@@ -1,0 +1,10 @@
+# Normaliza finais de linha (evita diffs CRLF/LF entre Windows e o CI)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.pdf binary
+*.mp4 binary
