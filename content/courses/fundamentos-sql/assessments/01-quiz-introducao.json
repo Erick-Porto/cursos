@@ -1,0 +1,64 @@
+{
+  "title": "Quiz: O que é um banco de dados",
+  "description": "Cinco questões rápidas para fixar os conceitos da primeira aula.",
+  "lesson": "o-que-e-um-banco-de-dados",
+  "kind": "quiz",
+  "passing_score": 60,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Em uma tabela de banco de dados, o que representa **uma linha**?",
+      "options": {
+        "a": "Uma característica dos dados, como nome ou preço",
+        "b": "Um registro completo, como um cliente específico",
+        "c": "O conjunto de todas as tabelas do sistema",
+        "d": "O comando que lê os dados"
+      },
+      "answer": "b",
+      "explanation": "Cada linha é um registro. As características (nome, preço) são colunas, e o conjunto de dados sobre um assunto é a tabela."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais vantagens um banco de dados oferece em relação a planilhas espalhadas?",
+      "options": {
+        "a": "Regras que garantem consistência dos dados",
+        "b": "Acesso simultâneo de várias pessoas sem conflito",
+        "c": "Eliminar a necessidade de definir colunas",
+        "d": "Proteção contra perda de dados"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Bancos de dados impõem regras, permitem acesso simultâneo e protegem contra perdas. Colunas continuam sendo necessárias: são elas que estruturam os dados.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "A chave primária é uma coluna que identifica cada linha de forma única.",
+      "answer": true,
+      "explanation": "A chave primária, como a coluna `id`, nunca se repete e permite localizar exatamente um registro."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "A linguagem usada para consultar e alterar dados em bancos relacionais é a ___.",
+      "answer": [["SQL", "linguagem SQL"]],
+      "explanation": "SQL (Structured Query Language) é a linguagem padrão dos bancos relacionais."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Na consulta abaixo, qual parte indica **de qual tabela** os dados vêm?\n\n```sql\nSELECT nome, cidade\nFROM clientes\nWHERE cidade = 'Recife';\n```",
+      "options": {
+        "a": "SELECT nome, cidade",
+        "b": "FROM clientes",
+        "c": "WHERE cidade = 'Recife'",
+        "d": "cidade = 'Recife'"
+      },
+      "answer": "b",
+      "explanation": "FROM aponta a tabela de origem. SELECT escolhe as colunas e WHERE filtra as linhas."
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "title": "Prova final: Fundamentos de SQL",
+  "description": "Avaliação final do curso. Você tem até 3 tentativas e 20 minutos por tentativa. O gabarito não é exibido.",
+  "lesson": null,
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": 20,
+  "show_answers": false,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é a função da cláusula `FROM` em uma consulta SQL?",
+      "options": {
+        "a": "Escolher quais colunas aparecem no resultado",
+        "b": "Indicar a tabela de onde os dados são lidos",
+        "c": "Filtrar as linhas do resultado",
+        "d": "Ordenar o resultado"
+      },
+      "answer": "b",
+      "explanation": "FROM define a origem dos dados."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre chave primária estão corretas?",
+      "options": {
+        "a": "Identifica cada linha de forma única",
+        "b": "Pode se repetir em linhas diferentes",
+        "c": "Costuma ser uma coluna como `id`",
+        "d": "É obrigatória em toda consulta SELECT"
+      },
+      "answer": ["a", "c"],
+      "explanation": "A chave primária é única por linha e normalmente é a coluna id. Ela não é exigida em consultas.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Para dar um apelido a uma coluna no resultado, usamos a palavra-chave ___.",
+      "answer": [["AS"]],
+      "explanation": "AS cria um alias apenas no resultado da consulta."
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em SQL, valores de texto devem ficar entre aspas simples, como em `'Recife'`.",
+      "answer": true,
+      "explanation": "Aspas simples delimitam texto. Aspas duplas costumam identificar nomes de colunas ou tabelas."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual consulta devolve os **3 produtos mais baratos**?",
+      "options": {
+        "a": "SELECT nome FROM produtos ORDER BY preco DESC LIMIT 3;",
+        "b": "SELECT nome FROM produtos LIMIT 3 ORDER BY preco;",
+        "c": "SELECT nome FROM produtos ORDER BY preco LIMIT 3;",
+        "d": "SELECT nome FROM produtos WHERE preco < 3;"
+      },
+      "answer": "c",
+      "explanation": "ORDER BY preco (crescente) seguido de LIMIT 3. A ordem das cláusulas é fixa: ORDER BY vem antes de LIMIT.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual condição seleciona produtos que custam entre 100 e 300, **incluindo** os limites?",
+      "options": {
+        "a": "WHERE preco > 100 AND preco < 300",
+        "b": "WHERE preco BETWEEN 100 AND 300",
+        "c": "WHERE preco IN (100, 300)",
+        "d": "WHERE preco LIKE '1%' OR preco LIKE '3%'"
+      },
+      "answer": "b",
+      "explanation": "BETWEEN inclui os limites. A alternativa com > e < exclui 100 e 300."
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais padrões `LIKE` encontram o nome `Webcam`?",
+      "options": {
+        "a": "'W%'",
+        "b": "'%cam'",
+        "c": "'Web_'",
+        "d": "'%b%'"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "`%` casa qualquer quantidade de caracteres; `_` casa exatamente um. 'Web_' exigiria um nome de 4 letras.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Um `DELETE` sem a cláusula ___ apaga todas as linhas da tabela.",
+      "answer": [["WHERE"]],
+      "explanation": "WHERE limita o alcance do comando. Sem ele, UPDATE e DELETE atingem a tabela inteira.",
+      "points": 2
+    }
+  ]
+}

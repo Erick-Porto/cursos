@@ -1,0 +1,120 @@
+/* =====================================================================
+   Design tokens. Tema escuro é o padrão; o claro redefine as cores em
+   :root[data-theme="light"]. Componentes só usam estas variáveis.
+   ===================================================================== */
+:root {
+  color-scheme: dark;
+
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --bg: #0b1020;
+  --bg-elev: #0f162a;
+  --surface: #131c33;
+  --surface-2: #1a2440;
+  --surface-3: #22305a;
+  --border: rgba(148, 163, 184, 0.14);
+  --border-strong: rgba(148, 163, 184, 0.3);
+
+  --text: #e8edf7;
+  --text-2: #b4bfd3;
+  --muted: #8593ad;
+
+  --primary: #34d399;
+  --primary-strong: #10b981;
+  --primary-soft: rgba(52, 211, 153, 0.14);
+  --on-primary: #06281c;
+
+  --accent: #a78bfa;
+  --accent-strong: #8b5cf6;
+  --accent-soft: rgba(167, 139, 250, 0.16);
+  --on-accent: #1e1038;
+
+  --warning: #fbbf24;
+  --warning-soft: rgba(251, 191, 36, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(248, 113, 113, 0.14);
+  --info: #60a5fa;
+  --info-soft: rgba(96, 165, 250, 0.14);
+
+  --rarity-common: #94a3b8;
+  --rarity-rare: #60a5fa;
+  --rarity-epic: #a78bfa;
+  --rarity-legendary: #fbbf24;
+
+  --code-bg: #0a0f1d;
+  --code-kw: #c084fc;
+  --code-str: #86efac;
+  --code-num: #fbbf24;
+  --code-fn: #7dd3fc;
+  --code-var: #fca5a5;
+  --code-comment: #6b7a95;
+
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.35), 0 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --glow-primary: 0 0 0 4px var(--primary-soft);
+
+  --header-h: 56px;
+  --bottomnav-h: 64px;
+  --sidenav-w: 248px;
+  --content-max: 1180px;
+  --gutter: 16px;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --t-fast: 140ms;
+  --t: 220ms;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f3f5fa;
+  --bg-elev: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #eef2f8;
+  --surface-3: #e2e8f3;
+  --border: rgba(15, 23, 42, 0.1);
+  --border-strong: rgba(15, 23, 42, 0.22);
+
+  --text: #0f172a;
+  --text-2: #334155;
+  --muted: #64748b;
+
+  --primary: #059669;
+  --primary-strong: #047857;
+  --primary-soft: rgba(5, 150, 105, 0.12);
+  --on-primary: #ffffff;
+
+  --accent: #7c3aed;
+  --accent-strong: #6d28d9;
+  --accent-soft: rgba(124, 58, 237, 0.12);
+  --on-accent: #ffffff;
+
+  --warning: #d97706;
+  --warning-soft: rgba(217, 119, 6, 0.12);
+  --danger: #dc2626;
+  --danger-soft: rgba(220, 38, 38, 0.12);
+  --info: #2563eb;
+  --info-soft: rgba(37, 99, 235, 0.12);
+
+  --rarity-common: #64748b;
+  --rarity-rare: #2563eb;
+  --rarity-epic: #7c3aed;
+  --rarity-legendary: #d97706;
+
+  --code-bg: #0f172a;
+  --code-kw: #c084fc;
+  --code-str: #86efac;
+  --code-num: #fbbf24;
+  --code-fn: #7dd3fc;
+  --code-var: #fca5a5;
+  --code-comment: #94a3b8;
+
+  --shadow-1: 0 1px 2px rgba(15, 23, 42, 0.06), 0 2px 10px rgba(15, 23, 42, 0.06);
+  --shadow-2: 0 10px 30px rgba(15, 23, 42, 0.12);
+}

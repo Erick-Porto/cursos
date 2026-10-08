@@ -1,0 +1,72 @@
+name: CI e deploy (GitHub Pages)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Checar tipos
+        run: npm run typecheck
+
+      - name: Validar migrations (Postgres em memória)
+        run: npm run db:check
+
+      - name: Validar conteúdo dos cursos
+        run: npm run content:check
+
+      - name: Build
+        run: npm run build
+        env:
+          # Cadastre em Settings > Secrets and variables > Actions.
+          # A anon key é pública por natureza (vai para o bundle), mas pode ficar em Secrets.
+          VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_ENABLE_GOOGLE_LOGIN: ${{ vars.VITE_ENABLE_GOOGLE_LOGIN }}
+          # Site de projeto: https://<usuario>.github.io/<repo>/  ->  base "/<repo>/".
+          # Para domínio próprio ou site de usuário, defina a variável VITE_BASE="/".
+          VITE_BASE: ${{ vars.VITE_BASE || format('/{0}/', github.event.repository.name) }}
+
+      - name: Configurar Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
+      - name: Publicar artefato
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

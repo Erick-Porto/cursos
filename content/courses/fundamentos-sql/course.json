@@ -1,0 +1,36 @@
+{
+  "slug": "fundamentos-sql",
+  "title": "Fundamentos de SQL",
+  "subtitle": "Consultas, filtros e os primeiros passos com bancos de dados relacionais",
+  "level": "iniciante",
+  "estimated_hours": 3,
+  "tags": ["sql", "banco de dados", "dados"],
+  "icon": "database",
+  "color": "#34d399",
+  "instructor_name": "Erick Ribeiro Porto",
+  "is_published": true,
+  "modules": [
+    { "slug": "introducao", "title": "Introdução", "description": "O que é um banco de dados e por que ele existe" },
+    { "slug": "consultas", "title": "Consultas", "description": "Lendo dados com SELECT e WHERE" }
+  ],
+  "achievements": [
+    {
+      "slug": "primeira-consulta",
+      "title": "Primeira consulta",
+      "description": "Concluiu as duas primeiras aulas de Fundamentos de SQL.",
+      "icon": "database",
+      "rarity": "common",
+      "xp": 30,
+      "rule": { "type": "lessons_completed", "count": 2 }
+    },
+    {
+      "slug": "mestre-sql",
+      "title": "Mestre do SQL básico",
+      "description": "Concluiu o curso Fundamentos de SQL.",
+      "icon": "trophy",
+      "rarity": "epic",
+      "xp": 150,
+      "rule": { "type": "course_completed" }
+    }
+  ]
+}

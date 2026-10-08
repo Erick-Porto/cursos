@@ -1,0 +1,77 @@
+{
+  "title": "Quiz: SELECT e WHERE",
+  "description": "Questões sobre as aulas de consultas e filtros.",
+  "lesson": "filtrando-com-where",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual consulta devolve **apenas** as colunas nome e preco da tabela produtos?",
+      "options": {
+        "a": "SELECT * FROM produtos;",
+        "b": "SELECT nome preco FROM produtos;",
+        "c": "SELECT nome, preco FROM produtos;",
+        "d": "SELECT produtos FROM nome, preco;"
+      },
+      "answer": "c",
+      "explanation": "As colunas são separadas por vírgula. Sem a vírgula, `preco` vira apelido de `nome`. `*` traz todas as colunas."
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Para ordenar do maior para o menor preço, usamos `ORDER BY preco ___`.",
+      "answer": [["DESC"]],
+      "explanation": "DESC (descending) inverte a ordem padrão, que é ASC (ascending)."
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Sem `ORDER BY`, a ordem das linhas do resultado é garantida pelo banco.",
+      "answer": false,
+      "explanation": "Sem ORDER BY a ordem não é garantida e pode mudar entre execuções."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual condição encontra todos os produtos cujo nome **começa** com a letra M?",
+      "options": {
+        "a": "WHERE nome = 'M'",
+        "b": "WHERE nome LIKE 'M%'",
+        "c": "WHERE nome LIKE '%M'",
+        "d": "WHERE nome IN ('M')"
+      },
+      "answer": "b",
+      "explanation": "`%` substitui qualquer sequência de caracteres. `'M%'` significa: começa com M e segue com qualquer coisa."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Considerando a tabela produtos da aula, quais linhas satisfazem `WHERE categoria = 'video' AND preco < 500`?",
+      "options": {
+        "a": "Monitor 24\" (video, 900)",
+        "b": "Webcam (video, 250)",
+        "c": "Mouse (periferico, 60)",
+        "d": "Teclado (periferico, 120)"
+      },
+      "answer": ["b"],
+      "explanation": "Com AND, as duas condições precisam ser verdadeiras. Só a Webcam é de vídeo e custa menos de 500.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual alternativa é equivalente a `WHERE preco >= 100 AND preco <= 300`?",
+      "options": {
+        "a": "WHERE preco BETWEEN 100 AND 300",
+        "b": "WHERE preco IN (100, 300)",
+        "c": "WHERE preco LIKE '100%'",
+        "d": "WHERE preco = 100 OR preco = 300"
+      },
+      "answer": "a",
+      "explanation": "BETWEEN inclui os dois limites. IN compara com valores exatos de uma lista, e LIKE serve para padrões de texto."
+    }
+  ]
+}
