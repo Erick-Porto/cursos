@@ -22,6 +22,21 @@ const promptHtml = computed(() => renderMarkdown(props.question.prompt_md))
 const fillParts = computed(() => props.question.prompt_md.split(BLANK))
 const fillCount = computed(() => Math.max(1, fillParts.value.length - 1))
 
+/**
+ * Modo "marcador": quando o enunciado tem bloco de código, várias linhas ou uma lacuna dentro de
+ * código inline, ele é renderizado inteiro (com [1], [2]... no lugar das lacunas) e os campos
+ * ficam abaixo. Sem isso, o Markdown de cada pedaço quebraria (crases e cercas sem par).
+ */
+const fillMarkerMode = computed(() => {
+  if (props.question.type !== 'fill') return false
+  if (/\n/.test(props.question.prompt_md)) return true
+  return fillParts.value.some((part) => (part.match(/`/g) ?? []).length % 2 === 1)
+})
+const fillMarkedHtml = computed(() => {
+  let i = 0
+  return renderMarkdown(props.question.prompt_md.replace(/_{3,}/g, () => `[${++i}]`))
+})
+
 const fillValues = computed<string[]>(() => {
   const v = props.modelValue
   const arr = Array.isArray(v) ? v.map(String) : []
@@ -82,6 +97,23 @@ const typeLabel: Record<Question['type'], string> = {
 
     <!-- enunciado (lacunas são renderizadas inline abaixo) -->
     <div v-if="question.type !== 'fill'" class="q__prompt md" v-html="promptHtml"></div>
+    <template v-else-if="fillMarkerMode">
+      <div class="q__prompt md" v-html="fillMarkedHtml"></div>
+      <div class="q__fill-list">
+        <label v-for="i in fillCount" :key="i" class="q__fill-row">
+          <span class="q__fill-label">Lacuna [{{ i }}]</span>
+          <input
+            class="q__blank q__blank--row"
+            type="text"
+            autocomplete="off"
+            spellcheck="false"
+            :value="fillValues[i - 1]"
+            :disabled="disabled"
+            @input="setFill(i - 1, ($event.target as HTMLInputElement).value)"
+          />
+        </label>
+      </div>
+    </template>
     <p v-else class="q__prompt q__fill">
       <template v-for="(part, i) in fillParts" :key="i">
         <span v-html="renderInline(part)"></span>
@@ -225,6 +257,32 @@ const typeLabel: Record<Question['type'], string> = {
   font-family: var(--font-mono);
   font-size: 0.95em;
   text-align: center;
+}
+
+.q__fill-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.q__fill-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.q__fill-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+  min-width: 84px;
+}
+
+.q__blank--row {
+  width: 18ch;
+  max-width: 100%;
+  text-align: left;
 }
 
 .q__blank:focus {

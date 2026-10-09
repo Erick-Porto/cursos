@@ -20,6 +20,7 @@ import sql from 'highlight.js/lib/languages/sql'
 import typescript from 'highlight.js/lib/languages/typescript'
 import xml from 'highlight.js/lib/languages/xml'
 import yaml from 'highlight.js/lib/languages/yaml'
+import { INLINE_ICONS } from './inline-icons'
 
 hljs.registerLanguage('bash', bash)
 hljs.registerLanguage('csharp', csharp)
@@ -79,6 +80,18 @@ export interface Slide {
 
 type Token = ReturnType<MarkdownIt['parse']>[number]
 
+/** Sintaxe `:icon[nome]` dentro de qualquer texto (títulos, listas, parágrafos). */
+const INLINE_ICON_RE = /:icon\[([a-z0-9-]+)\]/g
+
+export function inlineIconSvg(name: string): string | null {
+  const inner = INLINE_ICONS[name]
+  if (!inner) return null
+  return (
+    `<svg class="icon-inline" data-icon="${name}" viewBox="0 0 24 24" fill="none" stroke="currentColor" ` +
+    `stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${inner}</svg>`
+  )
+}
+
 // markdown-it 14.3 traz tipos próprios; os @types do plugin de container apontam para
 // outra declaração. Chamamos o plugin diretamente com uma assinatura local.
 type ContainerPlugin = (
@@ -116,6 +129,41 @@ function createRenderer(opts: RenderOptions): MarkdownIt {
   })
   useContainer(md, 'steps', {
     render: (tokens: Token[], idx: number) => (tokens[idx].nesting === 1 ? '<div class="steps">\n' : '</div>\n'),
+  })
+
+  // Ícones inline: troca ":icon[nome]" por um SVG do lucide (ver src/lib/inline-icons.ts).
+  md.core.ruler.push('inline_icons', (state) => {
+    for (const block of state.tokens) {
+      if (block.type !== 'inline' || !block.children) continue
+      if (!block.content.includes(':icon[')) continue
+      const out: Token[] = []
+      for (const child of block.children) {
+        if (child.type !== 'text' || !child.content.includes(':icon[')) {
+          out.push(child)
+          continue
+        }
+        let last = 0
+        for (const m of child.content.matchAll(INLINE_ICON_RE)) {
+          const svg = inlineIconSvg(m[1])
+          if (!svg) continue
+          if (m.index! > last) {
+            const t = new state.Token('text', '', 0)
+            t.content = child.content.slice(last, m.index)
+            out.push(t)
+          }
+          const icon = new state.Token('html_inline', '', 0)
+          icon.content = svg
+          out.push(icon)
+          last = m.index! + m[0].length
+        }
+        if (last < child.content.length) {
+          const t = new state.Token('text', '', 0)
+          t.content = child.content.slice(last)
+          out.push(t)
+        }
+      }
+      block.children = out
+    }
   })
 
   // Imagens: caminho relativo -> storage do curso; carregamento preguiçoso.

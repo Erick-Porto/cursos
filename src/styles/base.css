@@ -688,6 +688,28 @@ textarea.input {
   margin-bottom: 1em;
 }
 
+/* Ícone inline (:icon[nome] no Markdown) */
+.md .icon-inline {
+  display: inline-block;
+  width: 1.05em;
+  height: 1.05em;
+  vertical-align: -0.16em;
+  flex-shrink: 0;
+}
+
+.md h1 .icon-inline,
+.md h2 .icon-inline,
+.md h3 .icon-inline {
+  color: var(--primary);
+  margin-right: 0.2em;
+}
+
+.md li > .icon-inline:first-child,
+.md p > .icon-inline:first-child {
+  color: var(--accent);
+  margin-right: 0.25em;
+}
+
 .md kbd {
   display: inline-block;
   padding: 0.1em 0.5em;

@@ -252,7 +252,7 @@ onMounted(load)
           </section>
 
           <section v-if="finalAssessments.length" class="card" style="padding: 0">
-            <header class="mod__head"><h2 class="mod__title">Avaliação final</h2></header>
+            <header class="mod__head"><h2 class="mod__title">{{ finalAssessments.length > 1 ? 'Provas do curso' : 'Avaliação final' }}</h2></header>
             <ol class="lessons">
               <li v-for="a in finalAssessments" :key="a.id">
                 <component

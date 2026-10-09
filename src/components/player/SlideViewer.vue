@@ -112,6 +112,10 @@ async function onClick(e: MouseEvent) {
   margin-bottom: 0.4em;
 }
 
+.slide--cover :deep(h1 .icon-inline) {
+  color: var(--primary);
+}
+
 .slide--cover :deep(p) {
   color: var(--text-2);
   font-size: 1.1em;
