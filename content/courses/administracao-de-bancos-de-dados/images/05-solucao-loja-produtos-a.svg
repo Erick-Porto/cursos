@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" font-family="Inter, system-ui, sans-serif">
+  <title>Solução da loja: produto, com código, nome e preço, se especializa em produto físico e produto digital; a especialização é total e disjunta</title>
+  <style>
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .a { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .k { fill: #a78bfa; font-size: 20px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .ln { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="410" rx="16" fill="#0b1020"/>
+
+  <!-- superclasse -->
+  <rect x="230" y="24" width="260" height="88" rx="12" class="box"/>
+  <path d="M230 36 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="360" y="52" text-anchor="middle" class="hd">produto</text>
+  <text x="246" y="96" class="a"><tspan text-decoration="underline">codigo</tspan>, nome, preco</text>
+
+  <!-- triângulo com t, d -->
+  <path d="M360 112 L360 134" class="ln"/>
+  <path d="M360 134 L330 180 L390 180 Z" fill="#131c33" stroke="#a78bfa" stroke-width="2.5"/>
+  <text x="402" y="166" class="k">t, d</text>
+  <path d="M360 180 L360 204 M170 204 L550 204 M170 204 L170 220 M550 204 L550 220" class="ln"/>
+
+  <!-- subclasses -->
+  <rect x="30" y="220" width="280" height="108" rx="12" class="box"/>
+  <path d="M30 232 a12 12 0 0 1 12 -12 h256 a12 12 0 0 1 12 12 v28 h-280 z" class="head"/>
+  <text x="170" y="248" text-anchor="middle" class="hd">produto_fisico</text>
+  <text x="46" y="290" class="a">peso_kg</text>
+  <text x="46" y="318" class="a">altura_cm, largura_cm</text>
+
+  <rect x="410" y="220" width="280" height="108" rx="12" class="box"/>
+  <path d="M410 232 a12 12 0 0 1 12 -12 h256 a12 12 0 0 1 12 12 v28 h-280 z" class="head"/>
+  <text x="550" y="248" text-anchor="middle" class="hd">produto_digital</text>
+  <text x="426" y="290" class="a">tamanho_mb</text>
+  <text x="426" y="318" class="a">url_download</text>
+
+  <text x="360" y="366" text-anchor="middle" class="m">t = total: todo produto é físico ou digital</text>
+  <text x="360" y="392" text-anchor="middle" class="m">d = disjunta: nunca os dois ao mesmo tempo</text>
+</svg>

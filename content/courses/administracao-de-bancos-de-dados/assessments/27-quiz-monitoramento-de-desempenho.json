@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Monitoramento de desempenho",
+  "description": "Verifique se você sabe identificar gargalos, ler as métricas do SO e do MySQL e usar as ferramentas de diagnóstico.",
+  "lesson": "monitoramento-de-desempenho",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que é um **gargalo** em um servidor de banco de dados?",
+      "options": {
+        "a": "O recurso mais lento do caminho, que limita a vazão de todo o sistema",
+        "b": "Qualquer consulta que demora mais de 10 segundos para executar",
+        "c": "O número máximo de conexões que o MySQL aceita ao mesmo tempo",
+        "d": "A diferença entre o tamanho da tabela e o tamanho do buffer pool"
+      },
+      "answer": "a",
+      "explanation": "Gargalo é o elo mais fraco: CPU, memória, disco, rede ou locks. A fila se forma nele, e não adianta acelerar o resto. Consultas lentas são um sintoma, não a definição."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais destas práticas caracterizam monitoramento **proativo**?",
+      "options": {
+        "a": "Criar um alerta para CPU acima de 80% durante 10 minutos",
+        "b": "Investigar o servidor depois que os usuários reclamam de lentidão",
+        "c": "Comparar as métricas de hoje com a linha de base de um dia normal",
+        "d": "Guardar meses de histórico para enxergar tendências"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Alertas, linha de base e histórico antecipam o problema. Investigar depois da reclamação é o modo reativo: a correção chega quando o prejuízo já aconteceu.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "`SHOW GLOBAL STATUS LIKE 'Threads_connected';` devolve **195** e `SHOW VARIABLES LIKE 'max_connections';` devolve **200**. O que isso indica?",
+      "options": {
+        "a": "Há 195 consultas lentas registradas desde que o servidor subiu",
+        "b": "Há 195 conexões abertas, perto do limite; novas conexões logo receberão \"Too many connections\"",
+        "c": "O servidor está usando 195 threads de CPU de um total de 200",
+        "d": "O buffer pool está com 195 MB ocupados de 200 MB disponíveis"
+      },
+      "answer": "b",
+      "explanation": "`Threads_connected` conta conexões de clientes abertas agora. A cinco do limite, o próximo pico recusa conexões. Consultas lentas, CPU e buffer pool são medidos por outros contadores.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Por padrão, `long_query_time` é 10 segundos; com esse valor, uma consulta que leva 3 segundos não entra no slow query log.",
+      "answer": true,
+      "explanation": "O log só grava consultas acima de `long_query_time`. Por isso a boa prática é baixar o limite para 1 segundo ou menos, de acordo com o sistema."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "A view ___ do sys schema resume as instruções executadas, com contagem, latência média e linhas examinadas por execução.",
+      "answer": [["sys.statement_analysis", "statement_analysis"]],
+      "explanation": "`sys.statement_analysis` agrega os dados do performance_schema por instrução normalizada. Ordenar por `total_latency` mostra onde o servidor gasta mais tempo."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `SHOW PROCESSLIST` mostra: a conexão 12 em `Sleep` há 900 segundos; a conexão 31 rodando `ALTER TABLE pedidos ...` com estado `Waiting for table metadata lock`; e a conexão 45 rodando um `SELECT` em `pedidos`, também em `Waiting for table metadata lock`. Qual é a causa raiz?",
+      "options": {
+        "a": "O SELECT da conexão 45 bloqueia o ALTER TABLE, que por sua vez bloqueia a conexão 12",
+        "b": "A conexão 12 mantém uma transação aberta que segura o metadata lock; o ALTER espera por ela e enfileira todas as consultas novas em pedidos",
+        "c": "O servidor atingiu `max_connections` e as consultas aguardam uma vaga para executar",
+        "d": "Falta um índice em pedidos, e o ALTER TABLE precisa varrer a tabela inteira antes de começar"
+      },
+      "answer": "b",
+      "explanation": "Uma conexão em `Sleep` pode estar dentro de uma transação que já leu `pedidos` e não fez COMMIT. O ALTER precisa de lock exclusivo e espera; enquanto espera, toda consulta nova na tabela entra na fila atrás dele. A conexão 45 é vítima, não causa.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A taxa de acerto do buffer pool do InnoDB caiu de 99,8% para 92%. O que isso significa?",
+      "options": {
+        "a": "O buffer pool está grande demais e desperdiça memória do servidor",
+        "b": "Muitas leituras estão indo ao disco porque os dados mais usados não cabem mais na memória",
+        "c": "A rede entre a aplicação e o banco está saturada",
+        "d": "Há deadlocks frequentes entre transações do InnoDB"
+      },
+      "answer": "b",
+      "explanation": "Taxa de acerto é a fração de leituras atendidas pela memória. Quando cai, o InnoDB vai ao disco com mais frequência, e a latência sobe. A reação é aumentar o buffer pool ou reduzir o volume lido com índices melhores."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No servidor do banco, o swap está em uso constante e o `%iowait` da CPU está alto. Qual gargalo é o mais provável?",
+      "options": {
+        "a": "CPU insuficiente para processar as consultas",
+        "b": "Memória insuficiente, forçando o sistema operacional a usar o disco como RAM",
+        "c": "Rede lenta entre o servidor e a aplicação",
+        "d": "Locks de linha presos em transações longas"
+      },
+      "answer": "b",
+      "explanation": "Swap ativo significa que a RAM acabou e o SO está paginando para o disco; o `%iowait` alto é a consequência, pois a CPU fica esperando esse disco. Não é um problema de processamento: a CPU está ociosa, esperando.",
+      "points": 2
+    }
+  ]
+}

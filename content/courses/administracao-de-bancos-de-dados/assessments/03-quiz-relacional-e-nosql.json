@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: O universo dos SGBDs: relacional e NoSQL",
+  "description": "Oito questões sobre SGBDs relacionais, os quatro tipos de NoSQL, a escolha entre eles e os primeiros comandos SQL.",
+  "lesson": "relacional-e-nosql",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual das alternativas é um SGBD **relacional**?",
+      "options": {
+        "a": "Redis",
+        "b": "MongoDB",
+        "c": "PostgreSQL",
+        "d": "Neo4j"
+      },
+      "answer": "c",
+      "explanation": "PostgreSQL organiza os dados em tabelas e usa SQL. Redis é chave-valor, MongoDB é orientado a documentos e Neo4j é um banco de grafos."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual SGBD é orientado a **documentos**, guardando registros em formato semelhante a JSON?",
+      "options": {
+        "a": "Oracle",
+        "b": "MongoDB",
+        "c": "Cassandra",
+        "d": "MySQL"
+      },
+      "answer": "b",
+      "explanation": "MongoDB armazena documentos com campos flexíveis. Cassandra é de família de colunas; Oracle e MySQL são relacionais."
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Para quais cenários um SGBD relacional com transações ACID é a escolha mais segura?",
+      "options": {
+        "a": "Registrar pedidos e pagamentos de uma loja, em que cada centavo precisa bater",
+        "b": "Guardar o carrinho temporário de cada visitante, que expira em minutos",
+        "c": "Processar a folha de pagamento de uma empresa",
+        "d": "Sugerir amigos de amigos em uma rede com milhões de ligações"
+      },
+      "answer": ["a", "c"],
+      "explanation": "Pedidos, pagamentos e folha são dados estruturados que exigem consistência forte. Carrinho temporário é um caso clássico de chave-valor, e amigos de amigos pede um banco de grafos.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "A sigla ACID significa Atomicidade, Consistência, Isolamento e Durabilidade.",
+      "answer": true,
+      "explanation": "Essas são as quatro garantias que um SGBD relacional dá a cada transação. Elas serão estudadas em detalhe no módulo de transações."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o comando que cria a tabela de categorias do banco `loja`:\n\n```sql\nCREATE TABLE categorias (\n  id INT AUTO_INCREMENT ___ KEY,\n  nome VARCHAR(60) NOT NULL UNIQUE\n);\n```",
+      "answer": [["PRIMARY"]],
+      "explanation": "`PRIMARY KEY` define a chave primária, que identifica cada linha de forma única. `FOREIGN KEY` seria usado para apontar para outra tabela.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A tabela `produtos` contém Teclado (120.00), Mouse (60.00) e Monitor 27\" (900.00). O que retorna a consulta abaixo?\n\n```sql\nSELECT nome FROM produtos WHERE preco > 100;\n```",
+      "options": {
+        "a": "Teclado e Monitor 27\"",
+        "b": "Apenas Mouse",
+        "c": "Apenas Monitor 27\"",
+        "d": "Teclado, Mouse e Monitor 27\""
+      },
+      "answer": "a",
+      "explanation": "`WHERE preco > 100` mantém só as linhas com preço acima de 100: Teclado (120) e Monitor (900). Mouse (60) fica de fora.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Uma rede social quer descobrir, em tempo real, quem são os amigos dos amigos de um usuário. Qual tipo de NoSQL é o mais indicado?",
+      "options": {
+        "a": "Chave-valor",
+        "b": "Documentos",
+        "c": "Família de colunas",
+        "d": "Grafos"
+      },
+      "answer": "d",
+      "explanation": "Bancos de grafos guardam nós e arestas e percorrem ligações com eficiência. Chave-valor é ótimo para cache, mas não representa relações entre registros.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "As tabelas `categorias` e `produtos` acabaram de ser criadas e ainda estão vazias. O que acontece ao executar o comando abaixo?\n\n```sql\nINSERT INTO produtos (nome, preco, estoque, categoria_id)\nVALUES ('Webcam', 180.00, 0, 1);\n```",
+      "options": {
+        "a": "O MySQL recusa o comando: a chave estrangeira não encontra a categoria 1",
+        "b": "O produto é inserido com `categoria_id` igual a NULL",
+        "c": "O MySQL cria a categoria 1 automaticamente e insere o produto",
+        "d": "O produto é inserido e a chave estrangeira é verificada depois"
+      },
+      "answer": "a",
+      "explanation": "`FOREIGN KEY (categoria_id) REFERENCES categorias(id)` exige que a categoria exista antes. Como a tabela está vazia, o MySQL responde com o erro 1452. Por isso as categorias entram primeiro.",
+      "points": 2
+    }
+  ]
+}

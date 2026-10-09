@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Ciclo do backup: gerar o dump, verificar o arquivo, copiar para fora do servidor e testar a restauração, repetindo todo dia</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .c { fill: #b4bfd3; font-size: 20px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+    .step { animation: acende 8s infinite; opacity: .35; }
+    .step.s2 { animation-delay: 2s; }
+    .step.s3 { animation-delay: 4s; }
+    .step.s4 { animation-delay: 6s; }
+    @keyframes acende { 0% { opacity: .35 } 6%, 24% { opacity: 1 } 32%, 100% { opacity: .35 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="c">Repete todo dia; o teste de restauração, todo mês</text>
+
+  <g class="step s1">
+    <rect x="40" y="64" width="290" height="90" rx="12" class="box"/>
+    <text x="185" y="102" text-anchor="middle" class="t">1. Backup</text>
+    <text x="185" y="132" text-anchor="middle" class="m">mysqldump + gzip, às 02:00</text>
+  </g>
+  <g class="step s2">
+    <rect x="390" y="64" width="290" height="90" rx="12" class="box"/>
+    <text x="535" y="102" text-anchor="middle" class="t">2. Verificação</text>
+    <text x="535" y="132" text-anchor="middle" class="m">tamanho, checksum, log</text>
+  </g>
+  <g class="step s3">
+    <rect x="390" y="206" width="290" height="90" rx="12" class="box"/>
+    <text x="535" y="244" text-anchor="middle" class="t">3. Cópia remota</text>
+    <text x="535" y="274" text-anchor="middle" class="m">outro servidor ou nuvem</text>
+  </g>
+  <g class="step s4">
+    <rect x="40" y="206" width="290" height="90" rx="12" class="box"/>
+    <text x="185" y="244" text-anchor="middle" class="t">4. Testar restauração</text>
+    <text x="185" y="274" text-anchor="middle" class="m">em servidor de teste</text>
+  </g>
+  <path d="M332 109 L382 109" class="arrow"/>
+  <path d="M535 156 L535 198" class="arrow"/>
+  <path d="M388 251 L338 251" class="arrow"/>
+  <path d="M185 204 L185 162" class="arrow"/>
+</svg>

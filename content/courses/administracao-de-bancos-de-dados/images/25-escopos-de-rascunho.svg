@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Alcance de cada rascunho: a derived table vive em uma subconsulta, a CTE em um comando e a tabela temporária na sessão inteira</title>
+  <style>
+    .n { fill: #e8edf7; font-size: 18px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .d { fill: #0b1020; font-size: 18px; font-weight: 700; }
+    .g { fill: #06281c; font-size: 18px; font-weight: 700; }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+  <text x="200" y="88" text-anchor="end" class="n">Derived table</text>
+  <rect x="220" y="60" width="170" height="42" rx="8" fill="#60a5fa"/>
+  <text x="305" y="88" text-anchor="middle" class="d">uma subconsulta</text>
+  <text x="200" y="158" text-anchor="end" class="n">CTE (WITH)</text>
+  <rect x="220" y="130" width="280" height="42" rx="8" fill="#a78bfa"/>
+  <text x="360" y="158" text-anchor="middle" class="d">um comando</text>
+  <text x="200" y="228" text-anchor="end" class="n">Temporária</text>
+  <rect x="220" y="200" width="470" height="42" rx="8" fill="#34d399"/>
+  <text x="455" y="228" text-anchor="middle" class="g">a sessão inteira</text>
+  <text x="360" y="280" text-anchor="middle" class="m">Quanto maior o alcance, mais comandos podem reusar o rascunho</text>
+</svg>

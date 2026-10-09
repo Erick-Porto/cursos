@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: UPDATE e DELETE com segurança",
+  "description": "Oito questões sobre UPDATE, DELETE, TRUNCATE e DROP, modo seguro, rotina com transação e chaves estrangeiras.",
+  "lesson": "update-e-delete",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Carla Mendes (id 3) trocou o e-mail para carla@novo.com e se mudou para Olinda. Qual comando faz as duas alterações de uma vez na tabela `clientes`?",
+      "options": {
+        "a": "UPDATE clientes SET email = 'carla@novo.com', cidade = 'Olinda' WHERE id = 3;",
+        "b": "UPDATE clientes SET email = 'carla@novo.com' AND cidade = 'Olinda' WHERE id = 3;",
+        "c": "UPDATE clientes (email, cidade) VALUES ('carla@novo.com', 'Olinda') WHERE id = 3;",
+        "d": "UPDATE clientes SET email = 'carla@novo.com' WHERE id = 3 SET cidade = 'Olinda';"
+      },
+      "answer": "a",
+      "explanation": "No SET, as atribuições são separadas por vírgula. Com AND (opção b) o MySQL não dá erro: avalia a expressão lógica e grava 0 ou 1 no e-mail, um estrago silencioso. VALUES pertence ao INSERT, e só existe um SET por comando.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A tabela `produtos` tem 6 linhas. O que acontece ao executar o comando abaixo com o modo seguro desligado?\n\n```sql\nUPDATE produtos SET preco = preco * 1.10;\n```",
+      "options": {
+        "a": "O MySQL recusa o comando porque falta a cláusula WHERE",
+        "b": "Os 6 produtos ficam 10% mais caros e o servidor responde Rows matched: 6",
+        "c": "Só a primeira linha da tabela é alterada",
+        "d": "Nada muda, porque a expressão usa a própria coluna preco"
+      },
+      "answer": "b",
+      "explanation": "Sem WHERE, o alvo é a tabela inteira e o MySQL executa sem perguntar. Só o modo seguro (SQL_SAFE_UPDATES) faria o comando ser recusado. A expressão preco * 1.10 é avaliada linha a linha, com o preço atual de cada produto.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "TRUNCATE TABLE pode ser desfeito com ROLLBACK dentro de uma transação, assim como DELETE.",
+      "answer": false,
+      "explanation": "TRUNCATE é DDL: ele confirma a transação em andamento e não pode ser desfeito. DELETE é DML e, dentro de uma transação, volta atrás com ROLLBACK."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Para que o MySQL recuse UPDATE e DELETE sem WHERE em uma coluna-chave, ative o modo seguro com `SET ___ = 1;`",
+      "answer": [["SQL_SAFE_UPDATES", "@@SQL_SAFE_UPDATES", "SESSION SQL_SAFE_UPDATES"]],
+      "explanation": "SET SQL_SAFE_UPDATES = 1 liga o modo seguro na sessão: o servidor devolve o erro 1175 para UPDATE e DELETE que não filtram por uma coluna com índice nem usam LIMIT. O Workbench já vem com a opção ligada."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Você vai apagar os pedidos cancelados em produção. Quais passos fazem parte da rotina segura?",
+      "options": {
+        "a": "Rodar um SELECT com o mesmo WHERE para ver quantas e quais linhas serão atingidas",
+        "b": "Abrir uma transação com START TRANSACTION antes do DELETE",
+        "c": "Conferir o resultado com SELECT e só então executar COMMIT",
+        "d": "Executar o DELETE direto e, se o rows affected vier alto, restaurar o backup"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A rotina é SELECT antes, transação durante, conferência depois e COMMIT ou ROLLBACK. Restaurar backup é o último recurso, não um passo do procedimento: até o COMMIT, um ROLLBACK resolve sem custo.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Ana Souza (id 1) tem os pedidos 1 e 3. A chave estrangeira `pedidos.cliente_id` foi criada sem cláusula ON DELETE. O que acontece com o comando abaixo?\n\n```sql\nDELETE FROM clientes WHERE id = 1;\n```",
+      "options": {
+        "a": "Ana e os pedidos 1 e 3 são apagados em cascata",
+        "b": "Ana é apagada e os pedidos ficam com cliente_id igual a NULL",
+        "c": "O MySQL responde Cannot delete or update a parent row e nada é apagado",
+        "d": "Só os pedidos 1 e 3 são apagados; Ana permanece"
+      },
+      "answer": "c",
+      "explanation": "Sem ON DELETE, a chave estrangeira usa RESTRICT: o MySQL impede a exclusão da linha pai com o erro 1451. A cascata só acontece se a FK tiver sido criada com ON DELETE CASCADE, e SET NULL nem seria possível, porque cliente_id é NOT NULL.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual afirmação sobre `DELETE FROM funcionarios` (sem WHERE) e `TRUNCATE TABLE funcionarios` está correta?",
+      "options": {
+        "a": "DELETE remove também a estrutura da tabela; TRUNCATE remove só as linhas",
+        "b": "TRUNCATE reinicia o AUTO_INCREMENT e não dispara triggers de DELETE; DELETE mantém o contador e dispara",
+        "c": "DELETE é mais rápido em tabelas grandes, porque não grava nada no log",
+        "d": "TRUNCATE aceita WHERE para filtrar linhas; DELETE não aceita"
+      },
+      "answer": "b",
+      "explanation": "TRUNCATE esvazia a tabela de forma quase instantânea, zera o contador AUTO_INCREMENT e ignora triggers; DELETE trabalha linha a linha, mantém o contador e dispara os triggers. Nenhum dos dois remove a estrutura, e só DELETE aceita WHERE."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que `DROP TABLE funcionarios` faz que `DELETE FROM funcionarios` não faz?",
+      "options": {
+        "a": "Remove a tabela inteira, inclusive a estrutura, as constraints e os índices",
+        "b": "Remove as linhas uma a uma, respeitando as chaves estrangeiras",
+        "c": "Esvazia a tabela, mas mantém colunas e índices para novas inserções",
+        "d": "Apaga as linhas e permite desfazer com ROLLBACK em seguida"
+      },
+      "answer": "a",
+      "explanation": "DROP é DDL e elimina a tabela por completo: depois dele, nem um SELECT funciona. DELETE remove linhas e preserva a estrutura; é ele, não o DROP, que pode ser desfeito com ROLLBACK dentro de uma transação."
+    }
+  ]
+}

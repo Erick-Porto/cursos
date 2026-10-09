@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Granularidade de locks: o lock de linha do InnoDB trava só o Notebook e deixa as outras linhas livres; o lock de tabela do MyISAM faz todas as sessões esperarem</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .s { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .ok { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .no { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .lk { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .row { stroke: #2a3a5c; stroke-width: 1; }
+  </style>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <text x="190" y="40" text-anchor="middle" class="h">Lock de linha (InnoDB)</text>
+  <rect x="30" y="58" width="320" height="184" rx="12" class="box"/>
+  <line x1="30" y1="104" x2="350" y2="104" class="row"/>
+  <line x1="30" y1="150" x2="350" y2="150" class="row"/>
+  <line x1="30" y1="196" x2="350" y2="196" class="row"/>
+  <rect x="31" y="197" width="318" height="44" rx="10" fill="#fbbf24" fill-opacity=".18"/>
+  <text x="48" y="90" class="s">Teclado</text><text x="332" y="90" text-anchor="end" class="ok">livre</text>
+  <text x="48" y="136" class="s">Mouse</text><text x="332" y="136" text-anchor="end" class="ok">livre</text>
+  <text x="48" y="182" class="s">Monitor</text><text x="332" y="182" text-anchor="end" class="ok">livre</text>
+  <text x="48" y="228" class="s">Notebook</text><text x="332" y="228" text-anchor="end" class="lk">lock X</text>
+  <text x="190" y="292" text-anchor="middle" class="m">as outras vendas seguem</text>
+
+  <text x="530" y="40" text-anchor="middle" class="h">Lock de tabela (MyISAM)</text>
+  <rect x="370" y="58" width="320" height="184" rx="12" class="box"/>
+  <rect x="371" y="59" width="318" height="182" rx="12" fill="#f87171" fill-opacity=".14"/>
+  <line x1="370" y1="104" x2="690" y2="104" class="row"/>
+  <line x1="370" y1="150" x2="690" y2="150" class="row"/>
+  <line x1="370" y1="196" x2="690" y2="196" class="row"/>
+  <text x="388" y="90" class="s">Teclado</text><text x="672" y="90" text-anchor="end" class="no">espera</text>
+  <text x="388" y="136" class="s">Mouse</text><text x="672" y="136" text-anchor="end" class="no">espera</text>
+  <text x="388" y="182" class="s">Monitor</text><text x="672" y="182" text-anchor="end" class="no">espera</text>
+  <text x="388" y="228" class="s">Notebook</text><text x="672" y="228" text-anchor="end" class="lk">lock</text>
+  <text x="530" y="292" text-anchor="middle" class="m">todas as sessões esperam</text>
+</svg>

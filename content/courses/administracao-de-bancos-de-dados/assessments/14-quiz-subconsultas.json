@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Subconsultas",
+  "description": "Oito questões sobre subconsultas escalares, listas e tabelas derivadas, os operadores IN, EXISTS, ANY e ALL e a escolha entre subconsulta e JOIN.",
+  "lesson": "subconsultas",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual operador testa apenas se a subconsulta devolve **alguma linha**, sem comparar valores, e por isso é o par natural de uma subconsulta correlacionada?",
+      "options": {
+        "a": "IN",
+        "b": "ANY",
+        "c": "EXISTS",
+        "d": "="
+      },
+      "answer": "c",
+      "explanation": "EXISTS devolve verdadeiro assim que a subconsulta encontra a primeira linha; o que está no SELECT dela não importa. IN e ANY comparam o valor com os itens da lista, e = exige exatamente um valor."
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "No MySQL, uma subconsulta usada no `FROM` (tabela derivada) precisa receber um apelido.",
+      "answer": true,
+      "explanation": "Sem o apelido, o MySQL responde com o erro 1248 (Every derived table must have its own alias). O apelido é o nome pelo qual a consulta externa se refere às colunas dessa tabela temporária."
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Uma subconsulta que usa uma coluna da consulta externa, e por isso é executada de novo para cada linha dela, chama-se subconsulta ___.",
+      "answer": [["correlacionada", "correlata", "correlacionada ou dependente", "dependente"]],
+      "explanation": "A subconsulta correlacionada depende da linha externa (por exemplo, p.cliente_id = c.id) e não pode rodar sozinha. A independente roda uma única vez e seu resultado vale para todas as linhas."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Os preços em `produtos` são 120, 60, 900, 750, 4200 e 180. O que a consulta devolve?\n\n```sql\nSELECT nome FROM produtos\nWHERE preco > (SELECT AVG(preco) FROM produtos);\n```",
+      "options": {
+        "a": "Só o Notebook (4200)",
+        "b": "Notebook e Monitor 27\" (4200 e 900)",
+        "c": "Monitor 27\", Cadeira ergonômica e Notebook",
+        "d": "Erro 1242: a subconsulta devolve mais de uma linha"
+      },
+      "answer": "a",
+      "explanation": "A média é 6210 / 6 = 1035. Só o Notebook custa mais que isso; o Monitor (900) fica abaixo. A subconsulta é escalar (AVG devolve um único valor), então não há erro.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Um produto novo foi cadastrado sem categoria, então `SELECT categoria_id FROM produtos` devolve a lista (1, 1, 2, 3, 4, NULL). O que a consulta abaixo devolve?\n\n```sql\nSELECT nome FROM categorias\nWHERE id NOT IN (SELECT categoria_id FROM produtos);\n```",
+      "options": {
+        "a": "Nenhuma linha: a comparação com o NULL da lista é desconhecida e invalida o NOT IN",
+        "b": "As categorias que não têm nenhum produto",
+        "c": "Erro 1242: a subconsulta devolve mais de uma linha",
+        "d": "Todas as categorias, porque NULL é ignorado"
+      },
+      "answer": "a",
+      "explanation": "NOT IN equivale a id <> 1 AND id <> 1 AND ... AND id <> NULL. A última comparação é desconhecida, então nenhuma linha passa, mesmo que exista uma categoria sem produto. Filtre o NULL na subconsulta ou use NOT EXISTS.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais condições selecionam os produtos **mais caros que o periférico mais caro** (categoria 1)?",
+      "options": {
+        "a": "preco > ALL (SELECT preco FROM produtos WHERE categoria_id = 1)",
+        "b": "preco > (SELECT MAX(preco) FROM produtos WHERE categoria_id = 1)",
+        "c": "preco > ANY (SELECT preco FROM produtos WHERE categoria_id = 1)",
+        "d": "preco IN (SELECT preco FROM produtos WHERE categoria_id = 1)"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Ser maior que todos os valores da lista é o mesmo que ser maior que o máximo. A opção c (> ANY) exige ser maior que apenas um deles, ou seja, maior que o mínimo. A opção d testa igualdade, não comparação.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A subconsulta em `WHERE preco = (SELECT preco FROM produtos WHERE categoria_id = 1)` devolve três linhas. O que acontece?",
+      "options": {
+        "a": "Erro 1242: uma comparação com = exige que a subconsulta devolva uma única linha",
+        "b": "O MySQL usa a primeira linha devolvida e ignora as outras",
+        "c": "O MySQL usa o maior valor da lista",
+        "d": "Funciona como IN, aceitando qualquer um dos três valores"
+      },
+      "answer": "a",
+      "explanation": "O operador = espera um valor escalar. Com mais de uma linha, o MySQL interrompe a consulta com o erro 1242 (Subquery returns more than 1 row). Para aceitar vários valores, use IN ou = ANY.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em que situação um `JOIN` costuma ser mais claro que uma subconsulta?",
+      "options": {
+        "a": "Quando o resultado precisa mostrar colunas das duas tabelas",
+        "b": "Quando a pergunta depende de um valor calculado antes, como a média",
+        "c": "Quando a subconsulta devolve um único valor",
+        "d": "Sempre, porque o MySQL 8 executa JOIN mais rápido que subconsulta"
+      },
+      "answer": "a",
+      "explanation": "JOIN coloca as tabelas lado a lado, por isso é a escolha natural quando você precisa de colunas de ambas. Perguntas com um passo antes (média, máximo, existe?) ficam mais legíveis como subconsulta. O otimizador do MySQL 8 costuma transformar uma na outra, então o desempenho raramente decide."
+    }
+  ]
+}

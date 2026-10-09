@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: Concorrência e níveis de isolamento",
+  "description": "Oito questões sobre as anomalias de leitura, os quatro níveis de isolamento e como configurá-los no MySQL.",
+  "lesson": "concorrencia-e-isolamento",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Uma transação lê um valor que outra sessão alterou mas ainda não confirmou. Se essa outra sessão fizer `ROLLBACK`, a primeira terá usado um dado que nunca existiu. Como se chama essa anomalia?",
+      "options": {
+        "a": "Leitura fantasma",
+        "b": "Leitura não repetível",
+        "c": "Leitura suja",
+        "d": "Atualização perdida"
+      },
+      "answer": "c",
+      "explanation": "Leitura suja é ler uma mudança ainda não confirmada. Na leitura não repetível, a outra sessão já confirmou a alteração; na fantasma, o que muda é o conjunto de linhas, não o valor de uma linha."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "T1 lê o preço do Monitor: 900.00. T2 muda o preço para 850.00 e faz `COMMIT`. T1 lê a mesma linha de novo e recebe 850.00. Qual anomalia ocorreu?",
+      "options": {
+        "a": "Leitura suja",
+        "b": "Leitura não repetível",
+        "c": "Leitura fantasma",
+        "d": "Deadlock"
+      },
+      "answer": "b",
+      "explanation": "A mesma linha mudou entre duas leituras da mesma transação: leitura não repetível. Não é suja porque T2 confirmou a alteração, e não é fantasma porque nenhuma linha nova apareceu ou sumiu.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual nível de isolamento evita a leitura suja, mas ainda permite leitura não repetível e leitura fantasma?",
+      "options": {
+        "a": "READ UNCOMMITTED",
+        "b": "READ COMMITTED",
+        "c": "REPEATABLE READ",
+        "d": "SERIALIZABLE"
+      },
+      "answer": "b",
+      "explanation": "READ COMMITTED só enxerga dados confirmados, o que elimina a leitura suja, mas cada leitura pode ver um estado novo. REPEATABLE READ vai além e também evita a leitura não repetível."
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "O nível de isolamento padrão do InnoDB no MySQL 8 é `READ COMMITTED`.",
+      "answer": false,
+      "explanation": "O padrão do InnoDB é REPEATABLE READ, com uma fotografia dos dados fixada na primeira leitura da transação. READ COMMITTED é o padrão de outros sistemas, como o PostgreSQL."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Para ver o nível de isolamento em vigor na sessão atual do MySQL 8, execute `SELECT @@___;`",
+      "answer": [["transaction_isolation", "session.transaction_isolation"]],
+      "explanation": "A variável transaction_isolation mostra o nível da sessão (por exemplo, REPEATABLE-READ). Ela substituiu a antiga tx_isolation, removida no MySQL 8.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre o nível `SERIALIZABLE` são verdadeiras?",
+      "options": {
+        "a": "Evita leitura suja, não repetível e fantasma",
+        "b": "É o nível com maior concorrência entre sessões",
+        "c": "Pode gerar mais esperas e bloqueios entre transações",
+        "d": "É o nível padrão do InnoDB"
+      },
+      "answer": ["a", "c"],
+      "explanation": "SERIALIZABLE é o nível mais protegido: as transações se comportam como se rodassem uma após a outra, ao custo de mais esperas. Por isso ele tem a menor concorrência, e não é o padrão do InnoDB, que usa REPEATABLE READ.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Um fechamento financeiro lê várias tabelas durante alguns minutos e precisa ver uma fotografia consistente dos dados, mesmo com vendas acontecendo ao mesmo tempo. Qual é o nível **mínimo** adequado no InnoDB?",
+      "options": {
+        "a": "READ UNCOMMITTED",
+        "b": "READ COMMITTED",
+        "c": "REPEATABLE READ",
+        "d": "SERIALIZABLE"
+      },
+      "answer": "c",
+      "explanation": "Em REPEATABLE READ o InnoDB fixa a fotografia na primeira leitura e a mantém até o fim da transação. Em READ COMMITTED cada comando vê um estado novo, então tabelas lidas depois já refletiriam as vendas. SERIALIZABLE também funciona, mas trava leituras sem necessidade.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual comando aplica `READ COMMITTED` apenas à próxima transação da sessão, sem mudar as seguintes?",
+      "options": {
+        "a": "SET TRANSACTION ISOLATION LEVEL READ COMMITTED;",
+        "b": "SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;",
+        "c": "SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;",
+        "d": "START TRANSACTION READ COMMITTED;"
+      },
+      "answer": "a",
+      "explanation": "Sem SESSION nem GLOBAL, SET TRANSACTION vale só para a próxima transação. Com SESSION, muda todas as transações seguintes da sessão; com GLOBAL, afeta as novas conexões. START TRANSACTION não aceita nível de isolamento.",
+      "points": 2
+    }
+  ]
+}

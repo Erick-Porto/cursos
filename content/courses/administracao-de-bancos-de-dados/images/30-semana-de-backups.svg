@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Uma semana de backups: domingo completo; os incrementais ficam pequenos todos os dias; os diferenciais crescem a cada dia porque acumulam tudo desde o completo</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .r { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .d { opacity: .25; }
+    .d0 { animation: w0 8s infinite; }
+    .d1 { animation: w1 8s infinite; }
+    .d2 { animation: w2 8s infinite; }
+    .d3 { animation: w3 8s infinite; }
+    .d4 { animation: w4 8s infinite; }
+    .d5 { animation: w5 8s infinite; }
+    .d6 { animation: w6 8s infinite; }
+    @keyframes w0 { 0% { opacity: .25 } 3%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w1 { 0%, 10% { opacity: .25 } 13%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w2 { 0%, 20% { opacity: .25 } 23%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w3 { 0%, 30% { opacity: .25 } 33%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w4 { 0%, 40% { opacity: .25 } 43%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w5 { 0%, 50% { opacity: .25 } 53%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @keyframes w6 { 0%, 60% { opacity: .25 } 63%, 94% { opacity: 1 } 100% { opacity: .25 } }
+    @media (prefers-reduced-motion: reduce) { .d { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+  <text x="40" y="40" class="h">Uma semana de backups</text>
+  <rect x="520" y="22" width="22" height="22" rx="4" fill="#34d399"/>
+  <text x="552" y="40" class="m">completo</text>
+
+  <text x="86" y="78" text-anchor="middle" class="t">Dom</text>
+  <text x="177" y="78" text-anchor="middle" class="t">Seg</text>
+  <text x="269" y="78" text-anchor="middle" class="t">Ter</text>
+  <text x="360" y="78" text-anchor="middle" class="t">Qua</text>
+  <text x="451" y="78" text-anchor="middle" class="t">Qui</text>
+  <text x="543" y="78" text-anchor="middle" class="t">Sex</text>
+  <text x="634" y="78" text-anchor="middle" class="t">Sáb</text>
+
+  <text x="40" y="112" class="r"><tspan font-weight="700" fill="#a78bfa">Incremental:</tspan> só o que mudou desde o backup anterior</text>
+  <path d="M40 212 L680 212" stroke="#2a3a5c" stroke-width="2"/>
+  <text x="40" y="252" class="r"><tspan font-weight="700" fill="#60a5fa">Diferencial:</tspan> tudo o que mudou desde o completo</text>
+  <path d="M40 352 L680 352" stroke="#2a3a5c" stroke-width="2"/>
+
+  <g class="d d0">
+    <rect x="54" y="128" width="64" height="84" rx="6" fill="#34d399"/>
+    <rect x="54" y="268" width="64" height="84" rx="6" fill="#34d399"/>
+  </g>
+  <g class="d d1">
+    <rect x="145" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="145" y="330" width="64" height="22" rx="6" fill="#60a5fa"/>
+  </g>
+  <g class="d d2">
+    <rect x="237" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="237" y="318" width="64" height="34" rx="6" fill="#60a5fa"/>
+  </g>
+  <g class="d d3">
+    <rect x="328" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="328" y="306" width="64" height="46" rx="6" fill="#60a5fa"/>
+  </g>
+  <g class="d d4">
+    <rect x="419" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="419" y="294" width="64" height="58" rx="6" fill="#60a5fa"/>
+  </g>
+  <g class="d d5">
+    <rect x="511" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="511" y="282" width="64" height="70" rx="6" fill="#60a5fa"/>
+  </g>
+  <g class="d d6">
+    <rect x="602" y="190" width="64" height="22" rx="6" fill="#a78bfa"/>
+    <rect x="602" y="270" width="64" height="82" rx="6" fill="#60a5fa"/>
+  </g>
+</svg>

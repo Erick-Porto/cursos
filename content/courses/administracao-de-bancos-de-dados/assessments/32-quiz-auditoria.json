@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Auditoria em bancos de dados",
+  "description": "Verifica se você sabe o que auditar, qual estratégia usar e como escrever triggers de auditoria.",
+  "lesson": "auditoria",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é o objetivo central da auditoria em um banco de dados?",
+      "options": {
+        "a": "Registrar quem fez o quê, quando e de onde, para segurança, conformidade e investigação",
+        "b": "Acelerar as consultas mais lentas com índices automáticos",
+        "c": "Gerar backups incrementais a cada alteração de linha",
+        "d": "Impedir que usuários executem comandos DDL"
+      },
+      "answer": "a",
+      "explanation": "A trilha de auditoria responde às quatro perguntas e serve para detectar abuso, provar conformidade e reconstruir incidentes. Ela não bloqueia comandos nem substitui backup ou índices."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em um trigger `AFTER UPDATE ON produtos`, qual expressão devolve o preço **antes** da alteração?",
+      "options": {
+        "a": "OLD.preco",
+        "b": "NEW.preco",
+        "c": "PREVIOUS.preco",
+        "d": "produtos.preco"
+      },
+      "answer": "a",
+      "explanation": "`OLD` é a linha como estava antes; `NEW` é como ficou. `PREVIOUS` não existe, e `produtos.preco` já seria o valor novo, pois o trigger `AFTER` roda depois da alteração.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Dentro de um trigger de auditoria no MySQL, `CURRENT_USER()` devolve a conta do usuário que executou o `UPDATE` que disparou o trigger.",
+      "answer": false,
+      "explanation": "Em um trigger, `CURRENT_USER()` devolve o `DEFINER`, a conta de quem criou o trigger. Para registrar quem realmente executou a operação, e de qual host, use `USER()`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais eventos costumam entrar em uma política de auditoria bem dimensionada?",
+      "options": {
+        "a": "Tentativas de login, inclusive as que falharam",
+        "b": "Comandos DDL como `DROP TABLE` e `ALTER TABLE`",
+        "c": "`GRANT` e `REVOKE` de privilégios",
+        "d": "Todo `SELECT` executado em todas as tabelas do servidor"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Logins, DDL e mudanças de privilégio são eventos raros e importantes. Auditar todo `SELECT` gera volume enorme e derruba o desempenho; leituras só são auditadas nas tabelas com dados pessoais ou financeiros."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "No MySQL, a função ___ monta um documento JSON a partir de pares chave e valor, útil para guardar os dados antigos e novos em uma única coluna.",
+      "answer": [["JSON_OBJECT", "JSON_OBJECT()"]],
+      "explanation": "`JSON_OBJECT('nome', OLD.nome, 'email', OLD.email)` produz um JSON com as colunas que interessam, sem precisar de uma coluna de auditoria para cada coluna da tabela."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A empresa precisa registrar **todos os logins** e **todo comando DDL** do servidor, sem alterar nenhuma tabela. Qual estratégia atende melhor?",
+      "options": {
+        "a": "Triggers `AFTER INSERT`, `AFTER UPDATE` e `AFTER DELETE` em cada tabela",
+        "b": "Um plugin de auditoria, como MySQL Enterprise Audit, MariaDB Audit Plugin ou Percona Audit Log",
+        "c": "Registrar os eventos no código da aplicação",
+        "d": "Ler o binary log com `mysqlbinlog`"
+      },
+      "answer": "b",
+      "explanation": "Plugins de auditoria capturam logins e DDL no nível do servidor, com filtros. Triggers só veem DML nas tabelas em que existem, a aplicação não vê quem acessa o banco por fora, e o binlog não registra logins.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Por que o usuário da aplicação não deve ter `UPDATE` nem `DELETE` na tabela `auditoria_clientes`?",
+      "options": {
+        "a": "Porque o trigger precisa dessas permissões para funcionar e elas entrariam em conflito",
+        "b": "Porque uma trilha que pode ser alterada ou apagada por quem é auditado deixa de ser prova",
+        "c": "Porque tabelas com colunas JSON não aceitam `UPDATE`",
+        "d": "Porque o MySQL bloqueia automaticamente qualquer tabela chamada auditoria"
+      },
+      "answer": "b",
+      "explanation": "A trilha só vale se ninguém puder editá-la. O trigger grava com os privilégios de quem o criou, então a aplicação nem precisa de acesso à tabela de auditoria."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A tabela `clientes` guarda nome, e-mail e cidade. Qual prática de auditoria ajuda a empresa a cumprir a **LGPD**?",
+      "options": {
+        "a": "Registrar quem acessou e alterou esses dados pessoais, de onde e quando, com retenção definida",
+        "b": "Copiar nome e e-mail de cada cliente para a tabela de auditoria a cada `SELECT`",
+        "c": "Guardar a senha dos clientes no JSON de auditoria para facilitar investigações",
+        "d": "Desligar a auditoria dessa tabela para reduzir o volume de dados pessoais armazenados"
+      },
+      "answer": "a",
+      "explanation": "A LGPD exige que a empresa prove quem tratou dados pessoais e proteja esses dados. Duplicar os dados ou guardar senhas na trilha cria mais exposição, não menos; desligar a auditoria elimina a prova.",
+      "points": 2
+    }
+  ]
+}

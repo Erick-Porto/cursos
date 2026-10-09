@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Animação: o WHERE testa cada linha de produtos; Teclado, Mouse e Monitor não atendem a estoque menor que 10 e esmaecem; Cadeira, Notebook e Webcam ficam</title>
+  <style>
+    .q { fill: #e8edf7; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .hd { fill: #b4bfd3; font-size: 22px; font-weight: 700; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .tg { font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .drop { animation: some 6s infinite; }
+    .d1 { animation-delay: .3s; }
+    .d2 { animation-delay: .6s; }
+    @keyframes some { 0%, 10% { opacity: 1 } 22%, 85% { opacity: .25 } 95%, 100% { opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { .drop { animation: none !important; opacity: .25 !important; } }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <rect x="20" y="16" width="680" height="48" rx="10" class="box"/>
+  <text x="360" y="48" text-anchor="middle" class="q">WHERE <tspan fill="#fbbf24">estoque &lt; 10</tspan></text>
+
+  <text x="36" y="92" class="hd">nome</text>
+  <text x="400" y="92" class="hd">estoque</text>
+  <text x="540" y="92" class="hd">estoque &lt; 10?</text>
+
+  <g class="drop">
+    <rect x="20" y="104" width="680" height="38" rx="8" class="box"/>
+    <text x="36" y="131" class="c">Teclado</text>
+    <text x="400" y="131" class="c">35</text>
+  </g>
+  <text x="540" y="131" class="tg" fill="#f87171">sai</text>
+
+  <g class="drop d1">
+    <rect x="20" y="148" width="680" height="38" rx="8" class="box"/>
+    <text x="36" y="175" class="c">Mouse</text>
+    <text x="400" y="175" class="c">50</text>
+  </g>
+  <text x="540" y="175" class="tg" fill="#f87171">sai</text>
+
+  <g class="drop d2">
+    <rect x="20" y="192" width="680" height="38" rx="8" class="box"/>
+    <text x="36" y="219" class="c">Monitor 27&quot;</text>
+    <text x="400" y="219" class="c">12</text>
+  </g>
+  <text x="540" y="219" class="tg" fill="#f87171">sai</text>
+
+  <rect x="20" y="236" width="680" height="38" rx="8" class="box"/>
+  <text x="36" y="263" class="c">Cadeira ergonômica</text>
+  <text x="400" y="263" class="c">8</text>
+  <text x="540" y="263" class="tg" fill="#34d399">fica</text>
+
+  <rect x="20" y="280" width="680" height="38" rx="8" class="box"/>
+  <text x="36" y="307" class="c">Notebook</text>
+  <text x="400" y="307" class="c">5</text>
+  <text x="540" y="307" class="tg" fill="#34d399">fica</text>
+
+  <rect x="20" y="324" width="680" height="38" rx="8" class="box"/>
+  <text x="36" y="351" class="c">Webcam</text>
+  <text x="400" y="351" class="c">0</text>
+  <text x="540" y="351" class="tg" fill="#34d399">fica</text>
+
+  <text x="360" y="400" text-anchor="middle" class="m">Linhas que respondem falso saem do resultado</text>
+</svg>

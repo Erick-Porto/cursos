@@ -1,0 +1,270 @@
+{
+  "title": "Prova final: Administração de Bancos de Dados",
+  "description": "Avaliação final do curso, cobrindo todos os módulos. Até 2 tentativas, 40 minutos por tentativa. O gabarito não é exibido. A aprovação libera o certificado.",
+  "lesson": null,
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 2,
+  "time_limit_minutes": 40,
+  "show_answers": false,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple",
+      "prompt": "Quais problemas um SGBD resolve em comparação com planilhas e arquivos soltos?",
+      "options": {
+        "a": "Redundância e inconsistência: o mesmo dado guardado de formas diferentes em vários lugares",
+        "b": "Acesso simultâneo de várias pessoas sem que uma sobrescreva o trabalho da outra",
+        "c": "Necessidade de definir a estrutura dos dados antes de usá-los",
+        "d": "Recuperação dos dados depois de uma falha"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Integridade, concorrência e recuperação são funções centrais do SGBD. Definir a estrutura continua necessário; aliás, é isso que torna as outras garantias possíveis.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Uma loja precisa registrar vendas com total garantido, estorno e relatórios por cliente e por produto. Qual escolha é mais adequada e por quê?",
+      "options": {
+        "a": "Um SGBD relacional, porque os dados são estruturados e as operações exigem transações ACID",
+        "b": "Um banco de documentos, porque vendas não têm estrutura fixa",
+        "c": "Um banco chave-valor, porque é o mais rápido para qualquer consulta",
+        "d": "Um banco de grafos, porque clientes e produtos se relacionam"
+      },
+      "answer": "a",
+      "explanation": "Vendas têm esquema estável, relacionamentos claros e exigem consistência transacional: o cenário clássico do relacional. Os bancos NoSQL brilham em esquema flexível, escala horizontal ou redes de ligações profundas."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "\"Cada funcionário trabalha em um único departamento; um departamento pode ter muitos funcionários, mas pode existir sem nenhum.\" No modelo lógico, onde fica a chave estrangeira?",
+      "options": {
+        "a": "Em funcionarios, como departamento_id",
+        "b": "Em departamentos, como funcionario_id",
+        "c": "Em uma tabela associativa funcionario_departamento",
+        "d": "Nas duas tabelas, uma apontando para a outra"
+      },
+      "answer": "a",
+      "explanation": "Em um relacionamento 1:N, a FK fica no lado N (funcionários). A tabela associativa só é necessária para N:M."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "A tabela `itens_pedido(pedido_id, produto_id, quantidade, nome_produto)` tem chave primária composta por `pedido_id` e `produto_id`. Qual forma normal ela viola e por quê?",
+      "options": {
+        "a": "A 2FN, porque nome_produto depende só de produto_id, parte da chave",
+        "b": "A 1FN, porque a chave é composta",
+        "c": "A 3FN, porque quantidade depende de nome_produto",
+        "d": "Nenhuma: a tabela está normalizada"
+      },
+      "answer": "a",
+      "explanation": "nome_produto depende apenas de uma parte da chave (produto_id): dependência parcial, violação da 2FN. Chave composta não viola a 1FN, e quantidade depende da chave inteira.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual destes comandos pertence à família **DDL** (definição de dados)?",
+      "options": {
+        "a": "ALTER TABLE",
+        "b": "UPDATE",
+        "c": "GRANT",
+        "d": "COMMIT"
+      },
+      "answer": "a",
+      "explanation": "ALTER, CREATE e DROP definem estrutura (DDL). UPDATE é DML, GRANT é DCL e COMMIT é TCL."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual consulta devolve os clientes cujo nome **começa com A** e que moram em São Paulo ou Recife?",
+      "options": {
+        "a": "SELECT nome FROM clientes WHERE nome LIKE 'A%' AND cidade IN ('São Paulo', 'Recife');",
+        "b": "SELECT nome FROM clientes WHERE nome LIKE '%A' AND cidade IN ('São Paulo', 'Recife');",
+        "c": "SELECT nome FROM clientes WHERE nome = 'A%' OR cidade = 'São Paulo' OR cidade = 'Recife';",
+        "d": "SELECT nome FROM clientes WHERE nome LIKE 'A_' AND cidade BETWEEN 'São Paulo' AND 'Recife';"
+      },
+      "answer": "a",
+      "explanation": "'A%' casa qualquer nome iniciado por A; IN testa a lista de cidades; AND exige as duas condições. '%A' é terminado em A, '=' não interpreta curinga e '_' casa um único caractere.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com os pedidos 1 e 3 de Ana Souza, 2 de Bruno Lima e 4 de Carla Mendes, o que a consulta devolve?\n\n```sql\nSELECT c.nome, COUNT(*) AS qtd\nFROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id\nGROUP BY c.id, c.nome\nHAVING COUNT(*) > 1;\n```",
+      "options": {
+        "a": "Uma linha: Ana Souza, 2",
+        "b": "Três linhas: Ana (2), Bruno (1) e Carla (1)",
+        "c": "Cinco linhas, uma por cliente, incluindo quem não tem pedido",
+        "d": "Erro: COUNT não pode ser usado no HAVING"
+      },
+      "answer": "a",
+      "explanation": "O JOIN interno deixa só quem tem pedido, o GROUP BY conta por cliente e o HAVING mantém apenas os grupos com mais de um pedido: só Ana.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois de um `LEFT JOIN` de `clientes` com `pedidos`, por que `COUNT(p.id)` é preferível a `COUNT(*)` para contar os pedidos de cada cliente?",
+      "options": {
+        "a": "Porque COUNT(*) conta 1 para o cliente sem pedido (a linha com NULL), e COUNT(p.id) conta 0",
+        "b": "Porque COUNT(*) é mais lento em qualquer situação",
+        "c": "Porque COUNT(p.id) inclui os clientes sem pedido e COUNT(*) os exclui",
+        "d": "Não há diferença: os dois sempre devolvem o mesmo valor"
+      },
+      "answer": "a",
+      "explanation": "O LEFT JOIN gera uma linha com p.id NULL para quem não comprou. COUNT(*) conta essa linha; COUNT(p.id) ignora o NULL e devolve 0, que é o valor correto.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "Para listar os produtos mais caros que a média, a subconsulta `(SELECT ... FROM produtos)` deve usar a função agregada ___ sobre a coluna `preco`.",
+      "answer": [["AVG"]],
+      "explanation": "A subconsulta escalar calcula a média com AVG uma única vez; a consulta externa compara cada produto com esse valor."
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Quais práticas protegem contra um `UPDATE` ou `DELETE` executado sem `WHERE` por engano?",
+      "options": {
+        "a": "Rodar antes um SELECT com o mesmo WHERE para conferir as linhas atingidas",
+        "b": "Executar dentro de uma transação e conferir o resultado antes do COMMIT",
+        "c": "Ativar o modo seguro com SET SQL_SAFE_UPDATES = 1",
+        "d": "Usar TRUNCATE no lugar de DELETE, porque ele pode ser desfeito"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "SELECT antes, transação durante e modo seguro formam a rotina defensiva. TRUNCATE é DDL: apaga tudo e não aceita ROLLBACK, o oposto de uma proteção.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "Qual constraint faz o MySQL 8 rejeitar um produto com preço negativo no momento da gravação?",
+      "options": {
+        "a": "CHECK (preco >= 0)",
+        "b": "DEFAULT 0",
+        "c": "NOT NULL",
+        "d": "UNIQUE (preco)"
+      },
+      "answer": "a",
+      "explanation": "CHECK valida uma condição por linha e é aplicado desde o MySQL 8.0.16. DEFAULT só preenche ausências, NOT NULL impede vazio e UNIQUE impede repetição."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "Qual propriedade ACID é diretamente controlada pelos níveis `READ COMMITTED`, `REPEATABLE READ` e `SERIALIZABLE`?",
+      "options": {
+        "a": "Isolamento",
+        "b": "Atomicidade",
+        "c": "Consistência",
+        "d": "Durabilidade"
+      },
+      "answer": "a",
+      "explanation": "Os níveis de isolamento definem o quanto uma transação enxerga das outras em andamento. Atomicidade e durabilidade vêm do mecanismo de log e rollback, e consistência das regras do esquema."
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "T1 conta os pedidos de março e obtém 4. T2 insere um pedido em março e faz COMMIT. T1 repete a contagem, na mesma transação, e obtém 5. Que anomalia é essa e qual nível do padrão SQL a impede por completo?",
+      "options": {
+        "a": "Leitura fantasma; SERIALIZABLE",
+        "b": "Leitura suja; READ COMMITTED",
+        "c": "Leitura não repetível; READ UNCOMMITTED",
+        "d": "Deadlock; REPEATABLE READ"
+      },
+      "answer": "a",
+      "explanation": "Surgiu uma linha nova em um intervalo já consultado: leitura fantasma. No padrão SQL, só SERIALIZABLE a proíbe (o InnoDB em REPEATABLE READ também a evita com next-key locks, mas isso é particularidade do MySQL).",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "A aplicação recebeu o erro 1213 (deadlock) ao confirmar uma transação. O que ela deve fazer?",
+      "options": {
+        "a": "Repetir a transação inteira, pois o InnoDB já desfez a vítima",
+        "b": "Executar apenas o COMMIT de novo",
+        "c": "Reiniciar o servidor MySQL para liberar os locks",
+        "d": "Trocar o nível de isolamento para READ UNCOMMITTED"
+      },
+      "answer": "a",
+      "explanation": "A transação vítima foi desfeita por completo; a saída correta é reexecutá-la do início. Reiniciar o servidor ou baixar o isolamento não corrigem a causa e criam outros problemas."
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "A procedure `sp_contar_clientes(OUT total INT)` foi criada. Como chamá-la e ver o resultado no MySQL?",
+      "options": {
+        "a": "CALL sp_contar_clientes(@total); SELECT @total;",
+        "b": "SELECT sp_contar_clientes();",
+        "c": "EXEC sp_contar_clientes total;",
+        "d": "RUN sp_contar_clientes() INTO total;"
+      },
+      "answer": "a",
+      "explanation": "Procedures são executadas com CALL; o parâmetro OUT é recebido em uma variável de sessão (@total) e lido com SELECT. SELECT direto funciona para funções, não para procedures.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Para impedir que um pedido seja gravado com data no futuro, qual é o momento certo do trigger?",
+      "options": {
+        "a": "BEFORE INSERT, lançando SIGNAL quando NEW.data_pedido > CURDATE()",
+        "b": "AFTER INSERT, apagando a linha recém-gravada",
+        "c": "AFTER UPDATE, usando OLD.data_pedido",
+        "d": "BEFORE DELETE, bloqueando a exclusão"
+      },
+      "answer": "a",
+      "explanation": "Validações devem acontecer antes da gravação, com BEFORE e SIGNAL. Um AFTER INSERT que apaga a linha é gambiarra: a linha chegou a existir e um DELETE dentro do trigger na própria tabela não é permitido."
+    },
+    {
+      "id": "q17",
+      "type": "fill",
+      "prompt": "Para criar um rascunho que existe só na sessão atual a partir de uma consulta, usa-se `CREATE` seguido da palavra ___ e de `TABLE vendas_mes AS SELECT ...`.",
+      "answer": [["TEMPORARY", "temporary"]],
+      "explanation": "CREATE TEMPORARY TABLE ... AS SELECT cria e preenche a tabela de uma vez; ela some quando a sessão termina."
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Na coluna `type` do `EXPLAIN`, qual valor indica o acesso mais eficiente?",
+      "options": {
+        "a": "const",
+        "b": "ALL",
+        "c": "range",
+        "d": "index"
+      },
+      "answer": "a",
+      "explanation": "const significa que o otimizador encontra no máximo uma linha pela chave primária ou única. ALL é a varredura completa, o pior caso; index varre o índice inteiro; range lê um intervalo."
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "Uma empresa aceita perder no máximo 1 hora de dados (RPO) e precisa voltar em até 30 minutos (RTO). O banco tem 200 GB. Qual estratégia atende melhor?",
+      "options": {
+        "a": "Backup completo diário com binary log habilitado e copiado a cada hora, restauração ensaiada em servidor de teste",
+        "b": "Backup completo semanal com mysqldump, guardado no mesmo disco do servidor",
+        "c": "Backup completo a cada hora com mysqldump de 200 GB",
+        "d": "Nenhum backup, confiando no RAID do servidor"
+      },
+      "answer": "a",
+      "explanation": "O completo diário mais o binary log permite recuperar até o último minuto gravado (PITR), e o ensaio de restauração é o que garante o RTO. Um dump completo de 200 GB por hora é inviável, o semanal viola o RPO e RAID não protege contra erro humano nem ransomware.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "multiple",
+      "prompt": "Quais eventos costumam fazer parte de uma trilha de auditoria de banco de dados?",
+      "options": {
+        "a": "Logins e tentativas de login que falharam",
+        "b": "Comandos DDL que alteram a estrutura do banco",
+        "c": "Alterações em tabelas sensíveis, com usuário, data e valores antigos e novos",
+        "d": "O conteúdo das senhas digitadas pelos usuários"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Auditoria registra quem fez o quê, quando e de onde: autenticação, mudanças de estrutura e de dados sensíveis. Senhas nunca devem ser gravadas em logs.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Funil de um gargalo: muitas consultas entram pelo topo, a fila se forma no recurso mais lento (CPU, memória, disco, rede ou locks) e poucas respostas saem por vez</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+  <text x="360" y="38" text-anchor="middle" class="h">A fila se forma no recurso mais lento</text>
+
+  <!-- funil -->
+  <path d="M40 70 L460 70 L280 230 L280 330 L220 330 L220 230 Z" class="box"/>
+  <text x="250" y="100" text-anchor="middle" class="m">consultas chegando</text>
+  <g fill="#60a5fa">
+    <circle cx="125" cy="124" r="7"/><circle cx="160" cy="124" r="7"/><circle cx="195" cy="124" r="7"/><circle cx="230" cy="124" r="7"/>
+    <circle cx="265" cy="124" r="7"/><circle cx="300" cy="124" r="7"/><circle cx="335" cy="124" r="7"/><circle cx="370" cy="124" r="7"/>
+    <circle cx="155" cy="150" r="7"/><circle cx="190" cy="150" r="7"/><circle cx="225" cy="150" r="7"/>
+    <circle cx="260" cy="150" r="7"/><circle cx="295" cy="150" r="7"/><circle cx="330" cy="150" r="7"/>
+    <circle cx="185" cy="176" r="7"/><circle cx="220" cy="176" r="7"/><circle cx="255" cy="176" r="7"/><circle cx="290" cy="176" r="7"/>
+    <circle cx="215" cy="202" r="7"/><circle cx="250" cy="202" r="7"/><circle cx="285" cy="202" r="7"/>
+  </g>
+  <!-- fila -->
+  <g fill="#fbbf24">
+    <circle cx="250" cy="246" r="7"/><circle cx="250" cy="270" r="7"/><circle cx="250" cy="294" r="7"/><circle cx="250" cy="318" r="7"/>
+  </g>
+  <text x="296" y="290" class="m">fila de espera</text>
+  <!-- saída -->
+  <g fill="#34d399">
+    <circle cx="250" cy="352" r="7"/><circle cx="250" cy="376" r="7"/>
+  </g>
+  <text x="250" y="410" text-anchor="middle" class="m">respostas: poucas por vez</text>
+
+  <!-- recursos -->
+  <text x="600" y="92" text-anchor="middle" class="m">possíveis gargalos</text>
+  <rect x="500" y="106" width="200" height="44" rx="10" class="box"/>
+  <text x="600" y="136" text-anchor="middle" class="t">CPU</text>
+  <rect x="500" y="160" width="200" height="44" rx="10" class="box"/>
+  <text x="600" y="190" text-anchor="middle" class="t">Memória</text>
+  <rect x="500" y="214" width="200" height="44" rx="10" class="box"/>
+  <text x="600" y="244" text-anchor="middle" class="t">Disco</text>
+  <rect x="500" y="268" width="200" height="44" rx="10" class="box"/>
+  <text x="600" y="298" text-anchor="middle" class="t">Rede</text>
+  <rect x="500" y="322" width="200" height="44" rx="10" class="box"/>
+  <text x="600" y="352" text-anchor="middle" class="t">Locks</text>
+  <path d="M500 236 L290 236" class="arrow"/>
+</svg>

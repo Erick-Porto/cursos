@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>As cinco fases do projeto final, da modelagem conceitual à apresentação, acendendo em sequência</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .n { fill: #06281c; font-size: 18px; font-weight: 700; }
+    .dot { fill: #34d399; }
+    .tick { stroke: #a78bfa; stroke-width: 2; }
+    .step { animation: acende 8s infinite; opacity: .35; }
+    .step.s2 { animation-delay: 1.5s; }
+    .step.s3 { animation-delay: 3s; }
+    .step.s4 { animation-delay: 4.5s; }
+    .step.s5 { animation-delay: 6s; }
+    @keyframes acende { 0% { opacity: .35 } 5%, 20% { opacity: 1 } 28%, 100% { opacity: .35 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="h">As cinco fases do projeto final</text>
+  <path d="M60 176 L660 176" stroke="#2a3a5c" stroke-width="3"/>
+
+  <g class="step s1">
+    <text x="110" y="100" text-anchor="middle" class="t">Conceitual</text>
+    <text x="110" y="126" text-anchor="middle" class="m">MER com 6+ entidades</text>
+    <path d="M110 134 L110 158" class="tick"/>
+    <circle cx="110" cy="176" r="16" class="dot"/>
+    <text x="110" y="183" text-anchor="middle" class="n">1</text>
+  </g>
+  <g class="step s2">
+    <circle cx="235" cy="176" r="16" class="dot"/>
+    <text x="235" y="183" text-anchor="middle" class="n">2</text>
+    <path d="M235 194 L235 218" class="tick"/>
+    <text x="235" y="244" text-anchor="middle" class="t">Lógica</text>
+    <text x="235" y="270" text-anchor="middle" class="m">tipos, chaves, 3FN</text>
+  </g>
+  <g class="step s3">
+    <text x="360" y="100" text-anchor="middle" class="t">Scripts SQL</text>
+    <text x="360" y="126" text-anchor="middle" class="m">DDL, DML, procedures</text>
+    <path d="M360 134 L360 158" class="tick"/>
+    <circle cx="360" cy="176" r="16" class="dot"/>
+    <text x="360" y="183" text-anchor="middle" class="n">3</text>
+  </g>
+  <g class="step s4">
+    <circle cx="485" cy="176" r="16" class="dot"/>
+    <text x="485" y="183" text-anchor="middle" class="n">4</text>
+    <path d="M485 194 L485 218" class="tick"/>
+    <text x="485" y="244" text-anchor="middle" class="t">Testes</text>
+    <text x="485" y="270" text-anchor="middle" class="m">consultas e integridade</text>
+  </g>
+  <g class="step s5">
+    <text x="610" y="100" text-anchor="middle" class="t">Apresentação</text>
+    <text x="610" y="126" text-anchor="middle" class="m">banco funcionando</text>
+    <path d="M610 134 L610 158" class="tick"/>
+    <circle cx="610" cy="176" r="16" class="dot"/>
+    <text x="610" y="183" text-anchor="middle" class="n">5</text>
+  </g>
+</svg>

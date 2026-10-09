@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Índice composto em (cliente_id, data_pedido): a consulta por cliente usa o índice, a consulta por cliente e data usa as duas colunas, e a consulta só por data não usa o índice</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .q { fill: #e8edf7; font-size: 22px; }
+    .c { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ok { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .no { fill: #f87171; font-size: 22px; font-weight: 700; }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+  <text x="360" y="38" text-anchor="middle" class="h">Índice composto: filtre a partir da esquerda</text>
+
+  <!-- índice -->
+  <rect x="20" y="64" width="260" height="296" rx="12" class="box"/>
+  <text x="150" y="94" text-anchor="middle" class="t">cliente_id,</text>
+  <text x="150" y="120" text-anchor="middle" class="t">data_pedido</text>
+  <text x="150" y="158" text-anchor="middle" class="c">1  2025-03-02</text>
+  <text x="150" y="188" text-anchor="middle" class="c">1  2025-03-09</text>
+  <text x="150" y="218" text-anchor="middle" class="c">2  2025-03-05</text>
+  <text x="150" y="248" text-anchor="middle" class="c">3  2025-03-11</text>
+  <text x="150" y="278" text-anchor="middle" class="c">3  2025-04-01</text>
+  <text x="150" y="308" text-anchor="middle" class="c">7  2025-03-03</text>
+  <text x="150" y="344" text-anchor="middle" class="m">cliente, depois data</text>
+
+  <!-- consulta 1 -->
+  <rect x="300" y="64" width="400" height="84" rx="10" class="box"/>
+  <text x="314" y="96" class="q">cliente_id = 3</text>
+  <rect x="314" y="110" width="372" height="30" rx="6" fill="#34d399"/>
+  <text x="500" y="132" text-anchor="middle" class="ok">usa o índice</text>
+
+  <!-- consulta 2 -->
+  <rect x="300" y="164" width="400" height="84" rx="10" class="box"/>
+  <text x="314" y="196" class="q">cliente_id = 3 AND data_pedido &gt; ?</text>
+  <rect x="314" y="210" width="372" height="30" rx="6" fill="#34d399"/>
+  <text x="500" y="232" text-anchor="middle" class="ok">usa as duas colunas</text>
+
+  <!-- consulta 3 -->
+  <rect x="300" y="264" width="400" height="84" rx="10" class="box"/>
+  <text x="314" y="296" class="q">data_pedido &gt; ?</text>
+  <rect x="314" y="310" width="372" height="30" rx="6" fill="none" stroke="#f87171" stroke-width="2"/>
+  <text x="500" y="332" text-anchor="middle" class="no">não usa: pula cliente_id</text>
+</svg>

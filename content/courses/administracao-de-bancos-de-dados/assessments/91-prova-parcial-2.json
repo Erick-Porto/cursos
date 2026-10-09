@@ -1,0 +1,254 @@
+{
+  "title": "Prova parcial 2: transações, programação e operação",
+  "description": "Cobre os módulos 5 a 7 (aulas 20 a 32): transações, concorrência, procedures, triggers, tabelas temporárias, desempenho, backup e auditoria. Até 3 tentativas, 30 minutos por tentativa. O gabarito não é exibido.",
+  "lesson": null,
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": 30,
+  "show_answers": false,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Uma transferência de estoque entre dois produtos faz um `UPDATE` em cada um. Qual propriedade ACID garante que, se o segundo falhar, o primeiro também seja desfeito?",
+      "options": {
+        "a": "Atomicidade",
+        "b": "Consistência",
+        "c": "Isolamento",
+        "d": "Durabilidade"
+      },
+      "answer": "a",
+      "explanation": "Atomicidade é o tudo ou nada da transação. Durabilidade trata do que acontece depois do COMMIT; isolamento, da convivência entre transações simultâneas."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o estado final dos dados depois desta sequência?\n\n```sql\nSTART TRANSACTION;\nUPDATE produtos SET estoque = 40 WHERE id = 1;\nSAVEPOINT s1;\nDELETE FROM produtos WHERE id = 6;\nROLLBACK TO SAVEPOINT s1;\nCOMMIT;\n```",
+      "options": {
+        "a": "O UPDATE foi confirmado e o DELETE foi desfeito",
+        "b": "O UPDATE e o DELETE foram desfeitos",
+        "c": "O UPDATE e o DELETE foram confirmados",
+        "d": "O UPDATE foi desfeito e o DELETE confirmado"
+      },
+      "answer": "a",
+      "explanation": "ROLLBACK TO SAVEPOINT desfaz só o que veio depois do ponto s1 (o DELETE) e mantém a transação aberta. O COMMIT confirma o que sobrou: o UPDATE.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "No MySQL, executar um `CREATE TABLE` no meio de uma transação aberta provoca um commit implícito do que foi feito até ali.",
+      "answer": true,
+      "explanation": "Comandos DDL (CREATE, ALTER, DROP, TRUNCATE) confirmam a transação em andamento automaticamente. Por isso não se mistura DDL com DML dentro de uma transação que se pretende desfazer."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "A transação T1 lê o saldo de uma conta (100). A transação T2 altera o saldo para 50 e faz COMMIT. T1 lê o saldo de novo, na mesma transação, e vê 50. Que anomalia ocorreu?",
+      "options": {
+        "a": "Leitura suja (dirty read)",
+        "b": "Leitura não repetível (non-repeatable read)",
+        "c": "Leitura fantasma (phantom read)",
+        "d": "Deadlock"
+      },
+      "answer": "b",
+      "explanation": "A mesma linha mudou entre duas leituras da mesma transação: leitura não repetível. Seria suja se T1 visse um valor ainda não confirmado, e fantasma se surgissem linhas novas em um intervalo."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual é o nível de isolamento padrão do InnoDB no MySQL 8?",
+      "options": {
+        "a": "READ UNCOMMITTED",
+        "b": "READ COMMITTED",
+        "c": "REPEATABLE READ",
+        "d": "SERIALIZABLE"
+      },
+      "answer": "c",
+      "explanation": "O InnoDB usa REPEATABLE READ por padrão, com uma fotografia consistente dos dados dentro da transação. READ COMMITTED é o padrão do PostgreSQL."
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Sobre **deadlocks** no InnoDB, quais afirmações estão corretas?",
+      "options": {
+        "a": "Ocorrem quando duas transações esperam, em ciclo, por locks que a outra segura",
+        "b": "O InnoDB detecta o ciclo e desfaz uma das transações, que recebe o erro 1213",
+        "c": "A solução recomendada é aumentar o tempo de espera por lock até o problema sumir",
+        "d": "Acessar as tabelas sempre na mesma ordem reduz a chance de deadlock"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Deadlock é espera circular; o InnoDB escolhe uma vítima e faz rollback. Aumentar o timeout não resolve um ciclo, apenas atrasa a detecção. A aplicação deve tratar o erro 1213 e repetir a transação.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "Para ler o estoque de um produto e travar a linha até o fim da transação, impedindo que outra sessão a altere, acrescenta-se ao fim de `SELECT estoque FROM produtos WHERE id = 3` a cláusula ___ (duas palavras).",
+      "answer": [["FOR UPDATE"]],
+      "explanation": "FOR UPDATE adquire um lock exclusivo na linha lida. FOR SHARE adquire um lock compartilhado, que permite outras leituras mas impede escritas."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em uma stored procedure do MySQL, qual tipo de parâmetro serve para **devolver** um valor a quem chamou?",
+      "options": {
+        "a": "IN",
+        "b": "OUT",
+        "c": "RETURN",
+        "d": "VAR"
+      },
+      "answer": "b",
+      "explanation": "OUT envia um valor de volta (lido com `CALL sp(@v); SELECT @v;`). IN só recebe, INOUT faz as duas coisas. RETURN é de funções, não de procedures."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Por que é preciso usar `DELIMITER $$` antes de um `CREATE PROCEDURE` no cliente de linha de comando do MySQL?",
+      "options": {
+        "a": "Porque o cliente enviaria o comando ao servidor no primeiro `;` encontrado dentro do corpo, antes do END",
+        "b": "Porque o servidor exige que procedures terminem com `$$` em vez de `;`",
+        "c": "Porque `$$` ativa o modo de compilação de procedures no servidor",
+        "d": "Porque sem isso a procedure é criada como função"
+      },
+      "answer": "a",
+      "explanation": "DELIMITER é um recurso do cliente: ele muda o separador de comandos para que os `;` internos do corpo não interrompam o envio. O servidor nunca vê o DELIMITER."
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um trigger precisa gravar o preço antigo e o preço novo de `produtos` sempre que uma linha for alterada. Qual combinação está correta?",
+      "options": {
+        "a": "AFTER UPDATE, usando OLD.preco e NEW.preco",
+        "b": "AFTER INSERT, usando OLD.preco e NEW.preco",
+        "c": "BEFORE DELETE, usando NEW.preco",
+        "d": "AFTER UPDATE, usando apenas NEW.preco, pois OLD não existe em UPDATE"
+      },
+      "answer": "a",
+      "explanation": "Em UPDATE existem OLD (valor anterior) e NEW (valor novo). Em INSERT só existe NEW e em DELETE só existe OLD.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "Dentro de um trigger `BEFORE INSERT`, como rejeitar a inserção quando o estoque informado é negativo?",
+      "options": {
+        "a": "SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Estoque negativo';",
+        "b": "ROLLBACK;",
+        "c": "RETURN FALSE;",
+        "d": "DELETE FROM produtos WHERE id = NEW.id;"
+      },
+      "answer": "a",
+      "explanation": "SIGNAL lança um erro que cancela o comando que disparou o trigger. ROLLBACK e RETURN não são permitidos dentro de triggers, e a linha ainda nem existe para ser apagada."
+    },
+    {
+      "id": "q12",
+      "type": "truefalse",
+      "prompt": "Uma tabela criada com `CREATE TEMPORARY TABLE` fica visível para todas as sessões conectadas ao servidor até alguém executar DROP.",
+      "answer": false,
+      "explanation": "A tabela temporária pertence só à sessão que a criou e desaparece quando a sessão termina. Outra sessão pode até criar uma com o mesmo nome sem conflito."
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "Qual recurso do MySQL registra as consultas que demoram mais do que um limite de tempo definido pelo DBA?",
+      "options": {
+        "a": "O slow query log, com o parâmetro long_query_time",
+        "b": "O binary log, com o parâmetro expire_logs_days",
+        "c": "O SHOW PROCESSLIST, que grava tudo em disco",
+        "d": "O buffer pool do InnoDB"
+      },
+      "answer": "a",
+      "explanation": "O slow query log guarda as consultas acima de long_query_time para análise. O binary log registra alterações para replicação e recuperação; PROCESSLIST mostra só o momento atual."
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "O `EXPLAIN` de `SELECT * FROM pedidos WHERE cliente_id = 42;` mostra `type: ALL`, `key: NULL` e `rows: 1200000`. Qual é a ação mais eficaz?",
+      "options": {
+        "a": "Criar um índice em pedidos(cliente_id)",
+        "b": "Trocar o SELECT * por SELECT id",
+        "c": "Aumentar a memória do servidor",
+        "d": "Adicionar ORDER BY cliente_id à consulta"
+      },
+      "answer": "a",
+      "explanation": "type ALL com key NULL significa varredura completa da tabela porque não há índice utilizável para o filtro. O índice em cliente_id leva o plano a `ref` e a poucas linhas lidas.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "multiple",
+      "prompt": "Sobre índices no InnoDB, quais afirmações estão corretas?",
+      "options": {
+        "a": "Um índice composto (a, b) atende filtros por `a` sozinho e por `a` e `b` juntos",
+        "b": "Um índice composto (a, b) atende um filtro só por `b` com a mesma eficiência",
+        "c": "Um covering index permite responder a consulta sem ler a tabela",
+        "d": "Cada índice extra torna INSERT, UPDATE e DELETE um pouco mais lentos"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Vale o prefixo mais à esquerda: filtrar só por `b` não usa o índice (a, b). O covering index contém todas as colunas pedidas, e todo índice tem custo de manutenção na escrita.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "O que um backup **diferencial** contém?",
+      "options": {
+        "a": "Tudo o que mudou desde o último backup completo",
+        "b": "Tudo o que mudou desde o último backup de qualquer tipo",
+        "c": "Uma cópia completa do banco, compactada",
+        "d": "Apenas a estrutura das tabelas, sem os dados"
+      },
+      "answer": "a",
+      "explanation": "Diferencial acumula as mudanças desde o último completo, por isso cresce ao longo da semana e se restaura em dois passos. O incremental guarda só o que mudou desde o backup anterior, de qualquer tipo."
+    },
+    {
+      "id": "q17",
+      "type": "single",
+      "prompt": "Em um plano de recuperação, o que significa **RPO** (Recovery Point Objective)?",
+      "options": {
+        "a": "Quanto de dados, medido em tempo, a empresa aceita perder em um incidente",
+        "b": "Quanto tempo o sistema pode ficar fora do ar até voltar",
+        "c": "O tamanho máximo do arquivo de backup",
+        "d": "O número de cópias que devem existir fora do site"
+      },
+      "answer": "a",
+      "explanation": "RPO é a perda de dados aceitável (por exemplo, 1 hora significa backups ao menos a cada hora). RTO é o tempo aceitável de indisponibilidade."
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Qual comando gera um backup lógico consistente do banco `loja` (tabelas InnoDB), incluindo procedures e triggers, sem travar as tabelas durante a cópia?",
+      "options": {
+        "a": "mysqldump --single-transaction --routines --triggers loja > loja.sql",
+        "b": "mysqldump --lock-all-tables --no-data loja > loja.sql",
+        "c": "mysql loja < loja.sql",
+        "d": "cp /var/lib/mysql/loja /backup/loja"
+      },
+      "answer": "a",
+      "explanation": "--single-transaction faz a leitura dentro de uma transação consistente; --routines e --triggers incluem o código do banco. A alternativa b trava tudo e não copia dados; c restaura, não copia; d copia arquivos com o servidor ligado e tende a gerar backup corrompido.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "fill",
+      "prompt": "No agendador `cron` do Linux, os cinco campos de uma linha representam, na ordem: minuto, hora, dia do mês, ___ e dia da semana.",
+      "answer": [["mês", "mes", "month"]],
+      "explanation": "A ordem é minuto, hora, dia do mês, mês e dia da semana. Assim, `0 2 * * *` roda todos os dias às 02:00."
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "Qual é uma boa prática para a tabela que guarda a trilha de auditoria gravada por triggers?",
+      "options": {
+        "a": "Permitir apenas INSERT nela, bloqueando UPDATE e DELETE para usuários comuns",
+        "b": "Armazenar as senhas dos usuários para facilitar investigações",
+        "c": "Apagar os registros no fim de cada dia para economizar espaço",
+        "d": "Gravar nela somente as consultas SELECT"
+      },
+      "answer": "a",
+      "explanation": "Uma trilha que pode ser alterada ou apagada não serve como evidência. Senhas nunca vão para logs, a retenção segue uma política definida e as operações de escrita são o foco principal."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo do esquema de funcionarios: v1 cria a tabela, v2 adiciona email com ALTER, v3 amplia salario com outro ALTER; cada versão é um arquivo de migration numerado</title>
+  <style>
+    .v { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .file { font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <rect width="720" height="410" rx="16" fill="#0b1020"/>
+
+  <path d="M60 50 L60 340" stroke="#2a3a5c" stroke-width="3"/>
+
+  <circle cx="60" cy="80" r="20" fill="#131c33" stroke="#a78bfa" stroke-width="3"/>
+  <text x="60" y="88" text-anchor="middle" class="v">v1</text>
+  <rect x="100" y="38" width="600" height="84" rx="12" class="box"/>
+  <text x="116" y="70" class="file" fill="#a78bfa">0001_cria_funcionarios.sql</text>
+  <text x="116" y="104" class="code">CREATE TABLE funcionarios (...)</text>
+
+  <circle cx="60" cy="190" r="20" fill="#131c33" stroke="#60a5fa" stroke-width="3"/>
+  <text x="60" y="198" text-anchor="middle" class="v">v2</text>
+  <rect x="100" y="148" width="600" height="84" rx="12" class="box"/>
+  <text x="116" y="180" class="file" fill="#60a5fa">0002_email_funcionarios.sql</text>
+  <text x="116" y="214" class="code">ALTER TABLE ... ADD COLUMN email</text>
+
+  <circle cx="60" cy="300" r="20" fill="#131c33" stroke="#34d399" stroke-width="3"/>
+  <text x="60" y="308" text-anchor="middle" class="v">v3</text>
+  <rect x="100" y="258" width="600" height="84" rx="12" class="box"/>
+  <text x="116" y="290" class="file" fill="#34d399">0003_salario_12_digitos.sql</text>
+  <text x="116" y="324" class="code">ALTER TABLE ... MODIFY salario DECIMAL(12,2)</text>
+
+  <text x="360" y="384" text-anchor="middle" class="m">Roda uma vez, na ordem: esquema atual = v1 + v2 + v3</text>
+</svg>

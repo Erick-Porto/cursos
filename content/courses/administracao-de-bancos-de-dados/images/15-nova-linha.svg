@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Animação: uma nova linha entra no fim da tabela produtos e o MySQL preenche o id 7 pelo AUTO_INCREMENT</title>
+  <style>
+    .code { fill: #e8edf7; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; }
+    .kw { fill: #a78bfa; font-weight: 700; }
+    .h { fill: #b4bfd3; font-size: 18px; font-weight: 700; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .nova { animation: entra 8s infinite; opacity: 0; }
+    .idq { animation: pergunta 8s infinite; opacity: 0; }
+    .id7 { animation: resposta 8s infinite; opacity: 0; }
+    @keyframes entra { 0% { opacity: 0; transform: translateY(28px); } 18%, 90% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(28px); } }
+    @keyframes pergunta { 0%, 17% { opacity: 0; } 20%, 40% { opacity: 1; } 44%, 100% { opacity: 0; } }
+    @keyframes resposta { 0%, 42% { opacity: 0; } 48%, 90% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .nova, .idq, .id7 { animation: none !important; }
+      .nova, .id7 { opacity: 1 !important; transform: none !important; }
+      .idq { opacity: 0 !important; }
+    }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+  <text x="20" y="36" class="code"><tspan class="kw">INSERT INTO</tspan> produtos (nome, preco, ...)</text>
+  <text x="20" y="64" class="code"><tspan class="kw">VALUES</tspan> ('Headset', 250.00, ...);</text>
+
+  <rect x="20" y="80" width="680" height="300" rx="12" class="box"/>
+  <text x="64" y="106" text-anchor="middle" class="h">id</text>
+  <text x="120" y="106" class="h">nome</text>
+  <text x="660" y="106" text-anchor="end" class="h">preco</text>
+  <line x1="32" y1="118" x2="688" y2="118" stroke="#2a3a5c" stroke-width="1.5"/>
+  <g class="c">
+    <text x="64" y="147" text-anchor="middle">1</text><text x="120" y="147">Teclado</text><text x="660" y="147" text-anchor="end">120.00</text>
+    <text x="64" y="183" text-anchor="middle">2</text><text x="120" y="183">Mouse</text><text x="660" y="183" text-anchor="end">60.00</text>
+    <text x="64" y="219" text-anchor="middle">3</text><text x="120" y="219">Monitor 27"</text><text x="660" y="219" text-anchor="end">900.00</text>
+    <text x="64" y="255" text-anchor="middle">4</text><text x="120" y="255">Cadeira ergonômica</text><text x="660" y="255" text-anchor="end">750.00</text>
+    <text x="64" y="291" text-anchor="middle">5</text><text x="120" y="291">Notebook</text><text x="660" y="291" text-anchor="end">4200.00</text>
+    <text x="64" y="327" text-anchor="middle">6</text><text x="120" y="327">Webcam</text><text x="660" y="327" text-anchor="end">180.00</text>
+  </g>
+  <g class="nova">
+    <rect x="30" y="338" width="660" height="36" rx="8" fill="#0f2a22" stroke="#34d399" stroke-width="1.5"/>
+    <g class="c">
+      <text x="120" y="364">Headset</text><text x="660" y="364" text-anchor="end">250.00</text>
+    </g>
+    <text x="64" y="364" text-anchor="middle" class="idq c" fill="#fbbf24" font-weight="700">?</text>
+    <text x="64" y="364" text-anchor="middle" class="id7 c" fill="#34d399" font-weight="700">7</text>
+  </g>
+  <text x="360" y="406" text-anchor="middle" class="m id7"><tspan fill="#34d399" font-weight="700">id = 7</tspan>: o AUTO_INCREMENT gera o número seguinte ao maior já usado</text>
+</svg>

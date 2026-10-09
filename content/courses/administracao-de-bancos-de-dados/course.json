@@ -1,0 +1,78 @@
+{
+  "slug": "administracao-de-bancos-de-dados",
+  "title": "Administração de Bancos de Dados",
+  "subtitle": "Da modelagem à operação: SQL, transações, desempenho, backup e auditoria com MySQL",
+  "level": "intermediario",
+  "estimated_hours": 20,
+  "tags": ["banco de dados", "sql", "mysql", "dba", "modelagem", "backup"],
+  "icon": "server",
+  "color": "#60a5fa",
+  "instructor_name": "Erick Ribeiro Porto",
+  "is_published": true,
+  "modules": [
+    { "slug": "fundamentos", "title": "Fundamentos de SGBD", "description": "O que é um sistema gerenciador de banco de dados, como ele é organizado por dentro e quais tipos existem" },
+    { "slug": "modelagem", "title": "Modelagem de dados", "description": "Do levantamento de requisitos ao modelo físico: MER, mapeamento lógico, normalização e um estudo de caso completo" },
+    { "slug": "sql-consultas", "title": "SQL: consultas", "description": "SELECT do básico ao avançado: filtros, ordenação, agregações, JOINs e subconsultas" },
+    { "slug": "sql-manipulacao-e-estrutura", "title": "SQL: manipulação e estrutura", "description": "INSERT, UPDATE e DELETE com segurança; CREATE, ALTER e DROP; views e índices" },
+    { "slug": "transacoes", "title": "Transações e concorrência", "description": "ACID, COMMIT e ROLLBACK, níveis de isolamento, locks e deadlocks" },
+    { "slug": "programacao-no-banco", "title": "Programação no banco", "description": "Stored procedures, triggers, tabelas temporárias e um laboratório gamificado" },
+    { "slug": "operacao", "title": "Operação do DBA", "description": "Monitoramento, planos de execução, índices avançados, backup, recuperação e auditoria" },
+    { "slug": "projeto-e-carreira", "title": "Projeto final e carreira", "description": "O projeto de conclusão e como apresentar sua formação no currículo e no LinkedIn" }
+  ],
+  "achievements": [
+    {
+      "slug": "arquiteto-de-dados",
+      "title": "Arquiteto de dados",
+      "description": "Concluiu os módulos de fundamentos e modelagem (8 aulas).",
+      "icon": "puzzle",
+      "rarity": "common",
+      "xp": 40,
+      "rule": { "type": "lessons_completed", "count": 8 }
+    },
+    {
+      "slug": "fluente-em-sql",
+      "title": "Fluente em SQL",
+      "description": "Concluiu todas as aulas de SQL do curso (19 aulas).",
+      "icon": "terminal",
+      "rarity": "rare",
+      "xp": 80,
+      "rule": { "type": "lessons_completed", "count": 19 }
+    },
+    {
+      "slug": "direto-ao-ponto",
+      "title": "Direto ao ponto",
+      "description": "Aprovado na primeira tentativa em 10 avaliações do curso.",
+      "icon": "zap",
+      "rarity": "rare",
+      "xp": 80,
+      "rule": { "type": "first_try_pass", "count": 10 }
+    },
+    {
+      "slug": "guardiao-da-integridade",
+      "title": "Guardião da integridade",
+      "description": "Aprovado em 25 avaliações do curso.",
+      "icon": "shield",
+      "rarity": "epic",
+      "xp": 120,
+      "rule": { "type": "assessments_passed", "count": 25 }
+    },
+    {
+      "slug": "sem-margem-de-erro",
+      "title": "Sem margem de erro",
+      "description": "Gabaritou 5 avaliações do curso.",
+      "icon": "target",
+      "rarity": "epic",
+      "xp": 100,
+      "rule": { "type": "perfect_score", "count": 5 }
+    },
+    {
+      "slug": "dba-junior",
+      "title": "DBA Júnior",
+      "description": "Concluiu o curso Administração de Bancos de Dados, com todas as aulas e provas.",
+      "icon": "server",
+      "rarity": "legendary",
+      "xp": 300,
+      "rule": { "type": "course_completed" }
+    }
+  ]
+}

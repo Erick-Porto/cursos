@@ -1,0 +1,111 @@
+{
+  "title": "Quiz: Introdução ao SQL",
+  "description": "Verifica se você reconhece as famílias de comandos, a anatomia do SELECT e a ordem em que o banco o executa.",
+  "lesson": "introducao-ao-sql",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual palavra-chave indica **de qual tabela** os dados devem ser lidos?",
+      "options": {
+        "a": "SELECT",
+        "b": "WHERE",
+        "c": "FROM",
+        "d": "ORDER BY"
+      },
+      "answer": "c",
+      "explanation": "FROM aponta a tabela de origem. SELECT escolhe as colunas, WHERE filtra as linhas e ORDER BY ordena o resultado.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais comandos pertencem à família **DML** (manipulação de dados)?",
+      "options": {
+        "a": "INSERT",
+        "b": "SELECT",
+        "c": "UPDATE",
+        "d": "CREATE",
+        "e": "DELETE"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "INSERT, UPDATE e DELETE alteram as linhas de uma tabela: isso é DML. SELECT só consulta (DQL) e CREATE define a estrutura (DDL).",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "O MySQL executa as cláusulas na mesma ordem em que você as escreve: primeiro o SELECT, depois o FROM.",
+      "answer": false,
+      "explanation": "A ordem de escrita é SELECT, FROM, WHERE, ORDER BY, LIMIT, mas o banco começa pelo FROM, filtra com WHERE, só então escolhe as colunas do SELECT, ordena e corta.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a consulta que lista nome e preço dos produtos com preço abaixo de 200:\n\n```sql\nSELECT nome, preco ___ produtos WHERE preco < 200;\n```",
+      "answer": [["FROM"]],
+      "explanation": "Entre a lista de colunas e o filtro vem o FROM, que diz de qual tabela as linhas saem. Sem ele o MySQL não sabe onde procurar nome e preco.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Considere a tabela `produtos`:\n\n| nome | preco | estoque |\n|---|---|---|\n| Teclado | 120.00 | 35 |\n| Mouse | 60.00 | 50 |\n| Notebook | 4200.00 | 5 |\n| Webcam | 180.00 | 0 |\n\nO que devolve `SELECT nome FROM produtos WHERE estoque = 0;`?",
+      "options": {
+        "a": "Webcam",
+        "b": "Notebook",
+        "c": "Nenhuma linha",
+        "d": "Teclado e Mouse"
+      },
+      "answer": "a",
+      "explanation": "O WHERE mantém só as linhas em que estoque é exatamente 0: apenas a Webcam. O Notebook tem estoque 5, que é baixo, mas não é zero.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual destas consultas **falha** ao ser executada?",
+      "options": {
+        "a": "SELECT nome FROM clientes WHERE cidade = 'Recife';",
+        "b": "SELECT nome FROM clientes WHERE cidade = Recife;",
+        "c": "SELECT * FROM clientes;",
+        "d": "SELECT nome, cidade FROM clientes;"
+      },
+      "answer": "b",
+      "explanation": "Sem aspas simples, o MySQL entende `Recife` como o nome de uma coluna, que não existe, e devolve erro. Texto sempre vai entre aspas simples; as outras três consultas são válidas.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual afirmação descreve corretamente a relação entre o SQL padrão e os dialetos?",
+      "options": {
+        "a": "O SELECT básico muda tanto entre SGBDs que é preciso reaprender a linguagem em cada um",
+        "b": "O padrão ANSI define a base e cada SGBD acrescenta extensões, como LIMIT no MySQL e TOP no SQL Server",
+        "c": "Dialeto é o nome que se dá ao SQL usado em bancos NoSQL, como o MongoDB",
+        "d": "Só o MySQL segue o padrão ANSI; PostgreSQL e SQL Server usam linguagens próprias"
+      },
+      "answer": "b",
+      "explanation": "Todos os SGBDs relacionais seguem o núcleo definido pelo padrão ANSI/ISO e acrescentam variações próprias (LIMIT, TOP, funções de data). O SELECT básico é quase idêntico entre eles.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual consulta devolve nome e preço dos produtos com preço acima de 500, do mais caro ao mais barato, mostrando só 2 linhas?",
+      "options": {
+        "a": "SELECT nome, preco FROM produtos WHERE preco > 500 ORDER BY preco DESC LIMIT 2;",
+        "b": "SELECT nome, preco FROM produtos ORDER BY preco DESC WHERE preco > 500 LIMIT 2;",
+        "c": "SELECT nome, preco FROM produtos WHERE preco > 500 LIMIT 2 ORDER BY preco DESC;",
+        "d": "SELECT nome, preco WHERE preco > 500 FROM produtos ORDER BY preco DESC LIMIT 2;"
+      },
+      "answer": "a",
+      "explanation": "A ordem de escrita é fixa: SELECT, FROM, WHERE, ORDER BY, LIMIT. As outras três trocam cláusulas de lugar (WHERE depois de ORDER BY, LIMIT antes de ORDER BY, WHERE antes de FROM) e são erro de sintaxe.",
+      "points": 2
+    }
+  ]
+}

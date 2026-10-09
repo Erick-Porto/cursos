@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Aplicações e usuários enviam comandos ao SGBD, que lê e grava nos arquivos de dados do disco e devolve o resultado</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .hi { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#head); }
+    .back { stroke: #60a5fa; stroke-width: 3; fill: none; marker-end: url(#headb); }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="headb" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <rect x="30" y="60" width="190" height="48" rx="10" class="box"/>
+  <text x="125" y="92" text-anchor="middle" class="t">Aplicação web</text>
+  <rect x="30" y="126" width="190" height="48" rx="10" class="box"/>
+  <text x="125" y="158" text-anchor="middle" class="t">Relatórios</text>
+  <rect x="30" y="192" width="190" height="48" rx="10" class="box"/>
+  <text x="125" y="224" text-anchor="middle" class="t">Cliente mysql</text>
+
+  <rect x="270" y="50" width="180" height="200" rx="12" class="hi"/>
+  <text x="360" y="92" text-anchor="middle" class="h">SGBD</text>
+  <text x="360" y="130" text-anchor="middle" class="m">valida o comando</text>
+  <text x="360" y="160" text-anchor="middle" class="m">aplica as regras</text>
+  <text x="360" y="190" text-anchor="middle" class="m">controla o acesso</text>
+  <text x="360" y="222" text-anchor="middle" class="m">lê e grava</text>
+
+  <rect x="520" y="100" width="170" height="100" rx="12" class="box"/>
+  <text x="605" y="140" text-anchor="middle" class="t">Disco</text>
+  <text x="605" y="170" text-anchor="middle" class="m">arquivos de dados</text>
+
+  <path d="M220 84 L262 120" class="arrow"/>
+  <path d="M220 150 L262 150" class="arrow"/>
+  <path d="M220 216 L262 180" class="arrow"/>
+  <path d="M450 136 L512 136" class="arrow"/>
+  <path d="M512 164 L458 164" class="back"/>
+
+  <text x="360" y="282" text-anchor="middle" class="m">ninguém toca nos arquivos: tudo passa pelo SGBD</text>
+</svg>

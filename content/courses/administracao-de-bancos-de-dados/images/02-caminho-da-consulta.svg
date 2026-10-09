@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>Caminho de uma consulta: o SQL entra, passa pelo parser, pelo otimizador e pelo executor, chega ao armazenamento e o resultado volta ao cliente</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .sql { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .in { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .out { fill: #131c33; stroke: #60a5fa; stroke-width: 2.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#head); }
+    .step { opacity: .35; animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: linear; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; }
+    .s4 { animation-name: s4; } .s5 { animation-name: s5; } .s6 { animation-name: s6; }
+    @keyframes s1 { 0% { opacity: .35 } 4%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @keyframes s2 { 0%, 12% { opacity: .35 } 16%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @keyframes s3 { 0%, 24% { opacity: .35 } 28%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @keyframes s4 { 0%, 36% { opacity: .35 } 40%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @keyframes s5 { 0%, 48% { opacity: .35 } 52%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @keyframes s6 { 0%, 60% { opacity: .35 } 64%, 92% { opacity: 1 } 100% { opacity: .35 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <g class="step s1">
+    <rect x="30" y="30" width="660" height="52" rx="10" class="in"/>
+    <text x="360" y="64" text-anchor="middle" class="sql">SELECT nome FROM produtos WHERE preco &gt; 100</text>
+  </g>
+
+  <g class="step s2">
+    <path d="M130 82 L130 108" class="arrow"/>
+    <rect x="30" y="110" width="200" height="90" rx="12" class="box"/>
+    <text x="130" y="148" text-anchor="middle" class="t">Parser</text>
+    <text x="130" y="180" text-anchor="middle" class="m">valida a sintaxe</text>
+  </g>
+
+  <g class="step s3">
+    <path d="M230 155 L258 155" class="arrow"/>
+    <rect x="260" y="110" width="200" height="90" rx="12" class="box"/>
+    <text x="360" y="148" text-anchor="middle" class="t">Otimizador</text>
+    <text x="360" y="180" text-anchor="middle" class="m">escolhe o plano</text>
+  </g>
+
+  <g class="step s4">
+    <path d="M460 155 L488 155" class="arrow"/>
+    <rect x="490" y="110" width="200" height="90" rx="12" class="box"/>
+    <text x="590" y="148" text-anchor="middle" class="t">Executor</text>
+    <text x="590" y="180" text-anchor="middle" class="m">roda o plano</text>
+  </g>
+
+  <g class="step s5">
+    <path d="M590 200 L590 228" class="arrow"/>
+    <rect x="490" y="230" width="200" height="90" rx="12" class="box"/>
+    <text x="590" y="268" text-anchor="middle" class="t">Armazenamento</text>
+    <text x="590" y="300" text-anchor="middle" class="m">lê páginas do disco</text>
+  </g>
+
+  <g class="step s6">
+    <path d="M490 275 L462 275" class="arrow"/>
+    <rect x="30" y="230" width="430" height="90" rx="12" class="out"/>
+    <text x="245" y="268" text-anchor="middle" class="t">Resultado</text>
+    <text x="245" y="300" text-anchor="middle" class="m">as linhas voltam ao cliente</text>
+  </g>
+</svg>

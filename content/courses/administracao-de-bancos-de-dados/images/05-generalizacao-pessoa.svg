@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>Generalização: pessoa, com id, nome, cpf e email, se especializa em cliente, com limite de crédito, e em funcionário, com matrícula e salário</title>
+  <style>
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .a { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .k { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .ln { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- superclasse -->
+  <rect x="230" y="24" width="260" height="88" rx="12" class="box"/>
+  <path d="M230 36 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="360" y="52" text-anchor="middle" class="hd">pessoa</text>
+  <text x="246" y="96" class="a"><tspan text-decoration="underline">id</tspan>, nome, cpf, email</text>
+  <text x="506" y="62" class="m">superclasse:</text>
+  <text x="506" y="86" class="m">o que é comum</text>
+
+  <!-- triângulo da hierarquia -->
+  <path d="M360 112 L360 134" class="ln"/>
+  <path d="M360 134 L330 180 L390 180 Z" fill="#131c33" stroke="#a78bfa" stroke-width="2.5"/>
+  <text x="402" y="166" class="k">é um tipo de</text>
+  <path d="M360 180 L360 204 M170 204 L550 204 M170 204 L170 220 M550 204 L550 220" class="ln"/>
+
+  <!-- subclasses -->
+  <rect x="40" y="220" width="260" height="124" rx="12" class="box"/>
+  <path d="M40 232 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="170" y="248" text-anchor="middle" class="hd">cliente</text>
+  <text x="56" y="292" class="a">limite_credito</text>
+  <text x="56" y="324" class="m">+ id, nome, cpf, email</text>
+
+  <text x="360" y="292" text-anchor="middle" class="m">subclasses:</text>
+  <text x="360" y="316" text-anchor="middle" class="m">o específico</text>
+
+  <rect x="420" y="220" width="260" height="124" rx="12" class="box"/>
+  <path d="M420 232 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="550" y="248" text-anchor="middle" class="hd">funcionário</text>
+  <text x="436" y="292" class="a">matricula, salario</text>
+  <text x="436" y="324" class="m">+ id, nome, cpf, email</text>
+
+  <text x="360" y="384" text-anchor="middle" class="m">as subclasses herdam os atributos da superclasse</text>
+</svg>

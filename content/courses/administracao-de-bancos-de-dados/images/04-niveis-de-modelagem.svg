@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" font-family="Inter, system-ui, sans-serif">
+  <title>Os três níveis de modelagem: o conceitual descreve o negócio, o lógico define tabelas e chaves, o físico escolhe tipos e índices do MySQL</title>
+  <style>
+    .hd { font-size: 22px; font-weight: 700; }
+    .v { fill: #e8edf7; font-size: 18px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .ex { font-size: 18px; font-weight: 700; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#head); }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#0b1020"/>
+
+  <rect x="20" y="30" width="200" height="160" rx="12" class="box"/>
+  <path d="M20 42 a12 12 0 0 1 12 -12 h176 a12 12 0 0 1 12 12 v28 h-200 z" fill="#34d399"/>
+  <text x="120" y="58" text-anchor="middle" class="hd" fill="#06281c">1. Conceitual</text>
+  <text x="120" y="104" text-anchor="middle" class="v">entidades, atributos</text>
+  <text x="120" y="130" text-anchor="middle" class="v">e relacionamentos</text>
+  <text x="120" y="168" text-anchor="middle" class="m">independe do SGBD</text>
+  <text x="120" y="232" text-anchor="middle" class="ex" fill="#34d399">cliente faz pedido</text>
+
+  <path d="M220 110 L258 110" class="arrow"/>
+
+  <rect x="260" y="30" width="200" height="160" rx="12" class="box"/>
+  <path d="M260 42 a12 12 0 0 1 12 -12 h176 a12 12 0 0 1 12 12 v28 h-200 z" fill="#a78bfa"/>
+  <text x="360" y="58" text-anchor="middle" class="hd" fill="#0b1020">2. Lógico</text>
+  <text x="360" y="104" text-anchor="middle" class="v">tabelas, colunas,</text>
+  <text x="360" y="130" text-anchor="middle" class="v">chaves PK e FK</text>
+  <text x="360" y="168" text-anchor="middle" class="m">normalização</text>
+  <text x="360" y="232" text-anchor="middle" class="ex code" fill="#a78bfa">pedidos.cliente_id</text>
+
+  <path d="M460 110 L498 110" class="arrow"/>
+
+  <rect x="500" y="30" width="200" height="160" rx="12" class="box"/>
+  <path d="M500 42 a12 12 0 0 1 12 -12 h176 a12 12 0 0 1 12 12 v28 h-200 z" fill="#60a5fa"/>
+  <text x="600" y="58" text-anchor="middle" class="hd" fill="#0b1020">3. Físico</text>
+  <text x="600" y="104" text-anchor="middle" class="v">tipos de dados,</text>
+  <text x="600" y="130" text-anchor="middle" class="v">índices, engine</text>
+  <text x="600" y="168" text-anchor="middle" class="m">específico do MySQL</text>
+  <text x="600" y="232" text-anchor="middle" class="ex code" fill="#60a5fa">cliente_id INT</text>
+</svg>

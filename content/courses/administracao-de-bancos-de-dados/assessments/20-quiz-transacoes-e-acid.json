@@ -1,0 +1,108 @@
+{
+  "title": "Quiz: Transações e ACID",
+  "description": "Oito questões sobre START TRANSACTION, COMMIT, ROLLBACK, SAVEPOINT, as propriedades ACID e o commit implícito.",
+  "lesson": "transacoes-e-acid",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual propriedade ACID garante que uma transação seja tratada como uma unidade indivisível: ou todos os comandos valem, ou nenhum vale?",
+      "options": {
+        "a": "Consistência",
+        "b": "Isolamento",
+        "c": "Durabilidade",
+        "d": "Atomicidade"
+      },
+      "answer": "d",
+      "explanation": "Atomicidade é o \"tudo ou nada\": se um comando falha, os anteriores são desfeitos. Consistência trata das regras de integridade que precisam continuar válidas, não de desfazer comandos parciais."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Ana registrou um pedido em três comandos dentro de uma transação e o terceiro falhou. Qual comando desfaz os dois primeiros e devolve o banco ao estado anterior à transação?",
+      "options": {
+        "a": "COMMIT",
+        "b": "SAVEPOINT",
+        "c": "ROLLBACK",
+        "d": "RELEASE SAVEPOINT"
+      },
+      "answer": "c",
+      "explanation": "ROLLBACK desfaz todas as mudanças provisórias da transação. COMMIT faria o oposto, confirmando os dois comandos que deram certo; SAVEPOINT só cria um marcador e RELEASE SAVEPOINT o apaga sem desfazer nada."
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Dentro de uma transação no MySQL, um `TRUNCATE TABLE` pode ser desfeito com `ROLLBACK`, desde que a tabela seja InnoDB.",
+      "answer": false,
+      "explanation": "TRUNCATE TABLE é DDL e provoca commit implícito: ele confirma a transação em andamento e não pode ser desfeito, mesmo em tabelas InnoDB. Para apagar linhas com direito a ROLLBACK, use DELETE.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Para desfazer apenas os comandos executados depois do marcador `item_mouse`, mantendo a transação aberta, use `ROLLBACK TO ___ item_mouse;`",
+      "answer": [["SAVEPOINT"]],
+      "explanation": "ROLLBACK TO SAVEPOINT volta até o marcador e mantém a transação aberta; o que veio antes dele continua provisório, à espera do COMMIT.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais comandos confirmam a transação em andamento sem que você escreva `COMMIT`?",
+      "options": {
+        "a": "CREATE TABLE",
+        "b": "ALTER TABLE",
+        "c": "UPDATE",
+        "d": "TRUNCATE TABLE",
+        "e": "SELECT"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Comandos DDL (CREATE, ALTER, DROP, RENAME, TRUNCATE) fazem commit implícito no MySQL. UPDATE e SELECT são DML: participam da transação e continuam provisórios até o COMMIT.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O estoque do Teclado (id 1) é 35 e o da Webcam (id 6) é 0. Qual é o resultado da consulta final?\n\n```sql\nSTART TRANSACTION;\nUPDATE produtos SET estoque = estoque - 10 WHERE id = 1;\nUPDATE produtos SET estoque = estoque + 10 WHERE id = 6;\nROLLBACK;\nSELECT id, estoque FROM produtos WHERE id IN (1, 6);\n```",
+      "options": {
+        "a": "Teclado 25 e Webcam 10",
+        "b": "Teclado 35 e Webcam 0",
+        "c": "Teclado 25 e Webcam 0",
+        "d": "Erro: não há transação ativa para consultar"
+      },
+      "answer": "b",
+      "explanation": "O ROLLBACK desfaz os dois UPDATE de uma vez, então os estoques voltam a 35 e 0. A opção \"25 e 10\" seria o resultado se o fim fosse COMMIT; não existe caso em que só um dos UPDATE seja desfeito.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Um segundo depois de um `COMMIT` bem-sucedido, o servidor perde energia. Qual propriedade ACID garante que o pedido continue gravado quando o MySQL voltar?",
+      "options": {
+        "a": "Atomicidade",
+        "b": "Consistência",
+        "c": "Isolamento",
+        "d": "Durabilidade"
+      },
+      "answer": "d",
+      "explanation": "Durabilidade: o InnoDB grava o redo log em disco antes de responder ao COMMIT, então a mudança sobrevive à queda. Atomicidade cuida do \"tudo ou nada\" durante a transação, não do que acontece depois de confirmada."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Uma tabela foi criada com `ENGINE = MyISAM`. O que acontece ao executar `START TRANSACTION`, um `UPDATE` nessa tabela e, em seguida, `ROLLBACK`?",
+      "options": {
+        "a": "O UPDATE é desfeito normalmente, como em qualquer tabela",
+        "b": "O MySQL recusa o UPDATE com um erro de transação",
+        "c": "Nada é desfeito: o MyISAM grava na hora e o ROLLBACK só gera um aviso",
+        "d": "O ROLLBACK converte a tabela para InnoDB automaticamente"
+      },
+      "answer": "c",
+      "explanation": "O MyISAM não suporta transações: cada comando é gravado imediatamente. O ROLLBACK não encontra nada para desfazer e devolve apenas um aviso. Só tabelas InnoDB participam de COMMIT e ROLLBACK.",
+      "points": 2
+    }
+  ]
+}

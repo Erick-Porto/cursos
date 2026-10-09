@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: Locks e deadlocks",
+  "description": "Oito questões sobre locks compartilhados e exclusivos, SELECT ... FOR UPDATE, deadlocks e as práticas que os evitam.",
+  "lesson": "locks-e-deadlocks",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Um lock compartilhado (S) em uma linha permite que:",
+      "options": {
+        "a": "apenas uma transação leia a linha até o COMMIT",
+        "b": "várias transações leiam a linha ao mesmo tempo, mas nenhuma a altere",
+        "c": "apenas uma transação altere a linha, sem bloquear leituras",
+        "d": "várias transações alterem a linha ao mesmo tempo"
+      },
+      "answer": "b",
+      "explanation": "Locks S são compatíveis entre si: várias leituras convivem. Mas um lock X, necessário para alterar, só é concedido quando não há nenhum outro lock na linha."
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Para alterar uma linha, a transação precisa de um lock ___, que só uma transação pode manter por vez.",
+      "answer": [["exclusivo", "exclusive", "X", "de escrita"]],
+      "explanation": "O lock exclusivo (X) é tomado automaticamente por INSERT, UPDATE e DELETE, ou de forma antecipada por SELECT ... FOR UPDATE. Enquanto ele dura, nenhuma outra transação obtém lock S ou X na mesma linha."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Você precisa ler o estoque do Notebook e, logo em seguida, dar baixa nele, sem que outra sessão faça o mesmo entre a sua leitura e a sua escrita. Qual comando de leitura usar?",
+      "options": {
+        "a": "SELECT estoque FROM produtos WHERE id = 5;",
+        "b": "SELECT estoque FROM produtos WHERE id = 5 FOR SHARE;",
+        "c": "SELECT estoque FROM produtos WHERE id = 5 FOR UPDATE;",
+        "d": "SELECT estoque FROM produtos WHERE id = 5 LOCK TABLE;"
+      },
+      "answer": "c",
+      "explanation": "FOR UPDATE pega o lock exclusivo já na leitura: a outra sessão espera até o seu COMMIT. FOR SHARE deixa as duas lerem com lock compartilhado e, quando as duas tentam o UPDATE, cada uma espera a outra soltar o S: deadlock. O SELECT comum não trava nada, e LOCK TABLE não é uma cláusula do SELECT.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Ao detectar um deadlock, o InnoDB espera o `innodb_lock_wait_timeout` (50 segundos) e então cancela as duas transações envolvidas.",
+      "answer": false,
+      "explanation": "O InnoDB detecta o ciclo na hora, escolhe uma única vítima e desfaz só a transação dela, com o erro 1213. O timeout de 50 segundos pertence a outra situação: a espera longa por um lock, que gera o erro 1205 e desfaz apenas o comando.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais práticas reduzem bloqueios e deadlocks?",
+      "options": {
+        "a": "Manter as transações curtas, sem esperar o usuário com a transação aberta",
+        "b": "Acessar tabelas e linhas sempre na mesma ordem em todo o código",
+        "c": "Usar SERIALIZABLE em todas as transações do sistema",
+        "d": "Criar índices nas colunas do WHERE de UPDATE e DELETE",
+        "e": "Capturar o erro 1213 e repetir a transação"
+      },
+      "answer": ["a", "b", "d", "e"],
+      "explanation": "Transações curtas seguram locks por menos tempo; ordem fixa impede o ciclo de espera; índices reduzem as linhas travadas; repetir após o 1213 é o tratamento esperado. SERIALIZABLE faz o contrário: aumenta locks e esperas.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Dentro de transações abertas ao mesmo tempo, a sessão A faz `UPDATE` no produto 1 e depois no produto 2; a sessão B faz `UPDATE` no produto 2 e depois no produto 1. Os comandos se intercalam. O que acontece?",
+      "options": {
+        "a": "As duas esperam 50 segundos e falham com o erro 1205",
+        "b": "O InnoDB detecta o deadlock e desfaz uma delas com o erro 1213; a outra conclui",
+        "c": "As duas concluem, porque cada uma começou por uma linha diferente",
+        "d": "O MySQL coloca B em fila automaticamente e nenhuma recebe erro"
+      },
+      "answer": "b",
+      "explanation": "A segura a linha 1 e pede a 2; B segura a linha 2 e pede a 1. É um ciclo de espera, detectado na hora pelo InnoDB, que escolhe uma vítima e a desfaz com o erro 1213. Não há espera de 50 segundos nem fila automática: a aplicação precisa repetir a transação desfeita.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No MySQL 8, onde você consulta os locks concedidos e em espera neste momento?",
+      "options": {
+        "a": "information_schema.tables",
+        "b": "SHOW PROCESSLIST",
+        "c": "performance_schema.data_locks",
+        "d": "mysql.general_log"
+      },
+      "answer": "c",
+      "explanation": "data_locks (e data_lock_waits) listam cada lock, seu modo e seu estado, GRANTED ou WAITING. SHOW PROCESSLIST mostra as sessões e o que elas executam, mas não os locks que mantêm."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que caracteriza o controle de concorrência **otimista**?",
+      "options": {
+        "a": "Trava o recurso antes de ler e libera apenas no COMMIT",
+        "b": "Lê sem travar e, ao gravar, confere se nada mudou; se mudou, repete",
+        "c": "Usa sempre o nível SERIALIZABLE para evitar conflitos",
+        "d": "Bloqueia a tabela inteira durante a transação"
+      },
+      "answer": "b",
+      "explanation": "O controle otimista assume que conflitos são raros: lê livremente e confere na gravação, por exemplo com uma coluna de versão. Travar antes de usar é a estratégia pessimista, a que o InnoDB aplica com locks."
+    }
+  ]
+}

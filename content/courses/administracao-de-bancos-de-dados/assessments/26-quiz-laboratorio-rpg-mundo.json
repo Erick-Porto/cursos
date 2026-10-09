@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: Laboratório: A Forja do Destino",
+  "description": "Oito provações sobre o rpg_mundo: DML, transações, chaves estrangeiras, trigger, view e procedure.",
+  "lesson": "laboratorio-rpg-mundo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual comando registra a nova heroína Brienne de Tarth na tabela `personagens`?",
+      "options": {
+        "a": "UPDATE personagens",
+        "b": "INSERT INTO personagens",
+        "c": "ALTER TABLE personagens",
+        "d": "CREATE TABLE personagens"
+      },
+      "answer": "b",
+      "explanation": "INSERT cria uma linha nova. UPDATE altera linhas que já existem, e ALTER TABLE e CREATE TABLE mexem na estrutura, não nos dados."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em `UPDATE magias SET custo_mana = custo_mana + 2 WHERE nivel_requerido = 1;`, qual parte decide **quais** magias mudam?",
+      "options": {
+        "a": "UPDATE magias",
+        "b": "SET custo_mana = custo_mana + 2",
+        "c": "WHERE nivel_requerido = 1",
+        "d": "custo_mana + 2"
+      },
+      "answer": "c",
+      "explanation": "WHERE seleciona as linhas afetadas: só as magias de nível 1. SET diz o que muda nelas, e UPDATE magias diz em qual tabela. Sem o WHERE, todas as magias ficariam 2 pontos mais caras.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Alguém executa `DELETE FROM personagens;` sem `WHERE`. A chave estrangeira de `personagem_magias` tem `ON DELETE CASCADE`. O que acontece?",
+      "options": {
+        "a": "Nada: o MySQL exige WHERE em todo DELETE",
+        "b": "Todos os heróis são apagados e, em cascata, todas as linhas de personagem_magias",
+        "c": "Só os heróis sem magias são apagados; os outros são protegidos pela chave estrangeira",
+        "d": "Os heróis são apagados, mas seus grimórios continuam em personagem_magias"
+      },
+      "answer": "b",
+      "explanation": "DELETE sem WHERE atinge a tabela inteira, e o CASCADE leva junto as linhas dependentes. É a chave estrangeira sem CASCADE que bloquearia a exclusão; com CASCADE, ela apaga em vez de proteger.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Gandalf (`id` 3) conhece duas magias. Você executa a sequência abaixo. Qual é o estado final?\n\n```sql\nSTART TRANSACTION;\nDELETE FROM personagens WHERE id = 3;\nROLLBACK;\n```",
+      "options": {
+        "a": "Gandalf foi apagado, mas as duas magias continuam no grimório",
+        "b": "Gandalf e as duas linhas do grimório estão de volta, como antes",
+        "c": "Gandalf voltou, mas o grimório foi perdido pelo CASCADE",
+        "d": "Erro: não é possível fazer ROLLBACK de um DELETE"
+      },
+      "answer": "b",
+      "explanation": "O ROLLBACK desfaz tudo o que a transação fez, inclusive o que o CASCADE apagou em personagem_magias. O banco volta exatamente ao estado anterior ao START TRANSACTION.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "A coluna `personagens.raca_id` referencia `racas.id` e, por isso, é uma chave ___.",
+      "answer": [["estrangeira", "foreign key", "FK"]],
+      "explanation": "Uma chave estrangeira (FOREIGN KEY) aponta para a chave primária de outra tabela. É ela que impede um herói de ter uma raça inexistente e que define o que acontece quando a raça é apagada (SET NULL, no rpg_mundo)."
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Um trigger `AFTER UPDATE` em `personagens` pode inserir uma linha em `cronicas`, mas não pode executar um `UPDATE` na própria tabela `personagens`.",
+      "answer": true,
+      "explanation": "No MySQL, um trigger não pode alterar a tabela que o disparou, porque ela já está em uso pelo comando. Gravar em outra tabela, como cronicas, é o uso clássico; para ajustar a própria linha, usa-se SET NEW.coluna em um trigger BEFORE."
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "A view `vw_ficha_heroi` liga `personagens` a `racas`, `classes` e `personagem_magias` com `LEFT JOIN`. Quais heróis aparecem na ficha?",
+      "options": {
+        "a": "Um herói cuja raça foi apagada e ficou com raca_id nulo",
+        "b": "Um herói que não conhece nenhuma magia",
+        "c": "Somente heróis com raça e classe preenchidas",
+        "d": "Um herói com raça, classe e várias magias"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "LEFT JOIN mantém toda linha da esquerda (personagens) mesmo sem par na direita: o herói sem raça aparece com raca nula e o herói sem magias aparece com contagem 0. Só um JOIN comum restringiria a ficha aos heróis com todas as ligações preenchidas.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A procedure `sp_aprender_magia` lança `SIGNAL SQLSTATE '45000'` quando o nível do herói é menor que o `nivel_requerido` da magia. Brienne (`id` 6) está no nível 1 e Escudo Mágico (`id` 3) exige nível 2. O que `CALL sp_aprender_magia(6, 3)` produz?",
+      "options": {
+        "a": "Insere a linha em personagem_magias e emite um warning",
+        "b": "ERROR 1644 (45000) com a mensagem definida, e nada é inserido",
+        "c": "Insere a linha com nivel_maestria igual a 0",
+        "d": "Sobe Brienne para o nível 2 e então insere a linha"
+      },
+      "answer": "b",
+      "explanation": "SIGNAL interrompe a procedure com um erro antes do INSERT, então nenhuma linha é gravada e o cliente recebe ERROR 1644 (45000) com o texto da mensagem. A procedure valida a regra; ela não altera o nível do herói.",
+      "points": 2
+    }
+  ]
+}

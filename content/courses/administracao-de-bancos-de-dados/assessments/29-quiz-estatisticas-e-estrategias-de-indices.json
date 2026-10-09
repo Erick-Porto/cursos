@@ -1,0 +1,105 @@
+{
+  "title": "Quiz: Estatísticas e estratégias de índices",
+  "description": "Verifique se você entende como o otimizador usa estatísticas e como projetar índices que valem o custo.",
+  "lesson": "estatisticas-e-estrategias-de-indices",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Para que o otimizador do MySQL usa as **estatísticas** das tabelas e índices?",
+      "options": {
+        "a": "Para estimar o custo de cada plano possível e quantas linhas um filtro deve devolver",
+        "b": "Para definir os tipos de dados e as constraints de cada coluna",
+        "c": "Para controlar quantas conexões simultâneas o servidor aceita",
+        "d": "Para decidir em qual disco os arquivos da tabela serão gravados"
+      },
+      "answer": "a",
+      "explanation": "Estatísticas como total de linhas, cardinalidade e histogramas alimentam a estimativa de custo. Com elas desatualizadas, o otimizador pode escolher varrer a tabela mesmo havendo um bom índice."
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Depois de carregar milhões de linhas em `pedidos`, o DBA roda `___ pedidos;` para recalcular as estatísticas da tabela e de seus índices.",
+      "answer": [["ANALYZE TABLE", "ANALYZE"]],
+      "explanation": "`ANALYZE TABLE` recalcula e grava as estatísticas persistentes do InnoDB. O recálculo automático só dispara quando cerca de 10% das linhas mudam, e pode demorar a acontecer."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A tabela `pedidos` tem o índice composto `(cliente_id, data_pedido, status)`. Qual destas condições **não** consegue usar esse índice?",
+      "options": {
+        "a": "WHERE cliente_id = 3",
+        "b": "WHERE cliente_id = 3 AND data_pedido > '2025-03-01'",
+        "c": "WHERE data_pedido > '2025-03-01' AND status = 'pago'",
+        "d": "WHERE cliente_id = 3 AND data_pedido = '2025-03-02' AND status = 'pago'"
+      },
+      "answer": "c",
+      "explanation": "Pela regra do prefixo mais à esquerda, a consulta precisa filtrar a primeira coluna do índice. A alternativa c pula `cliente_id`, então o índice, ordenado primeiro por cliente, não permite localizar as datas diretamente.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em uma tabela de um milhão de linhas, um índice em uma coluna com apenas dois valores distintos (por exemplo, `ativo` com sim e não) costuma acelerar muito as consultas que filtram por essa coluna.",
+      "answer": false,
+      "explanation": "A seletividade é baixíssima: cada valor corresponde a centenas de milhares de linhas, e o InnoDB ainda teria que voltar à tabela por cada ponteiro. Varrer em sequência costuma ser mais barato, e o otimizador tende a ignorar o índice."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre um **covering index** estão corretas?",
+      "options": {
+        "a": "Todas as colunas que a consulta usa estão dentro do índice",
+        "b": "O EXPLAIN mostra `Using index` na coluna Extra",
+        "c": "O InnoDB ainda precisa ler a tabela para cada linha encontrada",
+        "d": "A chave primária vem incluída automaticamente em todo índice secundário"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Um covering index responde a consulta sem visitar a tabela, e é exatamente isso que `Using index` sinaliza. Como os índices secundários do InnoDB guardam o valor da PK, ela também conta como coberta.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A aplicação executa o dia todo estas duas consultas em `pedidos`:\n\n```sql\nSELECT id, total FROM pedidos WHERE cliente_id = ? ORDER BY data_pedido DESC;\nSELECT id, total FROM pedidos WHERE cliente_id = ? AND data_pedido > ?;\n```\n\nQual **único** índice atende bem as duas?",
+      "options": {
+        "a": "INDEX (data_pedido, cliente_id)",
+        "b": "INDEX (cliente_id, data_pedido)",
+        "c": "Dois índices separados: INDEX (cliente_id) e INDEX (data_pedido)",
+        "d": "INDEX (data_pedido)"
+      },
+      "answer": "b",
+      "explanation": "As duas filtram por igualdade em `cliente_id` e depois ordenam ou restringem `data_pedido`. Com `cliente_id` à esquerda, o índice localiza o cliente e já entrega as datas em ordem, sem filesort. Com `data_pedido` primeiro, o filtro por cliente não aproveita o índice.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Por que uma busca por igualdade em um índice B-tree é rápida mesmo com milhões de linhas?",
+      "options": {
+        "a": "Porque a árvore é ordenada e balanceada: a busca desce da raiz às folhas em poucos passos",
+        "b": "Porque o índice inteiro fica sempre carregado na memória",
+        "c": "Porque o InnoDB lê a tabela em paralelo com várias threads",
+        "d": "Porque as folhas da árvore são tabelas hash com acesso direto"
+      },
+      "answer": "a",
+      "explanation": "Cada nível da B-tree descarta a maior parte das chaves; com três ou quatro níveis cobre-se um milhão de linhas. As folhas são ordenadas e encadeadas, o que também permite percorrer intervalos e ordenar sem passo extra."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual é a principal desvantagem de manter muitos índices em uma tabela que recebe milhares de `INSERT` e `UPDATE` por minuto?",
+      "options": {
+        "a": "Os SELECTs ficam mais lentos, porque o otimizador se confunde com tantas opções",
+        "b": "Cada escrita precisa atualizar todos os índices da tabela, tornando INSERT, UPDATE e DELETE mais lentos",
+        "c": "O backup da tabela deixa de funcionar com mais de dez índices",
+        "d": "O MySQL limita o número de colunas que podem ser adicionadas depois"
+      },
+      "answer": "b",
+      "explanation": "Índice é uma estrutura extra que precisa ser mantida em sincronia com a tabela. Dez índices são dez atualizações a mais por linha gravada. Índices redundantes ou não usados pagam esse custo sem devolver nada; `sys.schema_unused_indexes` ajuda a encontrá-los."
+    }
+  ]
+}

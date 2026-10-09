@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>Sintaxe do crontab: cinco campos (minuto, hora, dia do mês, mês, dia da semana) e o comando; "0 2 * * *" roda todo dia às 02:00</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .r { fill: #34d399; font-size: 22px; }
+    .f { fill: #fbbf24; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .line { stroke: #2a3a5c; stroke-width: 2; fill: none; }
+  </style>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <rect x="80" y="40" width="56" height="44" rx="8" class="box"/>
+  <text x="108" y="71" text-anchor="middle" class="f">0</text>
+  <rect x="160" y="40" width="56" height="44" rx="8" class="box"/>
+  <text x="188" y="71" text-anchor="middle" class="f">2</text>
+  <rect x="240" y="40" width="56" height="44" rx="8" class="box"/>
+  <text x="268" y="71" text-anchor="middle" class="f">*</text>
+  <rect x="320" y="40" width="56" height="44" rx="8" class="box"/>
+  <text x="348" y="71" text-anchor="middle" class="f">*</text>
+  <rect x="400" y="40" width="56" height="44" rx="8" class="box"/>
+  <text x="428" y="71" text-anchor="middle" class="f">*</text>
+  <text x="476" y="70" class="c">backup_loja.sh</text>
+
+  <path d="M108 84 L108 130 M268 84 L268 130" class="line"/>
+  <path d="M188 84 L188 224 M348 84 L348 224" class="line"/>
+  <path d="M428 84 L428 206 L540 206 L540 224" class="line"/>
+
+  <rect x="35" y="130" width="146" height="64" rx="10" class="box"/>
+  <text x="108" y="156" text-anchor="middle" class="t">minuto</text>
+  <text x="108" y="182" text-anchor="middle" class="m">0 a 59</text>
+  <rect x="195" y="130" width="146" height="64" rx="10" class="box"/>
+  <text x="268" y="156" text-anchor="middle" class="t">dia do mês</text>
+  <text x="268" y="182" text-anchor="middle" class="m">1 a 31</text>
+
+  <rect x="115" y="224" width="146" height="64" rx="10" class="box"/>
+  <text x="188" y="250" text-anchor="middle" class="t">hora</text>
+  <text x="188" y="276" text-anchor="middle" class="m">0 a 23</text>
+  <rect x="275" y="224" width="146" height="64" rx="10" class="box"/>
+  <text x="348" y="250" text-anchor="middle" class="t">mês</text>
+  <text x="348" y="276" text-anchor="middle" class="m">1 a 12</text>
+  <rect x="440" y="224" width="200" height="64" rx="10" class="box"/>
+  <text x="540" y="250" text-anchor="middle" class="t">dia da semana</text>
+  <text x="540" y="276" text-anchor="middle" class="m">0 a 6, dom = 0</text>
+
+  <text x="360" y="326" text-anchor="middle" class="r"><tspan font-weight="700">Lê-se:</tspan> minuto 0 da hora 2, todo dia = 02:00 diário</text>
+</svg>

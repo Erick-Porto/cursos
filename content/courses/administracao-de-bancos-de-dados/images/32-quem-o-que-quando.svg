@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Toda linha da trilha de auditoria responde a quatro perguntas: quem, o quê, quando e de onde</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="h">Toda linha responde a quatro perguntas</text>
+
+  <rect x="40" y="64" width="310" height="100" rx="12" class="box" stroke="#34d399"/>
+  <text x="195" y="98" text-anchor="middle" class="t">Quem</text>
+  <text x="195" y="124" text-anchor="middle" class="m">conta da sessão</text>
+  <text x="195" y="148" text-anchor="middle" class="m">USER()</text>
+
+  <rect x="370" y="64" width="310" height="100" rx="12" class="box" stroke="#a78bfa"/>
+  <text x="525" y="98" text-anchor="middle" class="t">O quê</text>
+  <text x="525" y="124" text-anchor="middle" class="m">INSERT, UPDATE ou DELETE</text>
+  <text x="525" y="148" text-anchor="middle" class="m">dados antigos e novos</text>
+
+  <rect x="40" y="184" width="310" height="100" rx="12" class="box" stroke="#60a5fa"/>
+  <text x="195" y="218" text-anchor="middle" class="t">Quando</text>
+  <text x="195" y="244" text-anchor="middle" class="m">data e hora</text>
+  <text x="195" y="268" text-anchor="middle" class="m">CURRENT_TIMESTAMP</text>
+
+  <rect x="370" y="184" width="310" height="100" rx="12" class="box" stroke="#fbbf24"/>
+  <text x="525" y="218" text-anchor="middle" class="t">De onde</text>
+  <text x="525" y="244" text-anchor="middle" class="m">host de origem</text>
+  <text x="525" y="268" text-anchor="middle" class="m">app@10.0.0.5</text>
+
+  <text x="360" y="318" text-anchor="middle" class="m">Exemplo: app@10.0.0.5 alterou a cliente 1 em 12/03 às 10:15</text>
+</svg>

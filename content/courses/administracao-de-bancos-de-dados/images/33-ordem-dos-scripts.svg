@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" font-family="Inter, system-ui, sans-serif">
+  <title>Ordem de execução da entrega: ddl.sql, dml.sql, procedures.sql e consultas.sql; o mysqldump gera backup.sql; modelo.png e README.md documentam</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .f { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .doc { fill: #131c33; stroke: #60a5fa; stroke-width: 1.5; stroke-dasharray: 6 4; }
+    .out { fill: #131c33; stroke: #34d399; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="410" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="h">Ordem de execução da entrega</text>
+
+  <rect x="40" y="64" width="250" height="60" rx="12" class="box"/>
+  <text x="165" y="90" text-anchor="middle" class="f">ddl.sql</text>
+  <text x="165" y="114" text-anchor="middle" class="m">tabelas e índices</text>
+  <path d="M165 126 L165 148" class="arrow"/>
+
+  <rect x="40" y="152" width="250" height="60" rx="12" class="box"/>
+  <text x="165" y="178" text-anchor="middle" class="f">dml.sql</text>
+  <text x="165" y="202" text-anchor="middle" class="m">dados de teste</text>
+  <path d="M165 214 L165 236" class="arrow"/>
+
+  <rect x="40" y="240" width="250" height="60" rx="12" class="box"/>
+  <text x="165" y="266" text-anchor="middle" class="f">procedures.sql</text>
+  <text x="165" y="290" text-anchor="middle" class="m">rotinas e triggers</text>
+  <path d="M165 302 L165 324" class="arrow"/>
+
+  <rect x="40" y="328" width="250" height="60" rx="12" class="box"/>
+  <text x="165" y="354" text-anchor="middle" class="f">consultas.sql</text>
+  <text x="165" y="378" text-anchor="middle" class="m">testes e views</text>
+
+  <path d="M292 358 L478 358" class="arrow"/>
+  <text x="385" y="348" text-anchor="middle" class="m">mysqldump</text>
+
+  <rect x="480" y="328" width="220" height="60" rx="12" class="out"/>
+  <text x="590" y="354" text-anchor="middle" class="f">backup.sql</text>
+  <text x="590" y="378" text-anchor="middle" class="m">saída do mysqldump</text>
+
+  <text x="590" y="86" text-anchor="middle" class="m">lida, não executada</text>
+  <rect x="480" y="98" width="220" height="60" rx="12" class="doc"/>
+  <text x="590" y="124" text-anchor="middle" class="f">modelo.png</text>
+  <text x="590" y="148" text-anchor="middle" class="m">diagrama do modelo</text>
+
+  <rect x="480" y="172" width="220" height="60" rx="12" class="doc"/>
+  <text x="590" y="198" text-anchor="middle" class="f">README.md</text>
+  <text x="590" y="222" text-anchor="middle" class="m">como executar</text>
+</svg>

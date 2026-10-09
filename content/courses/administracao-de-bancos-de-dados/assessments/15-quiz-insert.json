@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Inserindo dados com INSERT",
+  "description": "Oito questões sobre DML, a sintaxe do INSERT, valores especiais, cópia com SELECT e erros de constraint.",
+  "lesson": "insert",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que caracteriza os comandos DML (`INSERT`, `UPDATE`, `DELETE`) em relação ao `SELECT`?",
+      "options": {
+        "a": "Eles só funcionam dentro de uma transação aberta com START TRANSACTION",
+        "b": "Eles alteram o conteúdo das tabelas e, com autocommit ligado, gravam na hora",
+        "c": "Eles mudam a estrutura das tabelas, como nomes de colunas e tipos",
+        "d": "Eles apenas leem dados, mas de várias tabelas ao mesmo tempo"
+      },
+      "answer": "b",
+      "explanation": "DML altera dados; SELECT só lê. Mudar a estrutura é papel do DDL (CREATE, ALTER, DROP). A transação explícita é opcional: com autocommit ligado, cada comando DML é confirmado assim que termina."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A tabela `clientes` tem as colunas `id` (AUTO_INCREMENT), `nome`, `email`, `cidade` (aceita NULL) e `criado_em` (DEFAULT CURRENT_TIMESTAMP). Qual comando insere corretamente a cliente Helena Castro, e-mail helena@exemplo.com?",
+      "options": {
+        "a": "INSERT INTO clientes (nome, email) VALUES ('Helena Castro', 'helena@exemplo.com');",
+        "b": "INSERT INTO clientes (nome, email) VALUES (Helena Castro, helena@exemplo.com);",
+        "c": "INSERT INTO clientes VALUES ('Helena Castro', 'helena@exemplo.com');",
+        "d": "INSERT INTO clientes SET (nome, email) = ('Helena Castro', 'helena@exemplo.com');"
+      },
+      "answer": "a",
+      "explanation": "Com a lista de colunas, basta informar nome e e-mail entre aspas simples: id, cidade e criado_em ficam de fora porque têm AUTO_INCREMENT, aceitam NULL ou têm DEFAULT. Sem a lista (opção c), o MySQL exige um valor para todas as cinco colunas, na ordem da tabela. Sem aspas (opção b), os textos são lidos como nomes de colunas.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Em uma coluna AUTO_INCREMENT, você deve informar o próximo número manualmente para evitar conflitos.",
+      "answer": false,
+      "explanation": "É o contrário: omita a coluna (ou passe NULL) e o MySQL gera o próximo valor. Digitar o id à mão é justamente o que causa o erro Duplicate entry quando outra inserção já usou aquele número."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Para descobrir o id que o MySQL gerou no seu último INSERT, nesta conexão, use a função ___.",
+      "answer": [["LAST_INSERT_ID()", "LAST_INSERT_ID", "SELECT LAST_INSERT_ID()"]],
+      "explanation": "LAST_INSERT_ID() devolve o valor AUTO_INCREMENT gerado pelo último INSERT da sua conexão. Inserções de outros usuários não interferem no resultado."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Sobre o comando abaixo, quais afirmações são verdadeiras?\n\n```sql\nINSERT INTO produtos\nVALUES (NULL, 'Headset', 250.00, 10, 1);\n```",
+      "options": {
+        "a": "Os valores precisam seguir a ordem das colunas definida no CREATE TABLE",
+        "b": "O NULL na primeira posição faz o MySQL gerar o id pelo AUTO_INCREMENT",
+        "c": "Se alguém acrescentar uma coluna à tabela, o comando deixa de funcionar",
+        "d": "É a forma recomendada, porque dispensa a lista de colunas"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Sem lista de colunas, os valores seguem a ordem física da tabela, o NULL no id aciona o AUTO_INCREMENT e qualquer coluna nova quebra o comando. Por isso a forma recomendada é a oposta: sempre com a lista de colunas.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A tabela `clientes` já tem Ana Souza com o e-mail ana@exemplo.com, e a coluna `email` é UNIQUE. O que acontece ao executar o comando abaixo?\n\n```sql\nINSERT INTO clientes (nome, email)\nVALUES ('Ana Silva', 'ana@exemplo.com');\n```",
+      "options": {
+        "a": "A linha é gravada com um novo id, porque o nome é diferente",
+        "b": "O MySQL responde Duplicate entry 'ana@exemplo.com' for key 'clientes.email' e não grava nada",
+        "c": "O MySQL substitui o cadastro antigo de Ana pelo novo",
+        "d": "A linha é gravada, mas o e-mail fica como NULL"
+      },
+      "answer": "b",
+      "explanation": "UNIQUE compara só a coluna email, e o valor já existe: a linha inteira é rejeitada com o erro 1062. O nome diferente não importa, e o INSERT nunca substitui uma linha existente.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A tabela `produtos_backup` já existe com as colunas `nome` e `preco`. Qual comando copia para ela o nome e o preço de todos os produtos sem estoque?",
+      "options": {
+        "a": "INSERT INTO produtos_backup (nome, preco) SELECT nome, preco FROM produtos WHERE estoque = 0;",
+        "b": "INSERT INTO produtos_backup (nome, preco) VALUES (SELECT nome, preco FROM produtos WHERE estoque = 0);",
+        "c": "COPY produtos TO produtos_backup WHERE estoque = 0;",
+        "d": "SELECT nome, preco INTO produtos_backup FROM produtos WHERE estoque = 0;"
+      },
+      "answer": "a",
+      "explanation": "No INSERT ... SELECT, o SELECT entra no lugar de VALUES e pode ter WHERE à vontade. Um SELECT de duas colunas dentro de VALUES não é sintaxe válida, COPY não existe no MySQL e SELECT ... INTO serve para variáveis, não para gravar em outra tabela.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual literal o MySQL aceita, sem ambiguidade, para gravar 15 de março de 2025 em uma coluna DATE?",
+      "options": {
+        "a": "'2025-03-15'",
+        "b": "'15/03/2025'",
+        "c": "15-03-2025",
+        "d": "'março 15, 2025'"
+      },
+      "answer": "a",
+      "explanation": "O formato é 'AAAA-MM-DD', entre aspas simples. '15/03/2025' é rejeitado como data inválida, 15-03-2025 sem aspas é uma subtração de números e nomes de mês por extenso não são reconhecidos."
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Tabelas temporárias",
+  "description": "Confira se você domina o ciclo de vida na sessão, o AS SELECT, a escolha entre temporária e CTE e as limitações do MySQL.",
+  "lesson": "tabelas-temporarias",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que diferencia uma tabela temporária de uma tabela permanente?",
+      "options": {
+        "a": "Ela não aceita INSERT nem UPDATE, só SELECT",
+        "b": "Ela existe só na sessão que a criou e some quando a conexão termina",
+        "c": "Ela fica sempre em memória e nunca é gravada em disco",
+        "d": "Ela não pode ter chave primária nem índice"
+      },
+      "answer": "b",
+      "explanation": "A temporária é uma tabela comum em quase tudo, inclusive INSERT, UPDATE, chaves e índices. A diferença é a vida: ligada à sessão. Onde o MySQL a guarda (memória ou disco) é detalhe interno, não a definição."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na sessão A você executou `CREATE TEMPORARY TABLE tmp_gastos AS SELECT ...`. Na sessão B, conectada ao mesmo banco `loja`, você roda `SELECT * FROM tmp_gastos;`. O que acontece?",
+      "options": {
+        "a": "B vê as mesmas linhas que A, porque o banco é o mesmo",
+        "b": "B vê a tabela, mas vazia",
+        "c": "B recebe ERROR 1146: para ela a tabela não existe",
+        "d": "B fica bloqueada até A desconectar"
+      },
+      "answer": "c",
+      "explanation": "A temporária pertence à sessão que a criou. Para qualquer outra sessão ela simplesmente não existe, por isso o erro 1146 (Table doesn't exist). Não há compartilhamento nem bloqueio.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre tabelas temporárias no MySQL 8 são verdadeiras?",
+      "options": {
+        "a": "Não aparecem em SHOW TABLES",
+        "b": "Somem sozinhas quando a sessão termina",
+        "c": "Aceitam FOREIGN KEY para tabelas permanentes",
+        "d": "Podem receber índices"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Temporárias são invisíveis no catálogo, morrem com a sessão e aceitam índices, o que ajuda quando são grandes. FOREIGN KEY é a exceção: o MySQL não permite em tabelas temporárias."
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "`CREATE TEMPORARY TABLE tmp_vendas AS SELECT ...` copia também a chave primária e os índices da tabela de origem.",
+      "answer": false,
+      "explanation": "AS SELECT copia dados e deduz colunas e tipos do resultado, nada mais. Chaves e índices precisam ser declarados em um CREATE explícito, seguido de INSERT ... SELECT, ou criados depois."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Para que um script possa rodar de novo na mesma sessão sem `ERROR 1050: Table already exists`, comece com `DROP TEMPORARY TABLE ___ tmp_gastos;`.",
+      "answer": [["IF EXISTS", "if exists"]],
+      "explanation": "IF EXISTS evita o erro quando a tabela ainda não existe; na segunda execução ela existe e é apagada. A palavra TEMPORARY garante que uma tabela permanente de mesmo nome nunca seja atingida."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A temporária `tmp_gastos` tem as colunas `cliente_id` e `total_gasto`. Qual é o resultado deste comando no MySQL?\n\n```sql\nSELECT a.cliente_id, b.cliente_id\nFROM tmp_gastos a\nJOIN tmp_gastos b ON b.total_gasto > a.total_gasto;\n```",
+      "options": {
+        "a": "Lista os pares de clientes normalmente",
+        "b": "ERROR 1137: Can't reopen table, porque a temporária não pode aparecer duas vezes na mesma consulta",
+        "c": "ERROR 1146: a tabela não existe",
+        "d": "Devolve só a primeira linha, sem erro"
+      },
+      "answer": "b",
+      "explanation": "Essa é a limitação mais conhecida do MySQL: a mesma tabela temporária não pode ser aberta duas vezes no mesmo comando, nem em self-join nem em subconsulta. A tabela existe (o erro 1146 seria em outra sessão); o problema é o reuso dentro da consulta.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Um relatório precisa agregar os pedidos por cliente e usar esse resultado em um único `SELECT`, sem reaproveitá-lo em outros comandos. Qual rascunho é o mais simples para o caso?",
+      "options": {
+        "a": "Uma tabela temporária, com DROP no fim",
+        "b": "Uma CTE, com WITH",
+        "c": "Uma view permanente",
+        "d": "Um trigger que grava a agregação"
+      },
+      "answer": "b",
+      "explanation": "Rascunho de um comando só é o caso da CTE: nasce e morre no mesmo SELECT, sem CREATE nem DROP. A temporária compensa quando o resultado é reaproveitado em vários comandos ou conferido entre etapas; a view é permanente e o trigger não tem nada a ver com consulta.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A procedure `sp_relatorio_gastos` cria `tmp_gastos` com `CREATE TEMPORARY TABLE ... AS SELECT` e não a apaga ao terminar. O que acontece ao executar `CALL sp_relatorio_gastos(1000)` duas vezes na mesma sessão?",
+      "options": {
+        "a": "A segunda chamada falha com ERROR 1050: Table already exists",
+        "b": "A segunda chamada substitui a tabela pela versão nova",
+        "c": "A segunda chamada duplica as linhas da tabela",
+        "d": "Funciona normalmente, porque cada CALL abre uma sessão própria"
+      },
+      "answer": "a",
+      "explanation": "A temporária da primeira chamada continua viva na sessão, então o CREATE da segunda encontra o nome ocupado e falha. Por isso a procedure deve começar com DROP TEMPORARY TABLE IF EXISTS ou apagar a tabela no fim. CALL não abre sessão nova.",
+      "points": 2
+    }
+  ]
+}

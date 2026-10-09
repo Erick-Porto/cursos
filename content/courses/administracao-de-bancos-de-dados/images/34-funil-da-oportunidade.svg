@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" font-family="Inter, system-ui, sans-serif">
+  <title>Funil da oportunidade: visibilidade leva a contato, contato a entrevista e entrevista à vaga</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .l1 { fill: #131c33; stroke: #60a5fa; stroke-width: 2.5; }
+    .l2 { fill: #131c33; stroke: #a78bfa; stroke-width: 2.5; }
+    .l3 { fill: #131c33; stroke: #fbbf24; stroke-width: 2.5; }
+    .l4 { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+  </style>
+  <rect width="720" height="370" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="h">O funil da oportunidade</text>
+
+  <polygon points="60,58 660,58 610,120 110,120" class="l1"/>
+  <text x="360" y="84" text-anchor="middle" class="t">1. Visibilidade</text>
+  <text x="360" y="108" text-anchor="middle" class="m">perfil no LinkedIn, currículo, GitHub</text>
+
+  <polygon points="110,126 610,126 560,188 160,188" class="l2"/>
+  <text x="360" y="152" text-anchor="middle" class="t">2. Contato</text>
+  <text x="360" y="176" text-anchor="middle" class="m">convites, mensagens, indicações</text>
+
+  <polygon points="160,194 560,194 510,256 210,256" class="l3"/>
+  <text x="360" y="220" text-anchor="middle" class="t">3. Entrevista</text>
+  <text x="360" y="244" text-anchor="middle" class="m">técnica e comportamental</text>
+
+  <polygon points="210,262 510,262 470,324 250,324" class="l4"/>
+  <text x="360" y="288" text-anchor="middle" class="t">4. Vaga</text>
+  <text x="360" y="312" text-anchor="middle" class="m">contratação</text>
+
+  <text x="360" y="354" text-anchor="middle" class="m">cada etapa só acontece se a anterior existir</text>
+</svg>

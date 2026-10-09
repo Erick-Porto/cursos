@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Ciclo de uma transação: START TRANSACTION abre, os comandos fazem mudanças provisórias e o fim é COMMIT, que grava tudo, ou ROLLBACK, que desfaz tudo</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ok { stroke: #34d399; stroke-width: 2.5; }
+    .no { stroke: #f87171; stroke-width: 2.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#head); }
+    .arrow-ok { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#head-ok); }
+    .arrow-no { stroke: #f87171; stroke-width: 3; fill: none; marker-end: url(#head-no); }
+    .step { opacity: .3; animation-duration: 8s; animation-timing-function: linear; animation-iteration-count: infinite; }
+    .s1 { animation-name: abre; }
+    .s2 { animation-name: provisorio; }
+    .s3 { animation-name: confirma; }
+    .s4 { animation-name: desfaz; }
+    @keyframes abre { 0% { opacity: .3 } 6%, 100% { opacity: 1 } }
+    @keyframes provisorio { 0%, 6% { opacity: .3 } 11%, 62% { opacity: 1 } 68%, 80% { opacity: .3 } 86%, 100% { opacity: 1 } }
+    @keyframes confirma { 0%, 28% { opacity: .3 } 34%, 100% { opacity: 1 } }
+    @keyframes desfaz { 0%, 58% { opacity: .3 } 64%, 100% { opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="head-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="head-no" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <g class="step s1">
+    <rect x="40" y="40" width="300" height="84" rx="12" class="box"/>
+    <text x="190" y="74" text-anchor="middle" class="t">START TRANSACTION</text>
+    <text x="190" y="106" text-anchor="middle" class="m">abre a transação</text>
+  </g>
+
+  <path d="M340 82 L392 82" class="arrow"/>
+
+  <g class="step s2">
+    <rect x="400" y="40" width="280" height="84" rx="12" class="box"/>
+    <text x="540" y="74" text-anchor="middle" class="t">INSERT / UPDATE</text>
+    <text x="540" y="106" text-anchor="middle" class="m">mudanças provisórias</text>
+  </g>
+
+  <g class="step s3">
+    <path d="M440 124 C 440 170, 190 160, 190 212" class="arrow-ok"/>
+    <rect x="40" y="220" width="300" height="84" rx="12" class="box ok"/>
+    <text x="190" y="254" text-anchor="middle" class="t">COMMIT</text>
+    <text x="190" y="286" text-anchor="middle" class="m">grava as mudanças</text>
+  </g>
+
+  <g class="step s4">
+    <path d="M540 124 L540 212" class="arrow-no"/>
+    <rect x="400" y="220" width="280" height="84" rx="12" class="box no"/>
+    <text x="540" y="254" text-anchor="middle" class="t">ROLLBACK</text>
+    <text x="540" y="286" text-anchor="middle" class="m">desfaz as mudanças</text>
+  </g>
+
+  <text x="360" y="342" text-anchor="middle" class="m">a transação sempre termina de um dos dois jeitos</text>
+</svg>

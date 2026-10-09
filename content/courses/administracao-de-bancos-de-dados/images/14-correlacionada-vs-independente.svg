@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Fluxo de execução: a subconsulta independente roda uma vez e entrega um valor; a correlacionada roda de novo para cada linha da consulta externa</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .b { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .code { fill: #b4bfd3; font-size: 18px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+    .loop { stroke: #fbbf24; stroke-width: 2.5; fill: none; marker-end: url(#headl); }
+    .lt { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .ok { fill: #34d399; font-size: 18px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="headl" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <!-- independente -->
+  <text x="175" y="46" text-anchor="middle" class="t">Independente</text>
+  <rect x="20" y="66" width="310" height="80" rx="12" class="box"/>
+  <text x="175" y="100" text-anchor="middle" class="b">subconsulta roda 1 vez</text>
+  <text x="175" y="130" text-anchor="middle" class="code">AVG(preco) = 1035.00</text>
+  <path d="M175 146 L175 176" class="arrow"/>
+  <rect x="20" y="180" width="310" height="80" rx="12" class="box"/>
+  <text x="175" y="214" text-anchor="middle" class="b">consulta externa compara</text>
+  <text x="175" y="244" text-anchor="middle" class="m">cada preco com 1035.00</text>
+  <text x="175" y="300" text-anchor="middle" class="ok">uma execução, um valor</text>
+
+  <!-- correlacionada -->
+  <text x="520" y="46" text-anchor="middle" class="t">Correlacionada</text>
+  <rect x="370" y="66" width="300" height="80" rx="12" class="box"/>
+  <text x="520" y="100" text-anchor="middle" class="b">linha externa: c.id = 1</text>
+  <text x="520" y="130" text-anchor="middle" class="m">a cliente Ana</text>
+  <path d="M520 146 L520 176" class="arrow"/>
+  <rect x="370" y="180" width="300" height="80" rx="12" class="box"/>
+  <text x="520" y="214" text-anchor="middle" class="b">subconsulta roda de novo</text>
+  <text x="520" y="244" text-anchor="middle" class="code">WHERE p.cliente_id = 1</text>
+  <path d="M670 220 C706 220, 706 106, 676 106" class="loop"/>
+  <text x="520" y="300" text-anchor="middle" class="lt">roda de novo para cada linha: 2, 3, 4...</text>
+</svg>

@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Normalização e integridade",
+  "description": "Oito questões sobre anomalias, formas normais, desnormalização e constraints.",
+  "lesson": "normalizacao-e-integridade",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A loja guarda pedidos e clientes na mesma tabela. Ao apagar o único pedido de Bruno, o cadastro dele some do sistema. Que anomalia é essa?",
+      "options": {
+        "a": "Anomalia de inserção",
+        "b": "Anomalia de atualização",
+        "c": "Anomalia de exclusão",
+        "d": "Anomalia referencial"
+      },
+      "answer": "c",
+      "explanation": "Perder dados de um assunto (o cliente) ao apagar outro (o pedido) é a anomalia de exclusão. A de inserção é o inverso: não dá para cadastrar um cliente sem inventar um pedido. 'Referencial' é um tipo de integridade, não uma anomalia."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A tabela `itens_pedido` tem chave primária composta (`pedido_id`, `produto_id`) e a coluna `produto_nome`, que depende apenas de `produto_id`. Qual forma normal ela viola?",
+      "options": {
+        "a": "1FN, porque a chave tem duas colunas",
+        "b": "2FN, porque há uma dependência parcial da chave",
+        "c": "3FN, porque há uma dependência transitiva",
+        "d": "Nenhuma; a tabela está correta"
+      },
+      "answer": "b",
+      "explanation": "Um atributo fora da chave que depende só de parte da chave composta é uma dependência parcial, proibida pela 2FN. Seria 3FN se `produto_nome` dependesse de outro atributo fora da chave, e não de parte dela.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais situações violam a primeira forma normal (1FN)?",
+      "options": {
+        "a": "Uma coluna `telefones` com o valor `9999-1111, 8888-2222`",
+        "b": "Colunas `produto1`, `produto2` e `produto3` na tabela `pedidos`",
+        "c": "Uma coluna `cliente_id` que é chave estrangeira",
+        "d": "Uma coluna `total` com o valor somado dos itens"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Listas dentro de uma célula e grupos repetidos de colunas quebram a atomicidade exigida pela 1FN. Uma chave estrangeira é parte normal do modelo, e uma coluna calculada é uma decisão de desnormalização, não uma violação da 1FN.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em uma tabela na 3FN, um atributo que não faz parte da chave pode depender de outro atributo que também não faz parte da chave.",
+      "answer": false,
+      "explanation": "Isso é exatamente a dependência transitiva que a 3FN proíbe. Na 3FN, todo atributo fora da chave depende apenas da chave."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "A restrição ___ garante a integridade referencial: o valor gravado na coluna precisa existir na tabela referenciada.",
+      "answer": [["FOREIGN KEY", "chave estrangeira", "FK"]],
+      "explanation": "A chave estrangeira (FOREIGN KEY) obriga cada referência a apontar para uma linha existente. A PRIMARY KEY garante a integridade de entidade, não a referencial."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A tabela foi criada assim no MySQL 8.0.16 ou superior, e o cliente 1 existe:\n\n```sql\nCREATE TABLE pedidos (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  cliente_id INT NOT NULL,\n  data_pedido DATE NOT NULL,\n  total DECIMAL(10,2) NOT NULL DEFAULT 0 CHECK (total >= 0),\n  FOREIGN KEY (cliente_id) REFERENCES clientes(id)\n);\n```\n\nO que acontece com `INSERT INTO pedidos (cliente_id, data_pedido, total) VALUES (1, '2025-03-02', -5);`?",
+      "options": {
+        "a": "A linha é gravada com total -5",
+        "b": "A linha é gravada com total 0, por causa do DEFAULT",
+        "c": "O MySQL rejeita a linha: a constraint CHECK foi violada",
+        "d": "O MySQL rejeita a linha: a chave estrangeira falha"
+      },
+      "answer": "c",
+      "explanation": "`CHECK (total >= 0)` bloqueia o valor negativo (erro 3819). O DEFAULT só entra quando a coluna não é informada, e a chave estrangeira está satisfeita porque o cliente 1 existe.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A tabela `pedidos(id, cliente_id, cliente_nome, cliente_email)` repete o nome e o e-mail do cliente em cada pedido. O que você faz para levá-la à 3FN?",
+      "options": {
+        "a": "Cria as colunas `cliente_nome2` e `cliente_email2` para o segundo pedido",
+        "b": "Move `cliente_nome` e `cliente_email` para `clientes` e mantém `cliente_id` como chave estrangeira",
+        "c": "Transforma (`id`, `cliente_id`) em chave primária composta",
+        "d": "Remove `cliente_id` e deixa só o nome do cliente no pedido"
+      },
+      "answer": "b",
+      "explanation": "Nome e e-mail dependem de `cliente_id`, não do pedido: é uma dependência transitiva. A solução é uma tabela `clientes` e a FK `cliente_id` em `pedidos`. Chave composta ou colunas numeradas só pioram a redundância.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em qual situação desnormalizar de propósito é uma decisão aceitável?",
+      "options": {
+        "a": "Em relatórios de leitura intensa, depois de medir o custo das junções e documentando a cópia",
+        "b": "Sempre que uma tabela passa de cinco colunas",
+        "c": "Quando a aplicação já valida os dados antes de gravar",
+        "d": "Nunca; a 3FN é obrigatória em qualquer sistema"
+      },
+      "answer": "a",
+      "explanation": "Desnormalizar é uma troca consciente: aceita-se redundância para acelerar leituras, com medição, documentação e um responsável por manter a cópia sincronizada. Validação na aplicação não substitui a estrutura correta."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>As quatro famílias do SQL: DQL lê dados, DML altera dados, DDL muda a estrutura e TCL controla transações; esta aula é sobre DML</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .k { fill: #a78bfa; font-size: 18px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .focus { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .line { stroke: #2a3a5c; stroke-width: 2; fill: none; }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+  <rect x="300" y="20" width="120" height="44" rx="12" class="box"/>
+  <text x="360" y="49" text-anchor="middle" class="t">SQL</text>
+  <path d="M360 64 L360 84 M100 84 L619 84 M100 84 L100 104 M273 84 L273 104 M446 84 L446 104 M619 84 L619 104" class="line"/>
+
+  <rect x="20" y="104" width="160" height="130" rx="12" class="box"/>
+  <text x="100" y="136" text-anchor="middle" class="t">DQL</text>
+  <text x="100" y="168" text-anchor="middle" class="k">SELECT</text>
+  <text x="100" y="220" text-anchor="middle" class="m">lê dados</text>
+
+  <rect x="193" y="104" width="160" height="130" rx="12" class="focus"/>
+  <text x="273" y="136" text-anchor="middle" class="t">DML</text>
+  <text x="273" y="168" text-anchor="middle" class="k">INSERT UPDATE</text>
+  <text x="273" y="192" text-anchor="middle" class="k">DELETE</text>
+  <text x="273" y="220" text-anchor="middle" class="m">altera dados</text>
+  <rect x="218" y="244" width="110" height="32" rx="16" fill="#34d399"/>
+  <text x="273" y="267" text-anchor="middle" font-size="18" font-weight="700" fill="#06281c">esta aula</text>
+
+  <rect x="366" y="104" width="160" height="130" rx="12" class="box"/>
+  <text x="446" y="136" text-anchor="middle" class="t">DDL</text>
+  <text x="446" y="168" text-anchor="middle" class="k">CREATE ALTER</text>
+  <text x="446" y="192" text-anchor="middle" class="k">DROP</text>
+  <text x="446" y="220" text-anchor="middle" class="m">muda a estrutura</text>
+
+  <rect x="539" y="104" width="160" height="130" rx="12" class="box"/>
+  <text x="619" y="136" text-anchor="middle" class="t">TCL</text>
+  <text x="619" y="168" text-anchor="middle" class="k">COMMIT</text>
+  <text x="619" y="192" text-anchor="middle" class="k">ROLLBACK</text>
+  <text x="619" y="220" text-anchor="middle" class="m">transações</text>
+</svg>

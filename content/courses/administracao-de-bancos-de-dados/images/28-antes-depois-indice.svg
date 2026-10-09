@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Antes do índice, o EXPLAIN mostra type ALL e 1.000.000 de linhas lidas; depois de CREATE INDEX em nome, mostra type ref e 12 linhas</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .v { fill: #e8edf7; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .row { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+    .step { animation: acende 6s infinite; opacity: .35; }
+    .step.s2 { animation-delay: 2s; }
+    .step.s3 { animation-delay: 4s; }
+    @keyframes acende { 0% { opacity: .35 } 8%, 30% { opacity: 1 } 40%, 100% { opacity: .35 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+  <text x="360" y="38" text-anchor="middle" class="h">A mesma consulta, antes e depois do índice</text>
+
+  <g class="step s1">
+    <rect x="20" y="60" width="200" height="270" rx="12" class="box"/>
+    <text x="120" y="92" text-anchor="middle" class="h">Antes</text>
+    <text x="120" y="122" text-anchor="middle" class="v">type: <tspan fill="#f87171" font-weight="700">ALL</tspan></text>
+    <text x="120" y="150" text-anchor="middle" class="v">rows: <tspan fill="#f87171" font-weight="700">1.000.000</tspan></text>
+    <rect x="40" y="170" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <rect x="40" y="192" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <rect x="40" y="214" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <rect x="40" y="236" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <rect x="40" y="258" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <rect x="40" y="280" width="160" height="16" rx="3" fill="#f87171" opacity=".35"/>
+    <text x="120" y="318" text-anchor="middle" class="m">lê tudo</text>
+  </g>
+
+  <path d="M220 190 L242 190" class="arrow"/>
+
+  <g class="step s2">
+    <rect x="245" y="120" width="230" height="130" rx="12" class="box" stroke="#a78bfa"/>
+    <text x="360" y="156" text-anchor="middle" class="t">CREATE INDEX</text>
+    <text x="360" y="190" text-anchor="middle" class="v">idx_clientes_nome</text>
+    <text x="360" y="222" text-anchor="middle" class="v">ON clientes (nome)</text>
+    <text x="360" y="290" text-anchor="middle" class="m">ordena os nomes</text>
+  </g>
+
+  <path d="M475 190 L497 190" class="arrow"/>
+
+  <g class="step s3">
+    <rect x="500" y="60" width="200" height="270" rx="12" class="box"/>
+    <text x="600" y="92" text-anchor="middle" class="h">Depois</text>
+    <text x="600" y="122" text-anchor="middle" class="v">type: <tspan fill="#34d399" font-weight="700">ref</tspan></text>
+    <text x="600" y="150" text-anchor="middle" class="v">rows: <tspan fill="#34d399" font-weight="700">12</tspan></text>
+    <rect x="520" y="170" width="160" height="16" rx="3" class="row"/>
+    <rect x="520" y="192" width="160" height="16" rx="3" class="row"/>
+    <rect x="520" y="214" width="160" height="16" rx="3" class="row"/>
+    <rect x="520" y="236" width="160" height="16" rx="3" fill="#34d399" opacity=".6"/>
+    <rect x="520" y="258" width="160" height="16" rx="3" class="row"/>
+    <rect x="520" y="280" width="160" height="16" rx="3" class="row"/>
+    <text x="600" y="318" text-anchor="middle" class="m">vai às 12 linhas</text>
+  </g>
+</svg>

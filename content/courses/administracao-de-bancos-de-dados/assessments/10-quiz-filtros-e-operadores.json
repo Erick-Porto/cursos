@@ -1,0 +1,111 @@
+{
+  "title": "Quiz: Filtros e operadores no WHERE",
+  "description": "Verifica se você domina os operadores de comparação, BETWEEN, IN, LIKE, NULL e a precedência de AND e OR.",
+  "lesson": "filtros-e-operadores",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual operador encontra valores dentro de um intervalo, **incluindo as duas pontas** (por exemplo, preço de 100 a 200)?",
+      "options": {
+        "a": "IN",
+        "b": "LIKE",
+        "c": "BETWEEN",
+        "d": "AND"
+      },
+      "answer": "c",
+      "explanation": "BETWEEN 100 AND 200 equivale a preco >= 100 AND preco <= 200. IN testa uma lista de valores, LIKE compara padrões de texto e AND apenas combina condições.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Você quer listar os clientes cujo e-mail **termina** com `@exemplo.com`. Qual cláusula usar?",
+      "options": {
+        "a": "WHERE email = '%@exemplo.com'",
+        "b": "WHERE email IN ('%@exemplo.com')",
+        "c": "WHERE email LIKE '%@exemplo.com'",
+        "d": "WHERE email LIKE '@exemplo.com%'"
+      },
+      "answer": "c",
+      "explanation": "Só o LIKE interpreta o curinga %. Com = ou IN, o símbolo é tratado como um caractere comum. A opção d coloca o % no fim, o que busca e-mails que *começam* com @exemplo.com.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "A condição `WHERE cidade = NULL` devolve as linhas em que a cidade não foi preenchida.",
+      "answer": false,
+      "explanation": "Qualquer comparação com NULL resulta em NULL, nunca em verdadeiro, então a consulta devolve zero linhas. Para encontrar valores ausentes, use IS NULL.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a consulta que lista os clientes de Recife ou Curitiba usando uma lista de valores:\n\n```sql\nSELECT nome FROM clientes WHERE cidade ___ ('Recife', 'Curitiba');\n```",
+      "answer": [["IN"]],
+      "explanation": "IN testa se o valor da coluna é um dos itens da lista entre parênteses e substitui uma cadeia de OR. BETWEEN serviria para um intervalo, não para uma lista.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "O produto **Mouse** tem `preco` 60.00, `estoque` 50 e `categoria_id` 1. Quais condições são **verdadeiras** para ele?",
+      "options": {
+        "a": "preco BETWEEN 50 AND 60",
+        "b": "nome LIKE '_ouse'",
+        "c": "estoque <> 50",
+        "d": "categoria_id IN (2, 3)",
+        "e": "NOT preco > 100"
+      },
+      "answer": ["a", "b", "e"],
+      "explanation": "BETWEEN inclui as pontas, então 60 está dentro; '_ouse' casa com Mouse porque _ vale um caractere; NOT preco > 100 inverte um falso e dá verdadeiro. Já estoque <> 50 é falso (o estoque é 50) e a categoria 1 não está em (2, 3).",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Tabela `pedidos`:\n\n| id | status | total |\n|---|---|---|\n| 1 | pago | 180.00 |\n| 2 | enviado | 900.00 |\n| 3 | aberto | 4200.00 |\n| 4 | cancelado | 60.00 |\n\nQuais ids a consulta abaixo devolve?\n\n```sql\nSELECT id FROM pedidos\nWHERE status = 'pago' OR status = 'enviado' AND total > 500;\n```",
+      "options": {
+        "a": "1 e 2",
+        "b": "Só o 2",
+        "c": "1, 2 e 3",
+        "d": "Nenhum"
+      },
+      "answer": "a",
+      "explanation": "Sem parênteses o AND é resolvido primeiro: a condição vira pago OU (enviado E total > 500). O pedido 1 entra por ser pago, com qualquer total; o 2 entra por ser enviado acima de 500. Com parênteses em volta do OR, só o 2 entraria.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No MySQL 8 com a collation padrão (`utf8mb4_0900_ai_ci`), o que acontece com `WHERE nome LIKE 'm%'` na tabela de produtos?",
+      "options": {
+        "a": "Casa só com nomes que começam com m minúsculo; Mouse e Monitor ficam de fora",
+        "b": "Casa com Mouse e Monitor 27\", porque a collation ignora maiúsculas e minúsculas",
+        "c": "Dá erro, porque o padrão do LIKE precisa começar com letra maiúscula",
+        "d": "Casa com qualquer nome que contenha a letra m em qualquer posição"
+      },
+      "answer": "b",
+      "explanation": "O sufixo ci significa case insensitive: 'm%' e 'M%' dão o mesmo resultado. A opção d descreve '%m%', e não existe regra de maiúscula no LIKE. No PostgreSQL, por outro lado, LIKE diferencia maiúsculas.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A tabela tem produtos com preço entre 100 e 200. Qual condição devolve **zero linhas sem dar erro**?",
+      "options": {
+        "a": "WHERE preco BETWEEN 200 AND 100",
+        "b": "WHERE preco BETWEEN 100 AND 200",
+        "c": "WHERE preco >= 100 AND preco <= 200",
+        "d": "WHERE preco IN (120, 180)"
+      },
+      "answer": "a",
+      "explanation": "BETWEEN 200 AND 100 equivale a preco >= 200 AND preco <= 100, impossível de satisfazer: o MySQL não reclama e devolve o resultado vazio. As outras três encontram os produtos de 120 e 180.",
+      "points": 2
+    }
+  ]
+}

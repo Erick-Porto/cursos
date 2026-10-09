@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Antes da normalização, pedidos guarda uma lista de produtos numa célula; na 1FN cada item vira uma linha da nova tabela itens</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; font-weight: 400; }
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .bad { fill: #fbbf24; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .new { stroke: #34d399; stroke-width: 2.5; }
+    .head { fill: #34d399; }
+    .s2 { animation: entra 8s infinite; }
+    @keyframes entra { 0%, 32% { opacity: .3 } 40%, 94% { opacity: 1 } 100% { opacity: .3 } }
+    @media (prefers-reduced-motion: reduce) { .s2 { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- antes -->
+  <text x="180" y="34" text-anchor="middle" class="h">Antes<tspan class="m"> · tudo em uma tabela</tspan></text>
+  <rect x="20" y="52" width="320" height="120" rx="12" class="box"/>
+  <path d="M20 64 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+  <text x="180" y="76" text-anchor="middle" class="hd">pedidos</text>
+  <text x="34" y="110" class="c">id, cliente_nome</text>
+  <text x="34" y="136" class="c">cliente_email</text>
+  <text x="34" y="162" class="c bad">produtos: Teclado, Mouse</text>
+
+  <path d="M348 126 L374 140 L348 154 Z" fill="#a78bfa"/>
+
+  <!-- 1FN -->
+  <g class="s2">
+    <text x="540" y="34" text-anchor="middle" class="h">1FN<tspan class="m"> · um valor por célula</tspan></text>
+    <rect x="380" y="52" width="320" height="94" rx="12" class="box"/>
+    <path d="M380 64 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="76" text-anchor="middle" class="hd">pedidos</text>
+    <text x="394" y="110" class="c">id, cliente_nome</text>
+    <text x="394" y="136" class="c">cliente_email</text>
+
+    <rect x="380" y="154" width="320" height="94" rx="12" class="box new"/>
+    <path d="M380 166 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="178" text-anchor="middle" class="hd">itens</text>
+    <text x="394" y="212" class="c">pedido_id, produto_id</text>
+    <text x="394" y="238" class="c"><tspan class="bad">produto_nome</tspan>, quantidade</text>
+  </g>
+
+  <text x="360" y="282" text-anchor="middle" class="m">amarelo: o que a próxima etapa corrige · verde: tabela nova</text>
+</svg>

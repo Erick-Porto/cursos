@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Triggers",
+  "description": "Confira se você domina OLD e NEW, o momento BEFORE e AFTER, a validação com SIGNAL e os riscos dos triggers.",
+  "lesson": "triggers",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Um trigger é um bloco de código que é executado:",
+      "options": {
+        "a": "Manualmente, com o comando CALL",
+        "b": "Automaticamente, em resposta a um INSERT, UPDATE ou DELETE na tabela",
+        "c": "Em intervalos de tempo programados, como um job",
+        "d": "Sempre que alguém executa um SELECT na tabela"
+      },
+      "answer": "b",
+      "explanation": "Ninguém chama um trigger: o SGBD o dispara quando ocorre o evento DML na tabela. CALL serve para procedures; SELECT não dispara triggers."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Dentro de um trigger `FOR EACH ROW` disparado por um `UPDATE` em `clientes`, como você lê o e-mail que a linha tinha **antes** da alteração?",
+      "options": {
+        "a": "`CURRENT.email`",
+        "b": "`NEW.email`",
+        "c": "`OLD.email`",
+        "d": "`PREVIOUS.email`"
+      },
+      "answer": "c",
+      "explanation": "OLD guarda a linha antes da mudança e NEW, a linha depois. CURRENT e PREVIOUS não existem no MySQL.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Em quais destes triggers a pseudolinha `NEW` está disponível?",
+      "options": {
+        "a": "`BEFORE INSERT`",
+        "b": "`AFTER UPDATE`",
+        "c": "`AFTER DELETE`",
+        "d": "`BEFORE DELETE`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "NEW existe em INSERT e UPDATE, porque há uma linha nova entrando ou substituindo a antiga. Em DELETE só existe OLD: nada novo é gravado.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Um trigger `BEFORE INSERT` executa `SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Estoque insuficiente';`. O que acontece com o `INSERT` que o disparou?",
+      "options": {
+        "a": "O INSERT é gravado e a mensagem vai para o log do servidor",
+        "b": "O INSERT é cancelado e o erro com a mensagem volta para quem executou",
+        "c": "O trigger é ignorado e o INSERT segue normalmente",
+        "d": "O INSERT é gravado, mas o trigger AFTER INSERT deixa de rodar"
+      },
+      "answer": "b",
+      "explanation": "SIGNAL lança um erro dentro da mesma transação do INSERT: nada é gravado e o cliente recebe ERROR 1644 (45000) com o texto definido. Por isso BEFORE é o momento certo para validar.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Em um trigger `AFTER UPDATE` é possível executar `SET NEW.preco = 0` para mudar o valor que será gravado.",
+      "answer": false,
+      "explanation": "Em AFTER a linha já foi gravada e NEW é só leitura. Para ajustar a linha antes de gravar, o trigger precisa ser BEFORE."
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Para que o corpo do trigger execute uma vez para cada linha afetada pelo comando, a definição inclui a cláusula `___`, obrigatória no MySQL.",
+      "answer": [["FOR EACH ROW", "for each row"]],
+      "explanation": "FOR EACH ROW indica que o trigger é por linha: um UPDATE de 100 linhas executa o corpo 100 vezes. O MySQL não aceita triggers por comando."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A tabela `produtos` tem o trigger abaixo e o produto 5 está com estoque 5. Quantas linhas `log_estoque` ganha após `UPDATE produtos SET estoque = estoque - 3, preco = 4100 WHERE id = 5;`?\n\n```sql\nCREATE TRIGGER trg_produtos_au_estoque\nAFTER UPDATE ON produtos\nFOR EACH ROW\nBEGIN\n  IF OLD.estoque <> NEW.estoque THEN\n    INSERT INTO log_estoque (produto_id, estoque_anterior, estoque_novo)\n    VALUES (NEW.id, OLD.estoque, NEW.estoque);\n  END IF;\nEND\n```",
+      "options": {
+        "a": "Uma linha, com estoque_anterior 5 e estoque_novo 2",
+        "b": "Duas linhas, uma para o estoque e outra para o preço",
+        "c": "Nenhuma, porque o trigger só dispara em INSERT",
+        "d": "Uma linha, com estoque_anterior 2 e estoque_novo 5"
+      },
+      "answer": "a",
+      "explanation": "O UPDATE afeta uma linha, então o corpo roda uma vez. Como o estoque mudou de 5 para 2, o IF é verdadeiro e uma linha entra no log com OLD (5) e NEW (2). A mudança de preço não gera linha extra.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual é o risco mais comum de um trigger com lógica pesada em uma tabela muito atualizada?",
+      "options": {
+        "a": "O trigger passa a disparar também em SELECT",
+        "b": "Cada UPDATE ou INSERT fica mais lento, e ninguém enxerga o motivo no comando",
+        "c": "O MySQL converte o trigger em procedure para compensar",
+        "d": "Os índices da tabela são descartados automaticamente"
+      },
+      "answer": "b",
+      "explanation": "O corpo roda a cada linha afetada e é invisível para quem executa o comando: o UPDATE fica lento e a causa não aparece no SQL enviado. Por isso triggers devem ser curtos e documentados."
+    }
+  ]
+}

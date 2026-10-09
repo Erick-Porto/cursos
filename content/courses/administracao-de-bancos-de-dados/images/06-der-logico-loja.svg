@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Modelo lógico da loja: clientes faz pedidos por cliente_id; pedidos contém itens_pedido por pedido_id; produtos aparece em itens_pedido por produto_id</title>
+  <style>
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .k { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .v { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .n { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .ln { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <!-- clientes -->
+  <rect x="40" y="24" width="260" height="136" rx="12" class="box"/>
+  <path d="M40 36 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="170" y="52" text-anchor="middle" class="hd">clientes</text>
+  <text x="54" y="92" class="c">id</text><text x="286" y="92" text-anchor="end" class="k">PK</text>
+  <text x="54" y="120" class="c">nome</text>
+  <text x="54" y="148" class="c">email</text>
+
+  <!-- produtos -->
+  <rect x="420" y="24" width="260" height="136" rx="12" class="box"/>
+  <path d="M420 36 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="550" y="52" text-anchor="middle" class="hd">produtos</text>
+  <text x="434" y="92" class="c">id</text><text x="666" y="92" text-anchor="end" class="k">PK</text>
+  <text x="434" y="120" class="c">nome</text>
+  <text x="434" y="148" class="c">preco</text>
+
+  <!-- pedidos -->
+  <rect x="40" y="236" width="260" height="136" rx="12" class="box"/>
+  <path d="M40 248 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="170" y="264" text-anchor="middle" class="hd">pedidos</text>
+  <text x="54" y="304" class="c">id</text><text x="286" y="304" text-anchor="end" class="k">PK</text>
+  <text x="54" y="332" class="c">cliente_id</text><text x="286" y="332" text-anchor="end" class="k">FK</text>
+  <text x="54" y="360" class="c">data_pedido</text>
+
+  <!-- itens_pedido -->
+  <rect x="420" y="236" width="260" height="164" rx="12" class="box"/>
+  <path d="M420 248 a12 12 0 0 1 12 -12 h236 a12 12 0 0 1 12 12 v28 h-260 z" class="head"/>
+  <text x="550" y="264" text-anchor="middle" class="hd">itens_pedido</text>
+  <text x="434" y="304" class="c">id</text><text x="666" y="304" text-anchor="end" class="k">PK</text>
+  <text x="434" y="332" class="c">pedido_id</text><text x="666" y="332" text-anchor="end" class="k">FK</text>
+  <text x="434" y="360" class="c">produto_id</text><text x="666" y="360" text-anchor="end" class="k">FK</text>
+  <text x="434" y="388" class="c">quantidade</text>
+
+  <!-- clientes 1:N pedidos -->
+  <path d="M170 160 L170 236 M161 172 L179 172 M170 220 L161 236 M170 220 L179 236" class="ln"/>
+  <text x="188" y="182" class="n">1</text>
+  <text x="188" y="232" class="n">N</text>
+  <text x="152" y="206" text-anchor="end" class="v">faz</text>
+
+  <!-- produtos 1:N itens_pedido -->
+  <path d="M550 160 L550 236 M541 172 L559 172 M550 220 L541 236 M550 220 L559 236" class="ln"/>
+  <text x="568" y="182" class="n">1</text>
+  <text x="568" y="232" class="n">N</text>
+  <text x="532" y="206" text-anchor="end" class="v">aparece em</text>
+
+  <!-- pedidos 1:N itens_pedido -->
+  <path d="M300 304 L420 304 M312 295 L312 313 M404 304 L420 295 M404 304 L420 313" class="ln"/>
+  <text x="360" y="294" text-anchor="middle" class="v">contém</text>
+  <text x="322" y="328" text-anchor="middle" class="n">1</text>
+  <text x="398" y="328" text-anchor="middle" class="n">N</text>
+</svg>

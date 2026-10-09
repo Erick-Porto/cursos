@@ -1,0 +1,110 @@
+{
+  "title": "Quiz: Evoluindo o esquema: ALTER e DROP",
+  "description": "Verifique se você sabe alterar tabelas com segurança e remover objetos sem surpresas.",
+  "lesson": "alter-e-drop",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual comando adiciona a coluna `email VARCHAR(160)` à tabela `funcionarios`, logo após a coluna `nome`?",
+      "options": {
+        "a": "`ALTER TABLE funcionarios ADD COLUMN email VARCHAR(160) AFTER nome;`",
+        "b": "`UPDATE funcionarios ADD email VARCHAR(160) AFTER nome;`",
+        "c": "`ALTER TABLE funcionarios INSERT COLUMN email VARCHAR(160) BEFORE cargo;`",
+        "d": "`MODIFY TABLE funcionarios ADD email VARCHAR(160) AFTER nome;`"
+      },
+      "answer": "a",
+      "explanation": "Mudança de estrutura é ALTER TABLE, e a posição é dada por AFTER (ou FIRST). UPDATE altera dados, não colunas; INSERT COLUMN e MODIFY TABLE não existem.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é a diferença entre `MODIFY COLUMN` e `CHANGE COLUMN` no MySQL?",
+      "options": {
+        "a": "CHANGE permite renomear a coluna; MODIFY mantém o nome e muda só a definição",
+        "b": "MODIFY altera o tipo; CHANGE altera apenas as constraints",
+        "c": "CHANGE é mais rápido em tabelas grandes porque não reconstrói a tabela",
+        "d": "MODIFY exige informar o nome duas vezes; CHANGE, apenas uma"
+      },
+      "answer": "a",
+      "explanation": "Os dois redefinem a coluna inteira. CHANGE recebe o nome antigo e o novo, por isso serve para renomear; MODIFY recebe só o nome atual. A velocidade depende da mudança, não do comando.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "`TRUNCATE TABLE` pode ser desfeito com `ROLLBACK`, assim como um `DELETE` sem `WHERE`.",
+      "answer": false,
+      "explanation": "TRUNCATE é DDL: faz commit implícito e não aceita ROLLBACK. DELETE é DML e, dentro de uma transação, pode ser desfeito. A semelhança no resultado (tabela vazia) esconde essa diferença.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o comando para que ele não gere erro caso a tabela já tenha sido removida: `DROP TABLE` ___ `funcionarios_backup;`",
+      "answer": [["IF EXISTS", "if exists"]],
+      "explanation": "IF EXISTS transforma o erro 'tabela desconhecida' em um simples aviso, o que é essencial em scripts que rodam mais de uma vez. O mesmo vale para DROP DATABASE IF EXISTS e DROP VIEW IF EXISTS.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre um `ALTER TABLE` em uma tabela com milhões de linhas são verdadeiras?",
+      "options": {
+        "a": "Pode reconstruir a tabela inteira em uma cópia e demorar minutos ou horas",
+        "b": "Pode bloquear escritas enquanto roda",
+        "c": "Deve ser testado antes em um ambiente com volume parecido",
+        "d": "É sempre instantâneo, porque só altera metadados"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Só algumas alterações aceitam ALGORITHM=INSTANT; muitas exigem INPLACE ou COPY, com tempo, disco e bloqueios proporcionais ao tamanho da tabela. Por isso se testa antes e se agenda uma janela.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Você executa `DROP TABLE departamentos;` e recebe:\n\n```plaintext\nERROR 3730: Cannot drop table 'departamentos' referenced by a foreign key\nconstraint 'fk_funcionarios_departamento' on table 'funcionarios'.\n```\n\nQual é a correção segura?",
+      "options": {
+        "a": "Rodar `DROP TABLE departamentos CASCADE;`",
+        "b": "Remover a chave estrangeira em funcionarios (ou a própria tabela filha) e só então dropar departamentos",
+        "c": "Esvaziar departamentos com `TRUNCATE` e repetir o `DROP`",
+        "d": "Trocar o `DROP` por `DELETE FROM departamentos;`"
+      },
+      "answer": "b",
+      "explanation": "A tabela pai só pode ser removida quando ninguém mais aponta para ela. O MySQL aceita a palavra CASCADE no DROP TABLE, mas ela não faz nada; TRUNCATE também falha com a FK apontando; DELETE não remove a tabela.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Por que equipes organizam as mudanças de esquema em migrations versionadas (`0001_...sql`, `0002_...sql`)?",
+      "options": {
+        "a": "Para que cada mudança rode uma vez, na mesma ordem, em todos os ambientes, com histórico",
+        "b": "Para que o MySQL execute os ALTER com o algoritmo INSTANT",
+        "c": "Para dispensar o backup antes de um DROP em produção",
+        "d": "Para que um ALTER possa ser desfeito com ROLLBACK"
+      },
+      "answer": "a",
+      "explanation": "Migration é organização e rastreabilidade: desenvolvimento, testes e produção chegam ao mesmo esquema pelo mesmo caminho. Ela não muda como o MySQL executa o ALTER nem substitui backup; DDL continua sem ROLLBACK.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A coluna `cargo` tem `NULL` em algumas linhas. Com as configurações padrão do MySQL 8 (modo estrito), o que acontece ao executar:\n\n```sql\nALTER TABLE funcionarios MODIFY COLUMN cargo VARCHAR(60) NOT NULL;\n```",
+      "options": {
+        "a": "Falha com erro, porque já existem valores NULL na coluna",
+        "b": "Converte os NULL em texto vazio e conclui normalmente",
+        "c": "Apaga as linhas que têm NULL em cargo",
+        "d": "Conclui e passa a bloquear apenas os novos NULL"
+      },
+      "answer": "a",
+      "explanation": "No modo estrito, o MySQL responde ERROR 1138: Invalid use of NULL value. É preciso tratar os dados antes (UPDATE ... SET cargo = 'Indefinido' WHERE cargo IS NULL) e só depois aplicar o NOT NULL. Um ALTER nunca apaga linhas.",
+      "points": 2
+    }
+  ]
+}

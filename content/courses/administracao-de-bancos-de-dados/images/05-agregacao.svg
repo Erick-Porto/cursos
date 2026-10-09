@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>Agregação: o relacionamento trabalha em, entre funcionário e projeto, vira um bloco que se liga a equipamento pelo relacionamento usa</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .k { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .n { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .dia { fill: #131c33; stroke: #a78bfa; stroke-width: 2.5; }
+    .ln { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <text x="24" y="36" class="k">agregação: o relacionamento vira um bloco</text>
+  <rect x="12" y="52" width="696" height="120" rx="12" fill="none" stroke="#a78bfa" stroke-width="2" stroke-dasharray="8 6"/>
+
+  <rect x="24" y="82" width="170" height="60" rx="12" class="box"/>
+  <text x="109" y="120" text-anchor="middle" class="t">funcionário</text>
+
+  <path d="M194 112 L244 112 M476 112 L526 112" class="ln"/>
+  <text x="219" y="104" text-anchor="middle" class="n">N</text>
+  <text x="501" y="104" text-anchor="middle" class="n">M</text>
+
+  <path d="M244 112 L360 70 L476 112 L360 154 Z" class="dia"/>
+  <text x="360" y="120" text-anchor="middle" class="t">trabalha em</text>
+
+  <rect x="526" y="82" width="170" height="60" rx="12" class="box"/>
+  <text x="611" y="120" text-anchor="middle" class="t">projeto</text>
+
+  <path d="M360 154 L360 200" class="ln"/>
+  <path d="M290 236 L360 200 L430 236 L360 272 Z" class="dia"/>
+  <text x="360" y="244" text-anchor="middle" class="t">usa</text>
+  <path d="M360 272 L360 306" class="ln"/>
+  <text x="376" y="298" class="n">N</text>
+
+  <rect x="260" y="306" width="200" height="60" rx="12" class="box"/>
+  <text x="360" y="344" text-anchor="middle" class="t">equipamento</text>
+
+  <text x="360" y="390" text-anchor="middle" class="m">a alocação (o bloco tracejado) usa N equipamentos</text>
+</svg>

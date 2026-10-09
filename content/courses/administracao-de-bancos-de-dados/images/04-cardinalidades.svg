@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Três cardinalidades em notação pé de galinha: 1:1 entre departamento e funcionário gerente, 1:N entre cliente e pedido, N:M entre pedido e produto</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .v { fill: #e8edf7; font-size: 18px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .tag { font-size: 24px; font-weight: 700; }
+    .n { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ln { stroke: #a78bfa; stroke-width: 3; fill: none; }
+  </style>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <text x="50" y="72" text-anchor="middle" class="tag" fill="#34d399">1:1</text>
+  <rect x="100" y="36" width="190" height="56" rx="12" class="box"/>
+  <text x="195" y="72" text-anchor="middle" class="t">departamento</text>
+  <rect x="460" y="36" width="190" height="56" rx="12" class="box"/>
+  <text x="555" y="72" text-anchor="middle" class="t">funcionário</text>
+  <path d="M290 64 L460 64" class="ln"/>
+  <path d="M302 55 L302 73 M448 55 L448 73" class="ln"/>
+  <text x="375" y="52" text-anchor="middle" class="v">é gerenciado por</text>
+  <text x="318" y="90" text-anchor="middle" class="n">1</text>
+  <text x="432" y="90" text-anchor="middle" class="n">1</text>
+
+  <text x="50" y="164" text-anchor="middle" class="tag" fill="#a78bfa">1:N</text>
+  <rect x="100" y="128" width="190" height="56" rx="12" class="box"/>
+  <text x="195" y="164" text-anchor="middle" class="t">cliente</text>
+  <rect x="460" y="128" width="190" height="56" rx="12" class="box"/>
+  <text x="555" y="164" text-anchor="middle" class="t">pedido</text>
+  <path d="M290 156 L460 156" class="ln"/>
+  <path d="M302 147 L302 165" class="ln"/>
+  <path d="M442 156 L460 147 M442 156 L460 165" class="ln"/>
+  <text x="375" y="144" text-anchor="middle" class="v">faz</text>
+  <text x="318" y="182" text-anchor="middle" class="n">1</text>
+  <text x="432" y="182" text-anchor="middle" class="n">N</text>
+
+  <text x="50" y="256" text-anchor="middle" class="tag" fill="#60a5fa">N:M</text>
+  <rect x="100" y="220" width="190" height="56" rx="12" class="box"/>
+  <text x="195" y="256" text-anchor="middle" class="t">pedido</text>
+  <rect x="460" y="220" width="190" height="56" rx="12" class="box"/>
+  <text x="555" y="256" text-anchor="middle" class="t">produto</text>
+  <path d="M290 248 L460 248" class="ln"/>
+  <path d="M308 248 L290 239 M308 248 L290 257" class="ln"/>
+  <path d="M442 248 L460 239 M442 248 L460 257" class="ln"/>
+  <text x="375" y="236" text-anchor="middle" class="v">contém</text>
+  <text x="318" y="274" text-anchor="middle" class="n">N</text>
+  <text x="432" y="274" text-anchor="middle" class="n">M</text>
+
+  <text x="360" y="312" text-anchor="middle" class="m">traço = um · pé de galinha = muitos</text>
+</svg>

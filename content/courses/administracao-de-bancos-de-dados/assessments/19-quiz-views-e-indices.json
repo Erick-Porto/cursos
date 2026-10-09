@@ -1,0 +1,110 @@
+{
+  "title": "Quiz: Views e índices",
+  "description": "Verifique se você entende o que uma view guarda, quando ela aceita escrita e como um índice acelera buscas.",
+  "lesson": "views-e-indices",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "fill",
+      "prompt": "Uma ___ é uma consulta `SELECT` salva com nome no banco, que pode ser consultada como se fosse uma tabela.",
+      "answer": [["view", "visão", "VIEW"]],
+      "explanation": "A view guarda apenas a definição da consulta. Cada SELECT nela executa de novo o SELECT original sobre as tabelas base.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual comando cria (ou substitui, se já existir) uma view com os funcionários **sem** a coluna `salario`?",
+      "options": {
+        "a": "`CREATE OR REPLACE VIEW vw_funcionarios_publico AS SELECT id, nome, cargo, departamento_id FROM funcionarios;`",
+        "b": "`CREATE VIEW vw_funcionarios_publico AS SELECT * FROM funcionarios EXCEPT salario;`",
+        "c": "`CREATE TABLE vw_funcionarios_publico AS SELECT id, nome, cargo, departamento_id FROM funcionarios;`",
+        "d": "`REPLACE VIEW vw_funcionarios_publico WITH SELECT id, nome, cargo FROM funcionarios;`"
+      },
+      "answer": "a",
+      "explanation": "CREATE OR REPLACE VIEW ... AS SELECT lista só as colunas permitidas. Não existe EXCEPT coluna no SELECT; CREATE TABLE AS copia os dados (uma cópia que envelhece); REPLACE VIEW WITH não é sintaxe válida.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Consultar uma view é mais rápido que executar o `SELECT` equivalente, porque a view guarda o resultado pronto.",
+      "answer": false,
+      "explanation": "A view guarda só o texto da consulta, não o resultado. A cada uso o MySQL executa o SELECT de novo, com o mesmo plano. Quem acelera é o índice, não a view.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual destas views aceita `UPDATE` diretamente?",
+      "options": {
+        "a": "Uma view sobre uma única tabela, sem agregações nem GROUP BY",
+        "b": "Uma view com COUNT(*) e GROUP BY por departamento",
+        "c": "Uma view com DISTINCT sobre a coluna cidade",
+        "d": "Uma view formada pela UNION de duas consultas"
+      },
+      "answer": "a",
+      "explanation": "Para ser atualizável, cada linha da view precisa corresponder a uma linha de uma única tabela. Agregações, GROUP BY, DISTINCT e UNION quebram essa correspondência, e o MySQL recusa a escrita.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais ações fazem sentido para acelerar consultas no banco `loja`?",
+      "options": {
+        "a": "Criar um índice em `clientes.cidade`, filtrada com frequência no WHERE",
+        "b": "Criar um índice em `pedidos.data_pedido`, usada no ORDER BY de um relatório diário",
+        "c": "Criar um índice em `pedidos.id`, que é a chave primária",
+        "d": "Criar um índice em `pedidos.status`, que tem só quatro valores e recebe muitas escritas"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Colunas de WHERE e ORDER BY com muitos valores distintos se beneficiam. A chave primária já tem índice; e uma coluna com quatro valores tem baixa seletividade: o índice pouco ajuda a ler e ainda encarece cada INSERT e UPDATE.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Existe o índice `CREATE INDEX idx_pedidos_cliente_data ON pedidos (cliente_id, data_pedido);`. Qual consulta **não** consegue aproveitá-lo?",
+      "options": {
+        "a": "`SELECT * FROM pedidos WHERE cliente_id = 1;`",
+        "b": "`SELECT * FROM pedidos WHERE cliente_id = 1 AND data_pedido = '2025-03-02';`",
+        "c": "`SELECT * FROM pedidos WHERE data_pedido = '2025-03-02';`",
+        "d": "`SELECT * FROM pedidos WHERE cliente_id = 1 ORDER BY data_pedido;`"
+      },
+      "answer": "c",
+      "explanation": "Um índice composto é ordenado pela primeira coluna; a busca precisa começar por ela (prefixo à esquerda). Filtrar só por data_pedido não aproveita a ordenação, e o MySQL varre a tabela ou o índice inteiro.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual é o principal custo de ter muitos índices em uma tabela?",
+      "options": {
+        "a": "INSERT, UPDATE e DELETE ficam mais lentos, porque cada índice precisa ser atualizado",
+        "b": "SELECT fica mais lento, porque o MySQL precisa escolher entre os índices",
+        "c": "As constraints FOREIGN KEY deixam de ser verificadas",
+        "d": "A tabela passa a aceitar valores duplicados na chave primária"
+      },
+      "answer": "a",
+      "explanation": "Cada índice é uma estrutura extra em disco que acompanha toda escrita na tabela. Escolher o índice no SELECT custa microssegundos; constraints e chave primária não são afetadas.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Por que um índice B-tree encontra uma linha rapidamente, mesmo em uma tabela com milhões de registros?",
+      "options": {
+        "a": "Porque é uma estrutura ordenada: a busca desce poucos níveis da árvore e chega ao ponteiro da linha",
+        "b": "Porque copia a tabela inteira para a memória RAM na primeira consulta",
+        "c": "Porque guarda o resultado das consultas mais frequentes",
+        "d": "Porque reordena fisicamente as linhas da tabela a cada INSERT"
+      },
+      "answer": "a",
+      "explanation": "A B-tree é rasa e larga: com três ou quatro níveis cobre milhões de valores ordenados, e cada entrada aponta para a linha. Ela não guarda resultados nem reordena a tabela; a tabela continua onde está.",
+      "points": 1
+    }
+  ]
+}

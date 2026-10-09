@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo de uma transação com SAVEPOINT: pedido e mouse são gravados pelo COMMIT; o item webcam, inserido depois do savepoint, é desfeito por ROLLBACK TO SAVEPOINT</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .ok { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .no { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .flag { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .back { stroke: #f87171; stroke-width: 3; fill: none; stroke-dasharray: 8 5; marker-end: url(#head-no); }
+  </style>
+  <defs>
+    <marker id="head-no" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <line x1="40" y1="170" x2="680" y2="170" stroke="#2a3a5c" stroke-width="4"/>
+  <line x1="270" y1="170" x2="450" y2="170" stroke="#f87171" stroke-width="4" stroke-dasharray="8 5"/>
+
+  <path d="M444 154 C 420 72, 300 72, 280 152" class="back"/>
+  <text x="360" y="62" text-anchor="middle" class="no">ROLLBACK TO SAVEPOINT</text>
+
+  <circle cx="90" cy="170" r="12" fill="#34d399"/>
+  <text x="90" y="214" text-anchor="middle" class="t">pedido e mouse</text>
+  <text x="90" y="246" text-anchor="middle" class="ok">gravados</text>
+
+  <rect x="258" y="158" width="24" height="24" rx="4" fill="#fbbf24"/>
+  <text x="270" y="214" text-anchor="middle" class="t">SAVEPOINT</text>
+  <text x="270" y="246" text-anchor="middle" class="flag">item_mouse</text>
+
+  <circle cx="450" cy="170" r="12" fill="#0b1020" stroke="#f87171" stroke-width="3" stroke-dasharray="5 3"/>
+  <text x="450" y="214" text-anchor="middle" class="t">item webcam</text>
+  <text x="450" y="246" text-anchor="middle" class="no">desfeito</text>
+
+  <circle cx="630" cy="170" r="12" fill="#34d399"/>
+  <text x="630" y="214" text-anchor="middle" class="t">COMMIT</text>
+  <text x="630" y="246" text-anchor="middle" class="ok">só o mouse</text>
+
+  <text x="360" y="298" text-anchor="middle" class="m">depois do savepoint: desfeito · antes dele: gravado</text>
+</svg>

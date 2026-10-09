@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>GROUP BY cliente_id: cada linha de pedidos cai no balde do seu cliente e cada balde vira uma linha do resultado, com a contagem e a soma</title>
+  <style>
+    .code { fill: #e8edf7; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .v { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .g1 { fill: #34d399; font-weight: 700; }
+    .g2 { fill: #60a5fa; font-weight: 700; }
+    .g3 { fill: #fbbf24; font-weight: 700; }
+    .b1 { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .b2 { fill: #131c33; stroke: #60a5fa; stroke-width: 2; }
+    .b3 { fill: #131c33; stroke: #fbbf24; stroke-width: 2; }
+    .l1 { stroke: #34d399; stroke-width: 2.5; fill: none; opacity: .85; }
+    .l2 { stroke: #60a5fa; stroke-width: 2.5; fill: none; opacity: .85; }
+    .l3 { stroke: #fbbf24; stroke-width: 2.5; fill: none; opacity: .85; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="code">GROUP BY cliente_id</text>
+
+  <!-- pedidos: uma linha por pedido -->
+  <text x="140" y="86" text-anchor="middle" class="t">pedidos</text>
+  <text x="70" y="112" text-anchor="middle" class="m">cliente_id</text>
+  <text x="200" y="112" text-anchor="middle" class="m">total</text>
+
+  <rect x="20" y="122" width="240" height="40" rx="8" class="box"/>
+  <text x="70" y="150" text-anchor="middle" class="v g1">1</text>
+  <text x="200" y="150" text-anchor="middle" class="v">180.00</text>
+
+  <rect x="20" y="170" width="240" height="40" rx="8" class="box"/>
+  <text x="70" y="198" text-anchor="middle" class="v g2">2</text>
+  <text x="200" y="198" text-anchor="middle" class="v">900.00</text>
+
+  <rect x="20" y="218" width="240" height="40" rx="8" class="box"/>
+  <text x="70" y="246" text-anchor="middle" class="v g1">1</text>
+  <text x="200" y="246" text-anchor="middle" class="v">4200.00</text>
+
+  <rect x="20" y="266" width="240" height="40" rx="8" class="box"/>
+  <text x="70" y="294" text-anchor="middle" class="v g3">3</text>
+  <text x="200" y="294" text-anchor="middle" class="v">60.00</text>
+
+  <!-- baldes: um por cliente; cada um vira uma linha do resultado -->
+  <rect x="400" y="80" width="300" height="80" rx="10" class="b1"/>
+  <text x="550" y="112" text-anchor="middle" class="v g1">cliente_id = 1</text>
+  <text x="550" y="144" text-anchor="middle" class="v">2 pedidos · 4380.00</text>
+
+  <rect x="400" y="176" width="300" height="80" rx="10" class="b2"/>
+  <text x="550" y="208" text-anchor="middle" class="v g2">cliente_id = 2</text>
+  <text x="550" y="240" text-anchor="middle" class="v">1 pedido · 900.00</text>
+
+  <rect x="400" y="272" width="300" height="80" rx="10" class="b3"/>
+  <text x="550" y="304" text-anchor="middle" class="v g3">cliente_id = 3</text>
+  <text x="550" y="336" text-anchor="middle" class="v">1 pedido · 60.00</text>
+
+  <!-- linha da tabela -> balde -->
+  <path d="M260 142 C330 142, 330 120, 400 120" class="l1"/>
+  <path d="M260 190 C330 190, 330 216, 400 216" class="l2"/>
+  <path d="M260 238 C330 238, 330 120, 400 120" class="l1"/>
+  <path d="M260 286 C330 286, 330 312, 400 312" class="l3"/>
+
+  <text x="360" y="400" text-anchor="middle" class="m">cada balde vira uma linha do resultado: COUNT(*) e SUM(total)</text>
+</svg>

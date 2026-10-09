@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: O que é um SGBD",
+  "description": "Oito questões sobre dados e informação, as funções e os benefícios de um SGBD e a evolução dos SGBDs.",
+  "lesson": "o-que-e-um-sgbd",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que é um SGBD?",
+      "options": {
+        "a": "Uma linguagem de programação para criar relatórios",
+        "b": "Um software que cria, acessa, controla e gerencia bancos de dados",
+        "c": "Um modelo matemático para organizar dados em tabelas",
+        "d": "Um equipamento de armazenamento com discos redundantes"
+      },
+      "answer": "b",
+      "explanation": "SGBD é o software que fica entre as aplicações e os arquivos de dados. O modelo relacional (opção c) é uma forma de organizar dados que o SGBD implementa, não o SGBD em si."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual alternativa é um exemplo de **informação**, e não de dado bruto?",
+      "options": {
+        "a": "`180.00`",
+        "b": "`2025-03-02`",
+        "c": "A cliente Ana Souza fez um pedido de R$ 180,00 em 2 de março de 2025",
+        "d": "`Ana Souza`"
+      },
+      "answer": "c",
+      "explanation": "Informação é dado com contexto e significado. Os valores soltos (um número, uma data, um nome) são dados brutos; a frase os relaciona e responde a uma pergunta.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais das atividades abaixo são funções de um SGBD?",
+      "options": {
+        "a": "Coordenar o acesso simultâneo de vários usuários aos mesmos dados",
+        "b": "Fazer cumprir regras de integridade, como chaves primárias e estrangeiras",
+        "c": "Desenhar as telas da aplicação que o usuário final utiliza",
+        "d": "Fazer backup e recuperar os dados após uma falha"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Concorrência, integridade e backup com recuperação são funções do SGBD. As telas pertencem à aplicação, que apenas envia comandos ao SGBD."
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Gravar o nome completo do cliente em cada linha da tabela `pedidos`, em vez de guardar apenas o `id` do cliente, reduz a redundância dos dados.",
+      "answer": false,
+      "explanation": "Repetir o nome em cada pedido é exatamente redundância: se a cliente mudar de nome, será preciso corrigir todas as linhas, e qualquer esquecimento gera inconsistência. Guardar só o `id` e ligar à tabela `clientes` elimina a repetição.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Em 1970, Edgar Codd propôs o modelo ___, que organiza os dados em tabelas e serviu de base para o SQL.",
+      "answer": [["relacional", "modelo relacional"]],
+      "explanation": "O modelo relacional de Codd substituiu os modelos hierárquico e de rede e continua sendo a base do MySQL, do PostgreSQL e dos demais SGBDs relacionais."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual geração de SGBDs surgiu nos anos 2000 para lidar com grandes volumes de dados e esquemas flexíveis?",
+      "options": {
+        "a": "Hierárquico",
+        "b": "Rede",
+        "c": "NoSQL",
+        "d": "Objeto-relacional"
+      },
+      "answer": "c",
+      "explanation": "Os bancos NoSQL nasceram com os sites de grande escala dos anos 2000. Hierárquico e rede são dos anos 1960; o objeto-relacional é dos anos 1990 e continua sendo relacional."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O computador que guardava a planilha de pedidos de uma loja queimou, e todos os pedidos se perderam. Qual função de um SGBD teria evitado o prejuízo?",
+      "options": {
+        "a": "Controle de concorrência",
+        "b": "Backup e recuperação",
+        "c": "Definição de dados (DDL)",
+        "d": "Controle de acesso (DCL)"
+      },
+      "answer": "b",
+      "explanation": "Backup e recuperação protegem contra falhas de hardware. O controle de concorrência resolve conflitos entre usuários simultâneos, não perda de dados.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual destes comandos pertence à **manipulação** de dados (DML), e não à definição de estruturas?",
+      "options": {
+        "a": "`CREATE TABLE`",
+        "b": "`GRANT`",
+        "c": "`UPDATE`",
+        "d": "`DROP TABLE`"
+      },
+      "answer": "c",
+      "explanation": "UPDATE altera linhas, o que é manipulação. CREATE e DROP definem estruturas (DDL) e GRANT controla permissões (DCL).",
+      "points": 2
+    }
+  ]
+}

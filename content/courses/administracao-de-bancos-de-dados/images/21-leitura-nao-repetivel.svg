@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>Leitura não repetível: T1 lê o preço do Monitor, T2 altera o preço e confirma, T1 lê a mesma linha de novo e recebe outro valor</title>
+  <style>
+    .h { font-size: 24px; font-weight: 700; }
+    .s { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .alert { fill: #fbbf24; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bad { stroke: #fbbf24; stroke-width: 2.5; }
+    .n { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .axis { stroke: #2a3a5c; stroke-width: 3; marker-end: url(#down); }
+  </style>
+  <defs>
+    <marker id="down" markerWidth="10" markerHeight="10" refX="5" refY="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2a3a5c"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <text x="180" y="44" text-anchor="middle" class="h" fill="#60a5fa">T1 · carrinho</text>
+  <text x="540" y="44" text-anchor="middle" class="h" fill="#a78bfa">T2 · preço</text>
+  <line x1="360" y1="60" x2="360" y2="382" class="axis"/>
+
+  <g>
+    <rect x="20" y="70" width="320" height="70" rx="12" class="box"/>
+    <circle cx="50" cy="105" r="16" fill="#60a5fa"/>
+    <text x="50" y="113" text-anchor="middle" class="n">1</text>
+    <text x="78" y="100" class="s">lê preço: 900</text>
+    <text x="78" y="130" class="m">primeira leitura</text>
+  </g>
+
+  <g>
+    <rect x="380" y="150" width="320" height="70" rx="12" class="box"/>
+    <circle cx="410" cy="185" r="16" fill="#a78bfa"/>
+    <text x="410" y="193" text-anchor="middle" class="n">2</text>
+    <text x="438" y="180" class="s">preço = 850</text>
+    <text x="438" y="210" class="m">COMMIT</text>
+  </g>
+
+  <g>
+    <rect x="20" y="230" width="320" height="70" rx="12" class="box bad"/>
+    <circle cx="50" cy="265" r="16" fill="#60a5fa"/>
+    <text x="50" y="273" text-anchor="middle" class="n">3</text>
+    <text x="78" y="260" class="s">lê preço: 850</text>
+    <text x="78" y="290" class="alert">mesma linha, mudou</text>
+  </g>
+
+  <g>
+    <rect x="20" y="310" width="320" height="70" rx="12" class="box"/>
+    <circle cx="50" cy="345" r="16" fill="#60a5fa"/>
+    <text x="50" y="353" text-anchor="middle" class="n">4</text>
+    <text x="78" y="340" class="s">COMMIT</text>
+    <text x="78" y="370" class="m">dois valores lidos</text>
+  </g>
+</svg>

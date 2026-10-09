@@ -1,0 +1,104 @@
+{
+  "title": "Quiz: CREATE TABLE, tipos e constraints",
+  "description": "Verifique se você sabe criar tabelas, escolher tipos de dados e aplicar constraints no MySQL 8.",
+  "lesson": "create-table-tipos-e-constraints",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "fill",
+      "prompt": "Depois de `CREATE DATABASE loja;`, o comando ___ `loja;` faz o MySQL usar esse banco nos próximos comandos.",
+      "answer": [["USE"]],
+      "explanation": "USE seleciona o banco atual da sessão. Sem ele, cada tabela precisaria do prefixo `loja.`. No PostgreSQL não existe USE: você se conecta direto ao banco.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Você precisa guardar o salário dos funcionários com centavos exatos. Qual definição de coluna é a correta?",
+      "options": {
+        "a": "`salario FLOAT`",
+        "b": "`salario DECIMAL(10,2)`",
+        "c": "`salario DOUBLE`",
+        "d": "`salario VARCHAR(20)`"
+      },
+      "answer": "b",
+      "explanation": "DECIMAL guarda o valor exato, com o número de casas que você define. FLOAT e DOUBLE são aproximados e perdem centavos nas somas; VARCHAR impede cálculos e ordenação numérica.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre `PRIMARY KEY` são verdadeiras no MySQL?",
+      "options": {
+        "a": "A coluna não aceita NULL",
+        "b": "O valor não pode se repetir na tabela",
+        "c": "Só pode existir uma chave primária por tabela",
+        "d": "A coluna precisa ser AUTO_INCREMENT"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "PRIMARY KEY implica NOT NULL e UNIQUE, e cada tabela tem no máximo uma. AUTO_INCREMENT é opcional: a chave pode ser um código informado pela aplicação, como um CPF ou um UUID.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a ação da chave estrangeira para que o produto fique sem categoria quando a categoria dele for apagada: `FOREIGN KEY (categoria_id) REFERENCES categorias(id) ON DELETE` ___",
+      "answer": [["SET NULL", "set null"]],
+      "explanation": "SET NULL grava NULL na chave estrangeira das linhas filhas. CASCADE apagaria os produtos junto; RESTRICT (o padrão) recusaria o DELETE da categoria.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Dada a tabela abaixo, qual `INSERT` é recusado pelo MySQL?\n\n```sql\nCREATE TABLE clientes (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(120) NOT NULL,\n  email VARCHAR(160) NOT NULL UNIQUE,\n  cidade VARCHAR(80)\n);\n```",
+      "options": {
+        "a": "`INSERT INTO clientes (nome, email) VALUES ('Ana', 'ana@exemplo.com');`",
+        "b": "`INSERT INTO clientes (nome, email, cidade) VALUES ('Bruno', 'bruno@exemplo.com', NULL);`",
+        "c": "`INSERT INTO clientes (nome) VALUES ('Carla');`",
+        "d": "`INSERT INTO clientes (nome, email) VALUES ('Diego', 'diego@exemplo.com');`"
+      },
+      "answer": "c",
+      "explanation": "A coluna email é NOT NULL e não tem DEFAULT, então um INSERT que a omite falha. A opção b passa: cidade aceita NULL. O id é gerado pelo AUTO_INCREMENT em todos os casos.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Em qualquer versão do MySQL, uma constraint `CHECK` impede a gravação de valores que violam a condição.",
+      "answer": false,
+      "explanation": "O MySQL só aplica CHECK a partir da versão 8.0.16. Em versões anteriores a sintaxe é aceita, mas a regra é ignorada em silêncio, o que já causou muitos dados inválidos em produção.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Em um banco recém-criado e vazio, o comando abaixo falha. Por quê?\n\n```sql\nCREATE TABLE produtos (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  nome VARCHAR(120) NOT NULL,\n  categoria_id INT,\n  CONSTRAINT fk_produtos_categoria\n    FOREIGN KEY (categoria_id) REFERENCES categorias(id)\n);\n```",
+      "options": {
+        "a": "FOREIGN KEY precisa ser declarada na mesma linha da coluna",
+        "b": "A tabela categorias ainda não existe para ser referenciada",
+        "c": "A coluna categoria_id precisa ser NOT NULL para ter chave estrangeira",
+        "d": "Constraints de tabela não podem receber nome"
+      },
+      "answer": "b",
+      "explanation": "A tabela referenciada precisa existir antes: crie categorias primeiro. Constraints de tabela podem (e devem) ter nome, a coluna da FK pode aceitar NULL e a declaração no fim da tabela é válida.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual nome segue as convenções de nomenclatura da aula para a chave estrangeira de `pedidos` que aponta para `clientes`?",
+      "options": {
+        "a": "`fk_pedidos_cliente`",
+        "b": "`FK1`",
+        "c": "`pedidos_ibfk_1`",
+        "d": "`ChaveClientes`"
+      },
+      "answer": "a",
+      "explanation": "Prefixo do tipo (fk), tabela e coluna, tudo em snake_case: fk_pedidos_cliente. FK1 não diz nada, pedidos_ibfk_1 é o nome automático do MySQL e ChaveClientes mistura maiúsculas e não indica a tabela de origem.",
+      "points": 1
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Carreira: portfólio, currículo e LinkedIn",
+  "description": "Verifica se você sabe apresentar o curso e o projeto final no LinkedIn, no currículo e no GitHub.",
+  "lesson": "carreira-portfolio-e-linkedin",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é a ordem das etapas do funil da oportunidade profissional?",
+      "options": {
+        "a": "Visibilidade, contato, entrevista, vaga",
+        "b": "Entrevista, visibilidade, contato, vaga",
+        "c": "Contato, vaga, visibilidade, entrevista",
+        "d": "Visibilidade, entrevista, contato, vaga"
+      },
+      "answer": "a",
+      "explanation": "Cada etapa depende da anterior: alguém precisa encontrar você (visibilidade) para fazer contato; o contato leva à entrevista, e a entrevista à vaga. Sem a boca do funil, as demais etapas não acontecem."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais termos um recrutador costuma usar para buscar um DBA júnior no LinkedIn?",
+      "options": {
+        "a": "MySQL",
+        "b": "backup e restore",
+        "c": "pacote Office avançado",
+        "d": "modelagem de dados"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Tecnologias (MySQL, PostgreSQL, SQL) e rotinas de DBA (backup, restore, performance, modelagem) são as palavras-chave da área. Pacote Office é uma competência genérica que não filtra perfis de banco de dados.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Como você ainda não tem experiência formal como DBA, o título do seu perfil no LinkedIn deve ser apenas \"Estudante\".",
+      "answer": false,
+      "explanation": "O título é o campo mais lido e mais buscado do perfil. \"Estudante\" não contém nenhuma palavra-chave; um título como \"DBA Júnior | MySQL | PostgreSQL | SQL\" diz o que você sabe fazer e aparece nas buscas."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "No LinkedIn, o curso é cadastrado na seção ___, com descrição e certificado anexado; já o certificado com código de validação vai também em Licenças e certificados.",
+      "answer": [["Formação acadêmica", "Formação", "formacao academica", "formacao", "Educação", "Educacao"]],
+      "explanation": "A seção Formação acadêmica recebe instituição, diploma, área de estudo, datas, descrição e mídia. Licenças e certificados é complementar, para credenciais com URL ou código."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Para um DBA júnior sem experiência profissional formal, qual seção do currículo mais demonstra habilidade prática?",
+      "options": {
+        "a": "Projetos, com o projeto final descrito: tema, tecnologias e o que foi construído",
+        "b": "Idiomas, com o nível de proficiência em cada um",
+        "c": "Objetivo profissional, com o cargo pretendido",
+        "d": "Referências pessoais, com contatos de antigos professores"
+      },
+      "answer": "a",
+      "explanation": "Sem experiência formal, os projetos carregam o currículo: eles mostram o que você construiu de fato. O objetivo apenas declara uma intenção, e idiomas ou referências não comprovam habilidade técnica.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um aluno publicou no GitHub apenas o `backup.sql` do projeto, sem README nem os demais scripts. Qual é o principal problema para quem avalia o portfólio?",
+      "options": {
+        "a": "Ninguém sabe o que o banco faz nem como executá-lo, então o projeto não demonstra nada",
+        "b": "O GitHub não aceita arquivos com extensão .sql em repositórios públicos",
+        "c": "O arquivo deveria estar compactado em .zip para reduzir o tamanho",
+        "d": "Backups só podem ser publicados depois de convertidos para PDF"
+      },
+      "answer": "a",
+      "explanation": "Um repositório é portfólio quando explica o contexto: README com o que o banco faz e como rodar os scripts na ordem, mais o modelo e os arquivos ddl, dml, procedures e consultas. Um dump isolado não conta a história do projeto.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual destas publicações sobre a conclusão do curso segue a regra \"sem exagero\"?",
+      "options": {
+        "a": "Concluí o curso de Administração de Bancos de Dados. Destaque: projeto final com procedures, triggers e backup testado em MySQL 8.",
+        "b": "Agora sou especialista sênior em todos os bancos de dados do mercado e pronto para qualquer desafio.",
+        "c": "Terminei mais um curso. Obrigado a todos que acompanharam essa jornada incrível.",
+        "d": "Me contratem: depois deste curso, sou o melhor DBA que a sua empresa vai encontrar."
+      },
+      "answer": "a",
+      "explanation": "A publicação forte diz o que foi feito e cita recursos concretos com palavras-chave. Prometer ser especialista ou o melhor DBA após um curso destrói a credibilidade; a opção genérica não tem nenhuma palavra-chave para ser encontrada.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Ao enviar um convite de conexão a um profissional de banco de dados no LinkedIn, qual é a boa prática?",
+      "options": {
+        "a": "Adicionar uma nota curta dizendo quem você é e por que quer se conectar",
+        "b": "Anexar o currículo em PDF logo na primeira mensagem",
+        "c": "Pedir uma indicação para vaga já no texto do convite",
+        "d": "Enviar o convite sem mensagem, para parecer discreto"
+      },
+      "answer": "a",
+      "explanation": "A nota personalizada mostra profissionalismo e aumenta a chance de aceitação. Pedir vaga ou anexar currículo no primeiro contato soa como cobrança; o convite sem mensagem é ignorado com frequência."
+    }
+  ]
+}

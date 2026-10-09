@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Quatro camadas de integridade: entidade (PRIMARY KEY), referencial (FOREIGN KEY), domínio (tipo, NOT NULL, CHECK) e negócio (triggers e aplicação)</title>
+  <style>
+    .t { font-size: 24px; font-weight: 700; }
+    .k { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .kk { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <rect x="30" y="30" width="320" height="120" rx="12" class="box"/>
+  <text x="190" y="66" text-anchor="middle" class="t" fill="#34d399">Entidade</text>
+  <text x="190" y="100" text-anchor="middle" class="k">PRIMARY KEY</text>
+  <text x="190" y="132" text-anchor="middle" class="m">cada linha tem um id único</text>
+
+  <rect x="370" y="30" width="320" height="120" rx="12" class="box"/>
+  <text x="530" y="66" text-anchor="middle" class="t" fill="#60a5fa">Referencial</text>
+  <text x="530" y="100" text-anchor="middle" class="k">FOREIGN KEY</text>
+  <text x="530" y="132" text-anchor="middle" class="m">a linha referenciada existe</text>
+
+  <rect x="30" y="170" width="320" height="120" rx="12" class="box"/>
+  <text x="190" y="206" text-anchor="middle" class="t" fill="#a78bfa">Domínio</text>
+  <text x="190" y="240" text-anchor="middle" class="k">tipo, NOT NULL, CHECK</text>
+  <text x="190" y="272" text-anchor="middle" class="m">total >= 0, e-mail obrigatório</text>
+
+  <rect x="370" y="170" width="320" height="120" rx="12" class="box"/>
+  <text x="530" y="206" text-anchor="middle" class="t" fill="#fbbf24">Negócio</text>
+  <text x="530" y="240" text-anchor="middle" class="kk">triggers e aplicação</text>
+  <text x="530" y="272" text-anchor="middle" class="m">cliente em débito não compra</text>
+</svg>

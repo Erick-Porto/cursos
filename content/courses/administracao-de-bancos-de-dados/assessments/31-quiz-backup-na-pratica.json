@@ -1,0 +1,105 @@
+{
+  "title": "Quiz: Backup na prática: mysqldump e automação",
+  "description": "Verifica se você sabe gerar, restaurar, agendar e conferir backups com mysqldump.",
+  "lesson": "backup-na-pratica",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual opção do `mysqldump` gera um backup consistente de tabelas InnoDB sem travar as escritas durante o dump?",
+      "options": {
+        "a": "--lock-all-tables",
+        "b": "--single-transaction",
+        "c": "--no-data",
+        "d": "--result-file"
+      },
+      "answer": "b",
+      "explanation": "`--single-transaction` lê tudo dentro de uma transação, em um instante consistente. `--lock-all-tables` também garante consistência, mas bloqueando o servidor inteiro, o que derruba a loja em horário de uso."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O arquivo `loja.sql` foi gerado com `mysqldump -u root -p loja > loja.sql`. O banco `loja_restaurada` já foi criado. Qual comando restaura o dump nele?",
+      "options": {
+        "a": "mysql -u root -p loja_restaurada < loja.sql",
+        "b": "mysql -u root -p loja_restaurada > loja.sql",
+        "c": "mysqldump -u root -p loja_restaurada < loja.sql",
+        "d": "mysqldump -u root -p --restore loja_restaurada loja.sql"
+      },
+      "answer": "a",
+      "explanation": "Restaurar é entregar o SQL ao cliente `mysql` com `<`. Com `>` o arquivo de backup seria sobrescrito. O `mysqldump` só gera dumps; ele não restaura nada.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Complete os dois primeiros campos (minuto e hora) da linha do crontab para rodar o backup todo dia às 02:00: ___ ___ * * * /usr/local/bin/backup_loja.sh",
+      "answer": [["0", "00"], ["2", "02"]],
+      "explanation": "O primeiro campo é o minuto (0) e o segundo é a hora (2). Os três asteriscos deixam dia do mês, mês e dia da semana livres, ou seja, todo dia.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais opções do `mysqldump` são necessárias para que procedures, functions e eventos agendados entrem no backup?",
+      "options": {
+        "a": "--routines",
+        "b": "--no-create-info",
+        "c": "--events",
+        "d": "--all-databases"
+      },
+      "answer": ["a", "c"],
+      "explanation": "`--routines` traz procedures e functions; `--events` traz os eventos agendados. Nenhum dos dois é padrão. `--no-create-info` remove o `CREATE TABLE` e `--all-databases` só muda quais bancos entram."
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "O arquivo gerado pelo `mysqldump` é um script SQL em texto, com comandos `CREATE TABLE` e `INSERT` que você pode abrir e ler.",
+      "answer": true,
+      "explanation": "É isso que torna o backup lógico portável e legível: `head -n 20 loja.sql` mostra o cabeçalho e os primeiros comandos. Um backup físico, ao contrário, é uma cópia binária dos arquivos do InnoDB."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O trecho abaixo registra \"OK\" no log mesmo quando o `mysqldump` falha por senha errada. Por quê?\n\n```bash\nmysqldump --login-path=backup loja | gzip > loja.sql.gz\nif [ $? -eq 0 ]; then echo OK >> backup.log; fi\n```",
+      "options": {
+        "a": "`$?` guarda o código de saída do último comando do pipe, o `gzip`, que termina bem mesmo sem receber dados; use `${PIPESTATUS[0]}`",
+        "b": "O `gzip` corrige automaticamente os erros do `mysqldump` antes de gravar o arquivo",
+        "c": "O `if` do bash não funciona depois de um pipe; é preciso usar `case`",
+        "d": "`--login-path` desativa os códigos de erro do `mysqldump`"
+      },
+      "answer": "a",
+      "explanation": "Em um pipe, `$?` reflete apenas o último comando. `${PIPESTATUS[0]}` devolve o código do primeiro, o `mysqldump`, que é o que importa. O `gzip` não corrige nada: ele apenas compacta o que recebe, inclusive um arquivo vazio.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Onde a senha do usuário de backup deve ficar para que o script agendado no cron não a exponha?",
+      "options": {
+        "a": "Na própria linha do crontab, depois do caminho do script",
+        "b": "Em um arquivo `~/.my.cnf` com permissão 600, ou cifrada pelo `mysql_config_editor`",
+        "c": "Como comentário no início do script, para facilitar a manutenção",
+        "d": "Em uma variável de ambiente definida dentro do script"
+      },
+      "answer": "b",
+      "explanation": "O `mysqldump` lê `~/.my.cnf` sozinho, e `--login-path` busca a senha cifrada em `~/.mylogin.cnf`. Senha no crontab, no script ou em variável dentro do script aparece em qualquer `cat` ou cópia do arquivo."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Você quer criar um banco de testes com as mesmas tabelas do `loja`, mas vazio. Qual comando gera o dump certo?",
+      "options": {
+        "a": "mysqldump -u root -p --no-data loja > estrutura.sql",
+        "b": "mysqldump -u root -p --no-create-info loja > estrutura.sql",
+        "c": "mysqldump -u root -p --skip-triggers loja > estrutura.sql",
+        "d": "mysqldump -u root -p --single-transaction loja > estrutura.sql"
+      },
+      "answer": "a",
+      "explanation": "`--no-data` exporta apenas os `CREATE TABLE`. `--no-create-info` faz o oposto: só os `INSERT`. As outras opções continuam incluindo os dados."
+    }
+  ]
+}

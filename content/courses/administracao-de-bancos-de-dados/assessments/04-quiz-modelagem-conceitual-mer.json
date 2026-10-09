@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Modelagem conceitual com MER",
+  "description": "Verifique se você reconhece entidades, atributos, relacionamentos e cardinalidades em um cenário.",
+  "lesson": "modelagem-conceitual-mer",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual nível de modelagem descreve o negócio em entidades e relacionamentos, sem citar nenhum SGBD?",
+      "options": {
+        "a": "Conceitual",
+        "b": "Lógico",
+        "c": "Físico",
+        "d": "Relacional"
+      },
+      "answer": "a",
+      "explanation": "O nível conceitual (o MER) representa o que existe no negócio e independe do SGBD. O lógico já define tabelas e chaves; o físico escolhe tipos de dados e índices de um SGBD específico. \"Relacional\" é um modelo de dados, não um nível de modelagem."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Um cliente pode informar vários números de telefone. No MER, o atributo `telefone` é classificado como:",
+      "options": {
+        "a": "Composto",
+        "b": "Multivalorado",
+        "c": "Derivado",
+        "d": "Identificador"
+      },
+      "answer": "b",
+      "explanation": "Multivalorado é o atributo que admite mais de um valor para a mesma instância. Composto é o que se divide em partes (endereço em rua, número e cidade); derivado é calculado a partir de outro; identificador é único por instância."
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Em uma clínica, o sistema guarda dados de pacientes, médicos e consultas. Quais itens abaixo são **entidades** do modelo?",
+      "options": {
+        "a": "Paciente",
+        "b": "CRM do médico",
+        "c": "Médico",
+        "d": "Data e hora da consulta",
+        "e": "Consulta"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "Paciente, médico e consulta têm várias ocorrências, características próprias e se relacionam entre si. CRM e data e hora são características de uma entidade, ou seja, atributos.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em um relacionamento 1:N entre cliente e pedido, um mesmo pedido pode pertencer a vários clientes.",
+      "answer": false,
+      "explanation": "No 1:N, o lado N (pedido) se liga a no máximo uma instância do lado 1 (cliente). É o cliente que pode ter vários pedidos, não o contrário."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Quando a cardinalidade mínima de uma entidade em um relacionamento é 0, dizemos que a participação dela é ___.",
+      "answer": [["opcional", "parcial", "não obrigatória", "nao obrigatoria"]],
+      "explanation": "Mínimo 0 significa que a instância pode existir sem participar do relacionamento: participação opcional (ou parcial). Mínimo 1 torna a participação obrigatória (total)."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Em uma biblioteca, um livro pode ter vários autores e um autor pode escrever vários livros. Qual é a cardinalidade do relacionamento entre livro e autor?",
+      "options": {
+        "a": "1:1",
+        "b": "1:N",
+        "c": "N:1",
+        "d": "N:M"
+      },
+      "answer": "d",
+      "explanation": "Nos dois sentidos a resposta é \"vários\": muitos livros para um autor e muitos autores para um livro. Isso é N:M. Seria 1:N se cada livro tivesse um único autor.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Um analista modelou a entidade `paciente` com os atributos `data_nascimento` e `idade`. Qual é o problema desse modelo?",
+      "options": {
+        "a": "`idade` é um atributo derivado: fica desatualizado e deve ser calculado a partir de `data_nascimento`",
+        "b": "`idade` é um atributo multivalorado e precisa virar outra entidade",
+        "c": "`data_nascimento` deveria ser o identificador da entidade",
+        "d": "`data_nascimento` é um atributo composto e precisa ser dividido em dia, mês e ano"
+      },
+      "answer": "a",
+      "explanation": "A idade muda todo ano e pode ser obtida da data de nascimento; guardá-la gera dados inconsistentes. A data de nascimento não é única (duas pessoas nascem no mesmo dia), então não serve de identificador, e tratar a data como composta não resolve nada aqui.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Por que vale a pena desenhar o modelo antes de criar as tabelas no MySQL?",
+      "options": {
+        "a": "Corrigir a estrutura no diagrama custa muito menos do que corrigir com o sistema em uso",
+        "b": "O MySQL só executa `CREATE TABLE` depois de importar um diagrama",
+        "c": "Com o diagrama pronto, o sistema não precisa mais de testes",
+        "d": "Sem o diagrama, o banco não aceita chaves estrangeiras"
+      },
+      "answer": "a",
+      "explanation": "O modelo é a planta do banco: mudar uma caixa no desenho é barato, enquanto mudar uma tabela com dados, consultas e código dependendo dela custa migração e retrabalho. O MySQL não exige diagrama para nada, e o modelo não substitui testes."
+    }
+  ]
+}

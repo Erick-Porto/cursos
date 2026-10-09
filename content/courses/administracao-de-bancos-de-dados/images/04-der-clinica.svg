@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 290" font-family="Inter, system-ui, sans-serif">
+  <title>DER da clínica: paciente tem consultas e médico atende consultas, ambos 1:N; cada consulta tem exatamente um paciente e um médico, e cada um deles pode ter zero ou muitas consultas</title>
+  <style>
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .a { fill: #e8edf7; font-size: 18px; }
+    .v { fill: #e8edf7; font-size: 18px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .n { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ln { stroke: #a78bfa; stroke-width: 3; fill: none; }
+    .min0 { fill: #0b1020; stroke: #a78bfa; stroke-width: 3; }
+  </style>
+  <rect width="720" height="290" rx="16" fill="#0b1020"/>
+
+  <rect x="20" y="36" width="160" height="150" rx="12" class="box"/>
+  <path d="M20 48 a12 12 0 0 1 12 -12 h136 a12 12 0 0 1 12 12 v28 h-160 z" fill="#34d399"/>
+  <text x="100" y="64" text-anchor="middle" class="hd">paciente</text>
+  <text x="34" y="108" class="a" text-decoration="underline">cpf</text>
+  <text x="34" y="138" class="a">nome</text>
+  <text x="34" y="168" class="a">nascimento</text>
+
+  <rect x="280" y="36" width="160" height="150" rx="12" class="box"/>
+  <path d="M280 48 a12 12 0 0 1 12 -12 h136 a12 12 0 0 1 12 12 v28 h-160 z" fill="#34d399"/>
+  <text x="360" y="64" text-anchor="middle" class="hd">consulta</text>
+  <text x="294" y="108" class="a" text-decoration="underline">id</text>
+  <text x="294" y="138" class="a">data_hora</text>
+  <text x="294" y="168" class="a">status</text>
+
+  <rect x="540" y="36" width="160" height="150" rx="12" class="box"/>
+  <path d="M540 48 a12 12 0 0 1 12 -12 h136 a12 12 0 0 1 12 12 v28 h-160 z" fill="#34d399"/>
+  <text x="620" y="64" text-anchor="middle" class="hd">médico</text>
+  <text x="554" y="108" class="a" text-decoration="underline">crm</text>
+  <text x="554" y="138" class="a">nome</text>
+  <text x="554" y="168" class="a">especialidade</text>
+
+  <path d="M180 122 L280 122" class="ln"/>
+  <path d="M192 113 L192 131 M200 113 L200 131" class="ln"/>
+  <circle cx="248" cy="122" r="5" class="min0"/>
+  <path d="M262 122 L280 113 M262 122 L280 131" class="ln"/>
+  <text x="230" y="108" text-anchor="middle" class="v">tem</text>
+  <text x="198" y="152" text-anchor="middle" class="n">1..1</text>
+  <text x="262" y="152" text-anchor="middle" class="n">0..N</text>
+
+  <path d="M440 122 L540 122" class="ln"/>
+  <path d="M440 113 L458 122 M440 131 L458 122" class="ln"/>
+  <circle cx="472" cy="122" r="5" class="min0"/>
+  <path d="M520 113 L520 131 M528 113 L528 131" class="ln"/>
+  <text x="490" y="108" text-anchor="middle" class="v">atende</text>
+  <text x="458" y="152" text-anchor="middle" class="n">0..N</text>
+  <text x="522" y="152" text-anchor="middle" class="n">1..1</text>
+
+  <text x="360" y="232" text-anchor="middle" class="m">círculo = mínimo 0 · traço = um · pé de galinha = muitos</text>
+  <text x="360" y="262" text-anchor="middle" class="m">sublinhado = identificador</text>
+</svg>

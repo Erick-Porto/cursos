@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Parâmetros de procedure: IN entra, OUT sai e INOUT entra, é alterado e sai</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .in { stroke: #60a5fa; stroke-width: 2.5; fill: none; marker-end: url(#hb); }
+    .out { stroke: #34d399; stroke-width: 2.5; fill: none; marker-end: url(#hg); }
+    .io { stroke: #fbbf24; stroke-width: 2.5; fill: none; marker-end: url(#ha); marker-start: url(#ha); }
+    .lb { fill: #60a5fa; font-size: 18px; font-weight: 700; }
+    .lg { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .la { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="hb" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker>
+    <marker id="hg" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="ha" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+  <rect x="20" y="60" width="170" height="170" rx="12" class="box"/>
+  <text x="105" y="140" text-anchor="middle" class="t">Chamador</text>
+  <text x="105" y="170" text-anchor="middle" class="m">CALL sp_x(...)</text>
+  <rect x="500" y="60" width="200" height="170" rx="12" class="box"/>
+  <text x="600" y="140" text-anchor="middle" class="t">Procedure</text>
+  <text x="600" y="170" text-anchor="middle" class="m">BEGIN ... END</text>
+  <path d="M190 98 L492 98" class="in"/>
+  <text x="345" y="88" text-anchor="middle" class="lb">IN: o valor entra</text>
+  <path d="M500 150 L198 150" class="out"/>
+  <text x="345" y="140" text-anchor="middle" class="lg">OUT: a procedure devolve</text>
+  <path d="M198 202 L492 202" class="io"/>
+  <text x="345" y="192" text-anchor="middle" class="la">INOUT: entra, muda e volta</text>
+  <text x="360" y="276" text-anchor="middle" class="m">OUT e INOUT são lidos em variáveis de sessão, como @total</text>
+</svg>

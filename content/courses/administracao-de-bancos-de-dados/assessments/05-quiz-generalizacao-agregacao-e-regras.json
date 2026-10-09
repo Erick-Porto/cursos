@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Generalização, agregação e regras de negócio",
+  "description": "Verifique se você classifica hierarquias, reconhece entidades fracas e sabe onde cada regra de negócio fica.",
+  "lesson": "generalizacao-agregacao-e-regras",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na hierarquia em que `pessoa` se divide em `cliente` e `funcionario`, que relação a especialização expressa?",
+      "options": {
+        "a": "\"é um tipo de\": cliente é um tipo de pessoa",
+        "b": "\"possui\": pessoa possui clientes",
+        "c": "\"depende de\": cliente só existe se existir pessoa cadastrada",
+        "d": "\"contém\": pessoa contém clientes e funcionários"
+      },
+      "answer": "a",
+      "explanation": "Especialização e generalização modelam o \"é um tipo de\": a subclasse herda os atributos da superclasse. \"Depende de\" descreve entidade fraca; \"possui\" e \"contém\" são relacionamentos comuns entre entidades distintas."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em uma escola, toda pessoa cadastrada é aluno ou professor, e ninguém pode ser os dois ao mesmo tempo. Como se classifica essa especialização?",
+      "options": {
+        "a": "Total e disjunta",
+        "b": "Total e sobreposta",
+        "c": "Parcial e disjunta",
+        "d": "Parcial e sobreposta"
+      },
+      "answer": "a",
+      "explanation": "\"Toda pessoa é aluno ou professor\" torna a especialização total (nenhuma instância fica fora das subclasses). \"Ninguém é os dois\" torna a especialização disjunta. Seria sobreposta se um professor também pudesse ser aluno.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Uma entidade fraca consegue ser identificada apenas pelos próprios atributos, sem depender de outra entidade.",
+      "answer": false,
+      "explanation": "É justamente o contrário: a entidade fraca depende da entidade forte para ser identificada. Seu identificador parcial só distingue instâncias dentro de uma mesma instância da entidade forte."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "A entidade `dependente`, identificada pelo nome do dependente em conjunto com o identificador do funcionário, é chamada de entidade ___.",
+      "answer": [["fraca", "entidade fraca"]],
+      "explanation": "Dois funcionários podem ter dependentes com o mesmo nome. O nome é apenas um identificador parcial; a identificação completa precisa do funcionário. Isso caracteriza a entidade fraca."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais regras de negócio abaixo o DER consegue registrar diretamente, com cardinalidades, atributos ou hierarquias?",
+      "options": {
+        "a": "Todo pedido pertence a exatamente um cliente",
+        "b": "O e-mail do cliente é obrigatório e único",
+        "c": "O desconto de um item não pode passar de 30%",
+        "d": "Um cliente pode ter vários telefones",
+        "e": "Um pedido só pode ser cancelado enquanto estiver aberto"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Cardinalidade mínima e máxima registram \"exatamente um cliente\"; atributo obrigatório e identificador alternativo registram o e-mail; atributo multivalorado registra os telefones. Limites de valor e condições de status não têm símbolo no DER: ficam documentados à parte e viram `CHECK`, triggers ou validação na aplicação.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Quando a agregação é usada no MER?",
+      "options": {
+        "a": "Quando um relacionamento precisa participar de outro relacionamento",
+        "b": "Quando duas entidades compartilham vários atributos",
+        "c": "Quando um atributo admite vários valores",
+        "d": "Quando uma entidade não tem identificador próprio"
+      },
+      "answer": "a",
+      "explanation": "A agregação trata um relacionamento como se fosse uma entidade para que ele se ligue a outra. Atributos em comum pedem generalização; vários valores pedem atributo multivalorado; falta de identificador próprio caracteriza entidade fraca."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Uma única entidade `produto` tem os atributos `peso_kg`, `altura_cm`, `tamanho_mb` e `url_download`. Produtos físicos deixam `tamanho_mb` e `url_download` vazios; digitais deixam `peso_kg` e `altura_cm` vazios. Que recurso do MER resolve melhor essa situação?",
+      "options": {
+        "a": "Especializar `produto` em `produto_fisico` e `produto_digital`",
+        "b": "Transformar `peso_kg` e `tamanho_mb` em atributos multivalorados",
+        "c": "Criar uma agregação entre `produto` e `pedido`",
+        "d": "Tornar `produto` uma entidade fraca de `categoria`"
+      },
+      "answer": "a",
+      "explanation": "Os atributos comuns ficam na superclasse e os específicos em cada subclasse, sem colunas vazias. Multivalorado trata de vários valores do mesmo atributo; agregação liga relacionamentos; entidade fraca trata de identificação, não de atributos opcionais.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual ferramenta oficial do MySQL desenha diagramas EER, faz engenharia reversa de um banco existente e gera o script `CREATE TABLE`?",
+      "options": {
+        "a": "MySQL Workbench",
+        "b": "brModelo",
+        "c": "draw.io",
+        "d": "dbdiagram.io"
+      },
+      "answer": "a",
+      "explanation": "O MySQL Workbench é a ferramenta oficial do MySQL e integra diagrama, engenharia reversa e geração de SQL. O brModelo é voltado ao modelo conceitual; o draw.io é um editor de diagramas genérico; o dbdiagram.io desenha a partir de texto, mas não é oficial do MySQL."
+    }
+  ]
+}

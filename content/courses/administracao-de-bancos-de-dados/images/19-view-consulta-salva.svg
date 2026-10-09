@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>A view vw_pedidos_clientes guarda só a consulta: cada SELECT nela executa de novo o JOIN de pedidos com clientes</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <rect x="20" y="70" width="180" height="56" rx="12" class="box"/>
+  <text x="110" y="106" text-anchor="middle" class="t">pedidos</text>
+  <rect x="20" y="180" width="180" height="56" rx="12" class="box"/>
+  <text x="110" y="216" text-anchor="middle" class="t">clientes</text>
+
+  <path d="M200 98 L232 130" class="arrow"/>
+  <path d="M200 208 L232 176" class="arrow"/>
+
+  <rect x="240" y="92" width="250" height="120" rx="12" class="box" stroke="#a78bfa"/>
+  <text x="365" y="128" text-anchor="middle" class="t" fill="#a78bfa">vw_pedidos_clientes</text>
+  <text x="365" y="162" text-anchor="middle" class="m">consulta salva</text>
+  <text x="365" y="192" text-anchor="middle" class="m">sem dados próprios</text>
+
+  <path d="M490 152 L522 152" class="arrow"/>
+
+  <rect x="530" y="116" width="170" height="72" rx="12" class="box"/>
+  <text x="615" y="146" text-anchor="middle" class="t">aplicação</text>
+  <text x="615" y="176" text-anchor="middle" class="m">SELECT na view</text>
+
+  <text x="360" y="292" text-anchor="middle" class="m">A view não guarda linhas: cada SELECT roda o JOIN de novo</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Duas linhas do tempo: no monitoramento reativo a correção vem depois da reclamação dos usuários; no proativo o alerta chega antes do prejuízo</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+  <text x="360" y="38" text-anchor="middle" class="h">Reativo age depois; proativo age antes</text>
+
+  <!-- reativo -->
+  <text x="16" y="112" class="t" fill="#f87171">Reativo</text>
+  <rect x="120" y="72" width="180" height="64" rx="10" class="box"/>
+  <text x="210" y="99" text-anchor="middle" class="t">Lentidão</text>
+  <text x="210" y="125" text-anchor="middle" class="m">sem alerta</text>
+  <path d="M300 104 L318 104" class="arrow"/>
+  <rect x="320" y="72" width="180" height="64" rx="10" class="box" stroke="#f87171"/>
+  <text x="410" y="99" text-anchor="middle" class="t">Reclamação</text>
+  <text x="410" y="125" text-anchor="middle" class="m">usuário sofre</text>
+  <path d="M500 104 L518 104" class="arrow"/>
+  <rect x="520" y="72" width="180" height="64" rx="10" class="box"/>
+  <text x="610" y="99" text-anchor="middle" class="t">Correção</text>
+  <text x="610" y="125" text-anchor="middle" class="m">tarde demais</text>
+
+  <!-- proativo -->
+  <text x="16" y="232" class="t" fill="#34d399">Proativo</text>
+  <rect x="120" y="192" width="180" height="64" rx="10" class="box"/>
+  <text x="210" y="219" text-anchor="middle" class="t">Linha de base</text>
+  <text x="210" y="245" text-anchor="middle" class="m">dia normal</text>
+  <path d="M300 224 L318 224" class="arrow"/>
+  <rect x="320" y="192" width="180" height="64" rx="10" class="box" stroke="#34d399"/>
+  <text x="410" y="219" text-anchor="middle" class="t">Alerta</text>
+  <text x="410" y="245" text-anchor="middle" class="m">CPU em 75%</text>
+  <path d="M500 224 L518 224" class="arrow"/>
+  <rect x="520" y="192" width="180" height="64" rx="10" class="box"/>
+  <text x="610" y="219" text-anchor="middle" class="t">Correção</text>
+  <text x="610" y="245" text-anchor="middle" class="m">sem prejuízo</text>
+
+  <text x="360" y="298" text-anchor="middle" class="m">Cada incidente vira um alerta novo</text>
+</svg>

@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo: RPO é o intervalo entre o último backup e o incidente; RTO é o intervalo entre o incidente e a volta do sistema</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .k { font-size: 24px; font-weight: 700; }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <text x="255" y="56" text-anchor="middle" class="k" fill="#fbbf24">RPO</text>
+  <text x="255" y="84" text-anchor="middle" class="m">dados perdidos: 12h32</text>
+  <path d="M120 108 L390 108" stroke="#fbbf24" stroke-width="3"/>
+  <path d="M120 100 L120 116 M390 100 L390 116" stroke="#fbbf24" stroke-width="3"/>
+
+  <text x="510" y="56" text-anchor="middle" class="k" fill="#a78bfa">RTO</text>
+  <text x="510" y="84" text-anchor="middle" class="m">tempo parado: 30 min</text>
+  <path d="M410 108 L610 108" stroke="#a78bfa" stroke-width="3"/>
+  <path d="M410 100 L410 116 M610 100 L610 116" stroke="#a78bfa" stroke-width="3"/>
+
+  <path d="M30 160 L690 160" stroke="#2a3a5c" stroke-width="3"/>
+  <circle cx="110" cy="160" r="10" fill="#34d399"/>
+  <circle cx="400" cy="160" r="10" fill="#f87171"/>
+  <circle cx="620" cy="160" r="10" fill="#60a5fa"/>
+
+  <text x="110" y="202" text-anchor="middle" class="t">Último backup</text>
+  <text x="110" y="230" text-anchor="middle" class="m">02:00</text>
+  <text x="400" y="202" text-anchor="middle" class="t">Incidente</text>
+  <text x="400" y="230" text-anchor="middle" class="m">14:32, o disco falha</text>
+  <text x="620" y="202" text-anchor="middle" class="t">Volta ao ar</text>
+  <text x="620" y="230" text-anchor="middle" class="m">15:02</text>
+
+  <text x="360" y="276" text-anchor="middle" class="m">Backups mais frequentes reduzem o RPO.</text>
+  <text x="360" y="302" text-anchor="middle" class="m">Restauração mais rápida reduz o RTO.</text>
+</svg>

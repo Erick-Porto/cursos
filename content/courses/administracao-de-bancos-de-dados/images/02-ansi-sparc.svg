@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Arquitetura ANSI-SPARC: nível externo com as visões de cada usuário, nível conceitual com o esquema lógico global e nível interno com arquivos e índices no disco</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .s { fill: #e8edf7; font-size: 20px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .v { fill: #e8edf7; font-size: 18px; }
+    .a { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .band { fill: #131c33; stroke-width: 2; }
+    .box { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .link { stroke: #fbbf24; stroke-width: 2; stroke-dasharray: 5 5; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <rect x="30" y="24" width="660" height="96" rx="12" class="band" stroke="#60a5fa"/>
+  <text x="50" y="62" class="t">Nível externo</text>
+  <text x="50" y="94" class="m">o que cada usuário vê</text>
+  <rect x="330" y="48" width="150" height="48" rx="10" class="box"/>
+  <text x="405" y="78" text-anchor="middle" class="v">Visão vendas</text>
+  <rect x="500" y="48" width="170" height="48" rx="10" class="box"/>
+  <text x="585" y="78" text-anchor="middle" class="v">Visão financeiro</text>
+
+  <line x1="60" y1="120" x2="60" y2="164" class="link"/>
+  <text x="380" y="148" text-anchor="middle" class="a">independência lógica: o esquema muda, as visões continuam</text>
+
+  <rect x="30" y="164" width="660" height="96" rx="12" class="band" stroke="#34d399"/>
+  <text x="50" y="202" class="t">Nível conceitual</text>
+  <text x="50" y="234" class="m">esquema lógico global</text>
+  <rect x="300" y="180" width="370" height="64" rx="10" class="box"/>
+  <text x="485" y="206" text-anchor="middle" class="s">clientes · pedidos · produtos</text>
+  <text x="485" y="232" text-anchor="middle" class="m">tipos, chaves e regras</text>
+
+  <line x1="60" y1="260" x2="60" y2="304" class="link"/>
+  <text x="380" y="288" text-anchor="middle" class="a">independência física: o disco muda, o esquema continua</text>
+
+  <rect x="30" y="304" width="660" height="96" rx="12" class="band" stroke="#a78bfa"/>
+  <text x="50" y="342" class="t">Nível interno</text>
+  <text x="50" y="374" class="m">como fica no disco</text>
+  <rect x="300" y="320" width="370" height="64" rx="10" class="box"/>
+  <text x="485" y="346" text-anchor="middle" class="s">arquivos InnoDB · índices B-tree</text>
+  <text x="485" y="372" text-anchor="middle" class="m">páginas de 16 KB</text>
+</svg>

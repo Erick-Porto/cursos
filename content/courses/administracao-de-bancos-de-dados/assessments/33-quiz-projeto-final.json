@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Projeto final: um banco de dados completo",
+  "description": "Verifica se você conhece as fases do projeto, os critérios de cada uma e a organização da entrega.",
+  "lesson": "projeto-final",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é a ordem correta das cinco fases do projeto final?",
+      "options": {
+        "a": "Modelagem conceitual, modelagem lógica, desenvolvimento SQL, testes, apresentação",
+        "b": "Desenvolvimento SQL, modelagem conceitual, modelagem lógica, testes, apresentação",
+        "c": "Modelagem lógica, modelagem conceitual, desenvolvimento SQL, apresentação, testes",
+        "d": "Modelagem conceitual, desenvolvimento SQL, modelagem lógica, testes, apresentação"
+      },
+      "answer": "a",
+      "explanation": "O projeto vai do abstrato ao concreto: primeiro o modelo conceitual (entidades), depois o lógico (tabelas e tipos), então os scripts SQL, os testes e, por fim, a apresentação. Escrever SQL antes de modelar gera tabelas que não refletem o negócio."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais itens fazem parte dos critérios da fase de **modelagem lógica**?",
+      "options": {
+        "a": "Tipos de dados que preservam a integridade de cada atributo",
+        "b": "Constraints em cada tabela: PK, FK, NOT NULL, UNIQUE e CHECK",
+        "c": "Arquivo de backup completo gerado com mysqldump",
+        "d": "Normalização até a 3FN, com justificativa das tabelas auxiliares"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Tipos, constraints e normalização definem a estrutura lógica. O backup completo é critério da fase de desenvolvimento SQL, quando o banco já existe.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "O tema do projeto é livre, mas os critérios de avaliação são os mesmos para todos os temas.",
+      "answer": true,
+      "explanation": "Cada aluno escolhe o negócio que vai modelar, porém o checklist de cada fase é uniforme e não muda de um tema para outro."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "O modelo conceitual do projeto precisa ter, no mínimo, ___ entidades, todas com seus relacionamentos e cardinalidades.",
+      "answer": [["6", "seis"]],
+      "explanation": "Seis entidades é o mínimo para que o projeto tenha relacionamentos suficientes para praticar JOINs, triggers e normalização."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Ao executar `ddl.sql` em um servidor vazio, o avaliador recebe um erro de chave estrangeira porque `pedidos` é criada antes de `clientes`. Qual critério foi violado e como corrigir?",
+      "options": {
+        "a": "Os scripts devem rodar do zero: crie as tabelas referenciadas antes das que têm FK",
+        "b": "As procedures devem ser criadas antes das tabelas que elas usam",
+        "c": "O script DML precisa ser executado antes do DDL para carregar os dados",
+        "d": "As chaves estrangeiras devem ser removidas para que o script execute"
+      },
+      "answer": "a",
+      "explanation": "Um script que depende de ordem errada não roda do zero. A correção é ordenar o DDL: tabelas pai primeiro, tabelas com FK depois. Remover as FKs faria o script executar, mas destruiria a integridade referencial que o projeto exige.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na estrutura de entrega do projeto, em qual arquivo ficam os `CREATE PROCEDURE` e os `CREATE TRIGGER`?",
+      "options": {
+        "a": "ddl.sql",
+        "b": "procedures.sql",
+        "c": "consultas.sql",
+        "d": "backup.sql"
+      },
+      "answer": "b",
+      "explanation": "procedures.sql reúne as rotinas e os triggers, com o DELIMITER ajustado. ddl.sql cria a estrutura (banco, tabelas, índices), consultas.sql guarda SELECTs e views, e backup.sql é a saída do mysqldump.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na fase de testes, o aluno executa `DELETE FROM clientes WHERE id = 1;` e o MySQL responde com o erro 1451 (*a foreign key constraint fails*). O que esse resultado comprova?",
+      "options": {
+        "a": "O banco está com defeito e a chave estrangeira precisa ser removida",
+        "b": "A integridade referencial funciona: o cliente tem pedidos que dependem dele",
+        "c": "O cliente 1 não existe na tabela e por isso nada foi apagado",
+        "d": "O DELETE precisa de um COMMIT antes de ser aplicado"
+      },
+      "answer": "b",
+      "explanation": "O erro é o comportamento esperado: a FK em pedidos impede apagar um cliente que ainda tem pedidos. Demonstrar isso é um dos critérios da fase de testes. Se o cliente não existisse, o DELETE terminaria sem erro e com zero linhas afetadas.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O aluno gerou `backup.sql` com mysqldump e o colocou na pasta de entrega. O que ainda falta para esse item do checklist estar realmente cumprido?",
+      "options": {
+        "a": "Restaurar o arquivo em um servidor vazio e conferir se o banco volta completo",
+        "b": "Compactar o arquivo para que ele ocupe menos espaço no repositório",
+        "c": "Converter o backup para CSV para que o avaliador possa abri-lo em planilha",
+        "d": "Renomear o arquivo com a data para indicar quando foi gerado"
+      },
+      "answer": "a",
+      "explanation": "Um backup que nunca foi restaurado não é backup: só o restore prova que o arquivo está completo e executável. Compactar ou renomear não verifica nada, e CSV perde estrutura, procedures e triggers."
+    }
+  ]
+}

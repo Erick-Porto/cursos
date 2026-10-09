@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Seis produtos ordenados por preço decrescente divididos em três páginas de dois itens com LIMIT 2 e OFFSET 0, 2 e 4</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .codeb { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .n { fill: #b4bfd3; font-size: 22px; font-weight: 700; }
+    .p { font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .pg { fill: #131c33; stroke-width: 2.5; }
+    .br { fill: none; stroke-width: 3; }
+    .s-green { stroke: #34d399; }
+    .s-blue { stroke: #60a5fa; }
+    .s-purple { stroke: #a78bfa; }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <text x="170" y="40" text-anchor="middle" class="codeb">ORDER BY preco DESC</text>
+  <text x="555" y="40" text-anchor="middle" class="t">Páginas de 2</text>
+
+  <rect x="20" y="62" width="300" height="38" rx="8" class="box s-green"/>
+  <text x="36" y="89" class="n">1</text><text x="66" y="89" class="c">Notebook</text>
+  <rect x="20" y="106" width="300" height="38" rx="8" class="box s-green"/>
+  <text x="36" y="133" class="n">2</text><text x="66" y="133" class="c">Monitor 27&quot;</text>
+
+  <rect x="20" y="150" width="300" height="38" rx="8" class="box s-blue"/>
+  <text x="36" y="177" class="n">3</text><text x="66" y="177" class="c">Cadeira ergonômica</text>
+  <rect x="20" y="194" width="300" height="38" rx="8" class="box s-blue"/>
+  <text x="36" y="221" class="n">4</text><text x="66" y="221" class="c">Webcam</text>
+
+  <rect x="20" y="238" width="300" height="38" rx="8" class="box s-purple"/>
+  <text x="36" y="265" class="n">5</text><text x="66" y="265" class="c">Teclado</text>
+  <rect x="20" y="282" width="300" height="38" rx="8" class="box s-purple"/>
+  <text x="36" y="309" class="n">6</text><text x="66" y="309" class="c">Mouse</text>
+
+  <path d="M328 66 L340 66 L340 140 L328 140 M340 103 L402 103" class="br s-green"/>
+  <path d="M328 154 L340 154 L340 228 L328 228 M340 191 L402 191" class="br s-blue"/>
+  <path d="M328 242 L340 242 L340 316 L328 316 M340 279 L402 279" class="br s-purple"/>
+
+  <rect x="410" y="65" width="290" height="76" rx="10" class="pg s-green"/>
+  <text x="426" y="96" class="p" fill="#34d399">Página 1</text>
+  <text x="426" y="127" class="code">LIMIT 2 OFFSET 0</text>
+
+  <rect x="410" y="153" width="290" height="76" rx="10" class="pg s-blue"/>
+  <text x="426" y="184" class="p" fill="#60a5fa">Página 2</text>
+  <text x="426" y="215" class="code">LIMIT 2 OFFSET 2</text>
+
+  <rect x="410" y="241" width="290" height="76" rx="10" class="pg s-purple"/>
+  <text x="426" y="272" class="p" fill="#a78bfa">Página 3</text>
+  <text x="426" y="303" class="code">LIMIT 2 OFFSET 4</text>
+
+  <text x="360" y="362" text-anchor="middle" class="m">OFFSET = (página − 1) × 2</text>
+</svg>

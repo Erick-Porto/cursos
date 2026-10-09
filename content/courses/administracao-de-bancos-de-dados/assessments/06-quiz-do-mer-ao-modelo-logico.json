@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: Do MER ao modelo lógico e físico",
+  "description": "Verifique se você mapeia relacionamentos para chaves estrangeiras e escolhe tipos e ações de integridade.",
+  "lesson": "do-mer-ao-modelo-logico",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No mapeamento do MER para o modelo lógico, o atributo identificador de uma entidade se torna:",
+      "options": {
+        "a": "A chave primária da tabela",
+        "b": "Uma chave estrangeira em outra tabela",
+        "c": "Um índice opcional",
+        "d": "Uma tabela associativa"
+      },
+      "answer": "a",
+      "explanation": "O identificador é único por instância, então ele vira a `PRIMARY KEY` da tabela. Chaves estrangeiras surgem dos relacionamentos, e tabelas associativas, dos relacionamentos N:M."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Um cliente faz vários pedidos e cada pedido pertence a um único cliente (1:N). Onde fica a chave estrangeira?",
+      "options": {
+        "a": "Em `pedidos`, na coluna `cliente_id`",
+        "b": "Em `clientes`, na coluna `pedido_id`",
+        "c": "Em uma tabela associativa entre as duas",
+        "d": "Nas duas tabelas, uma apontando para a outra"
+      },
+      "answer": "a",
+      "explanation": "A chave do lado 1 viaja para o lado N: cada pedido guarda o `cliente_id` do seu cliente. Um `pedido_id` em `clientes` só guardaria um pedido por cliente. Tabela associativa é a solução para N:M, não para 1:N.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Um relacionamento N:M é mapeado para uma tabela ___, cuja chave primária combina as chaves estrangeiras das duas tabelas envolvidas.",
+      "answer": [["associativa", "de associação", "de junção", "de ligação", "intermediária", "intermediaria", "de relacionamento"]],
+      "explanation": "Nenhum dos lados consegue guardar a chave do outro quando os dois são \"muitos\". A tabela associativa (também chamada de junção ou ligação) recebe as duas chaves estrangeiras e os atributos do relacionamento."
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "O relacionamento \"pedido contém produto\" é N:M e tem os atributos `quantidade` e `preco_unitario`. Quais colunas a tabela `itens_pedido` precisa ter?",
+      "options": {
+        "a": "`pedido_id`",
+        "b": "`produto_id`",
+        "c": "`quantidade`",
+        "d": "`nome_cliente`",
+        "e": "`estoque`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A tabela associativa recebe as chaves estrangeiras das duas tabelas e os atributos do próprio relacionamento. O nome do cliente pertence a `clientes` (chega por `pedidos`) e o estoque pertence a `produtos`; repeti-los em `itens_pedido` criaria redundância.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Com `ON DELETE CASCADE` na chave estrangeira `cliente_id` de `pedidos`, apagar um cliente apaga automaticamente todos os pedidos dele.",
+      "answer": true,
+      "explanation": "`CASCADE` propaga a exclusão do pai para os filhos. Por isso ele é adequado para itens de um pedido, mas perigoso para o histórico de vendas de um cliente, onde `RESTRICT` costuma ser a escolha segura."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um DBA escreveu, na tabela `produtos`:\n\n```sql\ncategoria_id INT NOT NULL,\nFOREIGN KEY (categoria_id) REFERENCES categorias(id)\n  ON DELETE SET NULL\n```\n\nO que acontece no MySQL 8?",
+      "options": {
+        "a": "A criação da tabela falha: `SET NULL` exige que a coluna aceite `NULL`",
+        "b": "A tabela é criada; ao apagar uma categoria, os produtos dela são apagados",
+        "c": "A tabela é criada; ao apagar uma categoria, `categoria_id` recebe 0",
+        "d": "A tabela é criada; ao apagar uma categoria, o `DELETE` falha se houver produtos"
+      },
+      "answer": "a",
+      "explanation": "O MySQL recusa a constraint porque `SET NULL` precisaria gravar `NULL` em uma coluna `NOT NULL`. Apagar os filhos seria `CASCADE`; impedir a exclusão seria `RESTRICT`; nenhuma ação grava 0.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No modelo físico em MySQL, qual tipo é o mais adequado para a coluna `preco` de `produtos`?",
+      "options": {
+        "a": "`DECIMAL(10,2)`",
+        "b": "`FLOAT`",
+        "c": "`INT`",
+        "d": "`VARCHAR(10)`"
+      },
+      "answer": "a",
+      "explanation": "`DECIMAL` guarda casas decimais exatas, o que importa para dinheiro. `FLOAT` arredonda e acumula erros em somas; `INT` não tem centavos; `VARCHAR` impede cálculos e ordenação numérica."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um departamento tem no máximo um gerente e um funcionário gerencia no máximo um departamento (1:1). Ao colocar `gerente_id` em `departamentos`, qual restrição garante que o mesmo funcionário não apareça como gerente de dois departamentos?",
+      "options": {
+        "a": "`UNIQUE` em `gerente_id`",
+        "b": "`NOT NULL` em `gerente_id`",
+        "c": "`AUTO_INCREMENT` em `gerente_id`",
+        "d": "`ON DELETE CASCADE` na chave estrangeira"
+      },
+      "answer": "a",
+      "explanation": "`UNIQUE` impede que o mesmo valor de `gerente_id` se repita em duas linhas, o que transforma a FK de 1:N em 1:1. `NOT NULL` trata da participação obrigatória, não da unicidade; `AUTO_INCREMENT` é para chaves geradas; `CASCADE` é uma ação de exclusão.",
+      "points": 2
+    }
+  ]
+}

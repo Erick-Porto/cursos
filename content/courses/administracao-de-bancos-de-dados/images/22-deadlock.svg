@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>Deadlock: T1 trava a linha A e espera a linha B, T2 trava a linha B e espera a linha A; as setas de espera formam um ciclo e o InnoDB desfaz T2 para que T1 continue</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .lbl { font-size: 22px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .lock { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#head-ok); }
+    .wait { stroke: #fbbf24; stroke-width: 3; fill: none; stroke-dasharray: 8 5; marker-end: url(#head-wait); }
+    .dead { stroke: #f87171; stroke-width: 3.5; fill: none; stroke-dasharray: 8 5; marker-end: url(#head-no); }
+    .step { opacity: 0; animation-duration: 8s; animation-timing-function: linear; animation-iteration-count: infinite; }
+    .p1 { animation-name: trava; }
+    .p2 { animation-name: espera; }
+    .p3 { animation-name: ciclo; }
+    @keyframes trava { 0%, 2% { opacity: 0 } 7%, 100% { opacity: 1 } }
+    @keyframes espera { 0%, 30% { opacity: 0 } 35%, 100% { opacity: 1 } }
+    @keyframes ciclo { 0%, 58% { opacity: 0 } 63%, 100% { opacity: 1 } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <defs>
+    <marker id="head-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="head-wait" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+    <marker id="head-no" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <rect x="270" y="24" width="180" height="70" rx="12" class="box"/>
+  <text x="360" y="52" text-anchor="middle" class="t">Linha A</text>
+  <text x="360" y="82" text-anchor="middle" class="m">produto 1</text>
+
+  <rect x="270" y="250" width="180" height="70" rx="12" class="box"/>
+  <text x="360" y="278" text-anchor="middle" class="t">Linha B</text>
+  <text x="360" y="308" text-anchor="middle" class="m">produto 2</text>
+
+  <rect x="30" y="137" width="180" height="70" rx="12" class="box"/>
+  <text x="120" y="165" text-anchor="middle" class="t">T1</text>
+  <text x="120" y="195" text-anchor="middle" class="m">sessão da Ana</text>
+
+  <rect x="510" y="137" width="180" height="70" rx="12" class="box"/>
+  <text x="600" y="165" text-anchor="middle" class="t">T2</text>
+  <text x="600" y="195" text-anchor="middle" class="m">sessão do Bruno</text>
+
+  <g class="step p1">
+    <path d="M210 150 L266 86" class="lock"/>
+    <text x="120" y="120" text-anchor="middle" class="lbl" fill="#34d399">1 trava A</text>
+    <path d="M510 194 L454 258" class="lock"/>
+    <text x="600" y="236" text-anchor="middle" class="lbl" fill="#34d399">2 trava B</text>
+  </g>
+
+  <g class="step p2">
+    <path d="M210 194 L266 258" class="wait"/>
+    <text x="120" y="236" text-anchor="middle" class="lbl" fill="#fbbf24">3 espera B</text>
+    <path d="M510 150 L454 86" class="wait"/>
+    <text x="600" y="120" text-anchor="middle" class="lbl" fill="#fbbf24">4 espera A</text>
+  </g>
+
+  <g class="step p3">
+    <path d="M210 194 L266 258" class="dead"/>
+    <path d="M510 150 L454 86" class="dead"/>
+    <text x="360" y="162" text-anchor="middle" style="fill: #f87171; font-size: 26px; font-weight: 700">Deadlock</text>
+    <text x="360" y="192" text-anchor="middle" class="m">cada uma espera a outra</text>
+    <rect x="510" y="137" width="180" height="70" rx="12" fill="none" stroke="#f87171" stroke-width="3"/>
+    <text x="360" y="354" text-anchor="middle" class="lbl" fill="#f87171">T2 é a vítima: ROLLBACK, erro 1213</text>
+    <text x="360" y="386" text-anchor="middle" class="lbl" fill="#34d399">T1 recebe a linha B e continua</text>
+  </g>
+</svg>

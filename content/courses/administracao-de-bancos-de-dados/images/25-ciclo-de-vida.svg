@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Ciclo de vida de uma tabela temporária: nasce no CREATE, é usada na sessão e some ao desconectar; outra sessão não a enxerga</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .e { fill: #f87171; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bad { fill: #131c33; stroke: #f87171; stroke-width: 2; stroke-dasharray: 6 4; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+  <text x="40" y="48" class="m">Sessão A</text>
+  <rect x="40" y="66" width="130" height="90" rx="12" class="box"/>
+  <text x="105" y="106" text-anchor="middle" class="t">Conectar</text>
+  <text x="105" y="134" text-anchor="middle" class="m">nova sessão</text>
+  <rect x="200" y="66" width="190" height="90" rx="12" class="box"/>
+  <text x="295" y="106" text-anchor="middle" class="t">CREATE</text>
+  <text x="295" y="134" text-anchor="middle" class="m">TEMPORARY TABLE</text>
+  <rect x="420" y="66" width="140" height="90" rx="12" class="box"/>
+  <text x="490" y="106" text-anchor="middle" class="t">Usar</text>
+  <text x="490" y="134" text-anchor="middle" class="m">SELECT, JOIN</text>
+  <rect x="590" y="66" width="110" height="90" rx="12" class="box"/>
+  <text x="645" y="106" text-anchor="middle" class="t">Fim</text>
+  <text x="645" y="134" text-anchor="middle" class="m">tabela some</text>
+  <path d="M170 111 L192 111" class="arrow"/>
+  <path d="M390 111 L412 111" class="arrow"/>
+  <path d="M560 111 L582 111" class="arrow"/>
+  <text x="40" y="212" class="m">Sessão B, ao mesmo tempo</text>
+  <rect x="200" y="226" width="360" height="70" rx="12" class="bad"/>
+  <text x="380" y="254" text-anchor="middle" class="m">SELECT * FROM tmp_gastos</text>
+  <text x="380" y="282" text-anchor="middle" class="e">ERROR 1146: tabela não existe</text>
+</svg>

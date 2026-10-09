@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" font-family="Inter, system-ui, sans-serif">
+  <title>Auditoria de estoque: um UPDATE em produtos dispara o trigger AFTER UPDATE, que insere uma linha em log_estoque</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .l { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .hi { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="260" rx="16" fill="#0b1020"/>
+  <rect x="20" y="70" width="180" height="100" rx="12" class="box"/>
+  <text x="110" y="112" text-anchor="middle" class="t">UPDATE</text>
+  <text x="110" y="140" text-anchor="middle" class="m">produtos.estoque</text>
+  <rect x="270" y="70" width="180" height="100" rx="12" class="hi"/>
+  <text x="360" y="112" text-anchor="middle" class="t">Trigger</text>
+  <text x="360" y="140" text-anchor="middle" class="m">AFTER UPDATE</text>
+  <rect x="520" y="70" width="180" height="100" rx="12" class="box"/>
+  <text x="610" y="112" text-anchor="middle" class="t">INSERT</text>
+  <text x="610" y="140" text-anchor="middle" class="m">log_estoque</text>
+  <path d="M200 120 L262 120" class="arrow"/>
+  <text x="235" y="60" text-anchor="middle" class="l">dispara</text>
+  <path d="M450 120 L512 120" class="arrow"/>
+  <text x="485" y="60" text-anchor="middle" class="l">grava</text>
+  <text x="360" y="222" text-anchor="middle" class="m">Quem roda o UPDATE não vê o trigger: o log acontece sozinho</text>
+</svg>

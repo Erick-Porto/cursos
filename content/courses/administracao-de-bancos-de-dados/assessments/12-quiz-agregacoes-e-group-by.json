@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Funções agregadas e GROUP BY",
+  "description": "Oito questões sobre funções agregadas, GROUP BY, HAVING e a ordem de execução de um SELECT.",
+  "lesson": "agregacoes-e-group-by",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual cláusula filtra os **grupos** depois que o `GROUP BY` e as funções agregadas foram aplicados?",
+      "options": {
+        "a": "WHERE",
+        "b": "HAVING",
+        "c": "ON",
+        "d": "ORDER BY"
+      },
+      "answer": "b",
+      "explanation": "HAVING roda depois do GROUP BY e por isso pode usar funções agregadas. WHERE filtra linhas antes de agrupar e não aceita COUNT, SUM ou AVG."
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "`COUNT(cidade)` conta todas as linhas da tabela `clientes`, inclusive as que têm `cidade` igual a `NULL`.",
+      "answer": false,
+      "explanation": "COUNT(coluna) ignora as linhas em que a coluna é NULL. Para contar todas as linhas, use COUNT(*)."
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Toda coluna do `SELECT` que não está dentro de uma função agregada precisa aparecer na cláusula ___.",
+      "answer": [["GROUP BY", "group by"]],
+      "explanation": "Com o modo ONLY_FULL_GROUP_BY (padrão no MySQL 8), colunas fora de agregação precisam estar no GROUP BY; caso contrário o banco não sabe qual valor mostrar para o grupo."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual consulta devolve **uma linha por status** com a quantidade de pedidos em cada um?",
+      "options": {
+        "a": "SELECT status, COUNT(*) FROM pedidos;",
+        "b": "SELECT status, COUNT(*) FROM pedidos GROUP BY status;",
+        "c": "SELECT status, COUNT(*) FROM pedidos WHERE COUNT(*) > 0;",
+        "d": "SELECT COUNT(status) FROM pedidos ORDER BY status;"
+      },
+      "answer": "b",
+      "explanation": "O GROUP BY status cria um grupo por status e o COUNT(*) conta dentro de cada um. A opção a dá erro 1055 (status fora do GROUP BY); a c usa agregação no WHERE, o que não é permitido; a d devolve um único número.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Considere a consulta abaixo sobre a tabela `pedidos` (Carla, cliente 3, tem um único pedido, cancelado, de 60.00). Quais afirmações estão corretas?\n\n```sql\nSELECT cliente_id, SUM(total) AS gasto\nFROM pedidos\nWHERE status <> 'cancelado'\nGROUP BY cliente_id\nHAVING SUM(total) > 500;\n```",
+      "options": {
+        "a": "O WHERE descarta o pedido cancelado antes de os grupos serem formados",
+        "b": "O HAVING compara a soma de cada grupo com 500",
+        "c": "Trocar o HAVING por WHERE SUM(total) > 500 daria o mesmo resultado",
+        "d": "Carla aparece no resultado com gasto 60.00"
+      },
+      "answer": ["a", "b"],
+      "explanation": "WHERE filtra linhas antes do agrupamento e HAVING filtra grupos depois. WHERE não aceita funções agregadas, então a opção c dá erro. Carla não aparece: seu único pedido saiu no WHERE, e 60 nem passaria do HAVING.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A tabela `funcionarios` tem: Marcos (TI, 9500), Júlia (TI, 6200), Pedro (Vendas, 3800), Renata (Vendas, 8700) e Tiago (Financeiro, 5400). O que a consulta devolve?\n\n```sql\nSELECT departamento_id, ROUND(AVG(salario), 2) AS media\nFROM funcionarios\nGROUP BY departamento_id\nHAVING AVG(salario) > 7000;\n```",
+      "options": {
+        "a": "Só a linha de TI, com média 7850.00",
+        "b": "As linhas de TI e Vendas",
+        "c": "As linhas de Marcos e Renata, que ganham mais de 7000",
+        "d": "As linhas de TI, Vendas e Financeiro"
+      },
+      "answer": "a",
+      "explanation": "As médias são TI 7850, Vendas 6250 e Financeiro 5400; só TI passa de 7000. O HAVING filtra grupos (departamentos), não pessoas: Renata ganha 8700, mas a média de Vendas é 6250.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Em que ordem o banco executa as cláusulas de um `SELECT`?",
+      "options": {
+        "a": "FROM, WHERE, GROUP BY, HAVING, SELECT, ORDER BY",
+        "b": "SELECT, FROM, WHERE, GROUP BY, HAVING, ORDER BY",
+        "c": "FROM, GROUP BY, WHERE, HAVING, SELECT, ORDER BY",
+        "d": "FROM, WHERE, HAVING, GROUP BY, SELECT, ORDER BY"
+      },
+      "answer": "a",
+      "explanation": "O banco escolhe as tabelas, filtra linhas, agrupa, filtra grupos, calcula as colunas e só então ordena. A ordem em que você escreve (SELECT primeiro) não é a ordem de execução; por isso WHERE não enxerga apelidos do SELECT e ORDER BY enxerga."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que acontece ao executar a consulta abaixo no MySQL 8 com a configuração padrão?\n\n```sql\nSELECT categoria_id, nome, COUNT(*)\nFROM produtos\nGROUP BY categoria_id;\n```",
+      "options": {
+        "a": "Erro 1055: a coluna nome não está no GROUP BY nem em uma função agregada",
+        "b": "Funciona e mostra o primeiro nome de cada categoria",
+        "c": "Erro de sintaxe: COUNT(*) precisa de um apelido",
+        "d": "Funciona e mostra uma linha por produto"
+      },
+      "answer": "a",
+      "explanation": "Com ONLY_FULL_GROUP_BY ligado, o MySQL recusa a coluna nome: cada categoria tem vários produtos e o banco não tem como escolher um nome. Mostrar \"o primeiro nome\" era o comportamento antigo, sem esse modo, e não é confiável.",
+      "points": 2
+    }
+  ]
+}

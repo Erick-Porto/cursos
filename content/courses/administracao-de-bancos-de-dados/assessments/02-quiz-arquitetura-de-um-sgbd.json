@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Arquitetura de um SGBD",
+  "description": "Oito questões sobre os níveis ANSI-SPARC, a independência de dados, os componentes do SGBD e a conexão ao MySQL.",
+  "lesson": "arquitetura-de-um-sgbd",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na arquitetura ANSI-SPARC, o nível **interno** descreve:",
+      "options": {
+        "a": "As visões que cada usuário tem dos dados",
+        "b": "A estrutura lógica global: tabelas, colunas e chaves",
+        "c": "A forma como os dados são armazenados fisicamente no disco",
+        "d": "As permissões de acesso de cada usuário"
+      },
+      "answer": "c",
+      "explanation": "O nível interno trata de arquivos, índices e páginas no disco. A estrutura lógica é o nível conceitual, e as visões ficam no nível externo."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O time de vendas acessa uma visão que mostra apenas `nome` e `email` da tabela `clientes`. A qual nível da arquitetura ANSI-SPARC essa visão pertence?",
+      "options": {
+        "a": "Externo",
+        "b": "Conceitual",
+        "c": "Interno",
+        "d": "Físico"
+      },
+      "answer": "a",
+      "explanation": "Uma visão parcial, feita sob medida para um perfil de usuário, é o nível externo. O conceitual descreve a tabela `clientes` completa, com todas as colunas.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Criar um índice na coluna `data_pedido` da tabela `pedidos` obriga a reescrever as consultas SQL das aplicações que usam essa tabela.",
+      "answer": false,
+      "explanation": "Índice é uma estrutura do nível interno. Pela independência física de dados, as consultas continuam iguais; elas apenas ficam mais rápidas.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "A capacidade de alterar o esquema conceitual, por exemplo adicionando uma coluna, sem reescrever as aplicações chama-se independência ___ de dados.",
+      "answer": [["lógica", "logica"]],
+      "explanation": "A independência lógica protege o nível externo de mudanças no conceitual. A independência física protege o conceitual de mudanças no armazenamento."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O processador de consultas de um SGBD é responsável por:",
+      "options": {
+        "a": "Gravar as páginas de dados no disco",
+        "b": "Interpretar, otimizar e executar os comandos SQL",
+        "c": "Garantir que as transações sejam atômicas",
+        "d": "Conceder e revogar permissões de acesso"
+      },
+      "answer": "b",
+      "explanation": "Parser, otimizador e executor formam o processador de consultas. Gravação em disco e atomicidade das transações são tarefas do gerenciador de armazenamento."
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais informações ficam no **dicionário de dados** (catálogo) de um SGBD?",
+      "options": {
+        "a": "Nomes das tabelas e de suas colunas",
+        "b": "Tipo de dado de cada coluna",
+        "c": "As linhas gravadas na tabela `produtos`",
+        "d": "Usuários e permissões"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O dicionário guarda metadados: dados sobre os dados. As linhas de `produtos` são os dados em si, armazenados nos arquivos da tabela, não no catálogo."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Você precisa se conectar ao servidor MySQL `10.0.0.5`, na porta padrão, com o usuário `aluno`, digitando a senha quando o cliente pedir. Qual comando está correto?",
+      "options": {
+        "a": "`mysql -h 10.0.0.5 -P 3306 -u aluno -p`",
+        "b": "`mysql -h aluno -u 10.0.0.5 -p 3306`",
+        "c": "`mysql -h 10.0.0.5 -P 5432 -u aluno -p`",
+        "d": "`mysql 10.0.0.5 aluno --senha`"
+      },
+      "answer": "a",
+      "explanation": "`-h` é o host, `-P` (maiúsculo) é a porta, `-u` o usuário e `-p` sem valor pede a senha. A porta 5432 é do PostgreSQL; o MySQL usa 3306.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um usuário envia o comando abaixo ao MySQL:\n\n```sql\nSELEC nome FROM produtos;\n```\n\nEm qual componente a consulta é rejeitada?",
+      "options": {
+        "a": "No parser, por erro de sintaxe",
+        "b": "No otimizador, por não achar um plano barato",
+        "c": "No executor, por não encontrar a tabela",
+        "d": "No gerenciador de locks, por conflito de acesso"
+      },
+      "answer": "a",
+      "explanation": "`SELEC` não é uma palavra-chave válida. O parser é a primeira etapa e confere a sintaxe; a consulta nem chega ao otimizador ou ao executor.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "title": "Quiz: Combinando tabelas com JOIN",
+  "description": "Oito questões sobre INNER, LEFT e RIGHT JOIN, a cláusula ON, apelidos e as armadilhas mais comuns.",
+  "lesson": "joins",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual tipo de JOIN garante que **todas** as linhas da tabela à esquerda apareçam no resultado, mesmo sem correspondência na tabela à direita?",
+      "options": {
+        "a": "INNER JOIN",
+        "b": "RIGHT JOIN",
+        "c": "LEFT JOIN",
+        "d": "CROSS JOIN"
+      },
+      "answer": "c",
+      "explanation": "LEFT JOIN preserva a tabela da esquerda (a do FROM) e preenche com NULL as colunas da direita quando não há par. INNER JOIN descarta as linhas sem par; RIGHT JOIN preserva a tabela da direita."
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "O MySQL 8 implementa `FULL OUTER JOIN` nativamente, do mesmo modo que o PostgreSQL.",
+      "answer": false,
+      "explanation": "O MySQL não tem FULL OUTER JOIN. Para obter todas as linhas das duas tabelas, faça o UNION de um LEFT JOIN com um RIGHT JOIN. No PostgreSQL o comando existe."
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "A cláusula ___ define como as linhas das duas tabelas se correspondem em um JOIN, normalmente comparando a chave primária com a chave estrangeira.",
+      "answer": [["ON"]],
+      "explanation": "ON recebe a condição de ligação, como p.cliente_id = c.id. Sem ela, cada linha de uma tabela combina com todas as linhas da outra (produto cartesiano)."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "A tabela `clientes` tem 5 linhas (Ana, Bruno, Carla, Diego, Elisa) e `pedidos` tem 4 (dois de Ana, um de Bruno, um de Carla). Quantas linhas a consulta devolve?\n\n```sql\nSELECT c.nome, p.id\nFROM clientes c\nINNER JOIN pedidos p ON p.cliente_id = c.id;\n```",
+      "options": {
+        "a": "4",
+        "b": "5",
+        "c": "6",
+        "d": "20"
+      },
+      "answer": "a",
+      "explanation": "INNER JOIN devolve uma linha por par encontrado: cada pedido tem exatamente um cliente, então são 4 linhas (Ana aparece duas vezes). Com LEFT JOIN seriam 6, pois Diego e Elisa entrariam com NULL. 20 seria o produto cartesiano, sem ON.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você escreveu `FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id` e acrescentou `WHERE p.status = 'pago'`. O que acontece com os clientes que nunca fizeram pedido?",
+      "options": {
+        "a": "Somem do resultado, porque o status deles é NULL e NULL = 'pago' não é verdadeiro",
+        "b": "Continuam no resultado, com NULL nas colunas de pedidos",
+        "c": "A consulta dá erro: o WHERE não pode filtrar a tabela da direita",
+        "d": "O MySQL converte automaticamente o LEFT JOIN em RIGHT JOIN"
+      },
+      "answer": "a",
+      "explanation": "O WHERE roda depois do JOIN. Para quem não tem pedido, p.status é NULL, e a comparação com 'pago' falha, então a linha é descartada: o LEFT JOIN vira, na prática, um INNER JOIN. Para manter esses clientes, coloque a condição no ON.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais consultas listam **apenas** os clientes que nunca fizeram pedido?",
+      "options": {
+        "a": "SELECT c.nome FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NULL;",
+        "b": "SELECT c.nome FROM clientes c INNER JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NULL;",
+        "c": "SELECT c.nome FROM pedidos p RIGHT JOIN clientes c ON p.cliente_id = c.id WHERE p.id IS NULL;",
+        "d": "SELECT c.nome FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NOT NULL;"
+      },
+      "answer": ["a", "c"],
+      "explanation": "Tanto o LEFT JOIN (clientes à esquerda) quanto o RIGHT JOIN (clientes à direita) preservam todos os clientes e marcam com NULL os que não têm pedido; o IS NULL seleciona esses. O INNER JOIN nunca produz NULL em p.id, então a opção b não devolve nada. A opção d faz o contrário: lista quem tem pedido.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Para listar o nome do produto em cada item do pedido 1, qual JOIN completa a consulta?\n\n```sql\nSELECT pr.nome, i.quantidade\nFROM itens_pedido i\n___\nWHERE i.pedido_id = 1;\n```",
+      "options": {
+        "a": "JOIN produtos pr ON pr.id = i.produto_id",
+        "b": "JOIN produtos pr ON pr.id = i.pedido_id",
+        "c": "JOIN produtos pr ON pr.categoria_id = i.produto_id",
+        "d": "JOIN pedidos pr ON pr.id = i.pedido_id"
+      },
+      "answer": "a",
+      "explanation": "A chave estrangeira itens_pedido.produto_id aponta para produtos.id; é essa a condição de ligação. A opção b compara o id do produto com o id do pedido, dois números sem relação. A opção d junta com a tabela errada: pedidos não tem o nome do produto.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Tanto `clientes` quanto `pedidos` têm uma coluna `id`. O que acontece ao executar a consulta abaixo?\n\n```sql\nSELECT id, nome\nFROM clientes c\nJOIN pedidos p ON p.cliente_id = c.id;\n```",
+      "options": {
+        "a": "Erro 1052: a coluna id é ambígua, pois existe nas duas tabelas",
+        "b": "Mostra o id do cliente, porque clientes aparece primeiro no FROM",
+        "c": "Mostra o id do pedido, porque pedidos é a última tabela do JOIN",
+        "d": "Erro: a coluna nome precisa obrigatoriamente de apelido"
+      },
+      "answer": "a",
+      "explanation": "Quando um nome de coluna existe em mais de uma tabela da consulta, o MySQL exige o prefixo (c.id ou p.id) e recusa a consulta com o erro 1052. A coluna nome só existe em clientes, por isso não precisa de prefixo, embora seja boa prática usá-lo.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Animação: cada cliente se liga aos pedidos com o mesmo id; Diego e Elisa não encontram par e, no LEFT JOIN, recebem NULL</title>
+  <style>
+    .code { fill: #e8edf7; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .v { fill: #e8edf7; font-size: 22px; }
+    .k { fill: #60a5fa; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .lbl { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .row { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1; }
+    .link { stroke: #34d399; stroke-width: 2.5; fill: none; }
+    .ghost { fill: none; stroke: #f87171; stroke-width: 1.5; stroke-dasharray: 6 4; }
+    .gl { stroke: #f87171; stroke-width: 2.5; fill: none; stroke-dasharray: 6 4; }
+    .gt { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .gm { fill: #f87171; font-size: 18px; font-weight: 700; }
+    .a { opacity: 0; animation: 8s ease-in-out infinite; }
+    .a1 { animation-name: k1; }
+    .a2 { animation-name: k2; }
+    .a3 { animation-name: k3; }
+    @keyframes k1 { 0%, 8%  { opacity: 0 } 14%, 90% { opacity: 1 } 96%, 100% { opacity: 0 } }
+    @keyframes k2 { 0%, 30% { opacity: 0 } 36%, 90% { opacity: 1 } 96%, 100% { opacity: 0 } }
+    @keyframes k3 { 0%, 54% { opacity: 0 } 60%, 90% { opacity: 1 } 96%, 100% { opacity: 0 } }
+    @media (prefers-reduced-motion: reduce) { .a { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+  <text x="360" y="40" text-anchor="middle" class="code">ON p.cliente_id = c.id</text>
+
+  <!-- clientes -->
+  <rect x="20" y="100" width="230" height="296" rx="12" class="box"/>
+  <text x="135" y="134" text-anchor="middle" class="t">clientes</text>
+  <text x="52" y="158" text-anchor="middle" class="m">id</text>
+  <text x="84" y="158" class="m">nome</text>
+
+  <rect x="30" y="168" width="210" height="36" rx="6" class="row"/>
+  <text x="52" y="194" text-anchor="middle" class="k">1</text>
+  <text x="84" y="194" class="v">Ana Souza</text>
+
+  <rect x="30" y="212" width="210" height="36" rx="6" class="row"/>
+  <text x="52" y="238" text-anchor="middle" class="k">2</text>
+  <text x="84" y="238" class="v">Bruno Lima</text>
+
+  <rect x="30" y="256" width="210" height="36" rx="6" class="row"/>
+  <text x="52" y="282" text-anchor="middle" class="k">3</text>
+  <text x="84" y="282" class="v">Carla Mendes</text>
+
+  <rect x="30" y="300" width="210" height="36" rx="6" class="row"/>
+  <text x="52" y="326" text-anchor="middle" class="k">4</text>
+  <text x="84" y="326" class="v">Diego Rocha</text>
+
+  <rect x="30" y="344" width="210" height="36" rx="6" class="row"/>
+  <text x="52" y="370" text-anchor="middle" class="k">5</text>
+  <text x="84" y="370" class="v">Elisa Prado</text>
+
+  <!-- pedidos -->
+  <rect x="470" y="56" width="230" height="340" rx="12" class="box"/>
+  <text x="585" y="90" text-anchor="middle" class="t">pedidos</text>
+  <text x="530" y="114" text-anchor="middle" class="m">id</text>
+  <text x="640" y="114" text-anchor="middle" class="m">cliente_id</text>
+
+  <rect x="480" y="124" width="210" height="36" rx="6" class="row"/>
+  <text x="530" y="150" text-anchor="middle" class="v">1</text>
+  <text x="640" y="150" text-anchor="middle" class="k">1</text>
+
+  <rect x="480" y="168" width="210" height="36" rx="6" class="row"/>
+  <text x="530" y="194" text-anchor="middle" class="v">3</text>
+  <text x="640" y="194" text-anchor="middle" class="k">1</text>
+
+  <rect x="480" y="212" width="210" height="36" rx="6" class="row"/>
+  <text x="530" y="238" text-anchor="middle" class="v">2</text>
+  <text x="640" y="238" text-anchor="middle" class="k">2</text>
+
+  <rect x="480" y="256" width="210" height="36" rx="6" class="row"/>
+  <text x="530" y="282" text-anchor="middle" class="v">4</text>
+  <text x="640" y="282" text-anchor="middle" class="k">3</text>
+
+  <!-- 1: Ana tem dois pedidos -->
+  <g class="a a1">
+    <path d="M240 186 C300 186, 300 142, 480 142" class="link"/>
+    <path d="M240 186 L480 186" class="link"/>
+    <text x="360" y="181" text-anchor="middle" class="lbl">1 = 1</text>
+  </g>
+  <!-- 2: Bruno e Carla, um pedido cada -->
+  <g class="a a2">
+    <path d="M240 230 L480 230" class="link"/>
+    <text x="360" y="222" text-anchor="middle" class="lbl">2 = 2</text>
+    <path d="M240 274 L480 274" class="link"/>
+    <text x="360" y="266" text-anchor="middle" class="lbl">3 = 3</text>
+  </g>
+  <!-- 3: Diego e Elisa sem par -->
+  <g class="a a3">
+    <path d="M240 318 L480 318" class="gl"/>
+    <text x="360" y="310" text-anchor="middle" class="gm">sem par</text>
+    <rect x="480" y="300" width="210" height="36" rx="6" class="ghost"/>
+    <text x="530" y="326" text-anchor="middle" class="gt">NULL</text>
+    <text x="640" y="326" text-anchor="middle" class="gt">NULL</text>
+    <path d="M240 362 L480 362" class="gl"/>
+    <text x="360" y="354" text-anchor="middle" class="gm">sem par</text>
+    <rect x="480" y="344" width="210" height="36" rx="6" class="ghost"/>
+    <text x="530" y="370" text-anchor="middle" class="gt">NULL</text>
+    <text x="640" y="370" text-anchor="middle" class="gt">NULL</text>
+  </g>
+</svg>

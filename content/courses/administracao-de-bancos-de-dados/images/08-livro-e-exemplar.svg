@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Um livro (a obra) tem vários exemplares (cópias físicas com número de tombo); o empréstimo é sempre de um exemplar</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .card { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker></defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <text x="170" y="36" text-anchor="middle" class="h">livros (a obra)</text>
+  <text x="560" y="36" text-anchor="middle" class="h">exemplares (a cópia)</text>
+
+  <rect x="30" y="56" width="280" height="72" rx="12" class="box"/>
+  <text x="170" y="86" text-anchor="middle" class="h">Dom Casmurro</text>
+  <text x="170" y="112" text-anchor="middle" class="m">Machado de Assis · 1899</text>
+
+  <rect x="30" y="196" width="280" height="72" rx="12" class="box"/>
+  <text x="170" y="226" text-anchor="middle" class="h">A Hora da Estrela</text>
+  <text x="170" y="252" text-anchor="middle" class="m">Clarice Lispector · 1977</text>
+
+  <rect x="430" y="52" width="260" height="60" rx="10" class="box"/>
+  <text x="560" y="78" text-anchor="middle" class="h">tombo 1</text>
+  <text x="560" y="102" text-anchor="middle" class="m">na estante</text>
+
+  <rect x="430" y="124" width="260" height="60" rx="10" class="box"/>
+  <text x="560" y="150" text-anchor="middle" class="h">tombo 2</text>
+  <text x="560" y="174" text-anchor="middle" class="m">emprestado a Bruno</text>
+
+  <rect x="430" y="196" width="260" height="60" rx="10" class="box"/>
+  <text x="560" y="222" text-anchor="middle" class="h">tombo 3</text>
+  <text x="560" y="246" text-anchor="middle" class="m">emprestado a Ana</text>
+
+  <path d="M310 92 L422 82" class="arrow"/>
+  <path d="M310 92 L422 154" class="arrow"/>
+  <path d="M310 232 L422 226" class="arrow"/>
+
+  <text x="320" y="82" class="card">1</text>
+  <text x="408" y="72" text-anchor="end" class="card">N</text>
+  <text x="320" y="222" class="card">1</text>
+  <text x="408" y="216" text-anchor="end" class="card">N</text>
+
+  <text x="360" y="306" text-anchor="middle" class="m">um livro tem N exemplares; o empréstimo é sempre de um exemplar</text>
+</svg>

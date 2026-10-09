@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo dos SGBDs: hierárquico nos anos 1960, rede em 1969, relacional em 1970, SQL padrão em 1986, objeto-relacional nos anos 1990, NoSQL nos anos 2000 e nuvem nos anos 2010</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .y { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .line { stroke: #2a3a5c; stroke-width: 4; }
+    .tick { stroke: #2a3a5c; stroke-width: 2; }
+    .dot { fill: #a78bfa; stroke: #0b1020; stroke-width: 3; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+  <line x1="40" y1="176" x2="680" y2="176" class="line"/>
+
+  <text x="84" y="66" text-anchor="middle" class="y">anos 1960</text>
+  <text x="84" y="96" text-anchor="middle" class="t">Hierárquico</text>
+  <text x="84" y="122" text-anchor="middle" class="m">IMS, da IBM</text>
+  <line x1="84" y1="134" x2="84" y2="168" class="tick"/>
+  <circle cx="84" cy="176" r="8" class="dot"/>
+
+  <line x1="176" y1="184" x2="176" y2="218" class="tick"/>
+  <text x="176" y="242" text-anchor="middle" class="y">1969</text>
+  <text x="176" y="272" text-anchor="middle" class="t">Rede</text>
+  <text x="176" y="298" text-anchor="middle" class="m">CODASYL</text>
+  <circle cx="176" cy="176" r="8" class="dot"/>
+
+  <text x="268" y="66" text-anchor="middle" class="y">1970</text>
+  <text x="268" y="96" text-anchor="middle" class="t">Relacional</text>
+  <text x="268" y="122" text-anchor="middle" class="m">Edgar Codd</text>
+  <line x1="268" y1="134" x2="268" y2="168" class="tick"/>
+  <circle cx="268" cy="176" r="8" class="dot"/>
+
+  <line x1="360" y1="184" x2="360" y2="218" class="tick"/>
+  <text x="360" y="242" text-anchor="middle" class="y">1986</text>
+  <text x="360" y="272" text-anchor="middle" class="t">SQL padrão</text>
+  <text x="360" y="298" text-anchor="middle" class="m">ANSI e ISO</text>
+  <circle cx="360" cy="176" r="8" class="dot"/>
+
+  <text x="452" y="66" text-anchor="middle" class="y">anos 1990</text>
+  <text x="452" y="96" text-anchor="middle" class="t">Objeto-relacional</text>
+  <text x="452" y="122" text-anchor="middle" class="m">PostgreSQL</text>
+  <line x1="452" y1="134" x2="452" y2="168" class="tick"/>
+  <circle cx="452" cy="176" r="8" class="dot"/>
+
+  <line x1="544" y1="184" x2="544" y2="218" class="tick"/>
+  <text x="544" y="242" text-anchor="middle" class="y">anos 2000</text>
+  <text x="544" y="272" text-anchor="middle" class="t">NoSQL</text>
+  <text x="544" y="298" text-anchor="middle" class="m">MongoDB, Cassandra</text>
+  <circle cx="544" cy="176" r="8" class="dot"/>
+
+  <text x="636" y="66" text-anchor="middle" class="y">anos 2010</text>
+  <text x="636" y="96" text-anchor="middle" class="t">Nuvem</text>
+  <text x="636" y="122" text-anchor="middle" class="m">Amazon RDS</text>
+  <line x1="636" y1="134" x2="636" y2="168" class="tick"/>
+  <circle cx="636" cy="176" r="8" class="dot"/>
+</svg>

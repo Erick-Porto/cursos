@@ -1,0 +1,105 @@
+{
+  "title": "Quiz: Planos de execução com EXPLAIN",
+  "description": "Verifique se você sabe ler um EXPLAIN, reconhecer sinais de alerta e escolher a otimização certa.",
+  "lesson": "explain-e-otimizacao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que o comando `EXPLAIN` mostra no MySQL?",
+      "options": {
+        "a": "O plano de execução que o otimizador escolheu, sem executar a consulta",
+        "b": "O tempo real que a consulta levou na última execução",
+        "c": "A lista de erros de sintaxe encontrados na consulta",
+        "d": "Os privilégios necessários para executar a consulta"
+      },
+      "answer": "a",
+      "explanation": "`EXPLAIN` exibe o plano estimado: como cada tabela será acessada, qual índice será usado e quantas linhas devem ser lidas. Quem executa de verdade e mostra tempos reais é `EXPLAIN ANALYZE`."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em uma tabela com um milhão de linhas, qual valor da coluna `type` indica o acesso **mais caro**?",
+      "options": {
+        "a": "ref",
+        "b": "range",
+        "c": "ALL",
+        "d": "const"
+      },
+      "answer": "c",
+      "explanation": "`ALL` é a varredura completa da tabela: todas as linhas são lidas e filtradas depois. `range` e `ref` usam um índice para ler uma parte; `const` lê uma única linha."
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "`EXPLAIN ANALYZE` executa a consulta de verdade e mostra o tempo e o número de linhas reais de cada etapa do plano.",
+      "answer": true,
+      "explanation": "Disponível desde o MySQL 8.0.18, ele roda a consulta inteira. Por isso uma consulta de 2 minutos leva 2 minutos, e o uso em produção exige cuidado."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Na coluna `Extra` do EXPLAIN, o valor `Using ___` indica que a consulta foi respondida só com o índice, sem acessar a tabela (covering index).",
+      "answer": [["index"]],
+      "explanation": "`Using index` significa que todas as colunas necessárias estavam no índice. Não confunda com `Using index condition`, que apenas filtra parte da condição durante a leitura do índice, nem com `Using where`."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "A tabela `pedidos` tem um índice em `data_pedido`. Quais condições permitem que o otimizador **use** esse índice?",
+      "options": {
+        "a": "WHERE data_pedido >= '2025-01-01' AND data_pedido < '2026-01-01'",
+        "b": "WHERE YEAR(data_pedido) = 2025",
+        "c": "WHERE data_pedido BETWEEN '2025-03-01' AND '2025-03-31'",
+        "d": "WHERE DATE_FORMAT(data_pedido, '%Y') = '2025'"
+      },
+      "answer": ["a", "c"],
+      "explanation": "Intervalos diretos na coluna viram `type: range`. Quando uma função envolve a coluna (`YEAR`, `DATE_FORMAT`), o MySQL precisa calculá-la linha a linha e o índice B-tree deixa de servir.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O EXPLAIN da consulta abaixo mostra `type: ALL`, `key: NULL`, `rows: 1000000` e `Extra: Using where; Using filesort`. Qual é a **primeira** ação mais eficaz?\n\n```sql\nSELECT id, cliente_id, total\nFROM pedidos\nWHERE data_pedido BETWEEN '2025-03-01' AND '2025-03-31'\nORDER BY total DESC;\n```",
+      "options": {
+        "a": "Criar um índice em `total`, para eliminar o Using filesort",
+        "b": "Criar um índice em `data_pedido`, para trocar a varredura completa por um range",
+        "c": "Remover o ORDER BY e ordenar na aplicação",
+        "d": "Trocar o BETWEEN por duas subconsultas"
+      },
+      "answer": "b",
+      "explanation": "O custo dominante é ler um milhão de linhas. Um índice em `data_pedido` reduz a leitura a cerca de 3% da tabela. O `filesort` continua, mas sobre poucas linhas. Um índice só em `total` não ajuda o filtro e exigiria varrer o índice inteiro.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual `select_type` o EXPLAIN mostra para a subconsulta abaixo, e por que ela é lenta com muitos clientes?\n\n```sql\nSELECT c.nome,\n       (SELECT COUNT(*) FROM pedidos p WHERE p.cliente_id = c.id) AS pedidos\nFROM clientes c;\n```",
+      "options": {
+        "a": "DEPENDENT SUBQUERY: ela depende da linha externa e executa uma vez para cada cliente",
+        "b": "DERIVED: ela vira uma tabela temporária materializada antes do SELECT externo",
+        "c": "UNION: ela é combinada ao resultado externo por um UNION implícito",
+        "d": "SIMPLE: o otimizador a transforma automaticamente em um JOIN"
+      },
+      "answer": "a",
+      "explanation": "A subconsulta referencia `c.id`, então precisa rodar por linha da consulta externa. Com um milhão de clientes, são um milhão de execuções. A reescrita com `LEFT JOIN` e `GROUP BY` faz uma passada só.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Por que evitar `SELECT *` em consultas de produção?",
+      "options": {
+        "a": "Porque o otimizador ignora todos os índices quando a consulta usa SELECT *",
+        "b": "Porque traz colunas desnecessárias, gastando disco, rede e memória, e impede o covering index",
+        "c": "Porque SELECT * sempre força o uso de uma tabela temporária em disco",
+        "d": "Porque SELECT * desativa o buffer pool para aquela sessão"
+      },
+      "answer": "b",
+      "explanation": "Cada coluna extra custa leitura, tráfego e memória, e se a consulta pede colunas que não estão no índice, o InnoDB precisa voltar à tabela. O otimizador continua usando índices para o WHERE normalmente."
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Três formas de resultado de uma subconsulta: escalar (um valor), lista (uma coluna com várias linhas) e tabela (várias linhas e colunas)</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .v { fill: #e8edf7; font-size: 22px; }
+    .code { fill: #b4bfd3; font-size: 18px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .u { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .cell { fill: #0b1020; stroke: #60a5fa; stroke-width: 1.5; }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- escalar -->
+  <rect x="20" y="20" width="216" height="290" rx="12" class="box"/>
+  <text x="128" y="54" text-anchor="middle" class="t">Escalar</text>
+  <text x="128" y="82" text-anchor="middle" class="m">1 linha × 1 coluna</text>
+  <rect x="68" y="140" width="120" height="40" rx="6" class="cell"/>
+  <text x="128" y="168" text-anchor="middle" class="v">1035.00</text>
+  <text x="128" y="212" text-anchor="middle" class="code">AVG(preco)</text>
+  <text x="128" y="290" text-anchor="middle" class="u">use com =, &gt; e &lt;</text>
+
+  <!-- lista -->
+  <rect x="252" y="20" width="216" height="290" rx="12" class="box"/>
+  <text x="360" y="54" text-anchor="middle" class="t">Lista</text>
+  <text x="360" y="82" text-anchor="middle" class="m">N linhas × 1 coluna</text>
+  <rect x="310" y="100" width="100" height="32" rx="6" class="cell"/>
+  <text x="360" y="124" text-anchor="middle" class="v">1</text>
+  <rect x="310" y="138" width="100" height="32" rx="6" class="cell"/>
+  <text x="360" y="162" text-anchor="middle" class="v">2</text>
+  <rect x="310" y="176" width="100" height="32" rx="6" class="cell"/>
+  <text x="360" y="200" text-anchor="middle" class="v">1</text>
+  <rect x="310" y="214" width="100" height="32" rx="6" class="cell"/>
+  <text x="360" y="238" text-anchor="middle" class="v">3</text>
+  <text x="360" y="290" text-anchor="middle" class="u">use com IN, ANY, ALL</text>
+
+  <!-- tabela -->
+  <rect x="484" y="20" width="216" height="290" rx="12" class="box"/>
+  <text x="592" y="54" text-anchor="middle" class="t">Tabela</text>
+  <text x="592" y="82" text-anchor="middle" class="m">N linhas × M colunas</text>
+  <text x="542" y="118" text-anchor="middle" class="m">cliente_id</text>
+  <text x="642" y="118" text-anchor="middle" class="m">gasto</text>
+  <rect x="494" y="128" width="96" height="32" rx="6" class="cell"/>
+  <text x="542" y="152" text-anchor="middle" class="v">1</text>
+  <rect x="594" y="128" width="96" height="32" rx="6" class="cell"/>
+  <text x="642" y="152" text-anchor="middle" class="v">4380.00</text>
+  <rect x="494" y="166" width="96" height="32" rx="6" class="cell"/>
+  <text x="542" y="190" text-anchor="middle" class="v">2</text>
+  <rect x="594" y="166" width="96" height="32" rx="6" class="cell"/>
+  <text x="642" y="190" text-anchor="middle" class="v">900.00</text>
+  <rect x="494" y="204" width="96" height="32" rx="6" class="cell"/>
+  <text x="542" y="228" text-anchor="middle" class="v">3</text>
+  <rect x="594" y="204" width="96" height="32" rx="6" class="cell"/>
+  <text x="642" y="228" text-anchor="middle" class="v">60.00</text>
+  <text x="592" y="290" text-anchor="middle" class="u">no FROM, com apelido</text>
+
+  <text x="360" y="342" text-anchor="middle" class="m">EXISTS aceita qualquer forma: só pergunta se veio alguma linha</text>
+</svg>

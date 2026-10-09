@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" font-family="Inter, system-ui, sans-serif">
+  <title>Mapa das cinco famílias de comandos SQL (DQL, DML, DDL, DCL e TCL) com os principais comandos de cada uma</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .h { font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m { fill: #b4bfd3; font-size: 22px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .cur { stroke: #34d399; stroke-width: 2.5; }
+    .line { stroke: #2a3a5c; stroke-width: 2; fill: none; }
+  </style>
+  <rect width="720" height="410" rx="16" fill="#0b1020"/>
+
+  <rect x="20" y="169" width="110" height="70" rx="12" class="box"/>
+  <text x="75" y="213" text-anchor="middle" class="t">SQL</text>
+
+  <path d="M130 204 C158 204 152 52 180 52" class="line"/>
+  <path d="M130 204 C158 204 152 128 180 128" class="line"/>
+  <path d="M130 204 L180 204" class="line"/>
+  <path d="M130 204 C158 204 152 280 180 280" class="line"/>
+  <path d="M130 204 C158 204 152 356 180 356" class="line"/>
+
+  <rect x="180" y="20" width="520" height="64" rx="12" class="box cur"/>
+  <text x="200" y="46" class="h" fill="#34d399">DQL · consultar dados</text>
+  <text x="200" y="74" class="code">SELECT</text>
+  <text x="684" y="46" text-anchor="end" class="m">este módulo</text>
+
+  <rect x="180" y="96" width="520" height="64" rx="12" class="box"/>
+  <text x="200" y="122" class="h" fill="#60a5fa">DML · manipular dados</text>
+  <text x="200" y="150" class="code">INSERT · UPDATE · DELETE</text>
+
+  <rect x="180" y="172" width="520" height="64" rx="12" class="box"/>
+  <text x="200" y="198" class="h" fill="#a78bfa">DDL · definir a estrutura</text>
+  <text x="200" y="226" class="code">CREATE · ALTER · DROP · TRUNCATE</text>
+
+  <rect x="180" y="248" width="520" height="64" rx="12" class="box"/>
+  <text x="200" y="274" class="h" fill="#fbbf24">DCL · controlar o acesso</text>
+  <text x="200" y="302" class="code">GRANT · REVOKE</text>
+
+  <rect x="180" y="324" width="520" height="64" rx="12" class="box"/>
+  <text x="200" y="350" class="h" fill="#f87171">TCL · controlar transações</text>
+  <text x="200" y="378" class="code">COMMIT · ROLLBACK · SAVEPOINT</text>
+</svg>

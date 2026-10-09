@@ -1,0 +1,255 @@
+{
+  "title": "Prova parcial 1: fundamentos, modelagem e SQL",
+  "description": "Cobre os módulos 1 a 4 (aulas 1 a 19): SGBD, modelagem, consultas, manipulação e estrutura. Até 3 tentativas, 30 minutos por tentativa. O gabarito não é exibido.",
+  "lesson": null,
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": 30,
+  "show_answers": false,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual alternativa descreve melhor o papel de um **SGBD**?",
+      "options": {
+        "a": "Um software que fica entre as aplicações e os arquivos, definindo, manipulando, protegendo e recuperando dados",
+        "b": "Uma linguagem de consulta padronizada para bancos relacionais",
+        "c": "Um equipamento de armazenamento com alta capacidade e redundância",
+        "d": "Uma planilha compartilhada em rede com controle de versões"
+      },
+      "answer": "a",
+      "explanation": "O SGBD é o software que gerencia o banco: define a estrutura, manipula os dados, controla acesso e concorrência e faz backup e recuperação. SQL é a linguagem usada para conversar com ele, não o SGBD em si."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Sobre a arquitetura **ANSI-SPARC** de três níveis, quais afirmações estão corretas?",
+      "options": {
+        "a": "O nível externo corresponde às visões que cada grupo de usuários tem dos dados",
+        "b": "O nível conceitual descreve o esquema lógico do banco inteiro",
+        "c": "O nível interno define as telas e os formulários da aplicação",
+        "d": "A independência física permite mudar o armazenamento sem alterar o nível conceitual"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Externo são as visões, conceitual é o esquema lógico e interno é o armazenamento físico. Telas e formulários pertencem à aplicação, não ao SGBD.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Uma rede social precisa responder rapidamente \"quem são os amigos dos amigos de uma pessoa\". Qual tipo de banco NoSQL foi criado para esse tipo de pergunta?",
+      "options": {
+        "a": "Chave-valor, como o Redis",
+        "b": "Documentos, como o MongoDB",
+        "c": "Grafos, como o Neo4j",
+        "d": "Família de colunas, como o Cassandra"
+      },
+      "answer": "c",
+      "explanation": "Bancos de grafos armazenam nós e arestas e percorrem ligações em profundidade com eficiência. Os outros tipos resolvem esse problema com várias consultas encadeadas."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Em um DER, \"um cliente faz vários pedidos e cada pedido pertence a exatamente um cliente\" é um relacionamento de cardinalidade:",
+      "options": {
+        "a": "1:1",
+        "b": "1:N",
+        "c": "N:M",
+        "d": "N:1 obrigatório dos dois lados"
+      },
+      "answer": "b",
+      "explanation": "Um cliente para muitos pedidos é 1:N. Seria N:M se um pedido pudesse pertencer a vários clientes."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Ao mapear para tabelas o relacionamento **N:M** entre `livros` e `autores`, o que deve ser criado?",
+      "options": {
+        "a": "Uma tabela associativa `livro_autor` cuja chave primária é composta pelas duas chaves estrangeiras",
+        "b": "Uma coluna `autor_id` na tabela `livros`",
+        "c": "Uma coluna `livro_id` na tabela `autores`",
+        "d": "Uma coluna de texto em `livros` com os nomes dos autores separados por vírgula"
+      },
+      "answer": "a",
+      "explanation": "N:M sempre vira uma tabela intermediária com uma FK para cada lado. Colocar a FK em um dos lados só representa 1:N, e a lista separada por vírgula viola a 1FN."
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "A forma normal que proíbe que um atributo fora da chave dependa de outro atributo fora da chave (dependência transitiva) é a ___.",
+      "answer": [["3FN", "terceira forma normal", "3NF", "terceira", "3ª forma normal", "3a forma normal"]],
+      "explanation": "A 3FN elimina dependências transitivas. A 2FN trata da dependência parcial da chave composta e a 1FN exige valores atômicos."
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "`COUNT(coluna)` ignora as linhas em que a coluna é `NULL`, enquanto `COUNT(*)` conta todas as linhas.",
+      "answer": true,
+      "explanation": "COUNT(*) conta linhas; COUNT(coluna) conta valores não nulos. A diferença aparece com força depois de um LEFT JOIN."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual consulta devolve os clientes que **nunca fizeram um pedido**?",
+      "options": {
+        "a": "SELECT c.nome FROM clientes c INNER JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NULL;",
+        "b": "SELECT c.nome FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NULL;",
+        "c": "SELECT c.nome FROM clientes c LEFT JOIN pedidos p ON p.cliente_id = c.id WHERE p.id IS NOT NULL;",
+        "d": "SELECT c.nome FROM clientes c, pedidos p WHERE p.cliente_id <> c.id;"
+      },
+      "answer": "b",
+      "explanation": "O LEFT JOIN mantém todos os clientes e preenche com NULL os que não têm pedido; o filtro IS NULL seleciona exatamente esses. O INNER JOIN já descarta quem não tem par, então a alternativa a devolve zero linhas.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Qual é a diferença entre `WHERE` e `HAVING` em uma consulta com `GROUP BY`?",
+      "options": {
+        "a": "WHERE filtra linhas antes do agrupamento; HAVING filtra grupos depois, podendo usar agregações",
+        "b": "São sinônimos; HAVING é apenas a forma antiga",
+        "c": "HAVING filtra linhas antes do agrupamento; WHERE filtra grupos depois",
+        "d": "WHERE só aceita colunas numéricas e HAVING só aceita texto"
+      },
+      "answer": "a",
+      "explanation": "WHERE roda antes do GROUP BY e não pode usar SUM ou COUNT; HAVING roda depois e filtra os grupos formados."
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Na tabela `produtos` existem: Monitor 27\" (categoria 2, preço 900), Cadeira ergonômica (categoria 3, preço 750) e Teclado (categoria 1, preço 120). O que a consulta devolve?\n\n```sql\nSELECT nome FROM produtos\nWHERE categoria_id = 2 OR categoria_id = 3 AND preco < 800;\n```",
+      "options": {
+        "a": "Monitor 27\" e Cadeira ergonômica",
+        "b": "Somente Cadeira ergonômica",
+        "c": "Somente Monitor 27\"",
+        "d": "Monitor 27\", Cadeira ergonômica e Teclado"
+      },
+      "answer": "a",
+      "explanation": "AND é resolvido antes de OR: a condição vira (categoria 3 E preço < 800) OU categoria 2. A Cadeira atende a primeira parte e o Monitor a segunda. Quem lê da esquerda para a direita conclui errado que só a Cadeira aparece.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "fill",
+      "prompt": "Para mostrar a segunda página de um relatório com 10 itens por página, pulando os 10 primeiros, usa-se `ORDER BY id LIMIT 10` seguido de ___ `10`.",
+      "answer": [["OFFSET"]],
+      "explanation": "LIMIT define quantas linhas trazer e OFFSET quantas pular. Sem ORDER BY a paginação não é confiável."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "O que caracteriza uma subconsulta **correlacionada**?",
+      "options": {
+        "a": "Ela referencia colunas da consulta externa e é avaliada para cada linha dela",
+        "b": "Ela roda uma única vez e devolve uma lista fixa de valores",
+        "c": "Ela só pode aparecer na cláusula FROM",
+        "d": "Ela substitui obrigatoriamente um JOIN"
+      },
+      "answer": "a",
+      "explanation": "A correlacionada depende da linha externa (por exemplo, `WHERE p.cliente_id = c.id`) e por isso é reavaliada linha a linha. A independente roda uma vez."
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "A tabela `produtos` tem `id INT AUTO_INCREMENT PRIMARY KEY`, `nome`, `preco`, `estoque` e `categoria_id`. Qual comando insere um produto corretamente?",
+      "options": {
+        "a": "INSERT INTO produtos (nome, preco, estoque, categoria_id) VALUES ('Headset', 250.00, 10, 1);",
+        "b": "INSERT INTO produtos VALUES ('Headset', 250.00, 10, 1);",
+        "c": "INSERT INTO produtos (nome, preco, estoque, categoria_id) VALUES ('Headset');",
+        "d": "INSERT INTO produtos (nome, preco, estoque, categoria_id) VALUES (\"Headset\"; 250; 10; 1);"
+      },
+      "answer": "a",
+      "explanation": "Com a lista de colunas, o id é omitido e gerado pelo AUTO_INCREMENT. Sem a lista (b), o MySQL espera cinco valores e recusa quatro; (c) tem menos valores que colunas; (d) separa valores com ponto e vírgula.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "multiple",
+      "prompt": "Sobre `DELETE`, `TRUNCATE` e `DROP`, quais afirmações estão corretas?",
+      "options": {
+        "a": "DELETE sem WHERE apaga todas as linhas e, dentro de uma transação, pode ser desfeito com ROLLBACK",
+        "b": "TRUNCATE esvazia a tabela e reinicia o contador AUTO_INCREMENT",
+        "c": "TRUNCATE aceita a cláusula WHERE para apagar só parte das linhas",
+        "d": "DROP TABLE remove a estrutura da tabela, não apenas os dados"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "TRUNCATE é DDL: não aceita WHERE, não dispara triggers e não sofre ROLLBACK no MySQL. DELETE é DML e respeita a transação.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "Qual constraint garante que dois clientes não sejam cadastrados com o mesmo e-mail?",
+      "options": {
+        "a": "NOT NULL",
+        "b": "UNIQUE",
+        "c": "DEFAULT",
+        "d": "CHECK"
+      },
+      "answer": "b",
+      "explanation": "UNIQUE impede valores repetidos na coluna. NOT NULL só proíbe vazio, DEFAULT define um valor padrão e CHECK valida uma condição por linha."
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Qual comando adiciona a coluna `telefone VARCHAR(20)` à tabela `clientes` já existente?",
+      "options": {
+        "a": "ALTER TABLE clientes ADD COLUMN telefone VARCHAR(20);",
+        "b": "UPDATE clientes ADD COLUMN telefone VARCHAR(20);",
+        "c": "ALTER clientes INSERT COLUMN telefone VARCHAR(20);",
+        "d": "CREATE COLUMN telefone VARCHAR(20) IN clientes;"
+      },
+      "answer": "a",
+      "explanation": "Mudanças de estrutura são feitas com ALTER TABLE. UPDATE altera dados, e as outras duas sintaxes não existem."
+    },
+    {
+      "id": "q17",
+      "type": "truefalse",
+      "prompt": "Uma view armazena fisicamente uma cópia dos dados e, por isso, torna as consultas mais rápidas.",
+      "answer": false,
+      "explanation": "Uma view é só um SELECT salvo com nome: a consulta é executada toda vez. Ela simplifica e protege, mas não acelera. Quem acelera é o índice."
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "A tabela `pedidos` tem um índice composto em `(cliente_id, data_pedido)`. Qual consulta **não** consegue aproveitar esse índice?",
+      "options": {
+        "a": "SELECT * FROM pedidos WHERE cliente_id = 3;",
+        "b": "SELECT * FROM pedidos WHERE cliente_id = 3 AND data_pedido > '2025-03-01';",
+        "c": "SELECT * FROM pedidos WHERE data_pedido > '2025-03-01';",
+        "d": "SELECT * FROM pedidos WHERE cliente_id IN (1, 2);"
+      },
+      "answer": "c",
+      "explanation": "Um índice composto é ordenado pela primeira coluna; só filtros que incluem `cliente_id` entram pelo prefixo mais à esquerda. Filtrar só por `data_pedido` obriga a varrer a tabela ou o índice inteiro.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "Para armazenar o preço de um produto em reais e centavos, o tipo mais adequado no MySQL é:",
+      "options": {
+        "a": "DECIMAL(10,2), que guarda o valor exato",
+        "b": "FLOAT, que ocupa menos espaço",
+        "c": "VARCHAR(20), para aceitar o símbolo R$",
+        "d": "INT, arredondando os centavos"
+      },
+      "answer": "a",
+      "explanation": "FLOAT e DOUBLE são aproximados e acumulam erros de centavos em somas. DECIMAL é exato. Texto impede cálculos e INT perde os centavos."
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "A chave estrangeira `pedidos.cliente_id` foi criada com `ON DELETE CASCADE`. O que acontece ao executar `DELETE FROM clientes WHERE id = 1;` se o cliente 1 tem dois pedidos?",
+      "options": {
+        "a": "O cliente e seus dois pedidos são apagados",
+        "b": "O comando é rejeitado com erro de chave estrangeira",
+        "c": "O cliente é apagado e os pedidos ficam com cliente_id NULL",
+        "d": "Só os pedidos são apagados; o cliente permanece"
+      },
+      "answer": "a",
+      "explanation": "CASCADE propaga a exclusão para as linhas filhas. Com RESTRICT (o padrão) o comando seria rejeitado, e com SET NULL os pedidos ficariam sem cliente.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Estudo de caso: sistema de biblioteca",
+  "description": "Oito questões sobre o caminho da entrevista ao script no projeto da biblioteca.",
+  "lesson": "estudo-de-caso-biblioteca",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Por que o modelo da biblioteca separa `livros` de `exemplares`?",
+      "options": {
+        "a": "Porque o ISBN é obrigatório para cada cópia",
+        "b": "Porque um título pode ter várias cópias e o empréstimo é de uma cópia específica",
+        "c": "Porque assim as consultas não precisam de JOIN",
+        "d": "Porque autores e livros têm relacionamento N:M"
+      },
+      "answer": "b",
+      "explanation": "O livro é a obra; o exemplar é a cópia física com número de tombo. Um número de cópias em `livros` não diria qual exemplar saiu. O ISBN é do título, não da cópia, e o N:M com autores é um problema separado."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Um livro pode ter vários autores e um autor escreve vários livros. Como esse relacionamento aparece no modelo lógico?",
+      "options": {
+        "a": "Uma coluna `autor_id` em `livros` e uma coluna `livro_id` em `autores`",
+        "b": "Uma tabela associativa `livro_autor` com chave primária composta (`livro_id`, `autor_id`)",
+        "c": "Uma coluna `autores` em `livros` com os nomes separados por vírgula",
+        "d": "Uma hierarquia de generalização entre Autor e Livro"
+      },
+      "answer": "b",
+      "explanation": "Relacionamentos N:M viram uma tabela associativa com as duas chaves estrangeiras formando a chave primária. Uma FK de cada lado só representa 1:N, e nomes separados por vírgula violam a 1FN.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "A tabela `emprestimos` deveria guardar também o título do livro, para facilitar as consultas.",
+      "answer": false,
+      "explanation": "O título pertence ao livro, que você alcança por `exemplar_id`. Copiá-lo cria dependência transitiva (viola a 3FN) e dados repetidos. As consultas usam JOIN para trazer o título."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "A etapa do projeto em que você entrevista o bibliotecário para descobrir o que o sistema precisa guardar e fazer é o levantamento de ___.",
+      "answer": [["requisitos", "requisito"]],
+      "explanation": "O levantamento de requisitos vem antes de qualquer diagrama: é nele que surgem as entidades, as cardinalidades e as regras de negócio."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais colunas da tabela `emprestimos` do projeto são chaves estrangeiras?",
+      "options": {
+        "a": "`exemplar_id`",
+        "b": "`usuario_id`",
+        "c": "`id`",
+        "d": "`data_prevista`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "`exemplar_id` referencia `exemplares` e `usuario_id` referencia `usuarios`. `id` é a chave primária do próprio empréstimo e `data_prevista` é um atributo comum.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Hoje é 25/03/2025. Qual condição lista apenas os empréstimos atrasados?",
+      "options": {
+        "a": "`data_devolucao IS NULL AND data_prevista < CURDATE()`",
+        "b": "`data_devolucao IS NOT NULL AND data_prevista < CURDATE()`",
+        "c": "`data_devolucao = NULL AND data_prevista < CURDATE()`",
+        "d": "`data_devolucao IS NULL AND data_prevista > CURDATE()`"
+      },
+      "answer": "a",
+      "explanation": "Atrasado é o que ainda não voltou (`IS NULL`) e cujo prazo já passou (`<`). `= NULL` nunca é verdadeiro em SQL, `IS NOT NULL` pega só os devolvidos e `>` pega os que ainda estão no prazo.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Por que o script de carga insere em `editoras` antes de inserir em `livros`?",
+      "options": {
+        "a": "Porque `livros` tem uma chave estrangeira para `editoras`, e a editora precisa existir antes",
+        "b": "Porque o MySQL exige inserir nas tabelas em ordem alfabética",
+        "c": "Porque `AUTO_INCREMENT` só funciona na primeira tabela criada",
+        "d": "Porque `editoras` tem a restrição `UNIQUE` em `nome`"
+      },
+      "answer": "a",
+      "explanation": "A integridade referencial exige que a linha pai exista antes da filha; inserir um livro com `editora_id` inexistente gera o erro 1452. Ordem alfabética, AUTO_INCREMENT e UNIQUE não têm relação com isso.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que vai no dicionário de dados do projeto?",
+      "options": {
+        "a": "Cada tabela e coluna, com tipo, se aceita nulo, chaves e significado",
+        "b": "Os dados de exemplo usados nos testes",
+        "c": "Apenas o diagrama entidade-relacionamento final",
+        "d": "As consultas mais usadas pela aplicação"
+      },
+      "answer": "a",
+      "explanation": "O dicionário de dados descreve a estrutura: tabelas, colunas, tipos, nulidade, chaves e o significado de cada campo. O DER e os scripts complementam a documentação, mas não substituem o dicionário."
+    }
+  ]
+}

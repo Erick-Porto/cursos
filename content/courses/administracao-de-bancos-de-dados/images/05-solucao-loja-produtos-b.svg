@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 280" font-family="Inter, system-ui, sans-serif">
+  <title>Solução da loja: cliente faz pedido em 1:N e pedido tem item_pedido em 1:N; item_pedido é entidade fraca, com borda dupla, e num_item é o identificador parcial</title>
+  <style>
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .a { fill: #e8edf7; font-size: 22px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .v { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .n { fill: #fbbf24; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .weak { fill: none; stroke: #fbbf24; stroke-width: 2; }
+    .head { fill: #34d399; }
+    .ln { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="280" rx="16" fill="#0b1020"/>
+
+  <!-- cliente -->
+  <rect x="20" y="50" width="180" height="124" rx="12" class="box"/>
+  <path d="M20 62 a12 12 0 0 1 12 -12 h156 a12 12 0 0 1 12 12 v28 h-180 z" class="head"/>
+  <text x="110" y="78" text-anchor="middle" class="hd">cliente</text>
+  <text x="34" y="118" class="a"><tspan text-decoration="underline">id</tspan>, nome</text>
+  <text x="34" y="150" class="a">email</text>
+
+  <!-- cliente 1:N pedido -->
+  <path d="M200 112 L270 112 M212 103 L212 121 M254 112 L270 103 M254 112 L270 121" class="ln"/>
+  <text x="235" y="98" text-anchor="middle" class="v">faz</text>
+  <text x="214" y="142" text-anchor="middle" class="n">1</text>
+  <text x="256" y="142" text-anchor="middle" class="n">N</text>
+
+  <!-- pedido -->
+  <rect x="270" y="50" width="180" height="124" rx="12" class="box"/>
+  <path d="M270 62 a12 12 0 0 1 12 -12 h156 a12 12 0 0 1 12 12 v28 h-180 z" class="head"/>
+  <text x="360" y="78" text-anchor="middle" class="hd">pedido</text>
+  <text x="284" y="118" class="a"><tspan text-decoration="underline">id</tspan>, data</text>
+  <text x="284" y="150" class="a">status</text>
+
+  <!-- pedido 1:N item_pedido -->
+  <path d="M450 112 L520 112 M462 103 L462 121 M504 112 L520 103 M504 112 L520 121" class="ln"/>
+  <text x="485" y="98" text-anchor="middle" class="v">tem</text>
+  <text x="464" y="142" text-anchor="middle" class="n">1</text>
+  <text x="506" y="142" text-anchor="middle" class="n">N</text>
+
+  <!-- item_pedido: entidade fraca (borda dupla) -->
+  <rect x="520" y="50" width="180" height="124" rx="12" class="box" stroke="#fbbf24" stroke-width="2"/>
+  <path d="M520 62 a12 12 0 0 1 12 -12 h156 a12 12 0 0 1 12 12 v28 h-180 z" class="head"/>
+  <rect x="526" y="56" width="168" height="112" rx="8" class="weak"/>
+  <text x="610" y="78" text-anchor="middle" class="hd">item_pedido</text>
+  <text x="536" y="118" class="a"><tspan text-decoration="underline">num_item</tspan></text>
+  <text x="536" y="150" class="a">quantidade</text>
+
+  <text x="360" y="222" text-anchor="middle" class="m">borda dupla: entidade fraca, só existe dentro do pedido</text>
+  <text x="360" y="250" text-anchor="middle" class="m">num_item: identificador parcial, único dentro do pedido</text>
+</svg>

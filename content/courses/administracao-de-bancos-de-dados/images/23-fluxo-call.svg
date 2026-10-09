@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Fluxo de um CALL: a aplicação chama a procedure, o SGBD a executa junto às tabelas e devolve só o resultado</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .l { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .g { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .area { fill: none; stroke: #2a3a5c; stroke-width: 1.5; stroke-dasharray: 6 4; }
+    .arrow { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+    .back { stroke: #34d399; stroke-width: 2.5; fill: none; marker-end: url(#headg); }
+  </style>
+  <defs>
+    <marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="headg" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+  <rect x="210" y="40" width="490" height="200" rx="14" class="area"/>
+  <text x="455" y="68" text-anchor="middle" class="m">SGBD (MySQL)</text>
+  <rect x="20" y="100" width="150" height="90" rx="12" class="box"/>
+  <text x="95" y="140" text-anchor="middle" class="t">Aplicação</text>
+  <text x="95" y="168" text-anchor="middle" class="m">um CALL</text>
+  <rect x="240" y="100" width="170" height="90" rx="12" class="box"/>
+  <text x="325" y="140" text-anchor="middle" class="t">Procedure</text>
+  <text x="325" y="168" text-anchor="middle" class="m">sp_total_gasto</text>
+  <rect x="520" y="100" width="170" height="90" rx="12" class="box"/>
+  <text x="605" y="140" text-anchor="middle" class="t">Tabelas</text>
+  <text x="605" y="168" text-anchor="middle" class="m">pedidos</text>
+  <path d="M170 122 L232 122" class="arrow"/>
+  <text x="205" y="92" text-anchor="middle" class="l">CALL</text>
+  <path d="M240 168 L178 168" class="back"/>
+  <text x="205" y="218" text-anchor="middle" class="g">retorno</text>
+  <path d="M410 122 L512 122" class="arrow"/>
+  <text x="465" y="92" text-anchor="middle" class="l">lê e grava</text>
+  <path d="M520 168 L418 168" class="back"/>
+  <text x="465" y="218" text-anchor="middle" class="g">linhas</text>
+  <text x="360" y="278" text-anchor="middle" class="m">Uma ida e volta pela rede: o trabalho acontece ao lado dos dados</text>
+</svg>

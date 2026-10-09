@@ -1,0 +1,105 @@
+{
+  "title": "Quiz: Backup: conceitos e estratégias",
+  "description": "Verifica se você sabe traduzir RPO e RTO em uma estratégia e distinguir os tipos de backup.",
+  "lesson": "backup-conceitos-e-estrategias",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que o **RPO** (Recovery Point Objective) define?",
+      "options": {
+        "a": "O tempo máximo que o sistema pode ficar fora do ar após uma falha",
+        "b": "A quantidade máxima de dados que a empresa aceita perder, medida em tempo",
+        "c": "O local onde as cópias de backup devem ser guardadas",
+        "d": "O tamanho máximo que um arquivo de backup pode ter"
+      },
+      "answer": "b",
+      "explanation": "RPO responde \"quanto posso perder?\" e é medido em tempo (ex.: 1 hora de dados). O tempo máximo fora do ar é o RTO, a alternativa mais confundida com ele."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A loja faz um backup **completo** no domingo e **incrementais** de segunda a quarta. Na quinta de manhã o disco falha. Quais arquivos você precisa para restaurar?",
+      "options": {
+        "a": "Apenas o incremental de quarta, que é o mais recente",
+        "b": "O completo de domingo e o incremental de quarta",
+        "c": "O completo de domingo e os incrementais de segunda, terça e quarta, nessa ordem",
+        "d": "Apenas o completo de domingo, pois os incrementais são opcionais"
+      },
+      "answer": "c",
+      "explanation": "Cada incremental guarda só o que mudou desde o backup anterior, então a cadeia inteira é necessária. \"Completo + último arquivo\" valeria para backups diferenciais, não incrementais.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre o backup **diferencial** estão corretas?",
+      "options": {
+        "a": "Copia tudo o que mudou desde o último backup completo",
+        "b": "Tende a crescer a cada dia até o próximo completo",
+        "c": "Para restaurar, bastam o completo e o último diferencial",
+        "d": "Para restaurar, é preciso aplicar todos os diferenciais da semana em ordem"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O diferencial acumula tudo desde o completo, por isso cresce e por isso o último já contém os anteriores. Aplicar todos em ordem é a regra do incremental.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Um backup físico feito com o Percona XtraBackup pode ser restaurado em qualquer SGBD e versão, já que é apenas uma cópia dos arquivos.",
+      "answer": false,
+      "explanation": "É o contrário: o backup físico copia os arquivos internos do InnoDB e fica preso à mesma versão e plataforma. Quem é portável entre versões é o backup lógico (`mysqldump`)."
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "A regra ___ recomenda três cópias dos dados, em duas mídias diferentes, com uma delas fora do site.",
+      "answer": [["3-2-1", "3 2 1", "três-dois-um", "tres-dois-um"]],
+      "explanation": "3 cópias, 2 mídias, 1 fora do site. A cópia remota protege contra incêndio, roubo e ransomware que atinjam o local inteiro."
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O negócio exige **RPO de 15 minutos** para o banco `loja`. Qual estratégia atende a esse requisito?",
+      "options": {
+        "a": "Backup completo semanal com `mysqldump`",
+        "b": "Backup completo diário e binary log ativo, copiado para fora do servidor com frequência",
+        "c": "Backup diferencial diário às 02:00",
+        "d": "Replicação para um segundo servidor, sem backup"
+      },
+      "answer": "b",
+      "explanation": "Com o binary log arquivado, o PITR volta até o minuto do incidente, atendendo a um RPO curto. Backups diários ou semanais perdem horas; replicação copia inclusive o `DELETE` errado.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual é a principal vantagem de um backup **lógico** (como o de `mysqldump`) sobre um físico?",
+      "options": {
+        "a": "É sempre mais rápido para restaurar bancos de centenas de GB",
+        "b": "Gera SQL legível, portável entre versões, e permite restaurar uma única tabela",
+        "c": "Captura o estado exato dos arquivos do InnoDB no disco",
+        "d": "Dispensa o binary log para fazer Point-in-Time Recovery"
+      },
+      "answer": "b",
+      "explanation": "O dump é texto SQL: dá para ler, editar e levar para outra versão. Velocidade em bancos grandes e cópia exata dos arquivos são pontos fortes do backup físico."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Por que a aula afirma que \"um backup nunca restaurado não é um backup\"?",
+      "options": {
+        "a": "Porque o arquivo expira se não for aberto em até 30 dias",
+        "b": "Porque só a restauração em um servidor de teste prova que o arquivo está íntegro e que o RTO é alcançável",
+        "c": "Porque o MySQL exige uma restauração para liberar o próximo backup",
+        "d": "Porque a restauração reduz o tamanho do arquivo de backup"
+      },
+      "answer": "b",
+      "explanation": "Arquivo vazio, corrompido ou script com senha errada só aparecem ao restaurar. O teste periódico também mede quanto tempo a restauração leva de verdade."
+    }
+  ]
+}

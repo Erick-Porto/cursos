@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Sem parênteses o AND é avaliado antes do OR e sobram os pedidos 1 e 2; com parênteses o OR é avaliado primeiro e sobra só o pedido 2</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .res { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .br { stroke: #a78bfa; stroke-width: 3; fill: none; }
+    .div { stroke: #2a3a5c; stroke-width: 1.5; stroke-dasharray: 6 6; }
+  </style>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <text x="40" y="50" class="t">Sem parênteses</text>
+  <text x="40" y="98" class="code" textLength="403" lengthAdjust="spacing">pago OR enviado AND total &gt; 500</text>
+  <path d="M144 108 L144 120 L443 120 L443 108" class="br"/>
+  <text x="294" y="146" text-anchor="middle" class="lbl">avaliado primeiro</text>
+  <text x="680" y="98" text-anchor="end" class="res">pedidos 1 e 2</text>
+
+  <line x1="40" y1="172" x2="680" y2="172" class="div"/>
+
+  <text x="40" y="216" class="t">Com parênteses</text>
+  <text x="40" y="264" class="code" textLength="429" lengthAdjust="spacing">(pago OR enviado) AND total &gt; 500</text>
+  <path d="M40 274 L40 286 L261 286 L261 274" class="br"/>
+  <text x="150" y="312" text-anchor="middle" class="lbl">avaliado primeiro</text>
+  <text x="680" y="264" text-anchor="end" class="res">só o pedido 2</text>
+</svg>

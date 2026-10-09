@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Anatomia do INSERT: a primeira coluna da lista recebe o primeiro valor de VALUES, a segunda o segundo, a terceira o terceiro</title>
+  <style>
+    .code { fill: #e8edf7; font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; font-weight: 700; }
+    .k { fill: #a78bfa; font-size: 20px; font-weight: 700; }
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .v { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .arrow { stroke: #60a5fa; stroke-width: 2.5; fill: none; marker-end: url(#head); }
+  </style>
+  <defs><marker id="head" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+    <path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker></defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+  <text x="360" y="42" text-anchor="middle" class="code">INSERT INTO clientes</text>
+
+  <text x="130" y="84" text-anchor="middle" class="k">colunas</text>
+  <text x="490" y="84" text-anchor="middle" class="k">VALUES</text>
+
+  <rect x="30" y="100" width="200" height="48" rx="10" class="box"/>
+  <text x="130" y="132" text-anchor="middle" class="t">nome</text>
+  <rect x="300" y="100" width="380" height="48" rx="10" class="box"/>
+  <text x="490" y="132" text-anchor="middle" class="v">'Fábio Nunes'</text>
+  <path d="M230 124 L296 124" class="arrow"/>
+  <text x="263" y="116" text-anchor="middle" class="m">1ª</text>
+
+  <rect x="30" y="164" width="200" height="48" rx="10" class="box"/>
+  <text x="130" y="196" text-anchor="middle" class="t">email</text>
+  <rect x="300" y="164" width="380" height="48" rx="10" class="box"/>
+  <text x="490" y="196" text-anchor="middle" class="v">'fabio@exemplo.com'</text>
+  <path d="M230 188 L296 188" class="arrow"/>
+  <text x="263" y="180" text-anchor="middle" class="m">2ª</text>
+
+  <rect x="30" y="228" width="200" height="48" rx="10" class="box"/>
+  <text x="130" y="260" text-anchor="middle" class="t">cidade</text>
+  <rect x="300" y="228" width="380" height="48" rx="10" class="box"/>
+  <text x="490" y="260" text-anchor="middle" class="v">'Belo Horizonte'</text>
+  <path d="M230 252 L296 252" class="arrow"/>
+  <text x="263" y="244" text-anchor="middle" class="m">3ª</text>
+
+  <text x="360" y="316" text-anchor="middle" class="m">id e criado_em ficam de fora: AUTO_INCREMENT e DEFAULT preenchem</text>
+</svg>

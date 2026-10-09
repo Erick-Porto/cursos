@@ -1,0 +1,111 @@
+{
+  "title": "Quiz: Ordenação, apelidos e limites",
+  "description": "Verifica se você sabe ordenar, renomear, calcular no SELECT, paginar com LIMIT e OFFSET e usar DISTINCT.",
+  "lesson": "ordenacao-apelidos-e-limites",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual cláusula classifica o resultado em ordem alfabética (A a Z) pela coluna `nome`?",
+      "options": {
+        "a": "SORT BY nome ASC",
+        "b": "GROUP BY nome ASC",
+        "c": "ORDER BY nome ASC",
+        "d": "ARRANGE BY nome ASC"
+      },
+      "answer": "c",
+      "explanation": "ORDER BY é a cláusula de ordenação, e ASC (o padrão) é a ordem crescente. GROUP BY agrupa linhas para agregações; SORT BY e ARRANGE BY não existem em SQL.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Uma listagem mostra 5 produtos por página. Qual combinação devolve a **página 3**?",
+      "options": {
+        "a": "LIMIT 5 OFFSET 10",
+        "b": "LIMIT 10 OFFSET 5",
+        "c": "LIMIT 5 OFFSET 15",
+        "d": "LIMIT 15 OFFSET 5"
+      },
+      "answer": "a",
+      "explanation": "OFFSET = (página - 1) x itens por página = (3 - 1) x 5 = 10. Pula-se as 10 linhas das páginas 1 e 2 e trazem-se as 5 seguintes. OFFSET 15 já seria a página 4.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Um apelido criado com AS no SELECT pode ser usado na cláusula WHERE da mesma consulta.",
+      "answer": false,
+      "explanation": "O WHERE é avaliado antes do SELECT, quando o apelido ainda não existe: o MySQL responde com 'Unknown column'. Já o ORDER BY, que roda depois do SELECT, aceita o apelido.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a consulta para listar cada cidade uma única vez, mesmo que vários clientes morem nela:\n\n```sql\nSELECT ___ cidade FROM clientes ORDER BY cidade;\n```",
+      "answer": [["DISTINCT"]],
+      "explanation": "DISTINCT, logo após o SELECT, elimina as linhas repetidas do resultado. Sem ele, São Paulo apareceria duas vezes, uma para cada cliente que mora lá.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais destas são **boas práticas** ao escrever consultas SQL?",
+      "options": {
+        "a": "Palavras-chave em MAIÚSCULAS e uma cláusula por linha",
+        "b": "Usar SELECT * no código da aplicação para não esquecer nenhuma coluna",
+        "c": "Testar com LIMIT antes de rodar a consulta inteira em uma tabela grande",
+        "d": "Dar apelidos que descrevem o que a coluna significa",
+        "e": "Paginar com LIMIT e OFFSET sem ORDER BY, para a consulta ficar mais rápida"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Formatação consistente, apelidos claros e testes com LIMIT tornam a consulta legível e segura. SELECT * traz dados a mais e quebra quando a tabela muda; LIMIT sem ORDER BY devolve páginas em ordem imprevisível.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Tabela `produtos`:\n\n| nome | categoria_id | preco |\n|---|---|---|\n| Teclado | 1 | 120.00 |\n| Mouse | 1 | 60.00 |\n| Webcam | 1 | 180.00 |\n| Notebook | 4 | 4200.00 |\n\nQual nome a consulta abaixo devolve?\n\n```sql\nSELECT nome FROM produtos\nORDER BY categoria_id ASC, preco DESC\nLIMIT 1;\n```",
+      "options": {
+        "a": "Webcam",
+        "b": "Teclado",
+        "c": "Mouse",
+        "d": "Notebook"
+      },
+      "answer": "a",
+      "explanation": "Primeiro ordena-se por categoria crescente, então a categoria 1 vem antes da 4. Dentro dela, preco DESC coloca a Webcam (180) na frente de Teclado e Mouse. LIMIT 1 fica com essa primeira linha. O Notebook, apesar de mais caro, está na categoria 4.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O Teclado custa 120.00. O que devolve a consulta abaixo?\n\n```sql\nSELECT ROUND(preco * 0.9, 2) AS com_desconto\nFROM produtos\nWHERE nome = 'Teclado';\n```",
+      "options": {
+        "a": "108.00",
+        "b": "12.00",
+        "c": "132.00",
+        "d": "120.00"
+      },
+      "answer": "a",
+      "explanation": "120 x 0,9 = 108, e ROUND com 2 casas mostra 108.00 no cabeçalho com_desconto. 12.00 seria o desconto em si, não o preço com desconto; 132.00 seria um acréscimo de 10%.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No MySQL, o que significa `LIMIT 2, 2` no fim de uma consulta?",
+      "options": {
+        "a": "Pular 2 linhas e devolver as 2 seguintes",
+        "b": "Devolver 2 linhas e depois pular 2",
+        "c": "Devolver a segunda linha duas vezes",
+        "d": "Erro de sintaxe: LIMIT aceita um único número"
+      },
+      "answer": "a",
+      "explanation": "Na forma abreviada do MySQL, o primeiro número é o OFFSET e o segundo é a quantidade: LIMIT 2, 2 equivale a LIMIT 2 OFFSET 2. Essa inversão confunde, por isso a aula recomenda a forma com OFFSET, que também funciona no PostgreSQL.",
+      "points": 1
+    }
+  ]
+}

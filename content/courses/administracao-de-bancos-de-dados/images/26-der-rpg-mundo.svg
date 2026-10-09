@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Esquema do rpg_mundo: racas e classes apontam para personagens; personagens e magias se ligam pela tabela associativa personagem_magias</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 18px; }
+    .k    { fill: #b4bfd3; font-size: 18px; }
+    .lbl  { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2; fill: none; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <!-- racas -->
+  <rect class="box" x="30" y="24" width="200" height="140" rx="10"/>
+  <rect class="head" x="30" y="24" width="200" height="34" rx="10"/>
+  <rect class="head" x="30" y="44" width="200" height="14"/>
+  <text class="h" x="46" y="48">racas</text>
+  <text class="t" x="46" y="80">id <tspan class="k">(PK)</tspan></text>
+  <text class="t" x="46" y="104">nome</text>
+  <text class="t" x="46" y="128">bonus_forca</text>
+  <text class="t" x="46" y="152">bonus_destreza</text>
+
+  <!-- classes -->
+  <rect class="box" x="250" y="24" width="230" height="116" rx="10"/>
+  <rect class="head" x="250" y="24" width="230" height="34" rx="10"/>
+  <rect class="head" x="250" y="44" width="230" height="14"/>
+  <text class="h" x="266" y="48">classes</text>
+  <text class="t" x="266" y="80">id <tspan class="k">(PK)</tspan></text>
+  <text class="t" x="266" y="104">nome</text>
+  <text class="t" x="266" y="128">habilidade_principal</text>
+
+  <!-- magias -->
+  <rect class="box" x="495" y="24" width="195" height="140" rx="10"/>
+  <rect class="head" x="495" y="24" width="195" height="34" rx="10"/>
+  <rect class="head" x="495" y="44" width="195" height="14"/>
+  <text class="h" x="511" y="48">magias</text>
+  <text class="t" x="511" y="80">id <tspan class="k">(PK)</tspan></text>
+  <text class="t" x="511" y="104">nome</text>
+  <text class="t" x="511" y="128">custo_mana</text>
+  <text class="t" x="511" y="152">nivel_requerido</text>
+
+  <!-- personagens -->
+  <rect class="box" x="120" y="236" width="240" height="164" rx="10"/>
+  <rect class="head" x="120" y="236" width="240" height="34" rx="10"/>
+  <rect class="head" x="120" y="256" width="240" height="14"/>
+  <text class="h" x="136" y="260">personagens</text>
+  <text class="t" x="136" y="292">id <tspan class="k">(PK)</tspan></text>
+  <text class="t" x="136" y="316">nome</text>
+  <text class="t" x="136" y="340">raca_id <tspan class="k">(FK)</tspan></text>
+  <text class="t" x="136" y="364">classe_id <tspan class="k">(FK)</tspan></text>
+  <text class="t" x="136" y="388">nivel</text>
+
+  <!-- personagem_magias -->
+  <rect class="box" x="420" y="260" width="270" height="116" rx="10"/>
+  <rect class="head" x="420" y="260" width="270" height="34" rx="10"/>
+  <rect class="head" x="420" y="280" width="270" height="14"/>
+  <text class="h" x="436" y="284">personagem_magias</text>
+  <text class="t" x="436" y="316">personagem_id <tspan class="k">(PK, FK)</tspan></text>
+  <text class="t" x="436" y="340">magia_id <tspan class="k">(PK, FK)</tspan></text>
+  <text class="t" x="436" y="364">nivel_maestria</text>
+
+  <!-- ligações (chaves estrangeiras) -->
+  <path class="line" d="M 130 164 L 190 236"/>
+  <text class="lbl" x="146" y="196" text-anchor="end">1:N</text>
+
+  <path class="line" d="M 365 140 L 300 236"/>
+  <text class="lbl" x="342" y="196">1:N</text>
+
+  <path class="line" d="M 592 164 L 592 260"/>
+  <text class="lbl" x="604" y="218">1:N</text>
+
+  <path class="line" d="M 360 318 L 420 318"/>
+  <text class="lbl" x="390" y="308" text-anchor="middle">1:N</text>
+</svg>

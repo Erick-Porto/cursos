@@ -1,0 +1,106 @@
+{
+  "title": "Quiz: Stored procedures",
+  "description": "Verifique se você sabe quando programar no banco, como usar parâmetros e como tratar erros em procedures.",
+  "lesson": "stored-procedures",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": null,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Uma rotina de fechamento de pedido envia quatro comandos SQL e a regra está copiada em três sistemas. Qual é o principal ganho ao transformá-la em uma stored procedure?",
+      "options": {
+        "a": "O código nunca mais precisa ser alterado",
+        "b": "Menos idas e voltas pela rede e uma regra única para todos os sistemas",
+        "c": "O código passa a rodar em qualquer SGBD sem adaptação",
+        "d": "A depuração fica mais simples do que na aplicação"
+      },
+      "answer": "b",
+      "explanation": "A procedure roda ao lado dos dados em uma única chamada e centraliza a regra. Portabilidade e depuração são, na verdade, pontos fracos de programar no banco."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No MySQL, para que serve `DELIMITER $$` antes de um `CREATE PROCEDURE`?",
+      "options": {
+        "a": "Abre uma transação que envolve a criação da procedure",
+        "b": "Diz ao servidor que a procedure usa a sintaxe estendida",
+        "c": "Troca o terminador de comando no cliente, para que os `;` do corpo não encerrem o comando",
+        "d": "Define o esquema padrão onde a procedure será criada"
+      },
+      "answer": "c",
+      "explanation": "DELIMITER é um comando do cliente (mysql, Workbench), não do servidor. Sem ele, o cliente enviaria o CREATE PROCEDURE no primeiro ponto e vírgula do corpo."
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Para executar a procedure `sp_total_gasto` no MySQL, guardando o resultado em `@total`, você escreve: `___ sp_total_gasto(1, @total);`",
+      "answer": [["CALL"]],
+      "explanation": "CALL é o comando que executa uma procedure no MySQL (e no PostgreSQL). EXEC e EXECUTE pertencem a outros SGBDs.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre os modos de parâmetro de uma procedure estão corretas?",
+      "options": {
+        "a": "`IN` leva um valor do chamador para dentro da procedure e é o modo padrão",
+        "b": "`OUT` devolve um valor da procedure para o chamador",
+        "c": "`INOUT` recebe um valor, pode alterá-lo e devolve o novo valor",
+        "d": "`OUT` precisa receber um valor inicial do chamador para funcionar"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "IN entra, OUT sai e INOUT faz os dois. Um parâmetro OUT começa como NULL dentro da procedure; o valor que o chamador tinha na variável é ignorado.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A procedure abaixo insere um pedido e, em seguida, um item. O que acontece se o segundo `INSERT` violar a `CHECK (quantidade > 0)`?\n\n```sql\nDECLARE EXIT HANDLER FOR SQLEXCEPTION\nBEGIN\n  ROLLBACK;\n  RESIGNAL;\nEND;\nSTART TRANSACTION;\nINSERT INTO pedidos (cliente_id, data_pedido) VALUES (p_cliente, CURDATE());\nINSERT INTO itens_pedido (...) VALUES (...);\nCOMMIT;\n```",
+      "options": {
+        "a": "O pedido fica gravado e só o item é descartado",
+        "b": "O handler desfaz o pedido com ROLLBACK e o erro chega a quem chamou",
+        "c": "O handler ignora o erro e a procedure continua até o COMMIT",
+        "d": "O MySQL converte a quantidade inválida para 1 e grava os dois"
+      },
+      "answer": "b",
+      "explanation": "EXIT HANDLER FOR SQLEXCEPTION captura qualquer erro SQL: executa ROLLBACK, desfazendo o pedido, e RESIGNAL repassa o erro. Sem o handler, a transação ficaria aberta com o pedido pela metade.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "No MySQL, `ALTER PROCEDURE` permite reescrever o corpo de uma procedure existente.",
+      "answer": false,
+      "explanation": "ALTER PROCEDURE só altera características como comentário e SQL SECURITY. Para mudar a lógica, use DROP PROCEDURE e CREATE PROCEDURE de novo."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Dentro de `sp_adicionar_cliente`, logo após o `INSERT`, a linha `SET p_id = LAST_INSERT_ID();` guarda em `p_id`:",
+      "options": {
+        "a": "O número de linhas afetadas pelo INSERT",
+        "b": "O id da própria procedure no catálogo",
+        "c": "O valor AUTO_INCREMENT gerado pelo último INSERT da sessão",
+        "d": "O maior id existente na tabela, mesmo que outra sessão o tenha gerado"
+      },
+      "answer": "c",
+      "explanation": "LAST_INSERT_ID() devolve o valor AUTO_INCREMENT do último INSERT feito pela sua própria conexão, por isso é seguro mesmo com várias sessões inserindo ao mesmo tempo.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Você precisa calcular o preço com desconto diretamente dentro de um `SELECT`, como em `SELECT nome, fn_desconto(preco, 10) FROM produtos`. Qual objeto escolher?",
+      "options": {
+        "a": "Uma stored procedure chamada com CALL",
+        "b": "Uma função, porque ela devolve um valor e pode ser usada em expressões",
+        "c": "Um trigger AFTER SELECT na tabela produtos",
+        "d": "Uma variável de sessão preenchida antes da consulta"
+      },
+      "answer": "b",
+      "explanation": "Funções devolvem sempre um valor e entram em expressões SQL. Procedures são executadas com CALL e não cabem dentro de um SELECT; triggers não existem para SELECT."
+    }
+  ]
+}

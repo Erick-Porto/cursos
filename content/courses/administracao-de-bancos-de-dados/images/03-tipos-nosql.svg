@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Quatro tipos de NoSQL: chave-valor com pares chave e valor, documentos com um JSON, família de colunas com linhas de colunas variáveis e grafo com nós ligados por arestas</title>
+  <style>
+    .t { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .g { fill: #34d399; font-size: 18px; font-weight: 700; }
+    .k { fill: #06281c; font-size: 18px; font-weight: 700; }
+    .v { fill: #e8edf7; font-size: 18px; }
+    .m { fill: #b4bfd3; font-size: 18px; }
+    .code { fill: #e8edf7; font-size: 18px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .panel { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .key { fill: #34d399; }
+    .cell { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .node { fill: #0b1020; stroke: #a78bfa; stroke-width: 2.5; }
+    .edge { stroke: #a78bfa; stroke-width: 2.5; }
+    .lk { stroke: #2a3a5c; stroke-width: 2; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <rect x="30" y="26" width="330" height="182" rx="12" class="panel"/>
+  <text x="46" y="58" class="t">Chave-valor</text>
+  <text x="46" y="84" class="g">Redis</text>
+  <rect x="46" y="100" width="120" height="34" rx="6" class="key"/>
+  <text x="106" y="124" text-anchor="middle" class="k">sessao:1</text>
+  <line x1="166" y1="117" x2="184" y2="117" class="lk"/>
+  <rect x="184" y="100" width="100" height="34" rx="6" class="cell"/>
+  <text x="234" y="124" text-anchor="middle" class="v">Ana</text>
+  <rect x="46" y="150" width="120" height="34" rx="6" class="key"/>
+  <text x="106" y="174" text-anchor="middle" class="k">cesta:7</text>
+  <line x1="166" y1="167" x2="184" y2="167" class="lk"/>
+  <rect x="184" y="150" width="100" height="34" rx="6" class="cell"/>
+  <text x="234" y="174" text-anchor="middle" class="v">[3, 5]</text>
+
+  <rect x="360" y="26" width="330" height="182" rx="12" class="panel"/>
+  <text x="376" y="58" class="t">Documentos</text>
+  <text x="376" y="84" class="g">MongoDB</text>
+  <rect x="376" y="100" width="298" height="96" rx="8" class="cell"/>
+  <text x="388" y="128" class="code">{ "nome": "Mouse",</text>
+  <text x="410" y="156" class="code">"preco": 60,</text>
+  <text x="410" y="184" class="code">"tags": ["usb"] }</text>
+
+  <rect x="30" y="224" width="330" height="182" rx="12" class="panel"/>
+  <text x="46" y="256" class="t">Família de colunas</text>
+  <text x="46" y="282" class="g">Cassandra</text>
+  <text x="46" y="322" class="g">produto:1</text>
+  <rect x="150" y="298" width="62" height="34" rx="4" class="cell"/>
+  <text x="181" y="322" text-anchor="middle" class="v">nome</text>
+  <rect x="218" y="298" width="62" height="34" rx="4" class="cell"/>
+  <text x="249" y="322" text-anchor="middle" class="v">preco</text>
+  <rect x="286" y="298" width="62" height="34" rx="4" class="cell"/>
+  <text x="317" y="322" text-anchor="middle" class="v">qtd</text>
+  <text x="46" y="368" class="g">produto:6</text>
+  <rect x="150" y="344" width="62" height="34" rx="4" class="cell"/>
+  <text x="181" y="368" text-anchor="middle" class="v">nome</text>
+  <rect x="218" y="344" width="62" height="34" rx="4" class="cell"/>
+  <text x="249" y="368" text-anchor="middle" class="v">tags</text>
+
+  <rect x="360" y="224" width="330" height="182" rx="12" class="panel"/>
+  <text x="376" y="256" class="t">Grafos</text>
+  <text x="376" y="282" class="g">Neo4j</text>
+  <line x1="462" y1="320" x2="618" y2="320" class="edge"/>
+  <line x1="456" y1="332" x2="520" y2="360" class="edge"/>
+  <line x1="624" y1="332" x2="560" y2="360" class="edge"/>
+  <text x="540" y="312" text-anchor="middle" class="m">conhece</text>
+  <text x="500" y="374" text-anchor="end" class="m">comprou</text>
+  <circle cx="436" cy="320" r="26" class="node"/>
+  <text x="436" y="326" text-anchor="middle" class="v">Ana</text>
+  <circle cx="644" cy="320" r="26" class="node"/>
+  <text x="644" y="326" text-anchor="middle" class="v">Bruno</text>
+  <circle cx="540" cy="372" r="26" class="node"/>
+  <text x="540" y="378" text-anchor="middle" class="v">Mouse</text>
+</svg>

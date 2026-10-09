@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Na 2FN, produto_nome sai de itens para a nova tabela produtos; na 3FN, nome e e-mail do cliente saem de pedidos para a nova tabela clientes</title>
+  <style>
+    .h { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m { fill: #b4bfd3; font-size: 18px; font-weight: 400; }
+    .hd { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .c { fill: #e8edf7; font-size: 22px; }
+    .bad { fill: #fbbf24; }
+    .box { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .new { stroke: #34d399; stroke-width: 2.5; }
+    .head { fill: #34d399; }
+    .s2 { animation: entra 8s infinite; }
+    @keyframes entra { 0%, 32% { opacity: .3 } 40%, 94% { opacity: 1 } 100% { opacity: .3 } }
+    @media (prefers-reduced-motion: reduce) { .s2 { animation: none !important; opacity: 1 !important; } }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <!-- 2FN -->
+  <text x="180" y="34" text-anchor="middle" class="h">2FN<tspan class="m"> · depende da chave toda</tspan></text>
+  <rect x="20" y="52" width="320" height="94" rx="12" class="box"/>
+  <path d="M20 64 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+  <text x="180" y="76" text-anchor="middle" class="hd">pedidos</text>
+  <text x="34" y="110" class="c">id, <tspan class="bad">cliente_nome</tspan></text>
+  <text x="34" y="136" class="c bad">cliente_email</text>
+
+  <rect x="20" y="154" width="320" height="94" rx="12" class="box"/>
+  <path d="M20 166 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+  <text x="180" y="178" text-anchor="middle" class="hd">itens</text>
+  <text x="34" y="212" class="c">pedido_id, produto_id</text>
+  <text x="34" y="238" class="c">quantidade</text>
+
+  <rect x="20" y="256" width="320" height="68" rx="12" class="box new"/>
+  <path d="M20 268 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+  <text x="180" y="280" text-anchor="middle" class="hd">produtos</text>
+  <text x="34" y="314" class="c">id, nome</text>
+
+  <path d="M348 176 L374 190 L348 204 Z" fill="#a78bfa"/>
+
+  <!-- 3FN -->
+  <g class="s2">
+    <text x="540" y="34" text-anchor="middle" class="h">3FN<tspan class="m"> · sem dependência transitiva</tspan></text>
+    <rect x="380" y="52" width="320" height="68" rx="12" class="box new"/>
+    <path d="M380 64 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="76" text-anchor="middle" class="hd">clientes</text>
+    <text x="394" y="110" class="c">id, nome, email</text>
+
+    <rect x="380" y="128" width="320" height="68" rx="12" class="box"/>
+    <path d="M380 140 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="152" text-anchor="middle" class="hd">pedidos</text>
+    <text x="394" y="186" class="c">id, cliente_id</text>
+
+    <rect x="380" y="204" width="320" height="94" rx="12" class="box"/>
+    <path d="M380 216 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="228" text-anchor="middle" class="hd">itens</text>
+    <text x="394" y="262" class="c">pedido_id, produto_id</text>
+    <text x="394" y="288" class="c">quantidade</text>
+
+    <rect x="380" y="306" width="320" height="68" rx="12" class="box"/>
+    <path d="M380 318 a12 12 0 0 1 12 -12 h296 a12 12 0 0 1 12 12 v22 h-320 z" class="head"/>
+    <text x="540" y="330" text-anchor="middle" class="hd">produtos</text>
+    <text x="394" y="364" class="c">id, nome</text>
+  </g>
+
+  <text x="360" y="404" text-anchor="middle" class="m">amarelo: o que a 3FN corrige · verde: tabela nova</text>
+</svg>
