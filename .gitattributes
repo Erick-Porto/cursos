@@ -1,5 +1,8 @@
 # Normaliza finais de linha (evita diffs CRLF/LF entre Windows e o CI)
 * text=auto eol=lf
+# o cmd.exe se perde com LF em scripts .cmd/.bat
+*.cmd text eol=crlf
+*.bat text eol=crlf
 *.png binary
 *.jpg binary
 *.jpeg binary

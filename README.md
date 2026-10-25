@@ -61,6 +61,12 @@ npm run content:sync     # publica o conteúdo no Supabase
 npm run dev              # http://localhost:5173
 ```
 
+Atalho: `./start.sh` faz as checagens (Node 20.6+, `.env` preenchido, dependências em dia) e
+sobe o servidor. Use `--host` para abrir no celular pela rede local, `--sync` para publicar o
+conteúdo antes e `--preview` para servir o build de produção. `./start.sh --help` lista tudo.
+No Windows, use `start.cmd` (duplo clique ou `.\start.cmd` no PowerShell), que chama o mesmo
+script pelo Git Bash e aceita as mesmas opções.
+
 Crie sua conta pelo app e depois torne-se instrutor no SQL Editor:
 
 ```sql
@@ -109,6 +115,7 @@ Mudanças de conteúdo não exigem novo deploy do site.
 
 | Comando | O que faz |
 |---|---|
+| `./start.sh` / `start.cmd` | checa Node, `.env` e dependências e sobe o servidor (`--host`, `--sync`, `--preview`) |
 | `npm run dev` | servidor de desenvolvimento |
 | `npm run build` | build de produção em `dist/` |
 | `npm run typecheck` | verificação de tipos (vue-tsc) |
