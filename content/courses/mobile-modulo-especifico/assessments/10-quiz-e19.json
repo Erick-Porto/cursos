@@ -1,0 +1,102 @@
+{
+  "title": "Quiz: E19 · Animações e estados de tela",
+  "description": "Sete questões sobre Animated, driver nativo, interpolate, stagger, os 4 estados de tela e o toast.",
+  "lesson": "e19b-estados-de-carregamento-vazio-e-erro",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Com `useNativeDriver: true`, quais propriedades de estilo você pode animar?",
+      "options": {
+        "a": "Só `opacity` e `transform` (deslocar, escalar, girar)",
+        "b": "Só `width` e `height`, que mudam o tamanho do cartão",
+        "c": "`backgroundColor` e `borderColor`, desde que sejam cores do tema",
+        "d": "Qualquer propriedade de estilo, porque o lado nativo desenha tudo"
+      },
+      "answer": "a",
+      "explanation": "O driver nativo só anima propriedades que não mexem no layout: `opacity` e `transform` (`translateX`, `translateY`, `scale`, `rotate`). Animar `width` com o driver ligado gera a tela vermelha `Style property 'width' is not supported by native animated module`. A alternativa \"qualquer propriedade\" vale para `useNativeDriver: false`, quando o JavaScript calcula cada quadro.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O cartão abaixo aparece com um fade ao abrir a tela. O que acontece quando o usuário toca em **Curtir**, e por quê?\n\n```jsx\nexport default function CartaoProduto({ produto }) {\n  const [curtido, setCurtido] = useState(false);\n  const entrada = new Animated.Value(0);\n\n  useEffect(() => {\n    Animated.timing(entrada, { toValue: 1, duration: 300, useNativeDriver: true }).start();\n  }, []);\n\n  return (\n    <Animated.View style={{ opacity: entrada }}>\n      <Text>{produto.nome}</Text>\n      <Pressable onPress={() => setCurtido(!curtido)}><Text>Curtir</Text></Pressable>\n    </Animated.View>\n  );\n}\n```",
+      "options": {
+        "a": "O cartão some: a nova renderização cria outro `Animated.Value` em 0, e o efeito não roda de novo",
+        "b": "O cartão repete o fade, porque o `useEffect` roda a cada toque",
+        "c": "Nada muda, porque o `Animated.Value` sobrevive às renderizações como um estado",
+        "d": "O app mostra a tela vermelha, porque `Animated.Value` só funciona dentro de `useState`"
+      },
+      "answer": "a",
+      "explanation": "O corpo do componente roda a cada renderização. O `setCurtido` provoca uma nova, que cria um `Animated.Value` novo valendo 0 e o entrega à `Animated.View`; o efeito com `[]` não roda de novo, então o cartão fica com opacidade 0. A correção é `useRef(new Animated.Value(0)).current`, que guarda o mesmo valor entre renderizações. O fade não se repete porque o `useEffect` com `[]` roda só ao montar.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Complete a função que inicia a animação de cada cartão 80 ms depois da anterior, sem esperar a anterior terminar:\n\n```jsx\nAnimated.___(80, entradas.map((valor) =>\n  Animated.timing(valor, { toValue: 1, duration: 300, useNativeDriver: true })\n)).start();\n```",
+      "answer": [["stagger"]],
+      "explanation": "`Animated.stagger(intervalo, animacoes)` dispara cada animação um intervalo depois da anterior, e elas se sobrepõem: é a entrada em cascata dos cartões. `sequence` esperaria cada uma terminar (e não recebe um intervalo) e `parallel` dispararia todas juntas.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Sobre os estados de tela e o feedback no Lojinha, quais afirmações estão corretas?",
+      "options": {
+        "a": "A tela de erro precisa de uma saída, como o botão \"Tentar novamente\"",
+        "b": "O esqueleto mostra a forma do conteúdo e evita que a tela mude de layout quando os dados chegam",
+        "c": "O carrinho vazio deve mostrar só uma área em branco, para não poluir a tela",
+        "d": "O toast \"Adicionado ao carrinho\" deve exigir um toque em OK, como o `Alert`",
+        "e": "A tela vazia ganha uma ação, como \"Ver produtos\", que leva o usuário adiante"
+      },
+      "answer": ["a", "b", "e"],
+      "explanation": "Erro e vazio sempre oferecem uma ação; uma área em branco não diz se a tela está carregando, vazia ou quebrada. O esqueleto ocupa o lugar exato do conteúdo, por isso nada pula quando os cartões chegam. O toast confirma sem interromper e some sozinho; o `Alert` fica para o que exige decisão, como remover um item.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Quando o usuário ativa **Remover animações** (Android) ou **Reduzir movimento** (iOS), o app deve esconder os cartões e avisos que seriam animados.",
+      "answer": false,
+      "explanation": "O que sai é o movimento, não a informação. Com `AccessibilityInfo.isReduceMotionEnabled()` ligado, a duração vai a 0: os cartões aparecem prontos, sem deslizar, e o toast continua mostrando a mensagem. Esconder conteúdo puniria justamente quem precisa da opção.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Quando `entrada` vale `0.5`, como está o cartão?\n\n```jsx\nconst subida = entrada.interpolate({\n  inputRange: [0, 1],\n  outputRange: [24, 0],\n});\n\n<Animated.View style={{ opacity: entrada, transform: [{ translateY: subida }] }}>\n  <CartaoProduto produto={produto} />\n</Animated.View>\n```",
+      "options": {
+        "a": "Meio transparente e 12 pontos abaixo do lugar final",
+        "b": "Meio transparente e 24 pontos abaixo do lugar final",
+        "c": "Totalmente visível e 12 pontos abaixo do lugar final",
+        "d": "Invisível e já no lugar final"
+      },
+      "answer": "a",
+      "explanation": "A opacidade lê `entrada` direto: 0.5. O `interpolate` faz a regra de três entre as faixas: no meio de `[0, 1]` está o meio de `[24, 0]`, ou seja, 12. A alternativa com 24 esquece que o deslocamento acompanha o valor; 24 só vale quando `entrada` é 0.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Você quer conferir agora a tela de erro do Início, sem depender da sorte. O que mudar no código abaixo?\n\n```jsx\nconst CHANCE_DE_ERRO = 0.3;\n\nfunction carregar() {\n  setCarregando(true);\n  setErro(null);\n  setTimeout(() => {\n    if (Math.random() < CHANCE_DE_ERRO) setErro('Não conseguimos buscar os produtos.');\n    setCarregando(false);\n  }, 1500);\n}\n```",
+      "options": {
+        "a": "Trocar `0.3` por `1`",
+        "b": "Trocar `0.3` por `0`",
+        "c": "Trocar `1500` por `0`",
+        "d": "Apagar a linha `setCarregando(false)`"
+      },
+      "answer": "a",
+      "explanation": "`Math.random()` devolve um número de 0 até um pouco menos de 1, então ele é sempre menor que 1: o erro acontece em toda tentativa. Com `0`, a condição nunca é verdadeira e o erro some de vez. Mudar o tempo só tira a espera, e apagar `setCarregando(false)` deixa o esqueleto na tela para sempre.",
+      "points": 1
+    }
+  ]
+}

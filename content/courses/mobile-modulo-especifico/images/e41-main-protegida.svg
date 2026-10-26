@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 296" font-family="Inter, system-ui, sans-serif">
+  <title>Com a regra main protegida, o push direto na main é recusado; a mudança só entra por branch, Pull Request e uma aprovação</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .main { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-ok); }
+    .no   { stroke: #f87171; stroke-width: 3; fill: none; stroke-dasharray: 9 6; }
+    .lok  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .lno  { fill: #f87171; font-size: 22px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="seta-ok" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="296" rx="16" fill="#0b1020"/>
+
+  <!-- a main protegida -->
+  <rect class="main" x="582" y="40" width="118" height="216" rx="14"/>
+  <g transform="translate(617 62) scale(2)" fill="none" stroke="#34d399" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+    <path d="m9 12 2 2 4-4"/>
+  </g>
+  <text class="code" x="641" y="152" text-anchor="middle">main</text>
+  <text class="m" x="641" y="184" text-anchor="middle">protegida</text>
+
+  <!-- caminho recusado -->
+  <text class="t" x="24" y="98">push direto na main</text>
+  <path class="no" d="M244 90 H526"/>
+  <g transform="translate(534 72) scale(1.5)" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="m15 9-6 6"/>
+    <path d="m9 9 6 6"/>
+  </g>
+  <text class="lno" x="390" y="130" text-anchor="middle">recusado pela regra</text>
+
+  <!-- caminho aceito -->
+  <rect class="box" x="24" y="196" width="104" height="52" rx="10"/>
+  <text class="t" x="76" y="230" text-anchor="middle">branch</text>
+  <path class="ok" d="M128 222 H158"/>
+  <rect class="box" x="160" y="196" width="158" height="52" rx="10"/>
+  <text class="t" x="239" y="230" text-anchor="middle">Pull Request</text>
+  <path class="ok" d="M318 222 H348"/>
+  <rect class="box" x="350" y="196" width="148" height="52" rx="10"/>
+  <text class="t" x="424" y="230" text-anchor="middle">1 aprovação</text>
+  <path class="ok" d="M498 222 H580"/>
+  <text class="lok" x="538" y="208" text-anchor="middle">merge</text>
+</svg>

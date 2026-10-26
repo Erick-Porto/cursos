@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 372" font-family="Inter, system-ui, sans-serif">
+  <title>Como ler a tela vermelha de cima para baixo: 1 a mensagem do erro, 2 o arquivo e a linha, 3 o stack trace com as chamadas até lá</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .h    { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .num  { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .tela { fill: #131c33; stroke: #f87171; stroke-width: 3; }
+    .div  { stroke: #2a3a5c; stroke-width: 2; }
+    .guia { stroke: #fbbf24; stroke-width: 2.5; }
+    .bola { fill: #fbbf24; }
+  </style>
+  <rect width="720" height="372" rx="16" fill="#0b1020"/>
+
+  <!-- a tela vermelha -->
+  <rect class="tela" x="24" y="24" width="408" height="324" rx="12"/>
+  <path d="M 24 36 A 12 12 0 0 1 36 24 L 420 24 A 12 12 0 0 1 432 36 L 432 72 L 24 72 Z" fill="#f87171"/>
+  <text class="h" x="44" y="56">Render Error</text>
+
+  <text class="t" x="44" y="112">Text strings must be rendered</text>
+  <text class="t" x="44" y="142">within a &lt;Text&gt; component.</text>
+  <line class="div" x1="26" y1="170" x2="430" y2="170"/>
+
+  <text class="code" x="44" y="214">components/CartaoTarefa.js:9</text>
+  <line class="div" x1="26" y1="244" x2="430" y2="244"/>
+
+  <text class="code" x="44" y="286">CartaoTarefa</text>
+  <text class="code" x="44" y="322">App</text>
+
+  <!-- ordem de leitura -->
+  <line class="guia" x1="432" y1="121" x2="454" y2="121"/>
+  <circle class="bola" cx="470" cy="121" r="17"/>
+  <text class="num" x="470" y="129" text-anchor="middle">1</text>
+  <text class="lbl" x="496" y="114">mensagem</text>
+  <text class="m" x="496" y="142">leia primeiro</text>
+
+  <line class="guia" x1="432" y1="207" x2="454" y2="207"/>
+  <circle class="bola" cx="470" cy="207" r="17"/>
+  <text class="num" x="470" y="215" text-anchor="middle">2</text>
+  <text class="lbl" x="496" y="200">arquivo e linha</text>
+  <text class="m" x="496" y="228">onde aconteceu</text>
+
+  <line class="guia" x1="432" y1="296" x2="454" y2="296"/>
+  <circle class="bola" cx="470" cy="296" r="17"/>
+  <text class="num" x="470" y="304" text-anchor="middle">3</text>
+  <text class="lbl" x="496" y="289">stack trace</text>
+  <text class="m" x="496" y="317">as chamadas até lá</text>
+</svg>

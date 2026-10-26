@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 304" font-family="Inter, system-ui, sans-serif">
+  <title>O .map() percorre o array tarefas e, a cada item, devolve um CartaoTarefa: três tarefas viram três cartões na tela</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .card { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .code { font-size: 20px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .k    { fill: #e8edf7; }
+    .hd   { fill: #e8edf7; font-weight: 700; }
+    .fn   { fill: #a78bfa; font-weight: 700; }
+    .tit  { fill: #e8edf7; font-size: 20px; font-weight: 700; }
+    .pri  { fill: #b4bfd3; font-size: 20px; }
+    .link { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .i1 { animation: volta1 8s infinite; }
+    .i2 { animation: volta2 8s infinite; }
+    .i3 { animation: volta3 8s infinite; }
+    @keyframes volta1 {
+      0%, 6%   { opacity: 0; transform: translateX(-30px); }
+      16%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes volta2 {
+      0%, 28%  { opacity: 0; transform: translateX(-30px); }
+      38%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes volta3 {
+      0%, 50%  { opacity: 0; transform: translateX(-30px); }
+      60%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .i1, .i2, .i3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="640" height="304" rx="16" fill="#0b1020"/>
+
+  <text class="code hd" x="16" y="32">tarefas</text>
+  <text class="code fn" x="366" y="32" text-anchor="middle">.map()</text>
+  <text class="code hd" x="416" y="32">&lt;CartaoTarefa /&gt;</text>
+
+  <!-- itens do array -->
+  <rect class="box" x="16" y="48" width="300" height="72" rx="10"/>
+  <text class="code k" x="30" y="78">titulo: 'Estudar React'</text>
+  <text class="code pri" x="30" y="106">prioridade: 'alta'</text>
+
+  <rect class="box" x="16" y="132" width="300" height="72" rx="10"/>
+  <text class="code k" x="30" y="162">titulo: 'Fazer compras'</text>
+  <text class="code pri" x="30" y="190">prioridade: 'baixa'</text>
+
+  <rect class="box" x="16" y="216" width="300" height="72" rx="10"/>
+  <text class="code k" x="30" y="246">titulo: 'Ir à academia'</text>
+  <text class="code pri" x="30" y="274">prioridade: 'media'</text>
+
+  <!-- uma volta por item: seta e cartão -->
+  <g class="i1">
+    <path class="link" d="M 322 84 L 408 84"/>
+    <rect class="card" x="416" y="48" width="208" height="72" rx="10"/>
+    <text class="tit" x="432" y="78">Estudar React</text>
+    <text class="pri" x="432" y="106">Prioridade: alta</text>
+  </g>
+  <g class="i2">
+    <path class="link" d="M 322 168 L 408 168"/>
+    <rect class="card" x="416" y="132" width="208" height="72" rx="10"/>
+    <text class="tit" x="432" y="162">Fazer compras</text>
+    <text class="pri" x="432" y="190">Prioridade: baixa</text>
+  </g>
+  <g class="i3">
+    <path class="link" d="M 322 252 L 408 252"/>
+    <rect class="card" x="416" y="216" width="208" height="72" rx="10"/>
+    <text class="tit" x="432" y="246">Ir à academia</text>
+    <text class="pri" x="432" y="274">Prioridade: media</text>
+  </g>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>interpolate: enquanto o valor vai de 0 a 1, o translateY vai de 24 a 0; o cartão aparece e sobe até o lugar</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .eixo { stroke: #b4bfd3; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .liga { stroke: #a78bfa; stroke-width: 2; fill: none; stroke-dasharray: 6 5; }
+    .mv   { animation: desliza 6s ease-in-out infinite; }
+    .card { animation: entra 6s ease-in-out infinite; }
+    @keyframes desliza {
+      0%, 12%  { transform: translateX(-210px); }
+      50%, 90% { transform: translateX(0); }
+      100%     { transform: translateX(-210px); }
+    }
+    @keyframes entra {
+      0%, 12%  { opacity: 0; transform: translateY(40px); }
+      50%, 90% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(40px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .mv, .card { animation: none; }
+    }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- escala de entrada: valor -->
+  <text class="code" x="40" y="108">valor</text>
+  <text class="m" x="190" y="80" text-anchor="middle">0</text>
+  <text class="m" x="295" y="80" text-anchor="middle">0,5</text>
+  <text class="m" x="400" y="80" text-anchor="middle">1</text>
+  <path class="eixo" d="M190 100 H400 M190 92 V108 M295 92 V108 M400 92 V108"/>
+
+  <!-- correspondência do interpolate -->
+  <path class="liga" d="M190 112 V208 M295 112 V208 M400 112 V208"/>
+
+  <!-- escala de saída: translateY -->
+  <text class="code" x="40" y="228">translateY</text>
+  <path class="eixo" d="M190 220 H400 M190 212 V228 M295 212 V228 M400 212 V228"/>
+  <text class="m" x="190" y="258" text-anchor="middle">24</text>
+  <text class="m" x="295" y="258" text-anchor="middle">12</text>
+  <text class="m" x="400" y="258" text-anchor="middle">0</text>
+
+  <!-- marcadores que andam juntos -->
+  <g class="mv"><circle cx="400" cy="100" r="12" fill="#34d399"/></g>
+  <g class="mv"><circle cx="400" cy="220" r="12" fill="#34d399"/></g>
+
+  <!-- a tela com o cartão -->
+  <rect x="448" y="30" width="252" height="262" rx="18" fill="none" stroke="#2a3a5c" stroke-width="2"/>
+  <text class="lbl" x="574" y="70" text-anchor="middle">Animated.View</text>
+  <rect x="466" y="96" width="216" height="156" rx="12" fill="none" stroke="#b4bfd3" stroke-width="2" stroke-dasharray="6 5"/>
+  <g class="card">
+    <rect x="466" y="96" width="216" height="156" rx="12" fill="#131c33" stroke="#34d399" stroke-width="2"/>
+    <rect x="482" y="112" width="184" height="62" rx="8" fill="#2a3a5c"/>
+    <text class="t" x="482" y="208">Fone Bluetooth</text>
+    <text x="482" y="238" font-size="22" font-weight="700" fill="#34d399">R$ 199,90</text>
+  </g>
+
+  <text class="m" x="40" y="322">opacity lê o valor direto; translateY lê o interpolate</text>
+</svg>

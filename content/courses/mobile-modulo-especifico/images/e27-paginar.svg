@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 296" font-family="Inter, system-ui, sans-serif">
+  <title>paginar em fatias: 12 produtos em páginas de 5; a página 1 tem as posições 0 a 4, a 2 tem 5 a 9, a 3 só 10 e 11, porque Math.min corta o fim em 12, e a página 4 começa em 15 e vem vazia</title>
+  <style>
+    .cell { fill: #131c33; stroke-width: 2; }
+    .p1   { stroke: #34d399; }
+    .p2   { stroke: #60a5fa; }
+    .p3   { stroke: #fbbf24; }
+    .idx  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .br   { fill: none; stroke-width: 2.5; }
+    .pg   { font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+  </style>
+  <rect width="720" height="296" rx="16" fill="#0b1020"/>
+
+  <text class="m" x="40" y="40">12 produtos em páginas de 5</text>
+
+  <!-- as posições da lista -->
+  <rect class="cell p1" x="40" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p1" x="94" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p1" x="148" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p1" x="202" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p1" x="256" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p2" x="310" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p2" x="364" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p2" x="418" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p2" x="472" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p2" x="526" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p3" x="580" y="60" width="50" height="52" rx="6"/>
+  <rect class="cell p3" x="634" y="60" width="50" height="52" rx="6"/>
+  <text class="idx" x="65" y="94" text-anchor="middle">0</text>
+  <text class="idx" x="119" y="94" text-anchor="middle">1</text>
+  <text class="idx" x="173" y="94" text-anchor="middle">2</text>
+  <text class="idx" x="227" y="94" text-anchor="middle">3</text>
+  <text class="idx" x="281" y="94" text-anchor="middle">4</text>
+  <text class="idx" x="335" y="94" text-anchor="middle">5</text>
+  <text class="idx" x="389" y="94" text-anchor="middle">6</text>
+  <text class="idx" x="443" y="94" text-anchor="middle">7</text>
+  <text class="idx" x="497" y="94" text-anchor="middle">8</text>
+  <text class="idx" x="551" y="94" text-anchor="middle">9</text>
+  <text class="idx" x="605" y="94" text-anchor="middle">10</text>
+  <text class="idx" x="659" y="94" text-anchor="middle">11</text>
+
+  <!-- as fatias -->
+  <path class="br p1" d="M42 124 V136 H304 V124"/>
+  <path class="br p2" d="M312 124 V136 H574 V124"/>
+  <path class="br p3" d="M582 124 V136 H682 V124"/>
+  <text class="pg" x="173" y="166" text-anchor="middle" fill="#34d399">página 1</text>
+  <text class="pg" x="443" y="166" text-anchor="middle" fill="#60a5fa">página 2</text>
+  <text class="pg" x="632" y="166" text-anchor="middle" fill="#fbbf24">página 3</text>
+
+  <!-- as contas das duas últimas -->
+  <text class="t" x="40" y="222"><tspan class="pg" fill="#fbbf24">página 3:</tspan> <tspan class="code">inicio = 10, fim = Math.min(15, 12) = 12</tspan></text>
+  <text class="t" x="40" y="266"><tspan class="pg" fill="#b4bfd3">página 4:</tspan> <tspan class="code">inicio = 15</tspan>, já depois do fim: <tspan class="code">[]</tspan></text>
+</svg>

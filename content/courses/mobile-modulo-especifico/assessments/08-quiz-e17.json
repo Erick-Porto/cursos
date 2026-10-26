@@ -1,0 +1,102 @@
+{
+  "title": "Quiz: E17 · Abas, modais e fluxos",
+  "description": "Sete questões sobre grupos de rotas, abas com badge, pilhas aninhadas, modais, Redirect e deep links na Lojinha.",
+  "lesson": "e17b-modais-links-e-fluxos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A Lojinha tem `\"scheme\": \"lojinha\"` no `app.json`. Qual deep link abre a tela do arquivo `app/(tabs)/carrinho.js`?",
+      "options": {
+        "a": "`lojinha://carrinho`",
+        "b": "`lojinha://(tabs)/carrinho`",
+        "c": "`lojinha://tabs/carrinho`",
+        "d": "`lojinha://(tabs)?aba=carrinho`"
+      },
+      "answer": "a",
+      "explanation": "Pasta com o nome entre parênteses é um grupo de rotas: organiza os arquivos e pode ter layout, mas não entra na URL. Por isso `app/(tabs)/carrinho.js` responde por `/carrinho`, e o deep link é `lojinha://carrinho`. A opção com `(tabs)` no caminho é a mais tentadora, mas nenhuma URL da Lojinha contém o nome do grupo.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete a opção que faz a tela de filtros subir por cima das abas, como modal, na pilha raiz:\n\n```jsx\n<Stack.Screen name=\"filtros\" options={{ presentation: '___', title: 'Filtros' }} />\n```",
+      "answer": [["modal", "'modal'"]],
+      "explanation": "`presentation: 'modal'` faz a tela entrar de baixo para cima, como uma tarefa curta por cima da anterior. A opção fica no `Stack` raiz porque o `Tabs` não apresenta modais: um `filtros.js` dentro de `(tabs)` viraria apenas mais uma aba.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Depois de criar as abas, a turma vê **dois cabeçalhos empilhados** nas abas Carrinho e Perfil: o de cima diz \"(tabs)\" e o de baixo diz o nome da aba. O layout raiz está assim:\n\n```jsx\n<Stack>\n  <Stack.Screen name=\"(tabs)\" />\n  <Stack.Screen name=\"filtros\" options={{ presentation: 'modal' }} />\n</Stack>\n```\n\nQual é a causa?",
+      "options": {
+        "a": "A pilha raiz desenha um cabeçalho para a tela `(tabs)`; falta `options={{ headerShown: false }}` nela",
+        "b": "O `app/(tabs)/_layout.js` deveria devolver um `Stack` em vez de um `Tabs`",
+        "c": "Os `Tabs.Screen` estão sem `title`, e o Expo Router repete o nome da pasta",
+        "d": "O `app/index.js` antigo ainda existe e desenha o próprio cabeçalho"
+      },
+      "answer": "a",
+      "explanation": "Cada navegador desenha o próprio cabeçalho. A pilha raiz mostra o nome da rota, \"(tabs)\", porque nenhuma opção o esconde, e as abas desenham o delas logo abaixo. A opção d é tentadora porque o arquivo antigo também dá problema, mas o sintoma dele é outro: duas rotas disputando o endereço `/`, não um cabeçalho escrito \"(tabs)\".",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Você quer as abas, uma pilha dentro da aba Categorias (lista de categorias e, por cima, os produtos de uma categoria) e o detalhe do produto **cobrindo** a barra de abas. Quais arquivos fazem parte dessa estrutura?",
+      "options": {
+        "a": "`app/(tabs)/categorias/_layout.js`, devolvendo um `Stack`",
+        "b": "`app/(tabs)/categorias/[slug].js`",
+        "c": "`app/(tabs)/produto/[id].js`",
+        "d": "`app/produto/[id].js`",
+        "e": "`app/index.js`, ao lado de `app/(tabs)/index.js`"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "A pasta `categorias` com um `_layout.js` que devolve `Stack` vira a pilha da aba, e `[slug].js` é a tela empilhada nela. O detalhe fica na pilha raiz, em `app/produto/[id].js`, para entrar por cima das abas. Dentro de `(tabs)`, o detalhe viraria mais uma aba (c), e `app/index.js` disputaria a rota `/` com `app/(tabs)/index.js` (e).",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Quando você troca de aba, a tela da aba anterior é desmontada; por isso um `useEffect` com `[]` roda de novo toda vez que você volta a ela.",
+      "answer": false,
+      "explanation": "As abas continuam montadas quando você troca de aba: o `useEffect` com `[]` roda só na primeira visita. Para agir cada vez que a tela volta a aparecer, use `useFocusEffect` com `useCallback`, que roda sempre que a tela ganha o foco.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O badge do carrinho **nunca aparece**, mesmo depois de adicionar produtos no Detalhe. Veja o layout das abas:\n\n```jsx\nexport default function LayoutAbas() {\n  const [quantidade, setQuantidade] = useState(0);\n  return (\n    <Tabs>\n      <Tabs.Screen name=\"carrinho\"\n        options={{ title: 'Carrinho', tabBarBadge: quantidade || undefined }} />\n    </Tabs>\n  );\n}\n```\n\nQual mudança resolve?",
+      "options": {
+        "a": "Trocar o `useState(0)` por `const { quantidade } = useCarrinho();`",
+        "b": "Trocar `quantidade || undefined` por `quantidade`, para o badge aparecer sempre",
+        "c": "Chamar `setQuantidade(quantidade + 1)` dentro do `options` da aba",
+        "d": "Mover o `useState(0)` para `app/(tabs)/carrinho.js`"
+      },
+      "answer": "a",
+      "explanation": "O layout tem um estado próprio que ninguém atualiza: o Detalhe chama `adicionar` do `CarrinhoContext`, não o `setQuantidade` do layout. Lendo `useCarrinho()`, o layout redesenha sempre que o carrinho muda. A opção b é a mais tentadora, mas só faria aparecer um \"0\" fixo: o `|| undefined` está certo e esconde o badge quando o carrinho está vazio.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na tela Entrar, depois que o cliente toca em Entrar, o app deve ir para as abas, e o botão voltar **não** pode levar de novo ao login. Qual chamada usar no `onPress`?",
+      "options": {
+        "a": "`router.replace('/')`",
+        "b": "`router.push('/')`",
+        "c": "`router.back()`",
+        "d": "`router.push('/entrar')`"
+      },
+      "answer": "a",
+      "explanation": "`replace` troca a tela atual pela nova, sem deixar caminho de volta: Entrar sai da pilha e o voltar não a encontra mais. `router.push('/')` é a mais tentadora, mas empilha a vitrine por cima de Entrar, e o voltar devolveria o cliente ao login. `router.back()` só tira a tela de cima e não leva às abas.",
+      "points": 1
+    }
+  ]
+}

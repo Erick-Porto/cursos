@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Os três estados de uma Promise: nasce pendente e muda uma única vez, para cumprida com um valor ou rejeitada com um erro; as duas são encerradas e nunca mudam</title>
+  <style>
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .b-pen { stroke: #fbbf24; stroke-width: 2; }
+    .b-ok  { stroke: #34d399; stroke-width: 2; }
+    .b-no  { stroke: #f87171; stroke-width: 2; stroke-dasharray: 8 5; }
+    .t     { fill: #e8edf7; font-size: 22px; }
+    .s     { fill: #b4bfd3; font-size: 22px; }
+    .en    { fill: #b4bfd3; font-size: 22px; font-style: italic; }
+    .n-pen { fill: #fbbf24; font-size: 24px; font-weight: 700; }
+    .n-ok  { fill: #34d399; font-size: 24px; font-weight: 700; }
+    .n-no  { fill: #f87171; font-size: 24px; font-weight: 700; }
+    .t-ok  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .t-no  { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .ok    { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#ponta-ok); }
+    .no    { stroke: #f87171; stroke-width: 3; fill: none; stroke-dasharray: 8 5; marker-end: url(#ponta-no); }
+  </style>
+  <defs>
+    <marker id="ponta-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="ponta-no" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- pendente -->
+  <rect class="box b-pen" x="24" y="132" width="220" height="112" rx="12"/>
+  <text class="n-pen" x="134" y="170" text-anchor="middle">pendente</text>
+  <text class="en" x="134" y="200" text-anchor="middle">pending</text>
+  <text class="t" x="134" y="230" text-anchor="middle">ainda esperando</text>
+  <text class="s" x="134" y="284" text-anchor="middle">muda uma única vez</text>
+
+  <!-- transições -->
+  <path class="ok" d="M 246 162 C 330 162, 360 118, 446 118"/>
+  <text class="t-ok" x="336" y="120" text-anchor="middle">deu certo</text>
+  <path class="no" d="M 246 214 C 330 214, 360 246, 446 246"/>
+  <text class="t-no" x="336" y="272" text-anchor="middle">falhou</text>
+
+  <!-- encerrada -->
+  <rect x="440" y="14" width="266" height="352" rx="14" fill="none" stroke="#a78bfa" stroke-width="2" stroke-dasharray="6 6"/>
+  <text class="lbl" x="573" y="46" text-anchor="middle">encerrada (settled)</text>
+
+  <rect class="box b-ok" x="456" y="62" width="234" height="112" rx="12"/>
+  <text class="n-ok" x="573" y="98" text-anchor="middle">cumprida</text>
+  <text class="en" x="573" y="128" text-anchor="middle">fulfilled</text>
+  <text class="t" x="573" y="158" text-anchor="middle">com um valor</text>
+
+  <rect class="box b-no" x="456" y="190" width="234" height="112" rx="12"/>
+  <text class="n-no" x="573" y="226" text-anchor="middle">rejeitada</text>
+  <text class="en" x="573" y="256" text-anchor="middle">rejected</text>
+  <text class="t" x="573" y="286" text-anchor="middle">com um erro</text>
+
+  <text class="s" x="573" y="342" text-anchor="middle">nunca mudam</text>
+</svg>

@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E21 · JavaScript por dentro e Node na prática",
+  "description": "Oito questões sobre ECMAScript, motores e runtimes, o caminho do código até o celular e scripts Node com process.argv, fs, path e JSON.",
+  "lesson": "e21b-node-na-pratica",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Você roda `npx expo start`, lê o QR com o Expo Go e toca em **Adicionar ao carrinho** na Lojinha. Qual motor executa o código do `CarrinhoContext` nesse momento?",
+      "options": {
+        "a": "Hermes, no celular",
+        "b": "V8, dentro do Node.js que roda o Metro no computador",
+        "c": "JavaScriptCore, porque o app abre um Safari escondido por baixo",
+        "d": "V8, dentro do Chrome que você usa para ver o Console"
+      },
+      "answer": "a",
+      "explanation": "O código das telas e dos contextos roda no celular, no Hermes, o motor padrão dos apps React Native no Expo. O Node é a resposta mais tentadora: ele roda o Metro, que prepara o código e o entrega ao celular, mas não executa as telas. Um app React Native não roda dentro de um navegador, nem do Safari nem do Chrome.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Quando o TC39 aprova um recurso e ele entra na edição do ECMAScript daquele ano, o recurso passa a funcionar automaticamente no Hermes e em todos os outros motores.",
+      "answer": false,
+      "explanation": "O TC39 aprova a norma; cada motor implementa os recursos no seu próprio ritmo. Um método recém-aprovado pode existir no Chrome e ainda faltar no Hermes. Por isso, teste no Expo Go antes de usar algo recente e, quando houver, prefira a forma que funciona em todos, como `[...lista].sort()`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Nenhum motor de JavaScript entende JSX. Como `<Botao titulo=\"Comprar\" onPress={comprar} />` consegue rodar no celular?",
+      "options": {
+        "a": "O Metro passa cada arquivo pelo Babel, que reescreve o JSX como chamadas de função em JavaScript comum",
+        "b": "O Hermes entende JSX desde que foi criado, porque é um motor feito para o React Native",
+        "c": "O Expo Go converte o JSX em código Java ou Swift no momento em que o app abre",
+        "d": "O JSX faz parte do ECMAScript desde a edição de 2015, junto com `import` e `export`"
+      },
+      "answer": "a",
+      "explanation": "O Babel é um transpilador: lê o código e o reescreve em JavaScript que o motor executa. O Metro o chama a cada arquivo salvo, com a configuração do `babel-preset-expo`. A alternativa do Hermes é a mais tentadora, mas ele executa JavaScript comum: o JSX já chega transformado. O JSX nunca entrou no ECMAScript, e o app não é convertido em Java ou Swift.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Você vai colar trechos de tutoriais numa tela da Lojinha. Quais deles **quebram** quando o app roda no celular?",
+      "options": {
+        "a": "`localStorage.setItem('carrinho', JSON.stringify(itens));`",
+        "b": "`const texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');`",
+        "c": "`document.querySelector('#total').textContent = total;`",
+        "d": "`const caros = itens.filter((i) => i.preco > 200);`",
+        "e": "`const copia = JSON.parse(JSON.stringify(pedido));`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "`localStorage` e `document` são APIs do navegador, e `fs` é do Node: nenhuma delas existe no runtime do app, e o Hermes avisa que a propriedade não existe. `filter`, `JSON.parse` e `JSON.stringify` fazem parte da própria linguagem, definidos no ECMAScript, e por isso funcionam no navegador, no Node e no app.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você roda o relatório assim:\n\n```bash\nnode scripts/relatorio-catalogo.mjs --categoria=livros 5\n```\n\nO que `process.argv.slice(2)` devolve?",
+      "options": {
+        "a": "`['--categoria=livros', '5']`",
+        "b": "`['--categoria=livros', 5]`",
+        "c": "`['node', 'scripts/relatorio-catalogo.mjs', '--categoria=livros', '5']`",
+        "d": "`{ categoria: 'livros', 5: true }`"
+      },
+      "answer": "a",
+      "explanation": "As duas primeiras posições de `process.argv` são o caminho do `node` e o do script, e o `slice(2)` as descarta. Cada argumento chega como texto, inclusive o `5`: a opção com o número é a mais tentadora, mas para ter um número é preciso converter com `Number`. O Node não monta um objeto com as opções; separar `--categoria=livros` em nome e valor é trabalho do seu script.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Complete o script para ler o catálogo como texto e transformá-lo em objeto:\n\n```javascript\nimport fs from 'node:fs';\n\nconst texto = fs.___('src/data/catalogo.json', 'utf-8');\nconst catalogo = JSON.___(texto);\nconsole.log(catalogo.produtos.length);\n```",
+      "answer": [["readFileSync"], ["parse"]],
+      "explanation": "`fs.readFileSync` lê o arquivo inteiro e, com `'utf-8'`, devolve texto. `JSON.parse` transforma esse texto num objeto com `categorias` e `produtos`. `JSON.stringify` faz o caminho contrário, de objeto para texto, e é o que se usa antes de gravar com `fs.writeFileSync`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Você salvou o relatório como `scripts/relatorio.js`, começando com `import fs from 'node:fs';`. Ao rodar, o Node reclamou do tipo de módulo do arquivo e sugeriu acrescentar `\"type\": \"module\"` ao `package.json`. Qual é a correção mais segura para a Lojinha?",
+      "options": {
+        "a": "Renomear o arquivo para `scripts/relatorio.mjs`",
+        "b": "Acrescentar `\"type\": \"module\"` ao `package.json` do projeto",
+        "c": "Trocar `import` por `export` na primeira linha do script",
+        "d": "Rodar o script com `npx expo start` em vez de `node`"
+      },
+      "answer": "a",
+      "explanation": "A extensão `.mjs` faz o Node ler aquele arquivo como módulo ES, com `import` e `export`, sem mudar mais nada no projeto. Seguir a sugestão do `\"type\": \"module\"` é a tentação: resolve o script, mas muda a regra para todos os `.js` que o Node carrega, inclusive arquivos de configuração escritos com `module.exports`. `export` não importa nada, e o `npx expo start` sobe o Metro para o app, não roda scripts.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O relatório funciona quando você roda `node scripts/relatorio-catalogo.mjs` na raiz do `lojinha`. Uma colega entra na pasta com `cd scripts`, roda `node relatorio-catalogo.mjs` e recebe `ENOENT: no such file or directory`, apontando para `...\\lojinha\\scripts\\src\\data\\catalogo.json`. O script monta o caminho assim:\n\n```javascript\nconst arquivo = path.join(process.cwd(), 'src', 'data', 'catalogo.json');\n```\n\nPor que deu erro?",
+      "options": {
+        "a": "`process.cwd()` é a pasta em que o comando foi rodado, agora `scripts/`, e o caminho passou a apontar para uma pasta que não existe",
+        "b": "`path.join` sempre usa `/`, e o Windows só aceita caminhos com `\\`",
+        "c": "O `catalogo.json` precisa ficar dentro da pasta `scripts/` para o Node conseguir lê-lo",
+        "d": "Faltou o `'utf-8'` no `readFileSync`, e sem ele o Node não encontra o arquivo"
+      },
+      "answer": "a",
+      "explanation": "`process.cwd()` devolve a pasta de trabalho do terminal, não a pasta do script. Rodando de dentro de `scripts/`, o caminho vira `scripts/src/data/catalogo.json`, que não existe. A correção é rodar da raiz do projeto, que é de onde o npm roda os scripts do `package.json`. O `path.join` usa justamente o separador do sistema, o `'utf-8'` muda o tipo do resultado e não o caminho, e o JSON fica em `src/data/` porque o app também o lê.",
+      "points": 2
+    }
+  ]
+}

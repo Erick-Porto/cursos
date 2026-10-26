@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E39 · Dados no aparelho e login",
+  "description": "Oito questões sobre AsyncStorage, SecureStore, o login com a DummyJSON, o AuthContext, os operadores ?., ?? e at() e código limpo.",
+  "lesson": "e39b-login-e-codigo-limpo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O login da Lojinha devolve um `accessToken`. Onde o app deve guardá-lo para a pessoa continuar logada depois de fechar o app?",
+      "options": {
+        "a": "No SecureStore, que guarda o valor criptografado pelo sistema",
+        "b": "No AsyncStorage, com `JSON.stringify`, junto do carrinho",
+        "c": "No estado do `AuthContext`, com `useState`, sem gravar no aparelho",
+        "d": "No `.env`, numa variável `EXPO_PUBLIC_TOKEN`"
+      },
+      "answer": "a",
+      "explanation": "O token abre a conta sem senha, então vai para o cofre do sistema: o SecureStore. O AsyncStorage é a opção mais tentadora, porque também sobrevive ao fechar o app, mas grava texto aberto, sem criptografia. Só no estado, o token some quando o app fecha. O `.env` é lido quando o app é gerado, vale igual para todo mundo e vai junto no app instalado: não guarda nada de um usuário.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Um `catch` vazio, como `catch (erro) {}`, deixa o código mais limpo, porque impede que qualquer erro derrube o app.",
+      "answer": false,
+      "explanation": "O `catch` vazio esconde o problema: o login falha e a tela não mostra nada, e o bug some do terminal. A regra de código limpo é tratar o erro onde dá para agir: o `AuthContext` deixa o erro do login subir, e a tela Entrar o transforma numa mensagem em português para o cliente.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais destes dados da Lojinha devem ser guardados no **AsyncStorage**?",
+      "options": {
+        "a": "Os itens do carrinho, como array de objetos convertido com `JSON.stringify`",
+        "b": "Os ids dos produtos favoritos, como array",
+        "c": "O tema escolhido pelo cliente",
+        "d": "O token de acesso devolvido pelo login",
+        "e": "A senha digitada, para entrar sozinho na próxima vez"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Carrinho, favoritos e tema são listas e preferências do cliente, sem segredo: AsyncStorage, sempre como texto JSON. O token é segredo e vai para o SecureStore, porque o AsyncStorage não criptografa. A senha não fica em lugar nenhum: o token existe justamente para o app não precisar dela depois do login.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a função `ler` de `src/servicos/armazenamento.js`, que devolve o valor salvo já convertido, ou o padrão quando não há nada salvo:\n\n```javascript\nexport async function ler(chave, padrao) {\n  try {\n    const texto = await AsyncStorage.___(chave);\n    return texto === null ? padrao : JSON.___(texto);\n  } catch (erro) {\n    return padrao;\n  }\n}\n```",
+      "answer": [["getItem"], ["parse"]],
+      "explanation": "`AsyncStorage.getItem` devolve o texto gravado, ou `null` quando a chave não existe. `JSON.parse` transforma esse texto de volta em array ou objeto. `setItem` e `JSON.stringify` fazem o caminho de ida, na função `salvar`. Se o texto estiver corrompido, o `parse` lança erro e o `catch` devolve o padrão.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Com `const url = 'https://dummyjson.com/auth/login'`, qual chamada faz o login na DummyJSON e recebe o `accessToken`?",
+      "options": {
+        "a": "`fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, password }) })`",
+        "b": "`fetch(url, { method: 'POST', body: JSON.stringify({ username, password }) })`",
+        "c": "`fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: { username, password } })`",
+        "d": "`fetch(url + '?username=' + username + '&password=' + password)`"
+      },
+      "answer": "a",
+      "explanation": "O login é um `POST` com o corpo em texto JSON e o cabeçalho que avisa isso. Sem o `Content-Type`, a opção mais tentadora, a DummyJSON responde 400 com `Username and password required`. Com o objeto direto no `body`, o `fetch` envia `[object Object]` e a API recusa o JSON inválido. Um `GET` com a senha na URL não é a rota de login e ainda deixa a senha em históricos e registros.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No Perfil:\n\n```javascript\nconst primeiroNome = usuario?.nome.split(' ').at(0) ?? 'cliente';\n```\n\nQual é o valor de `primeiroNome` quando `usuario` é `null` e quando `usuario` é `{ nome: 'Emily Johnson' }`, nessa ordem?",
+      "options": {
+        "a": "`'cliente'` e `'Emily'`",
+        "b": "Um erro `Cannot read property 'split' of undefined` e `'Emily'`",
+        "c": "`'cliente'` e `'Johnson'`",
+        "d": "`undefined` e `'Emily'`"
+      },
+      "answer": "a",
+      "explanation": "Quando `usuario` é `null`, o `?.` interrompe a cadeia inteira: nem `.nome`, nem `.split`, nem `.at` rodam, o resultado é `undefined` e o `??` troca por `'cliente'`. Por isso não há erro no `split`, a confusão mais comum. Com o usuário, `split(' ')` gera `['Emily', 'Johnson']` e `at(0)` pega o primeiro; o último seria `at(-1)`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O aluno favoritou os produtos 3 e 7, fechou e reabriu o app, e os favoritos não voltaram. O `FavoritosContext` guarda um `Set` de ids e salva assim:\n\n```jsx\nuseEffect(() => {\n  if (carregado) salvar('lojinha.favoritos', favoritos);\n}, [favoritos, carregado]);\n```\n\nQual é a causa?",
+      "options": {
+        "a": "`JSON.stringify` de um `Set` gera `'{}'`: os ids nunca chegam ao aparelho; o certo é salvar `[...favoritos]`",
+        "b": "Falta `await` antes de `salvar`, e sem ele nada é gravado",
+        "c": "O AsyncStorage não aceita números; cada id precisa virar texto com `String(id)`",
+        "d": "O AsyncStorage apaga tudo ao fechar o app; favoritos precisam ir para o SecureStore"
+      },
+      "answer": "a",
+      "explanation": "O JSON não conhece `Set`: `JSON.stringify(new Set([3, 7]))` devolve `'{}'`. O `salvar` grava esse texto sem reclamar, e na volta não há ids. Converta para array na ida (`[...favoritos]`) e de volta para `Set` na leitura (`new Set(lista)`). Sem `await`, a gravação acontece do mesmo jeito; o efeito só não espera por ela. Números viram texto pelo próprio `JSON.stringify`, e o AsyncStorage persiste depois de fechar o app.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Com uma sessão salva e ainda válida, a Lojinha sempre abre na tela Entrar. O layout das abas está assim:\n\n```jsx\nexport default function LayoutAbas() {\n  const { usuario } = useAuth();\n  if (!usuario) return <Redirect href=\"/entrar\" />;\n  return <Tabs>{/* abas */}</Tabs>;\n}\n```\n\nQual é a causa?",
+      "options": {
+        "a": "No primeiro desenho, a sessão ainda está sendo restaurada e `usuario` é `null`: o `Redirect` dispara antes de o `/auth/me` responder. Falta tratar `carregando` antes",
+        "b": "O `Redirect` deveria ser um `router.push('/entrar')` chamado direto no corpo do componente",
+        "c": "O token vence sempre que o app fecha, então a sessão nunca vale ao reabrir",
+        "d": "O `AuthProvider` deveria ficar dentro do layout das abas, e não em `app/_layout.js`"
+      },
+      "answer": "a",
+      "explanation": "Ler o token no SecureStore e chamar o `/auth/me` leva um tempo; até lá, `usuario` vale `null`. Sem olhar `carregando`, o layout manda para Entrar no primeiro desenho e, quando o usuário chega, nada leva a pessoa de volta às abas. O certo é `if (carregando) return <EstadoCarregando />;` antes do `Redirect`. Navegar no corpo do componente quebra a renderização; o token vence pelo prazo, não ao fechar o app; e o provedor no layout das abas não alcançaria a tela Entrar, que fica fora delas.",
+      "points": 2
+    }
+  ]
+}

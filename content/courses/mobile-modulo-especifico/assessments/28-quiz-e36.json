@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E36 · Referência, cópia e coleções",
+  "description": "Oito questões sobre valor e referência, cópia rasa, protótipos, Set e Map e os favoritos no estado do React.",
+  "lesson": "e36b-map-set-e-favoritos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No checkout da Lojinha, o código abaixo roda. O que aparece no console?\n\n```javascript\nconst item = { nome: 'Fone Bluetooth', qtd: 1 };\nconst noPedido = item;\nnoPedido.qtd = 3;\nconsole.log(item.qtd);\n```",
+      "options": {
+        "a": "`3`",
+        "b": "`1`",
+        "c": "Um `TypeError`, porque `item` foi declarado com `const`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "`noPedido = item` copia a referência, não o objeto: as duas variáveis apontam o mesmo objeto, e mudar `qtd` por uma muda pela outra. O `const` só impede trocar a referência (`item = outroObjeto`); ele não trava o conteúdo, por isso não há erro. O `1` seria a resposta se a atribuição copiasse o objeto, o que só acontece com primitivos, como números e textos.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Sem rodar, o que aparece no console?\n\n```javascript\nconst carrinho = [{ id: 1, nome: 'Fone Bluetooth', qtd: 1 }];\nconst copia = [...carrinho];\ncopia.push({ id: 5, nome: 'Garrafa Térmica', qtd: 1 });\ncopia[0].qtd = 4;\nconsole.log(carrinho.length, carrinho[0].qtd);\n```",
+      "options": {
+        "a": "`1 4`",
+        "b": "`2 4`",
+        "c": "`1 1`",
+        "d": "`2 1`"
+      },
+      "answer": "a",
+      "explanation": "O spread faz uma cópia rasa: o array `copia` é novo, então o `push` entra só nele e `carrinho` continua com um item. Mas os objetos de dentro não foram copiados: `copia[0]` e `carrinho[0]` são o mesmo fone, e a `qtd` muda pelos dois. Quem responde `1 1` acha que o spread copia todos os níveis; para isso, cada nível alterado precisa do seu próprio spread.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Na classe `Produto`, o getter `precoFormatado` é copiado para dentro de cada instância criada com `new Produto(...)`, e por isso aparece em `Object.keys(tenis)`.",
+      "answer": false,
+      "explanation": "Os dados atribuídos no `constructor` (`this.id`, `this.nome`, `this.preco`) ficam no objeto. Métodos e getters ficam uma vez só em `Produto.prototype`, e a instância os alcança pela cadeia de protótipos. Por isso `Object.keys(tenis)` devolve só `['id', 'nome', 'preco']`, e o spread `{ ...tenis }` perde o getter.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre `Set` e `Map` estão corretas?",
+      "options": {
+        "a": "`new Set([1, 5, 1]).size` é `2`",
+        "b": "Num `Map` montado com ids numéricos, `get('7')` não encontra a chave `7`",
+        "c": "`JSON.stringify(new Set([7, 1]))` devolve o texto `'[7,1]'`",
+        "d": "`for (const [id, produto] of produtosPorId)` percorre um `Map` em pares de chave e valor",
+        "e": "Um `Set` tem `map` e `filter`, como um array"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O `Set` descarta repetidos, então sobram `1` e `5`. `Map` e `Set` comparam como o `===`: o texto `'7'` não é o número `7`. O `for...of` num `Map` entrega pares `[chave, valor]`. `JSON.stringify` não sabe escrever `Set` nem `Map` e devolve `'{}'`: converta antes com `[...favoritos]`. E `Set` não tem `map` nem `filter`: espalhe num array para usá-los.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o `alternar` do `FavoritosContext` para que o coração acenda e apague a cada toque:\n\n```jsx\nfunction alternar(id) {\n  setFavoritos((anterior) => {\n    const novo = ___ Set(anterior);\n    if (novo.___(id)) novo.delete(id);\n    else novo.add(id);\n    return novo;\n  });\n}\n```",
+      "answer": [["new"], ["has"]],
+      "explanation": "`new Set(anterior)` cria outro Set com os mesmos ids: a referência nova faz o React redesenhar. `has(id)` pergunta se o id já está lá, para decidir entre tirar e pôr. Sem o `new`, chamar `Set(anterior)` lança `TypeError`; `includes` é método de array e não existe no Set.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um colega escreveu o `alternar` assim. O toque no coração não muda nada na tela, mas um `console.log(favoritos.size)` mostra que o id entrou. Qual é a causa?\n\n```jsx\nconst [favoritos, setFavoritos] = useState(new Set());\n\nfunction alternar(id) {\n  if (favoritos.has(id)) favoritos.delete(id);\n  else favoritos.add(id);\n  setFavoritos(favoritos);\n}\n```",
+      "options": {
+        "a": "`add` e `delete` mudam o mesmo Set, e o React compara com `Object.is`: mesma referência, atualização ignorada",
+        "b": "O React não aceita `Set` no estado, só arrays e objetos",
+        "c": "`useState(new Set())` cria um Set novo a cada renderização e apaga o id",
+        "d": "Falta `await` antes de `setFavoritos`, porque o Set é atualizado depois"
+      },
+      "answer": "a",
+      "explanation": "O Set mudou por dentro, mas `setFavoritos` recebeu a mesma referência que já estava no estado; para o React, nada mudou, e ele não redesenha. A correção é entregar um Set novo: `setFavoritos((anterior) => alternarFavorito(anterior, id))`, com `new Set(anterior)` dentro. O `useState` aceita qualquer valor, inclusive `Set`. O valor inicial só é usado na primeira renderização, então ele não apaga nada. E `setFavoritos` não devolve Promise: `await` não muda nada.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A tela de favoritos tem um `Set` de ids e precisa achar o produto de cada id sem percorrer o catálogo a cada busca. Qual estrutura guarda o catálogo para isso?",
+      "options": {
+        "a": "`new Map(produtos.map((p) => [p.id, p]))`, consultado com `get(id)`",
+        "b": "`new Set(produtos)`, consultado com `has(id)`",
+        "c": "`new WeakMap()`, com o id de cada produto como chave",
+        "d": "O próprio array, consultado com `produtos.includes(id)`"
+      },
+      "answer": "a",
+      "explanation": "O `Map` guarda pares chave e valor, e `get(id)` vai direto ao produto: é o `produtosPorId` do laboratório. Um `Set` de produtos só diz se um objeto está lá, e `has(7)` procura o número 7, não um produto com id 7. O `WeakMap` só aceita objetos como chave: `set(7, produto)` lança `TypeError`. E `includes(id)` compara um número com objetos: dá sempre `false`, além de percorrer a lista.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O produto 7 está nos favoritos: o cartão da vitrine mostra o coração cheio. No Detalhe, aberto pela rota `/produto/7`, `favorito` é sempre `false`. Por quê?\n\n```jsx\nconst { id } = useLocalSearchParams();\nconst { ehFavorito } = useFavoritos();\nconst favorito = ehFavorito(id);\n```",
+      "options": {
+        "a": "O `id` da rota é o texto `'7'`, e o Set compara como o `===`: `has('7')` não acha o número `7`",
+        "b": "O Detalhe está fora do `FavoritosProvider` e lê um Set vazio",
+        "c": "Cada tela recebe uma cópia própria do Set, e a do Detalhe foi feita antes do toque",
+        "d": "`ehFavorito` precisa de `await`, porque o contexto entrega o Set depois"
+      },
+      "answer": "a",
+      "explanation": "Parâmetros de rota são sempre texto, e o `Set` compara como o `===`: `'7'` e `7` são valores diferentes. A correção é `ehFavorito(Number(id))`, ou usar o `produto.id` depois de achar o produto. Fora do provedor, `useFavoritos()` lançaria o erro do `throw`, não devolveria um Set vazio. Todas as telas leem o mesmo Set do contexto, e nada ali é assíncrono.",
+      "points": 2
+    }
+  ]
+}

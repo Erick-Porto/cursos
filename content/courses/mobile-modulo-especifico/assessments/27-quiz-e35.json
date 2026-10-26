@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E35 · Closures, debounce e módulos",
+  "description": "Oito questões sobre closures, funções de alta ordem, memoize, o this no onPress, o hook useDebounce e os módulos do app.",
+  "lesson": "e35b-this-hooks-e-modulos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A tela de categorias da Lojinha usa a função abaixo. Qual afirmação descreve o código?\n\n```javascript\nfunction daCategoria(categoria) {\n  return (produto) => produto.categoria === categoria;\n}\n\nconst deAudio = produtos.filter(daCategoria('audio'));\n```",
+      "options": {
+        "a": "`daCategoria` é uma função de alta ordem: devolve uma função, e essa função lembra `categoria` por closure",
+        "b": "`daCategoria('audio')` percorre a lista e devolve os produtos de áudio, que o `filter` só repassa",
+        "c": "A arrow devolvida perde `categoria` quando `daCategoria` termina, por isso o `filter` a recebe de novo",
+        "d": "`daCategoria` é o callback do `filter`, que a chama uma vez para cada produto da lista"
+      },
+      "answer": "a",
+      "explanation": "`daCategoria('audio')` não filtra nada: fabrica e devolve o teste `(produto) => ...`, e quem filtra é o `filter`. Como devolve uma função, `daCategoria` é de alta ordem; a arrow devolvida continua enxergando `categoria` depois que `daCategoria` terminou, e isso é a closure. O callback do `filter` é a arrow devolvida, não `daCategoria`, que roda uma vez só, antes do `filter`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Dentro de um método de classe, como `cancelar()` na classe `Pedido`, o que define o valor de `this`?",
+      "options": {
+        "a": "O objeto que aparece antes do ponto no momento da chamada",
+        "b": "A classe em que o método foi escrito, sempre a mesma",
+        "c": "O componente que renderiza o botão que chama o método",
+        "d": "O primeiro argumento recebido pelo método"
+      },
+      "answer": "a",
+      "explanation": "O `this` de um método é decidido na hora da chamada: em `pedido.cancelar()`, é `pedido`. Por isso o método solto, chamado sem ponto, perde o `this`, mesmo tendo sido escrito dentro da classe. O componente que renderiza o botão e os argumentos não mudam o `this`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Na tela de um pedido pendente, `pedido` é uma instância de `Pedido`, cujo método `cancelar()` faz `return this.comStatus('cancelado')`. Quais `onPress` executam `cancelar` **só no toque** e com `this` igual a `pedido`?",
+      "options": {
+        "a": "`onPress={() => atualizarPedido(pedido.cancelar())}`",
+        "b": "`onPress={pedido.cancelar.bind(pedido)}`",
+        "c": "`onPress={pedido.cancelar}`",
+        "d": "`onPress={pedido.cancelar()}`",
+        "e": "`onPress={() => { const cancelar = pedido.cancelar; atualizarPedido(cancelar()); }}`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "A arrow roda no toque e chama `pedido.cancelar()` com ponto; o `bind` devolve uma cópia da função com o `this` preso a `pedido`. As duas acertam o `this`, mas só a arrow guarda o pedido novo devolvido. Passar `pedido.cancelar` entrega a função solta, e o `Pressable` a chama sem ponto. Com parênteses, `cancelar` roda durante a renderização. Copiar o método para uma constante dentro da arrow também o solta do objeto: a chamada `cancelar()` não tem ponto.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Escrever `const calcularFreteComCache = memoize(calcularFrete);` dentro do componente `Carrinho`, antes do `return`, mantém o cache entre uma renderização e outra.",
+      "answer": false,
+      "explanation": "A cada renderização, o React chama o componente de novo, e a linha cria outro `memoize`, com uma closure nova e um cache vazio. O cache só dura se o `memoize` for criado uma vez, fora do componente: por exemplo em `src/regras/frete.js`, que roda uma vez na primeira importação e é o mesmo para todas as telas.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o teste com o número de vezes que a função original roda:\n\n```javascript\nconst calcular = jest.fn((subtotal, cep) => calcularFrete(subtotal, cep));\nconst calcularComCache = memoize(calcular);\n\ncalcularComCache(80, '01001000');\ncalcularComCache(80, '01001000');\ncalcularComCache(80, '20040020');\n\nexpect(calcular).toHaveBeenCalledTimes(___);\n```",
+      "answer": [["2", "duas"]],
+      "explanation": "A espiã criada por `jest.fn()` anota cada chamada real. A primeira chamada calcula e guarda o resultado com a chave `[80,\"01001000\"]`; a segunda tem a mesma chave e sai do cache, sem chamar `calcular`; a terceira tem outro CEP, outra chave, e calcula de novo. Total: 2.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na tela Início, você criou o termo atrasado. Qual combinação mostra cada letra no campo na hora e só filtra a lista depois da pausa?\n\n```jsx\nconst [termo, setTermo] = useState('');\nconst termoAtrasado = useDebounce(termo, 300);\n```",
+      "options": {
+        "a": "`<TextInput value={termo} onChangeText={setTermo} />` e `buscarProdutos(produtos, termoAtrasado)`",
+        "b": "`<TextInput value={termoAtrasado} onChangeText={setTermo} />` e `buscarProdutos(produtos, termoAtrasado)`",
+        "c": "`<TextInput value={termo} onChangeText={setTermo} />` e `buscarProdutos(produtos, termo)`",
+        "d": "`<TextInput value={termo} onChangeText={useDebounce} />` e `buscarProdutos(produtos, termo)`"
+      },
+      "answer": "a",
+      "explanation": "O campo fica ligado a `termo`, que muda a cada letra, e a lista usa `termoAtrasado`, que só muda depois de 300 ms sem digitação. Com `value={termoAtrasado}`, o campo trava e as letras aparecem atrasadas. Filtrar por `termo` deixa o hook sem efeito nenhum. Hook não pode ser usado como callback: ele só é chamado no corpo do componente.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Ao abrir o Carrinho, o app mostra a tela vermelha `Element type is invalid: expected a string ... but got: undefined`. O arquivo `src/components/ui/Botao.js` termina em `export default function Botao(...)`. No Carrinho, o import está assim:\n\n```javascript\nimport { Botao } from '../components/ui/Botao';\n```\n\nQual é a causa?",
+      "options": {
+        "a": "O import pede um export nomeado `Botao`, que o arquivo não tem: o valor chega `undefined`",
+        "b": "Faltou importar o React no topo do arquivo do Carrinho",
+        "c": "O caminho precisa terminar em `Botao.js`, com a extensão do arquivo",
+        "d": "Um export default só pode ser importado pelo barril `index.js` da pasta"
+      },
+      "answer": "a",
+      "explanation": "Chaves no import pedem um export nomeado; o `Botao.js` só tem o default. O valor importado é `undefined`, e o React reclama ao tentar desenhá-lo. Corrija com `import Botao from '../components/ui/Botao'` ou pelo barril, `import { Botao } from '../components/ui'`, que reexporta o default como nomeado. A extensão é opcional, e o default pode ser importado direto do arquivo.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual destas funções da Lojinha pode ser memoizada com segurança?",
+      "options": {
+        "a": "`calcularFrete(subtotal, cep)`, que devolve o frete pela tabela de regiões do CEP",
+        "b": "Uma função que mostra o Toast \"Produto adicionado\" na tela",
+        "c": "Uma função que calcula a data de entrega a partir da data de hoje, lida dentro dela",
+        "d": "Uma função que sorteia um cupom de desconto com `Math.random()`"
+      },
+      "answer": "a",
+      "explanation": "Só funções puras podem ser memoizadas: mesmos argumentos, mesmo resultado, sem efeito. `calcularFrete` é assim. Memoizado, o Toast apareceria só na primeira vez. A data de entrega é a armadilha mais comum: os argumentos se repetem, mas o dia muda, e o cache devolveria a data de ontem. O sorteio deixaria de sortear.",
+      "points": 1
+    }
+  ]
+}

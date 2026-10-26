@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>FlatList: o array tem 1.000 tarefas, mas só os itens que passam pela tela são desenhados; enquanto a lista rola, os que saem deixam de ser desenhados e os que entram passam a ser</title>
+  <style>
+    .t     { fill: #e8edf7; font-size: 22px; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .code  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .vazio { fill: none; stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 6 5; }
+    .item  { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .tela  { fill: none; stroke: #e8edf7; stroke-width: 3; }
+    .chave { fill: none; stroke: #a78bfa; stroke-width: 2.5; }
+    .marca { fill: none; stroke: #34d399; stroke-width: 2.5; }
+    .marca-fora { fill: none; stroke: #b4bfd3; stroke-width: 2.5; stroke-dasharray: 6 5; }
+    .lista { animation: rola 8s ease-in-out infinite; }
+    @keyframes rola {
+      0%, 12%  { transform: translateY(208px); }
+      62%, 92% { transform: translateY(0); }
+      100%     { transform: translateY(208px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lista { animation: none; }
+    }
+  </style>
+  <defs>
+    <clipPath id="recorte-cartao"><rect x="0" y="20" width="720" height="360"/></clipPath>
+    <clipPath id="recorte-tela"><rect x="232" y="96" width="236" height="208" rx="14"/></clipPath>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- o array inteiro -->
+  <text class="code" x="190" y="190" text-anchor="end">tarefas</text>
+  <text class="m" x="190" y="222" text-anchor="end">1.000 itens</text>
+  <path class="chave" d="M 214 24 L 204 24 L 204 376 L 214 376"/>
+
+  <!-- itens que existem no array, mas não são desenhados -->
+  <g clip-path="url(#recorte-cartao)">
+    <g class="lista">
+      <rect class="vazio" x="244" y="-108" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="-56" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="-4" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="48" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="100" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="152" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="204" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="256" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="308" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="360" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="412" width="212" height="44" rx="8"/>
+      <rect class="vazio" x="244" y="464" width="212" height="44" rx="8"/>
+    </g>
+  </g>
+
+  <!-- itens desenhados: só os que estão dentro da tela -->
+  <g clip-path="url(#recorte-tela)">
+    <g class="lista">
+      <rect class="item" x="244" y="-108" width="212" height="44" rx="8"/><text class="t" x="262" y="-78">Tarefa 1</text>
+      <rect class="item" x="244" y="-56" width="212" height="44" rx="8"/><text class="t" x="262" y="-26">Tarefa 2</text>
+      <rect class="item" x="244" y="-4" width="212" height="44" rx="8"/><text class="t" x="262" y="26">Tarefa 3</text>
+      <rect class="item" x="244" y="48" width="212" height="44" rx="8"/><text class="t" x="262" y="78">Tarefa 4</text>
+      <rect class="item" x="244" y="100" width="212" height="44" rx="8"/><text class="t" x="262" y="130">Tarefa 5</text>
+      <rect class="item" x="244" y="152" width="212" height="44" rx="8"/><text class="t" x="262" y="182">Tarefa 6</text>
+      <rect class="item" x="244" y="204" width="212" height="44" rx="8"/><text class="t" x="262" y="234">Tarefa 7</text>
+      <rect class="item" x="244" y="256" width="212" height="44" rx="8"/><text class="t" x="262" y="286">Tarefa 8</text>
+      <rect class="item" x="244" y="308" width="212" height="44" rx="8"/><text class="t" x="262" y="338">Tarefa 9</text>
+      <rect class="item" x="244" y="360" width="212" height="44" rx="8"/><text class="t" x="262" y="390">Tarefa 10</text>
+      <rect class="item" x="244" y="412" width="212" height="44" rx="8"/><text class="t" x="262" y="442">Tarefa 11</text>
+      <rect class="item" x="244" y="464" width="212" height="44" rx="8"/><text class="t" x="262" y="494">Tarefa 12</text>
+    </g>
+  </g>
+  <rect class="tela" x="232" y="96" width="236" height="208" rx="14"/>
+
+  <!-- legendas -->
+  <path class="marca" d="M 486 100 L 496 100 L 496 300 L 486 300"/>
+  <text class="ok" x="512" y="192">na tela:</text>
+  <text class="t" x="512" y="224">desenhados</text>
+  <path class="marca-fora" d="M 486 312 L 496 312 L 496 376"/>
+  <text class="m" x="512" y="338">fora da tela:</text>
+  <text class="m" x="512" y="368">não desenhados</text>
+</svg>

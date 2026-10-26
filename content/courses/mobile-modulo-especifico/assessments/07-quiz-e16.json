@@ -1,0 +1,102 @@
+{
+  "title": "Quiz: E16 · Navegação em pilha com Expo Router",
+  "description": "Sete questões sobre padrões de navegação, instalação do Expo Router, rotas, parâmetros e o carrinho compartilhado.",
+  "lesson": "e16b-stack-com-expo-router",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Em um app de loja, você toca em **Filtros**: uma tela sobe por cima da busca, você escolhe faixa de preço e marca, e ela fecha devolvendo você à busca. Qual padrão de navegação é esse?",
+      "options": {
+        "a": "Pilha, porque a tela nova entra por cima e o voltar a remove",
+        "b": "Abas, porque os filtros são uma seção principal do app",
+        "c": "Modal, porque a tela sobe por cima para uma tarefa curta e fecha",
+        "d": "Gaveta, porque o menu desliza da borda da tela"
+      },
+      "answer": "c",
+      "explanation": "Modal é a tela que aparece por cima para uma tarefa curta e se fecha, devolvendo o usuário ao que fazia. A pilha é a alternativa mais tentadora, porque também empilha uma tela, mas nela o usuário avança por um caminho (vitrine, detalhe, carrinho); o modal interrompe o caminho para uma tarefa e volta. Abas ficam fixas no rodapé e a gaveta desliza da lateral.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "O `lojinha` foi criado com o modelo `blank`. Quais passos fazem parte da instalação do Expo Router nesse projeto existente?",
+      "options": {
+        "a": "Rodar `npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar`",
+        "b": "Trocar o `main` do `package.json` para `expo-router/entry`",
+        "c": "Acrescentar `\"scheme\": \"lojinha\"` dentro de `\"expo\"` no `app.json`",
+        "d": "Mover o `App.js` para dentro da pasta `app/`, que vira a tela inicial",
+        "e": "Envolver o `App.js` com um `NavigationContainer`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A instalação em projeto existente tem três partes: os pacotes com `npx expo install`, o `main` apontando para `expo-router/entry` e o `scheme` no `app.json`; depois, `npx expo start -c`. Mover o `App.js` para `app/` criaria a rota `/App`, não a tela inicial, que é o `app/index.js`. O `NavigationContainer` é do React Navigation usado direto; o Expo Router já cuida dele, e o `App.js` deixa de ser usado.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Para o Carrinho enxergar o que o Detalhe adicionou, cada uma dessas telas precisa ter o seu próprio `<CarrinhoProvider>` em volta do conteúdo.",
+      "answer": false,
+      "explanation": "Cada `CarrinhoProvider` cria um estado próprio: com um provedor por tela, o Detalhe adicionaria num carrinho e o Carrinho leria outro, vazio. O certo é um único provedor em `app/_layout.js`, por fora do `Stack`, para que todas as telas da pilha leiam o mesmo `itens` com `useCarrinho()`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a tela de detalhe, aberta pela rota `app/produto/[id].js`, para ler o `id` do endereço:\n\n```jsx\nimport { ___ } from 'expo-router';\n\nexport default function Detalhe() {\n  const { id } = ___();\n  const produto = produtos.find((p) => p.id === Number(id));\n  // ...\n}\n```",
+      "answer": [["useLocalSearchParams"], ["useLocalSearchParams"]],
+      "explanation": "`useLocalSearchParams()` devolve os parâmetros da rota atual; em `[id].js`, a chave é `id`. `useState` guardaria um valor da própria tela, e `router` serve para navegar, não para ler o endereço.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você quer que o botão abaixo, feito com `Pressable`, abra a tela do carrinho. Qual versão funciona?\n\n```jsx\n<Pressable style={estilos.botao}>\n  <Text>Ver carrinho</Text>\n</Pressable>\n```",
+      "options": {
+        "a": "Envolver com `<Link href=\"/carrinho\" asChild>` ... `</Link>`",
+        "b": "Envolver com `<Link href=\"/carrinho\">` ... `</Link>`, sem `asChild`",
+        "c": "Trocar por `<Pressable href=\"/carrinho\">`",
+        "d": "Envolver com `<Link to=\"/carrinho\" asChild>` ... `</Link>`"
+      },
+      "answer": "a",
+      "explanation": "Com `asChild`, o `Link` não desenha o próprio `Text`: ele repassa o endereço e o `onPress` ao filho, e o `Pressable` passa a navegar. Sem `asChild`, a opção mais tentadora, o `Link` coloca o `Pressable` dentro de um texto e o toque fica com o `Pressable`, que não tem `onPress`. `Pressable` não conhece `href`, e `to` é a prop de outras bibliotecas: no Expo Router é `href`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na tela de detalhe, o botão deve guardar o produto no carrinho e abrir a tela do carrinho. Qual `onPress` faz isso?\n\n```jsx\nconst { adicionar } = useCarrinho();\n\n<Botao titulo=\"Adicionar ao carrinho\" onPress={/* ? */} />\n```",
+      "options": {
+        "a": "`onPress={router.push('/carrinho')}`",
+        "b": "`onPress={() => { adicionar(produto); router.push('/carrinho'); }}`",
+        "c": "`onPress={() => { adicionar(produto); <Link href=\"/carrinho\" />; }}`",
+        "d": "`onPress={() => { adicionar(produto); router.back(); }}`"
+      },
+      "answer": "b",
+      "explanation": "A arrow function só roda no toque: primeiro guarda o produto no contexto, depois empilha `/carrinho`. Sem arrow function, `router.push` seria chamado durante a renderização e nada seria adicionado. Escrever `<Link />` dentro de uma função não navega: JSX solto ali não vai para a tela. `router.back()` volta ao Início em vez de abrir o carrinho.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O aluno tocou no produto de `id` 7 e o app mostrou a tela vermelha `Cannot read property 'nome' of undefined`. Em `produtos.js`, os ids são números. Qual é a causa?\n\n```jsx\nexport default function Detalhe() {\n  const { id } = useLocalSearchParams();\n  const produto = produtos.find((p) => p.id === id);\n  return <Text>{produto.nome}</Text>;\n}\n```",
+      "options": {
+        "a": "O `id` chega como a string `'7'`, e `7 === '7'` é falso: o `find` devolve `undefined`",
+        "b": "O arquivo deveria se chamar `app/produto/id.js`, sem colchetes",
+        "c": "O `useLocalSearchParams` só funciona dentro de `app/_layout.js`",
+        "d": "Falta envolver o `Text` com `<Stack.Screen options={{ title: produto.nome }} />`"
+      },
+      "answer": "a",
+      "explanation": "Parâmetros de rota são sempre texto. A comparação estrita entre o número `7` e a string `'7'` falha, `produto` fica `undefined` e `produto.nome` derruba o app. A correção é `p.id === Number(id)`. Sem colchetes, o arquivo atenderia só o endereço literal `/produto/id`; o hook funciona em qualquer tela aberta por uma rota; e `Stack.Screen` só ajusta o cabeçalho.",
+      "points": 2
+    }
+  ]
+}

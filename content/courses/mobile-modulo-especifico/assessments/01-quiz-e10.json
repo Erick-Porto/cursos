@@ -1,0 +1,102 @@
+{
+  "title": "Quiz: E10 · Flexbox, dimensões e áreas seguras",
+  "description": "Sete questões sobre eixos, flex, pontos lógicos, useWindowDimensions, áreas seguras, StatusBar e Platform.",
+  "lesson": "e10b-dimensoes-e-areas-seguras",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Numa `View` com `flexDirection: 'row'`, qual propriedade alinha os filhos **na vertical**?",
+      "options": {
+        "a": "`justifyContent`",
+        "b": "`alignItems`",
+        "c": "`flexWrap`",
+        "d": "`gap`"
+      },
+      "answer": "b",
+      "explanation": "Em `row`, o eixo principal é o horizontal e o cruzado é o vertical. `alignItems` trabalha sempre no eixo cruzado, então alinha na vertical. `justifyContent` é a tentação de quem decorou que ele centraliza na vertical numa `View` comum: isso só vale em `column`, porque ele trabalha no eixo principal, que em `row` é o horizontal.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A linha abaixo tem 360 pontos de largura. Qual é a largura da `View` do meio?\n\n```jsx\n<View style={{ flexDirection: 'row' }}>\n  <View style={{ flex: 1 }} />\n  <View style={{ flex: 2 }} />\n  <View style={{ flex: 1 }} />\n</View>\n```",
+      "options": {
+        "a": "120",
+        "b": "180",
+        "c": "240",
+        "d": "90"
+      },
+      "answer": "b",
+      "explanation": "Os valores de `flex` somam 4 partes. A do meio recebe 2 de 4, ou seja, metade de 360: 180. As pontas ficam com 90 cada. 120 é o erro de dividir por 3, como se cada filho recebesse uma parte igual.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Complete o estilo para a coluna de textos ocupar a largura que sobra ao lado da foto e o texto longo quebrar dentro do cartão:\n\n```jsx\n<View style={{ flexDirection: 'row', gap: 12 }}>\n  <View style={{ width: 72, height: 72, backgroundColor: '#cbd5e1' }} />\n  <View style={{ ___: 1 }}>\n    <Text>Fone sem fio com 20 horas de bateria e cancelamento de ruído</Text>\n  </View>\n</View>\n```",
+      "answer": [["flex"]],
+      "explanation": "`flex: 1` faz a coluna crescer até o espaço livre e também permite que ela encolha até caber, por isso o texto quebra em linhas. `flexGrow: 1` sozinho não basta: no React Native, `flexShrink` vale 0 por padrão, e o texto longo continua passando da borda.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "No React Native, `width: 100` ocupa sempre 100 pixels físicos da tela, em qualquer aparelho.",
+      "answer": false,
+      "explanation": "Medidas são pontos lógicos (dp no Android). O aparelho multiplica pela densidade: 100 pontos viram 200 pixels numa tela de densidade 2 e 300 numa de densidade 3. Por isso um botão tem quase o mesmo tamanho físico em todos os celulares.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre área segura, barra de status e plataforma são verdadeiras?",
+      "options": {
+        "a": "A `SafeAreaView` de `react-native-safe-area-context` protege o conteúdo no Android e no iOS",
+        "b": "`useSafeAreaInsets()` devolve, em pontos, quanto o sistema ocupa em cada borda: `top`, `right`, `bottom` e `left`",
+        "c": "`Platform.OS` vale `'android'` quando o app roda num celular Android",
+        "d": "A `SafeAreaView` importada de `react-native` é a recomendada, porque funciona igual nas duas plataformas",
+        "e": "`<StatusBar style=\"light\" />` deixa relógio e bateria escuros, para fundos claros"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A biblioteca `react-native-safe-area-context` funciona nas duas plataformas, e o hook devolve as quatro medidas para você somar ao seu espaçamento. `Platform.OS` devolve `'ios'`, `'android'` ou `'web'`. A `SafeAreaView` do `react-native` só funciona no iOS e está obsoleta. E `style=\"light\"` deixa os ícones **claros**, para fundos escuros: é a alternativa que mais confunde.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Com o app aberto e a rotação liberada no `app.json`, a pessoa gira o celular de em pé para deitado. O que acontece com o texto?\n\n```jsx\nexport default function Orientacao() {\n  const { width, height } = useWindowDimensions();\n  return <Text>{width > height ? 'Paisagem' : 'Retrato'}</Text>;\n}\n```",
+      "options": {
+        "a": "Muda para \"Paisagem\": o hook devolve as novas medidas e o componente é redesenhado",
+        "b": "Continua \"Retrato\" até o app ser fechado e aberto de novo",
+        "c": "Aparece a tela vermelha, porque `width` e `height` não podem mudar com o app aberto",
+        "d": "Continua \"Retrato\", porque `useWindowDimensions` devolve sempre as medidas do aparelho em pé"
+      },
+      "answer": "a",
+      "explanation": "`useWindowDimensions` acompanha a janela: ao girar, largura e altura trocam, o componente redesenha e a comparação passa a dar `true`. A alternativa b descreve o `Dimensions.get('window')` lido uma vez no topo do arquivo, que não acompanha a rotação.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O botão \"Finalizar\" deveria ficar colado no rodapé, mas aparece logo abaixo do último item, no meio da tela. Qual é a causa?\n\n```jsx\n<SafeAreaView style={{ flex: 1 }}>\n  <View style={{ padding: 16 }}>\n    <Text>Fone Bluetooth</Text>\n    <Text>Caixa de Som Portátil</Text>\n  </View>\n  <View style={estilos.rodape}>\n    <Text>Finalizar</Text>\n  </View>\n</SafeAreaView>\n```",
+      "options": {
+        "a": "A `View` dos itens só tem a altura do próprio conteúdo; com `flex: 1` nela, ela ocupa o espaço livre e empurra o rodapé para baixo",
+        "b": "Falta `justifyContent: 'flex-end'` no estilo `rodape`, para ele descer até a borda",
+        "c": "A `SafeAreaView` não aceita `flex`; é preciso trocá-la por uma `View`",
+        "d": "Falta `height: '100%'` no estilo `rodape`"
+      },
+      "answer": "a",
+      "explanation": "Em `column`, cada filho tem a altura do conteúdo e o espaço que sobra fica vazio no fim. Com `flex: 1`, a área dos itens cresce e empurra o rodapé até a borda. A b é a mais tentadora, mas `justifyContent` no rodapé organiza os **filhos** do rodapé, não a posição dele. A d faria o rodapé ocupar a tela inteira.",
+      "points": 2
+    }
+  ]
+}

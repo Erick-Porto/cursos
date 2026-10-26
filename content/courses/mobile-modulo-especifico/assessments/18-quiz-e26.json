@@ -1,0 +1,117 @@
+{
+  "title": "Quiz: E26 · Decisões no frete, no status e no cupom",
+  "description": "Oito questões sobre if, switch, truthy e falsy, ternário, ??, ?. e guard clauses nas regras da Lojinha.",
+  "lesson": "e26b-condicoes-legiveis",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Carrinho, você quer mostrar \"1 item\" ou \"3 itens\" dentro das chaves do JSX. Por que o ternário funciona ali e o `if` não?",
+      "options": {
+        "a": "O ternário é uma expressão: produz um valor, e as chaves do JSX aceitam valores",
+        "b": "O `if` só funciona com números, e a quantidade vira texto no JSX",
+        "c": "O ternário é mais rápido, e o React Native recusa código lento na renderização",
+        "d": "O `if` funciona dentro das chaves, desde que tenha um `else`"
+      },
+      "answer": "a",
+      "explanation": "As chaves do JSX recebem uma expressão, algo que produz um valor, como `quantidade === 1 ? '1 item' : rotuloPlural`. O `if` é uma instrução: decide qual bloco roda, mas não produz valor, e por isso não cabe ali nem com `else`. Velocidade e tipo do valor não têm relação com isso.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais valores fazem o bloco de `if (valor) { ... }` **não** ser executado?",
+      "options": {
+        "a": "`0`",
+        "b": "`''` (texto vazio)",
+        "c": "`'0'` (o texto zero)",
+        "d": "`null`",
+        "e": "`[]` (array vazio)",
+        "f": "`NaN`"
+      },
+      "answer": ["a", "b", "d", "f"],
+      "explanation": "Os falsy são só seis: `false`, `0`, `''`, `null`, `undefined` e `NaN`. Os que mais enganam são `'0'` e `[]`: um texto com qualquer caractere e qualquer array, mesmo vazio, são truthy. Por isso `if (itens)` entra com o carrinho vazio, e o certo é `if (itens.length > 0)`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Num `switch`, quando um `case` não termina com `break` nem `return`, a execução continua no `case` de baixo.",
+      "answer": true,
+      "explanation": "É o fall-through, ou cascata. Sem `break`, o `case 'pendente'` que define o tom `'alerta'` desce para o `case 'cancelado'` e termina com `'perigo'`. A cascata também serve de propósito: `case` vazios seguidos agrupam valores com o mesmo resultado, como `'pago'` e `'entregue'` em `tomDoStatus`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete `validarCupom` para que um `codigo` igual a `null` não derrube o app e para que a função saia logo quando o código estiver vazio:\n\n```javascript\nexport function validarCupom(codigo, subtotal) {\n  const chave = codigo___trim().toUpperCase() ?? '';\n  if (chave === '') ___ recusar('Digite o código do cupom');\n  // demais guardas e o desconto\n}\n```",
+      "answer": [["?."], ["return"]],
+      "explanation": "Com `codigo?.trim()`, o encadeamento opcional para no `null` e corta a cadeia inteira: nem `trim` nem `toUpperCase` rodam, o resultado é `undefined` e o `?? ''` o troca por texto vazio. Com um ponto só, `null.trim()` mostra a tela vermelha. A guard clause precisa do `return`: sem ele, `recusar(...)` é chamada, o resultado se perde e a função segue com o código vazio.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que `tomDoStatus('pago')` devolve?\n\n```javascript\nexport function tomDoStatus(status) {\n  switch (status) {\n    case 'pendente':\n      return 'alerta';\n    case 'pago':\n    case 'entregue':\n      return 'sucesso';\n    case 'cancelado':\n      return 'perigo';\n    default:\n      return 'neutro';\n  }\n}\n```",
+      "options": {
+        "a": "`'sucesso'`",
+        "b": "`'neutro'`",
+        "c": "`'perigo'`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "`'pago'` entra no seu `case`, que está vazio, e a execução desce até o primeiro comando abaixo: o `return 'sucesso'` que ele divide com `'entregue'`. É o agrupamento de casos. As respostas tentadoras são `undefined` e `'neutro'`, para quem acha que um `case` vazio não faz nada ou pula para o `default`. `'perigo'` exigiria passar pelo `return 'sucesso'`, que sai da função antes.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O cliente tem R$ 199,90 no carrinho e um CEP válido, então `calcularFrete` devolve `0` (frete grátis). O que a linha de frete mostra?\n\n```javascript\nconst frete = calcularFrete(199.9, '01310-100'); // 0\nconst texto = frete || 'Informe o CEP';\n```",
+      "options": {
+        "a": "`'Informe o CEP'`, porque `0` é falsy e o `||` o troca pelo padrão",
+        "b": "`0`, porque o `||` só troca `null` e `undefined`",
+        "c": "`'Grátis'`, porque `0` significa frete grátis",
+        "d": "Nada: a linha lança um erro, porque `0` não é texto"
+      },
+      "answer": "a",
+      "explanation": "O `||` devolve o lado direito sempre que o esquerdo é falsy, e `0` é falsy: o cliente com frete grátis lê \"Informe o CEP\". Quem só troca `null` e `undefined` é o `??`: com `frete ?? 'Informe o CEP'`, o `0` continuaria lá. \"Grátis\" só aparece se uma regra, como `textoDoFrete`, tratar o `0` com `frete === 0`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com o carrinho vazio, a tela abaixo mostra a tela vermelha `Text strings must be rendered within a <Text> component`. Qual é a causa?\n\n```jsx\n<View style={estilos.tela}>\n  {itens.length && <ResumoDoPedido itens={itens} />}\n</View>\n```",
+      "options": {
+        "a": "`itens.length` é `0`, o `&&` devolve esse `0` e o React Native tenta desenhar um número fora de um `Text`",
+        "b": "O `&&` sempre devolve `true` ou `false`, e o React Native não sabe desenhar booleanos",
+        "c": "`ResumoDoPedido` recebe um array vazio e devolve um texto solto",
+        "d": "Falta uma `key` no `ResumoDoPedido`, obrigatória em renderização condicional"
+      },
+      "answer": "a",
+      "explanation": "O `&&` não devolve booleano: devolve o primeiro valor falsy ou o último valor. Com o carrinho vazio, a expressão vale `0`, e um número solto dentro de uma `View` derruba o app. Booleanos, `null` e `undefined` não desenham nada, por isso a correção é `itens.length > 0 && ...`. O componente nem chega a ser chamado, e `key` só é exigida em listas.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois de uma refatoração, o teste `expect(calcularFrete(200, '1234')).toBeNull()` passou a falhar. O que explica a falha e como corrigir?\n\n```javascript\nexport function calcularFrete(subtotal, cep) {\n  if (subtotal >= FRETE_GRATIS_A_PARTIR_DE) return 0;\n  const digitos = (cep ?? '').replace(/\\D/g, '');\n  if (digitos.length !== 8) return null;\n  return FRETE_POR_DIGITO[digitos[0]];\n}\n```",
+      "options": {
+        "a": "A guarda do frete grátis vem antes da validação do CEP e devolve `0` para um CEP inválido; a validação do CEP deve ser a primeira guarda",
+        "b": "O `replace` apaga os dígitos do CEP e `digitos` fica vazio; basta trocar `\\D` por `\\d`",
+        "c": "`toBeNull` não compara com `0`; o teste deveria usar `toBe(null)`",
+        "d": "Falta um `else` depois de cada `return`, sem o qual a função continua executando"
+      },
+      "answer": "a",
+      "explanation": "Com subtotal 200, a primeira guarda já devolve `0` e a validação do CEP nunca roda: a Lojinha prometeria entrega grátis num CEP que não existe. A ordem das guardas é regra de negócio, e o CEP vem primeiro. Trocar `\\D` por `\\d` apagaria os dígitos e deixaria todo CEP inválido; `toBeNull` e `toBe(null)` fazem a mesma checagem; e o `return` já sai da função, por isso a guard clause dispensa o `else`.",
+      "points": 2
+    }
+  ]
+}

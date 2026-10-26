@@ -1,0 +1,115 @@
+{
+  "title": "Quiz: E04 · Estado, eventos e formulários",
+  "description": "Oito questões sobre eventos, useState, arrays sem mutação e formulários controlados.",
+  "lesson": "e04b-formularios-controlados",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que a linha `const [contador, setContador] = useState(0)` cria dentro de um componente?",
+      "options": {
+        "a": "Uma variável comum `contador` que o React passa a observar automaticamente",
+        "b": "O valor atual `contador` e a função `setContador`, que troca o valor e pede o redesenho",
+        "c": "Duas variáveis independentes: `contador` começa em 0 e `setContador` em 1",
+        "d": "Uma função `contador` que devolve 0 toda vez que é chamada"
+      },
+      "answer": "b",
+      "explanation": "useState devolve um par: o valor guardado e a função que o atualiza. Trocar o valor por essa função é o que faz o React redesenhar. Uma variável comum (`let contador = 0`) muda em silêncio e a tela não acompanha.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o erro neste componente?\n\n```jsx\nfunction Contador() {\n  const [contador, setContador] = useState(0)\n\n  function contar() {\n    setContador(contador + 1)\n  }\n\n  return <button onClick={contar()}>Cliques: {contador}</button>\n}\n```",
+      "options": {
+        "a": "`contar()` é chamada ao desenhar o componente, não no clique; o certo é `onClick={contar}`",
+        "b": "Falta um `return` dentro da função `contar`",
+        "c": "`setContador(contador + 1)` deveria ser `contador++`",
+        "d": "`onClick` deveria ser escrito em minúsculas, como no HTML: `onclick`"
+      },
+      "answer": "a",
+      "explanation": "Com parênteses, a função roda na hora de desenhar e o `onClick` recebe o resultado dela (`undefined`). Pior: `setContador` dentro do desenho pede outro desenho, em loop. `contador++` não serve porque mutar a variável não avisa o React, e no JSX os eventos são camelCase.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Ao clicar no botão que chama `concluirTodas`, a tela não muda. Por quê?\n\n```jsx\nfunction concluirTodas() {\n  tarefas.forEach((t) => {\n    t.concluida = true\n  })\n  setTarefas(tarefas)\n}\n```",
+      "options": {
+        "a": "O array foi mutado e `setTarefas` recebeu o mesmo array de antes; o React não percebe a mudança",
+        "b": "`forEach` não funciona com arrays guardados no estado; o certo seria um `for`",
+        "c": "Falta chamar `setTarefas` uma vez para cada tarefa alterada",
+        "d": "`concluida` só pode ser alterada por uma função `setConcluida`"
+      },
+      "answer": "a",
+      "explanation": "O React compara o array novo com o antigo. Como `forEach` alterou os objetos por dentro e `setTarefas` recebeu o mesmo array, ele considera que nada mudou. A solução é criar um array novo: `setTarefas(tarefas.map((t) => ({ ...t, concluida: true })))`. `forEach` funciona normalmente; o problema é a mutação.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais trechos atualizam o estado `tarefas` corretamente, sem mutar o array original?",
+      "options": {
+        "a": "`setTarefas([...tarefas, nova])`",
+        "b": "`tarefas.push(nova); setTarefas(tarefas)`",
+        "c": "`setTarefas(tarefas.filter((t) => t.id !== id))`",
+        "d": "`tarefas[0].concluida = true; setTarefas(tarefas)`"
+      },
+      "answer": ["a", "c"],
+      "explanation": "O spread e o `filter` criam um array novo, que o React reconhece como mudança. `push` e a atribuição direta alteram o array original e entregam o mesmo objeto para `setTarefas`, então a tela não redesenha.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que `novas` contém depois deste código?\n\n```javascript\nconst tarefas = [\n  { id: 1, titulo: 'Ler', concluida: false },\n  { id: 2, titulo: 'Correr', concluida: false },\n]\n\nconst novas = tarefas.map((t) =>\n  t.id === 2 ? { ...t, concluida: true } : t\n)\n```",
+      "options": {
+        "a": "As duas tarefas; só a de id 2 com `concluida: true`",
+        "b": "Apenas a tarefa de id 2, com `concluida: true`",
+        "c": "As duas tarefas, ambas com `concluida: true`",
+        "d": "Um array vazio, porque `map` altera `tarefas` no lugar"
+      },
+      "answer": "a",
+      "explanation": "`map` devolve um array do mesmo tamanho. Para o id 2 a função retorna uma cópia com `concluida: true`; para o id 1 retorna o item como está. Quem descarta itens é o `filter`, e `map` nunca altera o array original.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Um `<input value={texto} />` sem `onChange` fica travado: o que a pessoa digita não aparece no campo.",
+      "answer": true,
+      "explanation": "Em um input controlado, o campo sempre mostra o valor do estado. Sem `onChange` o estado nunca muda, então o React mantém o campo com o texto antigo a cada tecla. A solução é `onChange={(e) => setTexto(e.target.value)}`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "Para impedir que o navegador recarregue a página ao enviar um formulário, a função ligada ao `onSubmit` chama `event.___()`.",
+      "answer": [["preventDefault", "preventDefault()"]],
+      "explanation": "O comportamento padrão do `<form>` é enviar os dados para um servidor e recarregar a página, o que apaga todo o estado. `event.preventDefault()` cancela esse padrão e deixa o React cuidar do envio.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "`FormularioTarefa` cria tarefas e `ListaTarefas` exibe todas. Onde o array `tarefas` deve ficar e como o formulário adiciona uma tarefa?",
+      "options": {
+        "a": "No `App`, pai dos dois; o formulário recebe uma função `onAdicionar` por prop e a chama ao enviar",
+        "b": "No `FormularioTarefa`, que exporta o array para `ListaTarefas` importar",
+        "c": "Em cada um dos dois, com `useState` próprio, para ficarem independentes",
+        "d": "No `ListaTarefas`, e o formulário altera esse estado direto com `tarefas.push`"
+      },
+      "answer": "a",
+      "explanation": "Quando dois componentes precisam do mesmo dado, o estado sobe para o pai mais próximo (lifting state up) e desce por props; os filhos pedem mudanças chamando funções recebidas por prop. Dois `useState` separados criariam duas listas que não se enxergam, e um filho nunca muta o estado de outro componente.",
+      "points": 2
+    }
+  ]
+}

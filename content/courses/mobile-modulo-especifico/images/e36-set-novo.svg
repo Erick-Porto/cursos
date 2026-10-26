@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Set no estado: com add no mesmo Set, o valor atual e o novo são o mesmo objeto, Object.is dá true e o coração não acende; com new Set(anterior), o novo é outro Set, Object.is dá false e o coração acende</title>
+  <style>
+    .panel { fill: none; stroke: #2a3a5c; stroke-width: 1.5; }
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .add   { fill: #fbbf24; font-weight: 700; }
+    .noh   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .okh   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .line  { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <!-- errado: add no mesmo Set -->
+  <rect class="panel" x="16" y="16" width="336" height="298" rx="12"/>
+  <text class="noh" x="36" y="54">errado: add no mesmo Set</text>
+  <text class="m" x="36" y="120">atual</text>
+  <text class="m" x="36" y="190">novo</text>
+  <rect class="box" x="176" y="114" width="160" height="80" rx="10"/>
+  <text class="code" x="256" y="162" text-anchor="middle">Set {1, <tspan class="add">7</tspan>}</text>
+  <path class="line" d="M102 112 L168 138"/>
+  <path class="line" d="M102 182 L168 168"/>
+  <text class="code" x="36" y="252">Object.is: true</text>
+  <text class="noh" x="36" y="292">coração não acende</text>
+
+  <!-- certo: new Set(anterior) -->
+  <rect class="panel" x="368" y="16" width="336" height="298" rx="12"/>
+  <text class="okh" x="388" y="54">certo: new Set(anterior)</text>
+  <text class="m" x="388" y="120">atual</text>
+  <text class="m" x="388" y="190">novo</text>
+  <rect class="box" x="528" y="90" width="160" height="44" rx="8"/>
+  <text class="code" x="608" y="120" text-anchor="middle">Set {1}</text>
+  <rect class="box" x="528" y="160" width="160" height="44" rx="8"/>
+  <text class="code" x="608" y="190" text-anchor="middle">Set {1, <tspan class="add">7</tspan>}</text>
+  <path class="line" d="M454 112 L520 112"/>
+  <path class="line" d="M454 182 L520 182"/>
+  <text class="code" x="388" y="252">Object.is: false</text>
+  <text class="okh" x="388" y="292">coração acende</text>
+</svg>

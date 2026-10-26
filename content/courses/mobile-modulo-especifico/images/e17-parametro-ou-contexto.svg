@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>Parâmetro e contexto: o parâmetro vai junto ao abrir o Detalhe com router.push; a escolha dos Filtros volta ao Início pelo FiltrosContext</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .code { font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .par  { fill: #60a5fa; font-size: 22px; font-weight: 700; }
+    .ctx  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .vai  { stroke: #60a5fa; stroke-width: 3; fill: none; marker-end: url(#seta-vai); }
+    .volta { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-volta); }
+  </style>
+  <defs>
+    <marker id="seta-vai" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker>
+    <marker id="seta-volta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <!-- a tela que fica embaixo -->
+  <rect class="box" x="24" y="24" width="152" height="302" rx="12"/>
+  <text class="t" x="100" y="182" text-anchor="middle">Início</text>
+
+  <!-- parâmetro: vai ao abrir -->
+  <text class="par" x="200" y="56">parâmetro: vai junto ao abrir</text>
+  <path class="vai" d="M 176 100 L 530 100"/>
+  <rect class="box" x="536" y="72" width="160" height="56" rx="10"/>
+  <text class="t" x="616" y="108" text-anchor="middle">Detalhe</text>
+  <text class="code" x="200" y="156" fill="#b4bfd3">router.push('/produto/' + id)</text>
+
+  <!-- contexto: volta para quem ficou embaixo -->
+  <text class="ctx" x="200" y="214">contexto: volta para quem ficou embaixo</text>
+  <rect class="box" x="536" y="236" width="160" height="56" rx="10"/>
+  <text class="t" x="616" y="272" text-anchor="middle">Filtros</text>
+  <path class="volta" d="M 536 264 L 484 264"/>
+  <rect class="box" x="280" y="236" width="198" height="56" rx="10"/>
+  <text class="code" x="379" y="272" text-anchor="middle" fill="#e8edf7">FiltrosContext</text>
+  <path class="volta" d="M 280 264 L 182 264"/>
+  <text class="code" x="200" y="324" fill="#b4bfd3">setFiltros(...) e router.back()</text>
+</svg>

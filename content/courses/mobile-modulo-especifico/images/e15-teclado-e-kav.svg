@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>O teclado sobe nos dois celulares: sem KeyboardAvoidingView ele cobre o botão Criar conta; com KeyboardAvoidingView o botão sobe junto e fica à vista</title>
+  <style>
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .fld  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .foc  { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .btn  { fill: #34d399; }
+    .bt   { fill: #06281c; font-size: 22px; font-weight: 700; text-anchor: middle; }
+    .kb   { fill: #2a3a5c; }
+    .key  { fill: #131c33; }
+    .kt   { fill: #e8edf7; font-size: 22px; text-anchor: middle; }
+    .tela { fill: none; stroke: #b4bfd3; stroke-width: 2.5; }
+    .anim { animation-duration: 7s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .teclado { animation-name: teclado; }
+    .rodape  { animation-name: rodape; }
+    .legenda { animation-name: legenda; }
+    @keyframes teclado {
+      0%, 10%   { transform: translateY(126px); }
+      32%, 86%  { transform: translateY(0); }
+      100%      { transform: translateY(126px); }
+    }
+    @keyframes rodape {
+      0%, 10%   { transform: translateY(124px); }
+      32%, 86%  { transform: translateY(0); }
+      100%      { transform: translateY(124px); }
+    }
+    @keyframes legenda {
+      0%, 26%   { opacity: 0; }
+      34%, 86%  { opacity: 1; }
+      94%, 100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { .anim { animation: none; } }
+  </style>
+  <defs>
+    <clipPath id="esq"><rect x="40" y="56" width="300" height="300" rx="22"/></clipPath>
+    <clipPath id="dir"><rect x="380" y="56" width="300" height="300" rx="22"/></clipPath>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <text class="no" x="40" y="38">sem KeyboardAvoidingView</text>
+  <text class="ok" x="380" y="38">com KeyboardAvoidingView</text>
+
+  <!-- sem: o teclado cobre o rodapé -->
+  <g clip-path="url(#esq)">
+    <rect class="fld" x="56" y="72" width="268" height="42" rx="8"/>
+    <text class="m" x="72" y="100">E-mail</text>
+    <rect class="foc" x="56" y="124" width="268" height="42" rx="8"/>
+    <text class="m" x="72" y="152">Senha</text>
+    <rect x="134" y="133" width="2" height="24" fill="#34d399"/>
+    <rect class="btn" x="56" y="300" width="268" height="44" rx="8"/>
+    <text class="bt" x="190" y="329">Criar conta</text>
+    <g class="anim teclado">
+      <rect class="kb" x="40" y="230" width="300" height="126"/>
+      <path class="key" d="M 52 242 h 26 v 26 h -26 Z M 83 242 h 26 v 26 h -26 Z M 114 242 h 26 v 26 h -26 Z M 145 242 h 26 v 26 h -26 Z M 176 242 h 26 v 26 h -26 Z M 207 242 h 26 v 26 h -26 Z M 238 242 h 26 v 26 h -26 Z M 269 242 h 26 v 26 h -26 Z M 300 242 h 26 v 26 h -26 Z M 52 276 h 26 v 26 h -26 Z M 83 276 h 26 v 26 h -26 Z M 114 276 h 26 v 26 h -26 Z M 145 276 h 26 v 26 h -26 Z M 176 276 h 26 v 26 h -26 Z M 207 276 h 26 v 26 h -26 Z M 238 276 h 26 v 26 h -26 Z M 269 276 h 26 v 26 h -26 Z M 300 276 h 26 v 26 h -26 Z"/>
+      <rect class="key" x="100" y="312" width="180" height="32" rx="4"/>
+      <text class="kt" x="190" y="335">teclado</text>
+    </g>
+  </g>
+  <rect class="tela" x="40" y="56" width="300" height="300" rx="22"/>
+
+  <!-- com: o rodapé sobe junto -->
+  <g clip-path="url(#dir)">
+    <rect class="fld" x="396" y="72" width="268" height="42" rx="8"/>
+    <text class="m" x="412" y="100">E-mail</text>
+    <rect class="foc" x="396" y="124" width="268" height="42" rx="8"/>
+    <text class="m" x="412" y="152">Senha</text>
+    <rect x="474" y="133" width="2" height="24" fill="#34d399"/>
+    <g class="anim rodape">
+      <rect class="btn" x="396" y="176" width="268" height="44" rx="8"/>
+      <text class="bt" x="530" y="205">Criar conta</text>
+    </g>
+    <g class="anim teclado">
+      <rect class="kb" x="380" y="230" width="300" height="126"/>
+      <path class="key" d="M 392 242 h 26 v 26 h -26 Z M 423 242 h 26 v 26 h -26 Z M 454 242 h 26 v 26 h -26 Z M 485 242 h 26 v 26 h -26 Z M 516 242 h 26 v 26 h -26 Z M 547 242 h 26 v 26 h -26 Z M 578 242 h 26 v 26 h -26 Z M 609 242 h 26 v 26 h -26 Z M 640 242 h 26 v 26 h -26 Z M 392 276 h 26 v 26 h -26 Z M 423 276 h 26 v 26 h -26 Z M 454 276 h 26 v 26 h -26 Z M 485 276 h 26 v 26 h -26 Z M 516 276 h 26 v 26 h -26 Z M 547 276 h 26 v 26 h -26 Z M 578 276 h 26 v 26 h -26 Z M 609 276 h 26 v 26 h -26 Z M 640 276 h 26 v 26 h -26 Z"/>
+      <rect class="key" x="440" y="312" width="180" height="32" rx="4"/>
+      <text class="kt" x="530" y="335">teclado</text>
+    </g>
+  </g>
+  <rect class="tela" x="380" y="56" width="300" height="300" rx="22"/>
+
+  <g class="anim legenda">
+    <text class="no" x="190" y="388" text-anchor="middle">o teclado cobre Criar conta</text>
+    <text class="ok" x="530" y="388" text-anchor="middle">o botão sobe com o teclado</text>
+  </g>
+</svg>

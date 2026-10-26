@@ -1,0 +1,256 @@
+{
+  "title": "Prova 2: JavaScript para apps",
+  "description": "Prova do encontro E40, aplicada em sala na última hora. Cobre os encontros E21 a E40: ambiente JavaScript, lógica e classes nas regras de negócio da Lojinha e a linguagem a serviço do app conectado. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e40b-revisao-javascript",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual motor JavaScript roda o código do app React Native no celular?",
+      "options": {
+        "a": "Hermes",
+        "b": "V8",
+        "c": "O Node.js instalado no computador",
+        "d": "O motor do navegador do celular"
+      },
+      "answer": "a",
+      "explanation": "O Hermes é o motor feito para o React Native: compila o código antes e abre o app mais rápido. O V8 roda o Chrome e o Node no computador, onde ficam o Expo CLI, o Metro e os testes, não o app."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Por que a Lojinha instala pacotes do app com `npx expo install` e não com `npm install`?",
+      "options": {
+        "a": "Porque o Expo escolhe a versão do pacote compatível com o SDK do projeto",
+        "b": "Porque o npm install não funciona em projetos React Native",
+        "c": "Porque o npx expo install não altera o package.json",
+        "d": "Porque o npx expo install instala o pacote direto no celular"
+      },
+      "answer": "a",
+      "explanation": "Os dois gravam no `package.json`, mas o `npx expo install` escolhe a versão que combina com o SDK do Expo, evitando pacotes nativos incompatíveis. O `npm install` funciona, só não faz essa escolha."
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Sobre as ferramentas de qualidade da Lojinha, quais afirmações estão corretas?",
+      "options": {
+        "a": "npx expo lint configura e roda o ESLint com as regras do Expo",
+        "b": "A tecla j no terminal do npx expo start abre o React Native DevTools, com breakpoints",
+        "c": "Uma variável EXPO_PUBLIC_ pode guardar uma senha, porque fica só no computador",
+        "d": "Um workflow do GitHub Actions pode rodar o lint e os testes a cada push"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Lint, depuração com breakpoints e integração contínua fazem parte do fluxo profissional. As variáveis `EXPO_PUBLIC_` vão para dentro do app instalado: qualquer pessoa pode lê-las, então nunca guardam segredo.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Para um script Node da pasta scripts/ usar import e export sem mudar o package.json do app, salve o arquivo com a extensão ___.",
+      "answer": [[".mjs", "mjs"]],
+      "explanation": "A extensão `.mjs` diz ao Node que aquele arquivo é um módulo ES. Trocar o `\"type\"` do `package.json` mudaria a regra para todos os `.js` que o Node carrega no projeto."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No carrinho, a pessoa digita 2 no campo de quantidade e toca em \"+\". O que aparece?\n\n```javascript\nconst [qtd, setQtd] = useState('');\n// o TextInput chamou setQtd('2')\nsetQtd(qtd + 1);\n```",
+      "options": {
+        "a": "21, porque o TextInput entrega texto e + junta textos",
+        "b": "3, porque o JavaScript converte o texto em número sozinho",
+        "c": "NaN, porque não dá para somar texto com número",
+        "d": "Um erro na tela vermelha"
+      },
+      "answer": "a",
+      "explanation": "O `TextInput` sempre entrega texto. Com um texto de um lado, o `+` concatena: `'2' + 1` vale `'21'`. Converta antes de somar: `Number(qtd) + 1`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Com `status` igual a `'pago'`, que valor fica em `tom`?\n\n```javascript\nlet tom;\nswitch (status) {\n  case 'pago':\n    tom = 'sucesso';\n  case 'cancelado':\n    tom = 'perigo';\n    break;\n  default:\n    tom = 'neutro';\n}\n```",
+      "options": {
+        "a": "'perigo'",
+        "b": "'sucesso'",
+        "c": "'neutro'",
+        "d": "undefined"
+      },
+      "answer": "a",
+      "explanation": "Falta o `break` no caso `'pago'`. O `switch` entra no caso certo e continua descendo até o próximo `break`, então `tom` vira `'sucesso'` e logo depois `'perigo'`. O Badge de um pedido pago apareceria vermelho.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que acontece ao rodar esta soma do carrinho?\n\n```javascript\nlet total = 0;\nfor (let i = 0; i <= itens.length; i++) {\n  total = total + itens[i].preco;\n}\n```",
+      "options": {
+        "a": "Lança um TypeError: na última volta, itens[i] é undefined",
+        "b": "Soma todos os itens corretamente",
+        "c": "Pula o primeiro item",
+        "d": "Entra num laço infinito"
+      },
+      "answer": "a",
+      "explanation": "Os índices vão de 0 a `itens.length - 1`. Com `<=`, o laço dá uma volta a mais, `itens[itens.length]` é `undefined` e ler `.preco` de `undefined` lança `TypeError`. O certo é `i < itens.length`, ou um `for...of`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "truefalse",
+      "prompt": "Uma função recursiva precisa de um caso base que pare as chamadas; sem ele, o app termina com um erro de pilha cheia, como RangeError: Maximum call stack size exceeded.",
+      "answer": true,
+      "explanation": "Cada chamada recursiva ocupa um lugar na pilha. Sem um caso base, como a categoria sem subcategorias em `contarProdutos`, as chamadas nunca acabam e a pilha estoura."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Na tela do pedido, o Badge continua em \"Pendente\" depois do toque em Pagar. Por quê?\n\n```jsx\nconst [pedido, setPedido] = useState(new Pedido(dados));\n\nfunction pagar() {\n  pedido.status = 'pago';\n  setPedido(pedido);\n}\n```",
+      "options": {
+        "a": "setPedido recebeu o mesmo objeto, o React compara a referência e não redesenha a tela",
+        "b": "O setter de status recusa o valor 'pago'",
+        "c": "Classes não podem ser guardadas em useState",
+        "d": "Falta await antes de setPedido"
+      },
+      "answer": "a",
+      "explanation": "O React só redesenha quando recebe um valor novo; a instância mutada é a mesma referência. Na Lojinha, o estado guarda dados simples e a classe devolve uma instância nova: `setDados(pedido.comStatus('pago').paraJSON())`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O Checkout guarda a forma escolhida numa variável e chama `forma.totalAPagar(valor)` sem saber se ela é um `PagamentoPix`, um `PagamentoCartao` ou um `PagamentoBoleto`, e cada uma responde do seu jeito. Como se chama esse recurso?",
+      "options": {
+        "a": "Polimorfismo",
+        "b": "Encapsulamento",
+        "c": "Recursão",
+        "d": "Coerção"
+      },
+      "answer": "a",
+      "explanation": "Polimorfismo é a mesma chamada produzir comportamentos diferentes conforme a classe: cada filha sobrescreve `totalAPagar`. Encapsulamento é esconder detalhes internos, como os campos `#`."
+    },
+    {
+      "id": "q11",
+      "type": "multiple",
+      "prompt": "Sobre tratamento de erros no checkout, quais afirmações estão corretas?",
+      "options": {
+        "a": "O bloco finally roda com ou sem erro, bom para tirar o estado de \"enviando\"",
+        "b": "throw interrompe a função e o erro sobe até o catch mais próximo",
+        "c": "Um erro próprio que estende Error permite usar instanceof para escolher a mensagem da tela",
+        "d": "Um catch vazio é a forma recomendada de tratar um cupom inválido"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "`finally` limpa o estado em qualquer caso, `throw` desvia para o `catch` e classes como `CupomInvalidoError` deixam a tela reagir a cada caso. Um `catch` vazio esconde o problema: a pessoa não sabe o que deu errado.",
+      "points": 2
+    },
+    {
+      "id": "q12",
+      "type": "fill",
+      "prompt": "Uma classe filha que tem constructor, como PagamentoPix extends Pagamento, precisa chamar ___(...) antes de usar this.",
+      "answer": [["super"]],
+      "explanation": "`super(...)` roda o constructor da classe mãe, que prepara a instância. Usar `this` antes dele lança `ReferenceError`."
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "Qual data esta linha cria?\n\n```javascript\nconst data = new Date(2025, 9, 16);\n```",
+      "options": {
+        "a": "16 de outubro de 2025",
+        "b": "16 de setembro de 2025",
+        "c": "9 de dezembro de 2025",
+        "d": "Uma data inválida"
+      },
+      "answer": "a",
+      "explanation": "No `Date`, o mês começa em 0: janeiro é 0 e outubro é 9. Esquecer isso joga a previsão de entrega para o mês errado."
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "Quanto vale `total`?\n\n```javascript\nconst itens = [{ preco: 10, qtd: 2 }, { preco: 5.5, qtd: 1 }];\nconst total = itens.reduce((soma, item) => soma + item.preco * item.qtd, 0);\n```",
+      "options": {
+        "a": "25.5",
+        "b": "15.5",
+        "c": "18.5",
+        "d": "'0205.51'"
+      },
+      "answer": "a",
+      "explanation": "O `reduce` começa em 0 e soma `preco * qtd` de cada item: 0 + 20 + 5.5 = 25.5. O valor inicial `0` garante que a soma é numérica desde a primeira volta.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "O botão Cancelar dá TypeError ao ser tocado. O método `cancelar` da classe `Pedido` usa `this`. Qual é a correção?\n\n```jsx\n<Botao titulo=\"Cancelar\" onPress={pedido.cancelar} />\n```",
+      "options": {
+        "a": "onPress={() => pedido.cancelar()}",
+        "b": "onPress={pedido.cancelar()}",
+        "c": "onPress={this.cancelar}",
+        "d": "onPress={cancelar}"
+      },
+      "answer": "a",
+      "explanation": "Passar `pedido.cancelar` entrega só a função, separada do objeto: quando o botão a chama, `this` é `undefined`. A arrow chama o método a partir do `pedido`, então `this` aponta para ele (o `bind` resolve do mesmo jeito). Com parênteses direto no `onPress`, ele roda na renderização.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "multiple",
+      "prompt": "Os favoritos ficam num Set guardado no estado. Quais afirmações estão corretas?",
+      "options": {
+        "a": "favoritos.add(id) seguido de setFavoritos(favoritos) não redesenha a tela",
+        "b": "Criar um novo Set a partir do anterior, alterar e devolver o novo redesenha a tela",
+        "c": "Um Set não guarda o mesmo id duas vezes",
+        "d": "JSON.stringify(new Set([1, 2])) gera o texto '[1,2]', pronto para o AsyncStorage"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O React compara referências: o mesmo Set alterado passa despercebido, um `new Set(anterior)` não. O `JSON.stringify` de um Set gera `'{}'`; para salvar, converta antes com `[...favoritos]`.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "single",
+      "prompt": "Em que ordem as letras aparecem no terminal?\n\n```javascript\nconsole.log('A');\nsetTimeout(() => console.log('B'), 0);\nPromise.resolve().then(() => console.log('C'));\nconsole.log('D');\n```",
+      "options": {
+        "a": "A, D, C, B",
+        "b": "A, B, C, D",
+        "c": "A, D, B, C",
+        "d": "A, C, B, D"
+      },
+      "answer": "a",
+      "explanation": "Primeiro roda todo o código síncrono (A e D). Depois o event loop esvazia a fila de microtarefas, onde está o `then` (C), e só então pega a tarefa do `setTimeout` (B), mesmo com 0 ms.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "multiple",
+      "prompt": "Sobre a camada de API da Lojinha, quais afirmações estão corretas?",
+      "options": {
+        "a": "O AbortController cancela a busca anterior quando a pessoa continua digitando",
+        "b": "EXPO_PUBLIC_API_URL guarda o endereço da API, lido com process.env",
+        "c": "Sem internet, o fetch rejeita e o erro cai no catch",
+        "d": "await funciona dentro de uma função comum, sem async"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Cancelar a busca antiga evita que uma resposta atrasada sobrescreva a nova, e o endereço da API vem do `.env`. Uma falha de rede rejeita a Promise do `fetch`. `await` fora de uma função `async` é erro de sintaxe.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "truefalse",
+      "prompt": "O AsyncStorage guarda apenas texto: para salvar o carrinho, use JSON.stringify ao gravar e JSON.parse ao ler.",
+      "answer": true,
+      "explanation": "O AsyncStorage é assíncrono e só aceita texto. Objetos e arrays viram texto com `JSON.stringify` e voltam com `JSON.parse`. Segredos, como o token de login, vão para o SecureStore."
+    },
+    {
+      "id": "q20",
+      "type": "fill",
+      "prompt": "Na API de testes, cada página tem 20 produtos. Para pedir a terceira página, use limit=20&skip=___.",
+      "answer": [["40"]],
+      "explanation": "O `skip` diz quantos produtos pular: a primeira página pula 0, a segunda 20 e a terceira 40. Em geral, `skip = (pagina - 1) * limite`."
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E38 · Async/await e a API de verdade",
+  "description": "Oito questões sobre async e await, fetch, erros de rede e de resposta, variáveis de ambiente e cancelamento de buscas na Lojinha.",
+  "lesson": "e38b-consumindo-a-api",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Detalhe da Lojinha, em qual situação o `catch` abaixo é executado?\n\n```javascript\ntry {\n  const resposta = await fetch(URL_BASE + '/products/' + id);\n  setProduto(await resposta.json());\n} catch (erro) {\n  setErro('Sem conexão');\n}\n```",
+      "options": {
+        "a": "Quando o celular está em modo avião e o pedido nem chega ao servidor",
+        "b": "Quando o produto não existe e a API responde com status 404",
+        "c": "Quando o servidor está com problema e responde com status 500",
+        "d": "Quando a API responde com qualquer status fora da faixa de 200 a 299"
+      },
+      "answer": "a",
+      "explanation": "O `fetch` só rejeita a Promise quando o pedido não chega ao servidor, como em modo avião; aí o `await` lança e o `catch` roda. Um 404 ou um 500 é uma resposta como outra qualquer: a Promise é cumprida, o `catch` não roda e o corpo de erro vira o `produto`. Para tratar esses casos é preciso conferir `resposta.ok`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Você vai enviar o carrinho para `https://dummyjson.com/carts/add` com `fetch`. Quais itens precisam estar no segundo argumento para a API entender o pedido em JSON?",
+      "options": {
+        "a": "`method: 'POST'`",
+        "b": "`headers: { 'Content-Type': 'application/json' }`",
+        "c": "`body: JSON.stringify({ userId: 1, products })`",
+        "d": "`body: { userId: 1, products }`, sem converter",
+        "e": "`signal: controle.signal`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Um POST em JSON precisa do método, do cabeçalho `Content-Type` e do corpo convertido em texto com `JSON.stringify`. O `body` não aceita objeto: sem a conversão, o servidor recebe `[object Object]` e responde 400. O `signal` é opcional: serve para cancelar o pedido, não para o servidor entendê-lo.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Uma variável `EXPO_PUBLIC_CHAVE_PAGAMENTO` é um lugar seguro para a chave secreta do serviço de pagamento, desde que o `.env` fique fora do Git.",
+      "answer": false,
+      "explanation": "Variáveis com o prefixo `EXPO_PUBLIC_` são copiadas para dentro do app no build. Tirar o `.env` do Git protege o repositório, mas qualquer pessoa consegue extrair o valor do app instalado. Segredo fica no servidor; no `.env` do app vai só o que pode ser público, como o endereço da API.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a função para esperar a resposta e lançar um erro quando o status não for de sucesso:\n\n```javascript\nasync function buscarProduto(id) {\n  const resposta = ___ fetch(URL_BASE + '/products/' + id);\n  if (!resposta.___) throw new ApiError(resposta.status);\n  return traduzirProduto(await resposta.json());\n}\n```",
+      "answer": [["await"], ["ok"]],
+      "explanation": "Sem `await`, `resposta` seria a Promise, e não a resposta. A propriedade `ok` é `true` para os status de 200 a 299; com `!resposta.ok`, um 404 vira um `ApiError` que a tela mostra no `EstadoErro`. Conferir `resposta.status === 200` deixaria de fora o 201 de um POST.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No Checkout, `consultarFrete` leva 800 ms, `consultarPrazo` leva 600 ms e `consultarCupom` leva 400 ms. Quanto tempo, aproximadamente, o trecho abaixo leva até as três constantes terem valor?\n\n```javascript\nconst [frete, prazo, desconto] = await Promise.all([\n  consultarFrete(cep),\n  consultarPrazo(cep),\n  consultarCupom(codigo),\n]);\n```",
+      "options": {
+        "a": "800 ms, o tempo da consulta mais lenta",
+        "b": "1800 ms, a soma das três consultas",
+        "c": "400 ms, o tempo da consulta mais rápida",
+        "d": "600 ms, a média das três consultas"
+      },
+      "answer": "a",
+      "explanation": "Com `Promise.all`, as três consultas começam juntas e o `await` espera a última terminar: o tempo é o da mais lenta. A soma, 1800 ms, seria o resultado de três `await` em sequência, um em cada linha. Quem termina primeiro é o `Promise.race`, não o `Promise.all`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que o `console.log` mostra no terminal do Expo?\n\n```javascript\nasync function mostrarNome() {\n  const produto = buscarProduto(3);\n  console.log(produto.nome);\n}\n```",
+      "options": {
+        "a": "`undefined`, porque `produto` guarda uma Promise, que não tem `nome`",
+        "b": "O nome do produto 3, porque a função é `async` e espera sozinha",
+        "c": "Um erro de sintaxe, porque falta `await` dentro de uma função `async`",
+        "d": "O nome do produto 3, mas só depois de a resposta chegar"
+      },
+      "answer": "a",
+      "explanation": "Sem `await`, `buscarProduto(3)` devolve a Promise na hora, e uma Promise não tem a propriedade `nome`: o resultado é `undefined`. Marcar a função como `async` permite usar `await`, mas não espera nada sozinho. Esquecer o `await` não é erro de sintaxe: o código roda e falha em silêncio. A correção é `const produto = await buscarProduto(3);`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na busca da Início, sem `AbortController`, a pessoa digita \"s\", espera um instante e completa \"shoes\". O pedido de \"shoes\" chega primeiro; o de \"s\" chega 2 segundos depois, e a grade termina mostrando os resultados de \"s\". Qual mudança resolve?",
+      "options": {
+        "a": "Criar um `AbortController` no `useEffect` e chamar `controle.abort()` na limpeza, ignorando o `AbortError`",
+        "b": "Aumentar o atraso do `useDebounce` para 2 segundos",
+        "c": "Trocar o `await` por `Promise.all` para os dois pedidos chegarem juntos",
+        "d": "Mostrar o `EstadoErro` sempre que dois pedidos estiverem em andamento"
+      },
+      "answer": "a",
+      "explanation": "Quando o termo muda, a limpeza do efeito roda antes do efeito novo: `abort()` cancela o pedido de \"s\", que rejeita com `AbortError` e nunca sobrescreve a grade. Aumentar o debounce reduz a chance, mas não garante a ordem de chegada e deixa a busca lenta. `Promise.all` junta pedidos independentes; não sabe qual resultado é o atual. Dois pedidos em andamento não são um erro para mostrar.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois de ligar a busca à API, um aluno percebe que o teclado fecha toda vez que a busca dispara. Qual é a causa mais provável?\n\n```jsx\nif (carregando) return <EstadoCarregando mensagem=\"Buscando produtos...\" />;\nif (erro) return <EstadoErro mensagem={erro} onTentarNovamente={tentarDeNovo} />;\nreturn (\n  <SafeAreaView style={estilos.tela}>\n    <Campo rotulo=\"Buscar\" value={termo} onChangeText={setTermo} />\n    <FlatList data={lista} renderItem={desenharCartao} />\n  </SafeAreaView>\n);\n```",
+      "options": {
+        "a": "Enquanto carrega, a tela inteira vira o `EstadoCarregando`: o `Campo` sai da tela e o teclado fecha",
+        "b": "O `useDebounce` fecha o teclado ao fim dos 300 ms de espera",
+        "c": "O `AbortController` cancela também o foco do campo de texto",
+        "d": "O `Campo` precisa da prop `autoFocus` para continuar aberto durante a busca"
+      },
+      "answer": "a",
+      "explanation": "O primeiro `return` troca a tela inteira, campo incluído, pelo `EstadoCarregando`. O `TextInput` é desmontado, perde o foco e o teclado fecha; quando a grade volta, o campo é outro. A correção é deixar o `Campo` fora da troca de estados e trocar só a área abaixo dele. O debounce só atrasa o valor, o `AbortController` só cancela pedidos e `autoFocus` não impede o campo de sair da tela.",
+      "points": 2
+    }
+  ]
+}

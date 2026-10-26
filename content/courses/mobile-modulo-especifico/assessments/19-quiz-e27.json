@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E27 · Repetições: totais, busca e paginação",
+  "description": "Oito questões sobre for, while, do...while, for...of, for...in, laços aninhados, breakpoints e as regras de busca e paginação da Lojinha.",
+  "lesson": "e27b-lacos-sobre-colecoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na Lojinha, o código de cupom precisa ser **gerado ao menos uma vez** e sorteado de novo enquanto já existir. Qual laço testa a condição só **depois** de rodar o corpo?",
+      "options": {
+        "a": "`do...while`",
+        "b": "`while`",
+        "c": "`for`",
+        "d": "`for...of`"
+      },
+      "answer": "a",
+      "explanation": "`do...while` roda o corpo e só então testa a condição, então o sorteio acontece pelo menos uma vez. O `while`, a opção mais tentadora, testa antes: você teria de sortear uma vez antes do laço e repetir o mesmo código dentro dele. `for` e `for...of` também testam antes de cada volta.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Ao percorrer um array com `for...in`, a variável recebe as **posições como texto** (`'0'`, `'1'`...), e não os itens do array.",
+      "answer": true,
+      "explanation": "`for...in` percorre chaves, e as chaves de um array são as posições, sempre em texto. Por isso `i + 1` vira `'01'` e `item.preco` dá `undefined`. Para pegar os itens, use `for...of`; deixe o `for...in` para objetos, como `{ audio: 3, casa: 3 }`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No React Native DevTools, você quer que o app pause dentro do laço de `buscarProdutos` **só na volta** em que `produto.id` vale 7, sem mudar o código. O que você faz?",
+      "options": {
+        "a": "Clica com o botão direito no número da linha, escolhe \"Add conditional breakpoint\" e escreve `produto.id === 7`",
+        "b": "Escreve `console.log(produto.id)` dentro do laço e procura o 7 no terminal",
+        "c": "Coloca um breakpoint comum na linha do `return encontrados`, depois do laço",
+        "d": "Escreve `debugger;` na primeira linha da função, antes do laço"
+      },
+      "answer": "a",
+      "explanation": "O breakpoint condicional só pausa quando a expressão é verdadeira, então o app para direto na volta do produto 7. O `console.log` muda o código e não pausa nada; o breakpoint no `return` para quando o laço já terminou; e o `debugger;` antes do laço pausa uma vez só, na entrada, e ainda exige mudar o arquivo.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete `contarItens`, que soma as quantidades do carrinho para o badge da aba:\n\n```javascript\nexport function contarItens(itens) {\n  let total = ___;\n  for (const item ___ itens) {\n    total += item.qtd;\n  }\n  return total;\n}\n```",
+      "answer": [["0"], ["of"]],
+      "explanation": "O acumulador começa no neutro da soma, `0`, e nasce antes do laço. `for...of` entrega cada objeto do carrinho, então `item.qtd` existe. Com `in`, `item` seria a posição em texto (`'0'`, `'1'`), `item.qtd` daria `undefined` e o total viraria `NaN`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A vitrine tem 12 produtos. O que `paginar(produtos, 3, 5)` devolve?\n\n```javascript\nexport function paginar(lista, pagina, tamanho) {\n  if (pagina < 1 || tamanho < 1) return [];\n  const inicio = (pagina - 1) * tamanho;\n  const fim = Math.min(inicio + tamanho, lista.length);\n  const resultado = [];\n  for (let i = inicio; i < fim; i++) {\n    resultado.push(lista[i]);\n  }\n  return resultado;\n}\n```",
+      "options": {
+        "a": "Os 2 produtos das posições 10 e 11",
+        "b": "5 itens: os produtos das posições 10 e 11 e três `undefined`",
+        "c": "5 itens das posições 15 a 19, todos `undefined`",
+        "d": "Uma lista vazia, porque a página 3 passa do fim"
+      },
+      "answer": "a",
+      "explanation": "O início é `(3 - 1) * 5`, ou seja, 10. O fim seria 15, mas `Math.min(15, 12)` corta em 12, então o laço roda com `i` valendo 10 e 11. Sem o `Math.min`, viriam três `undefined` no fim, a alternativa mais tentadora. A lista vazia só aparece na página 4, que começaria na posição 15.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A Lojinha tem 4 categorias e 12 produtos. Quantas vezes a linha do `if` roda numa chamada de `contarPorCategoria`?\n\n```javascript\nfunction contarPorCategoria(categorias, produtos) {\n  const contagem = {};\n  for (const categoria of categorias) {\n    let quantos = 0;\n    for (const produto of produtos) {\n      if (produto.categoria === categoria.slug) quantos++;\n    }\n    contagem[categoria.slug] = quantos;\n  }\n  return contagem;\n}\n```",
+      "options": {
+        "a": "48",
+        "b": "16",
+        "c": "12",
+        "d": "4"
+      },
+      "answer": "a",
+      "explanation": "Para cada uma das 4 voltas do laço de fora, o de dentro percorre os 12 produtos inteiros: 4 vezes 12 dá 48. O 16 soma em vez de multiplicar, o 12 conta só uma passada do laço de dentro e o 4 só o laço de fora. Uma passada única pelos produtos, guardando a contagem num objeto, faria o mesmo trabalho em 12 voltas.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "O carrinho tem 3 itens, e um deles tem `qtd` igual a `0`. Quais destes laços **nunca terminam**?",
+      "options": {
+        "a": "`let valor = 89.9; while (valor < 150) { valor += preco; }`, com `preco` igual a `0`",
+        "b": "`for (let i = 0; i < itens.length; i--) { voltas++; }`",
+        "c": "`for (let i = 0; i < itens.length; i++) { if (itens[i].qtd === 0) continue; total += itens[i].qtd; }`",
+        "d": "`let i = 0; while (i < itens.length) { if (itens[i].qtd === 0) continue; total += itens[i].qtd; i++; }`",
+        "e": "`let n = 3; do { n--; } while (n > 0);`"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Em `while (valor < 150)`, somar `0` nunca leva o valor a 150. Com `i--`, o passo anda para longe da saída: `i` fica negativo e continua menor que 3 para sempre. No `while` com `continue` antes do `i++`, o laço volta à condição sem avançar e repete a mesma posição sem fim. Já no `for`, o `continue` vai ao `i++` e o laço avança normalmente; e o `do...while` roda 3 voltas e para.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A cliente digita \"tênis\" na busca, e o \"Tênis de Corrida\" não aparece. Digitando \"tenis\", também não. Qual é a causa?\n\n```javascript\nexport function buscarProdutos(produtos, termo) {\n  const procurado = normalizar(termo).trim();\n  if (procurado === '') return produtos;\n  const encontrados = [];\n  for (const produto of produtos) {\n    if (produto.nome.toLowerCase().includes(procurado)) {\n      encontrados.push(produto);\n    }\n  }\n  return encontrados;\n}\n```",
+      "options": {
+        "a": "Só o termo é normalizado: `'tenis'` é procurado em `'tênis de corrida'`, que ainda tem acento",
+        "b": "O `trim()` apaga o acento do termo antes da comparação",
+        "c": "O `toLowerCase()` não funciona em letras acentuadas, e o nome continua com maiúscula",
+        "d": "O `for...of` não percorre arrays de objetos; o certo seria `for...in`"
+      },
+      "answer": "a",
+      "explanation": "`normalizar` tira acento e maiúsculas só do termo, que vira `'tenis'`. O nome passa apenas por `toLowerCase()` e continua `'tênis de corrida'`, então o `includes` nunca encontra. A correção é `normalizar(produto.nome).includes(procurado)`: normalize os dois lados. O `trim` só tira espaços das pontas, o `toLowerCase` funciona com acentos (`'Tênis'` vira `'tênis'`) e o `for...of` é justamente o laço certo para arrays.",
+      "points": 2
+    }
+  ]
+}

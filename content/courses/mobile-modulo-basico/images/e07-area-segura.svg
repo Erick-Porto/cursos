@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Sem SafeAreaView o título fica atrás do relógio e da câmera; com SafeAreaView o conteúdo começa abaixo, na área segura</title>
+  <style>
+    .t     { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .bad   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .fone  { fill: #131c33; stroke: #b4bfd3; stroke-width: 3; }
+    .cam   { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bat   { fill: none; stroke: #b4bfd3; stroke-width: 2; }
+    .barra { fill: none; stroke: #f87171; stroke-width: 2.5; stroke-dasharray: 7 5; }
+    .segura { fill: none; stroke: #34d399; stroke-width: 2.5; stroke-dasharray: 7 5; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- sem SafeAreaView -->
+  <text class="bad" x="180" y="40" text-anchor="middle">sem SafeAreaView</text>
+  <rect class="fone" x="80" y="56" width="200" height="236" rx="28"/>
+  <text class="t" x="98" y="98">Minhas Tarefas</text>
+  <text class="m" x="96" y="92">12:00</text>
+  <rect class="cam" x="154" y="70" width="52" height="26" rx="13"/>
+  <rect class="bat" x="234" y="76" width="28" height="14" rx="3"/>
+  <rect class="barra" x="86" y="62" width="188" height="48" rx="10"/>
+  <text class="bad" x="180" y="324" text-anchor="middle">título coberto</text>
+
+  <path d="M 304 174 L 410 174 M 396 162 L 410 174 L 396 186" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- com SafeAreaView -->
+  <text class="ok" x="540" y="40" text-anchor="middle">com SafeAreaView</text>
+  <rect class="fone" x="440" y="56" width="200" height="236" rx="28"/>
+  <text class="m" x="456" y="92">12:00</text>
+  <rect class="cam" x="514" y="70" width="52" height="26" rx="13"/>
+  <rect class="bat" x="594" y="76" width="28" height="14" rx="3"/>
+  <rect class="segura" x="450" y="116" width="180" height="164" rx="10"/>
+  <text class="t" x="464" y="150">Minhas Tarefas</text>
+  <text class="ok" x="540" y="324" text-anchor="middle">área segura</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 310" font-family="Inter, system-ui, sans-serif">
+  <title>flex 1, 2 e 1 numa linha de 360: o espaço vira 4 partes de 90, e os filhos ficam com 90, 180 e 90</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .in   { fill: #0b1020; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .frac { fill: #b4bfd3; font-size: 22px; }
+    .val  { fill: #e8edf7; font-size: 26px; font-weight: 700; }
+    .note { fill: #b4bfd3; font-size: 22px; }
+    .rule { stroke: #a78bfa; stroke-width: 2; fill: none; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .f1 { animation: f1 7s infinite; }
+    .f2 { animation: f2 7s infinite; }
+    .f3 { animation: f3 7s infinite; }
+    @keyframes f1 { 0%, 8%  { opacity: 0; transform: translateY(-14px); } 18%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes f2 { 0%, 26% { opacity: 0; transform: translateY(-14px); } 36%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes f3 { 0%, 44% { opacity: 0; transform: translateY(-14px); } 54%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .f1, .f2, .f3 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="310" rx="16" fill="#0b1020"/>
+
+  <text class="code" x="60" y="38">flexDirection: 'row'</text>
+  <text class="lbl" x="660" y="38" text-anchor="end">largura 360</text>
+
+  <!-- régua com as 4 partes iguais -->
+  <path class="rule" d="M 60 62 L 660 62 M 60 52 L 60 72 M 660 52 L 660 72 M 210 56 L 210 68 M 360 56 L 360 68 M 510 56 L 510 68"/>
+
+  <!-- a View pai -->
+  <rect class="box" x="60" y="80" width="600" height="76" rx="8"/>
+
+  <g class="f1">
+    <rect x="63" y="83" width="144" height="70" rx="6" fill="#fbbf24"/>
+    <text class="in" x="135" y="126" text-anchor="middle">flex: 1</text>
+    <text class="frac" x="135" y="194" text-anchor="middle">1/4</text>
+    <text class="val" x="135" y="230" text-anchor="middle">90</text>
+  </g>
+  <g class="f2">
+    <rect x="213" y="83" width="294" height="70" rx="6" fill="#34d399"/>
+    <text class="in" x="360" y="126" text-anchor="middle">flex: 2</text>
+    <text class="frac" x="360" y="194" text-anchor="middle">2/4</text>
+    <text class="val" x="360" y="230" text-anchor="middle">180</text>
+  </g>
+  <g class="f3">
+    <rect x="513" y="83" width="144" height="70" rx="6" fill="#60a5fa"/>
+    <text class="in" x="585" y="126" text-anchor="middle">flex: 1</text>
+    <text class="frac" x="585" y="194" text-anchor="middle">1/4</text>
+    <text class="val" x="585" y="230" text-anchor="middle">90</text>
+  </g>
+
+  <text class="note" x="360" y="284" text-anchor="middle">1 + 2 + 1 = 4 partes · 360 ÷ 4 = 90 por parte</text>
+</svg>

@@ -1,0 +1,52 @@
+{
+  "slug": "mobile-modulo-basico",
+  "title": "Programador Mobile: Módulo Básico",
+  "subtitle": "Introdução aos ambientes React e React Native: do primeiro componente ao app rodando no seu celular",
+  "level": "iniciante",
+  "estimated_hours": 36,
+  "tags": ["mobile", "react-native", "expo", "react", "javascript"],
+  "icon": "smartphone",
+  "color": "#22d3ee",
+  "instructor_name": "Erick Ribeiro Porto",
+  "is_published": true,
+  "modules": [
+    {
+      "slug": "react",
+      "title": "Introdução ao ambiente React"
+    },
+    {
+      "slug": "react-native",
+      "title": "Introdução ao ambiente React Native",
+      "description": "16h em 4 encontros (E06 a E09): o app Minhas Tarefas no celular com Expo, componentes nativos, StyleSheet, FlatList e depuração"
+    }
+  ],
+  "achievements": [
+    {
+      "slug": "primeiro-componente",
+      "title": "Primeiro componente",
+      "description": "Concluiu as 4 primeiras aulas: ambiente pronto e primeiro projeto React no ar.",
+      "icon": "code",
+      "rarity": "common",
+      "xp": 30,
+      "rule": { "type": "lessons_completed", "count": 4 }
+    },
+    {
+      "slug": "no-celular",
+      "title": "No celular",
+      "description": "Concluiu as aulas até o primeiro app React Native rodando no próprio celular.",
+      "icon": "smartphone",
+      "rarity": "rare",
+      "xp": 60,
+      "rule": { "type": "lessons_completed", "count": 12 }
+    },
+    {
+      "slug": "base-solida",
+      "title": "Base sólida",
+      "description": "Concluiu o Módulo Básico: React e React Native prontos para o módulo profissional.",
+      "icon": "rocket",
+      "rarity": "epic",
+      "xp": 150,
+      "rule": { "type": "course_completed" }
+    }
+  ]
+}

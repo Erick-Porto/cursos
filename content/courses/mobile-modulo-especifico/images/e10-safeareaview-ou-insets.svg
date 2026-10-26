@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>SafeAreaView desce o cabeçalho inteiro para baixo do notch; com useSafeAreaInsets o fundo do cabeçalho sobe até a borda e só o título desce insets.top + 12</title>
+  <style>
+    .code   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .tela   { fill: #e8edf7; }
+    .moldura { fill: none; stroke: #2a3a5c; stroke-width: 8; stroke-linejoin: round; }
+    .cab    { fill: #131c33; }
+    .notch  { fill: #0b1020; stroke: #b4bfd3; stroke-width: 1.5; }
+    .hora-escura { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .hora-clara  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .titulo { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .note   { fill: #b4bfd3; font-size: 22px; }
+    .lbl    { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .line   { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+  </style>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <!-- SafeAreaView -->
+  <text class="code" x="148" y="38" text-anchor="middle">SafeAreaView</text>
+  <path class="tela" d="M 28 256 L 28 96 A 40 40 0 0 1 68 56 L 228 56 A 40 40 0 0 1 268 96 L 268 256 Z"/>
+  <rect class="cab" x="32" y="116" width="232" height="64"/>
+  <path class="moldura" d="M 28 256 L 28 96 A 40 40 0 0 1 68 56 L 228 56 A 40 40 0 0 1 268 96 L 268 256"/>
+  <rect class="notch" x="110" y="68" width="76" height="24" rx="12"/>
+  <text class="hora-escura" x="52" y="89">9:41</text>
+  <text class="titulo" x="52" y="156">Lojinha</text>
+  <text class="note" x="148" y="296" text-anchor="middle">fundo e título</text>
+  <text class="note" x="148" y="326" text-anchor="middle">descem juntos</text>
+
+  <!-- useSafeAreaInsets -->
+  <text class="code" x="436" y="38" text-anchor="middle">useSafeAreaInsets</text>
+  <path class="tela" d="M 316 256 L 316 96 A 40 40 0 0 1 356 56 L 516 56 A 40 40 0 0 1 556 96 L 556 256 Z"/>
+  <path class="cab" d="M 320 180 L 320 96 A 36 36 0 0 1 356 60 L 516 60 A 36 36 0 0 1 552 96 L 552 180 Z"/>
+  <path class="moldura" d="M 316 256 L 316 96 A 40 40 0 0 1 356 56 L 516 56 A 40 40 0 0 1 556 96 L 556 256"/>
+  <rect class="notch" x="398" y="68" width="76" height="24" rx="12"/>
+  <text class="hora-clara" x="340" y="89">9:41</text>
+  <text class="titulo" x="340" y="156">Lojinha</text>
+  <text class="note" x="436" y="296" text-anchor="middle">o fundo sobe e</text>
+  <text class="note" x="436" y="326" text-anchor="middle">só o título desce</text>
+
+  <!-- paddingTop: insets.top + 12 -->
+  <path class="line" d="M 566 60 L 580 60 M 573 60 L 573 136 M 566 136 L 580 136"/>
+  <text class="lbl" x="590" y="94">insets.top</text>
+  <text class="lbl" x="590" y="124">+ 12</text>
+</svg>

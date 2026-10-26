@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>O caminho do cliente: Carrinho leva o CEP ao Checkout, o Checkout abre a Confirmação com router.replace, o voltar da Confirmação não reabre o Checkout, e Meus pedidos abre pelo Perfil com router.push</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .r    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .back { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .volta { stroke: #fbbf24; stroke-width: 2.5; fill: none; stroke-dasharray: 8 6; marker-end: url(#seta-volta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#a78bfa"/></marker>
+    <marker id="seta-volta" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- Carrinho para Checkout -->
+  <rect class="box" x="20" y="24" width="180" height="80" rx="10"/>
+  <text class="n" x="110" y="58" text-anchor="middle">Carrinho</text>
+  <text class="m" x="110" y="88" text-anchor="middle">aba</text>
+  <path class="line" d="M204 64 L512 64"/>
+  <text class="t" x="358" y="52" text-anchor="middle">Finalizar compra</text>
+  <text class="m" x="358" y="92" text-anchor="middle">leva o CEP</text>
+  <rect class="box" x="520" y="24" width="180" height="80" rx="10"/>
+  <text class="n" x="610" y="58" text-anchor="middle">Checkout</text>
+  <text class="r" x="610" y="88" text-anchor="middle">/checkout</text>
+
+  <!-- Checkout para Confirmação -->
+  <path class="line" d="M610 108 L610 188"/>
+  <text class="t" x="594" y="142" text-anchor="end">Confirmar pedido</text>
+  <text class="code" x="594" y="172" text-anchor="end">router.replace</text>
+  <rect class="box" x="520" y="194" width="180" height="80" rx="10"/>
+  <text class="n" x="610" y="228" text-anchor="middle">Confirmação</text>
+  <text class="r" x="610" y="258" text-anchor="middle">/confirmacao</text>
+
+  <!-- voltar -->
+  <path class="volta" d="M516 234 L110 234 L110 110"/>
+  <text class="back" x="318" y="222" text-anchor="middle">voltar: não reabre o Checkout</text>
+
+  <!-- Perfil para Meus pedidos -->
+  <rect class="box" x="20" y="300" width="180" height="80" rx="10"/>
+  <text class="n" x="110" y="334" text-anchor="middle">Perfil</text>
+  <text class="m" x="110" y="364" text-anchor="middle">aba</text>
+  <path class="line" d="M204 340 L512 340"/>
+  <text class="t" x="358" y="328" text-anchor="middle">Meus pedidos</text>
+  <text class="code" x="358" y="370" text-anchor="middle">router.push</text>
+  <rect class="box" x="520" y="300" width="180" height="80" rx="10"/>
+  <text class="n" x="610" y="334" text-anchor="middle">Meus pedidos</text>
+  <text class="r" x="610" y="364" text-anchor="middle">/pedidos</text>
+</svg>

@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E23 · Lint, formatação, depuração e TypeScript",
+  "description": "Oito questões sobre o lint do Expo, o Prettier, os breakpoints do React Native DevTools e o TypeScript na Lojinha.",
+  "lesson": "e23b-typescript-no-app",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na revisão de um PR da Lojinha, quase todos os comentários são sobre aspas, ponto e vírgula e quebras de linha. O que resolve isso de vez?",
+      "options": {
+        "a": "Prettier com o `.prettierrc` no repositório e a formatação ao salvar ligada no editor",
+        "b": "Rodar `npx expo lint --fix` antes de cada commit",
+        "c": "Converter os arquivos para TypeScript com `strict: true`",
+        "d": "Um breakpoint em cada arquivo alterado antes de abrir o PR"
+      },
+      "answer": "a",
+      "explanation": "O Prettier reescreve o arquivo inteiro num estilo fixo, e o `.prettierrc` versionado garante que o time todo formate igual. O lint é a alternativa mais tentadora, mas as regras do Expo vigiam hooks, imports e variáveis sem uso, não o estilo. O TypeScript confere tipos, e o breakpoint serve para ver o código rodando.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "No terminal do `npx expo start`, a tecla ___ abre o React Native DevTools, com breakpoints, Watch e pilha de chamadas.",
+      "answer": [["j"]],
+      "explanation": "A tecla `j` abre o React Native DevTools no Chrome ou no Edge, conectado ao Hermes do celular. A tecla `r` só recarrega o app, e a `w` abre a versão web.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Se um arquivo `.ts` da Lojinha tiver um erro de tipo, o Metro se recusa a montar o bundle, e o app não abre no Expo Go.",
+      "answer": false,
+      "explanation": "O Metro remove os tipos sem conferi-los: com um erro de tipo, o app abre normalmente. Quem aponta o erro é o editor, enquanto você digita, e o `npx tsc --noEmit`, no projeto inteiro. Por isso vale rodar o `tsc` antes do commit.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O `npx expo lint` apontou `React Hook \"useCarrinho\" is called conditionally` (regra `react-hooks/rules-of-hooks`) neste trecho. Qual é a correção?\n\n```jsx\nexport default function Detalhe() {\n  const { id } = useLocalSearchParams();\n  const produto = produtos.find((p) => p.id === Number(id));\n  if (!produto) return <Text>Produto não encontrado</Text>;\n  const { adicionar } = useCarrinho();\n  // ...\n}\n```",
+      "options": {
+        "a": "Mover `const { adicionar } = useCarrinho();` para antes do `if`, junto dos outros hooks",
+        "b": "Acrescentar `// eslint-disable-next-line react-hooks/rules-of-hooks` acima do `useCarrinho()`",
+        "c": "Trocar `useCarrinho()` por `useContext(CarrinhoContext)` na mesma linha",
+        "d": "Chamar `useCarrinho()` também dentro do `if`, para o hook rodar nos dois caminhos"
+      },
+      "answer": "a",
+      "explanation": "Hooks precisam rodar sempre, na mesma ordem, em toda renderização. Com o hook depois do `return`, ele roda só quando o produto existe, e o React quebra com `Rendered more hooks than during the previous render`. Desligar a regra é tentador, mas só esconde esse erro real. `useContext` também é um hook e sofre da mesma regra, e chamar hook dentro de um `if` é exatamente o que ela proíbe.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais destes problemas o `npx expo lint`, com as regras do Expo, aponta sem que você abra o app?",
+      "options": {
+        "a": "`import { formatarPreco } from '../utils/formatr';`, com o nome do arquivo digitado errado",
+        "b": "`useRef` importado no `Esqueleto` e nunca usado",
+        "c": "Um `useEffect` que lê `categoria`, mas tem `[]` como lista de dependências",
+        "d": "O badge do carrinho contando `itens.length` em vez da soma das quantidades",
+        "e": "Frete grátis liberado a partir de R$ 15 quando a regra da loja é R$ 150"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O import de arquivo inexistente cai em `import/no-unresolved`, o import sem uso em `no-unused-vars` e a dependência que falta em `react-hooks/exhaustive-deps`. As outras duas são erros de lógica do negócio: o código é válido, e nenhuma regra sabe quanto vale o frete ou o que o badge deveria contar. Esses aparecem no depurador e nos testes.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O app está pausado num breakpoint na linha marcada, dentro do Detalhe. Você quer ver, linha a linha, o que acontece **dentro** de `adicionar`. Qual comando do DevTools usa?\n\n```jsx\nfunction adicionarAoCarrinho() {\n  adicionar(produto); // pausado aqui\n  setToastVisivel(true);\n}\n```",
+      "options": {
+        "a": "Step into (<kbd>F11</kbd>)",
+        "b": "Step over (<kbd>F10</kbd>)",
+        "c": "Resume (<kbd>F8</kbd>)",
+        "d": "Step out (<kbd>Shift</kbd> + <kbd>F11</kbd>)"
+      },
+      "answer": "a",
+      "explanation": "Step into entra na função chamada na linha e para na primeira linha de `adicionar`. Step over é o mais tentador, mas executa `adicionar` inteira de uma vez e para no `setToastVisivel`. Resume segue até o próximo breakpoint, e Step out termina `adicionarAoCarrinho` e volta para quem a chamou.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com o código abaixo num arquivo `.ts`, qual chamada o TypeScript sublinha?\n\n```typescript\ntype Produto = { id: number; nome: string; preco: number };\n\nfunction formatarPreco(valor: number): string {\n  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });\n}\n\nconst garrafa: Produto = { id: 5, nome: 'Garrafa Térmica', preco: 79.9 };\n```",
+      "options": {
+        "a": "`formatarPreco(garrafa.nome)`",
+        "b": "`formatarPreco(garrafa.preco)`",
+        "c": "`formatarPreco(garrafa.preco * 2)`",
+        "d": "`const texto: string = formatarPreco(79.9)`"
+      },
+      "answer": "a",
+      "explanation": "`garrafa.nome` é `string`, e o parâmetro `valor` espera `number`: o editor mostra `Argument of type 'string' is not assignable to parameter of type 'number'`. `garrafa.preco` e `garrafa.preco * 2` são números, e o retorno de `formatarPreco` é `string`, o mesmo tipo anotado em `texto`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em `src/telas/Detalhe.tsx`, com `strict: true`, o editor sublinha `produto.nome` com `'produto' is possibly 'undefined'`. O que o aviso indica, e qual é a melhor resposta?\n\n```typescript\nconst produto = produtos.find((p) => p.id === Number(id));\nreturn <Text>{produto.nome}</Text>;\n```",
+      "options": {
+        "a": "O `find` pode não achar nenhum produto; trate o caso com `if (!produto)` antes de usar `produto.nome`",
+        "b": "O TypeScript se enganou, porque o `id` sempre existe; escreva `produto!.nome` para seguir em frente",
+        "c": "O `strict` está rígido demais; desligue-o no `tsconfig.json`",
+        "d": "Falta tipo na variável; declare `const produto: any` para o aviso sumir"
+      },
+      "answer": "a",
+      "explanation": "O tipo de `produto` é `Produto | undefined`, porque o `find` devolve `undefined` quando não acha nada, como num endereço `/produto/99`. É o `Cannot read property 'nome' of undefined` do E16, apontado antes de rodar. Depois do `if (!produto)`, o tipo estreita para `Produto`. O `!`, o `any` e desligar o `strict` só calam o aviso, e a tela vermelha volta no celular.",
+      "points": 2
+    }
+  ]
+}

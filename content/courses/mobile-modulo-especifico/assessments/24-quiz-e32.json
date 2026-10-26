@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E32 · Erros e o checkout completo",
+  "description": "Oito questões sobre throw, try, catch e finally, erros próprios, testes de exceção e o checkout completo da Lojinha.",
+  "lesson": "e32b-projeto-checkout",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Depois que o pedido é registrado, o Checkout abre a tela de confirmação com `router.replace` em vez de `router.push`. Por quê?",
+      "options": {
+        "a": "Para o voltar não levar de novo ao checkout de um pedido que já foi feito",
+        "b": "Porque `router.push` não consegue levar o `id` do pedido como parâmetro",
+        "c": "Porque é o `router.replace` que registra o pedido no `PedidosContext`",
+        "d": "Porque a confirmação fica dentro das abas, e abas não aceitam `router.push`"
+      },
+      "answer": "a",
+      "explanation": "`router.replace` troca a tela de cima da pilha: o Checkout sai e a Confirmação entra no lugar dele, então o voltar leva às abas, e não a um formulário de pedido já finalizado. A alternativa do parâmetro é a mais tentadora, mas `push` e `replace` aceitam `params` do mesmo jeito. Quem registra o pedido é o `registrar` do contexto, e `app/confirmacao.js` fica na pilha, fora das abas.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O código abaixo roda com um cupom que não existe, e `descontoDoCupom` lança um `CupomInvalidoError`. O que aparece no terminal?\n\n```javascript\nfunction aplicar(cupom) {\n  try {\n    console.log('1');\n    descontoDoCupom(cupom, 100);\n    console.log('2');\n  } catch (erro) {\n    console.log('3');\n    return 0;\n  } finally {\n    console.log('4');\n  }\n}\n\naplicar('NAOEXISTE');\n```",
+      "options": {
+        "a": "1, 3, 4",
+        "b": "1, 3",
+        "c": "1, 2, 3, 4",
+        "d": "1, 3, 4, 2"
+      },
+      "answer": "a",
+      "explanation": "O `throw` dentro de `descontoDoCupom` pula o `2` e leva ao `catch`, que imprime `3`. O `return 0` não impede o `finally`: ele roda antes de a função devolver o valor, e o `4` aparece. A resposta \"1, 3\" é a mais tentadora, porque parece que o `return` encerra tudo, mas o `finally` roda sempre: com erro, sem erro ou com `return`. O `2` nunca roda, porque nenhuma linha depois do `throw` é executada.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "No checkout da Lojinha, quais situações são **erros esperados**, que a regra lança como erro próprio e a tela transforma em mensagem?",
+      "options": {
+        "a": "A cliente digita o CEP com 7 números",
+        "b": "O cupom digitado já expirou",
+        "c": "A quantidade pedida passa do estoque do produto",
+        "d": "A tela lê `produto.nome` com `produto` igual a `undefined`",
+        "e": "O total aparece como `NaN` porque o preço chegou como texto"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "CEP, cupom e estoque dependem da situação, e o usuário consegue resolver com uma boa mensagem: são `CepInvalidoError`, `CupomInvalidoError` e `EstoqueInsuficienteError`. Ler propriedade de `undefined` (um `TypeError`) e chegar a `NaN` somando texto são bugs: a culpa é do código. Um `catch` que os transformasse em mensagem esconderia o problema em vez de corrigi-lo.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "O teste `expect(freteDoCep(100, 'abc')).toThrow(CepInvalidoError);` passa quando `freteDoCep` lança o erro certo para o CEP inválido.",
+      "answer": false,
+      "explanation": "Sem a arrow function, `freteDoCep(100, 'abc')` roda antes de o `expect` receber qualquer coisa: a exceção estoura ali e o teste falha com o próprio erro. O `toThrow` precisa receber uma função para chamá-la por dentro: `expect(() => freteDoCep(100, 'abc')).toThrow(CepInvalidoError)`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o erro próprio do cupom em `src/modelos/erros.js`:\n\n```javascript\nexport class CupomInvalidoError ___ ErroDeNegocio {\n  constructor(cupom, motivo) {\n    ___(motivo, 'CUPOM_INVALIDO');\n    this.name = 'CupomInvalidoError';\n    this.cupom = cupom;\n  }\n}\n```",
+      "answer": [["extends"], ["super"]],
+      "explanation": "`extends` faz `CupomInvalidoError` herdar de `ErroDeNegocio` e, por ela, de `Error`: o `instanceof` responde `true` para as duas. `super(...)` chama o constructor da mãe, que guarda a `message` e o `codigo`. Ele vem antes de qualquer `this`; sem ele, o JavaScript lança `ReferenceError` ao criar o erro.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A cliente leva um Fone Bluetooth (R$ 199,90) e uma Luminária de Mesa (R$ 89,90), aplica um cupom de 10%, informa um CEP de São Paulo (frete de R$ 9,90 abaixo de R$ 150) e escolhe o boleto. Pelas regras do projeto, quanto ela paga?",
+      "options": {
+        "a": "R$ 260,82",
+        "b": "R$ 247,78",
+        "c": "R$ 270,72",
+        "d": "R$ 289,80"
+      },
+      "answer": "a",
+      "explanation": "Os produtos somam R$ 289,80; o cupom tira 10% desse subtotal (R$ 28,98); o frete é grátis, porque os produtos passam de R$ 150; e o boleto não muda o valor: R$ 260,82. R$ 247,78 seria o Pix, com mais 5% de desconto. R$ 270,72 soma o frete de São Paulo, que não se cobra acima de R$ 150. R$ 289,80 esquece o cupom.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A cliente digita um CEP válido, `01310000`, e sai do campo. Repare no erro de digitação na primeira linha do `try`. O que acontece?\n\n```jsx\nfunction aoSairDoCep() {\n  try {\n    freteDoCep(subtotl, cep);\n    setErros({ ...erros, cep: null });\n  } catch (erro) {\n    setErros({ ...erros, cep: 'Confira o CEP' });\n  }\n}\n```",
+      "options": {
+        "a": "O campo mostra \"Confira o CEP\" para um CEP válido, e o bug do `subtotl` fica escondido",
+        "b": "A tela vermelha mostra `ReferenceError: subtotl is not defined`",
+        "c": "O campo fica sem erro, porque o CEP é válido",
+        "d": "O campo mostra a `message` do `CepInvalidoError`, com o CEP digitado"
+      },
+      "answer": "a",
+      "explanation": "`subtotl` não existe: o JavaScript lança um `ReferenceError` antes de `freteDoCep` rodar, e o `catch` genérico o transforma em \"Confira o CEP\". A tela vermelha, a alternativa mais tentadora, seria até o melhor resultado, mas o `catch` engole o erro antes. Nenhum `CepInvalidoError` é lançado, porque `freteDoCep` nem chega a ser chamada. A correção é relançar o que não é erro de negócio, com `if (!(erro instanceof ErroDeNegocio)) throw erro;`, e mostrar `erro.message` nos casos esperados.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A cliente digita um CEP inválido e toca em **Confirmar pedido**. O que acontece com esta versão do `finalizar`?\n\n```jsx\nfunction finalizar() {\n  try {\n    limpar(); // esvazia o carrinho\n    const pedido = fecharPedido({ itens, cep, cupom, pagamento });\n    registrar(pedido);\n    router.replace('/confirmacao');\n  } catch (erro) {\n    mostrarErro(erro); // CEP e cupom no Campo; o resto no Toast\n  }\n}\n```",
+      "options": {
+        "a": "O erro aparece embaixo do CEP, mas o carrinho já foi esvaziado e a cliente perde os produtos",
+        "b": "O erro aparece embaixo do CEP e o carrinho continua cheio, porque o `catch` desfaz o `limpar()`",
+        "c": "O pedido é registrado com frete zero e a confirmação abre",
+        "d": "A tela vermelha aparece, porque o `catch` relança o erro do CEP"
+      },
+      "answer": "a",
+      "explanation": "O `limpar()` roda antes da regra: quando `fecharPedido` lança o `CepInvalidoError`, o carrinho já foi esvaziado, e o `catch` não desfaz nada, só trata o erro. A ordem certa é montar o pedido primeiro e só depois registrar, navegar e limpar: se a regra lança, nenhuma dessas linhas roda. O pedido não chega a ser registrado, e o `mostrarErro` só relança o que não é `ErroDeNegocio`: o erro do CEP vai para o `Campo`.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E24 · Testes automatizados e integração contínua",
+  "description": "Oito questões sobre Jest, matchers, TDD, cobertura, o script verificar, variáveis EXPO_PUBLIC_ e o CI no GitHub Actions.",
+  "lesson": "e24b-automacao-e-integracao-continua",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O teste abaixo falha, embora o `aplicarFiltros` devolva os produtos na ordem certa. Qual troca faz o teste passar?\n\n```javascript\ntest('ordena pelo menor preço', () => {\n  const ids = aplicarFiltros(lista, { categoria: 'audio', ordem: 'preco' })\n    .map((p) => p.id);\n  expect(ids).toBe([2, 1]);\n});\n```",
+      "options": {
+        "a": "Trocar `toBe([2, 1])` por `toEqual([2, 1])`",
+        "b": "Trocar `toBe([2, 1])` por `toContain([2, 1])`",
+        "c": "Trocar `test` por `describe`, que compara listas",
+        "d": "Escrever `expect(() => ids).toBe([2, 1])`, com arrow function"
+      },
+      "answer": "a",
+      "explanation": "`toBe` pergunta se é o mesmo valor; para arrays, isso significa o mesmo array na memória, e o `[2, 1]` escrito no teste é outro array, ainda que com o mesmo conteúdo. `toEqual` compara item por item. `toContain([2, 1])` procuraria, dentro de `ids`, um item que fosse o próprio array `[2, 1]`, e não acharia. `describe` só agrupa testes, e a arrow function dentro do `expect` é para o `toThrow`.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "A Lojinha vai ler o endereço da API de um arquivo `.env`. Quais práticas estão corretas?",
+      "options": {
+        "a": "Nomear a variável `EXPO_PUBLIC_API_URL` e ler com `process.env.EXPO_PUBLIC_API_URL`",
+        "b": "Colocar o `.env` no `.gitignore` e fazer commit de um `.env.example` com as mesmas variáveis",
+        "c": "Guardar a chave secreta do pagamento em `EXPO_PUBLIC_PAGAMENTO_SEGREDO`, já que o `.env` não vai para o Git",
+        "d": "Ler com `const { EXPO_PUBLIC_API_URL } = process.env` para deixar o código mais curto",
+        "e": "Reiniciar o `npx expo start` depois de mudar um valor no `.env`"
+      },
+      "answer": ["a", "b", "e"],
+      "explanation": "O prefixo `EXPO_PUBLIC_` faz o Expo entregar a variável ao app, lida com ponto e nome inteiro; o `.env` fica fora do Git e o `.env.example` mostra à equipe o que configurar; e o servidor precisa reiniciar para ler o valor novo. A chave secreta é a armadilha: tudo que tem `EXPO_PUBLIC_` é copiado para dentro do app instalado, e qualquer pessoa extrai do APK, com ou sem Git. Desestruturar o `process.env` faz o valor chegar `undefined`, porque o Expo só substitui a forma escrita por extenso.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Com o script `\"verificar\": \"npx expo lint && npm test\"`, se o lint encontrar um erro, os testes rodam mesmo assim e o resultado final é o dos testes.",
+      "answer": false,
+      "explanation": "O `&&` só executa o segundo comando quando o primeiro termina com código de saída `0`. Com erro no lint, o `npm test` nem começa e o `verificar` termina com falha. É o comportamento desejado: nada passa se uma das verificações falhar.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o arquivo `src/utils/validar.test.js` para agrupar os casos do `validarEmail` e conferir que um e-mail válido não gera mensagem de erro:\n\n```javascript\nimport { validarEmail } from './validar';\n\n___('validarEmail', () => {\n  test('aceita um e-mail válido', () => {\n    expect(validarEmail('ana@loja.com')).___();\n  });\n});\n```",
+      "answer": [["describe"], ["toBeNull"]],
+      "explanation": "`describe` agrupa os testes de uma função e dá o nome que aparece no relatório. O `validarEmail` devolve `null` quando não há erro, e o matcher para isso é `toBeNull()`. `toBeFalsy()` também passaria, mas aceitaria `''` ou `undefined`, que seriam bugs: o teste deve conferir exatamente o que a tela espera.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você vai corrigir com TDD o bug do `mascararTelefone`, que mostra `(55) 11987-6543` quando o cliente cola `+55 11 98765-4321`. Qual é a ordem dos passos?",
+      "options": {
+        "a": "Escrever o teste que reproduz o bug e vê-lo falhar; escrever o mínimo de código para ele passar; melhorar o código com todos os testes verdes",
+        "b": "Corrigir o código; escrever o teste e vê-lo passar; refatorar se sobrar tempo",
+        "c": "Escrever o teste e o código juntos; rodar `npm test` uma vez no fim; fazer o commit",
+        "d": "Refatorar o código existente; escrever o teste; corrigir o bug se o teste falhar"
+      },
+      "answer": "a",
+      "explanation": "TDD é vermelho, verde, refatorar. O teste vem primeiro e precisa falhar: é a prova de que ele detecta o bug. Corrigir antes e testar depois, a opção mais tentadora, não garante isso, porque um teste que já nasce verde pode não estar conferindo nada. A refatoração vem por último, protegida pelos testes.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Depois de `npm test -- --coverage`, o relatório mostra esta linha. O que a coluna **% Funcs** indica?\n\n```plaintext\nFile        | % Stmts | % Branch | % Funcs | % Lines\nvalidar.js  |   35.71 |       25 |      20 |   36.36\n```",
+      "options": {
+        "a": "Só 20% das funções de `validar.js` foram chamadas por algum teste",
+        "b": "20% dos testes de `validar.js` falharam",
+        "c": "As funções de `validar.js` têm 20% de chance de conter um bug",
+        "d": "Só 20% das funções de `validar.js` são exportadas"
+      },
+      "answer": "a",
+      "explanation": "Cobertura mede o que os testes executaram: em `validar.js`, só uma de cinco funções foi chamada, provavelmente o `validarEmail`. Ela não conta falhas, que aparecem no resumo `Tests:`, nem mede chance de bug: até 100% de cobertura pode esconder um teste sem `expect`. O relatório aponta onde falta teste.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No GitHub Actions, o passo **Testes** da Lojinha começa e não termina: fica rodando até o job ser cancelado pelo `timeout-minutes`. Na sua máquina, `npm test` mostra os testes passando e continua aberto, esperando. Veja o `package.json`. Qual é a causa mais provável?\n\n```json\n\"scripts\": {\n  \"test\": \"jest --watchAll\",\n  \"verificar\": \"npx expo lint && npm test\"\n}\n```",
+      "options": {
+        "a": "O `--watchAll` deixa o Jest esperando mudanças nos arquivos em vez de terminar",
+        "b": "O `npm ci` não instalou o Jest, porque ele está em `devDependencies`",
+        "c": "O runner Linux não consegue rodar testes escritos no Windows",
+        "d": "Falta o `.env` no repositório, e o Jest espera o arquivo aparecer"
+      },
+      "answer": "a",
+      "explanation": "Com `--watchAll`, o Jest observa os arquivos para rodar de novo a cada mudança, e por isso continua aberto na sua máquina. No CI ninguém muda arquivo, e o passo só para no tempo limite. O script deve ser `\"test\": \"jest\"`; para observar, rode `npm test -- --watch` no seu terminal. O `npm ci` instala também as `devDependencies`, o Linux roda o mesmo JavaScript, e a falta do `.env` não faria o Jest esperar.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A equipe tem o workflow `verificar.yml` rodando em todo PR para a `main` e o selo verde no README. Mesmo assim, um PR com um teste vermelho foi mesclado. O que faltou?",
+      "options": {
+        "a": "Uma regra de proteção na `main` exigindo que o check `verificar` passe antes do merge",
+        "b": "Atualizar o selo do README, que só muda uma vez por dia",
+        "c": "Trocar `npm ci` por `npm install` no workflow, para testar com as versões mais novas",
+        "d": "Rodar o workflow também no evento `push` de todas as branches"
+      },
+      "answer": "a",
+      "explanation": "O workflow só informa o resultado; quem impede o merge é a regra de proteção da branch, com **Require status checks to pass before merging** e o job `verificar` escolhido (e **Do not allow bypassing the above settings**, para valer também para quem é dono). O selo se atualiza a cada execução, mas não bloqueia nada. Rodar em mais eventos ou trocar o `npm ci` não muda o fato: sem regra, um check vermelho não desabilita o merge.",
+      "points": 2
+    }
+  ]
+}

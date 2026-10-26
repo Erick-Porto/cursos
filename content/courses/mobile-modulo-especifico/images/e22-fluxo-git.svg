@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Fluxo do Git: git add leva a mudança da pasta de trabalho para a área de preparação, git commit grava no repositório local, git push envia ao GitHub e git pull traz de volta</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .gh   { fill: #131c33; stroke: #60a5fa; stroke-width: 2.5; }
+    .pc   { fill: none; stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 7 6; }
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .cmd  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .line { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- seu computador -->
+  <rect x="16" y="16" width="688" height="220" rx="14" class="pc"/>
+  <text x="36" y="48" class="m">seu computador</text>
+
+  <rect x="36" y="120" width="180" height="84" rx="12" class="box"/>
+  <text x="126" y="154" text-anchor="middle" class="t">pasta de</text>
+  <text x="126" y="184" text-anchor="middle" class="t">trabalho</text>
+
+  <rect x="270" y="120" width="180" height="84" rx="12" class="box"/>
+  <text x="360" y="154" text-anchor="middle" class="t">área de</text>
+  <text x="360" y="184" text-anchor="middle" class="t">preparação</text>
+
+  <rect x="504" y="120" width="180" height="84" rx="12" class="box"/>
+  <text x="594" y="154" text-anchor="middle" class="t">repositório</text>
+  <text x="594" y="184" text-anchor="middle" class="t">local</text>
+
+  <!-- add e commit -->
+  <path d="M 186 118 C 196 80, 290 80, 300 112" class="line"/>
+  <text x="243" y="76" text-anchor="middle" class="cmd">git add</text>
+  <path d="M 420 118 C 430 80, 524 80, 534 112" class="line"/>
+  <text x="477" y="76" text-anchor="middle" class="cmd">git commit</text>
+
+  <!-- GitHub -->
+  <rect x="504" y="286" width="180" height="72" rx="12" class="gh"/>
+  <text x="594" y="330" text-anchor="middle" class="t">GitHub</text>
+
+  <!-- push e pull -->
+  <path d="M 594 206 L 594 278" class="line"/>
+  <text x="582" y="270" text-anchor="end" class="cmd">git push</text>
+  <path d="M 500 322 L 126 322 L 126 212" class="line"/>
+  <text x="313" y="310" text-anchor="middle" class="cmd">git pull</text>
+</svg>

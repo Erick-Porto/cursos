@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 364" font-family="Inter, system-ui, sans-serif">
+  <title>Quadro kanban: o cartão da issue 9 anda de Todo para In Progress, In review e Done, enquanto a história passa por branch, Pull Request e merge</title>
+  <style>
+    .col  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .card { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ativo { fill: #0b1020; stroke: #34d399; stroke-width: 2.5; }
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .n    { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .anda { animation: anda 8s ease-in-out infinite; }
+    .c2   { animation: c2 8s ease-out infinite; }
+    .c3   { animation: c3 8s ease-out infinite; }
+    .c4   { animation: c4 8s ease-out infinite; }
+    @keyframes anda {
+      0%        { opacity: 0; transform: translateX(-528px); }
+      4%, 12%   { opacity: 1; transform: translateX(-528px); }
+      18%, 34%  { opacity: 1; transform: translateX(-352px); }
+      40%, 56%  { opacity: 1; transform: translateX(-176px); }
+      62%, 94%  { opacity: 1; transform: translateX(0); }
+      98%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes c2 {
+      0%, 16%   { opacity: 0; }
+      20%, 94%  { opacity: 1; }
+      98%, 100% { opacity: 0; }
+    }
+    @keyframes c3 {
+      0%, 38%   { opacity: 0; }
+      42%, 94%  { opacity: 1; }
+      98%, 100% { opacity: 0; }
+    }
+    @keyframes c4 {
+      0%, 60%   { opacity: 0; }
+      64%, 94%  { opacity: 1; }
+      98%, 100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .anda, .c2, .c3, .c4 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="364" rx="16" fill="#0b1020"/>
+
+  <!-- colunas -->
+  <rect class="col" x="10" y="16" width="172" height="272" rx="12"/>
+  <rect class="col" x="186" y="16" width="172" height="272" rx="12"/>
+  <rect class="col" x="362" y="16" width="172" height="272" rx="12"/>
+  <rect class="col" x="538" y="16" width="172" height="272" rx="12"/>
+  <text class="h" x="96" y="52" text-anchor="middle">Todo</text>
+  <text class="h" x="272" y="52" text-anchor="middle">In Progress</text>
+  <text class="h" x="448" y="52" text-anchor="middle">In review</text>
+  <text class="h" x="624" y="52" text-anchor="middle">Done</text>
+
+  <!-- cartão que fica no Todo -->
+  <rect class="card" x="18" y="184" width="156" height="92" rx="8"/>
+  <text class="n" x="30" y="212">#7</text>
+  <text class="t" x="30" y="240">Horários</text>
+  <text class="t" x="30" y="266">livres</text>
+
+  <!-- cartão que anda: posição final em Done -->
+  <g class="anda">
+    <rect class="ativo" x="546" y="80" width="156" height="92" rx="8"/>
+    <text class="n" x="558" y="108">#9</text>
+    <text class="t" x="558" y="136">Cancelar</text>
+    <text class="t" x="558" y="162">agendamento</text>
+  </g>
+
+  <!-- o que acontece em cada coluna -->
+  <text class="m" x="96" y="320" text-anchor="middle">issue com</text>
+  <text class="m" x="96" y="348" text-anchor="middle">critérios</text>
+  <g class="c2">
+    <text class="m" x="272" y="320" text-anchor="middle">branch e</text>
+    <text class="m" x="272" y="348" text-anchor="middle">commits</text>
+  </g>
+  <g class="c3">
+    <text class="m" x="448" y="320" text-anchor="middle">PR com</text>
+    <text class="code" x="448" y="348" text-anchor="middle">Closes #9</text>
+  </g>
+  <g class="c4">
+    <text class="m" x="624" y="320" text-anchor="middle">merge fecha</text>
+    <text class="m" x="624" y="348" text-anchor="middle">a issue</text>
+  </g>
+</svg>

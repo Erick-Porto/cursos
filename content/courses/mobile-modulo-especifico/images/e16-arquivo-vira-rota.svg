@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Arquivo vira rota no Expo Router: index.js responde por /, carrinho.js por /carrinho e o mesmo produto/[id].js por /produto/7 e /produto/12; o _layout.js envolve as rotas</title>
+  <style>
+    .frame { fill: none; stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 8 6; }
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .rota  { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .var   { fill: #fbbf24; font-weight: 700; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .head  { fill: #b4bfd3; font-size: 22px; }
+    .line  { stroke: #a78bfa; stroke-width: 2; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- moldura: o _layout.js envolve as rotas da pasta -->
+  <rect class="frame" x="20" y="20" width="344" height="300" rx="14"/>
+  <text class="lbl" x="40" y="58">app/_layout.js</text>
+
+  <!-- arquivos -->
+  <rect class="box" x="40" y="84" width="304" height="48" rx="10"/>
+  <text class="code" x="60" y="115">index.js</text>
+  <rect class="box" x="40" y="152" width="304" height="48" rx="10"/>
+  <text class="code" x="60" y="183">carrinho.js</text>
+  <rect class="box" x="40" y="242" width="304" height="48" rx="10"/>
+  <text class="code" x="60" y="273">produto/<tspan class="var">[id]</tspan>.js</text>
+
+  <!-- rotas -->
+  <text class="head" x="484" y="58">rota</text>
+  <rect class="rota" x="484" y="84" width="200" height="48" rx="10"/>
+  <text class="code" x="504" y="115">/</text>
+  <rect class="rota" x="484" y="152" width="200" height="48" rx="10"/>
+  <text class="code" x="504" y="183">/carrinho</text>
+  <rect class="rota" x="484" y="214" width="200" height="48" rx="10"/>
+  <text class="code" x="504" y="245">/produto/<tspan class="var">7</tspan></text>
+  <rect class="rota" x="484" y="272" width="200" height="48" rx="10"/>
+  <text class="code" x="504" y="303">/produto/<tspan class="var">12</tspan></text>
+
+  <!-- setas -->
+  <path class="line" d="M 344 108 L 480 108"/>
+  <path class="line" d="M 344 176 L 480 176"/>
+  <path class="line" d="M 344 266 L 480 240"/>
+  <path class="line" d="M 344 266 L 480 294"/>
+</svg>

@@ -1,0 +1,127 @@
+{
+  "title": "Quiz: E31 · Herança, polimorfismo, encapsulamento e composição",
+  "description": "Oito questões sobre as formas de pagamento da Lojinha, campos privados e o Pedido que compõe pagamento e entrega.",
+  "lesson": "e31b-encapsulamento-e-composicao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Dentro do `constructor` de `PagamentoPix`, que estende `Pagamento`, o que a linha `super('pix', 'Pix')` faz?",
+      "options": {
+        "a": "Roda o constructor de `Pagamento` com esses argumentos, e precisa vir antes de qualquer uso de `this`",
+        "b": "Cria uma segunda instância de `Pagamento` e a guarda dentro do objeto Pix",
+        "c": "Copia os métodos de `Pagamento` para o Pix; sem essa linha, o Pix não herda nenhum método",
+        "d": "Avisa ao JavaScript que os métodos do Pix sobrescrevem os da mãe"
+      },
+      "answer": "a",
+      "explanation": "`super(...)` chama o constructor da classe mãe, que monta a parte do objeto que vem dela (aqui, `tipo` e `nome`). Numa subclasse, usar `this` antes dele lança `ReferenceError`. Ele não cria outro objeto: existe uma instância só. A herança dos métodos vem do `extends`, não do `super`, e a sobrescrita acontece só por declarar na filha um método com o mesmo nome.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Pelas regras da Lojinha, o Pix dá 5% de desconto, o cartão não tem juros até 6x e `PagamentoBoleto` não declara `totalAPagar`. Quanto vale `totais`?\n\n```javascript\nconst formas = [new PagamentoPix(), new PagamentoCartao(6), new PagamentoBoleto()];\nconst totais = formas.map((forma) => forma.totalAPagar(300));\n```",
+      "options": {
+        "a": "`[285, 300, 300]`",
+        "b": "`[285, 337.65, 300]`",
+        "c": "`[285, 300, undefined]`",
+        "d": "O código lança um erro, porque `PagamentoBoleto` não tem `totalAPagar`"
+      },
+      "answer": "a",
+      "explanation": "É polimorfismo: a mesma chamada roda um código diferente em cada objeto. O Pix sobrescreve o método e tira 5% (285). Em 6x o cartão não passa do limite e usa `super.totalAPagar`, que devolve 300; os juros de 1,99% ao mês só começam em 7x, então 337,65 seria o erro de cobrar juros cedo demais. O boleto não declara o método, e o JavaScript o procura na mãe, `Pagamento`, que devolve o valor sem mudança: não há `undefined` nem erro.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Sobre esta versão de `PagamentoCartao`, criada com `const cartao = new PagamentoCartao(3)`, quais afirmações são verdadeiras?\n\n```javascript\nexport default class PagamentoCartao extends Pagamento {\n  #parcelas;\n\n  constructor(parcelas = 1) {\n    super('cartao', 'Cartão');\n    this.#parcelas = parcelas;\n  }\n\n  get parcelas() {\n    return this.#parcelas;\n  }\n}\n```",
+      "options": {
+        "a": "Na tela, `cartao.parcelas` lê o número 3",
+        "b": "`cartao.parcelas = 24` não muda o valor guardado: sem setter, a atribuição lança um `TypeError`",
+        "c": "Uma subclasse de `PagamentoCartao` pode ler `this.#parcelas` direto, porque herda tudo da mãe",
+        "d": "`JSON.stringify(cartao)` mostra `{\"parcelas\":3}`",
+        "e": "Fora da classe, escrever `cartao.#parcelas` é erro de sintaxe: o arquivo nem compila"
+      },
+      "answer": [
+        "a",
+        "b",
+        "e"
+      ],
+      "explanation": "O getter `parcelas` é a porta de leitura do campo privado, e sem setter ninguém escreve nele por fora. O `#parcelas` só existe dentro das chaves da classe que o declarou: nem as subclasses o enxergam, e elas precisam usar o getter. `JSON.stringify` só leva campos próprios e públicos; como os `#` e os getters ficam de fora, o resultado é `'{}'`. Por isso o Checkout guarda no estado `tipo` e `parcelas`, e não a instância.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Se `cartao` foi criado com `new PagamentoCartao(10)`, então `cartao instanceof Pagamento` é `false`, porque a classe dele é `PagamentoCartao`.",
+      "answer": false,
+      "explanation": "`instanceof` responde se o objeto foi criado pela classe ou por qualquer filha dela. Todo cartão é um pagamento, então `cartao instanceof Pagamento` é `true`, assim como `cartao instanceof PagamentoCartao`. Só `cartao instanceof PagamentoPix` daria `false`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete a classe para que o boleto herde tudo de `Pagamento` e chame o constructor da mãe:\n\n```javascript\nimport Pagamento from './Pagamento';\n\nexport default class PagamentoBoleto ___ Pagamento {\n  constructor() {\n    ___('boleto', 'Boleto');\n  }\n}\n```",
+      "answer": [
+        [
+          "extends"
+        ],
+        [
+          "super"
+        ]
+      ],
+      "explanation": "`extends` liga a filha à mãe: o boleto ganha `descricao` e `totalAPagar` de `Pagamento`. `super(...)` roda o constructor da mãe com o tipo e o nome. `implements` não existe em JavaScript, e `this(...)` ou `Pagamento(...)` não chamam o constructor da mãe.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `Pedido` precisa guardar a forma de pagamento escolhida no Checkout. Pelo teste \"é um\" ou \"tem um\", qual modelagem é a certa?",
+      "options": {
+        "a": "Composição: o pedido tem um campo `pagamento`, que recebe qualquer filha de `Pagamento`",
+        "b": "Herança: `class Pedido extends Pagamento`, porque o pedido também calcula um total",
+        "c": "Herança: uma subclasse por forma, como `PedidoPix`, `PedidoCartao` e `PedidoBoleto`",
+        "d": "Um campo de texto `forma` e um `if` dentro do `Pedido` para cada forma de pagamento"
+      },
+      "answer": "a",
+      "explanation": "\"O pedido tem um pagamento\" é verdadeiro; \"o pedido é um pagamento\" não é. Com composição, o pedido guarda a peça e delega o total a ela, e trocar de Pix para cartão é só trocar a peça. Uma subclasse por forma multiplica as classes a cada combinação, e um objeto não muda de classe quando o cliente troca a escolha. O campo de texto com `if` é o problema que a herança dos pagamentos resolveu.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O teste do Pix falhou: esperava `189.9` e recebeu `199.9`. O `Pagamento` da mãe tem `totalAPagar(valor)`, que devolve o valor sem mudança. Qual é a causa?\n\n```javascript\nexport default class PagamentoPix extends Pagamento {\n  constructor() {\n    super('pix', 'Pix');\n  }\n\n  totalApagar(valor) {\n    return precoComPix(valor);\n  }\n}\n```",
+      "options": {
+        "a": "O método se chama `totalApagar`, e não `totalAPagar`: a filha não sobrescreve nada e herda o método da mãe, sem desconto",
+        "b": "Faltou chamar `super.totalAPagar(valor)` dentro do método da filha antes do `return`",
+        "c": "O `super('pix', 'Pix')` deveria vir depois da declaração do método",
+        "d": "Métodos de uma subclasse só valem quando declarados com `static`"
+      },
+      "answer": "a",
+      "explanation": "Sobrescrever exige o mesmo nome, letra por letra. Com `totalApagar`, a filha ganha um método novo que ninguém chama, e `pix.totalAPagar(199.9)` cai no da mãe, que devolve 199.9. Nada quebra na hora: só o teste denuncia. Chamar `super.totalAPagar` não daria desconto, a ordem dos métodos na classe não importa e `static` serve para métodos da classe, como `Produto.deJSON`, não das instâncias.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Os itens deste pedido somam R$ 100,00, a entrega tem frete de R$ 20,00 e não há desconto. Quanto vale `pedido.total`?\n\n```javascript\n// no Pedido\nget total() {\n  if (!this.pagamento) return this.valorDaCompra; // subtotal + frete - desconto\n  return this.pagamento.totalAPagar(this.valorDaCompra);\n}\n\nconst pedido = new Pedido({ itens, entrega, pagamento: new PagamentoPix() });\n```",
+      "options": {
+        "a": "`114`",
+        "b": "`115`",
+        "c": "`120`",
+        "d": "`95`"
+      },
+      "answer": "a",
+      "explanation": "O pedido soma produtos e frete (120) e delega a conta ao pagamento: o Pix tira 5% de 120 e devolve 114. O 115 viria de dar desconto só nos produtos (95 + 20), mas o `total` passa o `valorDaCompra` inteiro para o pagamento. O 120 ignoraria o pagamento, e o 95 esqueceria o frete.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "title": "Quiz: E02 · Ambiente e primeiro projeto com Vite",
+  "description": "Sete questões sobre Node.js, npm, terminal, Git, a estrutura do projeto Vite e as regras do JSX.",
+  "lesson": "e02b-primeiro-projeto-vite",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é o papel do **Node.js** enquanto você desenvolve um projeto React?",
+      "options": {
+        "a": "Executar JavaScript fora do navegador, rodando ferramentas como o Vite",
+        "b": "Baixar e instalar pacotes como o React a partir de um catálogo público",
+        "c": "Editar os arquivos do projeto com destaque de sintaxe",
+        "d": "Guardar o histórico de alterações do código"
+      },
+      "answer": "a",
+      "explanation": "O Node.js roda JavaScript no seu computador, e é nele que o Vite executa. Baixar pacotes é tarefa do npm (que vem junto com o Node, mas é outra ferramenta); editar é o VS Code; guardar histórico é o Git.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Você está na pasta `Documentos`, que já contém a pasta `projetos-react`. Quer entrar nela e abrir o VS Code nessa pasta. Qual sequência de comandos faz isso?",
+      "options": {
+        "a": "`cd projetos-react` e depois `code .`",
+        "b": "`mkdir projetos-react` e depois `code .`",
+        "c": "`ls projetos-react` e depois `code .`",
+        "d": "`cd ..` e depois `code .`"
+      },
+      "answer": "a",
+      "explanation": "`cd` entra na pasta e `code .` abre a pasta atual no VS Code. `mkdir` tenta criar uma pasta que já existe, `ls` só lista o conteúdo sem entrar, e `cd ..` sobe para a pasta de cima; nesses três casos o VS Code abriria a pasta errada.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Seu projeto `minhas-tarefas` já tem um repositório Git com um commit. Você acabou de editar `src/App.jsx` e quer registrar essa mudança no histórico. Quais comandos são necessários?",
+      "options": {
+        "a": "`git add .`",
+        "b": "`git commit -m \"Ajusta o App\"`",
+        "c": "`git init`",
+        "d": "`npm install`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "O ciclo de todo dia é `git add .` (marca o que mudou) e `git commit -m` (tira a fotografia). `git init` só roda uma vez, quando o repositório é criado; repetir não registra nada. `npm install` baixa pacotes e não tem relação com o histórico.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Em um projeto gerado pelo Vite, qual arquivo é o ponto de partida do JavaScript: ele encontra a `div#root` e pede ao React para renderizar o componente `App`?",
+      "options": {
+        "a": "`index.html`",
+        "b": "`src/main.jsx`",
+        "c": "`src/App.jsx`",
+        "d": "`package.json`"
+      },
+      "answer": "b",
+      "explanation": "`src/main.jsx` chama `createRoot(document.getElementById('root')).render(<App />)`. O `index.html` só tem a `div` vazia e a tag `script` que carrega o `main.jsx`; o `App.jsx` é o componente renderizado, não quem renderiza; o `package.json` lista scripts e pacotes.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Este componente não compila. Qual erro impede a compilação?\n\n```jsx\nfunction Cabecalho() {\n  return (\n    <h1 class=\"titulo\">Minhas Tarefas</h1>\n    <p>Organize seu dia</p>\n  )\n}\n\nexport default Cabecalho\n```",
+      "options": {
+        "a": "O `return` devolve dois elementos irmãos sem um elemento raiz em volta",
+        "b": "O atributo `class` deveria ser `className`",
+        "c": "Falta o `export default` no fim do arquivo",
+        "d": "O nome do componente deveria começar com letra minúscula"
+      },
+      "answer": "a",
+      "explanation": "JSX exige um único elemento raiz: `<h1>` e `<p>` precisam ficar dentro de um fragmento `<>...</>` ou de uma `div`. O `class` está errado também, mas gera apenas um aviso no console, não impede a compilação. O `export default` está presente, e componentes devem começar com maiúscula.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Em JSX, a tag `<img src=\"logo.png\">` pode ficar sem fechamento, exatamente como no HTML.",
+      "answer": false,
+      "explanation": "No JSX toda tag fecha. Tags sem conteúdo, como `img`, `br` e `input`, terminam com `/>`: `<img src=\"logo.png\" />`. Deixá-la aberta quebra a compilação.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "Considere o trecho abaixo dentro de um componente.\n\n```jsx\n<p>Total: {2 + 2}</p>\n```\n\nO texto que aparece na tela é \"Total: ___\".",
+      "answer": [["4"]],
+      "explanation": "As chaves `{}` abrem uma janela para o JavaScript: a expressão `2 + 2` é calculada e só o resultado, 4, aparece. Se o trecho estivesse em HTML puro, a tela mostraria o texto literal \"{2 + 2}\".",
+      "points": 1
+    }
+  ]
+}

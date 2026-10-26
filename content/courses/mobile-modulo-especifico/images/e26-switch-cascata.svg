@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 392" font-family="Inter, system-ui, sans-serif">
+  <title>Fall-through no switch: com status 'pendente', a execução entra no case 'pendente' e faz tom = 'alerta', desce sem break pelo case 'cancelado', faz tom = 'perigo' e só sai no break; o default não roda</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .dim  { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .alerta { fill: #fbbf24; font-size: 24px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .perigo { fill: #f87171; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .risco  { stroke: #f87171; stroke-width: 3; }
+
+    .run    { transform-box: fill-box; transform-origin: 0 0; animation: executa 8s infinite; }
+    .antes  { animation: antes 8s infinite; }
+    .troca  { animation: troca 8s infinite; }
+    @keyframes executa {
+      0%        { opacity: 0; transform: scaleY(0.2); }
+      4%, 14%   { opacity: 1; transform: scaleY(0.2); }
+      20%, 30%  { transform: scaleY(0.4); }
+      36%, 42%  { transform: scaleY(0.6); }
+      48%, 58%  { transform: scaleY(0.8); }
+      64%, 94%  { opacity: 1; transform: scaleY(1); }
+      100%      { opacity: 0; transform: scaleY(1); }
+    }
+    @keyframes antes {
+      0%, 18%  { opacity: 0; }
+      24%, 94% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes troca {
+      0%, 48%  { opacity: 0; }
+      54%, 94% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .run, .antes, .troca { animation: none; }
+    }
+  </style>
+  <rect width="720" height="392" rx="16" fill="#0b1020"/>
+
+  <!-- linhas que executaram: crescem de cima para baixo -->
+  <g transform="translate(32 60)">
+    <g class="run">
+      <rect width="448" height="260" fill="#34d399" fill-opacity="0.14"/>
+      <rect width="6" height="260" fill="#34d399"/>
+    </g>
+  </g>
+
+  <!-- o código -->
+  <text class="dim" x="40" y="44">switch (status) {</text>
+  <text class="code" x="52" y="94">case 'pendente':</text>
+  <text class="code" x="84" y="146">tom = 'alerta';</text>
+  <text class="no" x="470" y="146" text-anchor="end">sem break</text>
+  <text class="code" x="52" y="198">case 'cancelado':</text>
+  <text class="code" x="84" y="250">tom = 'perigo';</text>
+  <text class="code" x="84" y="302">break;</text>
+  <text class="ok" x="470" y="302" text-anchor="end">sai do switch</text>
+  <text class="dim" x="52" y="354">default: tom = 'neutro';</text>
+  <text class="m" x="470" y="354" text-anchor="end">não roda</text>
+
+  <!-- as variáveis -->
+  <rect class="box" x="510" y="60" width="180" height="84" rx="10"/>
+  <text class="m" x="600" y="92" text-anchor="middle">status</text>
+  <text class="code" x="600" y="126" text-anchor="middle">'pendente'</text>
+
+  <rect class="box" x="510" y="164" width="180" height="156" rx="10"/>
+  <text class="m" x="600" y="196" text-anchor="middle">tom</text>
+  <text class="alerta antes" x="600" y="246" text-anchor="middle">'alerta'</text>
+  <g class="troca">
+    <path class="risco" d="M538 238 H662"/>
+    <text class="perigo" x="600" y="298" text-anchor="middle">'perigo'</text>
+  </g>
+</svg>

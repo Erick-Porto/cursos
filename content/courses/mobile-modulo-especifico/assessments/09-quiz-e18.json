@@ -1,0 +1,102 @@
+{
+  "title": "Quiz: E18 · Responsividade e acessibilidade",
+  "description": "Sete questões sobre grade adaptável, orientação, fonte do sistema, leitor de tela, área de toque e contraste.",
+  "lesson": "e18b-acessibilidade-em-react-native",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A grade da Lojinha precisa mudar de 2 para 3 colunas quando o aparelho gira. Qual forma de ler a largura da tela atualiza sozinha?",
+      "options": {
+        "a": "`const { width } = useWindowDimensions();` dentro do componente",
+        "b": "`const { width } = Dimensions.get('window');` no topo do arquivo",
+        "c": "`const escuro = useColorScheme() === 'dark';` dentro do componente",
+        "d": "`const largura = 393;` exportada de `tokens.js`"
+      },
+      "answer": "a",
+      "explanation": "`useWindowDimensions` é um hook: quando a janela muda (giro, dobrável aberto), ele devolve os valores novos e o componente redesenha. `Dimensions.get('window')` no topo do arquivo é a armadilha mais comum: lê a medida uma vez, quando o arquivo carrega, e o valor fica velho depois do giro.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Com o código abaixo, girar o celular derruba o app com a tela vermelha `Changing numColumns on the fly is not supported`. Qual é a correção?\n\n```jsx\nconst { width } = useWindowDimensions();\nconst colunas = width >= 600 ? 3 : 2;\n\n<FlatList\n  data={produtos}\n  numColumns={colunas}\n  keyExtractor={(item) => String(item.id)}\n  renderItem={({ item }) => <CartaoProduto produto={item} />}\n/>\n```",
+      "options": {
+        "a": "Acrescentar `key={'grade-' + colunas}` à `FlatList`",
+        "b": "Trocar o `keyExtractor` por `(item, index) => String(index)`",
+        "c": "Mudar `orientation` para `portrait` no `app.json`",
+        "d": "Trocar `useWindowDimensions` por `Dimensions.get('window')`"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` não troca o número de colunas com a lista montada. Uma `key` que muda junto com `colunas` faz o React descartar a lista antiga e montar outra. O `keyExtractor` identifica cada item, não a lista inteira, por isso mexer nele não resolve. Travar em `portrait` só esconde o problema no celular e tira o modo deitado de quem precisa dele.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "O selo \"Destaque\" fica sobre a foto do cartão, num espaço fixo. Complete a prop para o texto crescer com a fonte do sistema até no máximo 1,5 vez, sem desligar o aumento:\n\n```jsx\n<Text ___={1.5} style={estilos.selo}>Destaque</Text>\n```",
+      "answer": [["maxFontSizeMultiplier"]],
+      "explanation": "`maxFontSizeMultiplier` põe um teto na escala daquele texto: com o sistema em 2, uma fonte de 12 vai a 18, não a 24. `allowFontScaling={false}` seria o erro tentador: ele desliga o aumento por completo e deixa o texto ilegível para quem precisa de letra grande.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "O botão abaixo abre os filtros. O leitor de tela não diz o que ele faz, e o ícone tem 20 por 20. Quais mudanças tornam o botão acessível?\n\n```jsx\n<Pressable onPress={() => router.push('/filtros')}>\n  <Ionicons name=\"options-outline\" size={20} color={cores.texto} />\n</Pressable>\n```",
+      "options": {
+        "a": "`accessibilityLabel=\"Abrir filtros\"`",
+        "b": "`accessibilityRole=\"button\"`",
+        "c": "`hitSlop={12}`, para a área de toque chegar a 44 por 44",
+        "d": "`accessibilityLabel=\"Botão de filtros\"`",
+        "e": "`allowFontScaling={false}` no ícone"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O rótulo dá o nome (\"Abrir filtros\"), o papel faz o leitor anunciar \"botão\" e o `hitSlop` de 12 de cada lado leva o alvo de 20 a 44. \"Botão de filtros\" é a escolha tentadora, mas põe o papel dentro do rótulo: com o `accessibilityRole`, o leitor diria \"Botão de filtros, botão\". `allowFontScaling` não tem relação com leitor de tela nem com área de toque.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Com `\"orientation\": \"portrait\"` no `app.json`, a Lojinha gira para o modo deitado quando o usuário vira o celular.",
+      "answer": false,
+      "explanation": "`portrait` trava o app em pé, e é o valor que vem no template `blank`. Para seguir o aparelho, use `\"orientation\": \"default\"`, pare o servidor e rode `npx expo start` de novo, com a rotação automática do celular ligada. Trave só quando o giro estraga algo essencial, como a mira de um leitor de código de barras.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Pela WCAG no nível AA, qual é o contraste mínimo entre um texto de tamanho normal e o fundo dele?",
+      "options": {
+        "a": "4,5 para 1",
+        "b": "3 para 1",
+        "c": "7 para 1",
+        "d": "2 para 1"
+      },
+      "answer": "a",
+      "explanation": "Texto normal pede 4,5 para 1 no nível AA. O 3 para 1, a alternativa mais tentadora, vale só para texto grande, ícones e bordas que identificam um controle; 7 para 1 é o nível AAA. Exemplo: um `alerta` `#f59e0b` sobre branco dá 2,15 e reprova; `#b45309` dá 5,02 e passa.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na auditoria com o TalkBack, os filtros de categoria do modal são anunciados todos iguais: \"Áudio, botão\", \"Casa, botão\". Na tela, o escolhido é um `Botao` `primaria` e os outros são `secundaria`. Qual correção faz o leitor anunciar qual está escolhido?",
+      "options": {
+        "a": "`accessibilityState={{ selected: categoria === c.slug }}` em cada `Botao`",
+        "b": "`accessibilityLabel={c.nome + ' selecionado'}` só no `Botao` escolhido",
+        "c": "`accessibilityHint=\"Filtro escolhido\"` em todos os `Botao`",
+        "d": "Escurecer a cor `primaria` até o contraste passar de 7 para 1"
+      },
+      "answer": "a",
+      "explanation": "O que falta é o estado: com `selected`, TalkBack e VoiceOver anunciam \"selecionado\" do jeito que o usuário já conhece, e o `Botao` repassa a prop ao `Pressable` pelo `...rest`. Pôr \"selecionado\" no rótulo é a escolha tentadora, mas mistura nome e estado num texto fixo, fora do padrão do sistema. A dica em todos diria \"Filtro escolhido\" até nos que não estão, e a cor não chega a quem não vê a tela.",
+      "points": 2
+    }
+  ]
+}

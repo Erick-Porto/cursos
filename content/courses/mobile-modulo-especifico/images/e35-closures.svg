@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Duas chamadas de criarContador, duas closures: tentativasDeCupom guarda uma caixa com total = 2 e tentativasDeLogin outra com total = 1; de fora, console.log(total) não alcança nenhuma e dá ReferenceError</title>
+  <style>
+    .clo  { fill: #131c33; stroke: #a78bfa; stroke-width: 2; }
+    .var  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .val  { fill: #e8edf7; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .err  { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .no   { stroke: #f87171; stroke-width: 2.5; fill: none; stroke-dasharray: 8 5; }
+    .x    { stroke: #f87171; stroke-width: 3.5; stroke-linecap: round; }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <!-- closure do cupom -->
+  <text class="var" x="24" y="79">tentativasDeCupom</text>
+  <path class="line" d="M262 71 L336 71"/>
+  <rect class="clo" x="344" y="24" width="352" height="94" rx="12"/>
+  <text class="lbl" x="364" y="60">closure do cupom</text>
+  <text class="val" x="364" y="100">total = 2</text>
+
+  <!-- closure do login -->
+  <text class="var" x="24" y="193">tentativasDeLogin</text>
+  <path class="line" d="M262 185 L336 185"/>
+  <rect class="clo" x="344" y="138" width="352" height="94" rx="12"/>
+  <text class="lbl" x="364" y="174">closure do login</text>
+  <text class="val" x="364" y="214">total = 1</text>
+
+  <!-- de fora, ninguém alcança total -->
+  <text class="var" x="24" y="296">console.log(total)</text>
+  <path class="no" d="M276 288 L364 288"/>
+  <line class="x" x1="370" y1="276" x2="394" y2="300"/>
+  <line class="x" x1="394" y1="276" x2="370" y2="300"/>
+  <text class="err" x="414" y="296">ReferenceError</text>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Parcelar R$ 199,90 em 3: Math.floor dá 6663 centavos a cada parcela, o resto da divisão sobra 1 centavo e ele vai para a primeira parcela; 6664 + 6663 + 6663 fecha os 19990</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .first { fill: none; stroke: #34d399; stroke-width: 3; }
+    .t    { fill: #e8edf7; font-size: 24px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .resto { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .v    { fill: #e8edf7; font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .chipbg { fill: #fbbf24; }
+    .chipt  { fill: #0b1020; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .real { fill: #e8edf7; font-size: 24px; }
+    .realok { fill: #34d399; font-size: 24px; font-weight: 700; }
+    .soma { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+
+    .divide { animation: divide 8s infinite; }
+    .sobra  { animation: sobra 8s infinite; }
+    .chip   { animation: desce 8s ease-in-out infinite; }
+    .fecha  { animation: fecha 8s infinite; }
+    @keyframes divide {
+      0%       { opacity: 0; transform: translateY(-14px); }
+      12%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes sobra {
+      0%, 22%  { opacity: 0; }
+      28%, 92% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes desce {
+      0%, 30%   { transform: translate(440px, -120px); }
+      48%, 100% { transform: translate(0, 0); }
+    }
+    @keyframes fecha {
+      0%, 56%  { opacity: 0; transform: translateY(10px); }
+      64%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .divide, .sobra, .chip, .fecha { animation: none; }
+    }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- o total -->
+  <rect class="box" x="40" y="24" width="640" height="56" rx="10"/>
+  <text class="t" x="360" y="61" text-anchor="middle">R$ 199,90 = <tspan class="code">19990</tspan> centavos</text>
+
+  <!-- Math.floor: a parcela que cabe em todas -->
+  <g class="divide">
+    <text class="code" x="40" y="118">Math.floor(19990 / 3) = 6663</text>
+    <rect class="box" x="40" y="140" width="200" height="64" rx="10"/>
+    <text class="v" x="104" y="182" text-anchor="middle">6663</text>
+    <rect class="box" x="260" y="140" width="200" height="64" rx="10"/>
+    <text class="v" x="360" y="182" text-anchor="middle">6663</text>
+    <rect class="box" x="480" y="140" width="200" height="64" rx="10"/>
+    <text class="v" x="580" y="182" text-anchor="middle">6663</text>
+  </g>
+
+  <!-- %: o centavo que sobra vai para a primeira -->
+  <g class="sobra">
+    <text class="resto" x="680" y="118" text-anchor="end">19990 % 3 = 1</text>
+    <g class="chip">
+      <rect class="chipbg" x="160" y="154" width="64" height="36" rx="18"/>
+      <text class="chipt" x="192" y="180" text-anchor="middle">+1</text>
+    </g>
+  </g>
+
+  <!-- as parcelas em reais e a soma -->
+  <g class="fecha">
+    <rect class="first" x="40" y="140" width="200" height="64" rx="10"/>
+    <text class="realok" x="140" y="244" text-anchor="middle">R$ 66,64</text>
+    <text class="real" x="360" y="244" text-anchor="middle">R$ 66,63</text>
+    <text class="real" x="580" y="244" text-anchor="middle">R$ 66,63</text>
+    <text class="soma" x="360" y="294" text-anchor="middle">6664 + 6663 + 6663 = 19990</text>
+    <text class="m" x="360" y="332" text-anchor="middle">a primeira parcela leva o centavo que sobra</text>
+  </g>
+</svg>

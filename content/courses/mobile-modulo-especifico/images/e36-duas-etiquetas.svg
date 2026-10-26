@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Valor e referência: freteComCupom recebe uma cópia do 15 e vira 0 sem mudar frete; item e noPedido são duas etiquetas na mesma caixa, e noPedido.qtd = 3 muda a qtd que item também enxerga</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .tag  { fill: #131c33; stroke: #a78bfa; stroke-width: 2; }
+    .hole { fill: #0b1020; stroke: #a78bfa; stroke-width: 1.5; }
+    .cover { fill: #131c33; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .val  { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .chg  { fill: #fbbf24; font-size: 24px; font-weight: 700; }
+    .chgc { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .sep  { stroke: #2a3a5c; stroke-width: 1.5; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .g1 { animation: g1 8s infinite; }
+    .g2 { animation: g2 8s infinite; }
+    @keyframes g1 { 0%, 8%  { opacity: 0; transform: translateY(8px); } 16%, 90% { opacity: 1; transform: translateY(0); } 96%, 100% { opacity: 0; transform: translateY(0); } }
+    @keyframes g2 { 0%, 40% { opacity: 0; } 48%, 90% { opacity: 1; } 96%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .g1, .g2 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- número: copia o valor -->
+  <text class="m" x="24" y="44">número: copia o valor</text>
+  <text class="code" x="40" y="98">frete</text>
+  <rect class="box" x="124" y="68" width="70" height="44" rx="8"/>
+  <text class="val" x="159" y="99" text-anchor="middle">15</text>
+  <g class="g1">
+    <text class="code" x="300" y="98">freteComCupom</text>
+    <rect class="box" x="486" y="68" width="70" height="44" rx="8"/>
+    <text class="val" x="521" y="99" text-anchor="middle">15</text>
+    <g class="g2">
+      <rect class="cover" x="490" y="72" width="62" height="36" rx="6"/>
+      <text class="chg" x="521" y="99" text-anchor="middle">0</text>
+    </g>
+  </g>
+
+  <line class="sep" x1="24" y1="134" x2="696" y2="134"/>
+
+  <!-- objeto: copia a referência -->
+  <text class="m" x="24" y="172">objeto: copia a referência</text>
+  <rect class="box" x="330" y="192" width="366" height="126" rx="10"/>
+  <text class="code" x="348" y="240">nome: 'Fone Bluetooth'</text>
+  <text class="code" x="348" y="290">qtd: 1</text>
+
+  <rect class="tag" x="40" y="206" width="130" height="44" rx="8"/>
+  <circle class="hole" cx="58" cy="228" r="5"/>
+  <text class="code" x="74" y="236">item</text>
+  <path class="line" d="M174 228 L322 236"/>
+
+  <g class="g1">
+    <text class="lbl" x="696" y="172" text-anchor="end">mesma caixa</text>
+    <rect class="tag" x="40" y="264" width="170" height="44" rx="8"/>
+    <circle class="hole" cx="58" cy="286" r="5"/>
+    <text class="code" x="74" y="294">noPedido</text>
+    <path class="line" d="M214 286 L322 278"/>
+  </g>
+
+  <g class="g2">
+    <rect class="cover" x="340" y="264" width="340" height="38" rx="6"/>
+    <text class="chgc" x="348" y="290">qtd: 3</text>
+  </g>
+</svg>

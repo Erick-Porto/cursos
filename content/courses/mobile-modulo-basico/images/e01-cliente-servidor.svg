@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>Cliente e servidor: o navegador pede a página, o servidor responde com os arquivos HTML, CSS e JS, e o navegador desenha a tela</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bar  { fill: #2a3a5c; }
+    .dot  { fill: #b4bfd3; }
+    .hd   { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .arrow { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+    .chip { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .ct   { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .h1   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .btn  { fill: #34d399; }
+    .bt   { fill: #06281c; font-size: 22px; font-weight: 600; }
+    .p1 { animation: pedido 8s infinite; }
+    .p2 { animation: resposta 8s infinite; }
+    .p3 { animation: desenha 8s infinite; }
+    @keyframes pedido {
+      0%, 4%   { opacity: 0; transform: translateX(-30px); }
+      14%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes resposta {
+      0%, 28%  { opacity: 0; transform: translateX(40px); }
+      42%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes desenha {
+      0%, 52%  { opacity: 0; transform: translateY(10px); }
+      64%, 90% { opacity: 1; transform: translateY(0); }
+      97%, 100% { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .p1, .p2, .p3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <!-- navegador (cliente) -->
+  <text class="hd" x="142" y="42" text-anchor="middle">navegador (cliente)</text>
+  <rect class="box" x="24" y="58" width="236" height="244" rx="12"/>
+  <rect class="bar" x="24" y="58" width="236" height="34" rx="12"/>
+  <rect class="bar" x="24" y="78" width="236" height="14"/>
+  <circle class="dot" cx="46" cy="75" r="5"/>
+  <circle class="dot" cx="64" cy="75" r="5"/>
+  <circle class="dot" cx="82" cy="75" r="5"/>
+
+  <!-- servidor -->
+  <text class="hd" x="608" y="42" text-anchor="middle">servidor</text>
+  <rect class="box" x="520" y="58" width="176" height="244" rx="12"/>
+  <g transform="translate(572 88) scale(3)" fill="none" stroke="#60a5fa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <rect width="20" height="8" x="2" y="2" rx="2" ry="2"/>
+    <rect width="20" height="8" x="2" y="14" rx="2" ry="2"/>
+    <line x1="6" x2="6.01" y1="6" y2="6"/>
+    <line x1="6" x2="6.01" y1="18" y2="18"/>
+  </g>
+  <text class="m" x="608" y="206" text-anchor="middle">guarda os</text>
+  <text class="m" x="608" y="236" text-anchor="middle">arquivos e</text>
+  <text class="m" x="608" y="266" text-anchor="middle">os dados</text>
+
+  <!-- 1: pedido -->
+  <g class="p1">
+    <text class="lbl" x="390" y="112" text-anchor="middle">1 pedido</text>
+    <path class="arrow" d="M 268 128 L 508 128"/>
+  </g>
+
+  <!-- 2: resposta com os arquivos -->
+  <g class="p2">
+    <rect class="chip" x="284" y="176" width="80" height="38" rx="8"/>
+    <text class="ct" x="324" y="203" text-anchor="middle">HTML</text>
+    <rect class="chip" x="374" y="176" width="64" height="38" rx="8"/>
+    <text class="ct" x="406" y="203" text-anchor="middle">CSS</text>
+    <rect class="chip" x="448" y="176" width="48" height="38" rx="8"/>
+    <text class="ct" x="472" y="203" text-anchor="middle">JS</text>
+    <path class="arrow" d="M 512 236 L 272 236"/>
+    <text class="lbl" x="390" y="272" text-anchor="middle">2 resposta</text>
+  </g>
+
+  <!-- 3: o navegador desenha a página -->
+  <g class="p3">
+    <text class="h1" x="44" y="134">Minhas Tarefas</text>
+    <rect class="bar" x="44" y="152" width="180" height="12" rx="6"/>
+    <rect class="bar" x="44" y="176" width="140" height="12" rx="6"/>
+    <rect class="btn" x="44" y="206" width="196" height="42" rx="8"/>
+    <text class="bt" x="142" y="234" text-anchor="middle">Adicionar tarefa</text>
+    <text class="lbl" x="142" y="334" text-anchor="middle">3 desenha a tela</text>
+  </g>
+</svg>

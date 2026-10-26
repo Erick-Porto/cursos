@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" font-family="Inter, system-ui, sans-serif">
+  <title>debounce na busca: as letras f, o, n e e chegam em 0, 120, 250 e 380 ms; cada uma agenda a busca para 300 ms depois e cancela o agendamento anterior; só o último vence e busca "fone" em 680 ms</title>
+  <style>
+    .bar   { fill: #131c33; stroke: #a78bfa; stroke-width: 2; }
+    .bt    { fill: #b4bfd3; font-size: 22px; }
+    .cover { fill: #0b1020; stroke: #0b1020; stroke-width: 4; }
+    .cx    { fill: none; stroke: #f87171; stroke-width: 2; stroke-dasharray: 8 5; }
+    .ct    { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok    { fill: #34d399; stroke: #34d399; stroke-width: 2.5; }
+    .okt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .key   { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .kt    { fill: #e8edf7; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .guide { stroke: #2a3a5c; stroke-width: 2; stroke-dasharray: 4 4; }
+    .axis  { stroke: #b4bfd3; stroke-width: 2; }
+    .tick  { fill: #b4bfd3; font-size: 22px; }
+    .tickok { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .note  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .a1 { animation: a1 8s infinite; }
+    .a2 { animation: a2 8s infinite; }
+    .a3 { animation: a3 8s infinite; }
+    .a4 { animation: a4 8s infinite; }
+    .a5 { animation: a5 8s infinite; }
+    @keyframes a1 { 0%, 3%  { opacity: 0; } 8%, 92%  { opacity: 1; } 97%, 100% { opacity: 0; } }
+    @keyframes a2 { 0%, 19% { opacity: 0; } 24%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+    @keyframes a3 { 0%, 35% { opacity: 0; } 40%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+    @keyframes a4 { 0%, 51% { opacity: 0; } 56%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+    @keyframes a5 { 0%, 70% { opacity: 0; } 75%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .a1, .a2, .a3, .a4, .a5 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="370" rx="16" fill="#0b1020"/>
+
+  <!-- eixo do tempo -->
+  <line class="axis" x1="36" y1="290" x2="694" y2="290"/>
+
+  <!-- letra f: agenda -->
+  <g class="a1">
+    <line class="guide" x1="60" y1="232" x2="60" y2="68"/>
+    <rect class="bar" x="60" y="30" width="265" height="36" rx="6"/>
+    <text class="bt" x="192" y="56" text-anchor="middle">agendado</text>
+    <rect class="key" x="40" y="236" width="40" height="40" rx="8"/>
+    <text class="kt" x="60" y="264" text-anchor="middle">f</text>
+    <text class="tick" x="60" y="320" text-anchor="middle">0</text>
+  </g>
+
+  <!-- letra o: agenda e cancela f -->
+  <g class="a2">
+    <rect class="cover" x="60" y="30" width="265" height="36" rx="6"/>
+    <rect class="cx" x="60" y="30" width="265" height="36" rx="6"/>
+    <text class="ct" x="192" y="56" text-anchor="middle">cancelado</text>
+    <line class="guide" x1="166" y1="232" x2="166" y2="114"/>
+    <rect class="bar" x="166" y="76" width="265" height="36" rx="6"/>
+    <text class="bt" x="298" y="102" text-anchor="middle">agendado</text>
+    <rect class="key" x="146" y="236" width="40" height="40" rx="8"/>
+    <text class="kt" x="166" y="264" text-anchor="middle">o</text>
+    <text class="tick" x="166" y="320" text-anchor="middle">120</text>
+  </g>
+
+  <!-- letra n: agenda e cancela o -->
+  <g class="a3">
+    <rect class="cover" x="166" y="76" width="265" height="36" rx="6"/>
+    <rect class="cx" x="166" y="76" width="265" height="36" rx="6"/>
+    <text class="ct" x="298" y="102" text-anchor="middle">cancelado</text>
+    <line class="guide" x1="281" y1="232" x2="281" y2="160"/>
+    <rect class="bar" x="281" y="122" width="264" height="36" rx="6"/>
+    <text class="bt" x="413" y="148" text-anchor="middle">agendado</text>
+    <rect class="key" x="261" y="236" width="40" height="40" rx="8"/>
+    <text class="kt" x="281" y="264" text-anchor="middle">n</text>
+    <text class="tick" x="281" y="320" text-anchor="middle">250</text>
+  </g>
+
+  <!-- letra e: agenda e cancela n -->
+  <g class="a4">
+    <rect class="cover" x="281" y="122" width="264" height="36" rx="6"/>
+    <rect class="cx" x="281" y="122" width="264" height="36" rx="6"/>
+    <text class="ct" x="413" y="148" text-anchor="middle">cancelado</text>
+    <line class="guide" x1="395" y1="232" x2="395" y2="206"/>
+    <rect class="bar" x="395" y="168" width="265" height="36" rx="6"/>
+    <text class="bt" x="527" y="194" text-anchor="middle">agendado</text>
+    <rect class="key" x="375" y="236" width="40" height="40" rx="8"/>
+    <text class="kt" x="395" y="264" text-anchor="middle">e</text>
+    <text class="tick" x="395" y="320" text-anchor="middle">380</text>
+  </g>
+
+  <!-- 300 ms sem letras: a busca roda uma vez -->
+  <g class="a5">
+    <rect class="ok" x="395" y="168" width="265" height="36" rx="6"/>
+    <text class="okt" x="527" y="194" text-anchor="middle">busca "fone"</text>
+    <line x1="660" y1="206" x2="660" y2="296" stroke="#34d399" stroke-width="2.5"/>
+    <text class="tickok" x="660" y="320" text-anchor="middle">680 ms</text>
+    <text class="note" x="360" y="356" text-anchor="middle">a busca sai 300 ms depois da última letra</text>
+  </g>
+</svg>

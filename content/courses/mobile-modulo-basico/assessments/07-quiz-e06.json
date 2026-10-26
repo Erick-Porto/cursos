@@ -1,0 +1,97 @@
+{
+  "title": "Quiz: E06 · React Native e o ambiente Expo",
+  "description": "Sete questões sobre a diferença entre app e site, o papel do Expo e o primeiro projeto rodando no celular.",
+  "lesson": "e06b-ambiente-expo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual frase descreve corretamente a diferença entre um app **híbrido** e um app **React Native**?",
+      "options": {
+        "a": "O híbrido carrega um site dentro de uma WebView; o React Native transforma o JavaScript em componentes nativos de verdade",
+        "b": "O híbrido é escrito em Kotlin e Swift; o React Native é escrito em JavaScript",
+        "c": "O React Native roda dentro de uma WebView; o híbrido compila para código nativo",
+        "d": "Os dois geram um site empacotado; a diferença é só o nome da ferramenta"
+      },
+      "answer": "a",
+      "explanation": "No híbrido, o app é um navegador escondido mostrando HTML e CSS. No React Native, cada `View` e `Text` vira um componente do sistema, o mesmo que Kotlin ou Swift desenhariam. A alternativa b descreve o app nativo, não o híbrido."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "O que o Expo faz por quem está começando em React Native? Marque todas as corretas.",
+      "options": {
+        "a": "Cria o projeto com um único comando",
+        "b": "Permite rodar o app no celular sem instalar Android Studio ou Xcode",
+        "c": "Oferece pacotes prontos para câmera, localização e notificações",
+        "d": "Substitui o JavaScript por Kotlin para ganhar desempenho",
+        "e": "Publica o app na loja automaticamente toda vez que você salva um arquivo"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O Expo é um kit de ferramentas sobre o React Native: cria o projeto, roda no celular pelo Expo Go e dá acesso ao aparelho por pacotes prontos. O código continua em JavaScript, e publicar na loja é um passo separado, que você decide quando fazer.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Este trecho vem do `CartaoTarefa` do projeto web:\n\n```jsx\n<div className=\"cartao\">\n  <p>Estudar React</p>\n</div>\n```\n\nQual é a versão equivalente em React Native?",
+      "options": {
+        "a": "`<View style={estilos.cartao}><Text>Estudar React</Text></View>`",
+        "b": "`<div style={estilos.cartao}><Text>Estudar React</Text></div>`",
+        "c": "`<View className=\"cartao\">Estudar React</View>`",
+        "d": "`<View style={estilos.cartao}><p>Estudar React</p></View>`"
+      },
+      "answer": "a",
+      "explanation": "No React Native a `div` vira `View`, o texto fica sempre dentro de `Text` e o estilo chega pelo atributo `style`, vindo de um `StyleSheet`, não por `className`. A alternativa c erra duas vezes: usa `className` e deixa o texto solto, o que gera erro na tela."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o comando que cria o projeto mobile do curso:\n\nnpx ___@latest minhas-tarefas-mobile --template blank",
+      "answer": [["create-expo-app"]],
+      "explanation": "`create-expo-app` é a ferramenta do Expo que cria a pasta do projeto e instala as dependências, no papel que `create vite` teve na web. Depois dele, `cd minhas-tarefas-mobile` e `npx expo start` colocam o app para rodar."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você quer que o nome \"Minhas Tarefas\" apareça embaixo do ícone na tela inicial do celular. Qual arquivo você edita?",
+      "options": {
+        "a": "`app.json`",
+        "b": "`App.js`",
+        "c": "`package.json`",
+        "d": "`index.html`"
+      },
+      "answer": "a",
+      "explanation": "O `app.json` guarda a identidade do app: nome, ícone e splash. O `App.js` define o que aparece dentro da tela, não o nome na tela inicial. E `index.html` não existe em um projeto React Native: não há navegador nem DOM."
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Com o computador no Wi-Fi e o celular usando só os dados móveis, o QR code do `npx expo start` abre o app normalmente no Expo Go.",
+      "answer": false,
+      "explanation": "Por padrão, o Expo Go baixa o app direto do seu computador pela rede local, então os dois aparelhos precisam estar no mesmo Wi-Fi. Em redes diferentes, o plano B é o modo túnel: `npx expo start --tunnel`."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que acontece ao rodar este `App.js`?\n\n```jsx\nimport { StyleSheet, View } from 'react-native';\n\nexport default function App() {\n  return (\n    <View style={styles.container}>\n      Minhas Tarefas\n    </View>\n  );\n}\n\nconst styles = StyleSheet.create({\n  container: { flex: 1, justifyContent: 'center' },\n});\n```",
+      "options": {
+        "a": "Erro: no React Native, texto solto precisa estar dentro de um componente `Text`",
+        "b": "Mostra \"Minhas Tarefas\" centralizado na tela, como faria na web",
+        "c": "Erro: falta importar `StatusBar` de `expo-status-bar`",
+        "d": "Erro: `View` não aceita o atributo `style`"
+      },
+      "answer": "a",
+      "explanation": "Diferente de uma `div`, a `View` não sabe desenhar texto: todo texto visível precisa estar dentro de `Text`, e o React Native mostra uma tela de erro explicando isso. `StatusBar` é opcional, e `style` é justamente o atributo que a `View` usa para receber estilos.",
+      "points": 2
+    }
+  ]
+}

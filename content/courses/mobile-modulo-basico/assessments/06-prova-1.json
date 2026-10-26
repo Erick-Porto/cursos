@@ -1,0 +1,260 @@
+{
+  "title": "Prova 1: Introdução ao ambiente React",
+  "description": "Prova do encontro E05, aplicada em sala na última hora. Cobre os encontros E01 a E05: a web por dentro, por que React, ambiente, JSX, componentes, props, listas, estado, formulários e efeitos. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e05b-revisao-ambiente-react",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Em uma página web, qual é o papel de cada uma das três linguagens?",
+      "options": {
+        "a": "HTML define a aparência, CSS define a estrutura e JavaScript define o comportamento",
+        "b": "HTML define a estrutura, CSS define a aparência e JavaScript define o comportamento",
+        "c": "HTML define o comportamento, CSS define a estrutura e JavaScript define a aparência",
+        "d": "As três definem a estrutura; o navegador decide a aparência"
+      },
+      "answer": "b",
+      "explanation": "HTML organiza o conteúdo em elementos (estrutura), CSS cuida de cores, tamanhos e posições (aparência) e JavaScript reage a ações e altera a página (comportamento). A alternativa que troca HTML e CSS é o erro mais comum."
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Uma alteração de texto feita na aba Elements do DevTools some quando a página é recarregada, porque o DevTools muda só a cópia que está no navegador, não o arquivo no servidor.",
+      "answer": true,
+      "explanation": "O DevTools edita o DOM carregado na memória do navegador. Ao recarregar, o navegador pede a página de novo ao servidor e a alteração se perde. Para mudar de verdade, é preciso editar o código-fonte."
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Observe o contador em JavaScript puro. Ao clicar no botão, o número na tela não muda.\n\n```javascript\nlet total = 0\nconst botao = document.querySelector('button')\nconst span = document.querySelector('span')\nbotao.addEventListener('click', () => {\n  total = total + 1\n})\n```\n\nQual linha falta dentro da função de clique para a tela mudar?",
+      "options": {
+        "a": "span.textContent = total",
+        "b": "total.render()",
+        "c": "botao.textContent = span",
+        "d": "document.reload()"
+      },
+      "answer": "a",
+      "explanation": "No jeito imperativo, você atualiza a variável e ainda precisa escrever o novo valor no elemento da tela com `span.textContent = total`. É exatamente esse trabalho manual que o React faz por você: ao mudar o estado, ele redesenha o que depende dele.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "No React, você descreve como a tela deve ficar para cada estado dos dados, e o React atualiza o DOM por você quando o estado muda.",
+      "answer": true,
+      "explanation": "Esse é o jeito declarativo: você diz o que quer ver, não os passos para desenhar. No JavaScript puro (imperativo), cada mudança na tela precisa ser feita à mão."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual sequência busca dados de uma API e os transforma em um array JavaScript, do jeito ensinado com `fetch` e `async/await`?",
+      "options": {
+        "a": "const dados = fetch(url).json()",
+        "b": "const resposta = await fetch(url)\nconst dados = await resposta.json()",
+        "c": "const dados = await fetch(url)",
+        "d": "const dados = fetch(url)\nsetTarefas(dados)"
+      },
+      "answer": "b",
+      "explanation": "São duas esperas: `await fetch(url)` traz a resposta e `await resposta.json()` converte o corpo em objeto ou array. Sem o `await` ou sem o `.json()`, você guarda uma promessa ou a resposta crua, e a lista não aparece."
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais comandos fazem parte do fluxo básico para guardar uma versão do projeto no Git?",
+      "options": {
+        "a": "git init",
+        "b": "git add .",
+        "c": "npm run dev",
+        "d": "git commit -m \"mensagem\""
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "`git init` cria o repositório, `git add .` seleciona os arquivos e `git commit -m` grava a versão com uma mensagem. `npm run dev` liga o servidor de desenvolvimento do Vite e não tem relação com o Git.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "A pasta ___ contém os pacotes instalados pelo npm e nunca deve ir para o Git.",
+      "answer": [["node_modules", "node_modules/"]],
+      "explanation": "`node_modules` é recriada por `npm install` a partir do `package.json`. Ela é enorme e fica listada no `.gitignore` para não ser versionada."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em um projeto criado com Vite, qual arquivo é o ponto de partida que encontra a `div#root` e renderiza o componente `App`?",
+      "options": {
+        "a": "index.html",
+        "b": "src/main.jsx",
+        "c": "src/App.jsx",
+        "d": "package.json"
+      },
+      "answer": "b",
+      "explanation": "`index.html` carrega `src/main.jsx`, que chama `createRoot(...).render(<App />)`. `App.jsx` é o componente principal, mas quem o liga à página é o `main.jsx`."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Quantas regras do JSX este código quebra, e quais?\n\n```jsx\nfunction Cabecalho() {\n  return (\n    <h1 class=\"titulo\">Minhas Tarefas</h1>\n    <p>Organize seu dia</p>\n  )\n}\n```",
+      "options": {
+        "a": "Uma: falta fechar a tag <p>",
+        "b": "Duas: dois elementos irmãos sem um elemento raiz, e class em vez de className",
+        "c": "Uma: return com parênteses não é permitido",
+        "d": "Nenhuma: o código é válido"
+      },
+      "answer": "b",
+      "explanation": "O `return` precisa devolver um único elemento raiz (envolva com `<>...</>` ou uma `div`) e o atributo `class` se escreve `className` no JSX. A tag `<p>` está fechada e os parênteses no `return` são corretos.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que aparece na tela com este JSX?\n\n```jsx\n<p>{'Ana'.length + 2}</p>\n```",
+      "options": {
+        "a": "'Ana'.length + 2",
+        "b": "5",
+        "c": "Ana2",
+        "d": "Um erro de compilação"
+      },
+      "answer": "b",
+      "explanation": "As chaves abrem uma janela para o JavaScript: a expressão é calculada e o resultado aparece. `'Ana'.length` vale 3, mais 2 dá 5. Sem as chaves, o texto apareceria literalmente."
+    },
+    {
+      "id": "q11",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre props em React são verdadeiras?",
+      "options": {
+        "a": "São passadas como atributos na tag do componente, como <CartaoTarefa titulo=\"Estudar\" />",
+        "b": "O componente pode alterá-las dentro da função, como props.titulo = 'Novo'",
+        "c": "Podem ser string, número, booleano ou função",
+        "d": "children é o conteúdo escrito entre a tag de abertura e a de fechamento do componente"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Props chegam como atributos, aceitam qualquer tipo de valor (os não-string entre chaves) e `children` traz o conteúdo interno da tag. Props são somente leitura: quem as define é o componente pai.",
+      "points": 2
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "O que aparece na tela?\n\n```jsx\nfunction CartaoTarefa({ titulo, prioridade = 'media' }) {\n  return <p>{titulo} ({prioridade})</p>\n}\n\n<CartaoTarefa titulo=\"Estudar\" />\n```",
+      "options": {
+        "a": "Estudar (media)",
+        "b": "Estudar ()",
+        "c": "Estudar (undefined)",
+        "d": "Um erro, porque prioridade é obrigatória"
+      },
+      "answer": "a",
+      "explanation": "Na desestruturação, `prioridade = 'media'` define um valor padrão usado quando a prop não é passada. Sem o valor padrão, apareceria `undefined`."
+    },
+    {
+      "id": "q13",
+      "type": "multiple",
+      "prompt": "Sobre a prop `key` em listas geradas com `map`, quais afirmações estão corretas?",
+      "options": {
+        "a": "Deve ser única entre os itens da mesma lista",
+        "b": "Usar o índice do array é a melhor opção quando itens podem ser removidos",
+        "c": "Costuma ser o id do item",
+        "d": "Sem key, o React mostra um aviso no console"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "A `key` identifica cada item para o React atualizar só o que mudou; por isso precisa ser única e estável, como o `id`. O índice muda quando um item é removido e faz o React confundir os cartões.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "Com `tarefas` sendo um array vazio, o que aparece na tela?\n\n```jsx\nconst tarefas = []\nreturn (\n  <div>\n    {tarefas.length && <p>Você tem tarefas</p>}\n  </div>\n)\n```",
+      "options": {
+        "a": "Nada",
+        "b": "O número 0",
+        "c": "O texto \"Você tem tarefas\"",
+        "d": "Um erro de compilação"
+      },
+      "answer": "b",
+      "explanation": "`tarefas.length` vale 0. Como 0 é falso, o `&&` para ali e devolve o próprio 0, que o React renderiza na tela. Use uma condição booleana, como `tarefas.length > 0 && ...`.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "Com `import estilos from './CartaoTarefa.module.css'`, como aplicar a classe `cartao` no JSX?",
+      "options": {
+        "a": "className=\"cartao\"",
+        "b": "className={estilos.cartao}",
+        "c": "class={estilos.cartao}",
+        "d": "style={estilos.cartao}"
+      },
+      "answer": "b",
+      "explanation": "CSS Modules gera nomes únicos para as classes, então você acessa pelo objeto importado: `estilos.cartao`. A string `\"cartao\"` não corresponde ao nome gerado, `class` não existe no JSX e `style` espera um objeto de estilos inline."
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "O que acontece com este contador?\n\n```jsx\nfunction Contador() {\n  const [n, setN] = useState(0)\n  return <button onClick={setN(n + 1)}>{n}</button>\n}\n```",
+      "options": {
+        "a": "Funciona: cada clique soma 1",
+        "b": "setN roda já na renderização, não no clique, e o componente entra em um loop de atualizações",
+        "c": "Nada acontece ao clicar, mas o botão mostra 0",
+        "d": "O botão mostra o texto \"n + 1\""
+      },
+      "answer": "b",
+      "explanation": "`onClick={setN(n + 1)}` chama a função na hora de renderizar e entrega o resultado ao `onClick`. Como cada chamada muda o estado, o React renderiza de novo sem parar. O certo é passar uma função: `onClick={() => setN(n + 1)}`.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "multiple",
+      "prompt": "Quais trechos atualizam o estado `tarefas` corretamente, sem mutar o array original?",
+      "options": {
+        "a": "setTarefas([...tarefas, nova])",
+        "b": "tarefas.push(nova); setTarefas(tarefas)",
+        "c": "setTarefas(tarefas.filter((t) => t.id !== id))",
+        "d": "tarefas[0].concluida = true"
+      },
+      "answer": ["a", "c"],
+      "explanation": "Spread e `filter` criam um array novo, que o React reconhece como mudança. `push` e a atribuição direta alteram o mesmo array: o React compara e não vê diferença, então a tela não atualiza.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "fill",
+      "prompt": "Em um formulário React, chamar event.___() dentro da função do onSubmit impede que a página recarregue.",
+      "answer": [["preventDefault", "preventDefault()"]],
+      "explanation": "O comportamento padrão de um `<form>` é enviar os dados e recarregar a página. `event.preventDefault()` cancela esse padrão para que o React continue no controle do estado."
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "O componente `FormularioTarefa` precisa adicionar uma tarefa na lista que vive no estado do `App`. Qual é a forma correta?",
+      "options": {
+        "a": "FormularioTarefa altera a lista diretamente com tarefas.push",
+        "b": "App passa uma função (onAdicionar) por prop e FormularioTarefa a chama com a nova tarefa",
+        "c": "FormularioTarefa usa document.querySelector para encontrar a lista na página",
+        "d": "A lista é copiada para um useState dentro do FormularioTarefa"
+      },
+      "answer": "b",
+      "explanation": "O estado mora no componente que precisa dele (o `App`). Os dados descem por props e os eventos sobem por funções: o filho avisa o pai chamando `onAdicionar`. Copiar o estado para o filho cria duas fontes da verdade."
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "O que acontece com este efeito, escrito sem o segundo argumento?\n\n```jsx\nuseEffect(() => {\n  carregarTarefas()\n})\n```",
+      "options": {
+        "a": "Roda só uma vez, logo após a primeira renderização",
+        "b": "Roda depois de toda renderização, o que pode disparar buscas repetidas",
+        "c": "Nunca roda, porque falta o array de dependências",
+        "d": "Roda só quando o estado tarefas muda"
+      },
+      "answer": "b",
+      "explanation": "Sem o array de dependências, o efeito roda após cada renderização. Como `carregarTarefas` atualiza o estado, isso gera nova renderização e nova busca. Para rodar uma vez, use `[]` como segundo argumento.",
+      "points": 2
+    }
+  ]
+}

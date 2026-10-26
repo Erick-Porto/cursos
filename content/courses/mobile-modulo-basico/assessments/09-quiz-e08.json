@@ -1,0 +1,101 @@
+{
+  "title": "Quiz: E08 · Estado, FlatList e depuração",
+  "description": "Sete questões sobre TextInput controlado, FlatList, Alert e a leitura de erros no Expo.",
+  "lesson": "e08b-depuracao-e-ferramentas",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No React Native, você quer guardar no estado o que o usuário digita em um `TextInput`. Qual prop usar e o que ela entrega?",
+      "options": {
+        "a": "`onChange`, que entrega o evento; o texto fica em `e.target.value`",
+        "b": "`onChangeText`, que entrega o texto digitado diretamente como string",
+        "c": "`onPress`, que entrega o texto a cada toque no campo",
+        "d": "`onInput`, que entrega o texto quando o usuário confirma no teclado"
+      },
+      "answer": "b",
+      "explanation": "`onChangeText` recebe a string nova, por isso `onChangeText={setTexto}` funciona. `e.target.value` é coisa do DOM do navegador: no celular não existe DOM, e o `onChange` do React Native entrega um evento nativo, não o texto.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete a prop que diz à `FlatList` como desenhar cada item:\n\n```jsx\n<FlatList\n  data={tarefas}\n  ___={({ item }) => <CartaoTarefa titulo={item.titulo} />}\n  keyExtractor={(item) => String(item.id)}\n/>\n```",
+      "answer": [["renderItem"]],
+      "explanation": "`renderItem` recebe um objeto `{ item, index }` e devolve o componente de um item. `data` é o array e `keyExtractor` devolve a chave única; nenhuma das duas desenha o item.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Um app mostra 5.000 produtos vindos de uma API. Qual componente usar para a lista e por quê?",
+      "options": {
+        "a": "`ScrollView`, porque aceita qualquer componente como filho",
+        "b": "`FlatList`, porque renderiza só os itens que estão na tela",
+        "c": "`View` com `.map()`, porque dispensa `keyExtractor`",
+        "d": "`FlatList` dentro de um `ScrollView`, para garantir a rolagem"
+      },
+      "answer": "b",
+      "explanation": "`FlatList` desenha só o que cabe na tela e reaproveita os itens ao rolar, por isso aguenta milhares de registros. `ScrollView` renderiza tudo de uma vez e trava com listas grandes; aninhar os dois faz as rolagens brigarem e gera aviso amarelo.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Sobre o código abaixo, quais afirmações são verdadeiras?\n\n```jsx\nAlert.alert('Remover?', 'Esta ação não pode ser desfeita', [\n  { text: 'Cancelar' },\n  { text: 'Remover', onPress: () => removerTarefa(id) },\n]);\n```",
+      "options": {
+        "a": "O primeiro argumento é o título e o segundo é a mensagem do alerta",
+        "b": "O botão Cancelar apenas fecha o alerta, porque não tem `onPress`",
+        "c": "A tarefa é removida no momento em que o alerta aparece na tela",
+        "d": "A remoção só acontece se o usuário tocar em Remover"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "`Alert.alert(título, mensagem, botões)`: cada botão é `{ text, onPress }`, e um botão sem `onPress` só fecha a caixa. Nada é removido ao abrir o alerta; `removerTarefa(id)` roda apenas no toque em Remover, por isso fica dentro de uma arrow function.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O app mostrou esta tela vermelha. Qual é a causa mais provável e onde olhar primeiro?\n\n```plaintext\nRender Error\nText strings must be rendered within a <Text> component.\n\nCartaoTarefa   components/CartaoTarefa.js:12\nApp            App.js:28\n```",
+      "options": {
+        "a": "Falta importar `Text` no `App.js`; olhar a linha 28",
+        "b": "Há um texto solto fora de `<Text>` em `CartaoTarefa.js`; olhar a linha 12",
+        "c": "A `FlatList` está sem `keyExtractor`; olhar o `App.js`",
+        "d": "O celular perdeu a conexão com o Expo; reiniciar o servidor"
+      },
+      "answer": "b",
+      "explanation": "A primeira linha diz o erro (texto fora de `<Text>`) e a primeira entrada do stack trace diz onde: `CartaoTarefa.js`, linha 12. `App.js:28` aparece só porque `App` chamou o cartão. Um import faltando daria outra mensagem (`Text is not defined`) e `keyExtractor` faltando gera, no máximo, aviso amarelo.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Um aviso amarelo (warning) no Expo para o app na hora, do mesmo jeito que a tela vermelha.",
+      "answer": false,
+      "explanation": "O aviso amarelo não interrompe o app: ele continua rodando e mostra uma faixa no rodapé e uma linha `WARN` no terminal. Ainda assim, vale corrigir, porque costuma virar erro de verdade (ex.: `key` faltando bagunça a lista ao remover itens).",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Depois de adicionar uma tarefa, a lista não mostra o item novo. Nenhum erro aparece. Seguindo o método de depuração, qual é o primeiro passo?",
+      "options": {
+        "a": "Trocar a `FlatList` por `ScrollView` e ver se resolve",
+        "b": "Reproduzir: repetir os passos exatos e confirmar quando o problema acontece",
+        "c": "Mudar várias linhas do `App.js` de uma vez até a lista aparecer",
+        "d": "Apagar o projeto e criar de novo com `create-expo-app`"
+      },
+      "answer": "b",
+      "explanation": "O método começa por reproduzir, depois isolar (um `console.log` no `adicionarTarefa` mostraria se o array mudou), formular uma hipótese (como \"estou usando `push` em vez de spread\") e testar uma mudança por vez. Trocar componentes ou várias linhas ao acaso é o erro mais comum: se funcionar, você não sabe por quê.",
+      "points": 1
+    }
+  ]
+}

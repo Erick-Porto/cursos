@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>O this de cancelar depende da chamada: no teste, pedido.cancelar() tem pedido antes do ponto, o this é pedido e sai um Pedido cancelado; no toque, o Pressable chama onPress(evento) sem nada antes do ponto, o this é undefined e sai um TypeError</title>
+  <style>
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .hl    { fill: none; stroke: #34d399; stroke-width: 2.5; }
+    .okc   { fill: #34d399; }
+    .okt   { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .noc   { fill: #131c33; stroke: #f87171; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .not   { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .no    { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .line  { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .sep   { stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <!-- no teste: com ponto -->
+  <text class="m" x="36" y="42">no teste</text>
+  <rect class="hl" x="30" y="66" width="90" height="36" rx="6"/>
+  <text class="code" x="36" y="92">pedido</text>
+  <text class="code" x="122" y="92">.cancelar()</text>
+  <text class="ok" x="36" y="134">pedido antes do ponto</text>
+  <path class="line" d="M274 84 L304 84"/>
+  <rect class="okc" x="314" y="62" width="232" height="44" rx="8"/>
+  <text class="okt" x="430" y="92" text-anchor="middle">this = pedido</text>
+  <path class="line" d="M550 84 L578 84"/>
+  <text class="ok" x="588" y="78">Pedido</text>
+  <text class="ok" x="588" y="104">cancelado</text>
+
+  <line class="sep" x1="24" y1="164" x2="696" y2="164"/>
+
+  <!-- no toque: sem ponto -->
+  <text class="m" x="36" y="202">no toque do Pressable</text>
+  <text class="code" x="36" y="252">onPress(evento)</text>
+  <text class="no" x="36" y="294">nada antes do ponto</text>
+  <path class="line" d="M274 244 L304 244"/>
+  <rect class="noc" x="314" y="222" width="232" height="44" rx="8"/>
+  <text class="not" x="430" y="252" text-anchor="middle">this = undefined</text>
+  <path class="line" d="M550 244 L578 244"/>
+  <text class="no" x="588" y="252">TypeError</text>
+</svg>

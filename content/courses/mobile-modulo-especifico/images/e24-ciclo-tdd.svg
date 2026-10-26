@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" font-family="Inter, system-ui, sans-serif">
+  <title>Ciclo do TDD: vermelho, o teste falha; verde, o mínimo de código para passar; refatorar com tudo verde; e o próximo teste recomeça o ciclo</title>
+  <style>
+    .box  { fill: #131c33; stroke-width: 2.5; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .h    { font-size: 24px; font-weight: 700; }
+    .c    { fill: #e8edf7; font-size: 26px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+    .p1 { animation: p1 7s infinite; }
+    .p2 { animation: p2 7s infinite; }
+    .p3 { animation: p3 7s infinite; }
+    @keyframes p1 { 0%, 3%  { opacity: 0; transform: translateY(10px); } 11%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes p2 { 0%, 24% { opacity: 0; transform: translateY(10px); } 32%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes p3 { 0%, 45% { opacity: 0; transform: translateY(10px); } 53%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .p1, .p2, .p3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="600" height="400" rx="16" fill="#0b1020"/>
+
+  <text x="300" y="214" text-anchor="middle" class="c">TDD</text>
+
+  <!-- 1: vermelho -->
+  <g class="p1">
+    <rect x="24" y="36" width="230" height="100" rx="12" class="box" stroke="#f87171"/>
+    <text x="139" y="78" text-anchor="middle" class="h" fill="#f87171">1 Vermelho</text>
+    <text x="139" y="112" text-anchor="middle" class="m">o teste falha</text>
+  </g>
+
+  <!-- 2: verde -->
+  <g class="p2">
+    <path d="M 258 86 L 336 86" class="line"/>
+    <rect x="346" y="36" width="230" height="100" rx="12" class="box" stroke="#34d399"/>
+    <text x="461" y="78" text-anchor="middle" class="h" fill="#34d399">2 Verde</text>
+    <text x="461" y="112" text-anchor="middle" class="m">o teste passa</text>
+  </g>
+
+  <!-- 3: refatorar e voltar ao começo -->
+  <g class="p3">
+    <path d="M 461 140 C 461 200, 440 240, 412 262" class="line"/>
+    <rect x="185" y="266" width="230" height="100" rx="12" class="box" stroke="#a78bfa"/>
+    <text x="300" y="308" text-anchor="middle" class="h" fill="#a78bfa">3 Refatorar</text>
+    <text x="300" y="342" text-anchor="middle" class="m">tudo segue verde</text>
+    <path d="M 188 262 C 160 240, 139 200, 139 146" class="line"/>
+    <text x="30" y="214" class="m">próximo</text>
+    <text x="30" y="242" class="m">teste</text>
+  </g>
+</svg>

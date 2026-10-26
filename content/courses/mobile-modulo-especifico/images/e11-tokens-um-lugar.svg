@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 376" font-family="Inter, system-ui, sans-serif">
+  <title>Antes, cada arquivo tinha o seu cinza; depois, todos usam o nome textoSuave e o valor fica só em tokens.js</title>
+  <style>
+    .antes  { fill: #131c33; stroke: #f87171; stroke-width: 2; stroke-dasharray: 7 5; }
+    .depois { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .token  { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .code   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ruim   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .bom    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .note   { fill: #b4bfd3; font-size: 22px; }
+    .lbl    { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .seta   { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#ponta); }
+  </style>
+  <defs>
+    <marker id="ponta" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="376" rx="16" fill="#0b1020"/>
+
+  <!-- antes -->
+  <text x="20" y="40"><tspan class="ruim">Antes:</tspan><tspan class="note"> um cinza em cada arquivo</tspan></text>
+  <rect class="antes" x="20" y="56" width="160" height="50" rx="8"/>
+  <rect class="antes" x="193" y="56" width="160" height="50" rx="8"/>
+  <rect class="antes" x="366" y="56" width="160" height="50" rx="8"/>
+  <rect class="antes" x="540" y="56" width="160" height="50" rx="8"/>
+  <text class="code" x="100" y="89" text-anchor="middle">'#666'</text>
+  <text class="code" x="273" y="89" text-anchor="middle">'#6b6b6b'</text>
+  <text class="code" x="446" y="89" text-anchor="middle">'#777'</text>
+  <text class="code" x="620" y="89" text-anchor="middle">'gray'</text>
+
+  <!-- depois -->
+  <text x="20" y="152"><tspan class="bom">Depois:</tspan><tspan class="note"> o mesmo nome em todos</tspan></text>
+  <rect class="depois" x="20" y="168" width="160" height="50" rx="8"/>
+  <rect class="depois" x="193" y="168" width="160" height="50" rx="8"/>
+  <rect class="depois" x="366" y="168" width="160" height="50" rx="8"/>
+  <rect class="depois" x="540" y="168" width="160" height="50" rx="8"/>
+  <text class="code" x="100" y="201" text-anchor="middle">textoSuave</text>
+  <text class="code" x="273" y="201" text-anchor="middle">textoSuave</text>
+  <text class="code" x="446" y="201" text-anchor="middle">textoSuave</text>
+  <text class="code" x="620" y="201" text-anchor="middle">textoSuave</text>
+
+  <!-- o valor mora num lugar só -->
+  <path class="seta" d="M 250 298 L 108 228"/>
+  <path class="seta" d="M 320 298 L 276 228"/>
+  <path class="seta" d="M 400 298 L 444 228"/>
+  <path class="seta" d="M 470 298 L 612 228"/>
+  <text class="lbl" x="176" y="340" text-anchor="end">tokens.js</text>
+  <rect class="token" x="190" y="300" width="340" height="58" rx="10"/>
+  <text class="code" x="360" y="337" text-anchor="middle">textoSuave: '#475569'</text>
+</svg>

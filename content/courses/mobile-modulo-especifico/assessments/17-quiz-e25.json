@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E25 · Tipos, operadores e regras de preço",
+  "description": "Oito questões sobre tipos, conversão do texto do TextInput, operadores, curto-circuito e dinheiro em centavos.",
+  "lesson": "e25b-operadores-e-dinheiro",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Carrinho, o campo Quantidade usa `keyboardType=\"numeric\"`. O cliente digita 2. Que valor a função passada ao `onChangeText` recebe?",
+      "options": {
+        "a": "A string `'2'`, porque o `TextInput` sempre entrega texto",
+        "b": "O número `2`, porque o teclado numérico só deixa digitar números",
+        "c": "O número `2` no Android e a string `'2'` no iOS",
+        "d": "`NaN`, até que o valor seja convertido com `Number`"
+      },
+      "answer": "a",
+      "explanation": "O `keyboardType` muda só o teclado que aparece, não o tipo do valor: o `onChangeText` recebe sempre uma string, em qualquer sistema. A alternativa mais tentadora é a do teclado numérico, mas o cliente ainda pode colar texto, e o valor chega como `'2'`. Por isso você guarda o texto no estado e converte com `Number` ou `parseInt(texto, 10)` na hora da conta. `NaN` só aparece se a conversão falhar.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O campo Quantidade entregou `qtd = '2'`. O que este `Text` mostra na tela?\n\n```jsx\n<Text>{`Total: ${qtd + 1} itens`}</Text>\n```",
+      "options": {
+        "a": "Total: 21 itens",
+        "b": "Total: 3 itens",
+        "c": "Total: ${qtd + 1} itens",
+        "d": "Total: NaN itens"
+      },
+      "answer": "a",
+      "explanation": "A template string calcula a expressão dentro de `${ }`. Como `qtd` é texto, `'2' + 1` concatena e vira `'21'`. O 3 só apareceria com a conversão antes da conta: `Number(qtd) + 1`. O `${qtd + 1}` literal apareceria com aspas comuns em vez de crases, e `NaN` exigiria uma conversão que falhou, o que não acontece com `'2'`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual afirmação sobre `const`, `let` e `var` está correta?",
+      "options": {
+        "a": "`const` impede reatribuir o nome; use `let` só quando o valor precisa mudar",
+        "b": "`const` deixa o objeto imutável: `itens.push(produto)` dá erro",
+        "c": "`var` e `let` funcionam igual; `var` é só a forma mais antiga",
+        "d": "`let` serve para números e `const` serve para textos"
+      },
+      "answer": "a",
+      "explanation": "`const` prende o nome ao valor: reatribuir é erro, e por isso ela é o padrão. `let` fica para o que precisa receber outro valor, como um total que vai somando. A `const` não congela o conteúdo: as propriedades de um objeto e os itens de um array ainda podem mudar. `var` não é igual a `let`: ignora os blocos do `if` e vale na função inteira. Nenhuma das três depende do tipo do valor.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em JavaScript, `0.1 + 0.2 === 0.3` é `true`.",
+      "answer": false,
+      "explanation": "`0.1 + 0.2` dá `0.30000000000000004`: o `number` guarda decimais em binário, e 0,1 não tem representação exata. Por isso as regras de preço da Lojinha fazem a conta em centavos inteiros, que são exatos, e só voltam para reais no fim.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete a regra que divide o total em parcelas sem perder centavo. A primeira parcela leva o que sobrar da divisão.\n\n```javascript\nexport function parcelar(total, parcelas) {\n  const centavos = paraCentavos(total);\n  const valor = Math.___(centavos / parcelas);\n  const resto = centavos ___ parcelas;\n  return { parcelas, valor: paraReais(valor), primeira: paraReais(valor + resto) };\n}\n```",
+      "answer": [["floor", "trunc"], ["%"]],
+      "explanation": "`Math.floor` arredonda a divisão para baixo: 19990 / 3 = 6663,33 vira 6663, uma parcela que cabe três vezes no total. O `%` devolve o resto: `19990 % 3` é 1, o centavo que vai para a primeira parcela. `Math.round` parece funcionar aqui, mas em 20000 / 3 = 6666,67 arredondaria para 6667 e as parcelas passariam do total.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais expressões resultam em `true`?",
+      "options": {
+        "a": "`'7' == 7`",
+        "b": "`'7' === 7`",
+        "c": "`Number('7') === 7`",
+        "d": "`Number.isNaN(Number('sete'))`",
+        "e": "`typeof null === 'null'`"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "O `==` converte o texto antes de comparar, então `'7' == 7` é `true`; é justamente por esconder a diferença de tipo que você usa `===`, e `'7' === 7` é `false`. Convertido com `Number`, o 7 passa no `===`. `Number('sete')` falha e dá `NaN`, que `Number.isNaN` reconhece. Já `typeof null` devolve `'object'`, um erro antigo da linguagem.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No Carrinho, este trecho funciona com itens, mas com o carrinho vazio o app mostra a tela vermelha `Text strings must be rendered within a <Text> component`. Qual é a causa?\n\n```jsx\n<View style={estilos.rodape}>\n  {itens.length && <Text>{itens.length} itens no carrinho</Text>}\n</View>\n```",
+      "options": {
+        "a": "Com o carrinho vazio, a expressão devolve `0`, e o React Native tenta desenhar esse número solto na `View`",
+        "b": "O `&&` devolve `false` com o carrinho vazio, e o React Native não consegue desenhar `false`",
+        "c": "Com o carrinho vazio, `itens.length` vale `undefined`, e o `Text` recebe um valor inválido",
+        "d": "Falta converter a expressão inteira com `String()`, porque a `View` só aceita texto"
+      },
+      "answer": "a",
+      "explanation": "O `&&` devolve o primeiro valor que conta como falso. Com `itens.length` igual a `0`, ele devolve o próprio `0`, um número solto fora de um `Text`. A correção é comparar antes: `itens.length > 0 && ...`. Aí sim o lado esquerdo vira `false`, que o React Native simplesmente não desenha; por isso a alternativa do `false` está errada. O `length` de um array vazio é `0`, nunca `undefined`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Para anunciar as parcelas do fone de R$ 199,90, um colega escreveu a regra abaixo, e a tela mostra \"ou 3x de R$ 66,63\". Qual é o problema?\n\n```javascript\nconst parcela = Math.round((199.9 / 3) * 100) / 100; // 66.63\n```",
+      "options": {
+        "a": "As 3 parcelas somam R$ 199,89: um centavo some, quando deveria ir para a primeira",
+        "b": "Nenhum: o `Math.round` já corrige o erro do ponto flutuante",
+        "c": "Deveria usar `Math.ceil`, que faz as 3 parcelas fecharem o total exato",
+        "d": "`199.9 / 3` dá `NaN`, porque a divisão não é exata"
+      },
+      "answer": "a",
+      "explanation": "Arredondar a parcela sozinha esquece o resto: 3 × 66,63 = 199,89. A regra certa divide em centavos com `Math.floor` e passa o resto, achado com `%`, para a primeira parcela: 66,64 + 66,63 + 66,63 = 199,90. `Math.ceil` daria 66,64 em todas e cobraria 199,92, dois centavos a mais. A divisão não exata dá um decimal, não `NaN`.",
+      "points": 2
+    }
+  ]
+}

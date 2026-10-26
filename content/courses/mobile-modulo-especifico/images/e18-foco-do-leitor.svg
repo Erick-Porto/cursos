@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>O foco do leitor de tela percorre o Início na ordem da tela: o título Destaques, o botão Abrir filtros e o cartão do Fone Bluetooth, e o leitor fala rótulo e papel de cada um</title>
+  <style>
+    .tela  { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .box   { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .foto  { fill: #2a3a5c; }
+    .ring  { fill: none; stroke: #34d399; stroke-width: 3; }
+    .t     { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .fala  { fill: #e8edf7; font-size: 22px; }
+    .n     { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .f1 { opacity: 0.35; animation: f1 8s ease-out infinite; }
+    .f2 { opacity: 0.35; animation: f2 8s ease-out infinite; }
+    .f3 { animation: f3 8s ease-out infinite; }
+    .s1 { animation: s1 8s ease-out infinite; }
+    .s2 { animation: s2 8s ease-out infinite; }
+    .s3 { animation: s3 8s ease-out infinite; }
+    @keyframes f1 { 0%, 4% { opacity: 0; } 10%, 30% { opacity: 1; } 36%, 92% { opacity: 0.35; } 100% { opacity: 0; } }
+    @keyframes f2 { 0%, 30% { opacity: 0; } 36%, 56% { opacity: 1; } 62%, 92% { opacity: 0.35; } 100% { opacity: 0; } }
+    @keyframes f3 { 0%, 56% { opacity: 0; } 62%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s1 { 0%, 4% { opacity: 0; } 10%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 30% { opacity: 0; } 36%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 56% { opacity: 0; } 62%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .f1, .f2, .f3, .s1, .s2, .s3 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- o topo do Início -->
+  <rect class="tela" x="24" y="24" width="280" height="352" rx="18"/>
+  <text class="t" x="48" y="79">Destaques</text>
+  <rect class="box" x="240" y="48" width="44" height="44" rx="10"/>
+  <g transform="translate(250 58)" fill="none" stroke="#e8edf7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- sliders-horizontal (lucide) -->
+    <line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>
+  </g>
+  <rect class="box" x="44" y="116" width="240" height="240" rx="12"/>
+  <rect class="foto" x="56" y="128" width="216" height="116" rx="8"/>
+  <text class="t" x="60" y="284">Fone Bluetooth</text>
+  <text class="ok" x="60" y="322">R$ 199,90</text>
+
+  <!-- o foco, um elemento por vez -->
+  <rect class="ring f1" x="36" y="48" width="160" height="46" rx="10"/>
+  <rect class="ring f2" x="233" y="41" width="58" height="58" rx="13"/>
+  <rect class="ring f3" x="37" y="109" width="254" height="254" rx="16"/>
+
+  <!-- o que o leitor fala -->
+  <text class="lbl" x="336" y="64">o leitor fala</text>
+  <g class="s1">
+    <text class="n" x="336" y="118">1</text>
+    <text class="fala" x="366" y="118">Destaques, título</text>
+  </g>
+  <g class="s2">
+    <text class="n" x="336" y="168">2</text>
+    <text class="fala" x="366" y="168">Abrir filtros, botão</text>
+  </g>
+  <g class="s3">
+    <text class="n" x="336" y="218">3</text>
+    <text class="fala" x="366" y="218">Fone Bluetooth, R$ 199,90,</text>
+    <text class="fala" x="366" y="250">avaliação 4,6 de 5, botão</text>
+  </g>
+  <text class="m" x="336" y="350">deslizar 1 dedo: próximo item</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>O toque em Tema escuro chama alternarTema: escuro vira true, useTema entrega cores.escuro e a tela inteira troca de paleta</title>
+  <style>
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .note { fill: #b4bfd3; font-size: 22px; }
+    .row  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .marca { fill: none; stroke: #a78bfa; stroke-width: 3; }
+    .h22  { font-size: 22px; font-weight: 700; }
+    .h26  { font-size: 26px; font-weight: 700; }
+    .t22  { font-size: 22px; }
+    .escuro { animation: tema 7s infinite; }
+    .marca  { animation: marca 7s infinite; }
+    @keyframes tema  { 0%, 30% { opacity: 0; } 42%, 88% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes marca { 0%, 30% { transform: translateY(-104px); } 42%, 88% { transform: translateY(0); } 100% { transform: translateY(-104px); } }
+    @media (prefers-reduced-motion: reduce) {
+      .escuro, .marca { animation: none; }
+    }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- tela no tema claro (embaixo) -->
+  <g>
+    <rect x="40" y="24" width="400" height="312" rx="24" fill="#f8fafc" stroke="#2a3a5c" stroke-width="2"/>
+    <text class="h22" x="64" y="60" fill="#0f172a">9:41</text>
+    <text class="h26" x="64" y="112" fill="#0f172a">Lojinha</text>
+    <rect x="262" y="84" width="162" height="40" rx="20" fill="none" stroke="#6d28d9" stroke-width="2"/>
+    <text class="h22" x="343" y="111" text-anchor="middle" fill="#6d28d9">Tema escuro</text>
+    <rect x="64" y="148" width="352" height="124" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/>
+    <rect x="84" y="170" width="80" height="80" rx="6" fill="#e2e8f0"/>
+    <text class="t22" x="184" y="202" fill="#0f172a">Fone Bluetooth</text>
+    <text class="h22" x="184" y="238" fill="#6d28d9">R$ 199,90</text>
+  </g>
+
+  <!-- a mesma tela no tema escuro (por cima) -->
+  <g class="escuro">
+    <rect x="40" y="24" width="400" height="312" rx="24" fill="#0f172a" stroke="#2a3a5c" stroke-width="2"/>
+    <text class="h22" x="64" y="60" fill="#f1f5f9">9:41</text>
+    <text class="h26" x="64" y="112" fill="#f1f5f9">Lojinha</text>
+    <rect x="262" y="84" width="162" height="40" rx="20" fill="none" stroke="#a78bfa" stroke-width="2"/>
+    <text class="h22" x="343" y="111" text-anchor="middle" fill="#a78bfa">Tema claro</text>
+    <rect x="64" y="148" width="352" height="124" rx="12" fill="#1e293b" stroke="#334155" stroke-width="2"/>
+    <rect x="84" y="170" width="80" height="80" rx="6" fill="#334155"/>
+    <text class="t22" x="184" y="202" fill="#f1f5f9">Fone Bluetooth</text>
+    <text class="h22" x="184" y="238" fill="#a78bfa">R$ 199,90</text>
+  </g>
+
+  <!-- o que o useTema entrega -->
+  <text class="lbl" x="472" y="60">useTema()</text>
+  <rect class="row" x="472" y="80" width="224" height="84" rx="10"/>
+  <text class="code" x="488" y="114">escuro: false</text>
+  <text class="code" x="488" y="148">cores.claro</text>
+  <rect class="row" x="472" y="184" width="224" height="84" rx="10"/>
+  <text class="code" x="488" y="218">escuro: true</text>
+  <text class="code" x="488" y="252">cores.escuro</text>
+  <rect class="marca" x="468" y="180" width="232" height="92" rx="12"/>
+
+  <text class="note" x="472" y="306">o toque chama</text>
+  <text class="code" x="472" y="336">alternarTema</text>
+</svg>

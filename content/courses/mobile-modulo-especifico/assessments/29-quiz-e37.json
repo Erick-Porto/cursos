@@ -1,0 +1,124 @@
+{
+  "title": "Quiz: E37 · Event loop e Promises no checkout",
+  "description": "Oito questões sobre a thread do app, o event loop, callbacks, Promises e testes assíncronos do checkout.",
+  "lesson": "e37b-promises",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `onPress` do botão **Finalizar compra**, um colega simulou a espera do servidor com um laço `while` de 3 segundos. O que o cliente percebe nesses 3 segundos?",
+      "options": {
+        "a": "Nada de diferente: o laço roda em segundo plano enquanto a tela segue respondendo",
+        "b": "O app não responde aos toques e a tela não muda, porque o JavaScript roda numa thread só e ela está ocupada",
+        "c": "O app fecha na hora, porque laços `while` são proibidos dentro de componentes",
+        "d": "Só a animação do botão para; os outros toques e o `setState` funcionam normalmente"
+      },
+      "answer": "b",
+      "explanation": "O JavaScript do app roda numa única thread, que também trata os toques e atualiza a tela. Um laço síncrono ocupa essa thread inteira: nenhum toque tem resposta e nenhum `setState` aparece até ele terminar. Não existe \"segundo plano\" para código síncrono, que é a confusão mais comum. O app não fecha por causa do laço, e não é só a animação que para.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em que ordem as mensagens aparecem no terminal?\n\n```javascript\nconsole.log('1: toque em Pagar');\nsetTimeout(() => console.log('2: timer'), 0);\nPromise.resolve().then(() => console.log('3: Pix gerado'));\nconsole.log('4: fim do toque');\n```",
+      "options": {
+        "a": "1, 2, 3, 4",
+        "b": "1, 4, 2, 3",
+        "c": "1, 4, 3, 2",
+        "d": "1, 3, 4, 2"
+      },
+      "answer": "c",
+      "explanation": "Primeiro roda todo o código síncrono: 1 e 4. Quando a pilha esvazia, o event loop roda as microtarefas, como o `then` da Promise (3), e só depois a próxima tarefa da fila, o callback do `setTimeout` (2). A ordem 1, 4, 2, 3 é a mais tentadora, porque o timer foi agendado antes; mas atraso 0 não fura a fila de microtarefas. Nenhum callback interrompe o código que está rodando, por isso 3 nunca aparece antes de 4.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Um `try/catch` em volta da chamada `setTimeout(() => { throw new Error('CEP inválido'); }, 800)` captura esse erro quando ele acontece.",
+      "answer": false,
+      "explanation": "O `try` termina assim que o `setTimeout` agenda o callback. Quando o callback roda, 800 ms depois, ele vem da fila de tarefas com a pilha vazia, fora do `try`. Por isso callbacks assíncronos recebem o erro como primeiro parâmetro, e Promises o entregam ao `catch`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete para que o indicador de carregamento seja desligado tanto quando o frete chega quanto quando o CEP é inválido:\n\n```jsx\nsetCarregandoFrete(true);\nconsultarFrete(cep)\n  .then((valor) => setFrete(valor))\n  .catch((erro) => setErroCep(erro.message))\n  .___(() => setCarregandoFrete(false));\n```",
+      "answer": [
+        [
+          "finally"
+        ]
+      ],
+      "explanation": "`finally` roda quando a Promise encerra, cumprida ou rejeitada, e por isso é o lugar de desligar o carregando. Colocar `setCarregandoFrete(false)` só no `then` deixa o indicador girando para sempre na falha; colocar só no `catch` deixa girando no sucesso.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre Promises estão corretas?",
+      "options": {
+        "a": "Uma Promise rejeitada pode passar a cumprida se o servidor responder depois",
+        "b": "`Promise.all` rejeita assim que uma das Promises da lista rejeita",
+        "c": "`Promise.allSettled` espera todas encerrarem e nunca rejeita",
+        "d": "`Promise.race` cancela as Promises que perderam a corrida",
+        "e": "O valor devolvido dentro de um `then` vira o valor recebido pelo próximo `then`"
+      },
+      "answer": [
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Uma Promise encerra uma única vez: rejeitada não volta a mudar. `Promise.all` falha na primeira falha; `allSettled` devolve um relatório com `status` de cada uma e nunca rejeita; o que um `then` devolve alimenta o próximo. `Promise.race` só adota o primeiro resultado: as perdedoras continuam rodando, e cancelar de verdade pede `AbortController`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A tela Início carrega destaques, categorias e banners de três fontes independentes. Se os banners estiverem fora do ar, a vitrine deve aparecer mesmo assim. Qual combinação usar?",
+      "options": {
+        "a": "`Promise.all`, porque as três cargas começam ao mesmo tempo",
+        "b": "`Promise.allSettled`, porque relata o resultado de cada carga sem rejeitar o conjunto",
+        "c": "`Promise.race`, porque mostra o que chegar primeiro",
+        "d": "Três `then` encadeados, um depois do outro, com um `catch` no fim"
+      },
+      "answer": "b",
+      "explanation": "`allSettled` espera as três e informa `fulfilled` ou `rejected` para cada uma: a tela usa o que chegou e ignora o banner. `Promise.all` também roda em paralelo, mas rejeita inteiro na primeira falha e apagaria a vitrine. `race` ficaria só com a primeira carga, e a corrente sequencial soma os tempos e também para no primeiro erro.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No teste, o log mostrou `reserva recebida: undefined` e a cobrança começou antes de a reserva terminar. Qual é a causa?\n\n```javascript\nvalidarEstoque(itens)\n  .then(() => {\n    reservar(itens);\n  })\n  .then((reserva) => {\n    console.log('reserva recebida:', reserva);\n    return cobrar(total, pagamento);\n  });\n```",
+      "options": {
+        "a": "O primeiro `then` não devolve a Promise de `reservar`, então a corrente segue sem esperar",
+        "b": "Falta um `catch` no fim da corrente",
+        "c": "`reservar` deveria ser chamada com `new Promise(reservar(itens))`",
+        "d": "Dois `then` seguidos rodam ao mesmo tempo, em paralelo"
+      },
+      "answer": "a",
+      "explanation": "Com chaves, a arrow só devolve o que vier depois de `return`. Sem ele, o primeiro `then` devolve `undefined` na hora e o segundo roda sem esperar a reserva. A correção é `return reservar(itens);` ou `.then(() => reservar(itens))`. Um `catch` no fim é necessário, mas não faria a corrente esperar; e os `then` de uma corrente rodam em sequência, nunca em paralelo.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Este teste fica verde, mas o serviço devolve `status: 'pago'`. Por que ele passa?\n\n```javascript\ntest('pedido fica cancelado', () => {\n  finalizarCompra(pedido, () => {}, { atraso: 0, sortear: () => 1 }).then((r) => {\n    expect(r.status).toBe('cancelado');\n  });\n});\n```",
+      "options": {
+        "a": "Porque `sortear: () => 1` faz a etapa de confirmação devolver qualquer status",
+        "b": "Porque a função do teste não devolve a Promise: o Jest encerra o teste antes de o `expect` rodar",
+        "c": "Porque `toBe` compara só o tipo do valor, e os dois são texto",
+        "d": "Porque o atraso 0 faz o `then` rodar antes de `finalizarCompra` começar"
+      },
+      "answer": "b",
+      "explanation": "Sem `return`, a função do teste termina na hora e o Jest dá o teste por aprovado; o `expect` roda depois, quando ninguém mais olha. A correção é `return finalizarCompra(...).then(...)` ou `return expect(finalizarCompra(...)).resolves.toMatchObject({ status: 'pago' })`. O sorteio injetado só decide se cada etapa falha, `toBe` compara valores e atraso 0 não faz o `then` rodar antes da hora.",
+      "points": 2
+    }
+  ]
+}

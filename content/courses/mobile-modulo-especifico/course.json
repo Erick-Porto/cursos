@@ -1,0 +1,68 @@
+{
+  "slug": "mobile-modulo-especifico",
+  "title": "Programador Mobile: Módulo Específico Profissional",
+  "subtitle": "Layout e componentes React Native, JavaScript a fundo para apps e o projeto integrador em equipe",
+  "level": "intermediario",
+  "estimated_hours": 144,
+  "tags": ["mobile", "react-native", "expo", "javascript", "projeto"],
+  "icon": "rocket",
+  "color": "#a78bfa",
+  "instructor_name": "Erick Ribeiro Porto",
+  "is_published": false,
+  "modules": [
+    {
+      "slug": "layout-rn",
+      "title": "Layout e componentes React Native",
+      "description": "44h em 11 encontros (E10 a E20): Flexbox, sistema de estilos, UI kit, listas, formulários, navegação, acessibilidade e animações no app Lojinha"
+    },
+    {
+      "slug": "ambiente-js",
+      "title": "Ambiente JavaScript",
+      "description": "16h em 4 encontros (E21 a E24): Node.js, npm, Git e GitHub, lint, depuração, testes e integração contínua a serviço do app"
+    },
+    {
+      "slug": "logica-js",
+      "title": "Classes e estruturas de controle",
+      "description": "32h em 8 encontros (E25 a E32): tipos, decisões, repetições, funções, arrays e objetos, classes e tratamento de erros nas regras de negócio da Lojinha"
+    },
+    {
+      "slug": "linguagem-js",
+      "title": "Linguagem JavaScript",
+      "description": "32h em 8 encontros (E33 a E40): strings e datas, programação funcional, closures e módulos, protótipos, assincronismo, consumo de APIs e armazenamento no aparelho"
+    },
+    {
+      "slug": "integracao",
+      "title": "Integração de competências profissionais",
+      "description": "20h em 5 encontros (E41 a E45): projeto integrador em equipe, do backlog ao app publicado no Demo Day"
+    }
+  ],
+  "achievements": [
+    {
+      "slug": "ui-kit-pronto",
+      "title": "UI kit pronto",
+      "description": "Concluiu as 22 aulas de layout e componentes React Native.",
+      "icon": "layers",
+      "rarity": "rare",
+      "xp": 80,
+      "rule": { "type": "lessons_completed", "count": 22 }
+    },
+    {
+      "slug": "javascript-a-fundo",
+      "title": "JavaScript a fundo",
+      "description": "Concluiu todas as aulas de ambiente, lógica e linguagem JavaScript (62 aulas no total).",
+      "icon": "braces",
+      "rarity": "epic",
+      "xp": 120,
+      "rule": { "type": "lessons_completed", "count": 62 }
+    },
+    {
+      "slug": "programador-mobile",
+      "title": "Programador mobile",
+      "description": "Concluiu o Módulo Específico Profissional, com o app do projeto integrador apresentado no Demo Day.",
+      "icon": "graduation-cap",
+      "rarity": "legendary",
+      "xp": 300,
+      "rule": { "type": "course_completed" }
+    }
+  ]
+}

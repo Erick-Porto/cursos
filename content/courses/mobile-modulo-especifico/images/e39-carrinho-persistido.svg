@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>O carrinho no estado vai para o AsyncStorage com salvar a cada mudança; quando o app fecha, a memória fica vazia, e ao abrir o ler devolve o carrinho guardado no aparelho</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .h    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .s    { fill: #b4bfd3; font-size: 22px; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .seta { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#ponta); }
+    .salvar { animation: salvar 8s infinite; }
+    .cartao { animation: cartao 8s infinite; }
+    .ler    { animation: ler 8s infinite; }
+    @keyframes salvar {
+      0%, 4%   { opacity: 0; transform: translateX(-12px); }
+      10%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes cartao { 0%, 28% { opacity: 1; } 34%, 58% { opacity: 0; } 66%, 100% { opacity: 1; } }
+    @keyframes ler {
+      0%, 54%  { opacity: 0; transform: translateX(12px); }
+      60%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .salvar, .cartao, .ler { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="ponta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- memória do app -->
+  <rect class="box" x="24" y="24" width="260" height="252" rx="12"/>
+  <text class="h" x="44" y="60">Estado</text>
+  <text class="s" x="44" y="92">na memória do app</text>
+  <!-- aparece só quando o cartão some -->
+  <text class="no" x="154" y="174" text-anchor="middle">vazio</text>
+  <text class="s" x="154" y="210" text-anchor="middle">o app fechou</text>
+  <g class="cartao">
+    <rect x="44" y="118" width="220" height="128" rx="10" fill="#0b1020" stroke="#34d399" stroke-width="2"/>
+    <g transform="translate(60 158) scale(1.75)" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+    </g>
+    <text class="t mono" x="118" y="172">itens</text>
+    <text class="s" x="118" y="208">3 produtos</text>
+  </g>
+
+  <!-- no aparelho -->
+  <rect class="box" x="436" y="24" width="260" height="252" rx="12"/>
+  <text class="h" x="456" y="60">AsyncStorage</text>
+  <text class="s" x="456" y="92">no aparelho</text>
+  <rect x="448" y="118" width="236" height="128" rx="10" fill="#0b1020" stroke="#2a3a5c" stroke-width="1.5"/>
+  <text class="t mono" x="460" y="172">lojinha.carrinho</text>
+  <text class="s mono" x="460" y="208">[{"id":3, ...}]</text>
+
+  <!-- ao mudar: grava -->
+  <g class="salvar">
+    <path class="seta" d="M 288 140 L 428 140"/>
+    <text class="lbl mono" x="360" y="126" text-anchor="middle">salvar</text>
+    <text class="s" x="360" y="168" text-anchor="middle">ao mudar</text>
+  </g>
+
+  <!-- ao abrir: lê de volta -->
+  <g class="ler">
+    <path class="seta" d="M 432 230 L 292 230"/>
+    <text class="lbl mono" x="360" y="216" text-anchor="middle">ler</text>
+    <text class="s" x="360" y="258" text-anchor="middle">ao abrir</text>
+  </g>
+</svg>

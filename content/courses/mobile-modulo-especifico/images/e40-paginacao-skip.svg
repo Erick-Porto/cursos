@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 368" font-family="Inter, system-ui, sans-serif">
+  <title>Paginação com limit 20: cada pedido usa como skip a quantidade que já está na tela, até chegar ao total de 194</title>
+  <style>
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .t     { fill: #e8edf7; font-size: 22px; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .skip  { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .trilho { fill: #131c33; }
+    .borda { fill: none; stroke: #2a3a5c; stroke-width: 1.5; }
+    .antes { fill: #34d399; opacity: 0.4; }
+    .nova  { fill: #34d399; }
+    .fim   { fill: #34d399; }
+    .fim-t { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .p1 { animation: p1 8s ease-out infinite; }
+    .p2 { animation: p2 8s ease-out infinite; }
+    .p3 { animation: p3 8s ease-out infinite; }
+    .p4 { animation: p4 8s ease-out infinite; }
+    .p5 { animation: p5 8s ease-out infinite; }
+    @keyframes p1 {
+      0%       { opacity: 0; transform: translateX(-16px); }
+      6%, 92%  { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes p2 {
+      0%, 14%  { opacity: 0; transform: translateX(-16px); }
+      20%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes p3 {
+      0%, 28%  { opacity: 0; transform: translateX(-16px); }
+      34%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes p4 {
+      0%, 42%  { opacity: 0; transform: translateX(-16px); }
+      48%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes p5 {
+      0%, 58%  { opacity: 0; transform: translateY(10px); }
+      64%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .p1, .p2, .p3, .p4, .p5 { animation: none; }
+    }
+  </style>
+  <defs>
+    <!-- a barra inteira é o catálogo: 194 produtos, 1,5 unidade por produto -->
+    <clipPath id="barra"><rect x="170" y="0" width="291" height="30" rx="6"/></clipPath>
+  </defs>
+  <rect width="720" height="368" rx="16" fill="#0b1020"/>
+
+  <!-- cabeçalho -->
+  <text class="lbl" x="40" y="44">pedido</text>
+  <text class="lbl" x="170" y="44">na tela, de 194</text>
+  <text class="lbl" x="486" y="44">a página traz</text>
+
+  <!-- 1º pedido -->
+  <g class="p1">
+    <text class="skip" x="40" y="92">skip=0</text>
+    <g transform="translate(0 71)">
+      <g clip-path="url(#barra)">
+        <rect class="trilho" x="170" y="0" width="291" height="30"/>
+        <rect class="nova" x="170" y="0" width="30" height="30"/>
+      </g>
+      <rect class="borda" x="170" y="0" width="291" height="30" rx="6"/>
+    </g>
+    <text class="t" x="486" y="94">1 a 20</text>
+  </g>
+
+  <!-- 2º pedido -->
+  <g class="p2">
+    <text class="skip" x="40" y="144">skip=20</text>
+    <g transform="translate(0 123)">
+      <g clip-path="url(#barra)">
+        <rect class="trilho" x="170" y="0" width="291" height="30"/>
+        <rect class="antes" x="170" y="0" width="30" height="30"/>
+        <rect class="nova" x="200" y="0" width="30" height="30"/>
+      </g>
+      <rect class="borda" x="170" y="0" width="291" height="30" rx="6"/>
+    </g>
+    <text class="t" x="486" y="146">21 a 40</text>
+  </g>
+
+  <!-- 3º pedido -->
+  <g class="p3">
+    <text class="skip" x="40" y="196">skip=40</text>
+    <g transform="translate(0 175)">
+      <g clip-path="url(#barra)">
+        <rect class="trilho" x="170" y="0" width="291" height="30"/>
+        <rect class="antes" x="170" y="0" width="60" height="30"/>
+        <rect class="nova" x="230" y="0" width="30" height="30"/>
+      </g>
+      <rect class="borda" x="170" y="0" width="291" height="30" rx="6"/>
+    </g>
+    <text class="t" x="486" y="198">41 a 60</text>
+  </g>
+
+  <!-- ... até o 10º pedido -->
+  <g class="p4">
+    <circle cx="80" cy="224" r="3" fill="#b4bfd3"/>
+    <circle cx="80" cy="236" r="3" fill="#b4bfd3"/>
+    <circle cx="80" cy="248" r="3" fill="#b4bfd3"/>
+    <text class="skip" x="40" y="290">skip=180</text>
+    <g transform="translate(0 269)">
+      <g clip-path="url(#barra)">
+        <rect class="trilho" x="170" y="0" width="291" height="30"/>
+        <rect class="antes" x="170" y="0" width="270" height="30"/>
+        <rect class="nova" x="440" y="0" width="21" height="30"/>
+      </g>
+      <rect class="borda" x="170" y="0" width="291" height="30" rx="6"/>
+    </g>
+    <text class="t" x="486" y="292">181 a 194</text>
+    <text class="m" x="596" y="292">(só 14)</text>
+  </g>
+
+  <!-- fim da lista -->
+  <g class="p5">
+    <rect class="fim" x="40" y="316" width="640" height="38" rx="8"/>
+    <text class="fim-t" x="360" y="342" text-anchor="middle">194 na tela = total: não há próxima página</text>
+  </g>
+</svg>

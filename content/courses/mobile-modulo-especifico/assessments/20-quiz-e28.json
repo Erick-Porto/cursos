@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E28 · Funções, recursão e decomposição",
+  "description": "Oito questões sobre formas de escrever funções, parâmetros, escopo, funções puras, recursão e as regras do carrinho.",
+  "lesson": "e28b-recursao-e-decomposicao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Num arquivo de regras, uma função é chamada na linha 3, mas só é escrita na linha 10. Em qual destas formas a chamada funciona sem erro?",
+      "options": {
+        "a": "`function subtotal(itens) { ... }`, uma declaração",
+        "b": "`const subtotal = (itens) => { ... };`, uma arrow function",
+        "c": "`const subtotal = function (itens) { ... };`, uma expressão",
+        "d": "`let subtotal = (itens) => { ... };`, uma arrow guardada em `let`"
+      },
+      "answer": "a",
+      "explanation": "Declarações são içadas (hoisting): o JavaScript as conhece antes de executar o arquivo, e por isso podem ser chamadas antes da linha em que aparecem. A expressão é a alternativa mais tentadora, porque também usa a palavra `function`, mas ali a função é só o valor de uma constante. Expressões e arrows guardadas em `const` ou `let` só existem depois da linha que as cria; antes dela, a chamada lança `Cannot access 'subtotal' before initialization`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Com a função abaixo, a chamada `textoDoFrete(0)` devolve `'Frete grátis'`.\n\n```javascript\nfunction textoDoFrete(frete) {\n  if (frete === 0) {\n    const texto = 'Frete grátis';\n  }\n  return texto;\n}\n```",
+      "answer": false,
+      "explanation": "Uma `const` vive só no bloco em que nasceu, aqui o `{ }` do `if`. Na linha do `return`, `texto` não existe mais, e a chamada lança `ReferenceError: texto is not defined`. A correção é declarar a variável no bloco da função, antes do `if` (`let texto = formatarPreco(frete);`), e só trocar o valor dentro dele.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Em qual destas tarefas da Lojinha a recursão é a escolha mais indicada?",
+      "options": {
+        "a": "Somar o preço de todos os itens do carrinho",
+        "b": "Contar os produtos de uma categoria cujas subcategorias podem ter outras subcategorias, sem limite de níveis",
+        "c": "Separar a vitrine em páginas de 6 produtos",
+        "d": "Conferir se o CEP digitado tem 8 dígitos"
+      },
+      "answer": "b",
+      "explanation": "Recursão combina com árvores de profundidade desconhecida: cada subcategoria tem o mesmo formato da categoria, e a função chama a si mesma para cada uma até chegar às que não têm subcategorias (o caso base). O carrinho é uma lista plana: somá-lo com recursão funciona, mas um laço é mais simples de ler e não corre o risco de estourar a pilha com listas grandes. Paginar e validar o CEP também são trabalhos de laço ou de uma condição.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete `contarProdutos`, que conta os produtos de uma categoria e de todas as subcategorias dela, em qualquer profundidade:\n\n```javascript\nfunction contarProdutos(categoria) {\n  if (categoria.subcategorias.length === ___) {\n    return categoria.produtos.length;\n  }\n  let total = categoria.produtos.length;\n  for (const sub of categoria.subcategorias) {\n    total += ___(sub);\n  }\n  return total;\n}\n```",
+      "answer": [["0"], ["contarProdutos"]],
+      "explanation": "A primeira lacuna é o caso base: uma categoria sem subcategorias (comprimento `0`) responde só com os próprios produtos, sem chamar a si mesma. A segunda é a chamada recursiva: a função chama `contarProdutos` para cada `sub`, um problema menor que a categoria original, e soma o resultado ao total.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Com a função abaixo, qual chamada mostra a **página 1** com **4 produtos**?\n\n```javascript\nfunction paginar(lista, pagina = 1, tamanho = 6) {\n  // corpo escrito com laços no E27\n}\n```",
+      "options": {
+        "a": "`paginar(produtos, undefined, 4)`",
+        "b": "`paginar(produtos, 4)`",
+        "c": "`paginar(produtos, null, 4)`",
+        "d": "`paginar(produtos, 0, 4)`"
+      },
+      "answer": "a",
+      "explanation": "O valor padrão só entra quando o argumento falta ou chega como `undefined`; por isso `pagina` vale 1 e `tamanho` recebe o 4. A alternativa mais tentadora, `paginar(produtos, 4)`, põe o 4 em `pagina`, porque os argumentos são lidos por posição: seria a página 4 com 6 produtos. `null` e `0` são valores de verdade, e a função os recebe como vieram, sem usar o padrão.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No `CarrinhoContext`, as regras puras já estão em `src/regras/carrinho.js` e o estado é `const [itens, setItens] = useState([]);`. Qual versão de `remover` faz o item sumir da tela do Carrinho?",
+      "options": {
+        "a": "`function remover(id) { setItens(removerItem(itens, id)); }`",
+        "b": "`function remover(id) { removerItem(itens, id); }`",
+        "c": "`function remover(id) { return removerItem(itens, id); }`",
+        "d": "`function remover(id) { itens = removerItem(itens, id); }`"
+      },
+      "answer": "a",
+      "explanation": "A regra pura só calcula: devolve uma lista nova e não mexe em nada. Quem guarda o resultado e faz a tela renderizar de novo é o `setItens`. Sem ele, a lista nova é jogada fora; devolvê-la com `return` também não adianta, porque quem chama `remover` no `onPress` ignora o valor. Atribuir a `itens` lança `TypeError: Assignment to constant variable`, e mesmo com `let` o React não saberia da mudança.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais destas funções da Lojinha são **puras**?",
+      "options": {
+        "a": "`const totalDoItem = (preco, qtd) => preco * qtd;`",
+        "b": "`function adicionarItem(itens, produto) { return [...itens, { ...produto, qtd: 1 }]; }`",
+        "c": "`function adicionarBrinde(itens) { itens.push(brinde); return itens; }`",
+        "d": "`function comprar() { adicionar(produto); router.push('/carrinho'); }`",
+        "e": "`const deveFalhar = () => Math.random() < CHANCE_DE_ERRO;`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Uma função pura devolve sempre o mesmo resultado para as mesmas entradas e não muda nada fora dela. `totalDoItem` e `adicionarItem` cumprem as duas regras: a segunda cria uma lista nova em vez de mexer na recebida. `adicionarBrinde` é a mais tentadora, porque devolve uma lista, mas o `push` altera o array de quem chamou. `comprar` muda o estado e navega: é efeito e mora na tela. `deveFalhar` lê o sorteio, então cada chamada pode dar um resultado diferente.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um colega mudou uma linha de `contarProdutos`. A categoria Casa tem as subcategorias Cozinha e Iluminação. O que acontece com `contarProdutos(casa)`?\n\n```javascript\nfunction contarProdutos(categoria) {\n  if (categoria.subcategorias.length === 0) {\n    return categoria.produtos.length;\n  }\n  let total = categoria.produtos.length;\n  for (const sub of categoria.subcategorias) {\n    total += contarProdutos(categoria);\n  }\n  return total;\n}\n```",
+      "options": {
+        "a": "Devolve o total certo, porque o caso base continua no `if`",
+        "b": "Devolve só os produtos da própria Casa, porque o laço ignora as subcategorias",
+        "c": "As chamadas se empilham sem parar até estourar: `RangeError: Maximum call stack size exceeded`",
+        "d": "Devolve `undefined`, porque nenhuma chamada chega ao `return total`"
+      },
+      "answer": "c",
+      "explanation": "O laço chama a função de novo com a mesma `categoria`, não com `sub`: o problema não diminui. Casa tem subcategorias, então nunca entra no caso base, e cada chamada abre outra igual até a pilha de chamadas estourar. O caso base só resolve quando cada chamada recebe um problema menor que o anterior. Não há `undefined`: antes de qualquer `return`, o app quebra com o `RangeError`.",
+      "points": 2
+    }
+  ]
+}

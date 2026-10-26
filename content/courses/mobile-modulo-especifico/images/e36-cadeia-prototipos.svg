@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 404" font-family="Inter, system-ui, sans-serif">
+  <title>Cadeia de protótipos de itens: o próprio array, depois Array.prototype com map, filter e push, depois Object.prototype com hasOwnProperty e toString, e por fim null; itens.map é achado em Array.prototype e itens.desconto chega a null e dá undefined</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .end  { fill: none; stroke: #b4bfd3; stroke-width: 2; stroke-dasharray: 8 5; }
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .q    { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .link { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#elo); }
+    .okl  { stroke: #34d399; stroke-width: 2.5; fill: none; marker-end: url(#seta-ok); }
+    .nol  { stroke: #f87171; stroke-width: 2.5; fill: none; stroke-dasharray: 7 5; marker-end: url(#seta-no); }
+  </style>
+  <defs>
+    <marker id="elo" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#a78bfa"/></marker>
+    <marker id="seta-ok" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#34d399"/></marker>
+    <marker id="seta-no" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="404" rx="16" fill="#0b1020"/>
+
+  <!-- a cadeia -->
+  <rect class="box" x="24" y="16" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="46">itens</text>
+  <text class="c" x="44" y="78">[{ id: 1, qtd: 1 }]</text>
+  <path class="link" d="M70 94 L70 110"/>
+
+  <rect class="box" x="24" y="114" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="144">Array.prototype</text>
+  <text class="c" x="44" y="176">map, filter, push</text>
+  <path class="link" d="M70 192 L70 208"/>
+
+  <rect class="box" x="24" y="212" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="242">Object.prototype</text>
+  <text class="c" x="44" y="274">hasOwnProperty, toString</text>
+  <path class="link" d="M70 290 L70 306"/>
+
+  <rect class="end" x="24" y="310" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="340">null</text>
+  <text class="m" x="44" y="372">fim da cadeia</text>
+
+  <!-- duas buscas -->
+  <text class="q" x="470" y="146">itens.map</text>
+  <text class="ok" x="470" y="178">achado aqui</text>
+  <path class="okl" d="M458 152 L414 152"/>
+
+  <text class="q" x="470" y="342">itens.desconto</text>
+  <text class="no" x="470" y="374">undefined</text>
+  <path class="nol" d="M458 348 L414 348"/>
+</svg>

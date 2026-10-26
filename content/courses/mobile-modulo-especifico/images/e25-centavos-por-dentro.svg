@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>A regra recebe 199.9 em reais, converte para 19990 centavos, faz a conta com inteiros até 18990, devolve 189.9 em reais, e só a tela formata R$ 189,90</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .zona { fill: none; stroke: #34d399; stroke-width: 2; stroke-dasharray: 8 6; }
+    .tela { fill: #34d399; }
+    .v    { fill: #e8edf7; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .vt   { fill: #06281c; font-size: 24px; font-weight: 700; }
+    .fn   { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- reais: entrada e saída da regra -->
+  <text class="m" x="40" y="40">reais, como no catálogo</text>
+  <rect class="box" x="40" y="56" width="160" height="56" rx="10"/>
+  <text class="v" x="120" y="93" text-anchor="middle">199.9</text>
+  <rect class="box" x="300" y="56" width="160" height="56" rx="10"/>
+  <text class="v" x="380" y="93" text-anchor="middle">189.9</text>
+
+  <!-- a tela formata -->
+  <path class="line" d="M460 84 L514 84"/>
+  <rect class="tela" x="520" y="56" width="170" height="56" rx="10"/>
+  <text class="vt" x="605" y="92" text-anchor="middle">R$ 189,90</text>
+  <text class="fn" x="605" y="146" text-anchor="middle">formatarPreco</text>
+  <text class="m" x="605" y="176" text-anchor="middle">só na tela</text>
+
+  <!-- por dentro: centavos inteiros -->
+  <rect class="zona" x="24" y="196" width="456" height="148" rx="12"/>
+  <path class="line" d="M120 112 L120 210"/>
+  <text class="fn" x="134" y="166">paraCentavos</text>
+  <rect class="box" x="40" y="216" width="160" height="56" rx="10"/>
+  <text class="v" x="120" y="253" text-anchor="middle">19990</text>
+  <path class="line" d="M200 244 L294 244"/>
+  <text class="fn" x="246" y="225" text-anchor="middle">− 1000</text>
+  <rect class="box" x="300" y="216" width="160" height="56" rx="10"/>
+  <text class="v" x="380" y="253" text-anchor="middle">18990</text>
+  <path class="line" d="M380 216 L380 118"/>
+  <text class="fn" x="394" y="166">paraReais</text>
+  <text class="ok" x="40" y="318">por dentro: centavos inteiros</text>
+</svg>

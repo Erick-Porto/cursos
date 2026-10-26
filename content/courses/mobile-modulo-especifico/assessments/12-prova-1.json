@@ -1,0 +1,260 @@
+{
+  "title": "Prova 1: Layout e componentes React Native",
+  "description": "Prova do encontro E20, aplicada em sala na última hora. Cobre os encontros E10 a E20: Flexbox e áreas seguras, tokens e tema, toque e fontes, UI kit, listas, formulários, navegação, responsividade, acessibilidade, animações e estados de tela. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e20b-revisao-layout-e-componentes",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Onde o texto aparece na tela?\n\n```jsx\n<View style={{ flex: 1, justifyContent: 'center' }}>\n  <Text>Olá</Text>\n</View>\n```",
+      "options": {
+        "a": "No topo da tela, centralizado na largura",
+        "b": "No meio da altura, encostado à esquerda",
+        "c": "No meio da altura e no meio da largura",
+        "d": "No topo da tela, encostado à esquerda"
+      },
+      "answer": "b",
+      "explanation": "No React Native o `flexDirection` padrão é `column`, então o eixo principal é vertical e `justifyContent: 'center'` centraliza na altura. A largura é o eixo cruzado: sem `alignItems: 'center'`, o texto fica à esquerda. A opção do centro exato é o erro de quem pensa no padrão `row` da web ou esquece o eixo cruzado.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Uma linha com `flexDirection: 'row'` tem 400 pontos de largura, sem padding nem gap. Os três filhos têm `flex: 1`, `flex: 2` e `flex: 1`. Qual a largura de cada um?",
+      "options": {
+        "a": "100, 200 e 100",
+        "b": "133, 133 e 133",
+        "c": "1, 2 e 1 pontos",
+        "d": "100, 100 e 200"
+      },
+      "answer": "a",
+      "explanation": "O `flex` divide o espaço em partes proporcionais: 1 + 2 + 1 = 4 partes de 100 pontos. O filho do meio fica com 2 partes. Os valores de `flex` não são medidas em pontos.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "A `SafeAreaView` importada de `react-native` protege o conteúdo do notch e das barras do sistema tanto no Android quanto no iOS.",
+      "answer": false,
+      "explanation": "A versão de `react-native` só funciona no iOS e está em desuso. Use a `SafeAreaView` (ou o `useSafeAreaInsets`) do pacote `react-native-safe-area-context`, que funciona nos dois sistemas."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "A grade de produtos deve ter 2 colunas no celular em pé e 3 quando a largura passa de 600 pontos, inclusive ao girar o aparelho. Qual recurso devolve a largura atualizada a cada rotação?",
+      "options": {
+        "a": "O hook useWindowDimensions",
+        "b": "A propriedade Platform.OS",
+        "c": "O valor fonte.titulo dos tokens",
+        "d": "A prop numColumns sozinha"
+      },
+      "answer": "a",
+      "explanation": "`useWindowDimensions` devolve `width` e `height` e faz o componente renderizar de novo quando eles mudam, como na rotação. `Platform.OS` só diz o sistema; `numColumns` precisa receber o número calculado a partir da largura."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No Lojinha, qual estilo segue o sistema de tokens para o fundo do botão principal?",
+      "options": {
+        "a": "backgroundColor: '#6d28d9'",
+        "b": "backgroundColor: cores.primaria",
+        "c": "backgroundColor: cores.roxo",
+        "d": "backgroundColor: 'purple'"
+      },
+      "answer": "b",
+      "explanation": "Tokens nomeiam a cor pelo papel, não pela aparência: `cores.primaria` continua certo se a marca trocar o roxo por verde e muda sozinho no tema escuro. A cor literal não acompanha o tema, e `cores.roxo` nomeia pela aparência."
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Sobre tema claro e escuro no Lojinha, quais afirmações estão corretas?",
+      "options": {
+        "a": "useColorScheme() devolve o tema do sistema, como 'light' ou 'dark'",
+        "b": "\"userInterfaceStyle\": \"automatic\" no app.json deixa o app acompanhar o tema do sistema",
+        "c": "A estrutura fica no StyleSheet e a cor do tema entra por array: style={[estilos.cartao, { backgroundColor: cores.superficie }]}",
+        "d": "Uma tela consegue usar useTema() mesmo sem estar dentro do TemaProvider"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "`useColorScheme` lê o tema do sistema, o `app.json` precisa liberar o modo automático, e as cores dinâmicas entram no array de estilos porque o `StyleSheet` é fixo. O `useTema` só funciona em telas envolvidas pelo `TemaProvider`, que por isso fica na raiz do app.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com o leitor de tela ligado, este botão é anunciado sem dizer o que faz. Qual é a correção?\n\n```jsx\n<Pressable onPress={abrirCarrinho}>\n  <Ionicons name=\"cart-outline\" size={24} />\n</Pressable>\n```",
+      "options": {
+        "a": "Adicionar accessibilityRole=\"button\" e accessibilityLabel=\"Abrir carrinho\" ao Pressable",
+        "b": "Aumentar o ícone para size={32}",
+        "c": "Trocar o Ionicons por uma imagem PNG do carrinho",
+        "d": "Adicionar testID=\"carrinho\" ao Pressable"
+      },
+      "answer": "a",
+      "explanation": "Um botão só com ícone não tem texto para o TalkBack ou o VoiceOver ler. O `accessibilityLabel` dá o nome e o `accessibilityRole` diz que é um botão. Um ícone maior ajuda quem enxerga, não quem usa leitor de tela, e o `testID` serve a testes automatizados.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Um ícone de 24 por 24 pontos dentro de um Pressable com hitSlop={___} alcança a área de toque mínima de 44 por 44.",
+      "answer": [["10"]],
+      "explanation": "O `hitSlop` estende a área sensível para fora do componente em cada lado: 24 + 10 + 10 = 44."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Por que o Lojinha chama `SplashScreen.preventAutoHideAsync()` no topo do arquivo e `SplashScreen.hideAsync()` depois que o `useFonts` termina?",
+      "options": {
+        "a": "Para manter a splash na tela até a fonte carregar ou falhar, evitando que o app apareça primeiro com a fonte do sistema",
+        "b": "Para baixar a fonte da internet a cada abertura do app",
+        "c": "Para pular a splash e abrir o app mais rápido",
+        "d": "Para esconder a barra de status enquanto a fonte carrega"
+      },
+      "answer": "a",
+      "explanation": "Sem segurar a splash, a primeira tela desenha com a fonte padrão e troca de letra um instante depois. A fonte vem empacotada com o app: não é baixada a cada abertura."
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que o `...rest` permite neste componente do UI kit?\n\n```jsx\nfunction Botao({ titulo, onPress, variante = 'primaria', ...rest }) {\n  return (\n    <Pressable onPress={onPress} {...rest}>\n      <Text>{titulo}</Text>\n    </Pressable>\n  );\n}\n```",
+      "options": {
+        "a": "Que a tela passe props nativas, como accessibilityLabel ou testID, sem o Botao declarar cada uma",
+        "b": "Que o Botao altere as props que recebeu da tela",
+        "c": "Que o Botao tenha uma variante diferente a cada renderização",
+        "d": "Que o Botao funcione sem a prop onPress"
+      },
+      "answer": "a",
+      "explanation": "`...rest` junta as props não declaradas e o `{...rest}` as repassa ao `Pressable`. Assim o kit fica pequeno e a tela ainda consegue configurar acessibilidade e testes. Props continuam somente leitura."
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "A designer entrega o protótipo da tela Perfil mostrando só a tela preenchida com os dados da Ana. Quais estados de tela você ainda precisa construir, mesmo sem desenho?",
+      "options": {
+        "a": "Carregando, vazio e erro",
+        "b": "Apenas o carregando",
+        "c": "Nenhum: o protótipo é a tela completa",
+        "d": "Apenas a versão para tablet"
+      },
+      "answer": "a",
+      "explanation": "Toda tela tem 4 estados: carregando, vazio, erro e conteúdo. O protótipo costuma mostrar só o conteúdo; quem implementa completa os outros três, além de conferir tema escuro, fonte grande e texto longo."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "Ao girar o tablet, a grade passa de 2 para 3 colunas e aparece a tela vermelha `Changing numColumns on the fly is not supported`. Qual é a correção?\n\n```jsx\n<FlatList data={produtos} numColumns={colunas} renderItem={renderItem} />\n```",
+      "options": {
+        "a": "Trocar a key da FlatList junto com as colunas: key={'grade-' + colunas}",
+        "b": "Trocar a FlatList por uma ScrollView com map",
+        "c": "Calcular colunas dentro de um useEffect",
+        "d": "Adicionar horizontal à FlatList"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` não muda o número de colunas com a lista montada. Uma `key` diferente faz o React desmontar a lista antiga e montar uma nova com o novo `numColumns`. A `ScrollView` perde a virtualização, e `horizontal` não aceita colunas.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre a FlatList estão corretas?",
+      "options": {
+        "a": "ListEmptyComponent aparece quando o array de data está vazio",
+        "b": "horizontal transforma a lista em um carrossel que rola para o lado",
+        "c": "numColumns monta uma grade com o número de colunas indicado",
+        "d": "ListHeaderComponent fica parado no topo enquanto os itens rolam"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Estado vazio, carrossel e grade são props da própria `FlatList`. O `ListHeaderComponent` rola junto com os itens; o que gruda no topo são os cabeçalhos de seção da `SectionList` com `stickySectionHeadersEnabled`.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "fill",
+      "prompt": "A SectionList recebe os grupos na prop ___, no formato [{ title, data }].",
+      "answer": [["sections"]],
+      "explanation": "`sections` é o array de grupos: cada um tem um `title` para o cabeçalho e um `data` com os itens, desenhados por `renderSectionHeader` e `renderItem`."
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "Qual `keyboardType` abre o teclado mais adequado para o campo de e-mail do cadastro?",
+      "options": {
+        "a": "email-address",
+        "b": "phone-pad",
+        "c": "numeric",
+        "d": "default"
+      },
+      "answer": "a",
+      "explanation": "`email-address` traz o @ e o ponto à mão. `phone-pad` e `numeric` servem para telefone e números; `default` funciona, mas obriga a pessoa a procurar o @."
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Em que momentos o cadastro do Lojinha deve validar o campo de e-mail?",
+      "options": {
+        "a": "Ao sair do campo e ao tocar em enviar; enquanto digita, só apaga o erro daquele campo",
+        "b": "A cada letra digitada, mostrando o erro desde a primeira tecla",
+        "c": "Só depois que o servidor responder",
+        "d": "Só quando o app abre"
+      },
+      "answer": "a",
+      "explanation": "Validar a cada tecla acusa erro antes de a pessoa terminar de digitar. Validar ao sair do campo e ao enviar avisa no momento certo; apagar o erro enquanto ela corrige mostra que o app percebeu a correção."
+    },
+    {
+      "id": "q17",
+      "type": "single",
+      "prompt": "Na rota `app/produto/[id].js`, aberta em `/produto/3`, o produto não aparece. Por quê?\n\n```jsx\nconst { id } = useLocalSearchParams();\nconst produto = produtos.find((p) => p.id === id);\n```",
+      "options": {
+        "a": "O id chega como o texto '3' e nunca é igual ao número 3; use Number(id) na comparação",
+        "b": "O Expo Router converte o id para número, então o problema é outro",
+        "c": "Arrays não têm o método find",
+        "d": "Falta await antes de useLocalSearchParams"
+      },
+      "answer": "a",
+      "explanation": "Parâmetros de rota são sempre texto. Com `===`, '3' e 3 são diferentes e o `find` devolve `undefined`. `Number(id)` converte antes de comparar. `useLocalSearchParams` não é assíncrono.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "multiple",
+      "prompt": "Sobre as rotas por arquivo do Expo Router no Lojinha, quais afirmações estão corretas?",
+      "options": {
+        "a": "app/produto/[id].js responde ao endereço /produto/7",
+        "b": "O grupo (tabs) não aparece no endereço: app/(tabs)/carrinho.js responde a /carrinho",
+        "c": "O _layout.js define como as telas da pasta são exibidas, como Stack ou Tabs",
+        "d": "app/_layout.js responde ao endereço /_layout"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Colchetes criam um segmento dinâmico, parênteses agrupam rotas sem entrar no endereço e o `_layout.js` não é uma tela: ele envolve as rotas da pasta com o navegador escolhido.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "truefalse",
+      "prompt": "Para a tela de filtros abrir como modal, a opção presentation: 'modal' vai no Stack.Screen dela, dentro da pilha do layout raiz.",
+      "answer": true,
+      "explanation": "O modal é uma forma de apresentar uma tela da pilha: `<Stack.Screen name=\"filtros\" options={{ presentation: 'modal' }} />` no `app/_layout.js`. Ele fecha com `router.back()`."
+    },
+    {
+      "id": "q20",
+      "type": "multiple",
+      "prompt": "Sobre animações com Animated no React Native, quais afirmações estão corretas?",
+      "options": {
+        "a": "O Animated.Value fica guardado em useRef para não recomeçar a cada renderização",
+        "b": "Com useNativeDriver: true é possível animar opacity e transform",
+        "c": "Com useNativeDriver: true é possível animar width e height",
+        "d": "Animated.stagger inicia várias animações em sequência, com um atraso entre elas"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Sem `useRef`, cada renderização cria um valor novo e a animação volta ao início. O driver nativo anima `opacity` e `transform` fora do JavaScript; propriedades de layout, como `width`, dão erro com ele. O `stagger` é o que faz os cartões entrarem um depois do outro.",
+      "points": 2
+    }
+  ]
+}

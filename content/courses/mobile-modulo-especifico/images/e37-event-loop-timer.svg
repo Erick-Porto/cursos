@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="Inter, system-ui, sans-serif">
+  <title>Event loop com setTimeout: o callback sai da pilha para o ambiente, espera 2 s, entra na fila de tarefas e só volta à pilha quando ela está vazia; o terminal mostra 1, 2 e 3</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .h    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .s    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .out  { fill: #e8edf7; font-size: 22px; }
+    .seta { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#ponta); }
+    .chip { animation: viagem 8s infinite; }
+    .l2   { animation: linha2 8s infinite; }
+    .l3   { animation: linha3 8s infinite; }
+    @keyframes viagem {
+      0%, 8%   { transform: translate(0, 0); }
+      18%, 46% { transform: translate(407px, -142px); }
+      54%, 62% { transform: translate(407px, 8px); }
+      70%, 100% { transform: translate(0, 0); }
+    }
+    @keyframes linha2 { 0%, 17% { opacity: 0; } 21%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes linha3 { 0%, 70% { opacity: 0; } 74%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .chip, .l2, .l3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="ponta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="440" rx="16" fill="#0b1020"/>
+
+  <!-- as três peças -->
+  <rect class="box" x="24" y="24" width="270" height="250" rx="12"/>
+  <text class="h" x="44" y="60">Pilha de chamadas</text>
+  <text class="s" x="44" y="92">o Hermes executa</text>
+  <text class="s" x="159" y="241" text-anchor="middle">livre para toques</text>
+
+  <rect class="box" x="446" y="24" width="250" height="100" rx="12"/>
+  <text class="h" x="466" y="60">Ambiente</text>
+  <text class="lbl" x="676" y="60" text-anchor="end">2 s</text>
+
+  <rect class="box" x="446" y="174" width="250" height="100" rx="12"/>
+  <text class="h" x="466" y="210">Fila de tarefas</text>
+
+  <!-- caminho do callback -->
+  <path class="seta" d="M 296 74 L 440 74"/>
+  <text class="lbl mono" x="369" y="62" text-anchor="middle">setTimeout</text>
+  <path class="seta" d="M 676 126 L 676 168"/>
+  <text class="lbl" x="660" y="155" text-anchor="end">venceu</text>
+  <path class="seta" d="M 444 224 L 300 224"/>
+  <text class="lbl" x="370" y="212" text-anchor="middle">event loop</text>
+  <text class="s" x="370" y="254" text-anchor="middle">pilha vazia</text>
+
+  <!-- o callback viajando (estado final: de volta na pilha, rodando) -->
+  <g class="chip">
+    <rect x="59" y="214" width="200" height="40" rx="8" fill="#fbbf24"/>
+    <text class="mono" x="159" y="241" text-anchor="middle" font-size="22" font-weight="700" fill="#0b1020">callback</text>
+  </g>
+
+  <!-- terminal -->
+  <rect class="box" x="24" y="296" width="672" height="124" rx="12"/>
+  <text class="s" x="676" y="330" text-anchor="end">terminal</text>
+  <text class="out mono" x="44" y="330">1. Toque em Finalizar</text>
+  <text class="out mono l2" x="44" y="364">2. Tela mostra "Processando..."</text>
+  <text class="out mono l3" x="44" y="398">3. Servidor respondeu</text>
+</svg>

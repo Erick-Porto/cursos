@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Árvore de componentes: ListaTarefas passa titulo e prioridade por props a cada CartaoTarefa; o terceiro cartão usa a prioridade padrão</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .card { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .comp { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .edge { stroke: #b4bfd3; stroke-width: 1.5; fill: none; }
+    .prop { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .tit  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .pri  { fill: #b4bfd3; font-size: 22px; }
+    .v1 { animation: desce1 8s infinite; }
+    .v2 { animation: desce2 8s infinite; }
+    .v3 { animation: desce3 8s infinite; }
+    @keyframes desce1 {
+      0%, 6%   { opacity: 0; transform: translate(234px, -136px); }
+      12%      { opacity: 1; transform: translate(234px, -136px); }
+      24%, 90% { opacity: 1; transform: translate(0, 0); }
+      97%, 100% { opacity: 0; transform: translate(0, 0); }
+    }
+    @keyframes desce2 {
+      0%, 28%  { opacity: 0; transform: translate(0, -136px); }
+      34%      { opacity: 1; transform: translate(0, -136px); }
+      46%, 90% { opacity: 1; transform: translate(0, 0); }
+      97%, 100% { opacity: 0; transform: translate(0, 0); }
+    }
+    @keyframes desce3 {
+      0%, 50%  { opacity: 0; transform: translate(-234px, -136px); }
+      56%      { opacity: 1; transform: translate(-234px, -136px); }
+      68%, 90% { opacity: 1; transform: translate(0, 0); }
+      97%, 100% { opacity: 0; transform: translate(0, 0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .v1, .v2, .v3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- ligações da árvore -->
+  <path class="edge" d="M 360 60 L 120 100 M 360 60 L 360 100 M 360 60 L 600 100"/>
+  <path class="prop" d="M 360 144 L 130 214"/>
+  <path class="prop" d="M 360 144 L 360 212"/>
+  <path class="prop" d="M 360 144 L 590 214"/>
+
+  <!-- nós -->
+  <rect class="box" x="300" y="16" width="120" height="44" rx="10"/>
+  <text class="comp" x="360" y="46" text-anchor="middle">App</text>
+  <rect class="box" x="30" y="100" width="180" height="44" rx="10"/>
+  <text class="comp" x="120" y="130" text-anchor="middle">Cabecalho</text>
+  <rect class="box" x="250" y="100" width="220" height="44" rx="10"/>
+  <text class="comp" x="360" y="130" text-anchor="middle">ListaTarefas</text>
+  <rect class="box" x="510" y="100" width="180" height="44" rx="10"/>
+  <text class="comp" x="600" y="130" text-anchor="middle">Rodape</text>
+  <text class="lbl" x="420" y="196">props</text>
+
+  <!-- três CartaoTarefa -->
+  <rect class="card" x="16" y="220" width="220" height="124" rx="10"/>
+  <text class="comp" x="126" y="252" text-anchor="middle">CartaoTarefa</text>
+  <rect class="card" x="250" y="220" width="220" height="124" rx="10"/>
+  <text class="comp" x="360" y="252" text-anchor="middle">CartaoTarefa</text>
+  <rect class="card" x="484" y="220" width="220" height="124" rx="10"/>
+  <text class="comp" x="594" y="252" text-anchor="middle">CartaoTarefa</text>
+  <text class="pri" x="594" y="326" text-anchor="middle">media (padrão)</text>
+
+  <!-- valores que descem pelas props -->
+  <g class="v1">
+    <text class="tit" x="126" y="292" text-anchor="middle">Estudar React</text>
+    <text class="pri" x="126" y="326" text-anchor="middle">alta</text>
+  </g>
+  <g class="v2">
+    <text class="tit" x="360" y="292" text-anchor="middle">Fazer compras</text>
+    <text class="pri" x="360" y="326" text-anchor="middle">baixa</text>
+  </g>
+  <g class="v3">
+    <text class="tit" x="594" y="292" text-anchor="middle">Ir à academia</text>
+  </g>
+</svg>

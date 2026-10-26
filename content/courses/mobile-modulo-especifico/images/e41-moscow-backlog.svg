@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 440" font-family="Inter, system-ui, sans-serif">
+  <title>Backlog da Agenda de serviços com MoSCoW: os Must vão para o Sprint 1, os Should para o Sprint 2, os Could só se sobrar tempo e os Won't ficam de fora</title>
+  <style>
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fora { fill: #131c33; stroke: #f87171; stroke-width: 2; stroke-dasharray: 8 6; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .g    { font-size: 22px; font-weight: 700; }
+    .pill { fill: none; stroke-width: 2; }
+  </style>
+  <rect width="720" height="440" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="24" y="38">Agenda de serviços: o topo do backlog vem primeiro</text>
+
+  <!-- Must -->
+  <rect class="box" x="24" y="56" width="672" height="84" rx="10"/>
+  <rect x="24" y="56" width="10" height="84" rx="4" fill="#34d399"/>
+  <text class="g" x="52" y="90" fill="#34d399">Must</text>
+  <rect class="pill" x="466" y="66" width="214" height="36" rx="18" stroke="#34d399"/>
+  <text class="g" x="573" y="91" text-anchor="middle" fill="#34d399">Sprint 1 · E43</text>
+  <text class="t" x="52" y="126">ver horários livres, agendar, cancelar</text>
+
+  <!-- Should -->
+  <rect class="box" x="24" y="150" width="672" height="84" rx="10"/>
+  <rect x="24" y="150" width="10" height="84" rx="4" fill="#60a5fa"/>
+  <text class="g" x="52" y="184" fill="#60a5fa">Should</text>
+  <rect class="pill" x="466" y="160" width="214" height="36" rx="18" stroke="#60a5fa"/>
+  <text class="g" x="573" y="185" text-anchor="middle" fill="#60a5fa">Sprint 2 · E44</text>
+  <text class="t" x="52" y="220">perfil salvo no aparelho, remarcar</text>
+
+  <!-- Could -->
+  <rect class="box" x="24" y="244" width="672" height="84" rx="10"/>
+  <rect x="24" y="244" width="10" height="84" rx="4" fill="#fbbf24"/>
+  <text class="g" x="52" y="278" fill="#fbbf24">Could</text>
+  <rect class="pill" x="466" y="254" width="214" height="36" rx="18" stroke="#fbbf24"/>
+  <text class="g" x="573" y="279" text-anchor="middle" fill="#fbbf24">se sobrar tempo</text>
+  <text class="t" x="52" y="314">lembrete antes do horário, avaliar o atendimento</text>
+
+  <!-- Won't -->
+  <rect class="fora" x="24" y="338" width="672" height="84" rx="10"/>
+  <text class="g" x="52" y="372" fill="#f87171">Won't</text>
+  <rect class="pill" x="466" y="348" width="214" height="36" rx="18" stroke="#f87171"/>
+  <text class="g" x="573" y="373" text-anchor="middle" fill="#f87171">fica de fora</text>
+  <text class="m" x="52" y="408">pagamento pelo app, painel do dono</text>
+</svg>

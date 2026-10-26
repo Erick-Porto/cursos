@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 288" font-family="Inter, system-ui, sans-serif">
+  <title>As duas pontas do array: unshift põe e shift tira no começo; push põe e pop tira no fim; os quatro mudam o array original</title>
+  <style>
+    .cell { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .in   { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .out  { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .warn { fill: #fbbf24; font-size: 22px; }
+    .ain  { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-in); }
+    .aout { stroke: #fbbf24; stroke-width: 3; fill: none; stroke-dasharray: 7 4; marker-end: url(#seta-out); }
+  </style>
+  <defs>
+    <marker id="seta-in" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+    <marker id="seta-out" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="288" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="228" y="74" text-anchor="middle">começo</text>
+  <text class="lbl" x="488" y="74" text-anchor="middle">fim</text>
+
+  <!-- array -->
+  <rect class="cell" x="163" y="96" width="130" height="80"/>
+  <rect class="cell" x="293" y="96" width="130" height="80"/>
+  <rect class="cell" x="423" y="96" width="130" height="80"/>
+  <text class="code" x="228" y="144" text-anchor="middle">'fone'</text>
+  <text class="code" x="358" y="144" text-anchor="middle">'garrafa'</text>
+  <text class="code" x="488" y="144" text-anchor="middle">'tênis'</text>
+  <text class="m" x="228" y="210" text-anchor="middle">0</text>
+  <text class="m" x="358" y="210" text-anchor="middle">1</text>
+  <text class="m" x="488" y="210" text-anchor="middle">2</text>
+
+  <!-- começo -->
+  <text class="in" x="28" y="125">unshift</text>
+  <path class="ain" d="M122 118 L158 118"/>
+  <text class="out" x="54" y="163">shift</text>
+  <path class="aout" d="M158 156 L122 156"/>
+
+  <!-- fim -->
+  <path class="ain" d="M594 118 L558 118"/>
+  <text class="in" x="604" y="125">push</text>
+  <path class="aout" d="M558 156 L594 156"/>
+  <text class="out" x="604" y="163">pop</text>
+
+  <text class="warn" x="360" y="256" text-anchor="middle">os quatro mudam o array original</text>
+</svg>

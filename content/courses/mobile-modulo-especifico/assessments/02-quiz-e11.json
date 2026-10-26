@@ -1,0 +1,101 @@
+{
+  "title": "Quiz: E11 · Tokens e tema",
+  "description": "Sete questões sobre tokens de design, sombras por plataforma, tema do sistema e o padrão de cores com useTema.",
+  "lesson": "e11b-tema-claro-e-escuro",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Por que a Lojinha usa `color: cores.claro.textoSuave` nos componentes em vez de `color: '#475569'`?",
+      "options": {
+        "a": "Porque a decisão fica em um lugar só: mudar o valor em `tokens.js` muda o app inteiro",
+        "b": "Porque o token converte a cor sozinho quando o celular entra no tema escuro",
+        "c": "Porque o React Native só aceita cores que venham de um objeto exportado",
+        "d": "Porque nomes de token ocupam menos memória que códigos de cor"
+      },
+      "answer": "a",
+      "explanation": "Um token é um nome para uma decisão visual; o valor mora só em `src/theme/tokens.js`, e quem usa o nome acompanha qualquer mudança. O token sozinho não troca de tema: quem escolhe entre `cores.claro` e `cores.escuro` é o `TemaProvider`. E o React Native aceita cor literal, só que ela espalha valores que ninguém lembra de atualizar.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete a propriedade que desenha a sombra no Android:\n\n```jsx\nconst sombra = Platform.select({\n  ios: {\n    shadowColor: cores.claro.texto,\n    shadowOpacity: 0.1,\n    shadowRadius: 8,\n    shadowOffset: { width: 0, height: 4 },\n  },\n  android: { ___: 3 },\n});\n```",
+      "answer": [["elevation"]],
+      "explanation": "No Android, a sombra vem de `elevation`, a altura simulada do elemento: quanto maior, mais sombra. As quatro propriedades `shadowColor`, `shadowOpacity`, `shadowRadius` e `shadowOffset` são do iOS, e `Platform.select` entrega o objeto da plataforma em que o app está rodando.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Com `\"userInterfaceStyle\": \"light\"` no `app.json`, `useColorScheme()` devolve `'dark'` quando o celular está no tema escuro.",
+      "answer": false,
+      "explanation": "Com `\"light\"`, o app avisa ao sistema que só usa o tema claro, e `useColorScheme()` devolve sempre `'light'`. É o valor que o template `blank` traz. Para acompanhar o celular, use `\"automatic\"` e reinicie com `npx expo start -c`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Você está trocando valores soltos pelos tokens da Lojinha (`espaco`: xs 4, sm 8, md 16, lg 24, xl 32; `fonte`: pequena 12, corpo 16, titulo 20, destaque 28). Quais trocas estão corretas?",
+      "options": {
+        "a": "`padding: 15` vira `padding: espaco.md`",
+        "b": "`fontSize: 17` vira `fontSize: fonte.corpo`",
+        "c": "`marginBottom: 10` vira `marginBottom: espaco.lg`",
+        "d": "`padding: 15` vira um token novo, `espaco.quinze`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Valor quebrado vira o token mais próximo da escala: 15 fica com `md` (16) e 17 fica com `corpo` (16). 10 está mais perto de `sm` (8) do que de `lg` (24). Criar `espaco.quinze` derrota o propósito da escala, que existe para limitar as escolhas.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Dentro da `Inicio`, que já chama `const { cores } = useTema();`, qual linha aplica o fundo do cartão de forma que ele acompanhe o tema?",
+      "options": {
+        "a": "`<View style={[estilos.cartao, { backgroundColor: cores.superficie }]}>`",
+        "b": "`<View style={[estilos.cartao, { backgroundColor: '#ffffff' }]}>`",
+        "c": "`<View style={estilos.cartao}>`, com `backgroundColor: useTema().cores.superficie` no `StyleSheet.create`",
+        "d": "`<View style={[estilos.cartao, { backgroundColor: cores.claro.superficie }]}>`"
+      },
+      "answer": "a",
+      "explanation": "A estrutura fica no `StyleSheet` e a cor da vez entra pelo array, vinda de `useTema()`. A opção com `useTema()` dentro do `StyleSheet.create` é a mais tentadora, mas o `StyleSheet` roda uma vez, fora do componente, e hooks só funcionam dentro de componentes. As outras fixam o branco: uma com cor literal, outra com a paleta clara.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Ao montar a paleta escura, um colega copiou o `textoSuave` do claro (`#475569`). Sobre a superfície escura (`#1e293b`), o contraste fica em 1,9 : 1. O que fazer?",
+      "options": {
+        "a": "Usar um cinza mais claro, como `#94a3b8`, porque texto comum pede pelo menos 4,5 : 1",
+        "b": "Manter o mesmo cinza nas duas paletas, porque tokens iguais deixam o app mais consistente",
+        "c": "Trocar a superfície escura por preto puro, que resolve o contraste de qualquer cinza",
+        "d": "Nada, porque contraste só importa no tema claro, onde há mais luz"
+      },
+      "answer": "a",
+      "explanation": "Para texto comum, a referência mínima é 4,5 : 1; `#94a3b8` sobre `#1e293b` dá cerca de 5,7 : 1. Consistência está nos nomes dos tokens, não nos valores: cada paleta escolhe o valor que funciona no seu fundo. Preto puro quase não melhora esse cinza (fica perto de 2,8 : 1) e ainda cansa a vista.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A pessoa toca em \"Tema escuro\". O que aparece na tela?\n\n```jsx\nexport default function Inicio() {\n  const { cores } = useTema();\n  return (\n    <View style={[estilos.tela, { backgroundColor: cores.fundo }]}>\n      <Text style={estilos.titulo}>Lojinha</Text>\n      <Text style={[estilos.total, { color: cores.texto }]}>R$ 0,00</Text>\n    </View>\n  );\n}\n\nconst estilos = StyleSheet.create({\n  tela: { flex: 1, padding: espaco.md },\n  titulo: { fontSize: fonte.destaque, color: '#0f172a' },\n  total: { fontSize: fonte.titulo },\n});\n```",
+      "options": {
+        "a": "O fundo escurece e o total fica claro, mas \"Lojinha\" continua quase preto e some no fundo escuro",
+        "b": "Tudo troca de cor, porque o `TemaProvider` aplica o tema a todos os `Text`",
+        "c": "Nada muda, porque o `StyleSheet.create` impede qualquer troca de cor",
+        "d": "A tela vermelha aparece, porque `estilos.titulo` não tem cor do tema"
+      },
+      "answer": "a",
+      "explanation": "Fundo e total recebem a cor por array, vinda de `useTema()`, e trocam de paleta. O título tem cor literal no `StyleSheet`, calculada uma vez: continua `#0f172a` sobre um fundo quase preto. O `TemaProvider` não pinta nada sozinho; cada componente precisa pedir a cor. Por isso a regra da Lojinha é nunca escrever cor literal no componente.",
+      "points": 2
+    }
+  ]
+}

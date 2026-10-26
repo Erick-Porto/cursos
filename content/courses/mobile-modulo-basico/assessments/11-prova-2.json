@@ -1,0 +1,259 @@
+{
+  "title": "Prova 2: Introdução ao ambiente React Native",
+  "description": "Prova do encontro E09, aplicada em sala na última hora. Dezesseis questões sobre os encontros E06 a E09 (React Native, Expo, componentes, StyleSheet, FlatList e depuração) e quatro sobre os encontros E01 a E05 (React). Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e09b-revisao-modulo-basico",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é a diferença essencial entre um app híbrido e um app React Native?",
+      "options": {
+        "a": "O híbrido roda um site dentro de uma WebView; o React Native transforma o JavaScript em componentes nativos reais",
+        "b": "O híbrido é escrito em Kotlin e o React Native em Swift",
+        "c": "O React Native exige duas bases de código, uma por sistema; o híbrido usa uma só",
+        "d": "Não há diferença: os dois empacotam uma página web"
+      },
+      "answer": "a",
+      "explanation": "No híbrido, a interface é uma página web dentro do app. No React Native, cada `View` e `Text` vira um componente nativo do sistema, com a mesma base de código JavaScript para Android e iOS. Kotlin e Swift são as linguagens do desenvolvimento nativo."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "O que o Expo oferece a quem desenvolve em React Native?",
+      "options": {
+        "a": "Criar o projeto com um único comando",
+        "b": "Rodar o app no celular sem instalar Android Studio ou Xcode",
+        "c": "Publicar o app nas lojas sem nenhuma configuração",
+        "d": "Pacotes prontos para câmera, localização e outros recursos do aparelho"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O Expo gera o projeto, roda no celular pelo Expo Go e traz pacotes para os recursos do aparelho. Publicar nas lojas continua exigindo contas, configuração e build; o Expo ajuda, mas não elimina esse trabalho.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Para iniciar o servidor de desenvolvimento do app Expo e exibir o QR code, você roda npx expo ___ na pasta do projeto.",
+      "answer": [["start"]],
+      "explanation": "`npx expo start` liga o servidor e mostra o QR code que o Expo Go lê. Com `-c` ele limpa o cache e com `--tunnel` funciona mesmo em redes diferentes."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Ao ler o QR code, o Expo Go mostra \"Something went wrong\" e o app não abre. Qual é a primeira coisa a verificar?",
+      "options": {
+        "a": "Se o celular e o computador estão na mesma rede Wi-Fi",
+        "b": "Se o Node.js está instalado no celular",
+        "c": "Se o VS Code está aberto no projeto",
+        "d": "Se o app.json tem um ícone definido"
+      },
+      "answer": "a",
+      "explanation": "O Expo Go baixa o app do servidor que roda no seu computador; se os dois não estão na mesma rede (ou um firewall bloqueia), a conexão falha. O plano B é `npx expo start --tunnel`. Node.js roda no computador, não no celular."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que acontece ao renderizar este trecho no React Native?\n\n```jsx\n<View>\n  Minhas tarefas\n  <Text>3 pendentes</Text>\n</View>\n```",
+      "options": {
+        "a": "Mostra as duas linhas normalmente",
+        "b": "Erro na tela vermelha: texto solto fora de um componente Text",
+        "c": "Mostra só \"3 pendentes\" e ignora o texto solto",
+        "d": "Mostra só \"Minhas tarefas\""
+      },
+      "answer": "b",
+      "explanation": "No React Native todo texto precisa estar dentro de `Text`. \"Minhas tarefas\" está direto na `View`, o que gera o erro \"Text strings must be rendered within a <Text> component\" e para o app.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A imagem remota abaixo não aparece na tela. O que falta?\n\n```jsx\n<Image source={{ uri: 'https://exemplo.com/foto.png' }} />\n```",
+      "options": {
+        "a": "O atributo alt com a descrição",
+        "b": "Um style com width e height",
+        "c": "Usar require em vez de uri",
+        "d": "Nada: imagens remotas demoram a carregar"
+      },
+      "answer": "b",
+      "explanation": "Imagens remotas não têm tamanho conhecido antes de carregar, então ocupam zero pixels. É preciso informar `width` e `height` no `style`. `require` serve para imagens locais da pasta `assets/`."
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "No React Native, Pressable aceita qualquer conteúdo e estilo próprio, enquanto Button recebe apenas um título e tem aparência fixa do sistema.",
+      "answer": true,
+      "explanation": "`Button` é rápido de usar, mas só aceita `title`, `onPress` e `color`. `Pressable` envolve o que você quiser (Text, Image, View) e recebe `style`, por isso é a escolha para botões com identidade visual."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual objeto de estilo está escrito corretamente para o StyleSheet do React Native?",
+      "options": {
+        "a": "{ 'font-size': '18px' }",
+        "b": "{ fontSize: 18 }",
+        "c": "{ fontSize: '18px' }",
+        "d": "{ font-size: 18 }"
+      },
+      "answer": "b",
+      "explanation": "No StyleSheet as propriedades ficam em camelCase e os números não levam unidade: `fontSize: 18`. `'18px'` é uma string com unidade, que não é válida."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Como os dois textos ficam na tela?\n\n```jsx\n<View style={{ flexDirection: 'row', justifyContent: 'center' }}>\n  <Text>Título</Text>\n  <Text>Alta</Text>\n</View>\n```",
+      "options": {
+        "a": "Lado a lado, juntos no centro da linha",
+        "b": "Um embaixo do outro, centralizados",
+        "c": "Lado a lado, um em cada extremidade da linha",
+        "d": "Lado a lado, colados à esquerda"
+      },
+      "answer": "a",
+      "explanation": "`flexDirection: 'row'` coloca os filhos lado a lado e `justifyContent: 'center'` os agrupa no centro do eixo principal (a linha). Para um em cada extremidade seria `space-between`; sem `row`, ficariam um embaixo do outro.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Quais trechos aplicam estilos corretamente no React Native?",
+      "options": {
+        "a": "style={estilos.cartao}",
+        "b": "style=\"cartao\"",
+        "c": "style={[estilos.cartao, concluida && estilos.concluida]}",
+        "d": "className={estilos.cartao}"
+      },
+      "answer": ["a", "c"],
+      "explanation": "`style` recebe um objeto do StyleSheet ou um array de objetos (o `false` do `&&` é ignorado, o que permite o estilo condicional). String em `style` e `className` são hábitos da web que não existem no React Native.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "No TextInput do React Native, qual prop entrega o texto digitado diretamente, como string, sem e.target.value?",
+      "options": {
+        "a": "onChange",
+        "b": "onChangeText",
+        "c": "onInput",
+        "d": "onSubmit"
+      },
+      "answer": "b",
+      "explanation": "`onChangeText` recebe o texto pronto, por isso `onChangeText={setTexto}` funciona. `onChange` existe, mas entrega um evento nativo sem `target`, e `onInput` e `onSubmit` são da web."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "Qual prop falta nesta FlatList para desenhar cada tarefa na tela?\n\n```jsx\n<FlatList\n  data={tarefas}\n  keyExtractor={(item) => String(item.id)}\n/>\n```",
+      "options": {
+        "a": "renderItem={({ item }) => <CartaoTarefa titulo={item.titulo} />}",
+        "b": "children={tarefas.map((t) => <CartaoTarefa titulo={t.titulo} />)}",
+        "c": "item={<CartaoTarefa />}",
+        "d": "map={(item) => <CartaoTarefa titulo={item.titulo} />}"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` percorre `data` por você e chama `renderItem` para cada item, entregando um objeto `{ item, index }`. Colocar um `map` como filho faz a lista perder a eficiência e não é a forma correta.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "Como abrir a caixa nativa de confirmação antes de remover uma tarefa?",
+      "options": {
+        "a": "window.confirm('Remover?')",
+        "b": "Alert.alert('Remover?', 'Esta ação não pode ser desfeita', [{ text: 'Cancelar' }, { text: 'Remover', onPress: () => removerTarefa(id) }])",
+        "c": "console.log('Remover?')",
+        "d": "Alert('Remover?', () => removerTarefa(id))"
+      },
+      "answer": "b",
+      "explanation": "`Alert.alert` recebe título, mensagem e uma lista de botões; cada botão é um objeto com `text` e, se precisar agir, `onPress`. `window.confirm` é do navegador e `Alert` não é chamado diretamente como função."
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "Onde aparece a saída de um console.log em um app rodando no Expo Go?",
+      "options": {
+        "a": "No console do navegador, aba Console",
+        "b": "No terminal onde npx expo start está rodando",
+        "c": "Em uma caixa na tela do celular",
+        "d": "No arquivo app.json"
+      },
+      "answer": "b",
+      "explanation": "O Expo envia os logs do celular para o terminal do servidor de desenvolvimento. O console do navegador só vale para apps web; na tela do celular aparecem apenas os erros (tela vermelha) e os avisos (amarelo)."
+    },
+    {
+      "id": "q15",
+      "type": "truefalse",
+      "prompt": "Um aviso amarelo (warning) no Expo interrompe a execução do app até que o problema seja corrigido.",
+      "answer": false,
+      "explanation": "O aviso amarelo avisa, mas o app continua rodando; é a tela vermelha que para o app. Mesmo assim, avisos como key faltando merecem correção."
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Qual é a tradução correta deste campo do app web para o React Native?\n\n```jsx\n<input value={texto} onChange={(e) => setTexto(e.target.value)} />\n```",
+      "options": {
+        "a": "<TextInput value={texto} onChangeText={setTexto} />",
+        "b": "<TextInput value={texto} onChange={(e) => setTexto(e.target.value)} />",
+        "c": "<input value={texto} onChangeText={setTexto} />",
+        "d": "<Text value={texto} onChangeText={setTexto} />"
+      },
+      "answer": "a",
+      "explanation": "O componente é `TextInput` e o evento é `onChangeText`, que já entrega a string. `e.target.value` não existe no React Native, `input` é uma tag HTML e `Text` só exibe texto.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre o React (web) são verdadeiras?",
+      "options": {
+        "a": "Um componente é uma função que retorna JSX",
+        "b": "useState guarda dados que, ao mudar, fazem o componente ser redesenhado",
+        "c": "Alterar um array de estado com push atualiza a tela",
+        "d": "Props são somente leitura dentro do componente que as recebe"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Componentes são funções que retornam JSX, o estado é a memória que dispara a renderização e as props vêm do pai sem poder ser alteradas. `push` muta o mesmo array e o React não percebe a mudança; crie um array novo com spread.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Em uma lista gerada com map no React, por que cada item precisa de uma key única?",
+      "options": {
+        "a": "Para o CSS Modules encontrar a classe de cada item",
+        "b": "Para o React identificar cada item e atualizar só o que mudou",
+        "c": "Para o fetch saber em que ordem buscar os dados",
+        "d": "Para evitar a chamada de preventDefault"
+      },
+      "answer": "b",
+      "explanation": "A `key` é a etiqueta de cada item: com ela o React sabe qual cartão foi adicionado, removido ou alterado, sem redesenhar a lista inteira. Ela não tem relação com CSS, fetch ou formulários."
+    },
+    {
+      "id": "q19",
+      "type": "fill",
+      "prompt": "No JSX do React web, o atributo HTML class se escreve ___.",
+      "answer": [["className"]],
+      "explanation": "`class` é palavra reservada do JavaScript, então o JSX usa `className`. No React Native nem esse atributo existe: o estilo vai na prop `style`."
+    },
+    {
+      "id": "q20",
+      "type": "multiple",
+      "prompt": "Sobre buscar dados com useEffect e fetch, quais afirmações são verdadeiras?",
+      "options": {
+        "a": "await resposta.json() converte o corpo da resposta em objeto ou array JavaScript",
+        "b": "useEffect(() => { ... }, []) roda uma vez, depois da primeira renderização",
+        "c": "Chamar fetch direto no corpo do componente, fora do useEffect, é a forma recomendada",
+        "d": "Um estado carregando serve para mostrar \"Carregando...\" enquanto a resposta não chega"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "A busca fica dentro do `useEffect` com `[]` para rodar uma vez; `.json()` converte a resposta e o estado `carregando` controla a mensagem na tela. Buscar no corpo do componente dispara uma nova busca a cada renderização.",
+      "points": 2
+    }
+  ]
+}

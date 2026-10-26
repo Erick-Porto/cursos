@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E22 · npm, dependências do Expo e Git em equipe",
+  "description": "Oito questões sobre o package.json, faixas de versão, npx expo install, scripts, Pull Requests e conflitos de merge na Lojinha.",
+  "lesson": "e22b-git-e-github-em-equipe",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `package.json` da Lojinha, uma biblioteca aparece como `\"~2.4.1\"`. Quais versões o npm pode instalar para ela?",
+      "options": {
+        "a": "De `2.4.1` até antes de `2.5.0`, como `2.4.7`",
+        "b": "De `2.4.1` até antes de `3.0.0`, como `2.9.0`",
+        "c": "Somente a `2.4.1`, exatamente",
+        "d": "Qualquer versão a partir de `2.4.1`, inclusive a `3.0.0`"
+      },
+      "answer": "a",
+      "explanation": "O `~` aceita só correções (o último número): de `2.4.1` até antes de `2.5.0`. A faixa até antes de `3.0.0` é a do `^`, que também aceita recursos novos. A versão exata se escreve sem símbolo, e nenhum dos dois símbolos aceita uma versão maior como `3.0.0`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No E24, a Lojinha ganha testes com `jest-expo` e `jest`, ferramentas que só rodam no seu computador. Qual comando instala os dois na versão compatível com o SDK e na seção certa do `package.json`?",
+      "options": {
+        "a": "`npx expo install jest-expo jest -- --save-dev`",
+        "b": "`npx expo install jest-expo jest`",
+        "c": "`npm install jest-expo jest`",
+        "d": "`npm install -g jest-expo jest`"
+      },
+      "answer": "a",
+      "explanation": "O `npx expo install` escolhe a versão testada com o SDK, e o `-- --save-dev` repassa ao npm a ordem de gravar em `devDependencies`, a seção das ferramentas de quem desenvolve. Sem esse trecho, a opção mais tentadora, os pacotes acertam a versão mas caem em `dependencies`. O `npm install` escolhe a versão mais nova, sem olhar o SDK, e o `-g` instala no computador inteiro, fora do projeto.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais práticas deixam um Pull Request fácil de revisar?",
+      "options": {
+        "a": "Tratar de um assunto só, como o script `relatorio`",
+        "b": "Escrever na descrição o que muda e um \"Como testar\" com os comandos",
+        "c": "Usar commits como `ajustes` e `aaa`, porque o que importa é o código",
+        "d": "Incluir a pasta `node_modules/` para o revisor não precisar rodar `npm install`",
+        "e": "Escrever `Closes #3` na descrição para ligar o PR à Issue que ele resolve"
+      },
+      "answer": ["a", "b", "e"],
+      "explanation": "Um assunto por PR, uma descrição com \"Como testar\" e o `Closes #3`, que fecha a Issue no merge, deixam claro o que revisar e por quê. Mensagens como `ajustes` não contam a história do código, e quem revisa lê também os commits. O `node_modules/` fica fora do Git pelo `.gitignore`: ele tem milhares de arquivos e qualquer pessoa o recria com `npm install`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "O `package-lock.json` é gerado pelo npm a cada instalação; por isso, ele deve ficar no `.gitignore`, como o `node_modules/`.",
+      "answer": false,
+      "explanation": "O lock é gerado pelo npm, mas é ele que registra a versão exata de cada pacote. Com ele no commit, toda a equipe instala as mesmas versões; sem ele, cada `npm install` pode escolher outra versão dentro da faixa do `package.json`. O `node_modules/` fica fora porque é recriado a partir do `package.json` e do lock.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o script do `package.json` e o comando que roda o relatório só da categoria áudio:\n\n```json\n\"scripts\": {\n  \"relatorio\": \"___ scripts/relatorio-catalogo.mjs\"\n}\n```\n\n```bash\nnpm run relatorio ___ --categoria=audio\n```",
+      "answer": [["node"], ["--"]],
+      "explanation": "O script chama o `node` com o caminho do arquivo, como você fazia à mão no E21. No comando, o `--` separa o que é do npm do que vai para o script: sem ele, o npm fica com o `--categoria=audio` e o relatório sai sem filtro.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Depois de `git merge main`, o `catalogo.json` ficou como abaixo. Você e a Ana combinaram que o preço certo é `179.9`. O que conclui o merge?\n\n```json\n<<<<<<< HEAD\n  \"preco\": 179.9,\n=======\n  \"preco\": 189.9,\n>>>>>>> main\n```",
+      "options": {
+        "a": "Deixar só a linha `\"preco\": 179.9,`, apagar as três marcas e rodar `git add` no arquivo e `git commit`",
+        "b": "Apagar só a linha `\"preco\": 189.9,` e fazer o commit com as marcas, que o Git remove sozinho",
+        "c": "Rodar `git push --force`, que envia a sua versão por cima da `main`",
+        "d": "Rodar `git commit` direto, porque o Git usa a versão de `HEAD` quando há marcas"
+      },
+      "answer": "a",
+      "explanation": "O arquivo final precisa ficar como deve ser: a linha combinada e nenhuma marca. O `git add` avisa ao Git que o conflito foi resolvido e o `git commit` conclui o merge. O Git não remove marcas sozinho: commitadas, elas deixam o JSON inválido e o app não abre. Com o arquivo ainda em conflito, o `git commit` é recusado, e o `--force` apagaria do GitHub o trabalho de quem enviou antes.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Seu PR, da branch `feature/preco-fone-b`, mostra no GitHub *This branch has conflicts that must be resolved*: a `main` recebeu outro PR que mudou a mesma linha. Qual sequência resolve sem perder o trabalho de ninguém?",
+      "options": {
+        "a": "`git switch main`, `git pull`, `git switch feature/preco-fone-b`, `git merge main`, resolver, `git add`, `git commit` e `git push`",
+        "b": "`git switch feature/preco-fone-b`, `git merge main` e `git push`, sem `git pull` antes",
+        "c": "`git switch main`, `git merge feature/preco-fone-b` e `git push --force` na `main`",
+        "d": "Fechar o PR, apagar a branch e refazer a mudança direto na `main`"
+      },
+      "answer": "a",
+      "explanation": "Primeiro a `main` local precisa receber o PR do colega (`git pull`); depois, o `git merge main` na sua branch faz o conflito aparecer no seu computador, onde você o resolve e envia, e o PR se atualiza. Sem o `git pull`, a opção mais tentadora, a `main` local ainda é a antiga: o merge não traz nada e o conflito continua no GitHub. O `--force` na `main` apaga o PR do colega, e trabalhar direto na `main` foge da revisão.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um colega instalou o `expo-camera` com `npm install`. Agora o `npx expo start` avisa que alguns pacotes deveriam estar na versão esperada pelo SDK, e o `npm audit` sugere `npm audit fix --force`. Qual é o melhor caminho?",
+      "options": {
+        "a": "Rodar `npx expo install --check` para alinhar as versões ao SDK e depois `npx expo-doctor` até não restar problema",
+        "b": "Rodar `npm audit fix --force`, que atualiza tudo para a versão mais nova e resolve os dois avisos",
+        "c": "Apagar o `package-lock.json` e rodar `npm install` de novo",
+        "d": "Ignorar o aviso: se o app abriu no celular do colega, vai abrir em todos"
+      },
+      "answer": "a",
+      "explanation": "O aviso do `npx expo start` é o mesmo do `--check`: o pacote está fora da versão testada com o SDK, e o `--check` oferece reinstalar a versão certa; o `expo-doctor` confirma que nada mais ficou errado. O `--force` sobe versões maiores e tira ainda mais pacotes do SDK. Apagar o lock não muda a faixa gravada no `package.json`, e um pacote nativo fora da versão do Expo Go pode quebrar em outros aparelhos.",
+      "points": 2
+    }
+  ]
+}

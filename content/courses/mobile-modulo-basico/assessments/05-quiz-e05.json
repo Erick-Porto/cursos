@@ -1,0 +1,87 @@
+{
+  "title": "Quiz: E05 · Efeitos e dados externos",
+  "description": "Seis questões sobre useEffect, dependências, fetch com async/await e os estados de carregamento e erro.",
+  "lesson": "e05a-efeitos-e-dados-externos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No código abaixo, qual é o papel do `[]` passado como segundo argumento?\n\n```jsx\nuseEffect(() => {\n  carregar()\n}, [])\n```",
+      "options": {
+        "a": "Faz o efeito rodar uma única vez, logo após a primeira renderização",
+        "b": "Faz o efeito rodar antes de o componente aparecer na tela",
+        "c": "Faz o efeito rodar depois de toda renderização do componente",
+        "d": "Impede o efeito de rodar até que alguém chame `carregar()`"
+      },
+      "answer": "a",
+      "explanation": "O array vazio diz a React que o efeito não depende de nenhum valor, então ele roda só depois da primeira renderização (ao montar). Rodar depois de toda renderização é o que acontece quando o segundo argumento é omitido. Efeitos nunca rodam antes de a tela ser desenhada.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na primeira renderização deste componente, em que ordem as letras aparecem no console?\n\n```jsx\nfunction App() {\n  console.log('A')\n  useEffect(() => {\n    console.log('B')\n  }, [])\n  console.log('C')\n  return <p>Minhas Tarefas</p>\n}\n```",
+      "options": {
+        "a": "A, B, C",
+        "b": "A, C, B",
+        "c": "B, A, C",
+        "d": "C, A, B"
+      },
+      "answer": "b",
+      "explanation": "O corpo da função roda de cima para baixo (A e depois C) e React desenha a tela. Só então o efeito é executado e imprime B. A ordem A, B, C é tentadora porque segue a posição no código, mas `useEffect` apenas registra a função; ela roda depois da renderização.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "A função abaixo deveria devolver a lista de tarefas, mas o console mostra `dados.map is not a function`. Quais correções são necessárias?\n\n```javascript\nasync function carregarTarefas() {\n  const resposta = fetch(URL_API)\n  const dados = resposta.json()\n  return dados.map((item) => ({ id: item.id, titulo: item.title }))\n}\n```",
+      "options": {
+        "a": "Adicionar `await` antes de `fetch(URL_API)`",
+        "b": "Adicionar `await` antes de `resposta.json()`",
+        "c": "Remover a palavra `async` da declaração da função",
+        "d": "Trocar `resposta.json()` por `resposta.text()`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Sem `await`, `fetch` e `.json()` devolvem promessas, não os dados; por isso `dados` não é um array e `.map` não existe nele. Os dois `await` são necessários. Remover o `async` quebraria qualquer `await`, e `.text()` devolveria uma string, que também não tem `.map`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "A função passada ao `useEffect` roda antes de o componente aparecer na tela, para que os dados buscados já estejam prontos na primeira renderização.",
+      "answer": false,
+      "explanation": "Efeitos rodam depois que React desenha a tela. Por isso a primeira renderização acontece com o estado inicial (uma lista vazia) e o app precisa de um estado como `carregando` para avisar o usuário enquanto os dados não chegam.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Para converter o corpo da resposta de `fetch` em objetos JavaScript, você chama `await resposta.___()`.",
+      "answer": [["json", "json()"]],
+      "explanation": "O método `json()` lê o corpo da resposta e o transforma em objetos e arrays JavaScript. Sem ele, você teria um objeto `Response`, e não a lista de tarefas; `setTarefas(resposta)` quebraria o `map` da lista.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O usuário abre o app sem internet. Com o código abaixo, o que aparece na tela?\n\n```jsx\nconst [carregando, setCarregando] = useState(true)\nconst [erro, setErro] = useState(null)\n\nasync function iniciar() {\n  try {\n    const lista = await carregarTarefas()\n    setTarefas(lista)\n    setCarregando(false)\n  } catch (e) {\n    setErro('Não foi possível carregar as tarefas.')\n  }\n}\n\n// no JSX:\n{carregando && <p>Carregando...</p>}\n{erro && <p>{erro}</p>}\n```",
+      "options": {
+        "a": "Apenas a mensagem de erro",
+        "b": "\"Carregando...\" e a mensagem de erro ao mesmo tempo",
+        "c": "Apenas \"Carregando...\", porque o `catch` não roda sem internet",
+        "d": "A lista vazia, sem nenhuma mensagem"
+      },
+      "answer": "b",
+      "explanation": "O `fetch` falha, o `catch` roda e define `erro`, mas `setCarregando(false)` está dentro do `try`, depois da linha que falhou, e nunca executa. Então `carregando` continua `true` e as duas mensagens aparecem juntas. A correção é mover `setCarregando(false)` para um bloco `finally`, que roda com ou sem erro.",
+      "points": 1
+    }
+  ]
+}

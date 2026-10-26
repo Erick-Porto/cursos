@@ -1,0 +1,88 @@
+{
+  "title": "Quiz: E40 · Integrando a API e paginação",
+  "description": "Seis questões sobre o hook useProdutos, a paginação com limit e skip, o puxar para atualizar e o checklist de app conectado.",
+  "lesson": "e40a-integrando-api-e-paginacao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A Lojinha pede 20 produtos por página à DummyJSON e já mostra 40 na grade. Qual endereço busca a próxima página?",
+      "options": {
+        "a": "`/products?limit=20&skip=40`",
+        "b": "`/products?limit=20&skip=60`",
+        "c": "`/products?limit=20&skip=3`",
+        "d": "`/products?limit=60&skip=0`"
+      },
+      "answer": "a",
+      "explanation": "`skip` é quantos produtos pular: quem já tem 40 pula 40 e recebe do 41 ao 60. Com `skip=60`, a opção mais tentadora para quem pensa em \"página 3 vezes 20\", os produtos 41 a 60 nunca aparecem. `skip=3` confunde o número da página com a quantidade, e `limit=60&skip=0` baixa de novo os 40 que já estão na tela.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual prop da `FlatList` recebe a função chamada quando a rolagem se aproxima do fim da lista?",
+      "options": {
+        "a": "`onEndReached`",
+        "b": "`onEndReachedThreshold`",
+        "c": "`onRefresh`",
+        "d": "`ListFooterComponent`"
+      },
+      "answer": "a",
+      "explanation": "`onEndReached` recebe a função; na Lojinha, `carregarMais`. `onEndReachedThreshold` parece certa, mas é só a distância do fim em telas (0.5 é meia tela), não a função. `onRefresh` responde ao gesto de puxar no topo, e `ListFooterComponent` desenha o rodapé.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "No puxar para atualizar, o `useProdutos` deve ligar `carregando`, para que o esqueleto apareça enquanto a primeira página chega de novo.",
+      "answer": false,
+      "explanation": "O gesto liga `atualizando`, que só gira a rodinha do topo pelo `refreshing` do `RefreshControl`, com a grade visível. Com `carregando`, o Início trocaria a grade pelo `GradeEsqueleto` no meio do gesto: a lista some e o esqueleto pisca. `carregando` serve à primeira carga e ao \"Tentar novamente\".",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o `carregarMais` do `useProdutos`, que para quando a lista está completa e pede a próxima página a partir do que já está na tela:\n\n```javascript\nasync function carregarMais() {\n  if (buscando.current || carregando || produtos.length >= ___) return;\n  setCarregandoMais(true);\n  await buscarPagina(produtos.___);\n  setCarregandoMais(false);\n}\n```",
+      "answer": [["total"], ["length"]],
+      "explanation": "A lista para quando já tem o `total` que a API informou (194 na DummyJSON). O `skip` da próxima página é quantos produtos você já tem: `produtos.length`. Com um número de página, seria preciso multiplicar e lembrar que a primeira começa em 0; o `length` não tem como errar.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais comportamentos fazem parte do checklist de app conectado da Lojinha? Marque todos os corretos.",
+      "options": {
+        "a": "Na primeira carga, o esqueleto aparece até a grade chegar",
+        "b": "Se o pedido da página 4 falha, as páginas já carregadas ficam na tela e o rodapé oferece \"Tentar de novo\"",
+        "c": "Com a lista no `total`, o rodapé avisa o fim e nenhum pedido novo sai",
+        "d": "Ao abrir, o app pede os 194 produtos de uma vez, para a rolagem nunca esperar",
+        "e": "Se qualquer página falha, o `EstadoErro` substitui a grade inteira"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Esqueleto na primeira carga, erro no rodapé quando já há produtos e parada no `total` estão no checklist. Pedir tudo de uma vez gasta o plano de dados e deixa o esqueleto mais tempo na tela: é o que a paginação evita. O `EstadoErro` só toma a tela quando não há nada para mostrar; trocar a grade por ele apaga o que o usuário já viu.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um colega fez a trava do `carregarMais` com estado. Ao rolar rápido até o fim, os produtos 21 a 40 aparecem duas vezes e o terminal avisa `Encountered two children with the same key`. Qual é a correção?\n\n```javascript\nconst [buscando, setBuscando] = useState(false);\n\nasync function carregarMais() {\n  if (buscando || produtos.length >= total) return;\n  setBuscando(true);\n  await buscarPagina(produtos.length);\n  setBuscando(false);\n}\n```",
+      "options": {
+        "a": "Trocar o estado por `const buscando = useRef(false)` e ler e gravar `buscando.current`",
+        "b": "Aumentar o `onEndReachedThreshold` para 1, para o fim ser detectado mais cedo",
+        "c": "Usar o índice do item no `keyExtractor`, para o aviso de chave repetida sumir",
+        "d": "Trocar o `await` por `.then()`, para o pedido terminar antes da segunda chamada"
+      },
+      "answer": "a",
+      "explanation": "`setBuscando(true)` só muda o valor na próxima renderização: a segunda chamada do `onEndReached`, logo em seguida, ainda lê `false` e pede `skip=20` de novo. O `useRef` muda na hora, e a segunda chamada já encontra a trava ligada. Um limite maior faz o evento disparar mais cedo, não menos vezes. O índice na chave só esconde o aviso: os produtos continuam repetidos. E `.then()` é a mesma Promise com outra escrita, sem mudar quando a resposta chega.",
+      "points": 2
+    }
+  ]
+}

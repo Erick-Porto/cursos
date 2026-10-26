@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E29 · Arrays e objetos",
+  "description": "Oito questões sobre métodos de array, ordenação com comparadores, objetos, Object.entries e as regras do histórico de buscas.",
+  "lesson": "e29b-objetos-e-colecoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A tela de Categorias deve listar os nomes `['Livros', 'Áudio', 'Casa']` na ordem `Áudio`, `Casa`, `Livros`. Qual chamada faz isso?",
+      "options": {
+        "a": "`nomes.sort((a, b) => a.localeCompare(b, 'pt-BR'))`",
+        "b": "`nomes.sort()`",
+        "c": "`nomes.sort((a, b) => a - b)`",
+        "d": "`nomes.sort((a, b) => a > b)`"
+      },
+      "answer": "a",
+      "explanation": "`localeCompare` com `'pt-BR'` devolve negativo, zero ou positivo seguindo as regras do português, e o Á fica junto do A. O `sort()` sem comparador, a opção mais tentadora, compara os códigos dos caracteres e manda o `Áudio` para o fim. Subtrair textos dá `NaN`, e um comparador que devolve `true` ou `false` nunca devolve negativo, então a ordem sai errada.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o conteúdo de `precos` depois destas linhas?\n\n```javascript\nconst precos = [89.9, 119.9, 59.9];\nprecos.sort();\n```",
+      "options": {
+        "a": "`[119.9, 59.9, 89.9]`",
+        "b": "`[59.9, 89.9, 119.9]`",
+        "c": "`[119.9, 89.9, 59.9]`",
+        "d": "`[89.9, 119.9, 59.9]`"
+      },
+      "answer": "a",
+      "explanation": "Sem comparador, o `sort` transforma cada número em texto e compara caractere a caractere: \"1\" vem antes de \"5\", que vem antes de \"8\". A ordem crescente certa só sai com `precos.sort((a, b) => a - b)`. O array também não fica como estava: o `sort` sempre ordena o próprio array.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Na Lojinha, o mesmo array `produtos` é importado pelo Início, por Categorias e pelo Detalhe. Quais linhas, escritas no Início, **alteram** esse array e, por isso, mudam o que as outras telas mostram?",
+      "options": {
+        "a": "`produtos.sort((a, b) => a.preco - b.preco)`",
+        "b": "`[...produtos].sort((a, b) => a.preco - b.preco)`",
+        "c": "`produtos.slice(0, 4)`",
+        "d": "`produtos.splice(0, 1)`",
+        "e": "`produtos.filter((p) => p.destaque)`"
+      },
+      "answer": ["a", "d"],
+      "explanation": "`sort` ordena no lugar e `splice` corta o próprio array: os dois mudam o catálogo que as outras telas leem. `[...produtos]` cria uma cópia antes, e o `sort` mexe só nela. `slice` e `filter` devolvem arrays novos e deixam o original intacto.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Com `const favoritos = [3, 7];`, a expressão `favoritos.includes('7')` devolve `true`.",
+      "answer": false,
+      "explanation": "`includes` compara com `===`, e o texto `'7'` é diferente do número `7`. Isso acontece de verdade no app: o `id` lido de uma rota como `/produto/7` chega como texto. Converta com `Number(id)` antes de procurar.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete para obter os pares `[chave, valor]` do objeto e gerar com eles os botões de ordem da tela de Filtros:\n\n```javascript\nconst rotulosDeOrdem = { nome: 'Nome', preco: 'Menor preço' };\nconst pares = Object.___(rotulosDeOrdem);\n// [['nome', 'Nome'], ['preco', 'Menor preço']]\n```",
+      "answer": [["entries"]],
+      "explanation": "`Object.entries` devolve um array de pares `[chave, valor]`, pronto para um `map` que gera um botão por par. `Object.keys` devolveria só `['nome', 'preco']`, e `Object.values`, só os rótulos.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual é o resultado de `registrarBusca(['fone', 'garrafa', 'tênis'], 'Garrafa')`?\n\n```javascript\nexport function registrarBusca(historico, termo, limite = 5) {\n  const limpo = termo.trim();\n  if (limpo === '') return historico;\n  const novo = [...historico];\n  const repetida = novo.findIndex((t) => t.toLowerCase() === limpo.toLowerCase());\n  if (repetida !== -1) novo.splice(repetida, 1);\n  novo.unshift(limpo);\n  return novo.slice(0, limite);\n}\n```",
+      "options": {
+        "a": "`['Garrafa', 'fone', 'tênis']`",
+        "b": "`['Garrafa', 'fone', 'garrafa', 'tênis']`",
+        "c": "`['fone', 'garrafa', 'tênis']`",
+        "d": "`['fone', 'tênis', 'Garrafa']`"
+      },
+      "answer": "a",
+      "explanation": "O `findIndex` compara em minúsculas e acha `'garrafa'` na posição 1; o `splice` tira essa entrada da cópia e o `unshift` põe `'Garrafa'` na frente. Sem o `toLowerCase`, a busca entraria repetida. O histórico não fica igual, porque a busca repetida sobe para o começo, e o `unshift` põe no começo, não no fim.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual expressão devolve `349.9`?\n\n```javascript\nconst produto = { id: 7, nome: 'Tênis de Corrida', preco: 349.9 };\nconst campo = 'preco';\n```",
+      "options": {
+        "a": "`produto[campo]`",
+        "b": "`produto.campo`",
+        "c": "`produto['campo']`",
+        "d": "`produto[preco]`"
+      },
+      "answer": "a",
+      "explanation": "Com colchete e sem aspas, a chave vem do valor da variável `campo`, que é `'preco'`. `produto.campo` e `produto['campo']` procuram uma chave chamada literalmente \"campo\" e devolvem `undefined`. `produto[preco]` procura uma variável `preco`, que não existe, e dá erro.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois que o cliente escolhe **Menor preço** com a categoria **Todas**, a aba Categorias também passa a mostrar os produtos por preço. Qual é a causa?\n\n```javascript\nexport function aplicarFiltros(lista, { categoria, ordem }) {\n  const base = categoria ? lista.filter((p) => p.categoria === categoria) : lista;\n  return base.sort(comparadores[ordem]);\n}\n```",
+      "options": {
+        "a": "Sem categoria, `base` é o próprio array `produtos`, e o `sort` o reordena no lugar",
+        "b": "O `filter` altera `produtos` ao tirar os itens das outras categorias",
+        "c": "`comparadores[ordem]` deveria ser `comparadores.ordem`",
+        "d": "O comparador de preço devolve um número em vez de `true` ou `false`"
+      },
+      "answer": "a",
+      "explanation": "Com `categoria` nula, `base` aponta para a mesma `lista` recebida, que é o catálogo, e o `sort` muda esse array, lido também por Categorias. A correção é `[...base].sort(...)`. O `filter` devolve um array novo e não toca no original. `comparadores.ordem` procuraria uma chave chamada \"ordem\". E o comparador deve mesmo devolver número.",
+      "points": 2
+    }
+  ]
+}

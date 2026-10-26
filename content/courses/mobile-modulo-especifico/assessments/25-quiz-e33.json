@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E33 · Strings, datas e números no app",
+  "description": "Oito questões sobre métodos de string, expressões regulares para CEP, formatação com Intl, datas, dias úteis e JSON.",
+  "lesson": "e33b-datas-numeros-e-json",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Para testar a previsão de entrega, você cria a data `new Date(2025, 9, 16)`. Que data é essa?",
+      "options": {
+        "a": "16 de outubro de 2025",
+        "b": "16 de setembro de 2025",
+        "c": "16 de novembro de 2025",
+        "d": "9 de dezembro de 2025"
+      },
+      "answer": "a",
+      "explanation": "No construtor com números, o mês começa em 0 (janeiro) e vai até 11 (dezembro): o 9 é outubro. Setembro é a resposta mais tentadora, porque é o nono mês contando a partir de 1. O dia, por outro lado, é o número de sempre: 16 é o dia 16.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Antes de calcular o frete, o Checkout confere o CEP com `CEP.test(texto)`. Quais textos fazem o teste dar `true`?\n\n```javascript\nconst CEP = /^\\d{5}-?\\d{3}$/;\n```",
+      "options": {
+        "a": "`'01310-100'`",
+        "b": "`'01310100'`",
+        "c": "`'01310-10'`",
+        "d": "`'CEP 01310-100'`",
+        "e": "`'01310--100'`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "O padrão exige, do início ao fim do texto, cinco dígitos, um hífen opcional (`-?`) e três dígitos: vale com e sem hífen. Com só dois dígitos no fim, falta um. O `^` recusa o texto que começa com `CEP `, e o `-?` aceita no máximo um hífen. Sem `^` e `$`, o texto com `CEP ` na frente passaria, porque o padrão casaria com um pedaço dele.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Depois de `const volta = JSON.parse(JSON.stringify({ criadoEm: new Date() }))`, a propriedade `volta.criadoEm` é de novo um objeto `Date`.",
+      "answer": false,
+      "explanation": "JSON só guarda texto, números, booleanos, listas e objetos simples. O `stringify` transforma o `Date` num texto em UTC, como `'2025-10-09T17:30:00.000Z'`, e o `parse` devolve esse texto, sem saber que era uma data. Para voltar a ter um `Date`, recrie com `new Date(volta.criadoEm)`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o formatador de preços em reais da Lojinha:\n\n```javascript\nconst moeda = new Intl.___('pt-BR', {\n  style: 'currency',\n  currency: '___',\n});\n\nmoeda.format(1299.9); // 'R$ 1.299,90'\n```",
+      "answer": [["NumberFormat"], ["BRL"]],
+      "explanation": "`Intl.NumberFormat` cria um formatador de números com idioma e opções; com `style: 'currency'`, a moeda é indicada pelo código de três letras, e o real é `BRL`. `DateTimeFormat` formata datas, e `BR` ou `R$` não são códigos de moeda.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual é o valor de `regiao` no código abaixo?\n\n```javascript\nconst partes = '01310-100'.match(/^(\\d{5})-?(\\d{3})$/);\nconst regiao = partes[1];\n```",
+      "options": {
+        "a": "`'01310'`",
+        "b": "`'01310-100'`",
+        "c": "`'100'`",
+        "d": "`'0'`"
+      },
+      "answer": "a",
+      "explanation": "O `match` devolve um array com o trecho inteiro que casou na posição 0 e depois um item por grupo, na ordem dos parênteses. A posição 1 é o primeiro grupo, `(\\d{5})`: `'01310'`. O CEP inteiro, a alternativa mais tentadora, está na posição 0; `'100'` é o segundo grupo, na posição 2.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um colega escreveu esta função para o prazo de entrega. O que aparece no console, e por quê?\n\n```javascript\nfunction somarDias(data, dias) {\n  data.setDate(data.getDate() + dias);\n  return data;\n}\n\nconst hoje = new Date(2025, 9, 9);\nconst entrega = somarDias(hoje, 5);\nconsole.log(hoje.getDate(), entrega.getDate());\n```",
+      "options": {
+        "a": "`14 14`: o `Date` é mutável, e a função alterou o mesmo objeto que recebeu",
+        "b": "`9 14`: a função recebe uma cópia da data, como acontece com uma string",
+        "c": "`9 14`: o `return` devolve uma data nova, com os dias somados",
+        "d": "`14 9`: `entrega` guarda o valor que a data tinha antes do `setDate`"
+      },
+      "answer": "a",
+      "explanation": "`setDate` muda o próprio objeto, e a função recebe o mesmo `Date` que está em `hoje`, não uma cópia. `hoje` e `entrega` apontam para um único objeto, que agora marca o dia 14. A string é imutável, por isso a comparação com ela engana: com `Date`, copie antes de somar, por exemplo com `new Date(data.getFullYear(), data.getMonth(), data.getDate())`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A API manda a data de um pedido como `'2025-10-16'`. No celular de um cliente em São Paulo, `formatarData(new Date('2025-10-16'))` mostra `'qua., 15 de out.'`. Qual é a causa?",
+      "options": {
+        "a": "O texto só com a data é lido como meia-noite em UTC, que em São Paulo ainda é 21h do dia 15",
+        "b": "O mês do `Date` começa em 0, e por isso o dia também é contado a partir de 0",
+        "c": "O `Intl.DateTimeFormat` com `weekday: 'short'` mostra o dia anterior ao da data",
+        "d": "O `Date` não aceita texto, e o `formatarData` recebe a data de hoje no lugar"
+      },
+      "answer": "a",
+      "explanation": "Uma string no formato `AAAA-MM-DD`, sem hora, é interpretada como meia-noite em UTC. Em São Paulo (UTC-3), esse instante ainda é 21h do dia 15, e é isso que o formatador mostra. A correção é montar a data pelos números, com `new Date(ano, mes - 1, dia)`. O mês começar em 0 vale só para o construtor com números e não muda o dia; o formatador mostra o dia que recebe.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Na tela \"Meus pedidos\", o código abaixo monta o rótulo de um pedido. Que texto ele produz?\n\n```javascript\nconst cliente = '  Maria Souza ';\nconst numero = 42;\nconst rotulo = `${cliente.trim().split(' ')[0]}, pedido #${String(numero).padStart(5, '0')}`;\n```",
+      "options": {
+        "a": "`'Maria, pedido #00042'`",
+        "b": "`'Maria, pedido #42000'`",
+        "c": "`'Maria Souza, pedido #00042'`",
+        "d": "`', pedido #00042'`"
+      },
+      "answer": "a",
+      "explanation": "O `trim` tira os espaços das pontas, o `split(' ')` quebra em `['Maria', 'Souza']` e o índice 0 é `'Maria'`. O `padStart(5, '0')` completa pela esquerda até 5 caracteres: `'00042'`. Completar pela direita seria o `padEnd`. O texto vazio só apareceria sem o `trim`, porque o primeiro pedaço antes do primeiro espaço seria vazio.",
+      "points": 1
+    }
+  ]
+}

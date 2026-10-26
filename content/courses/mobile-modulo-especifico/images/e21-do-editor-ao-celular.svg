@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Do editor ao celular: o Metro, no Node do computador, passa o Detalhe.js pelo Babel, que troca o JSX por JavaScript, junta tudo no bundle e o envia pela Wi-Fi ao Expo Go, onde o Hermes executa e a tela se atualiza</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .chip { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .seta { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#ponta); }
+    .jsx  { animation: jsx 8s ease-in-out infinite; }
+    .js   { animation: js 8s ease-in-out infinite; }
+    .nova { animation: nova 8s ease-in-out infinite; }
+    @keyframes jsx {
+      0%, 8%   { opacity: 1; transform: translate(0, 0); }
+      22%      { opacity: 1; transform: translate(304px, -24px); }
+      28%      { opacity: 0; transform: translate(304px, -24px); }
+      90%      { opacity: 0; transform: translate(0, 0); }
+      100%     { opacity: 1; transform: translate(0, 0); }
+    }
+    @keyframes js {
+      0%, 22%  { opacity: 0; transform: translate(-242px, -18px); }
+      28%      { opacity: 1; transform: translate(-242px, -18px); }
+      40%, 48% { opacity: 1; transform: translate(-242px, 86px); }
+      58%      { opacity: 1; transform: translate(0, 94px); }
+      64%, 92% { opacity: 1; transform: translate(0, 0); }
+      100%     { opacity: 0; transform: translate(0, 0); }
+    }
+    @keyframes nova {
+      0%, 64% { opacity: 0; }
+      70%, 92% { opacity: 1; }
+      100%    { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .jsx, .js, .nova { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="ponta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- computador -->
+  <rect x="16" y="16" width="440" height="308" rx="14" fill="none" stroke="#2a3a5c" stroke-width="2" stroke-dasharray="8 6"/>
+  <text class="m" x="32" y="48" font-weight="700">Computador, no Node.js</text>
+
+  <rect class="box" x="32" y="72" width="172" height="124" rx="10"/>
+  <text class="m" x="48" y="102">editor</text>
+  <text class="code" x="48" y="134">Detalhe.js</text>
+
+  <rect class="box" x="224" y="64" width="216" height="244" rx="10"/>
+  <text class="t" x="240" y="96">Metro</text>
+  <rect class="chip" x="240" y="110" width="184" height="80" rx="8"/>
+  <text class="t" x="256" y="144">Babel</text>
+  <text class="m" x="256" y="176">JSX vira JS</text>
+  <rect class="chip" x="240" y="216" width="184" height="80" rx="8"/>
+  <text class="t" x="256" y="248">bundle</text>
+  <text class="m" x="256" y="282">um só pacote</text>
+
+  <path class="seta" d="M204 142 H236"/>
+  <path class="seta" d="M332 190 V214"/>
+  <path class="seta" d="M424 256 H544"/>
+  <text class="m" x="500" y="226" text-anchor="middle">Wi-Fi</text>
+
+  <!-- celular -->
+  <rect class="box" x="548" y="24" width="156" height="292" rx="24"/>
+  <text class="t" x="626" y="62" text-anchor="middle">Expo Go</text>
+  <rect class="chip" x="564" y="80" width="124" height="44" rx="8"/>
+  <text class="t" x="626" y="110" text-anchor="middle">Hermes</text>
+  <rect class="chip" x="564" y="196" width="124" height="104" rx="8"/>
+  <g class="nova">
+    <g transform="translate(608 206) scale(1.5)" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></g>
+    <text x="626" y="284" text-anchor="middle" font-size="22" fill="#34d399">tela nova</text>
+  </g>
+
+  <!-- o código viajando -->
+  <g class="jsx">
+    <rect x="48" y="150" width="64" height="32" rx="6" fill="#fbbf24"/>
+    <text x="80" y="173" text-anchor="middle" font-size="22" font-weight="700" fill="#0b1020">JSX</text>
+  </g>
+  <g class="js">
+    <rect x="594" y="144" width="64" height="32" rx="6" fill="#34d399"/>
+    <text x="626" y="167" text-anchor="middle" font-size="22" font-weight="700" fill="#06281c">JS</text>
+  </g>
+</svg>

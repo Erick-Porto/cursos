@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>justifyContent em uma View com flexDirection row: os dois textos passam por flex-start, center, flex-end e terminam em space-between, um em cada ponta</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .dim  { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .chip { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ct   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .view { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .item { fill: #0b1020; stroke: #34d399; stroke-width: 2; }
+    .eixo { fill: none; stroke: #a78bfa; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .i1, .i2, .marca { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .i1 { animation-name: i1; }
+    .i2 { animation-name: i2; }
+    .marca { fill: #34d399; transform-box: fill-box; transform-origin: 0 0; animation-name: marca; }
+    @keyframes i1 {
+      0%, 18%  { transform: translateX(0); }
+      24%, 40% { transform: translateX(136px); }
+      46%, 60% { transform: translateX(272px); }
+      66%, 94% { transform: translateX(0); }
+      100%     { transform: translateX(0); }
+    }
+    @keyframes i2 {
+      0%, 18%  { transform: translateX(-272px); }
+      24%, 40% { transform: translateX(-136px); }
+      46%, 60% { transform: translateX(0); }
+      66%, 94% { transform: translateX(0); }
+      100%     { transform: translateX(-272px); }
+    }
+    @keyframes marca {
+      0%, 18%  { transform: translateX(-438px) scaleX(0.8); }
+      24%, 40% { transform: translateX(-266px) scaleX(0.54); }
+      46%, 60% { transform: translateX(-146px) scaleX(0.67); }
+      66%, 94% { transform: translateX(0) scaleX(1); }
+      100%     { transform: translateX(-438px) scaleX(0.8); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .i1, .i2, .marca { animation: none; }
+    }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <text class="code" x="40" y="44">justifyContent</text>
+  <text class="dim" x="680" y="44" text-anchor="end">flexDirection: 'row'</text>
+
+  <!-- valores -->
+  <rect class="chip" x="41" y="62" width="160" height="44" rx="8"/>
+  <text class="ct" x="121" y="91" text-anchor="middle">flex-start</text>
+  <rect class="chip" x="213" y="62" width="108" height="44" rx="8"/>
+  <text class="ct" x="267" y="91" text-anchor="middle">center</text>
+  <rect class="chip" x="333" y="62" width="134" height="44" rx="8"/>
+  <text class="ct" x="400" y="91" text-anchor="middle">flex-end</text>
+  <rect class="chip" x="479" y="62" width="200" height="44" rx="8"/>
+  <text class="ct" x="579" y="91" text-anchor="middle">space-between</text>
+  <rect class="marca" x="479" y="112" width="200" height="6" rx="3"/>
+
+  <!-- a View em linha com os dois textos -->
+  <rect class="view" x="40" y="148" width="640" height="100" rx="12"/>
+  <g class="i1">
+    <rect class="item" x="59" y="172" width="254" height="52" rx="8"/>
+    <text class="t" x="186" y="206" text-anchor="middle">Estudar React Native</text>
+  </g>
+  <g class="i2">
+    <rect class="item" x="591" y="172" width="70" height="52" rx="8"/>
+    <text class="t" x="626" y="206" text-anchor="middle">alta</text>
+  </g>
+
+  <!-- eixo principal -->
+  <path class="eixo" d="M 56 280 L 664 280 M 650 270 L 664 280 L 650 290"/>
+  <text class="m" x="360" y="318" text-anchor="middle">eixo principal: na horizontal, porque a direção é row</text>
+</svg>

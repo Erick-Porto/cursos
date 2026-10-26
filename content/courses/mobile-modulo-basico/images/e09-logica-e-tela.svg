@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 416" font-family="Inter, system-ui, sans-serif">
+  <title>Do minhas-tarefas ao minhas-tarefas-mobile: a lógica (useState, adicionarTarefa, alternarConcluida e removerTarefa) é copiada sem mudar; a tela é traduzida de div, button, onClick e className para View, Pressable, onPress e StyleSheet</title>
+  <style>
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .proj  { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .warn  { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .caixa { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .logica { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .nova-tela { fill: #131c33; stroke: #fbbf24; stroke-width: 2.5; stroke-dasharray: 9 6; }
+    .seta-ok { fill: none; stroke: #34d399; stroke-width: 3; marker-end: url(#ponta-ok); }
+    .seta-tr { fill: none; stroke: #fbbf24; stroke-width: 3; stroke-dasharray: 8 6; marker-end: url(#ponta-tr); }
+    .copia, .seta-copia, .traduz { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .copia { animation-name: copia; }
+    .seta-copia { animation-name: seta-copia; }
+    .traduz { animation-name: traduz; }
+    @keyframes copia {
+      0%       { opacity: 0; transform: translateX(-392px); }
+      8%       { opacity: 1; transform: translateX(-392px); }
+      30%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes seta-copia {
+      0%, 30%  { opacity: 0; }
+      36%, 92% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes traduz {
+      0%, 44%  { opacity: 0; transform: translateY(10px); }
+      54%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .copia, .seta-copia, .traduz { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="ponta-ok" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#34d399"/></marker>
+    <marker id="ponta-tr" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="416" rx="16" fill="#0b1020"/>
+
+  <!-- web -->
+  <text class="proj" x="164" y="40" text-anchor="middle">minhas-tarefas</text>
+  <text class="m" x="164" y="70" text-anchor="middle">navegador</text>
+  <rect class="caixa" x="24" y="88" width="280" height="108" rx="12"/>
+  <text class="warn" x="40" y="118">tela</text>
+  <text class="code" x="40" y="152">div button</text>
+  <text class="code" x="40" y="182">onClick className</text>
+  <rect class="logica" x="24" y="216" width="280" height="176" rx="12"/>
+  <text class="ok" x="40" y="246">lógica</text>
+  <text class="code" x="40" y="280">useState</text>
+  <text class="code" x="40" y="310">adicionarTarefa</text>
+  <text class="code" x="40" y="340">alternarConcluida</text>
+  <text class="code" x="40" y="370">removerTarefa</text>
+
+  <!-- celular -->
+  <text class="proj" x="556" y="40" text-anchor="middle">minhas-tarefas-mobile</text>
+  <text class="m" x="556" y="70" text-anchor="middle">celular</text>
+
+  <g class="traduz">
+    <path class="seta-tr" d="M 314 154 L 400 154"/>
+    <text class="warn" x="360" y="138" text-anchor="middle">traduzida</text>
+    <rect class="nova-tela" x="416" y="88" width="280" height="108" rx="12"/>
+    <text class="warn" x="432" y="118">tela</text>
+    <text class="code" x="432" y="152">View Pressable</text>
+    <text class="code" x="432" y="182">onPress StyleSheet</text>
+  </g>
+
+  <g class="seta-copia">
+    <path class="seta-ok" d="M 314 316 L 400 316"/>
+    <text class="ok" x="360" y="300" text-anchor="middle">copiada</text>
+  </g>
+
+  <g class="copia">
+    <rect class="logica" x="416" y="216" width="280" height="176" rx="12"/>
+    <text class="ok" x="432" y="246">lógica</text>
+    <text class="code" x="432" y="280">useState</text>
+    <text class="code" x="432" y="310">adicionarTarefa</text>
+    <text class="code" x="432" y="340">alternarConcluida</text>
+    <text class="code" x="432" y="370">removerTarefa</text>
+  </g>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>React desenha a lista vazia, o efeito busca com fetch, setTarefas guarda a resposta e React desenha de novo com as 10 tarefas; com [] o efeito não volta a rodar</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ok   { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .b    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .seta { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#ponta); }
+    .s2 { animation: p2 8s infinite; }
+    .s3 { animation: p3 8s infinite; }
+    .s4 { animation: p4 8s infinite; }
+    @keyframes p2 { 0%, 10% { opacity: 0; transform: translateX(-6px); } 18%, 92% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; } }
+    @keyframes p3 { 0%, 32% { opacity: 0; transform: translateY(-6px); } 40%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes p4 { 0%, 54% { opacity: 0; transform: translateX(6px); } 62%, 92% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .s2, .s3, .s4 { animation: none; } }
+  </style>
+  <defs>
+    <marker id="ponta" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- 1: primeira renderização -->
+  <rect class="box" x="30" y="30" width="290" height="90" rx="12"/>
+  <text class="b" x="175" y="66" text-anchor="middle">1 React desenha</text>
+  <text class="m" x="175" y="100" text-anchor="middle">a lista vazia</text>
+
+  <!-- 2: o efeito busca -->
+  <g class="s2">
+    <path class="seta" d="M 324 75 L 390 75"/>
+    <rect class="box" x="400" y="30" width="290" height="90" rx="12"/>
+    <text class="b" x="545" y="66" text-anchor="middle">2 o efeito roda</text>
+    <text class="t code" x="545" y="100" text-anchor="middle">fetch(URL_API)</text>
+  </g>
+
+  <!-- 3: a resposta chega -->
+  <g class="s3">
+    <path class="seta" d="M 545 124 L 545 190"/>
+    <text class="lbl code" x="530" y="164" text-anchor="end">await</text>
+    <rect class="box" x="400" y="200" width="290" height="90" rx="12"/>
+    <text class="b" x="545" y="236" text-anchor="middle">3 a resposta chega</text>
+    <text class="t code" x="545" y="270" text-anchor="middle">setTarefas(lista)</text>
+  </g>
+
+  <!-- 4: segunda renderização -->
+  <g class="s4">
+    <path class="seta" d="M 396 245 L 330 245"/>
+    <rect class="ok" x="30" y="200" width="290" height="90" rx="12"/>
+    <text class="b" x="175" y="236" text-anchor="middle">4 desenha de novo</text>
+    <text class="m" x="175" y="270" text-anchor="middle">10 tarefas na tela</text>
+    <text class="m" x="360" y="334" text-anchor="middle">Com <tspan class="code" fill="#e8edf7">[]</tspan>, o efeito não roda de novo: uma só busca</text>
+  </g>
+</svg>

@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>Busca com AbortController: o pedido de "s" está em andamento quando o termo vira "shoes"; abort() corta o pedido velho, o AbortError é ignorado e a vitrine mostra os resultados de shoes</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .s    { fill: #b4bfd3; font-size: 22px; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .no   { fill: #f87171; font-size: 22px; }
+    .eixo { stroke: #b4bfd3; stroke-width: 2; marker-end: url(#p-eixo); }
+    .liga { stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 5 6; }
+    .xis  { stroke: #f87171; stroke-width: 5; stroke-linecap: round; }
+    .fantasma { fill: none; stroke: #f87171; stroke-width: 2; stroke-dasharray: 8 5; }
+    .seta { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#p-ok); }
+    .cresce  { transform-box: fill-box; transform-origin: left center; animation: cresce 8s infinite; }
+    .corte   { animation: corte 8s infinite; }
+    .vitrine { animation: vitrine 8s infinite; }
+    @keyframes cresce {
+      0%, 4%   { transform: scaleX(0); opacity: 1; }
+      26%, 94% { transform: scaleX(1); opacity: 1; }
+      100%     { transform: scaleX(1); opacity: 0; }
+    }
+    @keyframes corte   { 0%, 28% { opacity: 0; } 33%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes vitrine {
+      0%, 52%  { opacity: 0; transform: translateY(10px); }
+      58%, 94% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cresce, .corte, .vitrine { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="p-eixo" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b4bfd3"/></marker>
+    <marker id="p-ok" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- 1: o pedido de "s" sai e demora -->
+  <text class="t mono" x="40" y="52">pesquisar('s')</text>
+  <rect class="cresce" x="40" y="66" width="210" height="32" rx="6" fill="#60a5fa"/>
+
+  <!-- 2: o termo vira "shoes": abort() corta o pedido velho e o novo sai -->
+  <g class="corte">
+    <rect class="fantasma" x="250" y="66" width="400" height="32" rx="6"/>
+    <text class="no" x="450" y="90" text-anchor="middle">sem abort, chegaria depois</text>
+    <path class="xis" d="M 238 70 L 262 94 M 262 70 L 238 94"/>
+    <line class="liga" x1="250" y1="104" x2="250" y2="186"/>
+    <text class="lbl" x="264" y="138"><tspan class="mono">abort()</tspan>: <tspan class="mono">AbortError</tspan> ignorado</text>
+    <text class="t mono" x="264" y="178">pesquisar('shoes')</text>
+    <rect x="250" y="188" width="170" height="32" rx="6" fill="#34d399"/>
+  </g>
+
+  <!-- 3: só a resposta de "shoes" chega à tela -->
+  <g class="vitrine">
+    <path class="seta" d="M 335 222 L 335 258"/>
+    <rect x="250" y="264" width="446" height="56" rx="10" fill="#131c33" stroke="#34d399" stroke-width="2"/>
+    <text class="t" x="473" y="300" text-anchor="middle">Vitrine com os resultados de <tspan class="mono">shoes</tspan></text>
+  </g>
+
+  <line class="eixo" x1="40" y1="352" x2="686" y2="352"/>
+  <text class="s" x="40" y="384">tempo</text>
+</svg>

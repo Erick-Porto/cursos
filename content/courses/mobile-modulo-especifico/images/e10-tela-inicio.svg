@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 444" font-family="Inter, system-ui, sans-serif">
+  <title>Wireframe da tela Início: cabeçalho, cartões numa ScrollView com flex 1, rodapé com total e quatro abas de mesma largura</title>
+  <style>
+    .tela   { fill: #131c33; stroke: #2a3a5c; stroke-width: 8; }
+    .notch  { fill: #0b1020; }
+    .div    { stroke: #2a3a5c; stroke-width: 2; }
+    .cartao { fill: none; stroke: #2a3a5c; stroke-width: 2; }
+    .ph     { fill: #2a3a5c; }
+    .t      { fill: #e8edf7; font-size: 22px; }
+    .tb     { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .preco  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .btn    { fill: #34d399; }
+    .btnt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .ativo  { fill: #34d399; }
+    .line   { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+    .num    { fill: #a78bfa; }
+    .numt   { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .lbl    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .code   { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+  </style>
+  <defs>
+    <clipPath id="lista"><rect x="44" y="116" width="282" height="180"/></clipPath>
+  </defs>
+  <rect width="720" height="444" rx="16" fill="#0b1020"/>
+  <g transform="translate(40 0)">
+
+  <!-- celular -->
+  <rect class="tela" x="40" y="16" width="290" height="412" rx="36"/>
+  <rect class="notch" x="150" y="30" width="70" height="22" rx="11"/>
+
+  <!-- 1 cabeçalho -->
+  <text class="tb" x="64" y="98">Lojinha</text>
+  <circle class="ph" cx="298" cy="90" r="14"/>
+  <path class="div" d="M 44 116 L 326 116"/>
+
+  <!-- 2 cartões (a lista rola) -->
+  <g clip-path="url(#lista)">
+    <rect class="cartao" x="58" y="128" width="254" height="84" rx="10"/>
+    <rect class="ph" x="68" y="138" width="64" height="64" rx="8"/>
+    <text class="t" x="144" y="164">Fone Bluetooth</text>
+    <text class="preco" x="144" y="194">R$ 199,90</text>
+    <rect class="cartao" x="58" y="224" width="254" height="84" rx="10"/>
+    <rect class="ph" x="68" y="234" width="64" height="64" rx="8"/>
+    <text class="t" x="144" y="260">Caixa de Som</text>
+    <text class="t" x="144" y="288">Portátil</text>
+  </g>
+
+  <!-- 3 rodapé -->
+  <path class="div" d="M 44 296 L 326 296"/>
+  <text class="tb" x="64" y="334">R$ 449,80</text>
+  <rect class="btn" x="196" y="308" width="116" height="38" rx="8"/>
+  <text class="btnt" x="254" y="335" text-anchor="middle">Finalizar</text>
+
+  <!-- 4 abas -->
+  <path class="div" d="M 44 356 L 326 356"/>
+  <rect class="ativo" x="70" y="374" width="24" height="24" rx="6"/>
+  <rect class="ph" x="138" y="374" width="24" height="24" rx="6"/>
+  <rect class="ph" x="207" y="374" width="24" height="24" rx="6"/>
+  <rect class="ph" x="276" y="374" width="24" height="24" rx="6"/>
+
+  <!-- faixas e rótulos -->
+  <path class="line" d="M 342 68 L 342 112 M 342 120 L 342 292 M 342 300 L 342 352 M 342 360 L 342 412"/>
+  <circle class="num" cx="374" cy="90" r="16"/>
+  <text class="numt" x="374" y="97" text-anchor="middle">1</text>
+  <text class="lbl" x="400" y="98">Cabeçalho</text>
+
+  <circle class="num" cx="374" cy="206" r="16"/>
+  <text class="numt" x="374" y="213" text-anchor="middle">2</text>
+  <text class="lbl" x="400" y="198">Cartões</text>
+  <text class="code" x="400" y="228">ScrollView, flex: 1</text>
+
+  <circle class="num" cx="374" cy="326" r="16"/>
+  <text class="numt" x="374" y="333" text-anchor="middle">3</text>
+  <text class="lbl" x="400" y="334">Rodapé com total</text>
+
+  <circle class="num" cx="374" cy="386" r="16"/>
+  <text class="numt" x="374" y="393" text-anchor="middle">4</text>
+  <text class="lbl" x="400" y="394">Abas</text>
+  <text class="code" x="462" y="394">flex: 1 cada</text>
+  </g>
+</svg>

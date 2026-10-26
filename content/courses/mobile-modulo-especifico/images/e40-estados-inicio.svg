@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 428" font-family="Inter, system-ui, sans-serif">
+  <title>Início: cada estado do useProdutos aparece numa parte da tela; atualizando no topo, carregando e erro sem produtos no lugar da grade, carregandoMais, erro com produtos e o fim da lista no rodapé</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .cel  { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .card { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .sep  { stroke: #2a3a5c; stroke-width: 1.5; stroke-dasharray: 6 5; }
+    .lig  { stroke: #a78bfa; stroke-width: 2; fill: none; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .h    { font-size: 22px; font-weight: 700; }
+  </style>
+  <rect width="720" height="428" rx="16" fill="#0b1020"/>
+
+  <!-- celular -->
+  <rect class="cel" x="24" y="16" width="172" height="396" rx="22"/>
+
+  <!-- topo: rodinha do puxar (refresh-cw do lucide) -->
+  <g transform="translate(92 38) scale(1.5)" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+    <path d="M21 3v5h-5"/>
+    <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+    <path d="M8 16H3v5"/>
+  </g>
+  <line class="sep" x1="36" y1="90" x2="184" y2="90"/>
+
+  <!-- meio: a grade -->
+  <rect class="card" x="40" y="104" width="64" height="64" rx="8"/>
+  <rect class="card" x="116" y="104" width="64" height="64" rx="8"/>
+  <rect class="card" x="40" y="180" width="64" height="64" rx="8"/>
+  <rect class="card" x="116" y="180" width="64" height="64" rx="8"/>
+  <rect class="card" x="40" y="256" width="64" height="64" rx="8"/>
+  <rect class="card" x="116" y="256" width="64" height="64" rx="8"/>
+  <line class="sep" x1="36" y1="338" x2="184" y2="338"/>
+
+  <!-- rodapé: rodinha do carregar mais -->
+  <circle cx="110" cy="372" r="14" fill="none" stroke="#2a3a5c" stroke-width="4"/>
+  <path d="M110 358 A14 14 0 0 1 124 372" fill="none" stroke="#fbbf24" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- ligações -->
+  <path class="lig" d="M196 56 L244 54"/>
+  <path class="lig" d="M196 212 L244 181"/>
+  <path class="lig" d="M196 372 L244 339"/>
+
+  <!-- topo -->
+  <rect class="box" x="244" y="16" width="456" height="76" rx="10"/>
+  <text class="h" x="264" y="46" fill="#60a5fa">topo</text>
+  <text x="264" y="78"><tspan class="code">atualizando</tspan><tspan class="m">: rodinha do puxar</tspan></text>
+
+  <!-- meio -->
+  <rect class="box" x="244" y="108" width="456" height="146" rx="10"/>
+  <text class="h" x="264" y="138" fill="#34d399">meio, no lugar da grade</text>
+  <text x="264" y="172"><tspan class="code">carregando</tspan><tspan class="m">: </tspan><tspan class="code">GradeEsqueleto</tspan></text>
+  <text x="264" y="206"><tspan class="code">erro</tspan><tspan class="m"> sem produtos: </tspan><tspan class="code">EstadoErro</tspan></text>
+  <text x="264" y="240"><tspan class="m">com produtos: a grade paginada</tspan></text>
+
+  <!-- rodapé -->
+  <rect class="box" x="244" y="266" width="456" height="146" rx="10"/>
+  <text class="h" x="264" y="296" fill="#fbbf24">rodapé</text>
+  <text x="264" y="330"><tspan class="code">carregandoMais</tspan><tspan class="m">: rodinha</tspan></text>
+  <text x="264" y="364"><tspan class="code">erro</tspan><tspan class="m"> com produtos: Tentar de novo</tspan></text>
+  <text x="264" y="398"><tspan class="m">fim da lista: Você viu todos os produtos</tspan></text>
+</svg>
