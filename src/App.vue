@@ -26,12 +26,20 @@ onMounted(async () => {
   if (window.location.search) {
     const params = new URLSearchParams(window.location.search)
     const flow = params.get('flow')
+    const linkError = params.get('error_code') ?? params.get('error')
     window.history.replaceState(null, '', window.location.pathname + window.location.hash)
-    if (flow === 'recovery') {
+    if (linkError) {
+      // Link vencido ou já usado: o Supabase volta com ?error=...&error_code=...
+      toast.error('Link inválido ou expirado', 'Peça um novo e-mail ou tente entrar com sua senha.')
+    } else if (flow === 'recovery') {
       auth.recoveryMode = true
       router.replace('/nova-senha')
     } else if (flow === 'confirm' && auth.isAuthenticated) {
       toast.success('E-mail confirmado', 'Sua conta está pronta. Bons estudos!')
+    } else if (flow === 'confirm') {
+      // Link aberto em outro aparelho ou navegador: o Supabase já confirmou o e-mail,
+      // mas a troca do código por sessão só funciona onde o cadastro foi feito.
+      toast.success('E-mail confirmado', 'Agora entre com seu e-mail e senha.')
     }
   }
 })

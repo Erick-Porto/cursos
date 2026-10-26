@@ -2,17 +2,17 @@
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute, useRouter } from 'vue-router'
 import {
-  ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, CircleCheck, FileText, List, Lock, Maximize, Minimize, Moon, Sun,
+  ArrowLeft, ArrowRight, Check, ChevronLeft, ChevronRight, CircleCheck, ClipboardList, FileText, List, Lock, Maximize, Minimize, Moon, Sun,
 } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
 import { useThemeStore } from '@/stores/theme'
-import { fetchCourseStructure, fetchLesson, fetchLessonProgress, trackLessonProgress } from '@/lib/api'
+import { fetchClassScripts, fetchCourseStructure, fetchLesson, fetchLessonProgress, trackLessonProgress } from '@/lib/api'
 import { renderLesson, type Slide } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
-import type { Assessment, Course, Lesson, LessonProgress, LessonSummary, TrackResult } from '@/types/db'
+import type { Assessment, ClassScript, Course, Lesson, LessonProgress, LessonSummary, TrackResult } from '@/types/db'
 import SlideViewer from '@/components/player/SlideViewer.vue'
 import SlideSidebar from '@/components/player/SlideSidebar.vue'
 import LoadingBlock from '@/components/ui/LoadingBlock.vue'
@@ -33,6 +33,7 @@ const lesson = ref<Lesson | null>(null)
 const slides = ref<Slide[]>([])
 const lessons = ref<LessonSummary[]>([])
 const assessments = ref<Assessment[]>([])
+const scripts = ref<ClassScript[]>([]) // roteiros do instrutor (vazio para alunos)
 const progress = ref<LessonProgress | null>(null)
 
 const index = ref(0)
@@ -52,6 +53,7 @@ const completed = computed(() => progress.value?.status === 'completed')
 const lessonIndex = computed(() => lessons.value.findIndex((l) => l.id === lesson.value?.id))
 const nextLesson = computed(() => lessons.value[lessonIndex.value + 1] ?? null)
 const lessonQuiz = computed(() => assessments.value.find((a) => a.lesson_id === lesson.value?.id) ?? null)
+const lessonScript = computed(() => scripts.value.find((s) => s.lesson_slugs.includes(lessonSlug.value)) ?? null)
 const pct = computed(() => (total.value ? ((index.value + 1) / total.value) * 100 : 0))
 
 // ---- tempo de estudo (só conta com a aba visível) ----
@@ -189,6 +191,8 @@ async function load() {
     lesson.value = l
     lessons.value = s.lessons
     assessments.value = s.assessments
+    // o roteiro do encontro só interessa a quem dá a aula; carrega sem atrasar os slides
+    if (auth.isStaff) void fetchClassScripts(c.id).then((list) => (scripts.value = list)).catch(() => {})
     slides.value = renderLesson(l.content_md, { assetBase: courseAssetBase(c.slug) })
     progress.value = await fetchLessonProgress(l.id)
 
@@ -259,6 +263,15 @@ watch([courseSlug, lessonSlug], async () => {
         <div class="player__lesson">{{ lesson?.title ?? 'Aula' }}</div>
       </div>
       <span v-if="total" class="player__count mono">{{ index + 1 }}/{{ total }}</span>
+      <RouterLink
+        v-if="lessonScript && course"
+        :to="`/instrutor/roteiros/${course.slug}/${lessonScript.slug}`"
+        class="btn btn--ghost btn--icon"
+        aria-label="Roteiro do instrutor"
+        title="Roteiro do instrutor"
+      >
+        <ClipboardList />
+      </RouterLink>
       <button class="btn btn--ghost btn--icon" type="button" aria-label="Sumário" @click="toggleSidebar"><List /></button>
       <button class="btn btn--ghost btn--icon hide-mobile" type="button" :aria-label="fullscreen ? 'Sair da tela cheia' : 'Tela cheia'" @click="toggleFullscreen">
         <Minimize v-if="fullscreen" />

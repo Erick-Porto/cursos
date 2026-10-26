@@ -74,6 +74,22 @@ export interface Lesson extends LessonSummary {
   is_published: boolean
 }
 
+/** Roteiro de aula do instrutor (um por encontro presencial). Só staff lê. */
+export interface ClassScript {
+  id: string
+  course_id: string
+  module_id: string | null
+  slug: string
+  title: string
+  summary: string | null
+  duration_minutes: number | null
+  position: number
+  lesson_slugs: string[]
+  content_md: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Assessment {
   id: string
   course_id: string

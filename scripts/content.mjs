@@ -5,9 +5,11 @@
 //   npm run content:check                 valida content/courses/**
 //   npm run content:sync                  envia para o Supabase (upsert)
 //   npm run content:sync:prune            idem, removendo o que saiu do repositório
+//   node scripts/content.mjs check --course=fundamentos-sql
 //   node --env-file=.env scripts/content.mjs sync --course=fundamentos-sql
 //
-// O formato dos arquivos está descrito em GUIA_DE_CONTEUDO.md.
+// O formato dos arquivos está descrito em GUIA_DE_CONTEUDO.md. As regras
+// daqui e as do guia andam juntas: ao mudar uma, atualize a outra.
 // =====================================================================
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, dirname, extname, join } from 'node:path'
@@ -24,17 +26,31 @@ const onlyCourse = (args.find((a) => a.startsWith('--course=')) ?? '').split('='
 
 const LEVELS = ['iniciante', 'intermediario', 'avancado']
 const RARITIES = ['common', 'rare', 'epic', 'legendary']
-const RULE_TYPES = ['lessons_completed', 'course_completed', 'assessments_passed', 'perfect_score', 'first_try_pass', 'xp_reached', 'streak_days']
+// Regras aceitas em course.json (contam só o curso). xp_reached e streak_days são
+// globais e vivem em supabase/migrations/0002_seed_achievements.sql.
+const COURSE_RULE_TYPES = ['lessons_completed', 'course_completed', 'assessments_passed', 'perfect_score', 'first_try_pass']
+const GLOBAL_RULE_TYPES = ['xp_reached', 'streak_days']
 const QUESTION_TYPES = ['single', 'multiple', 'truefalse', 'fill']
 const BLOCKS = ['info', 'tip', 'warning', 'danger', 'example', 'summary', 'goal', 'quote', 'question', 'columns', 'col', 'center', 'steps']
-const MIME = {
-  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp',
-  '.svg': 'image/svg+xml', '.avif': 'image/avif', '.mp4': 'video/mp4', '.pdf': 'application/pdf',
+const IMAGE_TYPES = {
+  '.svg': 'image/svg+xml',
+  '.png': 'image/png',
+  '.webp': 'image/webp',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.gif': 'image/gif',
+  '.avif': 'image/avif',
 }
 const EMOJI = /\p{Extended_Pictographic}/u
-const MAX_IMAGE_BYTES = 400 * 1024
+const KB = 1024
+const MAX_STATIC_BYTES = 400 * KB // imagem estática (aviso)
+const MAX_ANIMATED_BYTES = 1024 * KB // GIF ou WebP animado (aviso)
+const MAX_IMAGE_BYTES = 2048 * KB // qualquer imagem (erro)
+const MAX_IMAGE_WIDTH = 1600
 const MAX_WORDS_WARN = 130
 const MAX_WORDS_ERROR = 200
+const GENERIC_ALT = /^(imagem|figura|foto|diagrama|print|captura|screenshot|gif|anima[cç][aã]o|ilustra[cç][aã]o|tabela|gr[aá]fico|tela)$/i
+const FORBIDDEN_HTML = /<(script|iframe|style|link|video|audio|embed|object|form|svg)\b/i
 
 // ---------------------------------------------------------------------
 // util
@@ -43,6 +59,14 @@ const ICONS = (() => {
   const src = readFileSync(join(ROOT, 'src', 'lib', 'icons.ts'), 'utf8')
   const names = new Set()
   for (const m of src.matchAll(/^\s+'?([a-z][a-z0-9-]*)'?:\s*[A-Z]/gm)) names.add(m[1])
+  return names
+})()
+
+const INLINE_ICONS = (() => {
+  const file = join(ROOT, 'src', 'lib', 'inline-icons.ts')
+  const names = new Set()
+  if (!existsSync(file)) return names
+  for (const m of readFileSync(file, 'utf8').matchAll(/^\s+'([a-z0-9-]+)':\s*'/gm)) names.add(m[1])
   return names
 })()
 
@@ -88,6 +112,14 @@ function splitSlides(source) {
   return slides.map((s) => s.trim()).filter(Boolean)
 }
 
+/** Remove blocos de código e código inline (onde :icon[] e HTML são texto literal). */
+function stripCode(text) {
+  return text
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/~~~[\s\S]*?~~~/g, ' ')
+    .replace(/`[^`\n]*`/g, ' ')
+}
+
 function wordCount(text) {
   return text.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length
 }
@@ -96,6 +128,89 @@ function normalizeOptions(options) {
   if (!options) return null
   if (Array.isArray(options)) return options
   return Object.entries(options).map(([key, text]) => ({ key, text }))
+}
+
+/**
+ * Lê só o cabeçalho de uma imagem: dimensões e se é animada.
+ * Suporta PNG (e APNG), GIF, JPEG, WebP e SVG; de AVIF só o tamanho em bytes.
+ */
+function imageInfo(file) {
+  const ext = extname(file).toLowerCase()
+  const buf = readFileSync(file)
+  const info = { ext, bytes: buf.length, width: null, height: null, animated: false, svg: null }
+
+  if (ext === '.svg') {
+    info.svg = buf.toString('utf8')
+    const open = info.svg.match(/<svg\b[^>]*>/i)?.[0] ?? ''
+    const vb = open.match(/viewBox\s*=\s*["']\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)[\s,]+([\d.]+)/i)
+    if (vb) {
+      info.width = Number(vb[1])
+      info.height = Number(vb[2])
+    }
+    info.animated = /@keyframes|<(animate|animateTransform|animateMotion|set)\b/i.test(info.svg)
+    return info
+  }
+
+  if (ext === '.png') {
+    if (buf.length >= 24 && buf.toString('ascii', 1, 4) === 'PNG') {
+      info.width = buf.readUInt32BE(16)
+      info.height = buf.readUInt32BE(20)
+      info.animated = buf.indexOf('acTL') !== -1
+    }
+  } else if (ext === '.gif') {
+    if (buf.length >= 10 && buf.toString('ascii', 0, 3) === 'GIF') {
+      info.width = buf.readUInt16LE(6)
+      info.height = buf.readUInt16LE(8)
+      let frames = 0
+      for (let i = 0; i < buf.length - 2; i++) {
+        if (buf[i] === 0x21 && buf[i + 1] === 0xf9 && buf[i + 2] === 0x04) frames++
+      }
+      info.animated = frames > 1 || buf.indexOf('NETSCAPE2.0') !== -1
+    }
+  } else if (ext === '.jpg' || ext === '.jpeg') {
+    let i = 2
+    while (i + 9 < buf.length) {
+      if (buf[i] !== 0xff) {
+        i++
+        continue
+      }
+      const marker = buf[i + 1]
+      if (marker === 0xff) {
+        i++
+        continue
+      }
+      if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) {
+        i += 2
+        continue
+      }
+      if (marker === 0xd9 || marker === 0xda) break
+      const len = buf.readUInt16BE(i + 2)
+      const isSof = marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc
+      if (isSof) {
+        info.height = buf.readUInt16BE(i + 5)
+        info.width = buf.readUInt16BE(i + 7)
+        break
+      }
+      i += 2 + len
+    }
+  } else if (ext === '.webp') {
+    if (buf.length >= 30 && buf.toString('ascii', 0, 4) === 'RIFF' && buf.toString('ascii', 8, 12) === 'WEBP') {
+      const chunk = buf.toString('ascii', 12, 16)
+      if (chunk === 'VP8X') {
+        info.animated = (buf[20] & 0x02) !== 0
+        info.width = 1 + buf.readUIntLE(24, 3)
+        info.height = 1 + buf.readUIntLE(27, 3)
+      } else if (chunk === 'VP8 ') {
+        info.width = buf.readUInt16LE(26) & 0x3fff
+        info.height = buf.readUInt16LE(28) & 0x3fff
+      } else if (chunk === 'VP8L') {
+        const b = buf.readUInt32LE(21)
+        info.width = (b & 0x3fff) + 1
+        info.height = ((b >> 14) & 0x3fff) + 1
+      }
+    }
+  }
+  return info
 }
 
 // ---------------------------------------------------------------------
@@ -124,7 +239,7 @@ function loadCourse(dir, report) {
     ? readdirSync(lessonsDir)
         .filter((f) => f.endsWith('.md'))
         .sort()
-        .map((f) => loadLesson(join(lessonsDir, f)))
+        .map((f) => loadLesson(join(lessonsDir, f), report))
     : []
 
   const assessmentsDir = join(dir, 'assessments')
@@ -137,14 +252,36 @@ function loadCourse(dir, report) {
     : []
 
   const imagesDir = join(dir, 'images')
-  const images = existsSync(imagesDir) ? readdirSync(imagesDir).filter((f) => !f.startsWith('.')).map((f) => join(imagesDir, f)) : []
+  const images = existsSync(imagesDir)
+    ? readdirSync(imagesDir)
+        .filter((f) => !f.startsWith('.'))
+        .sort()
+        .map((f) => join(imagesDir, f))
+    : []
 
-  return { dir, slug, json, description_md, lessons, assessments, images }
+  // roteiros do instrutor (um por encontro presencial), só para quem dá a aula
+  const scriptsDir = join(dir, 'roteiros')
+  const scripts = existsSync(scriptsDir)
+    ? readdirSync(scriptsDir)
+        .filter((f) => f.endsWith('.md'))
+        .sort()
+        .map((f) => loadScript(join(scriptsDir, f), report))
+    : []
+
+  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts }
 }
 
-function loadLesson(file) {
+function loadLesson(file, report) {
   const raw = readFileSync(file, 'utf8')
-  const { data, content } = matter(raw)
+  let data = {}
+  let content = raw
+  try {
+    ;({ data, content } = matter(raw))
+  } catch (e) {
+    // frontmatter inválido (ex.: "summary: texto: com dois-pontos" sem aspas) não pode derrubar a validação inteira
+    report?.error(rel(file), `frontmatter YAML inválido: ${String(e.reason ?? e.message).split('\n')[0]} (coloque o valor entre aspas)`)
+    content = raw.replace(/^---\n[\s\S]*?\n---\n?/, '')
+  }
   const name = basename(file, '.md')
   const m = name.match(/^(\d{1,3})-([a-z0-9-]+)$/)
   const body = content.replace(/\r\n?/g, '\n').trim()
@@ -157,6 +294,12 @@ function loadLesson(file) {
     body,
     slides: splitSlides(body),
   }
+}
+
+/** Roteiro do instrutor: mesmo frontmatter + corpo de uma aula, mas é um documento (sem slides). */
+function loadScript(file, report) {
+  const { slides, ...rest } = loadLesson(file, report)
+  return rest
 }
 
 function loadAssessment(file, index, report) {
@@ -177,6 +320,8 @@ function loadAssessment(file, index, report) {
 function validateCourse(course, report) {
   const { json, slug, dir } = course
   const where = rel(join(dir, 'course.json'))
+  // imagens de images/ referenciadas em algum lugar (para apontar as órfãs)
+  const ctx = { used: new Set() }
 
   if (json.slug !== slug) report.error(where, `"slug" (${json.slug}) deve ser igual ao nome da pasta (${slug})`)
   if (!/^[a-z0-9-]+$/.test(slug)) report.error(where, 'slug da pasta deve usar só letras minúsculas, números e hífens')
@@ -185,6 +330,18 @@ function validateCourse(course, report) {
   if (json.icon && !ICONS.has(json.icon)) report.error(where, `"icon" ${json.icon} não existe em src/lib/icons.ts`)
   if (json.color && !/^#[0-9a-f]{6}$/i.test(json.color)) report.error(where, '"color" deve ser hexadecimal (#rrggbb)')
   if (json.tags && !Array.isArray(json.tags)) report.error(where, '"tags" deve ser uma lista')
+  if (json.estimated_hours !== undefined && (typeof json.estimated_hours !== 'number' || json.estimated_hours <= 0)) {
+    report.error(where, '"estimated_hours" deve ser um número maior que zero')
+  }
+  if (json.cover_url !== undefined && json.cover_url !== null) {
+    if (typeof json.cover_url !== 'string') report.error(where, '"cover_url" deve ser texto')
+    else if (/^images\//.test(json.cover_url)) {
+      if (!existsSync(join(dir, json.cover_url))) report.error(where, `capa não encontrada: ${json.cover_url}`)
+      else ctx.used.add(basename(json.cover_url))
+    } else if (!/^https?:\/\//i.test(json.cover_url)) {
+      report.error(where, '"cover_url" deve ser images/arquivo (enviado pelo sync) ou uma URL https')
+    }
+  }
   if (!course.description_md) report.warn(where, 'curso sem descrição (description.md ou description_md)')
   if (EMOJI.test(JSON.stringify(json))) report.error(where, 'não use emojis; use ícones (campo icon)')
 
@@ -196,8 +353,10 @@ function validateCourse(course, report) {
     moduleSlugs.add(m.slug)
   }
 
+  // conquistas do curso
   const achievements = Array.isArray(json.achievements) ? json.achievements : []
   const achSlugs = new Set()
+  let hasCompletion = false
   for (const a of achievements) {
     const w = `${where} (conquista ${a.slug ?? '?'})`
     if (!a.slug || !a.title || !a.description) report.error(w, 'conquista precisa de slug, title e description')
@@ -205,8 +364,21 @@ function validateCourse(course, report) {
     achSlugs.add(a.slug)
     if (a.icon && !ICONS.has(a.icon)) report.error(w, `ícone ${a.icon} não existe em src/lib/icons.ts`)
     if (a.rarity && !RARITIES.includes(a.rarity)) report.error(w, `rarity deve ser um de: ${RARITIES.join(', ')}`)
-    if (!a.rule || !RULE_TYPES.includes(a.rule.type)) report.error(w, `rule.type deve ser um de: ${RULE_TYPES.join(', ')}`)
+    if (a.xp !== undefined && (!Number.isInteger(a.xp) || a.xp < 0)) report.error(w, 'xp deve ser inteiro >= 0')
+    const rule = a.rule ?? {}
+    if (GLOBAL_RULE_TYPES.includes(rule.type)) {
+      report.error(w, `rule.type "${rule.type}" é global (supabase/migrations/0002_seed_achievements.sql); em course.json use: ${COURSE_RULE_TYPES.join(', ')}`)
+    } else if (!COURSE_RULE_TYPES.includes(rule.type)) {
+      report.error(w, `rule.type deve ser um de: ${COURSE_RULE_TYPES.join(', ')}`)
+    } else if (rule.type === 'course_completed') {
+      hasCompletion = true
+      if (rule.count !== undefined) report.warn(w, 'rule.count é ignorado em course_completed de curso')
+    } else if (!Number.isInteger(rule.count) || rule.count < 1) {
+      report.error(w, `rule.count deve ser inteiro >= 1 para ${rule.type}`)
+    }
   }
+  if (achievements.length && !hasCompletion) report.warn(where, 'nenhuma conquista com rule.type course_completed (convenção: uma por curso)')
+  if (achievements.length > 6) report.warn(where, `${achievements.length} conquistas; o guia sugere de 1 a 6 por curso`)
 
   // aulas
   const lessonSlugs = new Set()
@@ -221,12 +393,17 @@ function validateCourse(course, report) {
     lessonSlugs.add(l.slug)
     if (!l.fm.title) report.error(lw, 'frontmatter precisa de "title"')
     if (!l.fm.summary) report.warn(lw, 'frontmatter sem "summary" (aparece na lista de aulas)')
+    else if (String(l.fm.summary).length > 120) report.warn(lw, `"summary" com ${String(l.fm.summary).length} caracteres; ideal até 120`)
     if (l.fm.module && !moduleSlugs.has(l.fm.module)) report.error(lw, `módulo "${l.fm.module}" não existe em course.json`)
     if (modules.length && !l.fm.module) report.warn(lw, 'aula sem "module" apesar de o curso ter módulos')
     if (l.fm.duration_minutes !== undefined && typeof l.fm.duration_minutes !== 'number') report.error(lw, '"duration_minutes" deve ser número')
     if (l.fm.objectives !== undefined && !Array.isArray(l.fm.objectives)) report.error(lw, '"objectives" deve ser uma lista')
-    validateSlides(l, course, report)
+    if (l.fm.published !== undefined && typeof l.fm.published !== 'boolean') report.error(lw, '"published" deve ser true ou false')
+    validateSlides(l, course, ctx, report)
   }
+
+  // descrição do curso (mesmo renderizador dos slides)
+  if (course.description_md) validateProse(course.description_md, rel(course.descPath), course, ctx, report)
 
   // avaliações
   const assessmentSlugs = new Set()
@@ -234,26 +411,90 @@ function validateCourse(course, report) {
     const aw = rel(a.file)
     if (assessmentSlugs.has(a.slug)) report.error(aw, `slug de avaliação repetido: ${a.slug}`)
     assessmentSlugs.add(a.slug)
-    validateAssessment(a, lessonSlugs, report)
+    validateAssessment(a, lessonSlugs, course, ctx, report)
+  }
+
+  // roteiros do instrutor
+  const scriptSlugs = new Set()
+  const scriptPositions = new Set()
+  for (const s of course.scripts) {
+    const sw = rel(s.file)
+    if (s.position === null) report.error(sw, 'nome do arquivo deve ser NN-slug.md (ex.: 01-e01.md)')
+    if (scriptPositions.has(s.position)) report.error(sw, `posição ${s.position} repetida em outro roteiro`)
+    scriptPositions.add(s.position)
+    if (scriptSlugs.has(s.slug)) report.error(sw, `slug de roteiro repetido: ${s.slug}`)
+    scriptSlugs.add(s.slug)
+    validateScript(s, moduleSlugs, lessonSlugs, modules.length > 0, course, ctx, report)
   }
 
   // imagens
-  for (const img of course.images) {
-    const iw = rel(img)
-    const ext = extname(img).toLowerCase()
-    if (!MIME[ext]) report.error(iw, `extensão ${ext} não suportada`)
-    const size = statSync(img).size
-    if (size > MAX_IMAGE_BYTES) report.warn(iw, `imagem com ${Math.round(size / 1024)} KB (ideal até ${MAX_IMAGE_BYTES / 1024} KB)`)
-    if (!/^[a-z0-9._-]+$/.test(basename(img))) report.error(iw, 'nome de imagem deve usar só minúsculas, números, ponto, hífen e underline')
+  for (const img of course.images) validateImageFile(img, ctx.used, report)
+}
+
+/**
+ * Regras que valem para qualquer texto renderizado pelo markdown da plataforma
+ * (slides, description.md, enunciados): emojis, ícones inline, HTML e imagens.
+ * Devolve quantas imagens o texto referencia.
+ */
+function validateProse(text, where, course, ctx, report, opts = {}) {
+  const plain = stripCode(text)
+  if (EMOJI.test(text)) report.error(where, 'não use emojis; use ícones (:icon[nome]) ou os blocos :::tip etc.')
+
+  for (const m of plain.matchAll(/:icon\[([^\]]*)\]/g)) {
+    if (!INLINE_ICONS.has(m[1])) report.error(where, `ícone inline "${m[1]}" não existe (lista no Apêndice A do guia; gere com node scripts/inline-icons.mjs)`)
+  }
+
+  const html = plain.match(FORBIDDEN_HTML)
+  if (html) report.error(where, `tag <${html[1].toLowerCase()}> não é suportada; use os blocos ::: e a sintaxe Markdown`)
+  if (/<img\b/i.test(plain)) report.warn(where, 'use a sintaxe Markdown para imagens: ![descrição](images/arquivo.svg)')
+
+  let count = 0
+  // o texto alternativo pode ter colchetes balanceados, como em `[...tarefas]`
+  for (const m of plain.matchAll(/!\[((?:[^[\]]|\[[^[\]]*\])*)\]\(([^)\s]+)[^)]*\)/g)) {
+    const [, alt, src] = m
+    count++
+    if (/^(https?:)?\/\//i.test(src)) {
+      report.error(where, `imagem externa (${src}); coloque o arquivo em images/`)
+      continue
+    }
+    if (src.startsWith('data:')) {
+      report.error(where, 'imagem embutida em base64; coloque o arquivo em images/')
+      continue
+    }
+    const clean = src.replace(/^\.\//, '')
+    if (!clean.startsWith('images/') || clean.includes('..')) {
+      report.error(where, `imagem fora de images/ (${src})`)
+      continue
+    }
+    if (opts.noLocalImages) {
+      report.error(where, `questões não carregam imagens de images/ (${src}); descreva em texto, tabela ou código`)
+      continue
+    }
+    if (!existsSync(join(course.dir, clean))) report.error(where, `imagem não encontrada: ${src}`)
+    else ctx.used.add(basename(clean))
+    checkAlt(alt, clean, where, report)
+  }
+  return count
+}
+
+function checkAlt(alt, src, where, report) {
+  const a = alt.trim()
+  if (!a) {
+    report.warn(where, `imagem ${src} sem texto alternativo`)
+    return
+  }
+  const file = basename(src)
+  const stem = file.replace(/\.[a-z0-9]+$/i, '')
+  if (GENERIC_ALT.test(a) || a.toLowerCase() === file.toLowerCase() || a.toLowerCase() === stem.toLowerCase() || a.length < 15) {
+    report.warn(where, `texto alternativo de ${src} é genérico ("${a}"); descreva o que a imagem ensina`)
   }
 }
 
-function validateSlides(lesson, course, report) {
+function validateSlides(lesson, course, ctx, report) {
   const lw = rel(lesson.file)
   const { slides, body } = lesson
   if (slides.length < 4) report.warn(lw, `apenas ${slides.length} slide(s); aulas costumam ter entre 8 e 20`)
   if (slides.length > 30) report.warn(lw, `${slides.length} slides; considere dividir a aula`)
-  if (EMOJI.test(body)) report.error(lw, 'não use emojis nos slides; use ícones dos blocos (:::tip etc.)')
 
   // "---" precisa de linha em branco antes (senão vira título setext no Markdown)
   const lines = body.split('\n')
@@ -271,6 +512,7 @@ function validateSlides(lesson, course, report) {
 
     if (i === 0) {
       if (!/^#\s/.test(first)) report.warn(sw, 'o primeiro slide deve ser a capa, começando com "# Título"')
+      if (/:icon\[/.test(first)) report.warn(sw, 'evite ícone no título da capa (ele já tem destaque próprio)')
     } else if (!/^(##|#)\s/.test(first)) {
       report.error(sw, 'slide deve começar com um título "## ..."')
     }
@@ -303,32 +545,132 @@ function validateSlides(lesson, course, report) {
     }
     if (open !== 0) report.error(sw, 'bloco ::: aberto sem fechamento (ou fechado a mais)')
 
-    // código sem linguagem
-    for (const l of slideLines) {
-      if (/^\s{0,3}```\s*$/.test(l) && !slideLines.some((x) => x !== l && /^\s{0,3}```\w/.test(x))) {
-        /* fechamento */
-      }
-    }
-    const fences = slideLines.filter((l) => /^\s{0,3}```/.test(l))
-    for (let k = 0; k < fences.length; k += 2) {
-      if (!/```\s*\w+/.test(fences[k])) report.warn(sw, 'bloco de código sem linguagem (ex.: ```sql)')
+    // código: linguagem declarada e tamanho
+    const fences = []
+    slideLines.forEach((l, n) => {
+      if (/^\s{0,3}```/.test(l)) fences.push(n)
+    })
+    for (let k = 0; k + 1 < fences.length; k += 2) {
+      if (!/```\s*\w+/.test(slideLines[fences[k]])) report.warn(sw, 'bloco de código sem linguagem (ex.: ```sql)')
+      const codeLines = fences[k + 1] - fences[k] - 1
+      if (codeLines > 15) report.warn(sw, `bloco de código com ${codeLines} linhas; ideal até 15 (divida em dois slides)`)
     }
 
-    // imagens
-    for (const m of slide.matchAll(/!\[([^\]]*)\]\(([^)\s]+)[^)]*\)/g)) {
-      const alt = m[1]
-      const src = m[2]
-      if (!alt.trim()) report.warn(sw, `imagem ${src} sem texto alternativo`)
-      if (/^(https?:)?\/\//i.test(src)) report.error(sw, `imagem externa (${src}); coloque o arquivo em images/`)
-      else if (!src.startsWith('data:')) {
-        const p = join(course.dir, src.replace(/^\.\//, ''))
-        if (!existsSync(p)) report.error(sw, `imagem não encontrada: ${src}`)
-      }
-    }
+    // emojis, ícones inline, HTML e imagens
+    const images = validateProse(slide, sw, course, ctx, report)
+    if (images > 1) report.warn(sw, `${images} imagens no slide; use uma por slide (ou ::::columns para comparar duas)`)
   })
 }
 
-function validateAssessment(a, lessonSlugs, report) {
+/**
+ * Roteiro do instrutor (roteiros/NN-slug.md): documento em Markdown com o passo a passo
+ * de um encontro presencial. Vai para class_scripts, que só instrutores leem.
+ */
+function validateScript(script, moduleSlugs, lessonSlugs, courseHasModules, course, ctx, report) {
+  const sw = rel(script.file)
+  const fm = script.fm
+  if (!fm.title) report.error(sw, 'frontmatter precisa de "title"')
+  if (!fm.summary) report.warn(sw, 'frontmatter sem "summary" (aparece na lista de roteiros)')
+  else if (String(fm.summary).length > 160) report.warn(sw, `"summary" com ${String(fm.summary).length} caracteres; ideal até 160`)
+  if (fm.module && !moduleSlugs.has(fm.module)) report.error(sw, `módulo "${fm.module}" não existe em course.json`)
+  if (courseHasModules && !fm.module) report.warn(sw, 'roteiro sem "module" apesar de o curso ter módulos')
+  if (fm.duration_minutes !== undefined && typeof fm.duration_minutes !== 'number') report.error(sw, '"duration_minutes" deve ser número')
+  if (!Array.isArray(fm.lessons)) report.error(sw, '"lessons" deve ser uma lista com os slugs das aulas do encontro')
+  else {
+    if (!fm.lessons.length) report.warn(sw, '"lessons" vazia: o roteiro não vai aparecer ligado a nenhuma aula')
+    for (const l of fm.lessons) {
+      if (!lessonSlugs.has(l)) report.error(sw, `aula "${l}" em "lessons" não existe em lessons/`)
+    }
+  }
+
+  const body = script.body
+  const lines = body.split('\n')
+  if (/^#\s/.test(lines[0] ?? '')) report.warn(sw, 'o título vem do frontmatter; comece o corpo com "## ..." em vez de "# ..."')
+  const words = wordCount(body)
+  if (words < 150) report.warn(sw, `roteiro com ${words} palavras; um encontro de 4h costuma pedir mais detalhe`)
+
+  // blocos :::
+  let open = 0
+  for (const l of lines) {
+    const m = l.match(/^(:{3,})\s*([a-z]*)\s*(.*)$/)
+    if (!m) continue
+    if (m[2]) {
+      if (!BLOCKS.includes(m[2])) report.error(sw, `bloco ":::${m[2]}" não existe (use: ${BLOCKS.join(', ')})`)
+      open++
+    } else open--
+  }
+  if (open !== 0) report.error(sw, 'bloco ::: aberto sem fechamento (ou fechado a mais)')
+
+  // código com linguagem declarada
+  const fences = []
+  lines.forEach((l, n) => {
+    if (/^\s{0,3}```/.test(l)) fences.push(n)
+  })
+  for (let k = 0; k + 1 < fences.length; k += 2) {
+    if (!/```\s*\w+/.test(lines[fences[k]])) report.warn(sw, 'bloco de código sem linguagem (ex.: ```jsx)')
+  }
+
+  validateProse(body, sw, course, ctx, report)
+}
+
+function validateImageFile(file, used, report) {
+  const iw = rel(file)
+  const name = basename(file)
+  const ext = extname(file).toLowerCase()
+  if (!/^[a-z0-9._-]+$/.test(name)) report.error(iw, 'nome de imagem deve usar só minúsculas, números, ponto, hífen e underline')
+  if (!IMAGE_TYPES[ext]) {
+    report.error(iw, `extensão ${ext || '(nenhuma)'} não suportada; use ${Object.keys(IMAGE_TYPES).join(', ')}`)
+    return
+  }
+  if (!used.has(name)) report.warn(iw, 'imagem não é usada em nenhuma aula, na descrição nem como capa')
+
+  const info = imageInfo(file)
+  const kb = Math.round(info.bytes / KB)
+  const animatedRaster = info.animated && ext !== '.svg'
+  if (info.bytes > MAX_IMAGE_BYTES) report.error(iw, `${kb} KB; máximo ${MAX_IMAGE_BYTES / KB} KB`)
+  else if (animatedRaster && info.bytes > MAX_ANIMATED_BYTES) {
+    report.warn(iw, `${kb} KB; animação ideal até ${MAX_ANIMATED_BYTES / KB} KB (menos quadros por segundo, menor largura ou menos segundos)`)
+  } else if (!animatedRaster && info.bytes > MAX_STATIC_BYTES) {
+    report.warn(iw, `${kb} KB; ideal até ${MAX_STATIC_BYTES / KB} KB (converta para WebP ou reduza a largura)`)
+  }
+
+  if (ext === '.svg') {
+    validateSvg(info.svg, iw, report)
+    return
+  }
+  if (info.width === null) {
+    if (ext !== '.avif') report.warn(iw, 'não foi possível ler as dimensões (arquivo corrompido ou extensão errada)')
+    return
+  }
+  if (info.width > MAX_IMAGE_WIDTH) report.warn(iw, `${info.width} px de largura; redimensione para até ${MAX_IMAGE_WIDTH} px`)
+  if (ext === '.gif' && !info.animated) report.warn(iw, 'GIF estático: converta para PNG ou WebP (menor e com mais cores)')
+  if (ext === '.png' && info.animated) report.warn(iw, 'PNG animado (APNG): prefira WebP animado ou SVG animado')
+}
+
+function validateSvg(svg, where, report) {
+  const open = svg.match(/<svg\b[^>]*>/i)?.[0]
+  if (!open) {
+    report.error(where, 'arquivo .svg sem elemento <svg>')
+    return
+  }
+  if (!/\bviewBox\s*=/i.test(open)) report.error(where, 'SVG sem viewBox: não redimensiona no celular (ex.: viewBox="0 0 720 300")')
+  if (/<script\b/i.test(svg) || /\son[a-z]+\s*=/i.test(svg)) report.error(where, 'SVG com <script> ou atributos on*: não é permitido')
+  if (/(href|src)\s*=\s*["'](https?:)?\/\//i.test(svg) || /url\(\s*["']?(https?:)?\/\//i.test(svg) || /@import\b/i.test(svg)) {
+    report.error(where, 'SVG com referência externa (http, @import): o navegador bloqueia dentro de <img>')
+  }
+  if (!/<title\b/i.test(svg)) report.warn(where, 'SVG sem <title>: inclua um título curto logo depois de <svg>')
+  if (/<foreignObject\b/i.test(svg)) report.warn(where, 'SVG com <foreignObject> (texto em HTML): pode não renderizar; exporte o texto como <text> ou curvas')
+  if (/<image\b/i.test(svg) || /data:image\//i.test(svg)) report.warn(where, 'SVG com imagem embutida: prefira desenhar com formas e texto (menor e nítido)')
+  if (EMOJI.test(svg)) report.error(where, 'SVG com emoji: use formas ou ícones do lucide')
+  if (/<(animate|animateTransform|animateMotion|set)\b/i.test(svg)) {
+    report.warn(where, 'animação SMIL (<animate>): prefira @keyframes em <style>, que respeita prefers-reduced-motion')
+  }
+  if (/@keyframes/i.test(svg) && !/prefers-reduced-motion/i.test(svg)) {
+    report.warn(where, 'SVG animado sem @media (prefers-reduced-motion: reduce): inclua para quem desativa animações')
+  }
+}
+
+function validateAssessment(a, lessonSlugs, course, ctx, report) {
   const w = rel(a.file)
   const j = a.json
   if (!j.title) report.error(w, '"title" é obrigatório')
@@ -338,6 +680,7 @@ function validateAssessment(a, lessonSlugs, report) {
   if (j.max_attempts !== undefined && j.max_attempts !== null && (!Number.isInteger(j.max_attempts) || j.max_attempts < 1)) report.error(w, '"max_attempts" deve ser inteiro >= 1 ou null')
   if (j.time_limit_minutes !== undefined && j.time_limit_minutes !== null && (!Number.isInteger(j.time_limit_minutes) || j.time_limit_minutes < 1)) report.error(w, '"time_limit_minutes" deve ser inteiro >= 1 ou null')
   if (EMOJI.test(JSON.stringify(j))) report.error(w, 'não use emojis nas questões')
+  if (typeof j.description === 'string') validateProse(j.description, `${w} (description)`, course, ctx, report, { noLocalImages: true })
 
   const questions = Array.isArray(j.questions) ? j.questions : []
   if (!questions.length) report.error(w, 'avaliação sem questões')
@@ -355,6 +698,10 @@ function validateAssessment(a, lessonSlugs, report) {
     const options = normalizeOptions(q.options)
     const keys = options ? options.map((o) => o.key) : []
 
+    // enunciado, alternativas e explicação passam pelo mesmo markdown dos slides
+    const texts = [q.prompt, q.explanation, ...(options ?? []).map((o) => o.text)].filter((t) => typeof t === 'string')
+    for (const t of texts) validateProse(t, qw, course, ctx, report, { noLocalImages: true })
+
     if (q.type === 'single' || q.type === 'multiple') {
       if (!options || options.length < 2) report.error(qw, 'precisa de pelo menos 2 opções')
       if (new Set(keys).size !== keys.length) report.error(qw, 'chaves de opção repetidas')
@@ -371,7 +718,7 @@ function validateAssessment(a, lessonSlugs, report) {
       if (typeof q.answer !== 'boolean') report.error(qw, '"answer" deve ser true ou false')
     }
     if (q.type === 'fill') {
-      const blanks = (q.prompt.match(/_{3,}/g) ?? []).length
+      const blanks = (String(q.prompt ?? '').match(/_{3,}/g) ?? []).length
       if (!blanks) report.error(qw, 'prompt de "fill" precisa de pelo menos uma lacuna "___"')
       if (!Array.isArray(q.answer) || q.answer.length !== blanks) report.error(qw, `"answer" deve ter ${blanks} lista(s) de respostas aceitas, uma por lacuna`)
       else if (q.answer.some((v) => !Array.isArray(v) || !v.length || v.some((s) => typeof s !== 'string' || !s.trim()))) report.error(qw, 'cada lacuna precisa de uma lista de textos aceitos, ex.: [["WHERE"]]')
@@ -386,7 +733,7 @@ async function sync(courses) {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (!url || !key) {
-    console.error('Defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY no .env (rode com node --env-file=.env).')
+    console.error('Defina VITE_SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY no .env (rode com node --env-file=.env).')
     process.exit(1)
   }
   const { createClient } = await import('@supabase/supabase-js')
@@ -395,6 +742,7 @@ async function sync(courses) {
     if (error) throw new Error(`${what}: ${error.message}`)
     return data
   }
+  const publicUrl = (slug, path) => `${url.replace(/\/$/, '')}/storage/v1/object/public/course-assets/${slug}/${path}`
 
   for (const c of courses) {
     const j = c.json
@@ -408,7 +756,8 @@ async function sync(courses) {
             title: j.title,
             subtitle: j.subtitle ?? null,
             description_md: c.description_md,
-            cover_url: j.cover_url ?? null,
+            // capa local (images/capa.webp) vira a URL pública do storage
+            cover_url: j.cover_url ? (/^images\//.test(j.cover_url) ? publicUrl(c.slug, j.cover_url) : j.cover_url) : null,
             color: j.color ?? null,
             icon: j.icon ?? null,
             level: j.level ?? null,
@@ -532,6 +881,33 @@ async function sync(courses) {
     }
     console.log(`  ${c.assessments.length} avaliação(ões), ${qTotal} questão(ões)`)
 
+    // roteiros do instrutor (tabela criada pela migration 0003; sem ela, avisa e segue)
+    let scriptsTableMissing = false
+    for (const s of c.scripts) {
+      const res = await sb.from('class_scripts').upsert(
+          {
+            course_id: course.id,
+            module_id: s.fm.module ? (moduleIds[s.fm.module] ?? null) : null,
+            slug: s.slug,
+            title: s.fm.title,
+            summary: s.fm.summary ?? null,
+            duration_minutes: s.fm.duration_minutes ?? null,
+            position: s.position ?? 0,
+            lesson_slugs: Array.isArray(s.fm.lessons) ? s.fm.lessons : [],
+            content_md: s.body,
+          },
+          { onConflict: 'course_id,slug' },
+        )
+      if (res.error && /class_scripts/.test(res.error.message)) {
+        scriptsTableMissing = true
+        break
+      }
+      must(res, `roteiro ${s.slug}`)
+    }
+    if (scriptsTableMissing) {
+      console.log(`  aviso: tabela class_scripts não existe no banco; aplique supabase/migrations/0003_class_scripts.sql e rode o sync de novo (${c.scripts.length} roteiro(s) não enviados)`)
+    } else if (c.scripts.length) console.log(`  ${c.scripts.length} roteiro(s) do instrutor`)
+
     // conquistas do curso (slug global = curso--slug)
     const achievements = Array.isArray(j.achievements) ? j.achievements : []
     const achSlugs = []
@@ -571,18 +947,37 @@ async function sync(courses) {
       must(await (moduleSlugs.length ? q3.not('slug', 'in', inList(moduleSlugs)) : q3), 'prune módulos')
       const q4 = sb.from('achievements').delete().eq('course_id', course.id)
       must(await (achSlugs.length ? q4.not('slug', 'in', inList(achSlugs)) : q4), 'prune conquistas')
+      if (!scriptsTableMissing) {
+        const scriptSlugs = c.scripts.map((s) => s.slug)
+        const q5 = sb.from('class_scripts').delete().eq('course_id', course.id)
+        must(await (scriptSlugs.length ? q5.not('slug', 'in', inList(scriptSlugs)) : q5), 'prune roteiros')
+      }
       console.log('  itens removidos do repositório foram apagados do banco')
     }
 
     // imagens -> storage course-assets/<curso>/images/<arquivo>
+    // O CDN guarda o arquivo por 1 hora (cacheControl padrão): ao trocar uma imagem
+    // mantendo o nome, o aluno pode ver a antiga por um tempo. Prefira renomear.
+    const bucket = sb.storage.from('course-assets')
     for (const img of c.images) {
       const name = basename(img)
-      const { error } = await sb.storage
-        .from('course-assets')
-        .upload(`${c.slug}/images/${name}`, readFileSync(img), { upsert: true, contentType: MIME[extname(img).toLowerCase()] ?? 'application/octet-stream' })
+      const { error } = await bucket.upload(`${c.slug}/images/${name}`, readFileSync(img), {
+        upsert: true,
+        contentType: IMAGE_TYPES[extname(img).toLowerCase()] ?? 'application/octet-stream',
+      })
       if (error) throw new Error(`imagem ${name}: ${error.message}`)
     }
     if (c.images.length) console.log(`  ${c.images.length} imagem(ns) enviada(s)`)
+
+    if (prune) {
+      const stored = must(await bucket.list(`${c.slug}/images`, { limit: 1000 }), 'listar imagens') ?? []
+      const keep = new Set(c.images.map((p) => basename(p)))
+      const stale = stored.filter((f) => f.name && !keep.has(f.name)).map((f) => `${c.slug}/images/${f.name}`)
+      if (stale.length) {
+        must(await bucket.remove(stale), 'prune imagens')
+        console.log(`  ${stale.length} imagem(ns) removida(s) do storage`)
+      }
+    }
   }
 }
 
@@ -602,9 +997,19 @@ const report = new Report()
 const dirs = readdirSync(CONTENT_DIR)
   .map((d) => join(CONTENT_DIR, d))
   .filter((d) => statSync(d).isDirectory() && (!onlyCourse || basename(d) === onlyCourse))
+if (onlyCourse && !dirs.length) {
+  console.error(`Curso "${onlyCourse}" não encontrado em ${rel(CONTENT_DIR)}.`)
+  process.exit(1)
+}
 const courses = dirs.map((d) => loadCourse(d, report)).filter(Boolean)
 for (const c of courses) validateCourse(c, report)
 
+for (const c of courses) {
+  const slides = c.lessons.reduce((n, l) => n + l.slides.length, 0)
+  const questions = c.assessments.reduce((n, a) => n + (Array.isArray(a.json.questions) ? a.json.questions.length : 0), 0)
+  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s)`)
+}
+if (report.warnings.length || report.errors.length) console.log('')
 for (const w of report.warnings) console.log(`  aviso  ${w}`)
 for (const e of report.errors) console.log(`  ERRO   ${e}`)
 console.log(`\n${courses.length} curso(s), ${report.errors.length} erro(s), ${report.warnings.length} aviso(s).`)

@@ -28,9 +28,14 @@ export function avatarPublicUrl(path: string): string {
 /**
  * URL de retorno para fluxos por e-mail. Não usa hash (o roteador é hash-based),
  * só um parâmetro `flow` que o App lê ao iniciar para decidir a rota.
+ *
+ * Com VITE_SITE_URL definida (endereço público do site), os links do e-mail apontam
+ * sempre para ela. Sem isso, um cadastro feito em http://localhost:5173 manda um
+ * link que só abre no computador de quem rodou o servidor de desenvolvimento.
  */
 export function redirectUrl(flow?: 'recovery' | 'confirm'): string {
-  const base = `${window.location.origin}${import.meta.env.BASE_URL}`
+  const site = import.meta.env.VITE_SITE_URL?.trim()
+  const base = site ? site.replace(/\/*$/, '/') : `${window.location.origin}${import.meta.env.BASE_URL}`
   return flow ? `${base}?flow=${flow}` : base
 }
 

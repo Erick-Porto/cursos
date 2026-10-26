@@ -87,6 +87,13 @@ await db.query(
   [courseId],
 )
 
+// roteiro do instrutor (como faria o content:sync)
+await db.query(
+  `insert into public.class_scripts (course_id, slug, title, position, lesson_slugs, content_md)
+   values ($1, 'e01', 'Roteiro do encontro 1', 1, '{aula-1,aula-2}', '## Abertura')`,
+  [courseId],
+)
+
 // a partir daqui, agimos como o usuário autenticado (RLS ativa)
 await db.query(`select set_config('request.jwt.claim.sub', $1, false)`, [userId])
 await db.exec(`set role authenticated`)
@@ -94,6 +101,8 @@ await db.exec(`set role authenticated`)
 // gabarito invisível
 const { rows: keys } = await db.query('select * from public.question_keys')
 ok(keys.length === 0, 'RLS: aluno não lê question_keys')
+const { rows: scriptsAsStudent } = await db.query('select * from public.class_scripts')
+ok(scriptsAsStudent.length === 0, 'RLS: aluno não lê class_scripts (roteiros do instrutor)')
 
 // aulas invisíveis antes da matrícula
 let { rows: vis } = await db.query('select id from public.lessons')
@@ -177,6 +186,13 @@ ok(st.xp === expectedXp, `XP total ${st.xp} (esperado ${expectedXp})`)
 const { rows: mine } = await db.query('select * from public.v_student_progress')
 ok(mine.length === 1 && mine[0].lessons_completed === 2, 'v_student_progress com security_invoker')
 
+await db.exec('reset role')
+
+// roteiros do instrutor: visíveis para quem tem papel instructor
+await db.query(`update public.user_roles set role = 'instructor' where user_id = $1`, [userId])
+await db.exec(`set role authenticated`)
+const { rows: scriptsAsStaff } = await db.query('select slug, lesson_slugs from public.class_scripts where course_id = $1', [courseId])
+ok(scriptsAsStaff.length === 1 && scriptsAsStaff[0].lesson_slugs.length === 2, 'instrutor lê class_scripts com as aulas ligadas')
 await db.exec('reset role')
 await db.close()
 

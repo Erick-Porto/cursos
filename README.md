@@ -47,13 +47,14 @@ src/
 3. **Authentication → URL Configuration**:
    - *Site URL*: `https://<usuario>.github.io/<repo>/`
    - *Redirect URLs*: `https://<usuario>.github.io/<repo>/**` e `http://localhost:5173/**`
+   - No `.env` local, defina `VITE_SITE_URL` com o mesmo endereço público: assim os e-mails de confirmação e de recuperação enviados durante o desenvolvimento abrem em qualquer aparelho, e não em `localhost`.
 4. **Authentication → Providers → Email**: deixe "Confirm email" ligado (recomendado). Para Google, configure o provider e defina `VITE_ENABLE_GOOGLE_LOGIN=true`.
 5. **Project Settings → API**: copie a *URL*, a *anon key* e a *service_role key*.
 
 ### 2. Local
 
 ```bash
-cp .env.example .env     # preencha URL, anon key e service_role key
+cp .env.example .env     # preencha URL, anon key, service_role key e VITE_SITE_URL
 npm install
 npm run db:check         # valida as migrations num Postgres em memória
 npm run content:check    # valida o conteúdo em content/

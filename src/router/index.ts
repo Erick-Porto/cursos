@@ -35,6 +35,7 @@ export const router = createRouter({
     { path: '/conquistas', component: () => import('@/views/AchievementsView.vue'), meta: { requiresAuth: true, title: 'Conquistas' } },
     { path: '/perfil', component: () => import('@/views/ProfileView.vue'), meta: { requiresAuth: true, title: 'Perfil' } },
     { path: '/instrutor', component: () => import('@/views/InstructorView.vue'), meta: { requiresAuth: true, staff: true, title: 'Instrutor' } },
+    { path: '/instrutor/roteiros/:course/:script', component: () => import('@/views/InstructorScriptView.vue'), meta: { requiresAuth: true, staff: true, title: 'Roteiro de aula' } },
 
     { path: '/:pathMatch(.*)*', component: () => import('@/views/NotFoundView.vue'), meta: { title: 'Página não encontrada' } },
   ],

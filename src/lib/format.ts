@@ -77,7 +77,7 @@ export function plainText(md: string | null | undefined): string {
   if (!md) return ''
   return md
     .replace(/```[\s\S]*?```/g, (m) => m.replace(/```\w*\n?/g, ''))
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/!\[((?:[^[\]]|\[[^[\]]*\])*)\]\([^)]*\)/g, '$1')
     .replace(/\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/[*_`~#>]+/g, '')
     .replace(/\n{2,}/g, '\n')

@@ -7,6 +7,7 @@ import type {
   AnswerValue,
   Assessment,
   Attempt,
+  ClassScript,
   Course,
   Lesson,
   LessonProgress,
@@ -162,4 +163,22 @@ export async function fetchAllAttemptsForStaff(courseId: string): Promise<Attemp
 
 export async function fetchLessonsIndex(): Promise<LessonSummary[]> {
   return unwrap(await supabase.from('v_course_syllabus').select('*')) ?? []
+}
+
+// ---- Roteiros de aula (instrutor) ----
+
+/** Cursos visíveis para quem consulta (staff enxerga também os não publicados, via RLS). */
+export async function fetchCoursesForStaff(): Promise<Course[]> {
+  return unwrap(await supabase.from('courses').select('*').order('title')) ?? []
+}
+
+/** Roteiros de um curso, em ordem. Para alunos a RLS devolve lista vazia. */
+export async function fetchClassScripts(courseId: string): Promise<ClassScript[]> {
+  return unwrap(await supabase.from('class_scripts').select('*').eq('course_id', courseId).order('position')) ?? []
+}
+
+export async function fetchClassScript(courseId: string, slug: string): Promise<ClassScript | null> {
+  return unwrap(
+    await supabase.from('class_scripts').select('*').eq('course_id', courseId).eq('slug', slug).maybeSingle(),
+  )
 }
