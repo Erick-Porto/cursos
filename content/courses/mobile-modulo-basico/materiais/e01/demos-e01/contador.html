@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contador</title>
+</head>
+<body>
+  <p>Cliques: <span id="total">0</span></p>
+  <button id="botao">Clicar</button>
+
+  <script>
+    let total = 0
+    const span = document.querySelector('#total')
+    const botao = document.querySelector('#botao')
+
+    botao.addEventListener('click', () => {
+      total = total + 1
+      span.textContent = total
+    })
+  </script>
+</body>
+</html>

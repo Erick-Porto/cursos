@@ -10,7 +10,7 @@ import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
 import { useThemeStore } from '@/stores/theme'
 import { fetchClassScripts, fetchCourseStructure, fetchLesson, fetchLessonProgress, trackLessonProgress } from '@/lib/api'
-import { renderLesson, type Slide } from '@/lib/markdown'
+import { courseMaterialBase, renderLesson, type Slide } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
 import type { Assessment, ClassScript, Course, Lesson, LessonProgress, LessonSummary, TrackResult } from '@/types/db'
 import SlideViewer from '@/components/player/SlideViewer.vue'
@@ -193,7 +193,10 @@ async function load() {
     assessments.value = s.assessments
     // o roteiro do encontro só interessa a quem dá a aula; carrega sem atrasar os slides
     if (auth.isStaff) void fetchClassScripts(c.id).then((list) => (scripts.value = list)).catch(() => {})
-    slides.value = renderLesson(l.content_md, { assetBase: courseAssetBase(c.slug) })
+    slides.value = renderLesson(l.content_md, {
+      assetBase: courseAssetBase(c.slug),
+      materialBase: courseMaterialBase(c.slug),
+    })
     progress.value = await fetchLessonProgress(l.id)
 
     const q = Number(route.query.slide)

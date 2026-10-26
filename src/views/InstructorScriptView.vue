@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import { ArrowLeft, ArrowRight, BookOpen, ClipboardList, Clock, Printer } from 'lucide-vue-next'
 import { fetchClassScript, fetchClassScripts, fetchCourseBySlug, fetchCourseStructure } from '@/lib/api'
-import { renderMarkdown } from '@/lib/markdown'
+import { courseMaterialBase, renderMarkdown } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
 import { formatMinutes } from '@/lib/format'
 import type { ClassScript, Course, LessonSummary } from '@/types/db'
@@ -22,7 +22,10 @@ const loading = ref(true)
 const error = ref('')
 
 const html = computed(() =>
-  script.value && course.value ? renderMarkdown(script.value.content_md, { assetBase: courseAssetBase(course.value.slug) }) : '',
+  script.value && course.value ? renderMarkdown(script.value.content_md, {
+        assetBase: courseAssetBase(course.value.slug),
+        materialBase: courseMaterialBase(course.value.slug),
+      }) : '',
 )
 const scriptLessons = computed(() =>
   (script.value?.lesson_slugs ?? []).map((slug) => lessons.value.find((l) => l.slug === slug) ?? { slug, title: slug, id: slug }),

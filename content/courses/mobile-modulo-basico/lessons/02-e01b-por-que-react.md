@@ -63,6 +63,8 @@ botao.addEventListener('click', () => {
 
 O navegador monta o **DOM**, a árvore de elementos da página. Você procura o elemento (`querySelector`), espera o clique (`addEventListener`) e troca o texto (`textContent`).
 
+**Acompanhe**: [abra o contador em outra aba](materiais/e01/aluno/contador.html), teste e repita a demonstração.
+
 ---
 
 ## O problema cresce com a tela

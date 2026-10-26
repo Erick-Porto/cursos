@@ -38,10 +38,16 @@ content/courses/<slug-do-curso>/
 ├── assessments/
 │   ├── 01-quiz-introducao.json
 │   └── 99-prova-final.json
-└── images/
-    ├── tabela.svg            diagrama estático
-    ├── where-filtro.svg      diagrama animado (CSS @keyframes)
-    └── workbench-login.webp  captura de tela
+├── images/
+│   ├── tabela.svg            diagrama estático
+│   ├── where-filtro.svg      diagrama animado (CSS @keyframes)
+│   └── workbench-login.webp  captura de tela
+├── roteiros/                 roteiro do instrutor por encontro presencial (seção 9)
+│   └── 01-e01.md
+└── materiais/                arquivos abertos no navegador ou baixados (seção 10)
+    └── e01/
+        ├── aluno/contador.html
+        └── demos-e01/
 ```
 
 Regras de nomes: só letras minúsculas, números e hífens (imagens também aceitam ponto e underline).
@@ -777,6 +783,48 @@ lessons:
   turma; Dificuldades frequentes (sintoma, causa, como ajudar); Plano B.
 - O validador exige título, aulas existentes e blocos fechados; avisa roteiros curtos (menos de 150 palavras)
   e código sem linguagem. Não há limite de palavras por seção.
+- Materiais que o roteiro pede para preparar (demonstrações, soluções de referência) ficam em `materiais/`
+  e entram no roteiro como link (seção 10), em vez de só serem citados pelo nome.
+
+## 10. Materiais de aula (`materiais/`)
+
+Arquivos que o aluno ou o instrutor abre no navegador ou baixa: demonstrações em HTML, soluções de
+referência, arquivos iniciais de laboratório. Ficam em `content/courses/<curso>/materiais/` e são
+publicados **junto com o site** (GitHub Pages), não pelo `content:sync`. O endereço é
+`<site>/materiais/<curso>/<caminho>`; no `npm run dev`, o servidor local serve direto da pasta do curso.
+
+```
+materiais/
+└── e01/                       uma pasta por encontro
+    ├── aluno/                 o que o aluno abre, ligado pelos slides
+    │   └── contador.html
+    └── demos-e01/             pasta do instrutor, baixada como demos-e01.zip pelo roteiro
+        ├── contador.html
+        └── perfil/
+            ├── perfil.html
+            ├── estilo.css
+            └── foto.jpg
+```
+
+- **Link**, em slides, roteiros e descrição: `[abra o contador em outra aba](materiais/e01/aluno/contador.html)`.
+  A plataforma troca pelo endereço completo e abre em nova aba.
+- **Pasta inteira**: `[demos-e01.zip](materiais/e01/demos-e01.zip)` baixa a pasta `demos-e01/` compactada.
+  O zip é gerado no build a partir do link; não coloque o `.zip` no repositório.
+- **Versão do aluno** (`aluno/`): página autoexplicativa para ler e acompanhar a aula, inclusive no
+  celular. Mostra o exemplo funcionando, o código explicado linha por linha e os passos da
+  demonstração do instrutor; quando a demonstração depende do DevTools, mostre o mesmo dado na
+  própria página para quem está sem ele. Siga a paleta da plataforma, com tema claro e escuro.
+- **Pasta do instrutor**: os arquivos exatamente como nos slides (para editar ao vivo) e as soluções
+  de referência do laboratório. O nome segue o que o roteiro cita (`demos-e01/`).
+- Tudo em `materiais/` é público para quem tiver o endereço; só o roteiro é restrito ao instrutor.
+  Nunca coloque gabarito de prova ou de quiz em materiais.
+- Questões (`assessments/*.json`) não têm links para materiais (erro).
+- Nomes só com minúsculas, números, ponto, hífen e underline (o caminho vira URL). Sem emojis.
+  Até 2 MB por arquivo (aviso).
+- O validador confere se cada link aponta para um arquivo (ou, no caso do `.zip`, para uma pasta) e
+  avisa sobre página HTML sem link em nenhuma aula, roteiro ou descrição.
+- Publicação: o material vai ao ar no próximo deploy (push na `main`); a aula ou o roteiro que o cita
+  vai pelo `content:sync`. Faça os dois.
 
 ## Apêndice A: ícones inline disponíveis
 

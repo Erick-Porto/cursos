@@ -68,6 +68,16 @@ export const CALLOUTS: Record<string, { label: string; icon: string }> = {
 export interface RenderOptions {
   /** Prefixo para imagens com caminho relativo (ex.: images/x.png). */
   assetBase?: string
+  /** Prefixo para links de materiais do curso (ex.: materiais/e01/aluno/contador.html). */
+  materialBase?: string
+}
+
+/**
+ * Endereço dos materiais de um curso: `content/courses/<curso>/materiais/` é servido
+ * pelo próprio site (ver scripts/vite-materiais.mjs), não pelo storage.
+ */
+export function courseMaterialBase(courseSlug: string): string {
+  return `${import.meta.env.BASE_URL}materiais/${courseSlug}/`
 }
 
 export interface Slide {
@@ -178,14 +188,19 @@ function createRenderer(opts: RenderOptions): MarkdownIt {
     return defaultImage(tokens, idx, options, env, self)
   }
 
-  // Links externos abrem em nova aba.
+  // Links externos e materiais do curso abrem em nova aba; <pasta>.zip baixa a pasta.
   const defaultLinkOpen =
     md.renderer.rules.link_open || ((tokens, idx, options, _env, self) => self.renderToken(tokens, idx, options))
   md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
-    const href = tokens[idx].attrGet('href') || ''
-    if (/^https?:\/\//i.test(href)) {
-      tokens[idx].attrSet('target', '_blank')
-      tokens[idx].attrSet('rel', 'noopener noreferrer')
+    const token = tokens[idx]
+    const href = token.attrGet('href') || ''
+    const material = opts.materialBase ? href.match(/^(?:\.\/)?materiais\/(.+)$/) : null
+    if (material) token.attrSet('href', opts.materialBase + material[1])
+    if (material && /\.zip$/i.test(material[1])) {
+      token.attrSet('download', '')
+    } else if (material || /^https?:\/\//i.test(href)) {
+      token.attrSet('target', '_blank')
+      token.attrSet('rel', 'noopener noreferrer')
     }
     return defaultLinkOpen(tokens, idx, options, env, self)
   }
@@ -213,7 +228,7 @@ function createRenderer(opts: RenderOptions): MarkdownIt {
 
 const cache = new Map<string, MarkdownIt>()
 function renderer(opts: RenderOptions = {}): MarkdownIt {
-  const key = opts.assetBase ?? ''
+  const key = `${opts.assetBase ?? ''}|${opts.materialBase ?? ''}`
   let md = cache.get(key)
   if (!md) {
     md = createRenderer(opts)

@@ -8,7 +8,7 @@ import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
 import { fetchCourseBySlug, fetchCourseProgress, fetchCourseStructure } from '@/lib/api'
-import { renderMarkdown } from '@/lib/markdown'
+import { courseMaterialBase, renderMarkdown } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
 import { resolveIcon } from '@/lib/icons'
 import { formatMinutes, formatPct, LEVEL_LABEL } from '@/lib/format'
@@ -39,7 +39,10 @@ const enrollment = computed(() => (course.value ? catalog.enrollmentFor(course.v
 const icon = computed(() => resolveIcon(course.value?.icon))
 const color = computed(() => course.value?.color || 'var(--primary)')
 const descriptionHtml = computed(() =>
-  course.value ? renderMarkdown(course.value.description_md, { assetBase: courseAssetBase(course.value.slug) }) : '',
+  course.value ? renderMarkdown(course.value.description_md, {
+        assetBase: courseAssetBase(course.value.slug),
+        materialBase: courseMaterialBase(course.value.slug),
+      }) : '',
 )
 
 const progressByLesson = computed(() => new Map(progress.value.map((p) => [p.lesson_id, p])))

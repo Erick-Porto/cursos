@@ -268,7 +268,19 @@ function loadCourse(dir, report) {
         .map((f) => loadScript(join(scriptsDir, f), report))
     : []
 
-  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts }
+  // materiais de aula (demonstrações, soluções, arquivos de apoio), servidos pelo próprio site
+  const materialsDir = join(dir, 'materiais')
+  const materials = existsSync(materialsDir) ? listFiles(materialsDir) : []
+
+  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts, materials }
+}
+
+/** Arquivos de uma pasta, recursivo, sem ocultos. */
+function listFiles(dir) {
+  return readdirSync(dir, { withFileTypes: true })
+    .filter((e) => !e.name.startsWith('.'))
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((e) => (e.isDirectory() ? listFiles(join(dir, e.name)) : [join(dir, e.name)]))
 }
 
 function loadLesson(file, report) {
@@ -321,7 +333,7 @@ function validateCourse(course, report) {
   const { json, slug, dir } = course
   const where = rel(join(dir, 'course.json'))
   // imagens de images/ referenciadas em algum lugar (para apontar as órfãs)
-  const ctx = { used: new Set() }
+  const ctx = { used: new Set(), materials: new Set() }
 
   if (json.slug !== slug) report.error(where, `"slug" (${json.slug}) deve ser igual ao nome da pasta (${slug})`)
   if (!/^[a-z0-9-]+$/.test(slug)) report.error(where, 'slug da pasta deve usar só letras minúsculas, números e hífens')
@@ -429,6 +441,32 @@ function validateCourse(course, report) {
 
   // imagens
   for (const img of course.images) validateImageFile(img, ctx.used, report)
+
+  // materiais
+  for (const file of course.materials) validateMaterialFile(file, course, ctx, report)
+}
+
+const MATERIAL_TEXT = new Set(['.html', '.css', '.js', '.mjs', '.json', '.txt', '.md', '.sql', '.csv', '.svg'])
+const MAX_MATERIAL_BYTES = 2 * 1024 * KB
+
+function validateMaterialFile(file, course, ctx, report) {
+  const mw = rel(file)
+  const path = file.slice(join(course.dir, 'materiais').length + 1).split(/[\\/]/)
+  if (path.some((p) => !/^[a-z0-9._-]+$/.test(p))) {
+    report.error(mw, 'nomes em materiais/ usam só minúsculas, números, ponto, hífen e underline (o endereço vira URL)')
+  }
+  const bytes = statSync(file).size
+  if (bytes > MAX_MATERIAL_BYTES) report.warn(mw, `${Math.round(bytes / KB)} KB; materiais vão junto com o site, mantenha até ${MAX_MATERIAL_BYTES / KB / KB} MB`)
+  if (MATERIAL_TEXT.has(extname(file).toLowerCase()) && EMOJI.test(readFileSync(file, 'utf8'))) {
+    report.error(mw, 'não use emojis nos materiais')
+  }
+  // página HTML que ninguém abre: sem link direto e fora de qualquer pasta baixada como .zip
+  // (CSS, imagens e scripts são carregados pelas próprias páginas, então não entram no aviso)
+  if (extname(file).toLowerCase() !== '.html') return
+  const ancestors = path.slice(0, -1).map((_, i) => path.slice(0, i + 1).join('/'))
+  if (!ctx.materials.has(path.join('/')) && !ancestors.some((p) => ctx.materials.has(`${p}.zip`))) {
+    report.warn(mw, 'página sem link em nenhuma aula, roteiro ou descrição (link: materiais/pasta/arquivo.html)')
+  }
 }
 
 /**
@@ -473,6 +511,29 @@ function validateProse(text, where, course, ctx, report, opts = {}) {
     if (!existsSync(join(course.dir, clean))) report.error(where, `imagem não encontrada: ${src}`)
     else ctx.used.add(basename(clean))
     checkAlt(alt, clean, where, report)
+  }
+
+  // links para materiais/ (arquivo servido pelo site; <pasta>.zip baixa a pasta compactada)
+  for (const m of plain.matchAll(/(?<!!)\[((?:[^[\]]|\[[^[\]]*\])*)\]\(([^)\s]+)[^)]*\)/g)) {
+    const href = m[2].replace(/^\.\//, '')
+    if (!href.startsWith('materiais/')) continue
+    if (opts.noLocalImages) {
+      report.error(where, `questões não têm links para materiais/ (${m[2]}); cite o material no slide ou no roteiro`)
+      continue
+    }
+    const path = href.slice('materiais/'.length)
+    if (!path || path.includes('..') || /[?#\\]/.test(path)) {
+      report.error(where, `link de material inválido (${m[2]}); use materiais/pasta/arquivo`)
+      continue
+    }
+    const target = join(course.dir, 'materiais', path)
+    const isFile = existsSync(target) && statSync(target).isFile()
+    const zipOf = /\.zip$/i.test(path) ? target.slice(0, -4) : null
+    if (!isFile && !(zipOf && existsSync(zipOf) && statSync(zipOf).isDirectory())) {
+      report.error(where, `material não encontrado: ${m[2]} (arquivo em materiais/, ou <pasta>.zip para baixar uma pasta)`)
+      continue
+    }
+    ctx.materials?.add(path)
   }
   return count
 }
@@ -1007,7 +1068,7 @@ for (const c of courses) validateCourse(c, report)
 for (const c of courses) {
   const slides = c.lessons.reduce((n, l) => n + l.slides.length, 0)
   const questions = c.assessments.reduce((n, a) => n + (Array.isArray(a.json.questions) ? a.json.questions.length : 0), 0)
-  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s)`)
+  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s), ${c.materials.length} material(is)`)
 }
 if (report.warnings.length || report.errors.length) console.log('')
 for (const w of report.warnings) console.log(`  aviso  ${w}`)

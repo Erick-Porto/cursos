@@ -27,6 +27,7 @@ e conquistas.
 .github/workflows/deploy.yml   CI (typecheck, migrations, conteúdo, build) + deploy no Pages
 content/courses/<slug>/        conteúdo dos cursos (ver GUIA_DE_CONTEUDO.md)
 scripts/content.mjs            valida e sincroniza o conteúdo com o Supabase
+scripts/vite-materiais.mjs     serve e publica os materiais/ de cada curso junto com o site
 scripts/check-migrations.mjs   roda as migrations num Postgres em memória e testa as funções
 supabase/migrations/           esquema, RLS, funções e conquistas iniciais
 src/
@@ -102,7 +103,9 @@ node --env-file=.env scripts/content.mjs sync --course=fundamentos-sql
 ```
 
 As imagens de `content/courses/<slug>/images/` sobem para o bucket público `course-assets`.
-Mudanças de conteúdo não exigem novo deploy do site.
+Mudanças de conteúdo não exigem novo deploy do site, com uma exceção: os arquivos de
+`content/courses/<slug>/materiais/` (demonstrações e soluções abertas pelo link das aulas e roteiros)
+são publicados com o site, em `<site>/materiais/<slug>/`, e só mudam no ar depois do deploy.
 
 ## Segurança
 
