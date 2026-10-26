@@ -27,13 +27,11 @@ Fundamentos de SQL · Aula 3
 
 ## Por que filtrar
 
-Uma tabela de pedidos pode ter milhões de linhas.
+Uma tabela pode ter milhões de linhas. Você quase sempre quer uma **parte** delas: os pedidos de hoje, os produtos de uma categoria, os clientes de uma cidade.
 
-Você quase sempre quer uma **parte** delas:
-
-- os pedidos de hoje
-- os produtos de uma categoria
-- os clientes de uma cidade
+:::center
+![Animação: a condição WHERE categoria = 'video' destaca duas linhas da tabela produtos e esmaece as outras duas](images/where-filtro.svg)
+:::
 
 `WHERE` é o filtro que separa o que importa.
 

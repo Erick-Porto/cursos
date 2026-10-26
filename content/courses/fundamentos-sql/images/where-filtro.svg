@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>WHERE em ação: só as linhas em que a condição é verdadeira seguem para o resultado</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .lbl  { fill: #a78bfa; font-size: 18px; font-weight: 700; }
+    .note { fill: #b4bfd3; font-size: 18px; }
+    .cond { fill: #fbbf24; font-size: 18px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; animation: cond 6s infinite; }
+    .cell { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .keep { fill: none; stroke: #34d399; stroke-width: 3; animation: destaca 6s infinite; }
+    .out  { opacity: 0.25; animation: some 6s infinite; }
+    @keyframes cond    { 0%, 15% { opacity: 0; }    25%, 85% { opacity: 1; }    100% { opacity: 0; } }
+    @keyframes some    { 0%, 25% { opacity: 1; }    50%, 85% { opacity: 0.25; } 100% { opacity: 1; } }
+    @keyframes destaca { 0%, 25% { opacity: 0; }    50%, 85% { opacity: 1; }    100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cond, .keep, .out { animation: none; }
+    }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="40" y="44">tabela: produtos</text>
+  <text class="cond" x="400" y="44">WHERE categoria = 'video'</text>
+
+  <!-- cabeçalho -->
+  <rect class="head" x="40" y="60" width="260" height="44"/>
+  <rect class="head" x="300" y="60" width="220" height="44"/>
+  <rect class="head" x="520" y="60" width="160" height="44"/>
+  <text class="h" x="56" y="89">nome</text>
+  <text class="h" x="316" y="89">categoria</text>
+  <text class="h" x="536" y="89">preco</text>
+
+  <!-- linhas que não atendem à condição -->
+  <g class="out">
+    <rect class="cell" x="40" y="104" width="260" height="44"/>
+    <rect class="cell" x="300" y="104" width="220" height="44"/>
+    <rect class="cell" x="520" y="104" width="160" height="44"/>
+    <text class="t" x="56" y="133">Teclado</text>
+    <text class="t" x="316" y="133">periferico</text>
+    <text class="t" x="536" y="133">120</text>
+  </g>
+  <g class="out">
+    <rect class="cell" x="40" y="192" width="260" height="44"/>
+    <rect class="cell" x="300" y="192" width="220" height="44"/>
+    <rect class="cell" x="520" y="192" width="160" height="44"/>
+    <text class="t" x="56" y="221">Mouse</text>
+    <text class="t" x="316" y="221">periferico</text>
+    <text class="t" x="536" y="221">60</text>
+  </g>
+
+  <!-- linhas que atendem -->
+  <g>
+    <rect class="cell" x="40" y="148" width="260" height="44"/>
+    <rect class="cell" x="300" y="148" width="220" height="44"/>
+    <rect class="cell" x="520" y="148" width="160" height="44"/>
+    <text class="t" x="56" y="177">Monitor 24"</text>
+    <text class="t" x="316" y="177">video</text>
+    <text class="t" x="536" y="177">900</text>
+    <rect class="keep" x="41.5" y="149.5" width="637" height="41" rx="4"/>
+  </g>
+  <g>
+    <rect class="cell" x="40" y="236" width="260" height="44"/>
+    <rect class="cell" x="300" y="236" width="220" height="44"/>
+    <rect class="cell" x="520" y="236" width="160" height="44"/>
+    <text class="t" x="56" y="265">Webcam</text>
+    <text class="t" x="316" y="265">video</text>
+    <text class="t" x="536" y="265">250</text>
+    <rect class="keep" x="41.5" y="237.5" width="637" height="41" rx="4"/>
+  </g>
+
+  <text class="note" x="40" y="308">Só as linhas destacadas entram no resultado</text>
+</svg>

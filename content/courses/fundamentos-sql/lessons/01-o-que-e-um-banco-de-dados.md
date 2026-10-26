@@ -45,15 +45,17 @@ Um **banco de dados** guarda informação de forma organizada, com regras, para 
 
 Ele garante que:
 
-- os dados sigam **regras**: todo pedido tem um cliente
-- várias pessoas leiam e gravem **ao mesmo tempo** sem bagunça
-- nada se perca quando o computador desliga
+- :icon[shield] os dados sigam **regras**: todo pedido tem um cliente
+- :icon[users] várias pessoas leiam e gravem **ao mesmo tempo** sem bagunça
+- :icon[hard-drive] nada se perca quando o computador desliga
 
 ---
 
 ## Tabelas, linhas e colunas
 
-![Diagrama de uma tabela: nomes das colunas no topo e uma linha para cada registro](images/tabela.svg)
+:::center
+![Diagrama da tabela clientes: nomes das colunas no topo e uma linha para cada registro](images/tabela.svg)
+:::
 
 - **Tabela**: um assunto (clientes, pedidos, produtos)
 - **Coluna**: uma característica (nome, e-mail, preço)
