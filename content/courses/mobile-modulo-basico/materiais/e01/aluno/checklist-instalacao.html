@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checklist de instalação do ambiente · E01</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, dd code, td code, h3 code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+    a { color: var(--destaque); }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.2em;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+    }
+    .botao.leve { background: transparent; color: var(--destaque); border: 1px solid var(--borda); }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* progresso */
+    .progresso { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; }
+    .progresso p { margin: 0; }
+    .progresso strong { font-size: 1.2rem; }
+    .progresso small { display: block; color: var(--texto-2); }
+    .barra { height: 8px; margin-top: 14px; border-radius: 999px; background: var(--destaque-suave); overflow: hidden; }
+    .barra div { height: 100%; width: 0; background: var(--destaque); transition: width 0.3s; }
+
+    /* itens */
+    .item { margin-top: 16px; }
+    .item.feito { border-color: var(--ok); }
+    .item.feito h3 { color: var(--texto-2); text-decoration: line-through; }
+    .item-topo { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+    .item-topo input { width: 22px; height: 22px; margin: 3px 0 0; flex: none; accent-color: var(--destaque); }
+    .item-topo h3 { margin: 0; font-size: 1.05rem; }
+    .item-topo small { display: block; color: var(--texto-2); }
+    .item dl { margin: 8px 0 0 34px; }
+    dt {
+      margin-top: 12px;
+      color: var(--texto-2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    dd { margin: 4px 0 0; }
+    dd ul { margin: 4px 0 0; padding-left: 1.2em; }
+    dd li + li { margin-top: 4px; }
+    @media (max-width: 480px) { .item dl { margin-left: 0; } }
+
+    /* código */
+    .codigo { margin-top: 8px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+    .saida { color: #94a3b8; }
+
+    /* avisos e tabela */
+    .aviso, .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .aviso { border-left-color: var(--alerta); background: var(--alerta-suave); }
+    .aviso p, .dica p { margin: 0; }
+    .aviso p + p, .dica p + p { margin-top: 8px; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      .saida { color: #555; }
+      a { color: inherit; }
+      a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E01 · Checklist</p>
+      <h1>Checklist de instalação do ambiente</h1>
+      <p class="lead">
+        Tudo o que o seu computador precisa para programar em React a partir do E02. Marque cada item
+        quando terminar: a página lembra as marcações neste navegador. Em casa, siga a mesma ordem.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-progresso">
+      <h2 id="t-progresso"><svg class="ico"><use href="#i-list-checks"/></svg>Seu progresso</h2>
+      <div class="cartao">
+        <div class="progresso">
+          <p>
+            <strong id="progresso-texto">0 de 6 itens concluídos</strong>
+            <small>Entrega do dia: a captura de tela do terminal com as três versões (item 7).</small>
+          </p>
+          <div class="acoes nao-imprime">
+            <button class="botao leve" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+            <button class="botao leve" type="button" id="limpar"><svg class="ico"><use href="#i-rotate-ccw"/></svg>Limpar marcações</button>
+          </div>
+        </div>
+        <div class="barra" aria-hidden="true"><div id="progresso-barra"></div></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-itens">
+      <h2 id="t-itens"><svg class="ico"><use href="#i-terminal"/></svg>Os seis itens</h2>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-terminal">
+          <span>
+            <h3>1. Saber abrir o terminal</h3>
+            <small>Todas as conferências abaixo são feitas nele.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Como abrir</dt>
+          <dd>
+            <ul>
+              <li><strong>Windows</strong>: <kbd>Win</kbd> + <kbd>X</kbd> e escolha <strong>Terminal</strong> (ou <strong>Windows PowerShell</strong>). Também vale digitar "terminal" no menu Iniciar.</li>
+              <li><strong>macOS</strong>: <kbd>Cmd</kbd> + <kbd>Espaço</kbd>, digite "Terminal" e aperte <kbd>Enter</kbd>.</li>
+              <li><strong>Linux</strong>: <kbd>Ctrl</kbd> + <kbd>Alt</kbd> + <kbd>T</kbd>.</li>
+              <li><strong>Dentro do VS Code</strong>: menu <strong>Terminal</strong>, <strong>New Terminal</strong> (ou <kbd>Ctrl</kbd> + <kbd>&#96;</kbd>, a crase).</li>
+            </ul>
+          </dd>
+          <dt>Como conferir</dt>
+          <dd>Uma janela com um cursor piscando esperando você digitar. Teste com <code>echo oi</code> e <kbd>Enter</kbd>: ele responde <code>oi</code>.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-node">
+          <span>
+            <h3>2. Node.js LTS (vem com o npm)</h3>
+            <small>Executa JavaScript fora do navegador. O React, o Vite e o Expo dependem dele.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Onde baixar</dt>
+          <dd><a href="https://nodejs.org" target="_blank" rel="noopener noreferrer">nodejs.org</a>, botão <strong>LTS</strong>. A versão LTS tem número <strong>par</strong> (como 22). Não pegue a "Current".</dd>
+          <dt>Como instalar</dt>
+          <dd>
+            <ul>
+              <li><strong>Windows</strong>: baixe o instalador <code>.msi</code> e avance com as opções padrão. Não precisa marcar "Automatically install the necessary tools".</li>
+              <li><strong>macOS</strong>: instalador <code>.pkg</code>, avance até o fim.</li>
+              <li><strong>Linux</strong>: use os binários do site ou o <code>nvm</code>. Evite o <code>apt</code>, que traz uma versão antiga.</li>
+            </ul>
+          </dd>
+          <dt>Como conferir</dt>
+          <dd>
+            Feche o terminal, abra de novo e digite:
+            <div class="codigo">
+              <div class="codigo-topo"><span>terminal</span><button class="copiar nao-imprime" type="button" data-alvo="#cmd-node">Copiar</button></div>
+<pre><code id="cmd-node">node -v
+npm -v</code></pre>
+            </div>
+            Esperado: algo como <code>v22.12.0</code> e <code>10.9.0</code>. O que importa é o número par depois do <code>v</code>.
+          </dd>
+          <dt>Se falhar</dt>
+          <dd>
+            <ul>
+              <li>"<code>node</code> não é reconhecido": o terminal estava aberto antes da instalação. Feche <strong>tudo</strong> (terminal e VS Code) e abra de novo.</li>
+              <li>Versão ímpar (23, 25): você baixou a "Current". Desinstale e instale a LTS.</li>
+              <li>No Windows, <code>npm -v</code> reclama que "a execução de scripts foi desabilitada": rode <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> e responda <kbd>S</kbd>, ou use o <strong>Prompt de Comando</strong> no lugar do PowerShell.</li>
+            </ul>
+          </dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-git">
+          <span>
+            <h3>3. Git</h3>
+            <small>Guarda o histórico do seu código e conversa com o GitHub.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Onde baixar</dt>
+          <dd><a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">git-scm.com</a>, Downloads.</dd>
+          <dt>Como instalar</dt>
+          <dd>
+            <ul>
+              <li><strong>Windows</strong>: instalador normal; mantenha as opções padrão. Quando perguntar o editor, pode escolher o VS Code.</li>
+              <li><strong>macOS</strong>: ao digitar <code>git --version</code>, o sistema oferece instalar as "ferramentas de linha de comando". Aceite e espere.</li>
+              <li><strong>Linux</strong>: <code>sudo apt install git</code> (ou o gerenciador da sua distribuição).</li>
+            </ul>
+          </dd>
+          <dt>Como conferir</dt>
+          <dd>
+            <div class="codigo">
+              <div class="codigo-topo"><span>terminal</span><button class="copiar nao-imprime" type="button" data-alvo="#cmd-git">Copiar</button></div>
+<pre><code id="cmd-git">git --version</code></pre>
+            </div>
+            Esperado: <code>git version 2.x.x</code>.
+          </dd>
+          <dt>Se falhar</dt>
+          <dd>Mesmo caso do item 2: feche e reabra o terminal. Se o antivírus apagar o instalador, peça o pendrive ao instrutor.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-vscode">
+          <span>
+            <h3>4. VS Code com três extensões</h3>
+            <small>O editor do curso.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Onde baixar</dt>
+          <dd><a href="https://code.visualstudio.com" target="_blank" rel="noopener noreferrer">code.visualstudio.com</a>, botão Download. No Windows, prefira o <strong>User Installer</strong>: não pede senha de administrador.</dd>
+          <dt>Como instalar</dt>
+          <dd>Avance pelo instalador. Marque <strong>Add to PATH</strong> e as opções "Abrir com Code" quando aparecerem.</dd>
+          <dt>Extensões</dt>
+          <dd>
+            Dentro do VS Code, aperte <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> (<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd> no Mac), procure e instale, uma a uma:
+            <ul>
+              <li><strong>ES7+ React/Redux/React-Native snippets</strong></li>
+              <li><strong>Prettier - Code formatter</strong></li>
+              <li><strong>Error Lens</strong></li>
+            </ul>
+          </dd>
+          <dt>Como conferir</dt>
+          <dd>As três aparecem em "Instaladas" na aba de extensões. No terminal, <code>code --version</code> mostra a versão (opcional).</dd>
+          <dt>Se falhar</dt>
+          <dd>Loja de extensões bloqueada pela rede: instale de casa. Dá para acompanhar o E02 sem elas; são conveniências.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-navegador">
+          <span>
+            <h3>5. Navegador com DevTools</h3>
+            <small>Chrome ou Edge, atualizados.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Em qualquer página, <kbd>F12</kbd> abre o painel do DevTools. Também funciona <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> (<kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>I</kbd> no Mac) ou o botão direito na página e <strong>Inspecionar</strong>.</dd>
+          <dt>Se falhar</dt>
+          <dd>Em alguns notebooks, <kbd>F12</kbd> precisa da tecla <kbd>Fn</kbd> junto. Se o navegador for antigo, atualize pelo menu Ajuda.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-github">
+          <span>
+            <h3>6. Conta no GitHub</h3>
+            <small>Onde o seu código vai morar. É o começo do seu portfólio.</small>
+          </span>
+        </label>
+        <dl>
+          <dt>Onde criar</dt>
+          <dd><a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">github.com/signup</a>, com um e-mail que você consegue abrir pelo celular agora.</dd>
+          <dt>Nome de usuário</dt>
+          <dd>
+            Um nome que você colocaria em um currículo: seu nome ou uma variação, só com letras, números e hífen. Exemplos: <code>ana-souza</code>, <code>anasouza-dev</code>. Ele aparece no endereço de todos os seus projetos.
+          </dd>
+          <dt>Depois de criar</dt>
+          <dd>Confirme o e-mail (veja a caixa de spam) e coloque uma foto no perfil: ela serve de avatar na página do laboratório.</dd>
+          <dt>Como conferir</dt>
+          <dd><code>github.com/SEU-USUARIO</code> abre a sua página e <code>github.com/SEU-USUARIO.png</code> mostra a sua foto.</dd>
+          <dt>Se falhar</dt>
+          <dd>Nome em uso ou com espaço: escolha outro. E-mail de confirmação que não chega: procure "GitHub" no spam ou use outro e-mail.</dd>
+        </dl>
+      </article>
+    </section>
+
+    <section aria-labelledby="t-entrega">
+      <h2 id="t-entrega"><svg class="ico"><use href="#i-send"/></svg>7. Entrega: a captura de tela</h2>
+      <div class="cartao">
+        <p style="margin: 0">
+          Com tudo instalado, feche e abra o terminal e digite os três comandos, um por linha. Tire uma captura
+          de tela com as três respostas na mesma janela.
+        </p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>terminal</span><button class="copiar nao-imprime" type="button" data-alvo="#cmd-todos">Copiar</button></div>
+<pre><code id="cmd-todos">node -v
+npm -v
+git --version</code></pre>
+        </div>
+        <ul class="lista">
+          <li><strong>Como tirar a captura</strong>: Windows, <kbd>Win</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd>; macOS, <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>4</kbd>; Linux, <kbd>PrtSc</kbd>.</li>
+          <li><strong>Onde enviar</strong>: ao instrutor, pelo sistema, junto com a sua página de perfil. Prazo: hoje.</li>
+          <li><strong>Não deu tempo?</strong> Termine em casa com este checklist. No E02 você aprende a entregar por commit.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-admin">
+      <h2 id="t-admin"><svg class="ico"><use href="#i-triangle-alert"/></svg>Sem permissão de administrador</h2>
+      <div class="cartao">
+        <p style="margin: 0">Dá para instalar quase tudo só na sua conta de usuário:</p>
+        <ul class="lista">
+          <li><strong>Node.js</strong>: em nodejs.org, baixe o "Windows Binary (.zip)" da LTS e descompacte em <code>Documentos\node</code>. Peça ao instrutor para colocar a pasta no PATH; enquanto isso, os comandos funcionam com o terminal aberto dentro dela.</li>
+          <li><strong>Git</strong>: em git-scm.com, baixe o <strong>Portable Git</strong> ("thumbdrive edition") e descompacte em <code>Documentos\git</code>.</li>
+          <li><strong>VS Code</strong>: o <strong>User Installer</strong> já não pede administrador. Se ele for barrado, use o <code>.zip</code>.</li>
+        </ul>
+        <div class="aviso">
+          <p>
+            Antivírus ou proxy continuam barrando? Avise o instrutor. Você faz o laboratório em uma máquina
+            preparada ou no editor do GitHub, e a instalação fica para casa, com este checklist.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-problemas">
+      <h2 id="t-problemas"><svg class="ico"><use href="#i-wrench"/></svg>Problemas frequentes</h2>
+      <div class="cartao tabela">
+        <table>
+          <thead>
+            <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>node</code> ou <code>git</code> "não é reconhecido"</td><td>Terminal aberto antes da instalação</td><td>Fechar terminal e VS Code; abrir de novo</td></tr>
+            <tr><td>"O Windows protegeu o computador"</td><td>SmartScreen não conhece o instalador</td><td>"Mais informações", depois "Executar assim mesmo"</td></tr>
+            <tr><td>Antivírus apaga o instalador</td><td>Falso positivo</td><td>Baixar de novo do site oficial; se repetir, pendrive do instrutor</td></tr>
+            <tr><td><code>npm</code>: "a execução de scripts foi desabilitada"</td><td>Política do PowerShell</td><td><code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> ou usar o Prompt de Comando</td></tr>
+            <tr><td>Download parado em 0%</td><td>Wi-Fi saturado ou proxy</td><td>Esperar a sua fileira ou usar o pendrive</td></tr>
+            <tr><td><code>node -v</code> mostra versão ímpar</td><td>Baixou a "Current"</td><td>Desinstalar e instalar a LTS</td></tr>
+            <tr><td>GitHub não confirma a conta</td><td>E-mail no spam ou com filtro</td><td>Procurar no spam; usar um e-mail pessoal</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dica">
+        <p>Leia a mensagem de erro inteira antes de pedir ajuda: ela quase sempre diz o que falta. Se for pedir, leia o erro em voz alta.</p>
+      </div>
+    </section>
+
+    <footer>Material da aula E01 do curso Programador Mobile: Módulo Básico. As marcações ficam só neste navegador.</footer>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Marcações: ficam no localStorage deste navegador. Sem acesso a
+    // ele (modo privado, armazenamento bloqueado), a página funciona
+    // igual, só não lembra as marcações ao recarregar.
+    // ---------------------------------------------------------------
+    const CHAVE = 'pm-e01-checklist-instalacao'
+    const caixas = [...document.querySelectorAll('.item input[type="checkbox"]')]
+    const texto = document.querySelector('#progresso-texto')
+    const barra = document.querySelector('#progresso-barra')
+
+    function lerMarcacoes() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(CHAVE) || '[]')
+        return Array.isArray(lista) ? lista : []
+      } catch {
+        return []
+      }
+    }
+
+    function gravarMarcacoes(ids) {
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(ids))
+      } catch {
+        // sem armazenamento disponível: segue sem lembrar
+      }
+    }
+
+    function atualizar() {
+      const feitos = caixas.filter((c) => c.checked)
+      for (const c of caixas) c.closest('.item').classList.toggle('feito', c.checked)
+      texto.textContent = `${feitos.length} de ${caixas.length} itens concluídos`
+      barra.style.width = `${(feitos.length / caixas.length) * 100}%`
+      gravarMarcacoes(feitos.map((c) => c.id))
+    }
+
+    const salvas = lerMarcacoes()
+    for (const c of caixas) {
+      c.checked = salvas.includes(c.id)
+      c.addEventListener('change', atualizar)
+    }
+    atualizar()
+
+    document.querySelector('#limpar').addEventListener('click', () => {
+      for (const c of caixas) c.checked = false
+      atualizar()
+    })
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+
+    // botões "Copiar" dos blocos de comando
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>

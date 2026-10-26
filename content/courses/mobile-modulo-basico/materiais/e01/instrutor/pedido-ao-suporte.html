@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pedido ao suporte do laboratório · E01</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --campo: #fde68a;
+      --campo-texto: #713f12;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --campo: rgba(253, 230, 138, 0.22);
+        --campo-texto: #fde68a;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; font-size: 0.92em; }
+    p code, li code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    a { color: var(--destaque); }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.2em;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+    }
+    .botao.leve { background: transparent; color: var(--destaque); border: 1px solid var(--borda); }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    ul.lista { margin: 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+
+    /* a mensagem */
+    .mensagem { font-size: 0.97rem; }
+    .mensagem p { margin: 0 0 12px; }
+    .mensagem h3 { margin: 20px 0 8px; font-size: 1rem; }
+    .mensagem ul { margin: 0 0 12px; padding-left: 1.3em; }
+    .mensagem li + li { margin-top: 4px; }
+    .mensagem .assunto { padding: 10px 14px; border-radius: 10px; background: var(--destaque-suave); }
+    .mensagem .assinatura p { margin: 0; }
+    .campo {
+      padding: 0 4px;
+      border-radius: 4px;
+      background: var(--campo);
+      color: var(--campo-texto);
+      font-style: normal;
+    }
+    .mensagem code { background: none; padding: 0; }
+
+    .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .dica p { margin: 0; }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { border-color: #bbb; }
+      .campo { background: none; color: inherit; text-decoration: underline; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E01 · Instrutor</p>
+      <h1>Pedido ao suporte do laboratório</h1>
+      <p class="lead">
+        Modelo de mensagem para o suporte de TI do laboratório. Copie, troque os campos destacados e envie
+        com pelo menos uma semana de antecedência. O que o suporte não conseguir fazer define o seu plano B.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-uso">
+      <h2 id="t-uso"><svg class="ico"><use href="#i-info"/></svg>Como usar</h2>
+      <div class="cartao">
+        <ul class="lista">
+          <li><strong>Quando</strong>: uma semana antes do E01, ou assim que souber o laboratório. Reenvie a partir do item 1 se parte da turma ficar sem ambiente no E01.</li>
+          <li><strong>Peça para testar</strong> em uma máquina antes do encontro: <code>node -v</code>, <code>npm -v</code>, <code>git --version</code>, instalar uma extensão no VS Code e rodar <code>npm create vite@latest</code> em uma pasta de teste.</li>
+          <li><strong>Guarde a resposta</strong>: o que não for liberado (administrador, rede, antivírus) vira plano B no roteiro: pendrives, máquina preparada ou editor online do GitHub.</li>
+          <li><strong>Depois do E01</strong>, anexe a lista de pendências da folha de acompanhamento e peça prazo para o E02.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-mensagem">
+      <h2 id="t-mensagem"><svg class="ico"><use href="#i-mail"/></svg>A mensagem</h2>
+      <div class="acoes nao-imprime">
+        <button class="botao" type="button" id="copiar"><svg class="ico"><use href="#i-copy"/></svg>Copiar texto da mensagem</button>
+        <button class="botao leve" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+      </div>
+      <article class="cartao mensagem" id="mensagem">
+        <p class="assunto"><strong>Assunto:</strong> Instalação de software e acesso à rede para o curso Programador Mobile (laboratório <em class="campo">[sala]</em>, de <em class="campo">[data inicial]</em> a <em class="campo">[data final]</em>)</p>
+
+        <p>Olá, <em class="campo">[nome do responsável]</em>.</p>
+
+        <p>
+          Sou instrutor do curso Programador Mobile (180 horas, 45 encontros de 4 horas), que usará o laboratório
+          <em class="campo">[sala]</em> às <em class="campo">[dias da semana]</em>, das <em class="campo">[hora]</em> às
+          <em class="campo">[hora]</em>, de <em class="campo">[data inicial]</em> a <em class="campo">[data final]</em>.
+          Para o primeiro encontro, em <em class="campo">[data do E01]</em>, preciso que as <em class="campo">[N]</em> máquinas
+          estejam com os itens abaixo. Os alunos trabalham com JavaScript, React e React Native; todo o software é
+          gratuito e de código aberto.
+        </p>
+
+        <h3>1. Software a instalar, para todos os usuários</h3>
+        <ul>
+          <li>Node.js LTS (a versão par mais recente, com npm), de https://nodejs.org. Instalador .msi com as opções padrão; não é necessário marcar "ferramentas nativas".</li>
+          <li>Git for Windows, de https://git-scm.com, com as opções padrão.</li>
+          <li>Visual Studio Code, de https://code.visualstudio.com (System Installer), com as extensões ES7+ React/Redux/React-Native snippets (dsznajder.es7-react-js-snippets), Prettier - Code formatter (esbenp.prettier-vscode) e Error Lens (usernamehw.errorlens). Se a loja de extensões for bloqueada, basta liberar os endereços do item 3 e os alunos instalam.</li>
+          <li>Google Chrome ou Microsoft Edge atualizados; as ferramentas do desenvolvedor (DevTools) são usadas em sala.</li>
+        </ul>
+        <p>
+          Se não for possível instalar para todos os usuários, peço que os alunos tenham permissão para rodar os
+          instaladores nas próprias contas (Node.js, Git e o User Installer do VS Code).
+        </p>
+
+        <h3>2. Permissões nas contas dos alunos</h3>
+        <ul>
+          <li>Executar node, npm, npx e git e gravar nas próprias pastas de usuário. O npm cria a pasta .npm e as pastas node_modules dos projetos, com milhares de arquivos pequenos.</li>
+          <li>No PowerShell, permitir scripts assinados localmente (Set-ExecutionPolicy -Scope CurrentUser RemoteSigned). Sem isso, o comando npm falha com "a execução de scripts foi desabilitada neste sistema".</li>
+          <li>Exceção no antivírus para node.exe e para as pastas node_modules: a verificação em tempo real deixa o npm install muito lento.</li>
+          <li>Manter os arquivos dos alunos entre um encontro e outro. Se as máquinas forem restauradas, avisem; orientaremos a turma a guardar os projetos no GitHub.</li>
+        </ul>
+
+        <h3>3. Acesso à rede (HTTPS, porta 443)</h3>
+        <ul>
+          <li>nodejs.org, registry.npmjs.org e npmjs.com</li>
+          <li>github.com, api.github.com, raw.githubusercontent.com e objects.githubusercontent.com</li>
+          <li>code.visualstudio.com, marketplace.visualstudio.com, update.code.visualstudio.com e *.vscode-cdn.net</li>
+          <li>erick-porto.github.io (site do curso) e *.supabase.co (login, progresso e quizzes dos alunos)</li>
+          <li>A partir do encontro E06 (<em class="campo">[data]</em>): expo.dev, exp.host, *.expo.dev e *.expo.io</li>
+        </ul>
+        <p>
+          Se o laboratório usa proxy, peço o endereço e a porta para configurarmos o npm e o git
+          (npm config set proxy, git config http.proxy) ou, se possível, acesso direto a esses endereços.
+        </p>
+
+        <h3>4. Rede local a partir do E06 (<em class="campo">[data]</em>)</h3>
+        <p>
+          Os alunos testam os aplicativos no próprio celular com o aplicativo Expo Go, que se conecta ao computador
+          pela rede local. Precisamos que celulares e computadores fiquem na mesma rede Wi-Fi, com tráfego TCP entre
+          eles liberado nas portas 8081 e 19000 a 19006. Se isso não for possível, a alternativa é o modo túnel do
+          Expo, que exige acesso a *.exp.direct e aos servidores do ngrok.
+        </p>
+
+        <h3>5. O que não precisamos</h3>
+        <ul>
+          <li>Emulador Android, Android Studio ou Xcode: não serão usados.</li>
+          <li>Contas institucionais de software: os alunos criam as próprias contas no GitHub durante a aula; para isso precisam de acesso a github.com e ao e-mail pessoal.</li>
+        </ul>
+
+        <p>
+          Para evitar surpresas no dia, seria possível me liberar uma máquina para testar até
+          <em class="campo">[data, alguns dias antes do E01]</em>? Qualquer item que não possa ser atendido, por favor
+          me avisem, para que eu prepare uma alternativa.
+        </p>
+
+        <p>Agradeço a atenção.</p>
+
+        <div class="assinatura">
+          <p><em class="campo">[Seu nome]</em></p>
+          <p>Instrutor do curso Programador Mobile</p>
+          <p><em class="campo">[telefone e e-mail]</em></p>
+        </div>
+      </article>
+      <div class="dica">
+        <p>Os identificadores das extensões (como esbenp.prettier-vscode) permitem instalar pela linha de comando: <code>code --install-extension esbenp.prettier-vscode</code>. Útil para o suporte preparar muitas máquinas.</p>
+      </div>
+    </section>
+
+    <footer>Material do roteiro do E01 do curso Programador Mobile: Módulo Básico. Uso interno do instrutor.</footer>
+  </main>
+
+  <script>
+    const mensagem = document.querySelector('#mensagem')
+    const copiar = document.querySelector('#copiar')
+
+    copiar.addEventListener('click', async () => {
+      // innerText respeita as quebras de linha e tira as marcações
+      const texto = mensagem.innerText.replace(/\n{3,}/g, '\n\n').trim()
+      const rotulo = copiar.innerHTML
+      try {
+        await navigator.clipboard.writeText(texto)
+        copiar.textContent = 'Copiado. Cole no e-mail e troque os campos destacados.'
+      } catch {
+        getSelection().selectAllChildren(mensagem)
+        copiar.textContent = 'Use Ctrl+C para copiar a seleção'
+      }
+      setTimeout(() => { copiar.innerHTML = rotulo }, 3000)
+    })
+
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+  </script>
+</body>
+</html>

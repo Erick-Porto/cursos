@@ -246,7 +246,7 @@ A conta do GitHub que você cria hoje no laboratório é o começo do seu portf�
 | O que | Onde baixar | Como conferir |
 |---|---|---|
 | **Node.js LTS** (vem com o npm) | nodejs.org, botão LTS | `node -v` e `npm -v` |
-| **VS Code** | code.visualstudio.com | Abrir e instalar as extensões ES7+ React snippets, Prettier e Error Lens |
+| **VS Code** | code.visualstudio.com | Extensões ES7+ React snippets, Prettier e Error Lens |
 | **Git** | git-scm.com | `git --version` |
 | **Navegador** com DevTools | Chrome ou Edge | `F12` abre o painel |
 | **Conta no GitHub** | github.com | Entrar com usuário e senha |
@@ -254,6 +254,8 @@ A conta do GitHub que você cria hoje no laboratório é o começo do seu portf�
 :::tip
 No Windows, depois de instalar, feche e abra o terminal de novo. Sem isso, `node` e `git` podem não ser encontrados.
 :::
+
+Versão completa, com passo a passo por sistema e o que fazer se falhar: [checklist de instalação](materiais/e01/aluno/checklist-instalacao.html).
 
 ---
 
@@ -275,3 +277,5 @@ git --version
 ```
 
 **Entrega**: captura de tela do terminal com as três versões e o arquivo `perfil.html` (com o CSS), enviados ao instrutor. Quem não terminar hoje entrega por commit no E02.
+
+Enunciado completo, com esqueleto e erros comuns: [laboratório do E01](materiais/e01/aluno/laboratorio-perfil.html).
