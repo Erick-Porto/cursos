@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { supabase } from '@/lib/supabase'
+import { currentUserId, supabase } from '@/lib/supabase'
 import type { Course, Enrollment } from '@/types/db'
 
 export const useCatalogStore = defineStore('catalog', () => {
@@ -24,9 +24,11 @@ export const useCatalogStore = defineStore('catalog', () => {
     if (loaded.value && !force) return
     loading.value = true
     try {
+      // Filtra pelo usuário: para instrutor/admin a RLS devolve as matrículas de todos.
+      const uid = await currentUserId()
       const [c, e] = await Promise.all([
         supabase.from('courses').select('*').order('created_at'),
-        supabase.from('enrollments').select('*'),
+        uid ? supabase.from('enrollments').select('*').eq('user_id', uid) : Promise.resolve({ data: [] }),
       ])
       if (c.error) throw c.error
       courses.value = (c.data as Course[]) ?? []

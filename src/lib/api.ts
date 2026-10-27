@@ -1,6 +1,6 @@
 // Consultas ao Supabase usadas pelas telas. Mantém as views finas e
 // concentra o conhecimento sobre tabelas/RPCs num só lugar.
-import { supabase } from '@/lib/supabase'
+import { currentUserId, supabase } from '@/lib/supabase'
 import type {
   Achievement,
   ActivityEntry,
@@ -22,6 +22,16 @@ import type {
 function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
   if (res.error) throw res.error
   return res.data as T
+}
+
+/**
+ * Id de quem está logado, para filtrar as consultas aos próprios dados. Não dá para
+ * confiar só na RLS: para instrutor e admin ela devolve as linhas de todos os alunos.
+ */
+async function myId(): Promise<string> {
+  const id = await currentUserId()
+  if (!id) throw new Error('Sua sessão expirou. Entre novamente.')
+  return id
 }
 
 export async function fetchCourseBySlug(slug: string): Promise<Course | null> {
@@ -56,9 +66,15 @@ export interface CourseProgress {
 }
 
 export async function fetchCourseProgress(courseId: string): Promise<CourseProgress> {
+  const uid = await myId()
   const [progress, attempts] = await Promise.all([
-    supabase.from('lesson_progress').select('*').eq('course_id', courseId),
-    supabase.from('attempts').select('*').eq('course_id', courseId).order('submitted_at', { ascending: false }),
+    supabase.from('lesson_progress').select('*').eq('user_id', uid).eq('course_id', courseId),
+    supabase
+      .from('attempts')
+      .select('*')
+      .eq('user_id', uid)
+      .eq('course_id', courseId)
+      .order('submitted_at', { ascending: false }),
   ])
   return { progress: unwrap(progress) ?? [], attempts: unwrap(attempts) ?? [] }
 }
@@ -68,7 +84,10 @@ export async function fetchLesson(courseId: string, slug: string): Promise<Lesso
 }
 
 export async function fetchLessonProgress(lessonId: string): Promise<LessonProgress | null> {
-  return unwrap(await supabase.from('lesson_progress').select('*').eq('lesson_id', lessonId).maybeSingle())
+  const uid = await myId()
+  return unwrap(
+    await supabase.from('lesson_progress').select('*').eq('user_id', uid).eq('lesson_id', lessonId).maybeSingle(),
+  )
 }
 
 export async function fetchAssessment(
@@ -86,11 +105,13 @@ export async function fetchAssessment(
 }
 
 export async function fetchAttempts(assessmentId: string): Promise<Attempt[]> {
+  const uid = await myId()
   return (
     unwrap(
       await supabase
         .from('attempts')
         .select('*')
+        .eq('user_id', uid)
         .eq('assessment_id', assessmentId)
         .order('submitted_at', { ascending: false }),
     ) ?? []
@@ -134,19 +155,40 @@ export async function submitAttempt(
 }
 
 export async function fetchRecentActivity(limit = 8): Promise<ActivityEntry[]> {
+  const uid = await myId()
   return (
     unwrap(
-      await supabase.from('activity_log').select('*').order('created_at', { ascending: false }).limit(limit),
+      await supabase
+        .from('activity_log')
+        .select('*')
+        .eq('user_id', uid)
+        .order('created_at', { ascending: false })
+        .limit(limit),
     ) ?? []
   )
 }
 
 export async function fetchMyAttempts(limit = 20): Promise<Attempt[]> {
-  return unwrap(await supabase.from('attempts').select('*').order('submitted_at', { ascending: false }).limit(limit)) ?? []
+  const uid = await myId()
+  return (
+    unwrap(
+      await supabase
+        .from('attempts')
+        .select('*')
+        .eq('user_id', uid)
+        .order('submitted_at', { ascending: false })
+        .limit(limit),
+    ) ?? []
+  )
 }
 
 export async function fetchMyLessonProgress(): Promise<LessonProgress[]> {
-  return unwrap(await supabase.from('lesson_progress').select('*').order('updated_at', { ascending: false })) ?? []
+  const uid = await myId()
+  return (
+    unwrap(
+      await supabase.from('lesson_progress').select('*').eq('user_id', uid).order('updated_at', { ascending: false }),
+    ) ?? []
+  )
 }
 
 export async function fetchStudentProgress(): Promise<StudentProgressRow[]> {

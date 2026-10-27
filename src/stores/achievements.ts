@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
-import { supabase } from '@/lib/supabase'
+import { currentUserId, supabase } from '@/lib/supabase'
 import type { Achievement, UserAchievement } from '@/types/db'
 
 export const useAchievementsStore = defineStore('achievements', () => {
@@ -20,9 +20,11 @@ export const useAchievementsStore = defineStore('achievements', () => {
 
   async function load(force = false) {
     if (loaded.value && !force) return
+    // Filtra pelo usuário: para instrutor/admin a RLS devolve as conquistas de todos.
+    const uid = await currentUserId()
     const [a, ua] = await Promise.all([
       supabase.from('achievements').select('*').order('position'),
-      supabase.from('user_achievements').select('*'),
+      uid ? supabase.from('user_achievements').select('*').eq('user_id', uid) : Promise.resolve({ data: [] }),
     ])
     if (a.error) throw a.error
     all.value = (a.data as Achievement[]) ?? []

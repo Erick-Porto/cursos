@@ -15,6 +15,16 @@ export const supabase = createClient(url || 'https://placeholder.supabase.co', a
   },
 })
 
+/**
+ * Id de quem está logado (null sem sessão). Toda consulta a dados do próprio usuário
+ * (progresso, tentativas, matrículas, conquistas, atividade) precisa filtrar por ele:
+ * a RLS deixa instrutor e admin lerem as linhas de todos os alunos.
+ */
+export async function currentUserId(): Promise<string | null> {
+  const { data } = await supabase.auth.getSession()
+  return data.session?.user.id ?? null
+}
+
 /** URL pública de um arquivo do bucket `course-assets` (imagens das aulas). */
 export function courseAssetBase(courseSlug: string): string {
   return `${url}/storage/v1/object/public/course-assets/${courseSlug}/`
