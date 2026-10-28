@@ -396,3 +396,17 @@ Monte a lista do `minhas-tarefas`:
 :::
 
 **Critérios:** lista renderizada a partir do array; sem avisos de `key` no console; prioridade alta visualmente diferente; estado vazio funcionando ao trocar o array por `[]`.
+
+---
+
+## :icon[milestone] Projeto 4 · Etapa 2: lista com props e CSS Modules
+
+No seu repositório `livro-de-receitas`:
+
+- salve as 8 receitas de [receitas.js](materiais/projeto-4/receitas.js) em `src/data/receitas.js`
+- `tempoTotal` e `rotuloDificuldade` em `src/utils/receitas.js`
+- `CartaoReceita({ receita })`: a receita inteira numa prop só
+- `ListaReceitas` com `map`, `key={receita.id}` e a mensagem de lista vazia
+- CSS Modules, com um selo de cor e texto para cada dificuldade
+
+Commit: `Projeto 4: etapa 2, lista com props e CSS Modules`. Enunciado completo e entrega: página do curso, em **Projetos**.

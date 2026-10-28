@@ -398,6 +398,19 @@ Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **v
 
 ---
 
+## :icon[milestone] Projeto 6 · Etapa 11: acabamento e entrega
+
+No seu repositório `casas-de-adocao`:
+
+- a tela Sobre fiel ao protótipo do enunciado, com tokens no lugar dos números do desenho e o total de casas, cidades e vagas
+- o checklist de entrega de tela da aula 78 em todas as telas: estados, leitor de tela, fonte em 200%, dois temas e celular deitado
+- README: o que o app faz, como rodar (`npm install` e `npx expo start`), prints das telas, pelo menos um no tema escuro, a tabela de acessibilidade e as pendências
+- link do repositório na página do projeto até o **início do E41**
+
+Commit: `Projeto 6: etapa 11, acabamento e entrega`. Enunciado completo e entrega: página do curso, em **Projetos**.
+
+---
+
 ## Resumo
 
 :::summary

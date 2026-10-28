@@ -382,3 +382,17 @@ O carrinho e o catálogo com métodos de array, sem mudar um teste antigo.
 :::
 
 **Critérios**: nenhum `for` nem `push` em `carrinho.js`; testes do E07 e do E08 intactos e verdes; 5 testes novos ou mais; quatro categorias com 3 produtos no terminal. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 2 · Etapa 2: grupos, aniversários e cadastro
+
+No `agenda-de-contatos`, em `src/regras/agenda.js`, sem mexer na lista recebida:
+
+- `agruparPorInicial(contatos)` com `reduce`: Álvaro fica no A
+- `contarPorGrupo(contatos)`: os três grupos, mesmo os que têm zero
+- `aniversariantesDoMes(contatos, mes)`: do dia 1 ao 31
+- `adicionarContato(contatos, dados)`, com o maior id mais 1, e `removerContato(contatos, id)`
+- testes de cada uma e o script `resumo.js`
+
+Commit: `Projeto 2: etapa 2, grupos, aniversários e cadastro`. Enunciado completo: página do curso, em **Projetos**.

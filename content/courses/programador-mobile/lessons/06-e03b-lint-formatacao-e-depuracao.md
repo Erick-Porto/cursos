@@ -353,3 +353,17 @@ Em dupla, cada um revisando o repositório do outro.
 :::
 
 **Critérios**: `npm run relatorio Audio` mostra 3 produtos; `npm run lint` e `npx prettier --check .` sem problemas; dois PRs revisados, Issue fechada e nenhuma marca de conflito. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 2: GitHub, lint e formatação
+
+No seu `racha-conta`:
+
+- `git init`, `.gitignore` e o commit `Projeto 1: etapa 1, projeto npm e leitura da conta`
+- repositório público `racha-conta` no GitHub e `git push`
+- `README.md` com o que o projeto faz e como rodar
+- ESLint e Prettier como no laboratório, com os scripts `lint` e `formatar`
+- `npm run lint` e `npx prettier --check .` sem problemas
+
+Commit: `Projeto 1: etapa 2, GitHub, lint e formatação`. Enunciado completo e entrega: página do curso, em **Projetos**.

@@ -28,7 +28,7 @@ const LEVELS = ['iniciante', 'intermediario', 'avancado']
 const RARITIES = ['common', 'rare', 'epic', 'legendary']
 // Regras aceitas em course.json (contam só o curso). xp_reached e streak_days são
 // globais e vivem em supabase/migrations/0002_seed_achievements.sql.
-const COURSE_RULE_TYPES = ['lessons_completed', 'course_completed', 'assessments_passed', 'perfect_score', 'first_try_pass']
+const COURSE_RULE_TYPES = ['lessons_completed', 'course_completed', 'assessments_passed', 'perfect_score', 'first_try_pass', 'projects_approved']
 const GLOBAL_RULE_TYPES = ['xp_reached', 'streak_days']
 const QUESTION_TYPES = ['single', 'multiple', 'truefalse', 'fill']
 const BLOCKS = ['info', 'tip', 'warning', 'danger', 'example', 'summary', 'goal', 'quote', 'question', 'columns', 'col', 'center', 'steps']
@@ -272,7 +272,23 @@ function loadCourse(dir, report) {
   const materialsDir = join(dir, 'materiais')
   const materials = existsSync(materialsDir) ? listFiles(materialsDir) : []
 
-  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts, materials }
+  // projetos avaliados (enunciado para o aluno) e guias de correção (só staff lê)
+  const projectsDir = join(dir, 'projetos')
+  const projects = existsSync(projectsDir)
+    ? readdirSync(projectsDir)
+        .filter((f) => f.endsWith('.md'))
+        .sort()
+        .map((f) => loadScript(join(projectsDir, f), report))
+    : []
+  const guidesDir = join(projectsDir, 'correcao')
+  const projectGuides = existsSync(guidesDir)
+    ? readdirSync(guidesDir)
+        .filter((f) => f.endsWith('.md'))
+        .sort()
+        .map((f) => loadScript(join(guidesDir, f), report))
+    : []
+
+  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts, materials, projects, projectGuides }
 }
 
 /** Arquivos de uma pasta, recursivo, sem ocultos. */
@@ -437,6 +453,29 @@ function validateCourse(course, report) {
     if (scriptSlugs.has(s.slug)) report.error(sw, `slug de roteiro repetido: ${s.slug}`)
     scriptSlugs.add(s.slug)
     validateScript(s, moduleSlugs, lessonSlugs, modules.length > 0, course, ctx, report)
+  }
+
+  // projetos avaliados e guias de correção
+  const lessonPos = new Map(course.lessons.map((l) => [l.slug, l.position ?? 0]))
+  const projectSlugs = new Set()
+  const projectPositions = new Set()
+  for (const p of course.projects) {
+    const pw = rel(p.file)
+    if (p.position === null) report.error(pw, 'nome do arquivo deve ser NN-slug.md (ex.: 01-racha-conta.md)')
+    if (projectPositions.has(p.position)) report.error(pw, `posição ${p.position} repetida em outro projeto`)
+    projectPositions.add(p.position)
+    if (projectSlugs.has(p.slug)) report.error(pw, `slug de projeto repetido: ${p.slug}`)
+    projectSlugs.add(p.slug)
+    validateProject(p, moduleSlugs, lessonPos, course, ctx, report)
+  }
+  const projectNames = new Set(course.projects.map((p) => p.name))
+  for (const g of course.projectGuides) {
+    const gw = rel(g.file)
+    if (!projectNames.has(g.name)) report.error(gw, `guia de correção sem projeto: crie projetos/${g.name}.md ou renomeie o guia`)
+    validateDocBody(g.body, gw, course, ctx, report, 100)
+  }
+  for (const p of course.projects) {
+    if (!course.projectGuides.some((g) => g.name === p.name)) report.warn(rel(p.file), `projeto sem guia de correção (projetos/correcao/${p.name}.md)`)
   }
 
   // imagens
@@ -662,11 +701,18 @@ function validateScript(script, moduleSlugs, lessonSlugs, courseHasModules, cour
     }
   }
 
-  const body = script.body
+  validateDocBody(script.body, sw, course, ctx, report, 150, 'um encontro de 4h costuma pedir mais detalhe')
+}
+
+/**
+ * Corpo de um documento em Markdown (roteiro, enunciado de projeto, guia de correção):
+ * começa no "##", blocos ::: fechados, código com linguagem e as regras de qualquer texto.
+ */
+function validateDocBody(body, where, course, ctx, report, minWords, why = 'detalhe mais') {
   const lines = body.split('\n')
-  if (/^#\s/.test(lines[0] ?? '')) report.warn(sw, 'o título vem do frontmatter; comece o corpo com "## ..." em vez de "# ..."')
+  if (/^#\s/.test(lines[0] ?? '')) report.warn(where, 'o título vem do frontmatter; comece o corpo com "## ..." em vez de "# ..."')
   const words = wordCount(body)
-  if (words < 150) report.warn(sw, `roteiro com ${words} palavras; um encontro de 4h costuma pedir mais detalhe`)
+  if (words < minWords) report.warn(where, `documento com ${words} palavras; ${why}`)
 
   // blocos :::
   let open = 0
@@ -674,11 +720,11 @@ function validateScript(script, moduleSlugs, lessonSlugs, courseHasModules, cour
     const m = l.match(/^(:{3,})\s*([a-z]*)\s*(.*)$/)
     if (!m) continue
     if (m[2]) {
-      if (!BLOCKS.includes(m[2])) report.error(sw, `bloco ":::${m[2]}" não existe (use: ${BLOCKS.join(', ')})`)
+      if (!BLOCKS.includes(m[2])) report.error(where, `bloco ":::${m[2]}" não existe (use: ${BLOCKS.join(', ')})`)
       open++
     } else open--
   }
-  if (open !== 0) report.error(sw, 'bloco ::: aberto sem fechamento (ou fechado a mais)')
+  if (open !== 0) report.error(where, 'bloco ::: aberto sem fechamento (ou fechado a mais)')
 
   // código com linguagem declarada
   const fences = []
@@ -686,10 +732,82 @@ function validateScript(script, moduleSlugs, lessonSlugs, courseHasModules, cour
     if (/^\s{0,3}```/.test(l)) fences.push(n)
   })
   for (let k = 0; k + 1 < fences.length; k += 2) {
-    if (!/```\s*\w+/.test(lines[fences[k]])) report.warn(sw, 'bloco de código sem linguagem (ex.: ```jsx)')
+    if (!/```\s*\w+/.test(lines[fences[k]])) report.warn(where, 'bloco de código sem linguagem (ex.: ```jsx)')
   }
 
-  validateProse(body, sw, course, ctx, report)
+  validateProse(body, where, course, ctx, report)
+}
+
+/**
+ * Projeto avaliado (projetos/NN-slug.md): enunciado em Markdown + frontmatter com as etapas
+ * (cada uma ligada à aula em que acontece), a aula de abertura, a de entrega e a rubrica.
+ * Vai para a tabela projects; a entrega e a nota passam por submit_project e grade_project.
+ */
+function validateProject(p, moduleSlugs, lessonPos, course, ctx, report) {
+  const pw = rel(p.file)
+  const fm = p.fm
+  if (EMOJI.test(JSON.stringify(fm))) report.error(pw, 'não use emojis no frontmatter')
+  if (!fm.title) report.error(pw, 'frontmatter precisa de "title"')
+  if (!fm.summary) report.error(pw, 'frontmatter precisa de "summary" (aparece na lista de projetos)')
+  else if (String(fm.summary).length > 160) report.warn(pw, `"summary" com ${String(fm.summary).length} caracteres; ideal até 160`)
+  if (fm.section !== undefined && typeof fm.section !== 'string') report.error(pw, '"section" deve ser texto (ex.: "Módulo Básico")')
+  if (fm.module && !moduleSlugs.has(fm.module)) report.error(pw, `módulo "${fm.module}" não existe em course.json`)
+  if (fm.passing_score !== undefined && (typeof fm.passing_score !== 'number' || fm.passing_score < 0 || fm.passing_score > 100)) report.error(pw, '"passing_score" deve ser um número de 0 a 100')
+  if (fm.required !== undefined && typeof fm.required !== 'boolean') report.error(pw, '"required" deve ser true ou false')
+  for (const k of ['opens', 'due']) {
+    if (!fm[k]) report.error(pw, `frontmatter precisa de "${k}" (slug da aula em que o projeto ${k === 'opens' ? 'começa' : 'é entregue'})`)
+    else if (!lessonPos.has(fm[k])) report.error(pw, `"${k}": aula "${fm[k]}" não existe em lessons/`)
+  }
+  if (!fm.due_label) report.warn(pw, 'sem "due_label" (texto do prazo, ex.: "início do E08")')
+  if (fm.opens && fm.due && lessonPos.get(fm.due) < lessonPos.get(fm.opens)) report.error(pw, '"due" vem antes de "opens"')
+
+  // rubrica
+  const rubric = Array.isArray(fm.rubric) ? fm.rubric : []
+  if (rubric.length < 2) report.error(pw, '"rubric" precisa de pelo menos 2 critérios ({ key, title, points, description })')
+  const keys = new Set()
+  let total = 0
+  for (const [i, c] of rubric.entries()) {
+    const cw = `${pw} (critério ${c?.key ?? i + 1})`
+    if (!c || typeof c !== 'object') {
+      report.error(cw, 'critério deve ser um objeto')
+      continue
+    }
+    if (!/^[a-z0-9-]+$/.test(String(c.key ?? ''))) report.error(cw, '"key" com letras minúsculas, números e hífens')
+    if (keys.has(c.key)) report.error(cw, 'key repetida')
+    keys.add(c.key)
+    if (!c.title) report.error(cw, 'critério sem "title"')
+    if (typeof c.points !== 'number' || c.points <= 0) report.error(cw, '"points" deve ser número > 0')
+    else total += c.points
+    if (!c.description) report.warn(cw, 'critério sem "description" (o aluno precisa saber o que vale ponto)')
+    else validateProse(String(c.description), cw, course, ctx, report)
+  }
+  if (rubric.length && total !== 100) report.warn(pw, `rubrica soma ${total} pontos; o padrão é 100`)
+
+  // etapas
+  const steps = Array.isArray(fm.steps) ? fm.steps : []
+  if (!steps.length) report.error(pw, '"steps" precisa listar as etapas ({ lesson, when, title, summary })')
+  let last = -Infinity
+  for (const [i, s] of steps.entries()) {
+    const sw = `${pw} (etapa ${i + 1})`
+    if (!s || typeof s !== 'object') {
+      report.error(sw, 'etapa deve ser um objeto')
+      continue
+    }
+    if (!s.title) report.error(sw, 'etapa sem "title"')
+    if (!s.lesson) report.error(sw, 'etapa sem "lesson" (slug da aula em que ela acontece)')
+    else if (!lessonPos.has(s.lesson)) report.error(sw, `aula "${s.lesson}" não existe em lessons/`)
+    else {
+      const pos = lessonPos.get(s.lesson)
+      if (pos < last) report.warn(sw, 'etapas fora da ordem das aulas')
+      last = pos
+      if (fm.opens && lessonPos.has(fm.opens) && pos < lessonPos.get(fm.opens)) report.warn(sw, 'etapa antes da aula de abertura ("opens")')
+      if (fm.due && lessonPos.has(fm.due) && pos > lessonPos.get(fm.due)) report.warn(sw, 'etapa depois da aula de entrega ("due")')
+    }
+    if (s.when !== undefined && typeof s.when !== 'string') report.error(sw, '"when" deve ser texto (ex.: "E13")')
+    if (s.summary) validateProse(String(s.summary), sw, course, ctx, report)
+  }
+
+  validateDocBody(p.body, pw, course, ctx, report, 250, 'o enunciado precisa dizer o que construir, como entregar e como será avaliado')
 }
 
 function validateImageFile(file, used, report) {
@@ -821,6 +939,8 @@ async function sync(courses) {
     if (error) throw new Error(`${what}: ${error.message}`)
     return data
   }
+  // tabela que ainda não existe no banco (migration não aplicada): PostgREST responde PGRST205
+  const isMissingTable = (error) => !!error && (['PGRST205', '42P01'].includes(error.code) || /schema cache|does not exist/i.test(error.message ?? ''))
   const publicUrl = (slug, path) => `${url.replace(/\/$/, '')}/storage/v1/object/public/course-assets/${slug}/${path}`
 
   for (const c of courses) {
@@ -987,6 +1107,50 @@ async function sync(courses) {
       console.log(`  aviso: tabela class_scripts não existe no banco; aplique supabase/migrations/0003_class_scripts.sql e rode o sync de novo (${c.scripts.length} roteiro(s) não enviados)`)
     } else if (c.scripts.length) console.log(`  ${c.scripts.length} roteiro(s) do instrutor`)
 
+    // projetos avaliados e guias de correção (tabelas da migration 0004; sem ela, avisa e segue)
+    let projectsTableMissing = false
+    for (const p of c.projects) {
+      const fm = p.fm
+      const res = await sb
+        .from('projects')
+        .upsert(
+          {
+            course_id: course.id,
+            module_id: fm.module ? (moduleIds[fm.module] ?? null) : null,
+            slug: p.slug,
+            title: fm.title,
+            summary: fm.summary ?? null,
+            section: fm.section ?? null,
+            content_md: p.body,
+            rubric: (fm.rubric ?? []).map((r) => ({ key: r.key, title: r.title, description: r.description ?? null, points: r.points })),
+            steps: (fm.steps ?? []).map((s) => ({ lesson: s.lesson, when: s.when ?? null, title: s.title, summary: s.summary ?? null })),
+            opens_lesson: fm.opens ?? null,
+            due_lesson: fm.due ?? null,
+            due_label: fm.due_label ?? null,
+            passing_score: fm.passing_score ?? 70,
+            is_required: fm.required !== false,
+            position: p.position ?? 0,
+          },
+          { onConflict: 'course_id,slug' },
+        )
+        .select()
+        .single()
+      if (isMissingTable(res.error)) {
+        projectsTableMissing = true
+        break
+      }
+      const row = must(res, `projeto ${p.slug}`)
+      const guide = c.projectGuides.find((g) => g.name === p.name)
+      if (guide) {
+        must(await sb.from('project_guides').upsert({ project_id: row.id, content_md: guide.body }, { onConflict: 'project_id' }), `guia de correção ${p.slug}`)
+      } else if (prune) {
+        must(await sb.from('project_guides').delete().eq('project_id', row.id), `prune guia ${p.slug}`)
+      }
+    }
+    if (projectsTableMissing) {
+      console.log(`  aviso: tabela projects não existe no banco; aplique supabase/migrations/0004_projects.sql e rode o sync de novo (${c.projects.length} projeto(s) não enviados)`)
+    } else if (c.projects.length) console.log(`  ${c.projects.length} projeto(s), ${c.projectGuides.length} guia(s) de correção`)
+
     // conquistas do curso (slug global = curso--slug)
     const achievements = Array.isArray(j.achievements) ? j.achievements : []
     const achSlugs = []
@@ -1030,6 +1194,12 @@ async function sync(courses) {
         const scriptSlugs = c.scripts.map((s) => s.slug)
         const q5 = sb.from('class_scripts').delete().eq('course_id', course.id)
         must(await (scriptSlugs.length ? q5.not('slug', 'in', inList(scriptSlugs)) : q5), 'prune roteiros')
+      }
+      if (!projectsTableMissing) {
+        // apagar um projeto apaga também as entregas e notas dos alunos (on delete cascade)
+        const projectSlugs = c.projects.map((p) => p.slug)
+        const q6 = sb.from('projects').delete().eq('course_id', course.id)
+        must(await (projectSlugs.length ? q6.not('slug', 'in', inList(projectSlugs)) : q6), 'prune projetos')
       }
       console.log('  itens removidos do repositório foram apagados do banco')
     }
@@ -1086,7 +1256,7 @@ for (const c of courses) validateCourse(c, report)
 for (const c of courses) {
   const slides = c.lessons.reduce((n, l) => n + l.slides.length, 0)
   const questions = c.assessments.reduce((n, a) => n + (Array.isArray(a.json.questions) ? a.json.questions.length : 0), 0)
-  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s), ${c.materials.length} material(is)`)
+  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s), ${c.materials.length} material(is), ${c.projects.length} projeto(s)`)
 }
 if (report.warnings.length || report.errors.length) console.log('')
 for (const w of report.warnings) console.log(`  aviso  ${w}`)

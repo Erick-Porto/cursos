@@ -326,3 +326,18 @@ O `lojinha-regras` completo no seu computador, seguindo a [página do laboratór
 :::
 
 **Entrega:** o `package.json` e a saída de `npm run relatorio casa`: 3 produtos, 1 em destaque, 1 acima de R$ 200 e preço médio `R$ 209.90`.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 1: a conta no terminal
+
+O **Racha-conta** divide a conta do restaurante entre amigos sem perder nenhum centavo. Ele cresce uma etapa por encontro, até o E07, num repositório só seu.
+
+Hoje, na pasta `racha-conta`:
+
+- `npm init -y`, com `"type": "module"`
+- `src/data/conta.json`: restaurante, pessoas, gorjeta e pelo menos 4 itens
+- `src/scripts/racha.js` lê o JSON e mostra o restaurante, as pessoas e os itens
+- o script `racha`: `npm run racha`
+
+Ainda sem Git: o commit desta etapa é o primeiro do E03. Enunciado completo e entrega: página do curso, em **Projetos**.

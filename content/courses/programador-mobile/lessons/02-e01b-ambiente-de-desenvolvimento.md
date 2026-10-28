@@ -197,6 +197,22 @@ Pense em três situações:
 
 ---
 
+## :icon[clipboard-check] Como você vai ser avaliado
+
+| O que | Quantos | Como |
+|---|---|---|
+| Quizzes | um em quase todo encontro | no fim do encontro, na plataforma |
+| Provas | 4: no E20, no E25, no E29 e no E40 | uma tentativa, 60 minutos |
+| Projetos | 6, três por módulo | em etapas, um pouco a cada encontro |
+
+- Cada projeto é um repositório seu no GitHub, feito sozinho, com um commit por etapa
+- Para entregar, você cola o link do repositório na página do projeto; o instrutor corrige critério por critério e pode devolver para ajustes
+- Provas e projetos aprovam com 70
+
+O primeiro projeto, o Racha-conta, começa no E02.
+
+---
+
 ## :icon[circle-check] Conferindo a instalação
 
 Depois de instalar, **feche o terminal e abra de novo**. Ele só enxerga os programas que já existiam quando foi aberto.

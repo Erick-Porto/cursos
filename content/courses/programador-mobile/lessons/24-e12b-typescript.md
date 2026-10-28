@@ -372,3 +372,16 @@ Favoritos com `Set`, catálogo com `Map` e um rascunho em TypeScript.
 :::
 
 **Critérios de entrega**: nenhuma regra muda o `Set` recebido; `npm test` verde; `npx tsc --noEmit` limpo. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 2 · Etapa 5: favoritos e a interface web
+
+No `agenda-de-contatos`, a última etapa:
+
+- `alternarFavorito`, `ehFavorito` e `listarFavoritos` com um `Set` de ids, em `src/regras/favoritos.js`
+- `indexarPorId(contatos)`: um `Map` de id para contato
+- a interface pronta, [interface-web.zip](materiais/projeto-2/interface-web.zip), descompactada e renomeada para `web/`: `npx serve .`, o endereço com `/web/` no fim e o painel em 17 de 17
+- README com como rodar e prints da tela
+
+Commit: `Projeto 2: etapa 5, favoritos e interface web`. Entrega na página do projeto até o início do E13.

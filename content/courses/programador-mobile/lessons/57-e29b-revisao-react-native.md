@@ -322,3 +322,16 @@ Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **v
 **Critérios**: o app abre no celular de um colega e adiciona, conclui e remove tarefas; `app.json` com nome e ícone próprios; commit e README no GitHub.
 
 Entrega: link do repositório no sistema. Depois, a **Prova 3** (60 minutos, no sistema).
+
+---
+
+## :icon[milestone] Projeto 5 · Etapa 4: hook, regras e entrega
+
+Etapa curta, para casa. No `gota`, a tela não muda; muda onde a lógica mora:
+
+- `src/regras/agua.js`: `totalDoDia`, `percentualDaMeta`, `quantoFalta`, `mensagemDaFaixa`, `validarMeta` e `formatarHora`, puras
+- `src/hooks/useConsumo.js` com o estado e as funções; o `App` só monta a tela e confirma a remoção
+- `CartaoProgresso` mostra quanto falta e a mensagem da faixa
+- `app.json` com `"name": "Gota"`; README com dois prints do celular e como rodar
+
+Commit: `Projeto 5: etapa 4, hook, regras e entrega`. Prazo: **início do E30**, com o link do repositório na página do projeto, em **Projetos**.

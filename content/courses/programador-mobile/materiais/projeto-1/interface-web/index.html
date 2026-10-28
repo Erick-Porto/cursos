@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Racha-conta</title>
+    <script>
+      // Endereço sem a barra no fim (/web em vez de /web/): o navegador procuraria o
+      // estilo.css e o tela.js uma pasta acima. A barra resolve.
+      const ultimaParte = location.pathname.split('/').pop();
+      if (ultimaParte !== '' && ultimaParte !== 'index' && !ultimaParte.includes('.')) {
+        location.replace(location.pathname + '/' + location.search);
+      }
+    </script>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="estilo.css" />
+    <script type="module" src="tela.js"></script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <p class="sobre">Programador Mobile · Projeto 1</p>
+        <h1>Racha-conta</h1>
+        <p class="lead">
+          Divida a conta do restaurante sem perder nenhum centavo. Quem faz as contas desta página
+          são as funções do seu <code>src/regras/conta.js</code>.
+        </p>
+      </header>
+
+      <section id="aviso" class="aviso" role="alert">
+        <h2 id="aviso-titulo">A página não encontrou as suas funções</h2>
+        <div id="aviso-texto">
+          <p>
+            Abra a página pelo servidor. Na raiz do repositório, rode <code>npx serve .</code> e
+            acesse <code>http://localhost:3000/web/</code> no navegador. Aberta com dois cliques, a
+            página não consegue importar o <code>conta.js</code>.
+          </p>
+        </div>
+      </section>
+
+      <form id="formulario" class="cartao" novalidate>
+        <div class="campo">
+          <label for="restaurante">Restaurante <span class="opcional">(opcional)</span></label>
+          <input
+            id="restaurante"
+            type="text"
+            autocomplete="off"
+            maxlength="60"
+            placeholder="Cantina Bella Nonna"
+          />
+        </div>
+
+        <div class="campo">
+          <label for="valor">Valor da conta</label>
+          <input
+            id="valor"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+            placeholder="187,50"
+            aria-describedby="valor-dica valor-erro"
+          />
+          <p id="valor-dica" class="dica">Como está na conta: 187,50 ou R$ 187,50.</p>
+          <p id="valor-erro" class="erro" hidden></p>
+        </div>
+
+        <div class="campo">
+          <label for="pessoas">Pessoas</label>
+          <div class="contador">
+            <button type="button" class="passo" data-passo="-1" aria-label="Uma pessoa a menos">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /></svg>
+            </button>
+            <input
+              id="pessoas"
+              type="text"
+              inputmode="numeric"
+              autocomplete="off"
+              value="2"
+              aria-describedby="pessoas-dica pessoas-erro"
+            />
+            <button type="button" class="passo" data-passo="1" aria-label="Uma pessoa a mais">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+              </svg>
+            </button>
+          </div>
+          <p id="pessoas-dica" class="dica">De 1 a 50 pessoas.</p>
+          <p id="pessoas-erro" class="erro" hidden></p>
+        </div>
+
+        <fieldset class="campo">
+          <legend>Gorjeta</legend>
+          <div class="opcoes">
+            <label><input type="radio" name="gorjeta" value="0" /> <span>Sem gorjeta</span></label>
+            <label><input type="radio" name="gorjeta" value="10" checked /> <span>10%</span></label>
+            <label><input type="radio" name="gorjeta" value="12" /> <span>12%</span></label>
+            <label><input type="radio" name="gorjeta" value="15" /> <span>15%</span></label>
+          </div>
+        </fieldset>
+
+        <button id="dividir" type="submit" class="botao" disabled>Dividir a conta</button>
+      </form>
+
+      <section id="resultado" class="cartao resultado" aria-labelledby="t-resultado" hidden>
+        <h2 id="t-resultado">Cada pessoa paga</h2>
+        <dl class="totais">
+          <div>
+            <dt>Subtotal</dt>
+            <dd id="subtotal"></dd>
+          </div>
+          <div>
+            <dt id="rotulo-gorjeta">Gorjeta</dt>
+            <dd id="gorjeta"></dd>
+          </div>
+          <div class="total">
+            <dt>Total</dt>
+            <dd id="total"></dd>
+          </div>
+        </dl>
+        <ol id="partes" class="partes"></ol>
+        <p id="conferencia" class="conferencia"></p>
+      </section>
+
+      <section id="secao-recibo" class="cartao" aria-labelledby="t-recibo" hidden>
+        <div class="recibo-topo">
+          <h2 id="t-recibo">Recibo</h2>
+          <button id="copiar" type="button" class="secundario">Copiar</button>
+        </div>
+        <pre id="recibo"></pre>
+      </section>
+
+      <section class="cartao funcoes" aria-labelledby="t-funcoes">
+        <h2 id="t-funcoes">Funções que a página usa</h2>
+        <p class="dica">
+          Todas importadas de <code>src/regras/conta.js</code>, com estes nomes. Dinheiro sempre em
+          centavos inteiros.
+        </p>
+        <ul id="lista-funcoes" class="lista-funcoes"></ul>
+      </section>
+
+      <footer>
+        Interface pronta do curso: você não precisa mudar estes arquivos. Se uma conta sair errada,
+        o problema está numa função sua, e o teste dela é o melhor lugar para achar.
+      </footer>
+    </main>
+  </body>
+</html>

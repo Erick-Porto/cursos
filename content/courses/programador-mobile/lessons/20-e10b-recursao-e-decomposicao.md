@@ -329,3 +329,16 @@ Frete com cache, debounce no terminal e o resumo fora do script.
 :::
 
 **Critérios de entrega**: nenhum `console.log` em `src/regras/` e `src/utils/`; script sem contas; `memoize` criado uma vez, em `frete.js`; pelo menos 8 testes novos. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 2 · Etapa 3: validação e debounce
+
+No `agenda-de-contatos`:
+
+- `src/regras/validacao.js`: um validador pequeno por campo e `validarContato(dados)`, que junta as mensagens num objeto (`{}` quando está tudo certo)
+- `debounce(fn, espera)` em `src/utils/funcoes.js` e o script `digitar.js`: digitação rápida, uma busca só
+- `doGrupo(grupo)`, que devolve o teste para o `filter`
+- testes dos validadores, de `validarContato` e de `doGrupo`
+
+Commit: `Projeto 2: etapa 3, validação e debounce`. Enunciado completo: página do curso, em **Projetos**.

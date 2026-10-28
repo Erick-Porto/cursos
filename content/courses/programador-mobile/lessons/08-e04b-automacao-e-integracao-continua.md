@@ -355,3 +355,17 @@ Testes nas primeiras funções e um CI de verdade no `lojinha-regras`.
 :::
 
 **Critérios de entrega**: 12 testes ou mais passando; `verificar` sem erros; `.env` fora do Git e `.env.example` dentro; selo verde. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 3: o primeiro teste
+
+No seu `racha-conta`:
+
+- Jest e `babel.config.json`, como no laboratório
+- **primeiro o teste**: `calcularGorjeta(100, 10)` espera `10`, e o `npm test` fica vermelho
+- `calcularGorjeta(subtotal, percentual)` em `src/regras/conta.js`, por enquanto em reais
+- mais casos com `test.each`, inclusive a gorjeta de 0%
+- o bloco do `globals.jest` e o script `verificar`
+
+Commit: `Projeto 1: etapa 3, primeiro teste`. Enunciado completo e entrega: página do curso, em **Projetos**.

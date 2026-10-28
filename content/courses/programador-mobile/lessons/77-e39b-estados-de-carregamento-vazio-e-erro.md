@@ -421,3 +421,16 @@ Os 4 estados e o movimento chegam à Lojinha.
 :::
 
 **Critérios de entrega**: Início com os 4 estados e `CHANCE_DE_ERRO` de volta a 0.3; valores em `useRef` e `useNativeDriver: true`; vazio e erro com ação; toast que some. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 10: estados, animação e CEP
+
+No seu repositório `casas-de-adocao`:
+
+- `Estado` no UI kit, com as variantes `carregando`, `vazio` e `erro`, mensagem e ação: Favoritas sem nenhuma, busca sem resultado e casa não encontrada
+- `src/api/viacep.js`: `buscarEndereco(cep)` com `fetch` em `https://viacep.com.br/ws/{cep}/json/`
+- no Cadastro, o CEP completo preenche rua, bairro, cidade e UF: "Buscando endereço..." durante a espera, mensagem no campo para CEP inexistente e para falta de conexão, e os campos continuam editáveis
+- o botão de favoritar pulsa com `Animated.spring` e `useNativeDriver: true`
+
+Commit: `Projeto 6: etapa 10, estados, animação e CEP`. Enunciado completo e entrega: página do curso, em **Projetos**.

@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
-import { RouterLink } from 'vue-router'
-import { BookOpen, ClipboardList, Clock, Download, GraduationCap, Users, TrendingUp } from 'lucide-vue-next'
-import { fetchClassScripts, fetchCoursesForStaff, fetchLessonsIndex, fetchStudentProgress } from '@/lib/api'
-import { formatDate, formatMinutes, formatPct, formatSeconds, relativeTime } from '@/lib/format'
-import type { ClassScript, Course, LessonSummary, StudentProgressRow } from '@/types/db'
+import { RouterLink, useRoute } from 'vue-router'
+import { BookOpen, ClipboardList, Clock, Download, GraduationCap, Target, Users, TrendingUp } from 'lucide-vue-next'
+import { fetchClassScripts, fetchCoursesForStaff, fetchLessonsIndex, fetchProjectsForStaff, fetchStudentProgress, fetchSubmissionsForStaff } from '@/lib/api'
+import { formatDate, formatMinutes, formatPct, formatSeconds, plural, relativeTime } from '@/lib/format'
+import { PROJECT_STATE_BADGE, PROJECT_STATE_LABEL, projectState, type ProjectState } from '@/lib/projects'
+import type { ClassScript, Course, LessonSummary, Project, ProjectSubmission, StudentProgressRow } from '@/types/db'
 import StatTile from '@/components/ui/StatTile.vue'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import LoadingBlock from '@/components/ui/LoadingBlock.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 
-type Tab = 'alunos' | 'roteiros'
+const route = useRoute()
+
+type Tab = 'alunos' | 'roteiros' | 'projetos'
 const tab = ref<Tab>('alunos')
 
 // ---- alunos ----
@@ -106,7 +109,112 @@ async function openRoteiros() {
 
 watch(scriptCourseId, () => void loadScripts())
 
+// ---- projetos avaliados ----
+const projCourses = ref<Course[]>([])
+const projCourseId = ref('')
+const projects = ref<Project[]>([])
+const submissions = ref<ProjectSubmission[]>([])
+const projectId = ref('')
+let wantedProjectId = ''
+const projLoading = ref(false)
+const projReady = ref(false)
+
+const projCourse = computed(() => projCourses.value.find((c) => c.id === projCourseId.value) ?? null)
+const projStudents = computed(() => rows.value.filter((r) => r.course_id === projCourseId.value))
+const subKey = (projectIdValue: string, userId: string) => `${projectIdValue}:${userId}`
+const subsByKey = computed(() => new Map(submissions.value.map((s) => [subKey(s.project_id, s.user_id), s])))
+
+function projectCounts(p: Project) {
+  const subs = submissions.value.filter((s) => s.project_id === p.id)
+  return {
+    delivered: subs.length,
+    waiting: subs.filter((s) => s.status === 'submitted').length,
+    passed: subs.filter((s) => s.status === 'graded' && s.passed).length,
+    enrolled: projStudents.value.length,
+  }
+}
+
+// aguardando correção primeiro; depois devolvidos, sem entrega e corrigidos
+const STATE_ORDER: Record<ProjectState, number> = { submitted: 0, returned: 1, pending: 2, failed: 3, passed: 4 }
+const projectRows = computed(() => {
+  if (!projectId.value) return []
+  return projStudents.value
+    .map((st) => {
+      const sub = subsByKey.value.get(subKey(projectId.value, st.user_id)) ?? null
+      return { student: st, sub, state: projectState(sub) }
+    })
+    .sort((a, b) => STATE_ORDER[a.state] - STATE_ORDER[b.state] || a.student.full_name.localeCompare(b.student.full_name))
+})
+const selectedProject = computed(() => projects.value.find((p) => p.id === projectId.value) ?? null)
+
+async function loadProjects() {
+  projects.value = []
+  submissions.value = []
+  projectId.value = ''
+  if (!projCourseId.value) return
+  projLoading.value = true
+  try {
+    const [list, subs] = await Promise.all([fetchProjectsForStaff(projCourseId.value), fetchSubmissionsForStaff(projCourseId.value)])
+    projects.value = list
+    submissions.value = subs
+    // volta no projeto de onde veio a correção; senão, no primeiro com entrega aguardando (ou no primeiro)
+    const wanted = list.find((p) => p.id === wantedProjectId)
+    wantedProjectId = ''
+    projectId.value = (wanted ?? list.find((p) => subs.some((s) => s.project_id === p.id && s.status === 'submitted')) ?? list[0])?.id ?? ''
+  } finally {
+    projLoading.value = false
+  }
+}
+
+async function openProjetos(courseHint = '') {
+  tab.value = 'projetos'
+  if (projReady.value) return
+  projLoading.value = true
+  try {
+    const list = await fetchCoursesForStaff()
+    projCourses.value = list
+    projReady.value = true
+    const hinted = list.find((c) => c.id === courseHint)
+    if (hinted) projCourseId.value = hinted.id
+    else if (!projCourseId.value && list.length) projCourseId.value = (list.find((c) => c.is_published) ?? list[0]).id
+  } finally {
+    projLoading.value = false
+  }
+}
+
+watch(projCourseId, () => void loadProjects())
+
+const csvCell = (v: unknown) => `"${String(v).replace(/"/g, '""')}"`
+
+/** Planilha com a situação e a nota de cada aluno em cada projeto do curso (para o diário). */
+function exportProjectsCsv() {
+  const head = ['aluno', 'usuario', ...projects.value.flatMap((p) => [`${p.title} - situacao`, `${p.title} - nota`])]
+  const lines = projStudents.value.map((st) =>
+    [
+      st.full_name,
+      st.username ?? '',
+      ...projects.value.flatMap((p) => {
+        const sub = subsByKey.value.get(subKey(p.id, st.user_id)) ?? null
+        return [PROJECT_STATE_LABEL[projectState(sub)], sub?.pct ?? '']
+      }),
+    ]
+      .map(csvCell)
+      .join(';'),
+  )
+  const blob = new Blob(['﻿' + [head.map(csvCell).join(';'), ...lines].join('\n')], { type: 'text/csv;charset=utf-8' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = `projetos-${projCourse.value?.slug ?? 'curso'}-${new Date().toISOString().slice(0, 10)}.csv`
+  a.click()
+  URL.revokeObjectURL(a.href)
+}
+
 onMounted(async () => {
+  // a tela de correção volta com ?aba=projetos&curso=<id>&projeto=<id>
+  if (route.query.aba === 'projetos') {
+    wantedProjectId = String(route.query.projeto ?? '')
+    void openProjetos(String(route.query.curso ?? ''))
+  }
   try {
     rows.value = await fetchStudentProgress()
   } finally {
@@ -123,6 +231,7 @@ onMounted(async () => {
         <h1>Instrutor</h1>
       </div>
       <button v-if="tab === 'alunos'" class="btn btn--outline" type="button" :disabled="!filtered.length" @click="exportCsv"><Download /> Exportar CSV</button>
+      <button v-else-if="tab === 'projetos'" class="btn btn--outline" type="button" :disabled="!projects.length || !projStudents.length" @click="exportProjectsCsv"><Download /> Exportar notas</button>
     </div>
 
     <div class="tabs" role="tablist" aria-label="Seções do painel">
@@ -131,6 +240,9 @@ onMounted(async () => {
       </button>
       <button class="tabs__tab" :class="{ 'is-active': tab === 'roteiros' }" type="button" role="tab" :aria-selected="tab === 'roteiros'" @click="openRoteiros">
         <ClipboardList /> Roteiros de aula
+      </button>
+      <button class="tabs__tab" :class="{ 'is-active': tab === 'projetos' }" type="button" role="tab" :aria-selected="tab === 'projetos'" @click="openProjetos()">
+        <Target /> Projetos
       </button>
     </div>
 
@@ -196,6 +308,98 @@ onMounted(async () => {
         </div>
         <div v-else class="card">
           <EmptyState :icon="Users" title="Nenhuma matrícula" text="Quando alunos se matricularem, o progresso deles aparece aqui." />
+        </div>
+      </template>
+    </template>
+
+    <!-- ===================== Projetos avaliados ===================== -->
+    <template v-else-if="tab === 'projetos'">
+      <p class="hint" style="margin: 0 0 14px; max-width: 72ch">
+        Entregas dos projetos avaliados. Corrija pela rubrica: devolva para ajustes (o aluno reenvia) ou lance a nota final.
+      </p>
+
+      <div class="row wrap" style="margin-bottom: 16px">
+        <select v-model="projCourseId" class="input" style="max-width: 360px" aria-label="Curso">
+          <option v-if="!projCourses.length" value="">Nenhum curso</option>
+          <option v-for="c in projCourses" :key="c.id" :value="c.id">{{ c.title }}{{ c.is_published ? '' : ' (não publicado)' }}</option>
+        </select>
+      </div>
+
+      <LoadingBlock v-if="projLoading" text="Carregando projetos" />
+
+      <div v-else-if="!projects.length" class="card">
+        <EmptyState
+          :icon="Target"
+          title="Nenhum projeto neste curso"
+          text="Crie arquivos em content/courses/<curso>/projetos/ e rode npm run content:sync (a migration 0004 precisa estar aplicada)."
+        />
+      </div>
+
+      <template v-else>
+        <div class="proj-cards" role="tablist" aria-label="Projetos do curso">
+          <button
+            v-for="p in projects"
+            :key="p.id"
+            class="proj-card"
+            :class="{ 'is-active': p.id === projectId }"
+            type="button"
+            role="tab"
+            :aria-selected="p.id === projectId"
+            @click="projectId = p.id"
+          >
+            <span class="proj-card__section">{{ p.section ?? 'Projeto' }}</span>
+            <span class="proj-card__title">{{ p.title }}</span>
+            <span class="proj-card__meta">
+              <span>{{ projectCounts(p).delivered }} de {{ projectCounts(p).enrolled }} entregaram</span>
+              <span v-if="projectCounts(p).waiting" class="badge badge--info">{{ projectCounts(p).waiting }} aguardando</span>
+              <span v-if="projectCounts(p).passed" class="badge badge--primary">{{ plural(projectCounts(p).passed, 'aprovado', 'aprovados') }}</span>
+            </span>
+          </button>
+        </div>
+
+        <div v-if="selectedProject" class="card" style="padding: 0">
+          <div v-if="projectRows.length" class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Aluno</th>
+                  <th>Situação</th>
+                  <th>Versão</th>
+                  <th>Enviado</th>
+                  <th>Nota</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="r in projectRows" :key="r.student.user_id">
+                  <td>
+                    <div class="row">
+                      <UserAvatar :name="r.student.full_name" :src="r.student.avatar_url" :size="30" />
+                      <div>
+                        <div style="font-weight: 600">{{ r.student.full_name }}</div>
+                        <div class="hint">{{ r.student.username ? '@' + r.student.username : '' }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td><span class="badge" :class="PROJECT_STATE_BADGE[r.state]">{{ PROJECT_STATE_LABEL[r.state] }}</span></td>
+                  <td>{{ r.sub ? r.sub.version : '' }}</td>
+                  <td :title="r.sub?.submitted_at">{{ r.sub ? relativeTime(r.sub.submitted_at) : '' }}</td>
+                  <td>{{ r.sub?.pct != null ? formatPct(r.sub.pct, 1) : '' }}</td>
+                  <td style="text-align: right">
+                    <RouterLink
+                      v-if="r.sub && projCourse"
+                      :to="`/instrutor/projetos/${projCourse.slug}/${selectedProject.slug}/${r.student.user_id}`"
+                      class="btn btn--sm"
+                      :class="r.state === 'submitted' ? 'btn--primary' : 'btn--outline'"
+                    >
+                      {{ r.state === 'submitted' ? 'Corrigir' : 'Abrir' }}
+                    </RouterLink>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <EmptyState v-else :icon="Users" title="Nenhum aluno matriculado" text="Quando alunos se matricularem, as entregas aparecem aqui." />
         </div>
       </template>
     </template>
@@ -283,6 +487,61 @@ onMounted(async () => {
 .tabs__tab.is-active {
   background: var(--primary-soft);
   color: var(--primary);
+}
+
+.proj-cards {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scroll-snap-type: x proximity;
+}
+.proj-card {
+  flex: 0 0 220px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.proj-card:hover {
+  border-color: var(--border-strong);
+}
+.proj-card.is-active {
+  border-color: var(--primary);
+  box-shadow: var(--glow-primary);
+}
+.proj-card__section {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.proj-card__title {
+  font-weight: 700;
+}
+.proj-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-2);
+}
+@media (min-width: 1024px) {
+  .proj-cards {
+    flex-wrap: wrap;
+    overflow: visible;
+  }
 }
 
 .scripts {

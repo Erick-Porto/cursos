@@ -350,3 +350,15 @@ Os pagamentos, o `Pedido` que os compõe e o checkout no terminal.
 :::
 
 **Critérios de entrega**: nenhum `if` com `'pix'` ou `'cartao'` no script nem no `Pedido`; `parcelas` só para leitura; testes passando. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 4: lista, recorrente e botões
+
+No seu repositório `lista-de-tarefas`:
+
+- `ListaDeTarefas` com `#tarefas`: `adicionar`, `concluir(id)`, `remover(id)` e `todas`, que devolve uma cópia
+- `TarefaRecorrente extends Tarefa`, com `#frequencia`: ao concluir, a lista pede `proxima(id)` sem perguntar o tipo
+- botões Concluir e Remover com `data-id` e um ouvinte só na lista ([Guia do DOM](materiais/projeto-3/guia-dom.html), partes 7 e 9)
+
+Commit: `Projeto 3: etapa 4, lista, recorrente e botões`. Enunciado completo e entrega: página do curso, em **Projetos**.

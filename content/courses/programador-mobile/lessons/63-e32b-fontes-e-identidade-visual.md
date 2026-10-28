@@ -336,7 +336,7 @@ Por dentro: `Pressable` com `({ pressed })`, `android_ripple`, `minHeight: 44` e
 Dê feedback e identidade ao Lojinha.
 
 :::steps
-1. `npx expo install expo-image expo-font @expo-google-fonts/inter expo-splash-screen`
+1. `npx expo install expo-image expo-font @expo-google-fonts/inter expo-splash-screen @expo/vector-icons`
 2. `familia` no `tokens.js`
 3. `src/components/ui/Botao.js` com `titulo`, `onPress`, `variante`, `icone` e `desabilitado`
 4. `src/components/CartaoProduto.js` com `expo-image`, placeholder, `formatarPreco` importado e carrinho de 44 por 44
@@ -346,3 +346,17 @@ Dê feedback e identidade ao Lojinha.
 :::
 
 **Critérios de entrega**: todo toque com feedback; alvos de 44 por 44; fotos com placeholder; Inter em todos os textos; claro e escuro funcionando. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 3: toque, ícones, fotos e fonte
+
+No seu repositório `casas-de-adocao`:
+
+- `npx expo install expo-image expo-font expo-splash-screen @expo/vector-icons` e o pacote da sua fonte
+- cartão inteiro tocável, com retorno visual; por enquanto, o toque mostra um `Alert` com o horário de visitas
+- `Ionicons` nas cores do tema: a pata no cabeçalho, o local ao lado do bairro e um coração de 44 por 44
+- foto com `expo-image` e espaço reservado; casa com `foto: ''` mostra a pata
+- fonte própria com `useFonts`, a splash segurando até carregar
+
+Commit: `Projeto 6: etapa 3, toque, ícones, fotos e fonte`. Enunciado completo e entrega: página do curso, em **Projetos**.

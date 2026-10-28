@@ -6,7 +6,7 @@
 // <base>materiais/<curso>/...: no `npm run dev` direto da pasta do curso, no
 // build copiados para dist/. Um link para <pasta>.zip baixa a pasta
 // compactada (o zip é gerado na hora no dev e no build para os links que
-// aparecem nas aulas, roteiros e descrição).
+// aparecem nas aulas, roteiros, projetos e descrição).
 //
 // Formato e regras em GUIA_DE_CONTEUDO.md (seção 10).
 // =====================================================================
@@ -131,7 +131,8 @@ function zipLinks(courseDir) {
   const texts = []
   const desc = join(courseDir, 'description.md')
   if (isFile(desc)) texts.push(readFileSync(desc, 'utf8'))
-  for (const sub of ['lessons', 'roteiros']) {
+  // walk é recursivo: projetos/ inclui os guias de correção em projetos/correcao/
+  for (const sub of ['lessons', 'roteiros', 'projetos']) {
     const d = join(courseDir, sub)
     if (isDir(d)) for (const f of walk(d)) if (f.endsWith('.md')) texts.push(readFileSync(f, 'utf8'))
   }

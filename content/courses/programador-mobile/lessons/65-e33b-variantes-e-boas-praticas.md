@@ -370,3 +370,17 @@ Complete o UI kit e monte a `Galeria`.
 **Critérios**: peças com `style` e `...rest`; nenhuma cor fora dos tokens; Galeria legível nos dois temas. Entregue o link do repositório no sistema.
 
 **Para casa**: refaça o `CartaoProduto` com o kit e em pé, imagem em cima (`width: '100%'`, `aspectRatio: 1`), para a grade do E34.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 4: UI kit e CartaoCasa
+
+No seu repositório `casas-de-adocao`:
+
+- `src/components/ui/` com `Botao`, `Cartao`, `Badge` e `Campo`, todos com `style` e `...rest`, e o `index.js`
+- `situacao`, `textoDaSituacao` e `tomDaSituacao` em `src/regras/casas.js`
+- `src/components/CartaoCasa.js` montado com o kit: foto, nome, bairro, cidade e o selo de vagas ("Lotada", "Últimas 2 vagas", "8 vagas")
+- a Início com as 12 casas e um `Botao` "Nova casa"
+- nenhuma cor fora do `tokens.js`, com `alerta` nos dois temas
+
+Commit: `Projeto 6: etapa 4, UI kit e CartaoCasa`. Enunciado completo e entrega: página do curso, em **Projetos**.

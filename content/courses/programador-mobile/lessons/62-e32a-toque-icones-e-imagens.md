@@ -119,7 +119,7 @@ O iPhone ignora `android_ripple`. Mantenha também o estilo de `pressed`: assim 
 
 ## :icon[shapes] Ícones com Ionicons
 
-O pacote `@expo/vector-icons` já vem no projeto criado com `create-expo-app` e reúne várias famílias de ícones. No Lojinha, use o **Ionicons**, desenhado para iOS e Android.
+O pacote `@expo/vector-icons` reúne várias famílias de ícones. O projeto criado com `create-expo-app --template blank` não traz ele: instale com `npx expo install @expo/vector-icons`. No Lojinha, use o **Ionicons**, desenhado para iOS e Android.
 
 ```jsx
 import { Ionicons } from '@expo/vector-icons';

@@ -347,3 +347,17 @@ Clique com o botão direito no número da linha, escolha "Add Conditional Breakp
 :::
 
 **Critérios de entrega**: `itemMaisCaro`, `contemTodas` e `buscarProdutos` com laços; 2 testes ou mais por função, um com lista ou termo vazio, todos verdes; a busca acha "tenis", "LOGICA" e "corrida tenis". Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 2: busca, filtro e urgência
+
+No seu repositório `lista-de-tarefas`, em `src/regras/tarefas.js`:
+
+- `buscarTarefas(tarefas, termo)`: todas as palavras, sem acento nem maiúsculas
+- `filtrarTarefas(tarefas, filtro, hoje)`: todas, pendentes, concluídas ou atrasadas
+- `ordenarPorUrgencia(tarefas)`: uma cópia, por prazo, prioridade e título
+- `resumirTarefas(tarefas, hoje)`: as contagens numa passada só, com `for...of`
+- 2 testes ou mais por função, um com a lista ou o termo vazio
+
+Commit: `Projeto 3: etapa 2, busca, filtro e urgência`. Enunciado completo e entrega: página do curso, em **Projetos**.

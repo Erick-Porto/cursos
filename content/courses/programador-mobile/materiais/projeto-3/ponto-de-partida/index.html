@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lista de tarefas</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="estilo.css">
+  <!-- type="module": o arquivo pode usar import e export. Abra com npx serve . (não pelo file://) -->
+  <script type="module" src="src/tela/app.js"></script>
+</head>
+<body>
+  <header class="topo">
+    <div class="topo-conteudo">
+      <h1>Lista de tarefas</h1>
+      <!-- Avisos curtos: "Carregando...", "Salvando...", "Tudo salvo." (etapa 6) -->
+      <p id="aviso" class="aviso" role="status" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <div class="coluna-lateral">
+      <!-- Etapa 4: o formulário cria a tarefa. Etapa 5: as mensagens de erro aparecem embaixo do campo. -->
+      <section class="cartao" aria-labelledby="titulo-nova">
+        <h2 id="titulo-nova">Nova tarefa</h2>
+        <form id="formulario" novalidate>
+          <div class="campo">
+            <label for="titulo">Título</label>
+            <input id="titulo" name="titulo" type="text" autocomplete="off"
+                   placeholder="Ex.: Pagar a conta de luz" aria-describedby="erro-titulo">
+            <p id="erro-titulo" class="erro-campo"></p>
+          </div>
+
+          <div class="campos-lado-a-lado">
+            <div class="campo">
+              <label for="prioridade">Prioridade</label>
+              <select id="prioridade" name="prioridade">
+                <option value="alta">Alta</option>
+                <option value="media" selected>Média</option>
+                <option value="baixa">Baixa</option>
+              </select>
+            </div>
+
+            <div class="campo">
+              <label for="prazo">Prazo</label>
+              <input id="prazo" name="prazo" type="date" aria-describedby="erro-prazo">
+              <p id="erro-prazo" class="erro-campo"></p>
+            </div>
+
+            <div class="campo">
+              <label for="frequencia">Repetir</label>
+              <select id="frequencia" name="frequencia">
+                <option value="">Não repete</option>
+                <option value="diaria">Todo dia</option>
+                <option value="semanal">Toda semana</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="botao-principal">Adicionar tarefa</button>
+        </form>
+      </section>
+
+      <!-- Etapa 7: tarefas de exemplo vindas da internet -->
+      <section class="cartao" aria-labelledby="titulo-exemplos">
+        <h2 id="titulo-exemplos">Tarefas de exemplo</h2>
+        <p class="explicacao">Traz 10 tarefas de exemplo da internet (em inglês) para testar a lista.</p>
+        <button id="importar" type="button" class="botao-secundario">Importar exemplos</button>
+        <p id="status-importacao" class="status" role="status" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <section class="cartao cartao-lista" aria-labelledby="titulo-lista">
+      <div class="cabecalho-lista">
+        <h2 id="titulo-lista">Tarefas</h2>
+        <!-- Etapa 3: o resumo vem de resumirTarefas -->
+        <p id="resumo" class="resumo">2 pendentes · 1 atrasada · 1 concluída</p>
+      </div>
+
+      <!-- Etapa 5: a busca e o filtro redesenham a lista -->
+      <div class="ferramentas">
+        <div class="campo campo-busca">
+          <label for="busca">Buscar</label>
+          <input id="busca" type="search" placeholder="Ex.: conta luz" autocomplete="off">
+        </div>
+        <div class="campo">
+          <label for="filtro">Mostrar</label>
+          <select id="filtro">
+            <option value="todas">Todas</option>
+            <option value="pendentes">Pendentes</option>
+            <option value="atrasadas">Atrasadas</option>
+            <option value="concluidas">Concluídas</option>
+          </select>
+        </div>
+      </div>
+
+      <!--
+        MOLDE. Os três itens abaixo foram escritos à mão para mostrar o HTML que o
+        seu JavaScript vai criar para cada tarefa (etapa 3) e as classes que o
+        estilo.css já entende. Quando a sua renderização funcionar, ela apaga o
+        molde e desenha as tarefas de verdade.
+
+        Classes do <li class="tarefa ...">:
+          prioridade-alta | prioridade-media | prioridade-baixa
+          atrasada | vence-hoje | em-dia | sem-prazo   (a situação do prazo)
+          concluida                                    (só quando estiver concluída)
+      -->
+      <ul id="lista" class="lista">
+        <li class="tarefa prioridade-alta atrasada">
+          <div class="tarefa-info">
+            <p class="tarefa-titulo">Pagar a conta de luz</p>
+            <p class="tarefa-detalhes">
+              <span class="selo">Alta</span>
+              <span class="prazo">Atrasada há 2 dias</span>
+            </p>
+          </div>
+          <div class="tarefa-acoes">
+            <button type="button" class="botao-concluir" data-acao="concluir" data-id="1">Concluir</button>
+            <button type="button" class="botao-remover" data-acao="remover" data-id="1">Remover</button>
+          </div>
+        </li>
+
+        <li class="tarefa prioridade-media vence-hoje">
+          <div class="tarefa-info">
+            <p class="tarefa-titulo">Regar as plantas</p>
+            <p class="tarefa-detalhes">
+              <span class="selo">Média</span>
+              <span class="prazo">Vence hoje</span>
+              <span class="selo selo-repete">Toda semana</span>
+            </p>
+          </div>
+          <div class="tarefa-acoes">
+            <button type="button" class="botao-concluir" data-acao="concluir" data-id="2">Concluir</button>
+            <button type="button" class="botao-remover" data-acao="remover" data-id="2">Remover</button>
+          </div>
+        </li>
+
+        <li class="tarefa prioridade-baixa sem-prazo concluida">
+          <div class="tarefa-info">
+            <p class="tarefa-titulo">Separar roupas para doação</p>
+            <p class="tarefa-detalhes">
+              <span class="selo">Baixa</span>
+              <span class="prazo">Concluída</span>
+            </p>
+          </div>
+          <div class="tarefa-acoes">
+            <button type="button" class="botao-remover" data-acao="remover" data-id="3">Remover</button>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Lista vazia: mostre com vazio.hidden = false (etapa 3) -->
+      <p id="vazio" class="vazio" hidden>Nenhuma tarefa por aqui. Escreva uma nova ou importe os exemplos.</p>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <p>Projeto 3 do curso Programador Mobile.</p>
+  </footer>
+</body>
+</html>

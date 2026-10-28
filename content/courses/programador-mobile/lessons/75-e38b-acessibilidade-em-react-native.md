@@ -378,3 +378,17 @@ Deixe Início, Detalhe e Carrinho responsivos e acessíveis.
 :::
 
 **Critérios**: 2 colunas em pé e 3 deitado, sem tela vermelha; nada cortado com fonte máxima; coração com foco próprio e "selecionado"; 5 correções no README; link do repositório entregue.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 9: responsividade e acessibilidade
+
+No seu repositório `casas-de-adocao`:
+
+- `useWindowDimensions`: a partir de 600 de largura, o Detalhe põe a foto ao lado das informações, e as listas ganham largura máxima, centralizadas
+- celular deitado, tablet e fonte no máximo sem nada cortado
+- `CartaoCasa` como um foco só: nome, cidade e vagas no rótulo, papel `button` e dica; favoritar com o estado `selected`
+- vagas escritas no `Badge`, não só na cor; cidades com papel `header`; alvos de 44 por 44
+- auditoria com TalkBack ou VoiceOver e a tabela "Acessibilidade" no README, com 3 correções
+
+Commit: `Projeto 6: etapa 9, responsividade e acessibilidade`. Enunciado completo e entrega: página do curso, em **Projetos**.

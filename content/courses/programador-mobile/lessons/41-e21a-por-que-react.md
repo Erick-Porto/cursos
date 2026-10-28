@@ -82,6 +82,22 @@ Os dados vivem em um lugar e a tela, em outro. Manter os dois em dia é trabalho
 
 ---
 
+## :icon[milestone] Você já fez isso na mão: o Projeto 3
+
+A sua `lista-de-tarefas`, entregue hoje, mudava a tela pelo DOM. A cada ação, o código de `src/tela/` precisava lembrar de tudo:
+
+- concluir: riscar o item e refazer o resumo
+- remover: tirar o `<li>` e, se a lista esvaziou, mostrar o aviso
+- importar da API: "Carregando...", a lista nova ou o aviso de erro
+
+:::question
+Abra o seu `src/tela/`. Quantas linhas existem só para a tela não ficar diferente dos dados?
+:::
+
+No Projeto 4, você descreve a lista a partir do array, e o React cuida dessas linhas.
+
+---
+
 ## :icon[component] O mesmo contador em React
 
 ```jsx

@@ -1,0 +1,452 @@
+/* Racha-conta: interface pronta do Projeto 1 (Programador Mobile). */
+
+:root {
+  color-scheme: light dark;
+  --fundo: #f1f5f9;
+  --cartao: #ffffff;
+  --borda: #dbe2ea;
+  --texto: #0f172a;
+  --texto-2: #475569;
+  --destaque: #0e7490;
+  --sobre-destaque: #ffffff;
+  --destaque-suave: #e0f7fb;
+  --erro: #b91c1c;
+  --erro-suave: #fef2f2;
+  --atencao: #92400e;
+  --atencao-suave: #fffbeb;
+  --codigo-fundo: #0b1020;
+  --codigo-texto: #e8edf7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0b1020;
+    --cartao: #131c33;
+    --borda: rgba(148, 163, 184, 0.22);
+    --texto: #e8edf7;
+    --texto-2: #b4bfd3;
+    --destaque: #22d3ee;
+    --sobre-destaque: #04252c;
+    --destaque-suave: rgba(34, 211, 238, 0.12);
+    --erro: #f87171;
+    --erro-suave: rgba(248, 113, 113, 0.12);
+    --atencao: #fbbf24;
+    --atencao-suave: rgba(251, 191, 36, 0.12);
+    --codigo-fundo: #0a0f1d;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font:
+    16px/1.6 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 16px 56px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+code,
+pre {
+  font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
+}
+
+code {
+  font-size: 0.92em;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.ico {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* topo */
+.sobre {
+  margin: 0 0 4px;
+  color: var(--destaque);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  line-height: 1.2;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+}
+
+.lead {
+  margin: 0;
+  color: var(--texto-2);
+}
+
+.cartao,
+.aviso {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  background: var(--cartao);
+}
+
+/* aviso: servidor, import ou função que falta */
+.aviso {
+  border-color: var(--atencao);
+  background: var(--atencao-suave);
+}
+
+.aviso h2 {
+  color: var(--atencao);
+  font-size: 1.05rem;
+}
+
+.aviso p,
+.aviso ul {
+  margin: 8px 0 0;
+}
+
+.aviso p:first-child {
+  margin-top: 0;
+}
+
+/* formulário */
+.campo {
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+}
+
+label,
+legend {
+  display: block;
+  margin-bottom: 6px;
+  padding: 0;
+  font-weight: 600;
+}
+
+.opcional {
+  color: var(--texto-2);
+  font-weight: 400;
+}
+
+input[type='text'] {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+  font-size: 1.05rem;
+}
+
+input[type='text']:focus {
+  border-color: var(--destaque);
+}
+
+input[aria-invalid='true'] {
+  border-color: var(--erro);
+}
+
+.dica {
+  margin: 6px 0 0;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+
+.erro {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+  color: var(--erro);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.contador {
+  display: flex;
+  gap: 8px;
+  max-width: 240px;
+}
+
+.contador input {
+  text-align: center;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.passo {
+  display: grid;
+  place-items: center;
+  min-width: 48px;
+  min-height: 48px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--cartao);
+  color: var(--texto);
+}
+
+.opcoes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.opcoes label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.opcoes input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--destaque);
+}
+
+.opcoes label:has(input:checked) {
+  border-color: var(--destaque);
+  background: var(--destaque-suave);
+  font-weight: 700;
+}
+
+.botao {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.botao:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--texto);
+  font-size: 0.9rem;
+}
+
+/* resultado */
+.totais {
+  margin: 0;
+}
+
+.totais div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--borda);
+}
+
+.totais dt {
+  color: var(--texto-2);
+}
+
+.totais dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.totais .total dt,
+.totais .total dd {
+  color: var(--texto);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.partes {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.partes li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--destaque-suave);
+}
+
+.partes strong {
+  font-variant-numeric: tabular-nums;
+}
+
+.conferencia {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border-left: 4px solid var(--destaque);
+  border-radius: 0 12px 12px 0;
+  background: var(--destaque-suave);
+  font-size: 0.95rem;
+}
+
+.conferencia.problema {
+  border-left-color: var(--erro);
+  background: var(--erro-suave);
+  color: var(--erro);
+  font-weight: 600;
+}
+
+.conferencia .ico {
+  margin-top: 2px;
+}
+
+/* recibo */
+.recibo-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.recibo-topo h2 {
+  margin: 0;
+}
+
+#recibo {
+  margin: 0;
+  padding: 16px;
+  overflow-x: auto;
+  border-radius: 12px;
+  background: var(--codigo-fundo);
+  color: var(--codigo-texto);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+}
+
+/* funções */
+.lista-funcoes {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-funcoes li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+}
+
+.lista-funcoes .ico {
+  margin-top: 3px;
+}
+
+.lista-funcoes .ok .ico {
+  color: var(--destaque);
+}
+
+.lista-funcoes .falta .ico {
+  color: var(--erro);
+}
+
+.lista-funcoes code {
+  word-break: break-word;
+}
+
+.lista-funcoes small {
+  display: block;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+footer {
+  margin-top: 40px;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 560px) {
+  .opcoes {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .botao {
+    width: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .botao:active:not(:disabled) {
+    transform: none;
+  }
+}

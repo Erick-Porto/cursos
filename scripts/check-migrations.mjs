@@ -194,6 +194,138 @@ await db.exec(`set role authenticated`)
 const { rows: scriptsAsStaff } = await db.query('select slug, lesson_slugs from public.class_scripts where course_id = $1', [courseId])
 ok(scriptsAsStaff.length === 1 && scriptsAsStaff[0].lesson_slugs.length === 2, 'instrutor lê class_scripts com as aulas ligadas')
 await db.exec('reset role')
+
+// ---------------------------------------------------------------------
+// projetos avaliados (migration 0004): entrega, devolução, reenvio e nota
+// ---------------------------------------------------------------------
+console.log('> projetos avaliados')
+const asUser = async (id) => {
+  await db.exec('reset role')
+  await db.query(`select set_config('request.jwt.claim.sub', $1, false)`, [id])
+  await db.exec('set role authenticated')
+}
+const fails = async (sql, params, pattern) => {
+  try {
+    await db.query(sql, params)
+    return false
+  } catch (e) {
+    return pattern.test(e.message)
+  }
+}
+
+const { rows: c2 } = await db.query(
+  `insert into public.courses (slug, title, is_published) values ('curso-projetos', 'Curso Projetos', true) returning id`,
+)
+const course2 = c2[0].id
+await db.query(
+  `insert into public.lessons (course_id, slug, title, position, slide_count, content_md)
+   values ($1, 'aula-p', 'Aula P', 1, 2, '# P')`,
+  [course2],
+)
+const rubric = [
+  { key: 'regras', title: 'Regras', points: 60 },
+  { key: 'git', title: 'Git', points: 40 },
+]
+const { rows: pr } = await db.query(
+  `insert into public.projects (course_id, slug, title, rubric, steps, passing_score)
+   values ($1, 'projeto-1', 'Projeto 1', $2::jsonb, '[{"lesson":"aula-p","title":"Etapa 1"}]', 70) returning id`,
+  [course2, JSON.stringify(rubric)],
+)
+const projectId = pr[0].id
+await db.query(`insert into public.project_guides (project_id, content_md) values ($1, '## Como corrigir')`, [projectId])
+await db.query(
+  `insert into public.achievements (slug, title, description, icon, rarity, xp, rule, course_id)
+   values ('projetista', 'Projetista', 'Aprovou um projeto.', 'award', 'rare', 40, '{"type":"projects_approved","count":1}', $1)`,
+  [course2],
+)
+const { rows: u2 } = await db.query(
+  `insert into auth.users (email, raw_user_meta_data) values ('aluna@example.com', '{"full_name":"Aluna Projetos"}') returning id`,
+)
+const student = u2[0].id
+
+await asUser(student)
+let { rows: guides } = await db.query('select * from public.project_guides')
+ok(guides.length === 0, 'RLS: aluno não lê project_guides (guia de correção)')
+const { rows: visibleProjects } = await db.query('select id from public.projects where course_id = $1', [course2])
+ok(visibleProjects.length === 1, 'aluno lê o enunciado de curso publicado')
+ok(
+  await fails('select public.submit_project($1, $2)', [projectId, 'https://github.com/aluna/projeto-1'], /matrícula/),
+  'entrega exige matrícula',
+)
+await db.query('select * from public.enroll($1)', [course2])
+ok(await fails('select public.submit_project($1, $2)', [projectId, 'github.com/aluna'], /inválido/), 'link sem https é recusado')
+ok(
+  await fails(
+    `insert into public.project_submissions (user_id, project_id, course_id, repo_url) values ($1, $2, $3, 'https://x.com/y')`,
+    [student, projectId, course2],
+    /./,
+  ),
+  'RLS: aluno não grava project_submissions diretamente',
+)
+let { rows: sp } = await db.query('select public.submit_project($1, $2, null, $3) as r', [
+  projectId,
+  'https://github.com/aluna/projeto-1',
+  'Primeira versão',
+])
+let sub = sp[0].r.submission
+ok(sub.status === 'submitted' && sub.version === 1, 'entrega registrada (versão 1, aguardando correção)')
+;({ rows: sp } = await db.query('select public.submit_project($1, $2) as r', [projectId, 'https://github.com/aluna/racha-conta']))
+sub = sp[0].r.submission
+ok(sub.version === 1 && sub.repo_url.endsWith('racha-conta') && sub.notes === null, 'antes da correção, reenviar troca o link na mesma versão')
+ok(
+  await fails(`select public.grade_project($1, '{"regras":60,"git":40}'::jsonb, 'ok', true)`, [sub.id], /instrutores/),
+  'aluno não corrige projeto',
+)
+
+// o primeiro usuário virou instructor acima
+await asUser(userId)
+const { rows: staffSees } = await db.query('select id from public.project_submissions where project_id = $1', [projectId])
+ok(staffSees.length === 1, 'instrutor vê as entregas dos alunos')
+;({ rows: guides } = await db.query('select * from public.project_guides'))
+ok(guides.length === 1, 'instrutor lê o guia de correção')
+ok(
+  await fails(`select public.grade_project($1, '{"regras":61,"git":40}'::jsonb, null, true)`, [sub.id], /entre 0 e 60/),
+  'nota acima do máximo do critério é recusada',
+)
+ok(await fails(`select public.grade_project($1, '{"regras":50}'::jsonb, null, true)`, [sub.id], /falta a nota/), 'critério sem nota é recusado')
+let { rows: gr } = await db.query(
+  `select public.grade_project($1, '{"regras":30,"git":20}'::jsonb, 'Faltou a divisão dos centavos.', false) as r`,
+  [sub.id],
+)
+sub = gr[0].r.submission
+ok(sub.status === 'returned' && Number(sub.pct) === 50 && sub.passed === null, 'devolvido para ajustes com nota parcial')
+
+await asUser(student)
+;({ rows: sp } = await db.query('select public.submit_project($1, $2) as r', [projectId, 'https://github.com/aluna/racha-conta']))
+sub = sp[0].r.submission
+ok(
+  sub.version === 2 && sub.status === 'submitted' && sub.history.length === 1 && sub.history[0].feedback === 'Faltou a divisão dos centavos.',
+  'reenvio vira versão 2 e guarda a anterior no histórico',
+)
+
+await asUser(userId)
+;({ rows: gr } = await db.query(`select public.grade_project($1, '{"regras":55,"git":35}'::jsonb, 'Muito bom.', true) as r`, [sub.id]))
+sub = gr[0].r.submission
+ok(sub.status === 'graded' && sub.passed === true && Number(sub.pct) === 90, 'nota final aprovada (90)')
+ok(gr[0].r.xp_gained === 200, 'XP da primeira aprovação do projeto')
+
+await asUser(student)
+ok(
+  await fails('select public.submit_project($1, $2)', [projectId, 'https://github.com/aluna/outro'], /nota final/),
+  'com nota final, o aluno só reenvia se o instrutor devolver',
+)
+const { rows: earned } = await db.query(
+  `select a.slug from public.user_achievements ua join public.achievements a on a.id = ua.achievement_id where ua.user_id = $1`,
+  [student],
+)
+ok(earned.some((a) => a.slug === 'projetista'), 'conquista com regra projects_approved')
+const { rows: e2 } = await db.query('select progress_pct from public.enrollments where user_id = $1 and course_id = $2', [student, course2])
+ok(Number(e2[0].progress_pct) === 50, `progresso conta o projeto aprovado (1 de 2 itens: ${e2[0].progress_pct}%)`)
+
+await asUser(userId)
+;({ rows: gr } = await db.query(`select public.grade_project($1, '{"regras":60,"git":35}'::jsonb, 'Revisto.', true) as r`, [sub.id]))
+ok(gr[0].r.xp_gained === 0 && Number(gr[0].r.submission.pct) === 95, 'corrigir de novo atualiza a nota sem repetir o XP')
+await db.exec('reset role')
 await db.close()
 
 console.log(failures === 0 ? '\nTudo certo.' : `\n${failures} falha(s).`)

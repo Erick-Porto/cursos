@@ -371,3 +371,15 @@ Os dois modelos da Lojinha, com testes, e a vitrine no terminal usando o `Produt
 :::
 
 **Critérios de entrega**: classes sem `console.log` nem leitura de arquivo; 10 testes passando; a vitrine sem conta de preço nem regra de destaque. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 3: a classe Tarefa e a lista na tela
+
+No seu repositório `lista-de-tarefas`:
+
+- `src/modelos/Tarefa.js`: `deJSON`, getters `peso` e `rotuloDaPrioridade`, `situacao(hoje)` e `concluir()` devolvendo uma tarefa nova
+- `src/data/tarefas.js` com 5 ou 6 tarefas suas
+- `src/tela/`: a lista desenhada no DOM igual ao molde do HTML, em ordem de urgência, com o resumo
+
+Para a tela, as partes 1 a 6 do [Guia do DOM](materiais/projeto-3/guia-dom.html). Commit: `Projeto 3: etapa 3, classe Tarefa e a lista na tela`. Enunciado completo e entrega: página do curso, em **Projetos**.

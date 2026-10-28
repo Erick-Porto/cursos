@@ -405,3 +405,16 @@ As regras do carrinho em `src/regras/carrinho.js`, testadas, e um script que sim
 :::
 
 **Critérios de entrega**: regras sem `console.log`; 8 testes ou mais, verdes; o script roda com `node src/scripts/simular-carrinho.js`. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 6: divisão, recibo e interface
+
+No seu `racha-conta`:
+
+- `somarItens(itens)` com `for...of` e `dividirConta(total, pessoas)` com `for` e `if`: a sobra vai para as primeiras pessoas
+- `calcularGorjeta` com 10% de padrão e `montarRecibo(dados)` pura, que devolve o texto
+- `npm run racha` com um aviso para entrada inválida
+- a interface pronta, [interface-web.zip](materiais/projeto-1/interface-web.zip), na pasta `web/`, aberta com `npx serve .`
+
+Commit: `Projeto 1: etapa 6, divisão, recibo e interface web`. Entrega até o **início do E08**, colando o link do repositório na página do projeto, em **Projetos**.

@@ -367,3 +367,17 @@ O cadastro da Lojinha, do primeiro toque ao "Conta criada".
 :::
 
 **Critérios**: teclado sem cobrir campo nem botão; erro que aparece ao sair e some ao corrigir; máscara que aguenta texto colado; `ana@email.com` recusado no campo, com o botão destravado; nenhum `useState` em `src/utils/`. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 6: formulário de cadastro
+
+No seu repositório `casas-de-adocao`:
+
+- `src/telas/Cadastro.js` com nome, responsável, celular, e-mail, CEP, rua, número, bairro, cidade, UF, capacidade e ocupação, mais visitas e descrição opcionais: teclado certo em cada campo e o Próximo levando ao seguinte
+- `Switch` para "aceita cães" e "aceita gatos"; o botão de salvar sem o teclado cobrir
+- máscaras de telefone e CEP em `src/utils/` (as suas do `lojinha-regras` servem)
+- `validarCasa(valores)` em `src/regras/casas.js`: devolve os erros, mostrados embaixo de cada campo ao sair e ao salvar
+- no `App.js`, um `useState` alterna entre a Início e o Cadastro; sem erros, Salvar mostra um `Alert`
+
+Commit: `Projeto 6: etapa 6, formulário de cadastro`. Enunciado completo e entrega: página do curso, em **Projetos**.

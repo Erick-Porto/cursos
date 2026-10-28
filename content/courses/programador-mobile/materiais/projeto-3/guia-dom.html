@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guia do DOM · Projeto 3</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --perigo: #b91c1c;
+      --perigo-suave: #fee2e2;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --perigo: #f87171;
+        --perigo-suave: rgba(248, 113, 113, 0.14);
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, td code, dd code {
+      padding: 1px 5px;
+      border-radius: 6px;
+      background: var(--destaque-suave);
+      overflow-wrap: anywhere;
+    }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+    [hidden] { display: none !important; }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 40px; }
+    h2 { margin: 0 0 12px; font-size: 1.25rem; line-height: 1.3; }
+    h3 { margin: 20px 0 8px; font-size: 1rem; }
+    p { margin: 0 0 12px; }
+    ul, ol { margin: 0 0 12px; padding-left: 1.4em; }
+    li + li { margin-top: 4px; }
+
+    .indice { padding: 16px 20px; background: var(--cartao); border: 1px solid var(--borda); border-radius: 16px; }
+    .indice ol { margin: 0; }
+    .indice a { color: var(--destaque); }
+
+    table { width: 100%; border-collapse: collapse; margin: 0 0 12px; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { font-size: 0.85rem; color: var(--texto-2); }
+    .tabela { overflow-x: auto; }
+
+    .nota {
+      margin: 16px 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .nota.cuidado { border-left-color: var(--perigo); background: var(--perigo-suave); }
+    .nota p:last-child { margin-bottom: 0; }
+
+    /* código */
+    .codigo { overflow: hidden; margin: 0 0 12px; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      min-height: 32px;
+      padding: 2px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    pre { margin: 0; padding: 14px 16px; overflow-x: auto; font-size: 0.86rem; line-height: 1.55; }
+    pre code { font-size: inherit; }
+    .comentario { color: #94a3b8; }
+
+    /* demonstrações */
+    .demo {
+      margin: 0 0 16px;
+      padding: 16px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    .demo-rotulo {
+      margin: 0 0 10px;
+      color: var(--destaque);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .demo input, .demo select, .demo button { font: inherit; }
+    .demo input, .demo select {
+      min-height: 44px;
+      padding: 8px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+    .demo input[type='checkbox'] { min-height: 0; width: 20px; height: 20px; accent-color: var(--destaque); }
+    .demo input[aria-invalid='true'] { border-color: var(--perigo); box-shadow: 0 0 0 1px var(--perigo); }
+    .demo button {
+      min-height: 44px;
+      padding: 8px 16px;
+      border: 1px solid var(--destaque);
+      border-radius: 10px;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .demo button.leve { background: transparent; color: var(--destaque); }
+    .demo button:disabled { opacity: 0.6; cursor: progress; }
+    .linha { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .linha input[type='text'], .linha input[type='search'] { flex: 1 1 180px; min-width: 0; }
+    .saida {
+      margin: 12px 0 0;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--destaque-suave);
+      font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
+      font-size: 0.88rem;
+      overflow-wrap: anywhere;
+    }
+    .rotulo { display: block; margin-bottom: 4px; font-size: 0.9rem; font-weight: 600; }
+    .erro { margin: 4px 0 0; color: var(--perigo); font-size: 0.9rem; }
+    .erro:empty { display: none; }
+    .lista-demo { margin: 12px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+    .lista-demo li {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 0;
+      padding: 8px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+    }
+    .lista-demo li.curtida { border-color: var(--destaque); background: var(--destaque-suave); }
+    .lista-demo li.curtida::after { content: 'curtida'; color: var(--destaque); font-size: 0.8rem; font-weight: 700; }
+    .vazio-demo { margin: 12px 0 0; color: var(--texto-2); font-style: italic; }
+    .cartao-classe {
+      margin-top: 12px;
+      padding: 14px;
+      border: 2px dashed var(--borda);
+      border-radius: 12px;
+    }
+    .cartao-classe.destaque { border-style: solid; border-color: var(--destaque); background: var(--destaque-suave); }
+    .cartao-classe.riscado { text-decoration: line-through; color: var(--texto-2); }
+
+    .ciclo { counter-reset: passo; list-style: none; padding: 0; display: grid; gap: 8px; }
+    .ciclo li {
+      counter-increment: passo;
+      margin: 0;
+      padding: 10px 14px 10px 52px;
+      position: relative;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+    }
+    .ciclo li::before {
+      content: counter(passo);
+      position: absolute;
+      left: 14px;
+      top: 9px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+      text-align: center;
+      line-height: 26px;
+    }
+
+    dl { margin: 0; }
+    dt { margin-top: 16px; font-weight: 600; }
+    dt code { padding: 2px 6px; border-radius: 6px; background: var(--perigo-suave); word-break: break-word; font-weight: 400; }
+    dd { margin: 4px 0 0; color: var(--texto-2); }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · Projeto 3 · Lista de tarefas</p>
+      <h1>Guia do DOM</h1>
+      <p class="lead">
+        O essencial para o seu JavaScript mexer na página da lista de tarefas. Cada parte tem um
+        exemplo que funciona aqui mesmo, no computador ou no celular. Os exemplos usam outros
+        assuntos (frutas, bichinhos, recados): o código da sua lista é você quem escreve.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-indice">
+      <h2 id="t-indice">O que cada etapa usa</h2>
+      <div class="tabela">
+        <table>
+          <thead>
+            <tr><th>Etapa do projeto</th><th>Partes deste guia</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>3 · E15: a lista na tela</td><td>1 a 6</td></tr>
+            <tr><td>4 · E16: formulário, concluir e remover</td><td>7, 8 e 9</td></tr>
+            <tr><td>5 · E17: erros na tela, busca e filtro</td><td>7 e 10</td></tr>
+            <tr><td>6 · E18: salvar no navegador</td><td>11</td></tr>
+            <tr><td>7 · E19: importar exemplos da internet</td><td>12</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <nav class="indice" aria-label="Partes do guia">
+        <ol>
+          <li><a href="#p1">A página e o seu código</a></li>
+          <li><a href="#p2">Encontrar um elemento</a></li>
+          <li><a href="#p3">Trocar o texto</a></li>
+          <li><a href="#p4">Criar, colocar e apagar elementos</a></li>
+          <li><a href="#p5">Classes: o CSS decide a cara</a></li>
+          <li><a href="#p6">Desenhar a partir dos dados</a></li>
+          <li><a href="#p7">Eventos</a></li>
+          <li><a href="#p8">Formulário: submit e preventDefault</a></li>
+          <li><a href="#p9">dataset: um ouvinte para a lista inteira</a></li>
+          <li><a href="#p10">Mensagem embaixo do campo</a></li>
+          <li><a href="#p11">localStorage: guardar no navegador</a></li>
+          <li><a href="#p12">Desligar o botão enquanto espera</a></li>
+          <li><a href="#p13">Erros comuns</a></li>
+        </ol>
+      </nav>
+    </section>
+
+    <!-- 1 ------------------------------------------------------------ -->
+    <section id="p1" aria-labelledby="t1">
+      <h2 id="t1">1. A página e o seu código</h2>
+      <p>
+        O navegador lê o <code>index.html</code> e monta o <strong>DOM</strong>: a árvore de elementos da
+        página, a mesma que você vê na aba <strong>Elements</strong> do DevTools (<kbd>F12</kbd>, E01). O
+        seu JavaScript lê e muda essa árvore, e a tela acompanha.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>index.html (já vem assim no ponto de partida)</span></div>
+<pre><code>&lt;script type="module" src="src/tela/app.js"&gt;&lt;/script&gt;</code></pre>
+      </div>
+      <ul>
+        <li>
+          <code>type="module"</code> deixa o arquivo usar <code>import</code> e <code>export</code>, como no
+          Node (E11). O <code>app.js</code> importa as suas classes e regras de <code>src/</code>.
+        </li>
+        <li>No navegador, o import relativo precisa do <code>.js</code> no fim: <code>'../regras/tarefas.js'</code>.</li>
+        <li>
+          Um script de módulo só roda depois que o HTML inteiro foi lido: quando o seu código procura
+          um elemento, ele já existe.
+        </li>
+        <li>
+          Abra sempre com <code>npx serve .</code> na pasta do projeto e use o endereço que ele mostra.
+          Pelo <code>file://</code> (dois cliques no arquivo), o navegador bloqueia módulos.
+        </li>
+        <li>Erros aparecem na aba <strong>Console</strong> do DevTools, com o arquivo e a linha.</li>
+      </ul>
+    </section>
+
+    <!-- 2 ------------------------------------------------------------ -->
+    <section id="p2" aria-labelledby="t2">
+      <h2 id="t2">2. Encontrar um elemento</h2>
+      <div class="codigo">
+        <div class="codigo-topo"><span>src/tela/app.js</span></div>
+<pre><code>const lista = document.querySelector('#lista');   <span class="comentario">// o elemento com id="lista"</span>
+const formulario = document.querySelector('#formulario');
+const titulo = document.querySelector('#titulo');</code></pre>
+      </div>
+      <ul>
+        <li><code>querySelector</code> recebe um seletor de CSS: <code>#</code> procura pelo <code>id</code>.</li>
+        <li>Devolve o primeiro elemento que combina, ou <code>null</code> se não achar nenhum.</li>
+        <li>
+          Procure cada elemento <strong>uma vez</strong>, no topo do arquivo, e guarde numa
+          <code>const</code>. Ele continua o mesmo enquanto a página estiver aberta.
+        </li>
+      </ul>
+      <div class="nota cuidado">
+        <p>
+          <code>Cannot read properties of null (reading 'addEventListener')</code> quer dizer que o
+          <code>querySelector</code> não achou nada: confira o <code>id</code> no HTML, letra por letra.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3 ------------------------------------------------------------ -->
+    <section id="p3" aria-labelledby="t3">
+      <h2 id="t3">3. Trocar o texto</h2>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span></div>
+<pre><code>const recado = document.querySelector('#recado');
+recado.textContent = 'Bom dia!';</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d3">
+        <p class="demo-rotulo" id="d3">Experimente</p>
+        <div class="linha">
+          <input id="d3-texto" type="text" value="Bom dia!" aria-label="Texto do recado">
+          <button id="d3-trocar" type="button">Trocar o texto</button>
+        </div>
+        <p class="saida" id="d3-recado" aria-live="polite">Recado ainda não trocado.</p>
+        <p>Digite <code>&lt;b&gt;oi&lt;/b&gt;</code> e troque: as tags aparecem como texto, sem virar negrito.</p>
+      </div>
+      <p>
+        <code>textContent</code> põe o texto exatamente como ele é. Por isso ele é o certo para mostrar o
+        que a pessoa digitou, como o título de uma tarefa.
+      </p>
+      <div class="nota cuidado">
+        <p>
+          Existe também o <code>innerHTML</code>, que interpreta o texto como HTML. Com o que a pessoa
+          digitou, ele é perigoso: um título como <code>&lt;img src=x onerror=...&gt;</code> roda código
+          na página. Neste projeto, use só <code>textContent</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- 4 ------------------------------------------------------------ -->
+    <section id="p4" aria-labelledby="t4">
+      <h2 id="t4">4. Criar, colocar e apagar elementos</h2>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span></div>
+<pre><code>const item = document.createElement('li');  <span class="comentario">// nasce fora da página</span>
+item.className = 'fruta';                      <span class="comentario">// class="fruta"</span>
+
+const nome = document.createElement('strong');
+nome.textContent = 'Banana';
+const preco = document.createElement('span');
+preco.textContent = 'R$ 6,90';
+
+item.append(nome, preco);                      <span class="comentario">// os dois dentro do item</span>
+
+lista.append(item);                            <span class="comentario">// agora aparece, no fim da lista</span></code></pre>
+      </div>
+      <table>
+        <thead><tr><th>Quero</th><th>Use</th></tr></thead>
+        <tbody>
+          <tr><td>criar um elemento</td><td><code>document.createElement('li')</code></td></tr>
+          <tr><td>colocar dentro de outro, no fim</td><td><code>pai.append(filho)</code>; aceita vários: <code>pai.append(a, b, c)</code></td></tr>
+          <tr><td>apagar tudo o que está dentro</td><td><code>pai.replaceChildren()</code></td></tr>
+          <tr><td>tirar um elemento da página</td><td><code>elemento.remove()</code></td></tr>
+          <tr><td>dar um atributo</td><td><code>botao.type = 'button'</code> ou <code>el.setAttribute('aria-label', 'texto')</code></td></tr>
+        </tbody>
+      </table>
+      <div class="nota">
+        <p>
+          Criar, dar classe e dar texto se repete muito. Uma função pequena economiza linhas:
+          <code>criar(tag, classe, texto)</code>, que cria, preenche e devolve o elemento. Escreva a sua
+          em <code>src/tela/</code>.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5 ------------------------------------------------------------ -->
+    <section id="p5" aria-labelledby="t5">
+      <h2 id="t5">5. Classes: o CSS decide a cara</h2>
+      <p>
+        O <code>estilo.css</code> do projeto já sabe desenhar uma tarefa atrasada, concluída ou de
+        prioridade alta. O seu JavaScript só escolhe as classes; cor, borda e risco são do CSS.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span></div>
+<pre><code>cartao.classList.add('destaque', 'grande');  <span class="comentario">// acrescenta uma ou várias</span>
+cartao.classList.remove('grande');
+cartao.classList.toggle('riscado', feito);    <span class="comentario">// põe se feito for true, tira se false</span>
+cartao.classList.contains('destaque');        <span class="comentario">// true</span></code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d5">
+        <p class="demo-rotulo" id="d5">Experimente</p>
+        <div class="linha">
+          <label class="linha"><input id="d5-destaque" type="checkbox"> destaque</label>
+          <label class="linha"><input id="d5-riscado" type="checkbox"> riscado</label>
+        </div>
+        <div class="cartao-classe" id="d5-cartao">Um cartão qualquer</div>
+        <p class="saida" id="d5-classes" aria-live="polite">className: "cartao-classe"</p>
+      </div>
+      <p>
+        Um nome de classe montado com template string também vale:
+        <code>item.classList.add(`prioridade-${prioridade}`)</code> dá <code>prioridade-alta</code>.
+      </p>
+    </section>
+
+    <!-- 6 ------------------------------------------------------------ -->
+    <section id="p6" aria-labelledby="t6">
+      <h2 id="t6">6. Desenhar a partir dos dados</h2>
+      <p>
+        A ideia que segura o projeto inteiro: os dados ficam numa variável, e uma função
+        <strong>desenha</strong> a tela a partir deles. Toda vez que os dados mudam, você chama a função
+        de novo.
+      </p>
+      <ol class="ciclo">
+        <li>Os dados mudam (alguém adicionou, concluiu ou removeu).</li>
+        <li>Você chama a função que desenha.</li>
+        <li>Ela apaga o que estava na tela e cria tudo de novo, a partir dos dados.</li>
+      </ol>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span><button class="copiar" type="button" data-copiar="c6">Copiar código</button></div>
+<pre><code id="c6">const frutas = ['Maçã', 'Banana', 'Uva'];
+const lista = document.querySelector('#frutas');
+const vazio = document.querySelector('#sem-frutas');
+
+function desenhar() {
+  lista.replaceChildren();               <span class="comentario">// 1. apaga o que estava lá</span>
+  for (const fruta of frutas) {          <span class="comentario">// 2. um item por fruta</span>
+    const item = document.createElement('li');
+    item.textContent = fruta;
+    lista.append(item);
+  }
+  vazio.hidden = frutas.length &gt; 0;     <span class="comentario">// 3. a mensagem só aparece sem frutas</span>
+}
+
+desenhar();</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d6">
+        <p class="demo-rotulo" id="d6">Experimente</p>
+        <div class="linha">
+          <button id="d6-mais" type="button">Acrescentar uma fruta</button>
+          <button id="d6-esvaziar" type="button" class="leve">Esvaziar</button>
+        </div>
+        <ul class="lista-demo" id="d6-lista"></ul>
+        <p class="vazio-demo" id="d6-vazio" hidden>Nenhuma fruta por aqui.</p>
+        <p class="saida" id="d6-dado" aria-live="polite"></p>
+      </div>
+      <ul>
+        <li>
+          Sem o <code>replaceChildren()</code> no começo, cada chamada acrescenta a lista inteira de novo:
+          a tela mostra tudo duplicado.
+        </li>
+        <li>
+          <code>elemento.hidden = true</code> esconde o elemento; <code>false</code> mostra. É assim que a
+          mensagem de lista vazia aparece e some.
+        </li>
+        <li>
+          A função de desenhar não decide regra nenhuma: o texto do prazo, a ordem e o resumo vêm das
+          suas regras e classes, que já têm testes.
+        </li>
+      </ul>
+      <div class="nota">
+        <p>
+          Mudar o dado e esquecer de chamar a função de desenhar é o erro mais comum de quem mexe no DOM
+          à mão: o dado muda e a tela fica parada. No E21, o React resolve justamente isso.
+        </p>
+      </div>
+    </section>
+
+    <!-- 7 ------------------------------------------------------------ -->
+    <section id="p7" aria-labelledby="t7">
+      <h2 id="t7">7. Eventos</h2>
+      <p>
+        <code>addEventListener(tipo, funcao)</code> guarda a função e o navegador a chama quando o evento
+        acontece, como o <code>setTimeout</code> do E18 chama a função quando o tempo acaba. A função
+        recebe o <strong>evento</strong>; <code>evento.target</code> é o elemento onde ele aconteceu.
+      </p>
+      <table>
+        <thead><tr><th>Evento</th><th>Quando acontece</th><th>No projeto</th></tr></thead>
+        <tbody>
+          <tr><td><code>click</code></td><td>clique ou toque; <kbd>Enter</kbd> num botão</td><td>Concluir, Remover, Importar</td></tr>
+          <tr><td><code>input</code></td><td>a cada letra digitada ou apagada</td><td>a busca</td></tr>
+          <tr><td><code>change</code></td><td>quando o valor de um <code>select</code> muda</td><td>o filtro</td></tr>
+          <tr><td><code>submit</code></td><td>o formulário foi enviado (botão ou <kbd>Enter</kbd>)</td><td>nova tarefa</td></tr>
+        </tbody>
+      </table>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span></div>
+<pre><code>campo.addEventListener('input', () =&gt; {
+  eco.textContent = `Você digitou: ${campo.value}`;
+});
+
+tamanho.addEventListener('change', desenhar);  <span class="comentario">// o nome da função, sem ()</span></code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d7">
+        <p class="demo-rotulo" id="d7">Experimente</p>
+        <div class="linha">
+          <input id="d7-campo" type="search" placeholder="Digite algo" aria-label="Campo de exemplo">
+          <select id="d7-tamanho" aria-label="Tamanho">
+            <option value="p">Pequeno</option>
+            <option value="m" selected>Médio</option>
+            <option value="g">Grande</option>
+          </select>
+        </div>
+        <p class="saida" id="d7-eco" aria-live="polite">Você digitou: (nada ainda) · tamanho: m</p>
+      </div>
+      <ul>
+        <li><code>campo.value</code> é sempre <strong>texto</strong>; o campo vazio dá <code>''</code>.</li>
+        <li>O <code>value</code> de um <code>select</code> é o <code>value</code> da opção escolhida, não o texto que aparece.</li>
+        <li>
+          <code>addEventListener('change', desenhar())</code>, com parênteses, chama a função na hora e
+          entrega o resultado (<code>undefined</code>) ao navegador. Passe a função, sem chamar.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 8 ------------------------------------------------------------ -->
+    <section id="p8" aria-labelledby="t8">
+      <h2 id="t8">8. Formulário: submit e preventDefault</h2>
+      <p>
+        Ouça o <code>submit</code> do <strong>formulário</strong>, não o clique do botão: assim o
+        <kbd>Enter</kbd> no campo também envia. Por padrão, enviar um formulário recarrega a página, e
+        tudo o que estava na memória some. <code>evento.preventDefault()</code> cancela esse padrão.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span><button class="copiar" type="button" data-copiar="c8">Copiar código</button></div>
+<pre><code id="c8">formulario.addEventListener('submit', (evento) =&gt; {
+  evento.preventDefault();          <span class="comentario">// sem isso, a página recarrega</span>
+  const nome = campoNome.value;     <span class="comentario">// texto; '' se vazio</span>
+  const especie = campoEspecie.value;
+  bichinhos.push({ nome, especie });
+  formulario.reset();               <span class="comentario">// limpa os campos</span>
+  campoNome.focus();                <span class="comentario">// o cursor volta para o primeiro campo</span>
+  desenhar();
+});</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d8">
+        <p class="demo-rotulo" id="d8">Experimente</p>
+        <form id="d8-form" novalidate>
+          <div class="linha">
+            <input id="d8-nome" type="text" placeholder="Nome do bichinho" aria-label="Nome do bichinho" autocomplete="off">
+            <select id="d8-especie" aria-label="Espécie">
+              <option value="gato">Gato</option>
+              <option value="cao">Cão</option>
+            </select>
+            <button type="submit">Adicionar</button>
+          </div>
+        </form>
+        <ul class="lista-demo" id="d8-lista"></ul>
+        <p class="saida" id="d8-log" aria-live="polite">Envie com o botão ou com Enter no campo.</p>
+      </div>
+      <ul>
+        <li>
+          Campo de data (<code>type="date"</code>): o <code>value</code> vem como <code>'AAAA-MM-DD'</code>,
+          mesmo que a tela mostre dd/mm/aaaa, ou <code>''</code> se vazio. É o formato do prazo das tarefas.
+        </li>
+        <li>
+          O <code>novalidate</code> do <code>&lt;form&gt;</code> do projeto desliga as mensagens prontas do
+          navegador: quem valida são as suas classes (etapa 5).
+        </li>
+      </ul>
+    </section>
+
+    <!-- 9 ------------------------------------------------------------ -->
+    <section id="p9" aria-labelledby="t9">
+      <h2 id="t9">9. dataset: um ouvinte para a lista inteira</h2>
+      <p>
+        Os botões de cada item nascem e morrem a cada desenho. Em vez de um ouvinte por botão, ponha
+        <strong>um</strong> ouvinte na lista: o clique num botão "sobe" até ela. Para saber qual botão
+        foi, guarde os dados no próprio botão com atributos <code>data-</code>:
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>o HTML que o seu código cria</span></div>
+<pre><code>&lt;button type="button" data-acao="apagar" data-id="2"&gt;Apagar&lt;/button&gt;</code></pre>
+      </div>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span><button class="copiar" type="button" data-copiar="c9">Copiar código</button></div>
+<pre><code id="c9">botao.dataset.acao = 'apagar';      <span class="comentario">// vira data-acao="apagar"</span>
+botao.dataset.id = recado.id;       <span class="comentario">// vira data-id="2"</span>
+
+lista.addEventListener('click', (evento) =&gt; {
+  const { acao, id } = evento.target.dataset;
+  if (!acao) return;                <span class="comentario">// clicou fora de um botão: guard clause (E13)</span>
+  const numero = Number(id);        <span class="comentario">// o dataset sempre devolve texto</span>
+  if (acao === 'apagar') recados = recados.filter((r) =&gt; r.id !== numero);
+  if (acao === 'curtir') curtidos.add(numero);
+  desenhar();
+});</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d9">
+        <p class="demo-rotulo" id="d9">Experimente</p>
+        <ul class="lista-demo" id="d9-lista"></ul>
+        <p class="saida" id="d9-log" aria-live="polite">Clique num botão ou no espaço vazio de um item.</p>
+      </div>
+      <ul>
+        <li><code>data-id</code> no HTML vira <code>dataset.id</code> no JavaScript; <code>data-acao</code>, <code>dataset.acao</code>.</li>
+        <li>
+          O valor é <strong>sempre texto</strong>: <code>'2' === 2</code> é <code>false</code>. Converta com
+          <code>Number</code> antes de procurar pelo id.
+        </li>
+        <li>
+          Um ouvinte só, ligado uma vez no começo, serve para os itens que ainda nem existem: os que o
+          próximo desenho criar.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 10 ----------------------------------------------------------- -->
+    <section id="p10" aria-labelledby="t10">
+      <h2 id="t10">10. Mensagem embaixo do campo</h2>
+      <p>
+        O HTML do projeto já tem um parágrafo vazio embaixo do título e do prazo
+        (<code>#erro-titulo</code> e <code>#erro-prazo</code>), e o CSS esconde o parágrafo enquanto ele
+        está vazio. Mostrar o erro é escrever nele; limpar é escrever <code>''</code>.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span><button class="copiar" type="button" data-copiar="c10">Copiar código</button></div>
+<pre><code id="c10">function mostrarErro(campo, mensagem, texto) {
+  mensagem.textContent = texto;
+  campo.setAttribute('aria-invalid', 'true');  <span class="comentario">// borda vermelha e aviso ao leitor de tela</span>
+  campo.focus();
+}
+
+function limparErro(campo, mensagem) {
+  mensagem.textContent = '';
+  campo.removeAttribute('aria-invalid');
+}</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d10">
+        <p class="demo-rotulo" id="d10">Experimente: o recado precisa de pelo menos 3 letras</p>
+        <form id="d10-form" novalidate>
+          <label class="rotulo" for="d10-campo">Recado</label>
+          <div class="linha">
+            <input id="d10-campo" type="text" autocomplete="off" aria-describedby="d10-erro">
+            <button type="submit">Enviar</button>
+          </div>
+          <p class="erro" id="d10-erro"></p>
+        </form>
+        <p class="saida" id="d10-log" aria-live="polite">Envie vazio, com 2 letras e com 3.</p>
+      </div>
+      <ul>
+        <li>
+          No projeto, quem decide que o título está errado é a sua classe, que lança um erro próprio
+          (etapa 5). A tela só captura o erro com <code>try...catch</code> e escolhe onde mostrar pelo
+          <code>codigo</code>, com o <code>switch</code> do E13.
+        </li>
+        <li>
+          <code>aria-describedby="erro-titulo"</code>, que já está no HTML, liga o campo à mensagem: o
+          leitor de tela lê o erro junto com o campo.
+        </li>
+        <li>Limpe as mensagens antigas no começo de cada envio, antes de validar de novo.</li>
+      </ul>
+    </section>
+
+    <!-- 11 ----------------------------------------------------------- -->
+    <section id="p11" aria-labelledby="t11">
+      <h2 id="t11">11. localStorage: guardar no navegador</h2>
+      <p>
+        O <code>localStorage</code> guarda textos no navegador, por chave, e eles continuam lá depois de
+        recarregar ou fechar a página.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span></div>
+<pre><code>localStorage.setItem('recado', 'Comprar pão');
+localStorage.getItem('recado');      <span class="comentario">// 'Comprar pão'</span>
+localStorage.getItem('nao-existe');  <span class="comentario">// null</span>
+localStorage.removeItem('recado');
+
+<span class="comentario">// só guarda texto: objetos e listas passam pelo JSON (E06)</span>
+localStorage.setItem('bichinhos', JSON.stringify([{ nome: 'Mingau' }]));
+const lidos = JSON.parse(localStorage.getItem('bichinhos'));</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d11">
+        <p class="demo-rotulo" id="d11">Experimente: guarde, recarregue a página e veja o recado voltar</p>
+        <div class="linha">
+          <input id="d11-campo" type="text" placeholder="Um recado" aria-label="Recado para guardar" autocomplete="off">
+          <button id="d11-guardar" type="button">Guardar</button>
+          <button id="d11-apagar" type="button" class="leve">Apagar</button>
+        </div>
+        <p class="saida" id="d11-log" aria-live="polite"></p>
+      </div>
+      <ul>
+        <li>
+          Instâncias de classe perdem a classe no <code>JSON.stringify</code> (E15): guarde os dados do
+          <code>paraJSON()</code> e recrie as instâncias ao ler.
+        </li>
+        <li>
+          Veja e apague o que está guardado no DevTools, aba <strong>Application</strong>, item
+          <strong>Local storage</strong>.
+        </li>
+        <li>
+          Cada endereço tem o seu: <code>localhost:3000</code> e <code>localhost:5000</code> não enxergam
+          os dados um do outro. Se o <code>npx serve</code> abriu em outra porta, as tarefas "somem".
+        </li>
+        <li>
+          O <code>localStorage</code> não existe no Node nem no Jest. Por isso, na etapa 6, os testes
+          recebem um armazenamento falso com o mesmo <code>getItem</code> e <code>setItem</code>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 12 ----------------------------------------------------------- -->
+    <section id="p12" aria-labelledby="t12">
+      <h2 id="t12">12. Desligar o botão enquanto espera</h2>
+      <p>
+        Enquanto um pedido à internet não volta, o botão que o disparou fica desligado: assim ninguém
+        dispara o mesmo pedido cinco vezes. O <code>finally</code> (E17) religa nos dois caminhos.
+      </p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>exemplo</span><button class="copiar" type="button" data-copiar="c12">Copiar código</button></div>
+<pre><code id="c12">botao.addEventListener('click', async () =&gt; {
+  botao.disabled = true;
+  situacao.textContent = 'Carregando...';
+  try {
+    const piada = await buscarPiada();   <span class="comentario">// uma Promise (E18, E19)</span>
+    situacao.textContent = piada;
+  } catch (erro) {
+    situacao.textContent = erro.message;
+  } finally {
+    botao.disabled = false;              <span class="comentario">// com sucesso ou com falha</span>
+  }
+});</code></pre>
+      </div>
+      <div class="demo" aria-labelledby="d12">
+        <p class="demo-rotulo" id="d12">Experimente: a espera aqui é de mentira, 2 segundos</p>
+        <div class="linha">
+          <button id="d12-botao" type="button">Buscar</button>
+          <label class="linha"><input id="d12-falhar" type="checkbox"> simular falha</label>
+        </div>
+        <p class="saida" id="d12-situacao" aria-live="polite">Clique em Buscar.</p>
+      </div>
+      <ul>
+        <li>Botão desligado não recebe clique; o CSS do projeto deixa ele mais claro.</li>
+        <li>
+          Sem o <code>finally</code>, uma falha deixa o botão desligado para sempre, e o "Carregando..."
+          fica na tela.
+        </li>
+        <li>
+          Para testar o caminho sem internet no navegador: DevTools, aba <strong>Network</strong>, troque
+          <strong>No throttling</strong> por <strong>Offline</strong>.
+        </li>
+      </ul>
+    </section>
+
+    <!-- 13 ----------------------------------------------------------- -->
+    <section id="p13" aria-labelledby="t13">
+      <h2 id="t13">13. Erros comuns</h2>
+      <dl>
+        <dt><code>Access to script ... from origin 'null' has been blocked by CORS policy</code></dt>
+        <dd>A página foi aberta pelo <code>file://</code>. Rode <code>npx serve .</code> e use o endereço dele.</dd>
+
+        <dt><code>GET .../src/regras/tarefas 404 (Not Found)</code></dt>
+        <dd>Import sem o <code>.js</code>. O Jest aceita sem; o navegador, não.</dd>
+
+        <dt><code>Cannot read properties of null (reading 'addEventListener')</code></dt>
+        <dd>O <code>querySelector</code> não achou o elemento: <code>id</code> escrito diferente do HTML.</dd>
+
+        <dt>A página pisca e a tarefa nova some</dt>
+        <dd>Faltou <code>evento.preventDefault()</code> no <code>submit</code>: o navegador recarregou a página.</dd>
+
+        <dt>A lista aparece duplicada depois de cada ação</dt>
+        <dd>A função de desenhar não apaga o que já estava lá: <code>replaceChildren()</code> no começo.</dd>
+
+        <dt>Clicar em Remover não faz nada</dt>
+        <dd>O id do <code>dataset</code> é texto: compare com <code>Number(id)</code>.</dd>
+
+        <dt>O dado mudou, mas a tela não</dt>
+        <dd>Faltou chamar a função de desenhar depois da mudança.</dd>
+
+        <dt>As tarefas salvas sumiram</dt>
+        <dd>O <code>npx serve</code> abriu em outra porta, e cada endereço tem o seu <code>localStorage</code>.</dd>
+
+        <dt><code>Uncaught (in promise)</code> no Console</dt>
+        <dd>Uma Promise rejeitou e ninguém tratou: falta <code>catch</code> (ou <code>try...catch</code> em volta do <code>await</code>).</dd>
+      </dl>
+    </section>
+
+    <footer>Material do Projeto 3 (lista de tarefas) do curso Programador Mobile.</footer>
+  </main>
+
+  <script>
+    // -----------------------------------------------------------------
+    // 3. Trocar o texto
+    // -----------------------------------------------------------------
+    const d3Texto = document.querySelector('#d3-texto');
+    const d3Recado = document.querySelector('#d3-recado');
+    document.querySelector('#d3-trocar').addEventListener('click', () => {
+      d3Recado.textContent = d3Texto.value;
+    });
+
+    // -----------------------------------------------------------------
+    // 5. Classes
+    // -----------------------------------------------------------------
+    const d5Cartao = document.querySelector('#d5-cartao');
+    const d5Destaque = document.querySelector('#d5-destaque');
+    const d5Riscado = document.querySelector('#d5-riscado');
+    const d5Classes = document.querySelector('#d5-classes');
+    function d5Atualizar() {
+      d5Cartao.classList.toggle('destaque', d5Destaque.checked);
+      d5Cartao.classList.toggle('riscado', d5Riscado.checked);
+      d5Classes.textContent = `className: "${d5Cartao.className}"`;
+    }
+    d5Destaque.addEventListener('change', d5Atualizar);
+    d5Riscado.addEventListener('change', d5Atualizar);
+
+    // -----------------------------------------------------------------
+    // 6. Desenhar a partir dos dados
+    // -----------------------------------------------------------------
+    const d6Sobra = ['Manga', 'Pera', 'Caju', 'Kiwi', 'Figo', 'Limão'];
+    let d6Frutas = ['Maçã', 'Banana', 'Uva'];
+    let d6Proxima = 0;
+    const d6Lista = document.querySelector('#d6-lista');
+    const d6Vazio = document.querySelector('#d6-vazio');
+    const d6Dado = document.querySelector('#d6-dado');
+    function d6Desenhar() {
+      d6Lista.replaceChildren();
+      for (const fruta of d6Frutas) {
+        const item = document.createElement('li');
+        item.textContent = fruta;
+        d6Lista.append(item);
+      }
+      d6Vazio.hidden = d6Frutas.length > 0;
+      d6Dado.textContent = `frutas = ${JSON.stringify(d6Frutas)}`;
+    }
+    document.querySelector('#d6-mais').addEventListener('click', () => {
+      d6Frutas.push(d6Sobra[d6Proxima % d6Sobra.length]);
+      d6Proxima++;
+      d6Desenhar();
+    });
+    document.querySelector('#d6-esvaziar').addEventListener('click', () => {
+      d6Frutas = [];
+      d6Desenhar();
+    });
+    d6Desenhar();
+
+    // -----------------------------------------------------------------
+    // 7. Eventos
+    // -----------------------------------------------------------------
+    const d7Campo = document.querySelector('#d7-campo');
+    const d7Tamanho = document.querySelector('#d7-tamanho');
+    const d7Eco = document.querySelector('#d7-eco');
+    function d7Mostrar() {
+      const texto = d7Campo.value === '' ? '(nada ainda)' : d7Campo.value;
+      d7Eco.textContent = `Você digitou: ${texto} · tamanho: ${d7Tamanho.value}`;
+    }
+    d7Campo.addEventListener('input', d7Mostrar);
+    d7Tamanho.addEventListener('change', d7Mostrar);
+
+    // -----------------------------------------------------------------
+    // 8. Formulário
+    // -----------------------------------------------------------------
+    const d8Form = document.querySelector('#d8-form');
+    const d8Nome = document.querySelector('#d8-nome');
+    const d8Especie = document.querySelector('#d8-especie');
+    const d8Lista = document.querySelector('#d8-lista');
+    const d8Log = document.querySelector('#d8-log');
+    const d8Bichinhos = [];
+    function d8Desenhar() {
+      d8Lista.replaceChildren();
+      for (const bichinho of d8Bichinhos) {
+        const item = document.createElement('li');
+        item.textContent = `${bichinho.nome} (${bichinho.especie})`;
+        d8Lista.append(item);
+      }
+    }
+    d8Form.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const nome = d8Nome.value.trim();
+      if (nome === '') {
+        d8Log.textContent = 'O campo veio vazio: value é \'\'. Nada foi adicionado.';
+        d8Nome.focus();
+        return;
+      }
+      d8Bichinhos.push({ nome, especie: d8Especie.value });
+      d8Log.textContent = `submit recebido: { nome: '${nome}', especie: '${d8Especie.value}' }, e a página não recarregou.`;
+      d8Form.reset();
+      d8Nome.focus();
+      d8Desenhar();
+    });
+
+    // -----------------------------------------------------------------
+    // 9. dataset
+    // -----------------------------------------------------------------
+    let d9Recados = [
+      { id: 1, texto: 'Levar o lixo' },
+      { id: 2, texto: 'Pagar o aluguel' },
+      { id: 3, texto: 'Ligar para a avó' },
+    ];
+    const d9Curtidos = new Set();
+    const d9Lista = document.querySelector('#d9-lista');
+    const d9Log = document.querySelector('#d9-log');
+    function d9Botao(acao, texto, recado) {
+      const botao = document.createElement('button');
+      botao.type = 'button';
+      botao.className = 'leve';
+      botao.textContent = texto;
+      botao.dataset.acao = acao;
+      botao.dataset.id = recado.id;
+      botao.setAttribute('aria-label', `${texto}: ${recado.texto}`);
+      return botao;
+    }
+    function d9Desenhar() {
+      d9Lista.replaceChildren();
+      for (const recado of d9Recados) {
+        const item = document.createElement('li');
+        item.classList.toggle('curtida', d9Curtidos.has(recado.id));
+        const texto = document.createElement('span');
+        texto.textContent = recado.texto;
+        const acoes = document.createElement('span');
+        acoes.className = 'linha';
+        acoes.append(d9Botao('curtir', 'Curtir', recado), d9Botao('apagar', 'Apagar', recado));
+        item.append(texto, acoes);
+        d9Lista.append(item);
+      }
+      if (d9Recados.length === 0) {
+        const item = document.createElement('li');
+        item.textContent = 'Todos os recados foram apagados. Recarregue a página para vê-los de novo.';
+        d9Lista.append(item);
+      }
+    }
+    d9Lista.addEventListener('click', (evento) => {
+      const { acao, id } = evento.target.dataset;
+      if (!acao) {
+        d9Log.textContent = 'Clique fora de um botão: dataset.acao é undefined, e a guard clause sai.';
+        return;
+      }
+      const numero = Number(id);
+      if (acao === 'apagar') d9Recados = d9Recados.filter((r) => r.id !== numero);
+      if (acao === 'curtir') d9Curtidos.add(numero);
+      d9Log.textContent = `acao = '${acao}', id = '${id}' (texto), Number(id) = ${numero}`;
+      d9Desenhar();
+    });
+    d9Desenhar();
+
+    // -----------------------------------------------------------------
+    // 10. Mensagem embaixo do campo
+    // -----------------------------------------------------------------
+    const d10Form = document.querySelector('#d10-form');
+    const d10Campo = document.querySelector('#d10-campo');
+    const d10Erro = document.querySelector('#d10-erro');
+    const d10Log = document.querySelector('#d10-log');
+    d10Form.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      d10Erro.textContent = '';
+      d10Campo.removeAttribute('aria-invalid');
+      const texto = d10Campo.value.trim();
+      let problema = '';
+      if (texto === '') problema = 'Escreva o recado.';
+      else if (texto.length < 3) problema = 'O recado precisa de pelo menos 3 letras.';
+      if (problema !== '') {
+        d10Erro.textContent = problema;
+        d10Campo.setAttribute('aria-invalid', 'true');
+        d10Campo.focus();
+        d10Log.textContent = 'Erro mostrado embaixo do campo, com aria-invalid="true".';
+        return;
+      }
+      d10Log.textContent = `Recado aceito: "${texto}". A mensagem de erro foi limpa.`;
+      d10Form.reset();
+    });
+
+    // -----------------------------------------------------------------
+    // 11. localStorage (com try/catch: em janelas anônimas pode falhar)
+    // -----------------------------------------------------------------
+    const D11_CHAVE = 'guia-dom-recado';
+    const d11Campo = document.querySelector('#d11-campo');
+    const d11Log = document.querySelector('#d11-log');
+    function d11Mostrar() {
+      try {
+        const guardado = localStorage.getItem(D11_CHAVE);
+        d11Log.textContent = guardado === null
+          ? `getItem('${D11_CHAVE}') devolve null: nada guardado ainda.`
+          : `getItem('${D11_CHAVE}') devolve '${guardado}'.`;
+      } catch {
+        d11Log.textContent = 'Este navegador não deixou usar o localStorage (janela anônima?).';
+      }
+    }
+    document.querySelector('#d11-guardar').addEventListener('click', () => {
+      try {
+        localStorage.setItem(D11_CHAVE, d11Campo.value);
+      } catch {
+        // mostrado em d11Mostrar
+      }
+      d11Mostrar();
+    });
+    document.querySelector('#d11-apagar').addEventListener('click', () => {
+      try {
+        localStorage.removeItem(D11_CHAVE);
+      } catch {
+        // mostrado em d11Mostrar
+      }
+      d11Mostrar();
+    });
+    d11Mostrar();
+
+    // -----------------------------------------------------------------
+    // 12. Desligar o botão enquanto espera
+    // -----------------------------------------------------------------
+    const d12Botao = document.querySelector('#d12-botao');
+    const d12Falhar = document.querySelector('#d12-falhar');
+    const d12Situacao = document.querySelector('#d12-situacao');
+    function d12Buscar(falhar) {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (falhar) reject(new Error('Sem conexão. Tente de novo.'));
+          else resolve('Pronto: chegou a resposta, e o botão voltou a funcionar.');
+        }, 2000);
+      });
+    }
+    d12Botao.addEventListener('click', async () => {
+      d12Botao.disabled = true;
+      d12Situacao.textContent = 'Carregando... (o botão está desligado)';
+      try {
+        d12Situacao.textContent = await d12Buscar(d12Falhar.checked);
+      } catch (erro) {
+        d12Situacao.textContent = `${erro.message} O botão voltou a funcionar, graças ao finally.`;
+      } finally {
+        d12Botao.disabled = false;
+      }
+    });
+
+    // -----------------------------------------------------------------
+    // Copiar código
+    // -----------------------------------------------------------------
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const codigo = document.getElementById(botao.dataset.copiar);
+        try {
+          await navigator.clipboard.writeText(codigo.textContent);
+          botao.textContent = 'Copiado';
+        } catch {
+          getSelection().selectAllChildren(codigo);
+          botao.textContent = 'Use Ctrl+C';
+        }
+        setTimeout(() => { botao.textContent = 'Copiar código'; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

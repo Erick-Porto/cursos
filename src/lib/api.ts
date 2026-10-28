@@ -13,6 +13,10 @@ import type {
   LessonProgress,
   LessonSummary,
   Module,
+  Project,
+  ProjectGradeResult,
+  ProjectSubmission,
+  ProjectSubmitResult,
   Question,
   StudentProgressRow,
   SubmitResult,
@@ -22,6 +26,25 @@ import type {
 function unwrap<T>(res: { data: T | null; error: { message: string } | null }): T {
   if (res.error) throw res.error
   return res.data as T
+}
+
+type DbError = { code?: string; message: string } | null
+
+/** Tabela que ainda não existe no banco (migration não aplicada): o PostgREST responde PGRST205. */
+function isMissingTable(err: DbError): boolean {
+  return !!err && (err.code === 'PGRST205' || err.code === '42P01' || /schema cache|does not exist/i.test(err.message))
+}
+
+/** Lista de uma tabela opcional: vazia enquanto a migration dela não for aplicada. */
+function listOrEmpty<T>(res: { data: unknown; error: DbError }): T[] {
+  if (isMissingTable(res.error)) return []
+  return (unwrap(res) as T[] | null) ?? []
+}
+
+/** Uma linha de uma tabela opcional: null enquanto a migration dela não for aplicada. */
+function oneOrNull<T>(res: { data: unknown; error: DbError }): T | null {
+  if (isMissingTable(res.error)) return null
+  return (unwrap(res) as T | null) ?? null
 }
 
 /**
@@ -43,31 +66,39 @@ export interface CourseStructure {
   lessons: LessonSummary[]
   assessments: Assessment[]
   achievements: Achievement[]
+  projects: Project[]
 }
 
+/** Projeto sem o enunciado: a página do curso só lista. */
+const PROJECT_LIST_COLUMNS =
+  'id, course_id, module_id, slug, title, summary, section, rubric, steps, opens_lesson, due_lesson, due_label, passing_score, is_required, position'
+
 export async function fetchCourseStructure(courseId: string): Promise<CourseStructure> {
-  const [modules, lessons, assessments, achievements] = await Promise.all([
+  const [modules, lessons, assessments, achievements, projects] = await Promise.all([
     supabase.from('modules').select('*').eq('course_id', courseId).order('position'),
     supabase.from('v_course_syllabus').select('*').eq('course_id', courseId).order('position'),
     supabase.from('assessments').select('*').eq('course_id', courseId).order('position'),
     supabase.from('achievements').select('*').eq('course_id', courseId).order('position'),
+    supabase.from('projects').select(PROJECT_LIST_COLUMNS).eq('course_id', courseId).order('position'),
   ])
   return {
     modules: unwrap(modules) ?? [],
     lessons: unwrap(lessons) ?? [],
     assessments: unwrap(assessments) ?? [],
     achievements: unwrap(achievements) ?? [],
+    projects: listOrEmpty<Project>(projects),
   }
 }
 
 export interface CourseProgress {
   progress: LessonProgress[]
   attempts: Attempt[]
+  submissions: ProjectSubmission[]
 }
 
 export async function fetchCourseProgress(courseId: string): Promise<CourseProgress> {
   const uid = await myId()
-  const [progress, attempts] = await Promise.all([
+  const [progress, attempts, submissions] = await Promise.all([
     supabase.from('lesson_progress').select('*').eq('user_id', uid).eq('course_id', courseId),
     supabase
       .from('attempts')
@@ -75,8 +106,13 @@ export async function fetchCourseProgress(courseId: string): Promise<CourseProgr
       .eq('user_id', uid)
       .eq('course_id', courseId)
       .order('submitted_at', { ascending: false }),
+    supabase.from('project_submissions').select('*').eq('user_id', uid).eq('course_id', courseId),
   ])
-  return { progress: unwrap(progress) ?? [], attempts: unwrap(attempts) ?? [] }
+  return {
+    progress: unwrap(progress) ?? [],
+    attempts: unwrap(attempts) ?? [],
+    submissions: listOrEmpty<ProjectSubmission>(submissions),
+  }
 }
 
 export async function fetchLesson(courseId: string, slug: string): Promise<Lesson | null> {
@@ -223,4 +259,75 @@ export async function fetchClassScript(courseId: string, slug: string): Promise<
   return unwrap(
     await supabase.from('class_scripts').select('*').eq('course_id', courseId).eq('slug', slug).maybeSingle(),
   )
+}
+
+// ---- Projetos avaliados ----
+
+export async function fetchProject(courseId: string, slug: string): Promise<Project | null> {
+  return oneOrNull<Project>(await supabase.from('projects').select('*').eq('course_id', courseId).eq('slug', slug).maybeSingle())
+}
+
+export async function fetchMySubmission(projectId: string): Promise<ProjectSubmission | null> {
+  const uid = await myId()
+  return oneOrNull<ProjectSubmission>(
+    await supabase.from('project_submissions').select('*').eq('user_id', uid).eq('project_id', projectId).maybeSingle(),
+  )
+}
+
+export async function submitProject(args: {
+  projectId: string
+  repoUrl: string
+  demoUrl?: string | null
+  notes?: string | null
+}): Promise<ProjectSubmitResult> {
+  return unwrap(
+    await supabase.rpc('submit_project', {
+      p_project_id: args.projectId,
+      p_repo_url: args.repoUrl,
+      p_demo_url: args.demoUrl || null,
+      p_notes: args.notes || null,
+    }),
+  ) as ProjectSubmitResult
+}
+
+/** Projetos de um curso, com enunciado (staff vê também os de cursos não publicados). */
+export async function fetchProjectsForStaff(courseId: string): Promise<Project[]> {
+  return listOrEmpty<Project>(await supabase.from('projects').select('*').eq('course_id', courseId).order('position'))
+}
+
+/** Entregas de todos os alunos de um curso (a RLS só libera para staff). */
+export async function fetchSubmissionsForStaff(courseId: string): Promise<ProjectSubmission[]> {
+  return listOrEmpty<ProjectSubmission>(
+    await supabase.from('project_submissions').select('*').eq('course_id', courseId).order('submitted_at', { ascending: false }),
+  )
+}
+
+export async function fetchSubmissionForStaff(projectId: string, userId: string): Promise<ProjectSubmission | null> {
+  return oneOrNull<ProjectSubmission>(
+    await supabase.from('project_submissions').select('*').eq('project_id', projectId).eq('user_id', userId).maybeSingle(),
+  )
+}
+
+/** Guia de correção do projeto (só staff lê). */
+export async function fetchProjectGuide(projectId: string): Promise<string | null> {
+  const row = oneOrNull<{ content_md: string }>(
+    await supabase.from('project_guides').select('content_md').eq('project_id', projectId).maybeSingle(),
+  )
+  return row?.content_md ?? null
+}
+
+export async function gradeProject(args: {
+  submissionId: string
+  scores: Record<string, number>
+  feedback: string
+  final: boolean
+}): Promise<ProjectGradeResult> {
+  return unwrap(
+    await supabase.rpc('grade_project', {
+      p_submission_id: args.submissionId,
+      p_scores: args.scores,
+      p_feedback: args.feedback,
+      p_final: args.final,
+    }),
+  ) as ProjectGradeResult
 }

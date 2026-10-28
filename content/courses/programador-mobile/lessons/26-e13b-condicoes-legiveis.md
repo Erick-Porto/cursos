@@ -403,3 +403,31 @@ Status, parcelas, frete e cupom com testes.
 :::
 
 **Critérios de entrega**: 15 testes novos ou mais; os testes do E10 atualizados, não apagados; nenhuma regra nos scripts. Link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Lista de tarefas
+
+O projeto mais difícil do Módulo Básico: um app de tarefas no navegador, com a tela feita por você no DOM e as regras testadas no Jest.
+
+- :icon[calendar-clock] Prazo, prioridade, busca e ordem por urgência
+- :icon[boxes] Classes, tarefa que se repete e erros próprios
+- :icon[save] Tudo salvo no navegador, com Promises
+- :icon[cloud-download] Tarefas de exemplo vindas de uma API
+
+Oito etapas, uma por encontro, do E13 ao E20, num repositório seu. Entrega pela plataforma até o **início do E21**, com a rubrica na página do projeto.
+
+O Projeto 2, a Agenda de contatos, fechou no início de hoje: confira se o link está na página dele.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 1: prazo e prioridade
+
+Repositório `lista-de-tarefas`, a partir do [ponto-de-partida.zip](materiais/projeto-3/ponto-de-partida.zip):
+
+- `situacaoDoPrazo(prazo, hoje)`: `'atrasada'`, `'vence-hoje'`, `'em-dia'` ou `'sem-prazo'`
+- `textoDoPrazo(prazo, hoje)`: "Atrasada há 2 dias", "Vence amanhã"
+- `pesoDaPrioridade(prioridade)` com `switch` e `default`
+- testes com `hoje` fixo: ontem, hoje, amanhã e hoje às 23h59
+
+Commit: `Projeto 3: etapa 1, prazo e prioridade`. Enunciado completo e entrega: página do curso, em **Projetos**.

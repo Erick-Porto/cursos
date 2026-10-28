@@ -407,6 +407,19 @@ Entrega: link do repositório no sistema. Depois, a **Prova 2** (60 minutos, no 
 
 ---
 
+## :icon[milestone] Projeto 4 · Etapa 5: detalhe e entrega
+
+No seu repositório `livro-de-receitas`, a última etapa:
+
+- `DetalheReceita`: a ficha, os ingredientes em `<ul>` e o modo de preparo em `<ol>`
+- "Ver receita" no cartão e "Voltar para a lista", com um estado no `App`
+- README com o que o app faz, como rodar e dois prints
+- o link do repositório colado na página do projeto
+
+Commit: `Projeto 4: etapa 5, detalhe da receita e README`. Prazo: **início do E26**. Enunciado completo e entrega: página do curso, em **Projetos**.
+
+---
+
 ## Resumo
 
 :::summary

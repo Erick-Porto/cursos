@@ -1,0 +1,19 @@
+{
+  "name": "lista-de-tarefas",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "lint": "eslint .",
+    "verificar": "eslint . && jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
+    "@eslint/js": "^9.39.5",
+    "babel-jest": "^30.5.2",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0",
+    "jest": "^30.5.2"
+  }
+}

@@ -320,3 +320,17 @@ A Início vira vitrine e nasce a tela Categorias.
 :::
 
 **Critérios**: keys estáveis, cores do tema nos dois modos, nenhuma lista vertical dentro de `ScrollView`. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 5: lista por cidade e busca
+
+No seu repositório `casas-de-adocao`:
+
+- `agruparPorCidade` e `buscarCasas` em `src/regras/casas.js`; a busca ignora maiúsculas e acentos
+- `SectionList` com as 5 cidades, título de seção fixo, com fundo e a quantidade de casas
+- busca com um `Campo` controlado acima da lista: "sao" acha 4 casas
+- puxar para atualizar, com "atualizado às" no topo
+- lista vazia com mensagem e o botão "Limpar busca"
+
+Commit: `Projeto 6: etapa 5, lista por cidade e busca`. Enunciado completo e entrega: página do curso, em **Projetos**.

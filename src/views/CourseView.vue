@@ -2,17 +2,18 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import {
-  ArrowLeft, Award, BookOpen, Circle, CircleCheck, CirclePlay, Clock, FileText, Layers, Lock, Play, Signal, Trophy, UserRound,
+  ArrowLeft, Award, BookOpen, CalendarClock, Circle, CircleCheck, CirclePlay, Clock, FileText, Layers, Lock, Milestone, Play, Signal, Target, Trophy, UserRound,
 } from 'lucide-vue-next'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
 import { fetchCourseBySlug, fetchCourseProgress, fetchCourseStructure } from '@/lib/api'
-import { courseMaterialBase, renderMarkdown } from '@/lib/markdown'
+import { courseMaterialBase, renderInline, renderMarkdown } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
 import { resolveIcon } from '@/lib/icons'
 import { formatMinutes, formatPct, LEVEL_LABEL } from '@/lib/format'
-import type { Achievement, Assessment, Attempt, Course, LessonProgress, LessonSummary, Module } from '@/types/db'
+import { groupBySection, PROJECT_STATE_BADGE, PROJECT_STATE_LABEL, projectState } from '@/lib/projects'
+import type { Achievement, Assessment, Attempt, Course, LessonProgress, LessonSummary, Module, Project, ProjectSubmission } from '@/types/db'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
 import LoadingBlock from '@/components/ui/LoadingBlock.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
@@ -31,6 +32,8 @@ const assessments = ref<Assessment[]>([])
 const courseAchievements = ref<Achievement[]>([])
 const progress = ref<LessonProgress[]>([])
 const attempts = ref<Attempt[]>([])
+const projects = ref<Project[]>([])
+const submissions = ref<ProjectSubmission[]>([])
 const loading = ref(true)
 const notFound = ref(false)
 const enrolling = ref(false)
@@ -74,6 +77,10 @@ const sections = computed(() => {
   return out.filter((s) => s.lessons.length)
 })
 
+const submissionByProject = computed(() => new Map(submissions.value.map((s) => [s.project_id, s])))
+const projectGroups = computed(() => groupBySection(projects.value))
+const gradedProjects = computed(() => projects.value.filter((p) => submissionByProject.value.get(p.id)?.pct != null))
+
 const lessonAssessments = (lessonId: string) => assessments.value.filter((a) => a.lesson_id === lessonId)
 const finalAssessments = computed(() => assessments.value.filter((a) => a.lesson_id === null))
 const totalMinutes = computed(() => lessons.value.reduce((s, l) => s + (l.duration_minutes ?? 0), 0))
@@ -97,6 +104,7 @@ async function loadProgress(courseId: string) {
   const p = await fetchCourseProgress(courseId)
   progress.value = p.progress
   attempts.value = p.attempts
+  submissions.value = p.submissions
 }
 
 async function load() {
@@ -116,10 +124,12 @@ async function load() {
     lessons.value = s.lessons
     assessments.value = s.assessments
     courseAchievements.value = s.achievements
+    projects.value = s.projects
     if (catalog.enrollmentFor(c.id)) await loadProgress(c.id)
     else {
       progress.value = []
       attempts.value = []
+      submissions.value = []
     }
   } catch (e) {
     toast.error('Erro ao carregar o curso', friendlyError(e))
@@ -167,6 +177,7 @@ onMounted(load)
             <span class="badge"><Layers /> {{ lessons.length }} aulas</span>
             <span v-if="totalMinutes" class="badge"><Clock /> {{ formatMinutes(totalMinutes) }}</span>
             <span v-if="assessments.length" class="badge"><FileText /> {{ assessments.length }} avaliações</span>
+            <span v-if="projects.length" class="badge"><Target /> {{ projects.length }} projetos</span>
             <span v-if="!course.is_published" class="badge badge--warning">Rascunho</span>
           </div>
           <h1 class="hero__title">{{ course.title }}</h1>
@@ -196,6 +207,38 @@ onMounted(load)
       <div class="course-grid">
         <main class="stack">
           <section v-if="descriptionHtml" class="card md" v-html="descriptionHtml"></section>
+
+          <section v-if="projects.length" class="card" style="padding: 0">
+            <header class="mod__head">
+              <h2 class="mod__title">Projetos avaliados</h2>
+              <p class="muted small" style="margin: 2px 0 0">Feitos em etapas ao longo dos encontros e entregues aqui, com o link do repositório.</p>
+            </header>
+            <div v-for="g in projectGroups" :key="g.section ?? 'sem-secao'" class="proj-group">
+              <h3 v-if="g.section" class="proj-group__title">{{ g.section }}</h3>
+              <ol class="lessons" :class="{ 'lessons--tight': g.section }">
+                <li v-for="p in g.projects" :key="p.id">
+                  <RouterLink :to="`/cursos/${course.slug}/projetos/${p.slug}`" class="lesson" :class="{ 'is-completed': projectState(submissionByProject.get(p.id)) === 'passed' }">
+                    <span class="lesson__status">
+                      <CircleCheck v-if="projectState(submissionByProject.get(p.id)) === 'passed'" />
+                      <Target v-else />
+                    </span>
+                    <span class="lesson__body">
+                      <span class="lesson__title">{{ p.title }}</span>
+                      <span v-if="p.summary" class="lesson__summary inline-md" v-html="renderInline(p.summary)"></span>
+                      <span class="lesson__meta">
+                        <span v-if="enrollment" class="badge" :class="PROJECT_STATE_BADGE[projectState(submissionByProject.get(p.id))]">
+                          {{ PROJECT_STATE_LABEL[projectState(submissionByProject.get(p.id))] }}
+                        </span>
+                        <span v-if="p.due_label"><CalendarClock /> entrega até o {{ p.due_label }}</span>
+                        <span><Milestone /> {{ p.steps.length }} etapas</span>
+                        <span v-if="submissionByProject.get(p.id)?.pct != null">nota {{ formatPct(submissionByProject.get(p.id)!.pct, 1) }}</span>
+                      </span>
+                    </span>
+                  </RouterLink>
+                </li>
+              </ol>
+            </div>
+          </section>
 
           <section v-for="s in sections" :key="s.key" class="card" style="padding: 0">
             <header class="mod__head">
@@ -304,9 +347,15 @@ onMounted(load)
             </ul>
           </section>
 
-          <section v-if="enrollment && attempts.length" class="card">
+          <section v-if="enrollment && (attempts.length || gradedProjects.length)" class="card">
             <h2 style="font-size: 1.05rem">Suas notas</h2>
             <ul class="scores">
+              <li v-for="p in gradedProjects" :key="p.id" class="row between">
+                <span class="small">{{ p.title }}</span>
+                <span class="badge" :class="PROJECT_STATE_BADGE[projectState(submissionByProject.get(p.id))]">
+                  {{ formatPct(submissionByProject.get(p.id)!.pct, 1) }}
+                </span>
+              </li>
               <li v-for="a in assessments.filter((x) => bestByAssessment.has(x.id))" :key="a.id" class="row between">
                 <span class="small">{{ a.title }}</span>
                 <span class="badge" :class="bestByAssessment.get(a.id)!.passed ? 'badge--primary' : 'badge--danger'">
@@ -323,6 +372,7 @@ onMounted(load)
               <div v-if="course.estimated_hours"><dt>Carga horária</dt><dd>{{ course.estimated_hours }} h</dd></div>
               <div><dt>Aulas</dt><dd>{{ lessons.length }}</dd></div>
               <div><dt>Avaliações</dt><dd>{{ assessments.length }}</dd></div>
+              <div v-if="projects.length"><dt>Projetos</dt><dd>{{ projects.length }}</dd></div>
               <div v-if="course.tags.length"><dt>Temas</dt><dd>{{ course.tags.join(', ') }}</dd></div>
             </dl>
           </section>
@@ -500,6 +550,31 @@ a.lesson:hover {
 .lesson__meta svg {
   width: 12px;
   height: 12px;
+}
+
+.inline-md :deep(code) {
+  padding: 0.05em 0.35em;
+  border-radius: 6px;
+  background: var(--surface-2);
+  font-size: 0.85em;
+}
+
+.proj-group + .proj-group {
+  border-top: 1px solid var(--border);
+}
+
+.proj-group__title {
+  margin: 0;
+  padding: 12px 18px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.lessons--tight {
+  padding-top: 4px;
 }
 
 .ach-list,

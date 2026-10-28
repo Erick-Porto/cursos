@@ -316,3 +316,17 @@ Deixe o `minhas-tarefas` interativo:
 :::
 
 **Critérios:** adicionar, concluir e remover funcionando; campo limpa após adicionar; contador correto; nenhum erro no console. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 4 · Etapa 3: favoritas, busca e filtro
+
+No seu repositório `livro-de-receitas`:
+
+- no `App`, os estados `busca`, `dificuldade` e `favoritas` (um array de ids)
+- `Filtros` com o campo e o seletor controlados; o estado fica no `App`
+- `buscarPorNome` (sem acento nem maiúsculas) e `filtrarPorDificuldade`, combinados
+- botão "Favoritar" no cartão, sem mutar o array
+- "Nenhuma favorita", "1 favorita" ou "3 favoritas" no `Cabecalho`
+
+Commit: `Projeto 4: etapa 3, favoritas, busca e filtro`. Enunciado completo e entrega: página do curso, em **Projetos**.

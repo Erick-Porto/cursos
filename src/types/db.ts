@@ -90,6 +90,83 @@ export interface ClassScript {
   updated_at: string
 }
 
+/** Critério da rubrica de um projeto. */
+export interface RubricCriterion {
+  key: string
+  title: string
+  description: string | null
+  points: number
+}
+
+/** Etapa de um projeto, ligada à aula do encontro em que acontece. */
+export interface ProjectStep {
+  lesson: string
+  when: string | null
+  title: string
+  summary: string | null
+}
+
+/** Projeto avaliado (enunciado + rubrica). Espelha supabase/migrations/0004_projects.sql. */
+export interface Project {
+  id: string
+  course_id: string
+  module_id: string | null
+  slug: string
+  title: string
+  summary: string | null
+  section: string | null
+  content_md: string
+  rubric: RubricCriterion[]
+  steps: ProjectStep[]
+  opens_lesson: string | null
+  due_lesson: string | null
+  due_label: string | null
+  passing_score: number
+  is_required: boolean
+  position: number
+}
+
+export type SubmissionStatus = 'submitted' | 'returned' | 'graded'
+
+/** Versão anterior de uma entrega (guardada quando o aluno reenvia depois de uma devolução). */
+export interface SubmissionVersion {
+  version: number
+  repo_url: string
+  demo_url: string | null
+  notes: string | null
+  submitted_at: string
+  status: SubmissionStatus
+  scores: Record<string, number> | null
+  score: number | null
+  max_score: number | null
+  pct: number | null
+  feedback: string | null
+  graded_at: string | null
+}
+
+export interface ProjectSubmission {
+  id: string
+  user_id: string
+  project_id: string
+  course_id: string
+  version: number
+  repo_url: string
+  demo_url: string | null
+  notes: string | null
+  status: SubmissionStatus
+  submitted_at: string
+  scores: Record<string, number> | null
+  score: number | null
+  max_score: number | null
+  pct: number | null
+  passed: boolean | null
+  feedback: string | null
+  graded_by: string | null
+  graded_at: string | null
+  history: SubmissionVersion[]
+  updated_at: string
+}
+
 export interface Assessment {
   id: string
   course_id: string
@@ -237,6 +314,15 @@ export interface TrackResult {
   enrollment: Enrollment | null
   xp_gained: number
   new_achievements: Achievement[]
+}
+
+export interface ProjectSubmitResult {
+  submission: ProjectSubmission
+}
+
+export interface ProjectGradeResult {
+  submission: ProjectSubmission
+  xp_gained: number
 }
 
 export interface SubmitResult {

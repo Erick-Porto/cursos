@@ -375,3 +375,33 @@ Monte a base do app **Minhas Tarefas** e publique no GitHub.
 :::
 
 **Critérios**: roda sem erro; lint limpo; dois componentes em arquivos próprios; 2 commits ou mais, sem `node_modules`. **Entrega**: o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 4 · Livro de receitas
+
+Do E21 ao E25, além do laboratório, você constrói **sozinho** um app React: um livro de receitas que busca pratos numa API, filtra pela dificuldade, guarda as favoritas e mostra o modo de preparo.
+
+| Encontro | Etapa |
+|---|---|
+| E21 | projeto Vite e cartão fixo |
+| E22 | lista com props e CSS Modules |
+| E23 | favoritas, busca e filtro |
+| E24 | API e hooks próprios |
+| E25 | detalhe, README e entrega |
+
+Um repositório só seu, `livro-de-receitas`, com um commit por etapa. Entrega pela plataforma até o **início do E26**; nota mínima 70.
+
+---
+
+## :icon[milestone] Projeto 4 · Etapa 1: projeto Vite e cartão fixo
+
+Fora das pastas dos outros projetos:
+
+- crie o `livro-de-receitas` com os 4 comandos desta aula
+- `Cabecalho` com o título "Livro de Receitas"
+- `CartaoReceita` fixo da pizza margherita: foto com `alt`, nome, cozinha, dificuldade e porções
+- o tempo total por uma expressão: `{preparo + cozimento}` min
+- README com como rodar, `npm run lint` limpo e push num repositório público
+
+Commit: `Projeto 4: etapa 1, projeto Vite e cartão fixo`. Enunciado completo e entrega: página do curso, em **Projetos**.

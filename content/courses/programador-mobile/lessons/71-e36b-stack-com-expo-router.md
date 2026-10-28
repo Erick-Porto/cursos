@@ -401,3 +401,17 @@ Três telas do `lojinha` em pilha:
 :::
 
 **Critérios de entrega**: nome do produto no cabeçalho; carrinho com total formatado; o voltar percorre a pilha; `app/` só com layout e rotas finas; contas só em `src/regras/`. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 7: pilha de telas e CasasContext
+
+No seu repositório `casas-de-adocao`:
+
+- Expo Router instalado, com o `main` trocado e um `scheme` próprio; o `App.js` sai
+- `app/_layout.js` com a pilha, o `TemaProvider` e o `CasasProvider` por fora e o cabeçalho nas cores do tema
+- rotas `app/index.js` (Início), `app/casa/[id].js` (Detalhe, com o nome da casa no cabeçalho) e `app/cadastro.js`
+- `src/contexts/CasasContext.js` com `casas`, que começam pelas de `src/data/casas.js`, e `adicionar`; o id da casa nova vem de `proximoId(casas)`, em `src/regras/casas.js`
+- tocar num `CartaoCasa` abre o Detalhe; Salvar no Cadastro adiciona e volta, e a casa aparece na seção da cidade dela
+
+Commit: `Projeto 6: etapa 7, pilha e CasasContext`. Enunciado completo e entrega: página do curso, em **Projetos**.

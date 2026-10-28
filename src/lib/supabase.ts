@@ -60,6 +60,7 @@ export function friendlyError(err: unknown): string {
     [/rate limit|too many requests/i, 'Muitas tentativas. Aguarde um instante e tente de novo.'],
     [/limite de tentativas/i, 'Você atingiu o limite de tentativas desta avaliação.'],
     [/matrícula necessária/i, 'Matricule-se no curso para continuar.'],
+    [/(submit|grade)_project/i, 'A entrega de projetos ainda não foi ativada no servidor (migration 0004).'],
     [/duplicate key.*username/i, 'Este nome de usuário já está em uso.'],
     [/profiles_username_check/i, 'Nome de usuário inválido: use 3 a 30 letras minúsculas, números ou _.'],
     [/failed to fetch|networkerror/i, 'Sem conexão com o servidor. Verifique sua internet.'],

@@ -292,3 +292,31 @@ Crie o app e deixe-o rodando no seu celular.
 **Critérios**: app rodando no seu celular ou emulador; título, cor e imagem visíveis; repositório com commit.
 
 **Entrega**: mostre o app rodando ao instrutor e envie o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 5 · Gota: meta de água
+
+Seu projeto avaliado do React Native: um app para registrar os copos de água do dia e acompanhar a meta. Repositório próprio, `gota`, feito por você, uma etapa por encontro:
+
+| Encontro | Etapa |
+|---|---|
+| E26 | app no celular |
+| E27 | tela com componentes e `StyleSheet` |
+| E28 | estado, lista, `Alert` e caça ao bug |
+| E29 | hook `useConsumo`, regras puras e entrega |
+
+Entrega até o **início do E30**: link do repositório na página do projeto. Rubrica de 100 pontos, aprovação com 70.
+
+---
+
+## :icon[milestone] Projeto 5 · Etapa 1: app no celular
+
+Fora da pasta do laboratório:
+
+- `npx create-expo-app@latest gota --template blank`
+- `App.js` com o título "Gota", a linha "Meta do dia: 2000 ml" e uma cor de fundo sua
+- O app aberto no Expo Go (pare antes o servidor do laboratório)
+- Repositório público `gota` no GitHub, com README: o que é e como rodar
+
+Commit: `Projeto 5: etapa 1, app no celular`. Enunciado completo e entrega: página do curso, em **Projetos**.

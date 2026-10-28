@@ -381,3 +381,16 @@ No E07, você escreve as suas primeiras decisões e repetições, e o `for` do `
 :::
 
 **Critérios de entrega**: testes que não dependem do dia; nenhum `new Date('AAAA-MM-DD')`; máscaras que aguentam texto colado; previsão no script; CI verde. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 5: valor digitado e data
+
+No seu `racha-conta`:
+
+- `lerValor(texto)`: `'187,50'` e `'R$ 187,50'` viram `18750`; `'abc'` e `'0'` viram `null`
+- `lerPessoas(texto)`: inteiro de 1 a 50, ou `null`
+- `formatarDataHora(data)`: `'28/10/2026 19:42'`, testada com datas fixas
+- `npm run racha "R$ 187,50"` mostra o restaurante, a data e a hora
+
+Commit: `Projeto 1: etapa 5, valor digitado e data do recibo`. Enunciado completo e entrega: página do curso, em **Projetos**.

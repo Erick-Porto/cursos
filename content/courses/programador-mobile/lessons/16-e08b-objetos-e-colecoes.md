@@ -388,3 +388,29 @@ Comparadores, buscas recentes e favoritos no `lojinha-regras`.
 :::
 
 **Critérios de entrega**: três ordens corretas, com acentos; a vitrine termina com "Primeiro do catálogo: Fone Bluetooth"; até 5 buscas, sem repetir; favorito liga e desliga; nenhuma regra muda o array recebido. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 2 · Agenda de contatos
+
+O segundo projeto avaliado começa hoje: a **agenda de contatos** de um celular, num repositório novo, `agenda-de-contatos`, feito por você, sozinho.
+
+- :icon[contact] 15 contatos de exemplo, com telefone, e-mail, aniversário e grupo
+- :icon[list-checks] busca, grupos, aniversariantes, cadastro, validação e favoritos, com testes
+- :icon[monitor] no E12, uma interface web pronta passa a usar as suas funções
+- :icon[calendar-check] uma etapa por encontro, do E08 ao E12; entrega até o início do E13
+
+O Projeto 1, o Racha-conta, fechou no início de hoje: confira se o link está na página dele.
+
+---
+
+## :icon[milestone] Projeto 2 · Etapa 1: busca, ordem e histórico
+
+No repositório novo, com Jest e ESLint como no Projeto 1 e o [contatos.js](materiais/projeto-2/contatos.js) em `src/data/`:
+
+- `buscarContatos(contatos, termo)`: pelo nome ou pelos dígitos do telefone, sem diferenciar maiúsculas; `'zé'` não acha todo mundo
+- `ordenarPorNome(contatos)`: uma cópia, em ordem alfabética
+- `registrarBusca(historico, termo)`: 5 buscas, a mais nova na frente, sem repetir
+- testes, com "não altera a lista recebida", e o script `buscar.js`
+
+Commit: `Projeto 2: etapa 1, busca, ordem e histórico`. Enunciado completo e entrega: página do curso, em **Projetos**.

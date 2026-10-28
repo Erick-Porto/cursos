@@ -8,6 +8,10 @@ dist/
 .env.*
 !.env.example
 
+# soluções de referência dos projetos avaliados: ficam só na máquina do instrutor
+# (o repositório é público)
+privado/
+
 # sistema / editor
 .DS_Store
 Thumbs.db

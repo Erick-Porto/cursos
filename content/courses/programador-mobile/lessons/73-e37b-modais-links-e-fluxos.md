@@ -342,3 +342,16 @@ Monte as 4 abas, a pilha em Categorias e o modal de filtros.
 :::
 
 **Critérios de entrega**: 4 abas nos dois temas; badge some com o carrinho vazio; um cabeçalho por tela; detalhe cobre a barra; vitrine filtrada por `aplicarFiltros`. Extra: `app/(auth)/entrar.js` com `Redirect`. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 8: abas, filtros, editar e remover
+
+No seu repositório `casas-de-adocao`:
+
+- `app/(abas)/` com Casas, Favoritas e Sobre, ícones e cores do tema; Detalhe, Cadastro e Filtros ficam fora das abas
+- `alternarFavorita(id)` no `CasasContext`, um coração no cartão e no Detalhe e a aba Favoritas só com as marcadas, com aviso quando não houver nenhuma
+- `app/filtros.js` como modal: aceita cães, aceita gatos e só com vagas, guardados num `FiltrosContext`; a Início usa `filtrarCasas(casas, filtros)`, de `src/regras/casas.js`
+- no Detalhe, Editar abre `/cadastro?id=` seguido do id, com o formulário preenchido, e salva com `editar`; Remover pede confirmação num `Alert` antes do `remover`
+
+Commit: `Projeto 6: etapa 8, abas, filtros e edição`. Enunciado completo e entrega: página do curso, em **Projetos**.

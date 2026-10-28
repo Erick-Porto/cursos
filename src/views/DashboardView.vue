@@ -60,6 +60,14 @@ function activityText(a: ActivityEntry): string {
       return `Conquista: ${achievementTitle(a.ref_id) ?? ''}`.trim()
     case 'enrolled':
       return `Matrícula em ${courseTitle(a.ref_id) ?? 'curso'}`
+    case 'project_submitted':
+      return 'Entregou um projeto'
+    case 'project_returned':
+      return 'Projeto devolvido para ajustes'
+    case 'project_passed':
+      return `Projeto aprovado${pct !== undefined ? ` com ${pct}%` : ''}`
+    case 'project_failed':
+      return `Projeto corrigido${pct !== undefined ? ` (${pct}%)` : ''}`
     default:
       return a.kind
   }
@@ -262,15 +270,25 @@ onMounted(async () => {
 
 .activity__dot--lesson_completed,
 .activity__dot--assessment_passed,
+.activity__dot--project_passed,
 .activity__dot--course_completed {
   background: var(--primary);
+}
+
+.activity__dot--project_submitted {
+  background: var(--info);
+}
+
+.activity__dot--project_returned {
+  background: var(--warning);
 }
 
 .activity__dot--achievement {
   background: var(--warning);
 }
 
-.activity__dot--assessment_failed {
+.activity__dot--assessment_failed,
+.activity__dot--project_failed {
   background: var(--danger);
 }
 </style>

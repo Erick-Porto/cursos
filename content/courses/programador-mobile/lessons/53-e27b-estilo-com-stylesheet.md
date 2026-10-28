@@ -354,3 +354,17 @@ Monte a tela inicial do `minhas-tarefas-mobile` no celular, pelo Expo Go.
 :::
 
 **Critérios de entrega**: componentes em arquivos separados; todo estilo com `StyleSheet`; prioridade alta destacada; nada atrás do notch; app rodando no celular. Entregue o link do repositório.
+
+---
+
+## :icon[milestone] Projeto 5 · Etapa 2: tela com StyleSheet
+
+No repositório `gota`, ainda com valores fixos:
+
+- `SafeAreaProvider` e `SafeAreaView` com `flex: 1`; a [gota.png](materiais/projeto-5/gota.png) do curso em `assets/`
+- `Cabecalho`, `CartaoProgresso` (props `total` e `meta`) e `BotaoCopo` (prop `ml`) em `src/components/`
+- Barra de progresso com duas `View`, o trilho e o preenchimento; a largura do preenchimento em porcentagem, como texto: `'60%'`
+- Três `BotaoCopo` lado a lado: 200, 300 e 500 ml
+- `StyleSheet.create` no fim de cada arquivo
+
+Commit: `Projeto 5: etapa 2, tela com StyleSheet`. Enunciado completo e entrega: página do curso, em **Projetos**.

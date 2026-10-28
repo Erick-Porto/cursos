@@ -361,3 +361,16 @@ Próximo encontro: o E25 revisa o ambiente React e aplica a **Prova 2**, do E21 
 :::
 
 **Critérios de entrega**: 10 tarefas da API ao abrir; "Carregando..." antes delas; sem rede, a mensagem e o "Tentar de novo" funcionando; digitar "qui" depressa gera uma requisição só; adicionar, concluir e remover funcionando. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 4 · Etapa 4: API e hooks próprios
+
+No seu repositório `livro-de-receitas`:
+
+- `buscarReceitas(busca, sinal)` e `traduzirReceita` em `src/api/receitas.js`, na DummyJSON (`/recipes/search?q=`)
+- `useReceitas(busca)`: "Carregando receitas...", erro com "Tentar de novo" e busca sem resultado
+- `useDebounce` entre o campo e o `useReceitas`: uma requisição por pausa
+- `useFavoritos`: as favoritas no `localStorage`, ainda lá depois do F5
+
+Commit: `Projeto 4: etapa 4, API, hooks próprios e favoritas salvas`. Enunciado completo e entrega: página do curso, em **Projetos**.

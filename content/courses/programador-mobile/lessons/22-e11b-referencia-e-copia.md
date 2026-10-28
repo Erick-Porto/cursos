@@ -326,3 +326,16 @@ Barris, a promoção da semana e testes que provam que as regras não mexem na e
 :::
 
 **Critérios de entrega**: nenhum arquivo de `regras/` importa o próprio barril; `node src/scripts/promocao.js` imprime o aviso e os preços certos; pelo menos 5 testes novos passando. Entregue o link do repositório no sistema. No E12: `Set` nos favoritos e `Map` no catálogo.
+
+---
+
+## :icon[milestone] Projeto 2 · Etapa 4: barril, dados congelados e edição
+
+No `agenda-de-contatos`:
+
+- `src/index.js`: o barril, com os contatos e todas as funções; os scripts passam a importar dele
+- `src/data/contatos.js` congelado: cada contato e a lista, com `Object.freeze`
+- `editarContato(contatos, id, mudancas)`: um objeto novo só para o contato do id, e o id não muda
+- testes que rodam as regras sobre os contatos congelados: nenhuma pode quebrar
+
+Commit: `Projeto 2: etapa 4, barril, dados congelados e edição`. Enunciado completo: página do curso, em **Projetos**.

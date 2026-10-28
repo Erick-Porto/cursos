@@ -346,3 +346,16 @@ As primeiras regras de negócio do `lojinha-regras`, testadas e no terminal.
 :::
 
 **Critérios de entrega**: regras sem `console.log` e sem formatação; nenhuma conta de preço no script; teste da soma das parcelas; CI verde. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 1 · Etapa 4: centavos, gorjeta e reais
+
+No seu `racha-conta`:
+
+- `paraCentavos(reais)` e `formatarReais(centavos)`, que devolve `'R$ 187,50'`
+- `calcularGorjeta` passa a receber e devolver centavos, arredondada ao centavo: mude os testes primeiro
+- um teste para 15% de R$ 33,30, que dá R$ 5,00
+- `npm run racha 187.5` mostra o subtotal, a gorjeta e o total
+
+Commit: `Projeto 1: etapa 4, centavos, gorjeta e reais`. Enunciado completo e entrega: página do curso, em **Projetos**.

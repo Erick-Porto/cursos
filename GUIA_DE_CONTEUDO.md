@@ -44,10 +44,14 @@ content/courses/<slug-do-curso>/
 │   └── workbench-login.webp  captura de tela
 ├── roteiros/                 roteiro do instrutor por encontro presencial (seção 9)
 │   └── 01-e01.md
-└── materiais/                arquivos abertos no navegador ou baixados (seção 10)
-    └── e01/
-        ├── aluno/contador.html
-        └── demos-e01/
+├── materiais/                arquivos abertos no navegador ou baixados (seção 10)
+│   └── e01/
+│       ├── aluno/contador.html
+│       └── demos-e01/
+└── projetos/                 projetos avaliados, entregues e corrigidos na plataforma (seção 11)
+    ├── 01-racha-conta.md     enunciado para o aluno
+    └── correcao/
+        └── 01-racha-conta.md guia de correção (só instrutores leem)
 ```
 
 Regras de nomes: só letras minúsculas, números e hífens (imagens também aceitam ponto e underline).
@@ -111,6 +115,7 @@ renderizador dos slides: aceita blocos `:::`, ícones inline e imagens de `image
 | `assessments_passed` | `count` | aprovado em N avaliações do curso |
 | `perfect_score` | `count` | gabaritou N avaliações do curso |
 | `first_try_pass` | `count` | aprovado de primeira em N avaliações |
+| `projects_approved` | `count` | aprovado (nota final) em N projetos do curso (seção 11) |
 
 `count` é inteiro maior ou igual a 1 (erro se faltar). Crie de 1 a 6 conquistas por curso; uma de
 conclusão é obrigatória por convenção. As regras `xp_reached` e `streak_days` são globais (valem para
@@ -825,6 +830,64 @@ materiais/
   avisa sobre página HTML sem link em nenhuma aula, roteiro ou descrição.
 - Publicação: o material vai ao ar no próximo deploy (push na `main`); a aula ou o roteiro que o cita
   vai pelo `content:sync`. Faça os dois.
+
+## 11. Projetos avaliados (`projetos/NN-slug.md`)
+
+Um projeto é uma entrega prática avaliada por rubrica. Ele **não ocupa um encontro inteiro**: é feito
+em etapas pequenas, uma por encontro, cada uma ligada à aula em que acontece. O aluno lê o enunciado
+na página do projeto (link na página do curso), entrega o link do repositório pela plataforma e recebe
+a nota por critério com o comentário do instrutor. Projetos obrigatórios contam para concluir o curso,
+como as aulas e as provas.
+
+```yaml
+---
+title: "Projeto 3 · Lista de tarefas"
+summary: App web de tarefas com classes, erros próprios, código assíncrono e a interface feita por você.
+section: Módulo Básico            # agrupa os projetos na página do curso
+module: classes-e-controle        # opcional: módulo em que o projeto termina
+opens: e13a-if-else-e-switch      # aula em que o projeto é apresentado
+due: e21a-por-que-react           # aula até a qual a entrega deve chegar
+due_label: início do E21          # o prazo como o aluno lê
+passing_score: 70                 # padrão 70, igual às provas
+required: true                    # padrão true: conta para concluir o curso
+rubric:
+  - key: regras
+    title: Regras funcionando
+    points: 35
+    description: As regras do enunciado dão o resultado certo, inclusive nos casos de borda.
+  - key: testes
+    title: Testes
+    points: 20
+    description: "`npm test` verde, com um teste para cada regra e para cada borda."
+steps:
+  - lesson: e13b-condicoes-legiveis
+    when: E13
+    title: Prazo e prioridade
+    summary: "`situacaoDoPrazo` e `pesoDaPrioridade` em src/regras/tarefas.js, com testes."
+---
+```
+
+- **Nome do arquivo**: `NN-slug.md`; NN é a ordem na página do curso. O slug vira o endereço do projeto.
+- **Etapas** (`steps`): uma por encontro em que o projeto avança, em ordem. `lesson` é a aula do
+  encontro onde a etapa é apresentada (o slide da etapa fica nela); `when` é o rótulo curto ("E13").
+  A página do projeto mostra a linha do tempo com o link de cada aula.
+- **Rubrica** (`rubric`): de 3 a 6 critérios somando 100 pontos. A descrição diz o que vale ponto,
+  em frases que o aluno consegue conferir sozinho antes de entregar.
+- **Corpo**: o enunciado, um documento em Markdown que começa no `##`, com os mesmos blocos das aulas.
+  Estrutura recomendada: O que você vai construir; Regras (ou Funcionalidades); Etapas, com o que
+  entregar em cada encontro; Como entregar; Como será avaliado; Dúvidas frequentes.
+- **Materiais** (ponto de partida, interface pronta, dados de exemplo) ficam em `materiais/projeto-N/`
+  e entram no enunciado como link (seção 10). Lembre que tudo em `materiais/` é público.
+- **Guia de correção** (`projetos/correcao/NN-slug.md`, mesmo nome do enunciado): documento só para
+  o instrutor, mostrado ao lado da rubrica na tela de correção. Para cada critério, o que conferir
+  (comandos a rodar, telas a abrir), como pontuar (nota cheia, parcial, zero) e os erros mais comuns.
+  Não traga a solução completa: o repositório do curso é público.
+- **Nas aulas e roteiros**: cada etapa tem um slide na aula do encontro e um bloco "Projeto" no roteiro.
+  Não existe aula só de projeto.
+- O validador exige título, resumo, aulas existentes (`opens`, `due`, etapas) e rubrica com critérios
+  válidos; avisa rubrica que não soma 100, etapas fora de ordem e projeto sem guia de correção.
+- Publicação: o `content:sync` envia enunciado e guia (tabelas `projects` e `project_guides`, migration
+  0004). Remover um projeto com `--prune` apaga também as entregas e notas dele.
 
 ## Apêndice A: ícones inline disponíveis
 

@@ -32,10 +32,12 @@ export const router = createRouter({
     { path: '/cursos/:course', component: () => import('@/views/CourseView.vue'), meta: { requiresAuth: true } },
     { path: '/cursos/:course/aulas/:lesson', component: () => import('@/views/LessonView.vue'), meta: { requiresAuth: true, layout: 'player' } },
     { path: '/cursos/:course/avaliacoes/:assessment', component: () => import('@/views/AssessmentView.vue'), meta: { requiresAuth: true, layout: 'player' } },
+    { path: '/cursos/:course/projetos/:project', component: () => import('@/views/ProjectView.vue'), meta: { requiresAuth: true, title: 'Projeto' } },
     { path: '/conquistas', component: () => import('@/views/AchievementsView.vue'), meta: { requiresAuth: true, title: 'Conquistas' } },
     { path: '/perfil', component: () => import('@/views/ProfileView.vue'), meta: { requiresAuth: true, title: 'Perfil' } },
     { path: '/instrutor', component: () => import('@/views/InstructorView.vue'), meta: { requiresAuth: true, staff: true, title: 'Instrutor' } },
     { path: '/instrutor/roteiros/:course/:script', component: () => import('@/views/InstructorScriptView.vue'), meta: { requiresAuth: true, staff: true, title: 'Roteiro de aula' } },
+    { path: '/instrutor/projetos/:course/:project/:student', component: () => import('@/views/InstructorGradeView.vue'), meta: { requiresAuth: true, staff: true, title: 'Correção de projeto' } },
 
     { path: '/:pathMatch(.*)*', component: () => import('@/views/NotFoundView.vue'), meta: { title: 'Página não encontrada' } },
   ],

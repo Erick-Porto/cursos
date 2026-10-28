@@ -385,6 +385,20 @@ Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **v
 
 ---
 
+## :icon[milestone] Projeto 3 · Etapa 8: revisão e entrega
+
+No seu repositório `lista-de-tarefas`, depois da prova e até o **início do E21**:
+
+- `npm run verificar` verde com o Wi-Fi desligado
+- nenhum `document` fora de `src/tela/` e nenhum `fetch` fora de `src/api/`
+- dois prints em `docs/` e o README com o que o app faz, como rodar e como testar
+- a lista "Antes de entregar" do enunciado, conferida numa janela anônima
+- o link do repositório colado na página do projeto
+
+Commit: `Projeto 3: etapa 8, revisão e entrega`. Enunciado completo e entrega: página do curso, em **Projetos**.
+
+---
+
 ## Resumo
 
 :::summary

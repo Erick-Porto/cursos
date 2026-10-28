@@ -411,3 +411,17 @@ O `lojinha-regras` deixa de depender só do catálogo local e passa a buscar pro
 :::
 
 **Critérios de entrega**: nenhum `fetch` fora de `src/api/cliente.js`; sem internet, os scripts mostram "Sem conexão..." em vez de cair; nenhum teste usa a rede. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 7: importar exemplos da API
+
+No seu repositório `lista-de-tarefas`:
+
+- `buscarExemplos()` com `async`, `await` e `fetch` em `https://dummyjson.com/todos?limit=10`: `todo` vira `titulo`, `completed` vira `concluida`
+- sem rede, `ErroDeTarefa` com o código `SEM_CONEXAO`; resposta com erro, `API_` mais o status
+- `lista.importar(dados)` sem duplicar títulos
+- na tela, o botão desligado enquanto espera, "Carregando exemplos..." e a mensagem de erro
+- testes com `fetch` simulado, verdes com o Wi-Fi desligado
+
+Commit: `Projeto 3: etapa 7, importar exemplos da API`. Enunciado completo e entrega: página do curso, em **Projetos**.

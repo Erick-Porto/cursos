@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agenda de contatos · Projeto 2</title>
+    <script>
+      // O npx serve também abre /web, sem a barra no fim; sem ela, o navegador
+      // procura estilo.css e tela.js na pasta de cima. A barra resolve.
+      if (/\/web$/.test(location.pathname)) location.replace(location.pathname + '/');
+    </script>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="estilo.css" />
+    <script type="module" src="tela.js"></script>
+  </head>
+  <body>
+    <main>
+      <header class="topo">
+        <p class="sobre">Projeto 2 · Programador Mobile</p>
+        <h1>Agenda de contatos</h1>
+        <p class="lead" id="resumo">
+          A tela é pronta; as regras são suas, em <code>src/index.js</code>.
+        </p>
+      </header>
+
+      <div class="aviso" id="carregando">
+        <p>
+          <strong>Carregando as suas regras de <code>src/index.js</code>...</strong>
+        </p>
+        <p>Se esta mensagem não sumir:</p>
+        <ul>
+          <li>
+            Abriu este arquivo com dois cliques? Na raiz do repositório, rode
+            <code>npx serve .</code> e abra o endereço que ele mostrar, com <code>/web/</code> no
+            fim.
+          </li>
+          <li>
+            Abra o DevTools (<kbd>F12</kbd>), aba Console, e leia o erro. Os mais comuns: um
+            <code>import</code> sem o <code>.js</code> no fim e um nome que o
+            <code>src/index.js</code> não exporta.
+          </li>
+        </ul>
+      </div>
+
+      <div id="app" hidden>
+        <details class="cartao status" id="status">
+          <summary id="status-titulo">Funções do seu src/index.js</summary>
+          <p class="ajuda">
+            Cada parte da tela usa funções do seu repositório. O que falta aparece aqui, com a etapa
+            em que a função nasce.
+          </p>
+          <ul class="status-lista" id="status-lista"></ul>
+        </details>
+
+        <section class="cartao" aria-labelledby="titulo-busca">
+          <h2 id="titulo-busca" class="visualmente-oculto">Buscar</h2>
+          <form id="form-busca" role="search">
+            <label for="busca">Buscar por nome ou telefone</label>
+            <div class="campo-busca">
+              <svg class="icone" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="11" cy="11" r="8" />
+                <path d="m21 21-4.3-4.3" />
+              </svg>
+              <input
+                id="busca"
+                type="search"
+                autocomplete="off"
+                placeholder="ana, mar, 9876..."
+                aria-describedby="contador-busca"
+              />
+            </div>
+            <p class="ajuda" id="contador-busca">
+              Digite para buscar. <kbd>Enter</kbd> guarda a busca no histórico.
+            </p>
+          </form>
+          <div class="historico" id="historico" aria-label="Buscas recentes"></div>
+          <div class="filtros" id="filtros" role="group" aria-label="Filtrar por grupo"></div>
+        </section>
+
+        <details class="cartao" id="painel-form">
+          <summary id="titulo-form">Novo contato</summary>
+          <form id="form-contato" novalidate>
+            <div class="campo">
+              <label for="campo-nome">Nome</label>
+              <input id="campo-nome" name="nome" autocomplete="off" aria-describedby="erro-nome" />
+              <p class="erro" id="erro-nome"></p>
+            </div>
+            <div class="campo">
+              <label for="campo-telefone">Telefone com DDD</label>
+              <input
+                id="campo-telefone"
+                name="telefone"
+                type="tel"
+                placeholder="(11) 98765-4321"
+                aria-describedby="erro-telefone"
+              />
+              <p class="erro" id="erro-telefone"></p>
+            </div>
+            <div class="campo">
+              <label for="campo-email">E-mail <span class="opcional">(opcional)</span></label>
+              <input id="campo-email" name="email" type="email" aria-describedby="erro-email" />
+              <p class="erro" id="erro-email"></p>
+            </div>
+            <div class="campo">
+              <label for="campo-aniversario"
+                >Aniversário <span class="opcional">(opcional)</span></label
+              >
+              <input
+                id="campo-aniversario"
+                name="aniversario"
+                type="date"
+                aria-describedby="erro-aniversario"
+              />
+              <p class="erro" id="erro-aniversario"></p>
+            </div>
+            <div class="campo">
+              <label for="campo-grupo">Grupo</label>
+              <select id="campo-grupo" name="grupo" aria-describedby="erro-grupo">
+                <option value="">Escolha...</option>
+                <option value="familia">Família</option>
+                <option value="amigos">Amigos</option>
+                <option value="trabalho">Trabalho</option>
+              </select>
+              <p class="erro" id="erro-grupo"></p>
+            </div>
+            <p class="ajuda" id="aviso-form"></p>
+            <div class="acoes">
+              <button type="submit" class="botao" id="salvar">Salvar contato</button>
+              <button type="button" class="botao secundario" id="cancelar" hidden>
+                Cancelar edição
+              </button>
+            </div>
+          </form>
+        </details>
+
+        <div class="mensagem" id="mensagem" role="status" aria-live="polite" hidden>
+          <span id="mensagem-texto"></span>
+          <button type="button" class="botao-texto" id="desfazer">Desfazer</button>
+        </div>
+
+        <section class="cartao" aria-labelledby="titulo-aniversarios">
+          <h2 id="titulo-aniversarios">Aniversariantes do mês</h2>
+          <div id="aniversariantes"></div>
+        </section>
+
+        <section aria-labelledby="titulo-favoritos">
+          <h2 id="titulo-favoritos">Favoritos</h2>
+          <div id="favoritos"></div>
+        </section>
+
+        <section aria-labelledby="titulo-lista">
+          <h2 id="titulo-lista">Contatos</h2>
+          <div id="lista"></div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

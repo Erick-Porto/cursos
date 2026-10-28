@@ -362,3 +362,16 @@ O checkout do `lojinha-regras` fica assíncrono, e o terminal mostra cada etapa.
 :::
 
 **Critérios de entrega**: `node src/scripts/finalizar.js` mostra as etapas; com `CHANCE_DE_FALHA = 1`, aparece a mensagem do estoque; testes verdes. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 6: salvar com Promises
+
+No seu repositório `lista-de-tarefas`:
+
+- `salvarTarefas(lista, opcoes)` e `carregarTarefas(opcoes)` em `src/servicos/armazenamento.js`, devolvendo Promises sobre o `localStorage`
+- nos testes, um armazenamento falso e `atraso: 0`, como o sorteio injetado do checkout
+- na tela: "Carregando..." ao abrir, "Salvando..." a cada mudança e as tarefas de volta depois de recarregar
+- a busca e o filtro redesenhando a lista
+
+Commit: `Projeto 3: etapa 6, salvar com Promises`. Enunciado completo e entrega: página do curso, em **Projetos**.

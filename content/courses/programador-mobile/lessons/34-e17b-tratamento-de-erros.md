@@ -384,3 +384,16 @@ Os erros próprios da Lojinha, com testes, e um script que leva cada falha à me
 :::
 
 **Critérios de entrega**: nenhum `catch` sem `instanceof`; nenhuma regra com `console.log`; nenhum `codigo` nas mensagens; testes passando. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 3 · Etapa 5: erros próprios e formulário
+
+No seu repositório `lista-de-tarefas`:
+
+- `ErroDeTarefa(mensagem, codigo)` e os filhos `TituloInvalidoError`, `PrazoInvalidoError` e `TarefaNaoEncontradaError`
+- a `Tarefa` e a `ListaDeTarefas` lançam: título vazio, curto ou repetido, prazo errado, id sumido
+- o formulário cria a tarefa (`submit` com `preventDefault`), e o `codigo` escolhe onde a mensagem aparece: embaixo do título ou do prazo
+- testes com `toThrow(Classe)` nas bordas de 2, 3, 80 e 81 caracteres
+
+Commit: `Projeto 3: etapa 5, erros próprios e formulário`. Enunciado completo e entrega: página do curso, em **Projetos**.

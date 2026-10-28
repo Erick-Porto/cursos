@@ -344,3 +344,17 @@ Leve a `Inicio` do E30 para tokens e tema claro e escuro.
 :::
 
 **Critérios de entrega**: nenhum `#` em `src/telas`; espaços, fontes e raios da `Inicio` vêm dos tokens; os dois temas legíveis; o app segue o sistema e o botão. Entregue o link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 2: tokens e tema
+
+No seu repositório `casas-de-adocao`:
+
+- `src/theme/tokens.js` com a **sua** paleta (não a da Lojinha) nos dois temas, mais espaço, fonte e raio
+- o `TemaContext.js` da aula e `"userInterfaceStyle": "automatic"` no `app.json`
+- Início sem nenhuma cor literal: estrutura no `StyleSheet`, cor do `useTema()` no array
+- botão de tema no cabeçalho, com a `StatusBar` acompanhando
+- no README, o contraste de `textoSuave` e `primaria` sobre `superficie` nos dois temas: no mínimo 4,5 : 1
+
+Commit: `Projeto 6: etapa 2, tokens e tema`. Enunciado completo e entrega: página do curso, em **Projetos**.

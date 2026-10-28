@@ -379,3 +379,29 @@ Só `View`, `Text` e Flexbox: foto e ícones são caixas cinza. Fotos e ícones 
 :::
 
 **Critérios**: `src/` sem testes nem scripts; só `View`, `Text`, `ScrollView` e Flexbox; nenhuma altura fixa em texto; nada cortado, em pé e deitado. **Entrega**: link do repositório no sistema.
+
+---
+
+## :icon[milestone] Projeto 6 · Casas de adoção
+
+Até o E40, além da Lojinha, você constrói sozinho um app para cadastrar e encontrar **casas de adoção** de cães e gatos: quem é voluntário cadastra a casa onde ajuda; quem quer adotar acha uma com vaga perto de casa.
+
+- :icon[layout-list] lista por cidade, busca, filtros e favoritas
+- :icon[file-text] cadastro validado, com o CEP que preenche o endereço
+- :icon[smartphone] abas, tema claro e escuro, tablet e leitor de tela
+
+São 11 etapas, uma por encontro, num repositório seu chamado `casas-de-adocao`. Entrega pela plataforma até o **início do E41**.
+
+---
+
+## :icon[milestone] Projeto 6 · Etapa 1: projeto e tela Início
+
+No seu repositório `casas-de-adocao`:
+
+- projeto Expo criado ao lado da `lojinha`, com a área segura e `"orientation": "default"`
+- o [casas.js](materiais/projeto-6/casas.js) do curso copiado para `src/data/casas.js`
+- `vagas(casa)` em `src/regras/casas.js`
+- `src/telas/Inicio.js`: cabeçalho, chips (Todas, Cães, Gatos, Com vagas) e 3 cartões com a caixa da foto, nome, bairro e vagas, só com Flexbox
+- nada atrás do notch, em pé e deitado
+
+Commit: `Projeto 6: etapa 1, projeto e tela Início`. Enunciado completo e entrega: página do curso, em **Projetos**.

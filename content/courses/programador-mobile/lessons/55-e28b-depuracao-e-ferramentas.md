@@ -281,3 +281,17 @@ Torne o `minhas-tarefas-mobile` funcional e depois cace 3 bugs.
 :::
 
 **Entrega:** adicionar, concluir e remover funcionando no celular; lista vazia tratada; 3 bugs identificados e descritos no README.
+
+---
+
+## :icon[milestone] Projeto 5 · Etapa 3: estado, lista e caça ao bug
+
+No `gota`, a tela ganha vida:
+
+- `registros` e `meta` com `useState`; cada `BotaoCopo` cria `{ id, ml, hora }`
+- Total com `reduce` e percentual no `CartaoProgresso`; a barra para em 100%
+- `ItemRegistro` numa `FlatList`, com lista vazia e remoção confirmada por `Alert`
+- `CampoMeta`: meta de 500 a 5000 ml num `TextInput` numérico, com o erro embaixo do campo
+- Caça ao bug: cole o trecho do enunciado, ache o bug com o método de 4 passos e explique no README
+
+Commit: `Projeto 5: etapa 3, estado, lista e bug`. Enunciado completo e entrega: página do curso, em **Projetos**.
