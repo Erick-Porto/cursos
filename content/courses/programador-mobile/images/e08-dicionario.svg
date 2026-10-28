@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 310" font-family="Inter, system-ui, sans-serif">
+  <title>Objeto como dicionário: o valor 'preco' de filtros.ordem vira a chave da consulta em rotulosDeOrdem, que devolve 'Menor preço'</title>
+  <style>
+    .cell { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .key  { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .expr { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .note { fill: #b4bfd3; font-size: 22px; }
+    .hit  { fill: none; stroke: #fbbf24; stroke-width: 3; }
+    .line { stroke: #fbbf24; stroke-width: 3; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="310" rx="16" fill="#0b1020"/>
+
+  <text class="expr" x="250" y="46">rotulosDeOrdem[filtros.ordem]</text>
+
+  <!-- a chave vem da variável -->
+  <text class="m" x="40" y="138">filtros.ordem</text>
+  <rect x="40" y="154" width="120" height="44" rx="8" fill="#131c33" stroke="#fbbf24" stroke-width="2"/>
+  <text class="key" x="100" y="184" text-anchor="middle">'preco'</text>
+  <path class="line" d="M162 176 L246 176"/>
+
+  <!-- o dicionário -->
+  <rect class="head" x="250" y="66" width="150" height="44"/>
+  <rect class="head" x="400" y="66" width="280" height="44"/>
+  <text class="h" x="266" y="96">chave</text>
+  <text class="h" x="416" y="96">valor</text>
+
+  <rect class="cell" x="250" y="110" width="150" height="44"/>
+  <rect class="cell" x="400" y="110" width="280" height="44"/>
+  <text class="code" x="266" y="140">nome</text>
+  <text class="code" x="416" y="140">'Nome'</text>
+
+  <rect class="cell" x="250" y="154" width="150" height="44"/>
+  <rect class="cell" x="400" y="154" width="280" height="44"/>
+  <text class="code" x="266" y="184">preco</text>
+  <text class="code" x="416" y="184">'Menor preço'</text>
+  <rect class="hit" x="251.5" y="155.5" width="427" height="41" rx="4"/>
+
+  <rect class="cell" x="250" y="198" width="150" height="44"/>
+  <rect class="cell" x="400" y="198" width="280" height="44"/>
+  <text class="code" x="266" y="228">avaliacao</text>
+  <text class="code" x="416" y="228">'Melhor avaliação'</text>
+
+  <text class="note" x="465" y="282" text-anchor="middle">uma consulta no lugar de uma fila de if</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Com spread nasce um array novo, entregue a setTarefas, e a tela atualiza; com push o mesmo array muda, ninguém chama setTarefas e a tela não muda</title>
+  <style>
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .bad   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .cok   { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cbad  { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cm    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cel   { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .nova  { fill: #a78bfa; stroke: #a78bfa; stroke-width: 2; }
+    .seta  { fill: none; stroke: #34d399; stroke-width: 3; marker-end: url(#ponta-ok); }
+    .seta-x { fill: none; stroke: #f87171; stroke-width: 3; stroke-dasharray: 8 6; marker-end: url(#ponta-x); }
+    .caixa-ok { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .caixa-x  { fill: #131c33; stroke: #f87171; stroke-width: 2.5; stroke-dasharray: 8 6; }
+  </style>
+  <defs>
+    <marker id="ponta-ok" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#34d399"/></marker>
+    <marker id="ponta-x" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- spread: array novo -->
+  <text class="cok" x="40" y="44">setTarefas([...tarefas, nova])</text>
+  <rect class="cel" x="40" y="88" width="32" height="32" rx="4"/>
+  <rect class="cel" x="78" y="88" width="32" height="32" rx="4"/>
+  <rect class="cel" x="116" y="88" width="32" height="32" rx="4"/>
+  <text class="cm" x="94" y="152" text-anchor="middle">tarefas</text>
+  <path class="seta" d="M 164 104 L 216 104"/>
+  <rect class="cel" x="236" y="88" width="32" height="32" rx="4"/>
+  <rect class="cel" x="274" y="88" width="32" height="32" rx="4"/>
+  <rect class="cel" x="312" y="88" width="32" height="32" rx="4"/>
+  <rect class="nova" x="350" y="88" width="32" height="32" rx="4"/>
+  <text class="lbl" x="366" y="78" text-anchor="middle">nova</text>
+  <text class="ok" x="309" y="152" text-anchor="middle">array novo</text>
+  <path class="seta" d="M 398 104 L 450 104"/>
+  <rect class="caixa-ok" x="468" y="78" width="212" height="52" rx="10"/>
+  <text class="ok" x="574" y="111" text-anchor="middle">tela atualiza</text>
+
+  <!-- push: o mesmo array -->
+  <text class="cbad" x="40" y="220">tarefas.push(nova)</text>
+  <rect class="cel" x="40" y="264" width="32" height="32" rx="4"/>
+  <rect class="cel" x="78" y="264" width="32" height="32" rx="4"/>
+  <rect class="cel" x="116" y="264" width="32" height="32" rx="4"/>
+  <rect class="nova" x="154" y="264" width="32" height="32" rx="4"/>
+  <text class="lbl" x="170" y="254" text-anchor="middle">nova</text>
+  <text class="bad" x="112" y="324" text-anchor="middle">o mesmo array</text>
+  <path class="seta-x" d="M 204 280 L 450 280"/>
+  <text class="m" x="326" y="268" text-anchor="middle">sem setTarefas</text>
+  <rect class="caixa-x" x="468" y="254" width="212" height="52" rx="10"/>
+  <text class="bad" x="574" y="287" text-anchor="middle">tela não muda</text>
+</svg>

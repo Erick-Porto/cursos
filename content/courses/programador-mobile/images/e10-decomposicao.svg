@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 384" font-family="Inter, system-ui, sans-serif">
+  <title>Decomposição de cima para baixo: resumoDoCarrinho chama contarItens, do E09, subtotal, do E07, calcularFreteComCache, da aula 19, e somarReais, que ainda não existe</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .nova { fill: #131c33; stroke: #fbbf24; stroke-width: 2; stroke-dasharray: 8 6; }
+    .top  { fill: #34d399; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .tag  { fill: none; stroke: #60a5fa; stroke-width: 1.5; }
+    .tagn { fill: none; stroke: #fbbf24; stroke-width: 2; stroke-dasharray: 6 4; }
+    .tt   { fill: #60a5fa; font-size: 22px; font-weight: 700; }
+    .ttn  { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .lbl  { fill: #b4bfd3; font-size: 22px; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; }
+    .arr  { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="384" rx="16" fill="#0b1020"/>
+
+  <!-- função de cima -->
+  <rect class="top" x="40" y="24" width="420" height="52" rx="10"/>
+  <text class="h" x="58" y="58">resumoDoCarrinho(itens, cep)</text>
+  <text class="lbl" x="650" y="58" text-anchor="middle">origem</text>
+
+  <!-- tronco e galhos -->
+  <path class="line" d="M74 76 L74 339"/>
+  <path class="arr" d="M74 132 L106 132"/>
+  <path class="arr" d="M74 201 L106 201"/>
+  <path class="arr" d="M74 270 L106 270"/>
+  <path class="arr" d="M74 339 L106 339"/>
+
+  <!-- partes que já existem -->
+  <rect class="box" x="110" y="108" width="470" height="48" rx="8"/>
+  <text class="code" x="126" y="140">contarItens(itens)</text>
+  <rect class="tag" x="596" y="112" width="108" height="40" rx="20"/>
+  <text class="tt" x="650" y="140" text-anchor="middle">E09</text>
+
+  <rect class="box" x="110" y="177" width="470" height="48" rx="8"/>
+  <text class="code" x="126" y="209">subtotal(itens)</text>
+  <rect class="tag" x="596" y="181" width="108" height="40" rx="20"/>
+  <text class="tt" x="650" y="209" text-anchor="middle">E07</text>
+
+  <rect class="box" x="110" y="246" width="470" height="48" rx="8"/>
+  <text class="code" x="126" y="278">calcularFreteComCache(...)</text>
+  <rect class="tag" x="596" y="250" width="108" height="40" rx="20"/>
+  <text class="tt" x="650" y="278" text-anchor="middle">aula 19</text>
+
+  <!-- parte que ainda não existe: tracejada e rotulada -->
+  <rect class="nova" x="110" y="315" width="470" height="48" rx="8"/>
+  <text class="code" x="126" y="347">somarReais(valor, frete)</text>
+  <rect class="tagn" x="596" y="319" width="108" height="40" rx="20"/>
+  <text class="ttn" x="650" y="347" text-anchor="middle">nova</text>
+</svg>

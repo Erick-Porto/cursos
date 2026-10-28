@@ -1,0 +1,104 @@
+{
+  "title": "Quiz: E29 · Do React ao React Native",
+  "description": "Sete questões sobre o que muda e o que se mantém ao levar o app web para o React Native, e sobre como compartilhá-lo.",
+  "lesson": "e29a-do-react-ao-react-native",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `app.json` de um projeto Expo, qual campo define o nome que aparece embaixo do ícone do app no celular?",
+      "options": {
+        "a": "`name`",
+        "b": "`slug`",
+        "c": "`title`",
+        "d": "`displayName`"
+      },
+      "answer": "a",
+      "explanation": "`name` é o nome exibido para quem usa o app. `slug` é o identificador do projeto no Expo (sem espaços) e costuma ser confundido com ele; `title` e `displayName` não existem nesse arquivo.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Este trecho vem do app web `minhas-tarefas`:\n\n```jsx\nconst [titulo, setTitulo] = useState('')\n\nreturn (\n  <div className=\"cartao\">\n    <p>{titulo}</p>\n    <button onClick={remover}>Remover</button>\n  </div>\n)\n```\n\nQuais mudanças são necessárias para ele funcionar no React Native? Marque todas as corretas.",
+      "options": {
+        "a": "Trocar `div` por `View` e `p` por `Text`",
+        "b": "Trocar `className=\"cartao\"` por `style={estilos.cartao}`, com `estilos` vindo de `StyleSheet.create`",
+        "c": "Trocar `onClick` por `onPress` e envolver o texto do botão em `Text`",
+        "d": "Trocar `useState` por um hook próprio do React Native"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Componentes, estilo e eventos mudam: `View` e `Text` no lugar de `div` e `p`, `style` com `StyleSheet` no lugar de `className`, `onPress` no lugar de `onClick`. `useState` é do React, não do navegador, e funciona igual nas duas plataformas.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No app web, o campo de texto é controlado com `onChange={(e) => setTexto(e.target.value)}`. Em um `TextInput` do React Native, qual é o equivalente correto?",
+      "options": {
+        "a": "`onChangeText={(texto) => setTexto(texto)}`",
+        "b": "`onChange={(e) => setTexto(e.target.value)}`, sem alteração",
+        "c": "`onInput={(e) => setTexto(e.value)}`",
+        "d": "`onPress={(texto) => setTexto(texto)}`"
+      },
+      "answer": "a",
+      "explanation": "`onChangeText` entrega direto a string digitada. `onChange` até existe no `TextInput`, mas o evento não tem `target.value` (o texto fica em `e.nativeEvent.text`), por isso copiar o código da web deixa o campo travado. `onInput` é do HTML e `onPress` serve para toques, não para digitação.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "O `useEffect` com `fetch` que carrega as tarefas da API no app web roda sem alterações no app React Native.",
+      "answer": true,
+      "explanation": "`useEffect`, `fetch` e `async/await` fazem parte do React e do JavaScript, não do navegador: o mesmo `carregarTarefas` funciona no celular. O que muda é só a exibição de `carregando` e `erro`, que passa de `<p>` para `<Text>`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual é o erro neste código React Native?\n\n```jsx\n<FlatList data={tarefas}>\n  {tarefas.map((t) => (\n    <Text key={t.id}>{t.titulo}</Text>\n  ))}\n</FlatList>\n```",
+      "options": {
+        "a": "A `FlatList` não recebe filhos: cada item deve ser desenhado por `renderItem`",
+        "b": "Falta a prop `key` na própria `FlatList`",
+        "c": "`data` deveria receber o número de itens, não o array",
+        "d": "`map` não existe no JavaScript do React Native"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` recebe o array em `data` e desenha cada item com `renderItem` (identificando-o com `keyExtractor`). Colocar o `map` como filho é hábito da web: a lista ignora os filhos e reclama que falta `renderItem`. `data` recebe o array mesmo, e `map` é JavaScript puro, disponível em qualquer plataforma.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Para gerar um QR code e um link que qualquer pessoa com o Expo Go abre, mesmo fora do seu Wi-Fi, você roda o comando:\n\nnpx expo start ___",
+      "answer": [
+        [
+          "--tunnel",
+          "tunnel"
+        ]
+      ],
+      "explanation": "A opção `--tunnel` cria um túnel pela internet; sem ela, o QR code só funciona para celulares na mesma rede local. O link vale enquanto o servidor estiver rodando no seu computador; a publicação definitiva, com EAS Build e lojas, fica para o E44.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "Depois que um colega abriu o seu app com o QR code do `npx expo start --tunnel`, ele continua conseguindo abrir o app mesmo com o seu computador desligado.",
+      "answer": false,
+      "explanation": "O Expo Go baixa o app do servidor que roda no seu computador; o túnel só deixa esse servidor alcançável fora do seu Wi-Fi. Desligou o computador ou deu Ctrl+C no `npx expo start`, o app some para o colega. Para o app viver sozinho no celular, é preciso gerar um build com o EAS, assunto do E44.",
+      "points": 1
+    }
+  ]
+}

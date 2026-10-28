@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Frete, prazo e cupom de 800, 600 e 400 ms: em sequência o total é a soma, 1800 ms; em paralelo com Promise.all o total é o da mais lenta, 800 ms</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .s    { fill: #b4bfd3; font-size: 22px; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .bar  { fill: #60a5fa; }
+    .bt   { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .tot  { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .marca { stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 4 6; }
+    .cursor { animation: cursor 7s linear infinite; }
+    .tpar { animation: tpar 7s infinite; }
+    .tseq { animation: tseq 7s infinite; }
+    @keyframes cursor {
+      0%       { transform: translateX(-540px); opacity: 0; }
+      4%, 8%   { transform: translateX(-540px); opacity: 1; }
+      68%, 94% { transform: translateX(0); opacity: 1; }
+      100%     { transform: translateX(0); opacity: 0; }
+    }
+    @keyframes tpar { 0%, 34% { opacity: 0; } 37%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes tseq { 0%, 67% { opacity: 0; } 70%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .cursor, .tpar, .tseq { animation: none; }
+    }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- em sequência: um await por vez -->
+  <text class="t" x="24" y="44">Em sequência</text>
+  <text class="tot tseq" x="696" y="44" text-anchor="end">total: 1800 ms</text>
+  <text class="s" x="24" y="85">frete</text>
+  <text class="s" x="24" y="125">prazo</text>
+  <text class="s" x="24" y="165">cupom</text>
+  <rect class="bar" x="130" y="62" width="240" height="32" rx="6"/>
+  <text class="bt" x="250" y="86" text-anchor="middle">800 ms</text>
+  <rect class="bar" x="370" y="102" width="180" height="32" rx="6"/>
+  <text class="bt" x="460" y="126" text-anchor="middle">600 ms</text>
+  <rect class="bar" x="550" y="142" width="120" height="32" rx="6"/>
+  <text class="bt" x="610" y="166" text-anchor="middle">400 ms</text>
+
+  <!-- em paralelo: Promise.all -->
+  <text class="t" x="24" y="224">Em paralelo, com <tspan class="mono">Promise.all</tspan></text>
+  <text class="ok tpar" x="696" y="224" text-anchor="end">total: 800 ms</text>
+  <text class="s" x="24" y="263">frete</text>
+  <text class="s" x="24" y="303">prazo</text>
+  <text class="s" x="24" y="343">cupom</text>
+  <rect class="bar" x="130" y="240" width="240" height="32" rx="6"/>
+  <text class="bt" x="250" y="264" text-anchor="middle">800 ms</text>
+  <rect class="bar" x="130" y="280" width="180" height="32" rx="6"/>
+  <text class="bt" x="220" y="304" text-anchor="middle">600 ms</text>
+  <rect class="bar" x="130" y="320" width="120" height="32" rx="6"/>
+  <text class="bt" x="190" y="344" text-anchor="middle">400 ms</text>
+
+  <!-- fim da mais lenta (800 ms) e o tempo passando -->
+  <line class="marca" x1="370" y1="54" x2="370" y2="362"/>
+  <path class="cursor" d="M 670 54 V 184 M 670 234 V 362" stroke="#a78bfa" stroke-width="3" fill="none"/>
+</svg>

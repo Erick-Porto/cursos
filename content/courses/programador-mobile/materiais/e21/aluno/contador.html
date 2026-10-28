@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contador em JavaScript puro · E21</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+      --realce: rgba(34, 211, 238, 0.22);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --codigo-fundo: #0a0f1d;
+        --realce: rgba(34, 211, 238, 0.18);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { margin: 0 0 12px; font-size: 1.2rem; }
+
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+
+    /* contador */
+    .palco {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .tela { margin: 0; font-size: 1.6rem; font-weight: 700; }
+    button { font: inherit; cursor: pointer; }
+    #botao {
+      min-width: 140px;
+      padding: 12px 28px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    #botao:active { transform: translateY(1px); }
+    .memoria {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 4px 16px;
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--destaque-suave);
+    }
+    .memoria span { color: var(--texto-2); }
+    .memoria code { font-size: 1.05rem; font-weight: 700; }
+    .chave {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-top: 16px;
+      cursor: pointer;
+    }
+    .chave input { width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--destaque); flex: none; }
+    .chave code { white-space: nowrap; }
+    .chave small { display: block; color: var(--texto-2); }
+
+    /* passos e conclusão */
+    ol.passos { margin: 0; padding-left: 1.4em; }
+    ol.passos li + li { margin-top: 8px; }
+    .conclusao {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+
+    /* código */
+    .codigo { overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px 8px 16px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    #copiar {
+      padding: 4px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.85rem;
+    }
+    pre { margin: 0; padding: 16px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { font-size: inherit; }
+    .linha { background: var(--realce); }
+    .linha.desligada { text-decoration: line-through; opacity: 0.6; }
+    .linha.desligada::after { content: '(desligada)'; display: inline-block; margin-left: 2ch; }
+
+    dl { margin: 16px 0 0; }
+    dt { margin-top: 14px; }
+    dt code { padding: 2px 6px; border-radius: 6px; background: var(--destaque-suave); word-break: break-word; }
+    dd { margin: 4px 0 0; color: var(--texto-2); }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E21 · Por que React</p>
+      <h1>Contador em JavaScript puro</h1>
+      <p class="lead">
+        O mesmo contador do slide, para testar e acompanhar a demonstração do instrutor.
+        Funciona no computador e no celular.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-teste">
+      <h2 id="t-teste">1. Teste o contador</h2>
+      <div class="cartao">
+        <div class="palco">
+          <p class="tela" aria-live="polite">Cliques: <span id="total">0</span></p>
+          <button id="botao" type="button">Clicar</button>
+        </div>
+        <div class="memoria">
+          <span>Na memória</span>
+          <code>total = <output id="memoria">0</output></code>
+        </div>
+        <label class="chave">
+          <input type="checkbox" id="desligar">
+          <span>
+            Desligar a linha <code>span.textContent = total</code>
+            <small>Faz o mesmo que comentar essa linha no código.</small>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-passos">
+      <h2 id="t-passos">2. Acompanhe a demonstração</h2>
+      <ol class="passos">
+        <li>Clique em <strong>Clicar</strong> três vezes. A tela e a memória mostram 3.</li>
+        <li>
+          No computador, aperte <kbd>F12</kbd>, abra a aba <strong>Console</strong>, digite
+          <code>total</code> e aperte <kbd>Enter</kbd>. Aparece 3: é a mesma variável do quadro
+          "Na memória".
+        </li>
+        <li>Marque <strong>Desligar a linha</strong> e clique mais três vezes. A tela fica parada em 3.</li>
+        <li>Olhe o quadro "Na memória" (ou digite <code>total</code> no Console de novo): vale 6.</li>
+      </ol>
+      <p class="conclusao">
+        A variável mudou; a tela não. No JavaScript puro, cada clique pede duas atualizações, o dado e a
+        tela, e manter as duas em dia é trabalho seu.
+      </p>
+    </section>
+
+    <section aria-labelledby="t-codigo">
+      <h2 id="t-codigo">3. O código, linha por linha</h2>
+      <div class="codigo">
+        <div class="codigo-topo">
+          <span>contador.html</span>
+          <button id="copiar" type="button">Copiar código</button>
+        </div>
+<pre><code id="codigo">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Contador&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;p&gt;Cliques: &lt;span id="total"&gt;0&lt;/span&gt;&lt;/p&gt;
+  &lt;button id="botao"&gt;Clicar&lt;/button&gt;
+
+  &lt;script&gt;
+    let total = 0
+    const span = document.querySelector('#total')
+    const botao = document.querySelector('#botao')
+
+    botao.addEventListener('click', () =&gt; {
+      total = total + 1
+<span id="linha-tela" class="linha">      span.textContent = total</span>
+    })
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+      </div>
+
+      <dl>
+        <dt><code>&lt;span id="total"&gt;0&lt;/span&gt;</code></dt>
+        <dd>O lugar da tela onde o número aparece. O <code>id</code> é o nome que o JavaScript usa para encontrá-lo.</dd>
+
+        <dt><code>let total = 0</code></dt>
+        <dd>
+          A variável que guarda o número de cliques, na memória. Começa em 0. É <code>let</code>, e
+          não <code>const</code>, porque o valor muda a cada clique (E05).
+        </dd>
+
+        <dt><code>const span = document.querySelector('#total')</code></dt>
+        <dd>
+          A novidade de hoje. O navegador monta o <strong>DOM</strong>, a árvore de elementos da página:
+          é a cópia que você editou na aba Elements do DevTools, no E01. O <code>querySelector</code>
+          procura nessa árvore o elemento com <code>id="total"</code>; o <code>#</code> indica id, como
+          num seletor de CSS. O elemento encontrado fica guardado em <code>span</code>.
+        </dd>
+
+        <dt><code>botao.addEventListener('click', () =&gt; { ... })</code></dt>
+        <dd>
+          Espera o clique. A arrow function (E07) é um callback (E10): o navegador a chama a cada
+          clique, como o <code>setTimeout</code> do E18 chama a função quando o tempo acaba.
+        </dd>
+
+        <dt><code>total = total + 1</code></dt>
+        <dd>Atualiza o dado.</dd>
+
+        <dt><code>span.textContent = total</code></dt>
+        <dd>
+          Atualiza a tela: troca o texto do elemento no DOM. Sem esta linha, o dado muda e a tela fica
+          parada.
+        </dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="t-pense">
+      <h2 id="t-pense">4. Pense</h2>
+      <p>
+        Aqui são só duas coisas para manter em dia: a variável e um <code>span</code>. Em um app com
+        dezenas de telas, quem garante que tudo muda junto a cada clique? É o problema que o React
+        resolve: no próximo slide, o mesmo contador em React.
+      </p>
+    </section>
+
+    <section aria-labelledby="t-casa">
+      <h2 id="t-casa">5. Refaça em casa</h2>
+      <p>
+        Crie um arquivo <code>contador.html</code> no VS Code, cole o código
+        copiado acima, salve e abra o arquivo no navegador.
+      </p>
+      <p>
+        Desafio: acrescente um botão <strong>Zerar</strong> que volta o contador a 0. Lembre de
+        atualizar o dado e a tela.
+      </p>
+    </section>
+
+    <footer>Material da aula E21 do curso Programador Mobile.</footer>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------
+    // O contador do slide. A única diferença é a chave "Desligar a
+    // linha", que faz o mesmo que comentar span.textContent = total.
+    // ---------------------------------------------------------------
+    let total = 0
+    const span = document.querySelector('#total')
+    const botao = document.querySelector('#botao')
+    const desligar = document.querySelector('#desligar')
+
+    botao.addEventListener('click', () => {
+      total = total + 1
+      if (!desligar.checked) span.textContent = total
+    })
+
+    // ---------------------------------------------------------------
+    // Só desta página: o quadro "Na memória", o destaque da linha
+    // desligada e o botão de copiar o código.
+    // ---------------------------------------------------------------
+    const memoria = document.querySelector('#memoria')
+    const linha = document.querySelector('#linha-tela')
+    const codigo = document.querySelector('#codigo')
+    const copiar = document.querySelector('#copiar')
+
+    botao.addEventListener('click', () => {
+      memoria.textContent = total
+    })
+
+    desligar.addEventListener('change', () => {
+      linha.classList.toggle('desligada', desligar.checked)
+    })
+
+    copiar.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(codigo.textContent)
+        copiar.textContent = 'Copiado'
+      } catch {
+        // sem acesso à área de transferência: seleciona o código para copiar à mão
+        getSelection().selectAllChildren(codigo)
+        copiar.textContent = 'Use Ctrl+C'
+      }
+      setTimeout(() => { copiar.textContent = 'Copiar código' }, 2000)
+    })
+  </script>
+</body>
+</html>

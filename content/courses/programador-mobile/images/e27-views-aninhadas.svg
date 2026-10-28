@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>A View de fora é a tela e as duas de dentro são o cabeçalho e a lista; sem estilo, as Views não aparecem e só os textos ficam visíveis</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ttl  { fill: #b4bfd3; font-size: 22px; font-weight: 700; }
+    .view { fill: none; stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 8 6; }
+    .txt  { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .tela { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .tag  { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <text class="ttl" x="32" y="42">o que você escreveu</text>
+  <text class="ttl" x="440" y="42">o que aparece</text>
+
+  <!-- View de fora: a tela -->
+  <rect class="view" x="24" y="60" width="388" height="280" rx="12"/>
+  <text class="code" x="40" y="90">View</text>
+  <text class="m" x="104" y="90">tela</text>
+
+  <!-- View do cabeçalho -->
+  <rect class="view" x="40" y="104" width="356" height="108" rx="10"/>
+  <text class="code" x="56" y="132">View</text>
+  <text class="m" x="120" y="132">cabeçalho</text>
+  <rect class="txt" x="56" y="148" width="324" height="48" rx="8"/>
+  <text class="t" x="72" y="180">Minhas Tarefas</text>
+  <text class="tag" x="368" y="180" text-anchor="end">Text</text>
+
+  <!-- View da lista -->
+  <rect class="view" x="40" y="222" width="356" height="108" rx="10"/>
+  <text class="code" x="56" y="250">View</text>
+  <text class="m" x="120" y="250">lista</text>
+  <rect class="txt" x="56" y="266" width="324" height="48" rx="8"/>
+  <text class="t" x="72" y="298">Estudar React Native</text>
+  <text class="tag" x="368" y="298" text-anchor="end">Text</text>
+
+  <!-- a tela do celular, sem estilo -->
+  <rect class="tela" x="440" y="60" width="256" height="236" rx="18"/>
+  <text class="t" x="456" y="96">Minhas Tarefas</text>
+  <text class="t" x="456" y="128">Estudar React Native</text>
+  <text class="m" x="568" y="330" text-anchor="middle">só os textos</text>
+</svg>

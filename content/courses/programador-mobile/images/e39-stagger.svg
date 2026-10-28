@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 410" font-family="Inter, system-ui, sans-serif">
+  <title>Três animações de 300 ms: sequence leva 900 ms, uma depois do fim da outra; parallel leva 300 ms, todas juntas; stagger(80) leva 460 ms, cada uma começa 80 ms depois da anterior</title>
+  <style>
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .bar  { fill: #2a3a5c; }
+    .ok   { fill: #34d399; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .nok  { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .grid { stroke: #2a3a5c; stroke-width: 1.5; stroke-dasharray: 5 5; fill: none; }
+    .eixo { stroke: #b4bfd3; stroke-width: 2; fill: none; }
+  </style>
+  <rect width="720" height="410" rx="16" fill="#0b1020"/>
+
+  <!-- grade de tempo: 0,5 unidade por ms -->
+  <path class="grid" d="M380 24 V360 M530 24 V360 M680 24 V360"/>
+
+  <!-- sequence -->
+  <text class="code" x="32" y="70">sequence</text>
+  <text class="m" x="32" y="100">900 ms</text>
+  <rect class="bar" x="230" y="30" width="150" height="26" rx="5"/>
+  <rect class="bar" x="380" y="62" width="150" height="26" rx="5"/>
+  <rect class="bar" x="530" y="94" width="150" height="26" rx="5"/>
+  <text class="n" x="240" y="51">1</text>
+  <text class="n" x="390" y="83">2</text>
+  <text class="n" x="540" y="115">3</text>
+
+  <!-- parallel -->
+  <text class="code" x="32" y="186">parallel</text>
+  <text class="m" x="32" y="216">300 ms</text>
+  <rect class="bar" x="230" y="146" width="150" height="26" rx="5"/>
+  <rect class="bar" x="230" y="178" width="150" height="26" rx="5"/>
+  <rect class="bar" x="230" y="210" width="150" height="26" rx="5"/>
+  <text class="n" x="240" y="167">1</text>
+  <text class="n" x="240" y="199">2</text>
+  <text class="n" x="240" y="231">3</text>
+  <text class="lbl" x="400" y="199">todas juntas</text>
+
+  <!-- stagger -->
+  <text class="code" x="32" y="302">stagger(80)</text>
+  <text class="m" x="32" y="332">460 ms</text>
+  <rect class="ok" x="230" y="262" width="150" height="26" rx="5"/>
+  <rect class="ok" x="270" y="294" width="150" height="26" rx="5"/>
+  <rect class="ok" x="310" y="326" width="150" height="26" rx="5"/>
+  <text class="nok" x="240" y="283">1</text>
+  <text class="nok" x="280" y="315">2</text>
+  <text class="nok" x="320" y="347">3</text>
+  <text class="lbl" x="480" y="315">uma a cada 80 ms</text>
+
+  <!-- eixo do tempo -->
+  <path class="eixo" d="M230 368 H680 M230 362 V374 M380 362 V374 M530 362 V374 M680 362 V374"/>
+  <text class="m" x="230" y="400" text-anchor="middle">0</text>
+  <text class="m" x="380" y="400" text-anchor="middle">300</text>
+  <text class="m" x="530" y="400" text-anchor="middle">600</text>
+  <text class="m" x="680" y="400" text-anchor="end">900 ms</text>
+</svg>

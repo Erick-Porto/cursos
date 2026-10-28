@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laboratório: sua página de perfil · E01</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, td code, h3 code, label code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+    a { color: var(--destaque); }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.2em;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    button { font: inherit; cursor: pointer; }
+
+    /* entrega */
+    .entrega { margin: 0; padding: 0; list-style: none; }
+    .entrega li + li { margin-top: 10px; }
+    .entrega label { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+    .entrega input { width: 22px; height: 22px; margin: 2px 0 0; flex: none; accent-color: var(--destaque); }
+    .entrega .feito { color: var(--texto-2); text-decoration: line-through; }
+    .contagem { margin: 16px 0 0; color: var(--texto-2); font-size: 0.9rem; }
+
+    /* passos */
+    ol.passos { margin: 0; padding: 0; list-style: none; counter-reset: passo; }
+    ol.passos > li { position: relative; margin-top: 16px; padding-left: 48px; }
+    ol.passos > li::before {
+      counter-increment: passo;
+      content: counter(passo);
+      position: absolute;
+      left: 0;
+      top: -2px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+    ol.passos p { margin: 0; }
+    ol.passos p + p { margin-top: 6px; }
+    ol.passos ul { margin: 6px 0 0; padding-left: 1.2em; }
+    ol.passos li li + li { margin-top: 4px; }
+    @media (max-width: 480px) {
+      ol.passos > li { padding-left: 0; padding-top: 40px; }
+    }
+
+    /* código */
+    .codigo { margin-top: 10px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+    .comentario { color: #94a3b8; }
+
+    /* avisos e tabelas */
+    .aviso, .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .aviso { border-left-color: var(--alerta); background: var(--alerta-suave); }
+    .aviso p, .dica p { margin: 0; }
+    .aviso p + p, .dica p + p { margin-top: 8px; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    tbody tr:last-child td { border-bottom: 0; }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      .comentario { color: #555; }
+      ol.passos > li::before { background: #000; color: #fff; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-square-check" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-list-ordered" viewBox="0 0 24 24"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z"/><path d="m21.854 2.147-10.94 10.939"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E01 · Laboratório</p>
+      <h1>Laboratório: sua página de perfil</h1>
+      <p class="lead">
+        Hoje você monta a sua primeira página: <code>perfil.html</code> e <code>estilo.css</code> com uma foto,
+        o seu nome e três links, aberta no navegador e inspecionada com o DevTools. Junto, você instala as
+        ferramentas do <a href="checklist-instalacao.html">checklist de instalação</a>. Tempo: 70 minutos para as duas coisas.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-entrega">
+      <h2 id="t-entrega"><svg class="ico"><use href="#i-square-check"/></svg>O que entregar</h2>
+      <div class="cartao">
+        <ul class="entrega">
+          <li><label><input type="checkbox" id="e-html"><span><code>perfil.html</code> com o seu nome em um <code>h1</code></span></label></li>
+          <li><label><input type="checkbox" id="e-foto"><span>Uma foto (ou o seu avatar do GitHub) com texto alternativo no <code>alt</code></span></label></li>
+          <li><label><input type="checkbox" id="e-texto"><span>Um parágrafo (<code>p</code>) sobre você: o que estuda, o que quer construir</span></label></li>
+          <li><label><input type="checkbox" id="e-links"><span>Três links que funcionam, em uma lista (<code>ul</code> e <code>li</code>): GitHub, LinkedIn, e-mail ou outros</span></label></li>
+          <li><label><input type="checkbox" id="e-css"><span><code>estilo.css</code> em arquivo separado, ligado ao HTML com <code>&lt;link&gt;</code>; nada de <code>style</code> dentro do HTML</span></label></li>
+          <li><label><input type="checkbox" id="e-nomes"><span>Nomes de arquivo sem espaço, acento ou letra maiúscula</span></label></li>
+          <li><label><input type="checkbox" id="e-devtools"><span>Página aberta no navegador e inspecionada no DevTools (abas Elements e Network)</span></label></li>
+          <li><label><input type="checkbox" id="e-captura"><span>Captura de tela do terminal com as versões e o seu nome no Git (item 7 do checklist)</span></label></li>
+        </ul>
+        <p class="contagem" id="contagem">0 de 8 itens prontos. As marcações ficam só neste navegador.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-passos">
+      <h2 id="t-passos"><svg class="ico"><use href="#i-list-ordered"/></svg>Passo a passo</h2>
+      <div class="cartao">
+        <ol class="passos">
+          <li>
+            <h3>Crie a pasta <code>perfil</code> na Área de Trabalho</h3>
+            <p>Tudo deste laboratório fica dentro dela: a página, o CSS e a foto. Nome em minúsculas, sem espaço.</p>
+          </li>
+          <li>
+            <h3>Abra a pasta no VS Code</h3>
+            <p>Menu <strong>File</strong>, <strong>Open Folder</strong> (ou arraste a pasta para a janela do editor).</p>
+            <p>Ainda sem VS Code? O Bloco de Notas serve por hoje: ao salvar, escolha "Todos os arquivos" em Tipo e digite o nome com a extensão, como <code>perfil.html</code>.</p>
+          </li>
+          <li>
+            <h3>Crie <code>perfil.html</code> e cole o esqueleto</h3>
+            <p>No painel esquerdo do VS Code, ícone <strong>New File</strong>, nome <code>perfil.html</code>. Cole o código abaixo e salve com <kbd>Ctrl</kbd> + <kbd>S</kbd>.</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>perfil.html</span><button class="copiar nao-imprime" type="button" data-alvo="#esqueleto">Copiar</button></div>
+<pre><code id="esqueleto">&lt;!DOCTYPE html&gt;
+&lt;html lang="pt-BR"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;
+  &lt;title&gt;Seu nome&lt;/title&gt;
+  &lt;link rel="stylesheet" href="estilo.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  <span class="comentario">&lt;!-- Aqui vai o conteúdo: foto, nome, parágrafo e lista de links --&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+            <p>Troque "Seu nome" no <code>title</code>: é o texto da aba do navegador.</p>
+          </li>
+          <li>
+            <h3>Escreva o conteúdo dentro de <code>&lt;body&gt;</code></h3>
+            <p>Use as tags da aula. Cada uma tem um papel:</p>
+            <div class="tabela">
+              <table>
+                <thead><tr><th>Tag</th><th>Para que serve</th><th>Lembre</th></tr></thead>
+                <tbody>
+                  <tr><td><code>&lt;img src="foto.jpg" alt="..."&gt;</code></td><td>A foto</td><td>O <code>alt</code> descreve a imagem: "Foto de Ana Souza"</td></tr>
+                  <tr><td><code>&lt;h1&gt;...&lt;/h1&gt;</code></td><td>O seu nome</td><td>Só um <code>h1</code> por página</td></tr>
+                  <tr><td><code>&lt;p&gt;...&lt;/p&gt;</code></td><td>O parágrafo sobre você</td><td>Duas ou três frases bastam</td></tr>
+                  <tr><td><code>&lt;ul&gt;</code> com <code>&lt;li&gt;</code></td><td>A lista de links</td><td>Um <code>li</code> por link, e o <code>a</code> dentro dele</td></tr>
+                  <tr><td><code>&lt;a href="https://..."&gt;texto&lt;/a&gt;</code></td><td>Cada link</td><td>O <code>href</code> começa com <code>https://</code>; para e-mail, <code>mailto:voce@exemplo.com</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Copie a foto para a pasta <code>perfil</code> com o nome <code>foto.jpg</code> (ou use o avatar do GitHub, veja o quadro abaixo).</p>
+          </li>
+          <li>
+            <h3>Abra no navegador</h3>
+            <p>Dois cliques em <code>perfil.html</code> no Explorador de Arquivos, ou arraste o arquivo para a janela do navegador. Toda vez que salvar algo, recarregue com <kbd>F5</kbd>.</p>
+          </li>
+          <li>
+            <h3>Crie <code>estilo.css</code> na mesma pasta</h3>
+            <p>Comece pelo mínimo e recarregue a página: a fonte mudou? Então o CSS está ligado.</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>estilo.css</span><button class="copiar nao-imprime" type="button" data-alvo="#css-inicio">Copiar</button></div>
+<pre><code id="css-inicio">body {
+  font-family: sans-serif;
+}</code></pre>
+            </div>
+            <p>Agora experimente, uma propriedade por vez, recarregando a cada mudança:</p>
+            <ul>
+              <li><code>color</code> e <code>background</code> no <code>body</code>: cor do texto e do fundo</li>
+              <li><code>text-align: center</code> no <code>body</code>: tudo centralizado</li>
+              <li><code>width: 120px</code> e <code>border-radius: 50%</code> no <code>img</code>: foto redonda</li>
+              <li><code>list-style: none</code> no <code>ul</code>: lista sem as bolinhas</li>
+              <li><code>color</code> e <code>font-weight: bold</code> no <code>a</code>: links na sua cor</li>
+            </ul>
+          </li>
+          <li>
+            <h3>Inspecione com o DevTools</h3>
+            <p><kbd>F12</kbd>, aba <strong>Elements</strong>: encontre o seu <code>h1</code> e troque a cor em <strong>Styles</strong>. Recarregue: voltou, porque você mudou só a cópia na memória.</p>
+            <p>Aba <strong>Network</strong>: recarregue a página e confira que <code>estilo.css</code> e a foto aparecem com status <strong>200</strong>. Uma linha em vermelho é um arquivo que o navegador não achou.</p>
+          </li>
+          <li>
+            <h3>Envie</h3>
+            <p><code>perfil.html</code>, <code>estilo.css</code> e a foto (ou avise que usou o avatar), mais a captura de tela do terminal, ao instrutor pelo sistema. Não terminou? Termine em casa e envie até o início do E02.</p>
+          </li>
+        </ol>
+      </div>
+
+      <div class="dica">
+        <p><strong>Sem foto à mão?</strong> Use o avatar do GitHub, que você acabou de criar:</p>
+        <p><code>&lt;img src="https://github.com/SEU-USUARIO.png" alt="Foto de Seu Nome"&gt;</code></p>
+        <p>Troque <code>SEU-USUARIO</code> pelo seu nome de usuário. Precisa de internet para aparecer.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-erros">
+      <h2 id="t-erros"><svg class="ico"><use href="#i-triangle-alert"/></svg>Erros comuns</h2>
+      <div class="cartao tabela">
+        <table>
+          <thead>
+            <tr><th>Sintoma</th><th>Causa provável</th><th>O que fazer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Página sem estilo nenhum</td><td><code>href</code> diferente do nome do arquivo, arquivo salvo como <code>estilo.css.txt</code> ou em outra pasta</td><td>No Explorador, ative "Extensões de nome de arquivo"; na aba Network, veja se <code>estilo.css</code> está em vermelho</td></tr>
+            <tr><td>Link abre uma página de erro</td><td><code>href</code> sem <code>https://</code>: o navegador procura um arquivo na sua pasta</td><td><code>href="https://github.com/seu-usuario"</code></td></tr>
+            <tr><td>Foto quebrada</td><td>Nome diferente (<code>Foto.JPG</code> não é <code>foto.jpg</code>) ou arquivo em outra pasta</td><td>Mesmo nome, mesma pasta, tudo em minúsculas</td></tr>
+            <tr><td>Acentos virando símbolos estranhos</td><td>Faltou <code>&lt;meta charset="UTF-8"&gt;</code></td><td>Copie o esqueleto de novo</td></tr>
+            <tr><td>Arquivo abre no Bloco de Notas, não no navegador</td><td>Salvou como <code>.txt</code></td><td>Renomeie para <code>.html</code> com as extensões visíveis</td></tr>
+            <tr><td>Parte da página sumiu ou ficou em negrito</td><td>Tag sem fechar (<code>&lt;p&gt;</code> sem <code>&lt;/p&gt;</code>)</td><td>No DevTools, Elements, veja onde a árvore fica diferente do seu arquivo</td></tr>
+            <tr><td>A alteração feita no DevTools sumiu</td><td>O DevTools muda só a cópia na memória</td><td>Edite no VS Code, salve e recarregue</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="aviso">
+        <p>Nome de arquivo com espaço ou acento (<code>Meu Perfil.html</code>, <code>página.html</code>) funciona hoje e quebra quando o projeto vai para o GitHub. Comece certo: <code>perfil.html</code>.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-extra">
+      <h2 id="t-extra"><svg class="ico"><use href="#i-flask"/></svg>Terminou antes?</h2>
+      <div class="cartao">
+        <ul class="lista" style="margin-top: 0">
+          <li>Acrescente um segundo parágrafo com o app que você gostaria de construir até o fim do curso.</li>
+          <li>Faça os links mudarem de cor ao passar o mouse: <code>a:hover { color: ...; }</code>.</li>
+          <li>Veja a sua página no tamanho de um celular: no DevTools, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd> liga o modo dispositivo. Tudo cabe na tela?</li>
+          <li>Ajude quem está ao lado a achar o erro, sem pegar o teclado.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>Material da aula E01 do curso Programador Mobile. As marcações ficam só neste navegador.</footer>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Lista de entrega: as marcações ficam no localStorage deste
+    // navegador; sem ele, a página funciona igual, só não lembra.
+    // ---------------------------------------------------------------
+    const CHAVE = 'pm-e01-laboratorio-perfil'
+    const caixas = [...document.querySelectorAll('.entrega input[type="checkbox"]')]
+    const contagem = document.querySelector('#contagem')
+
+    function lerMarcacoes() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(CHAVE) || '[]')
+        return Array.isArray(lista) ? lista : []
+      } catch {
+        return []
+      }
+    }
+
+    function gravarMarcacoes(ids) {
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(ids))
+      } catch {
+        // sem armazenamento disponível: segue sem lembrar
+      }
+    }
+
+    function atualizar() {
+      const feitos = caixas.filter((c) => c.checked)
+      for (const c of caixas) c.nextElementSibling.classList.toggle('feito', c.checked)
+      contagem.textContent = `${feitos.length} de ${caixas.length} itens prontos. As marcações ficam só neste navegador.`
+      gravarMarcacoes(feitos.map((c) => c.id))
+    }
+
+    const salvas = lerMarcacoes()
+    for (const c of caixas) {
+      c.checked = salvas.includes(c.id)
+      c.addEventListener('change', atualizar)
+    }
+    atualizar()
+
+    // botões "Copiar" dos blocos de código
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>

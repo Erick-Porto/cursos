@@ -1,0 +1,278 @@
+{
+  "title": "Prova 3: Introdução ao ambiente React Native",
+  "description": "Prova do encontro E29, aplicada em sala na última hora. Cobre os encontros E26 a E29: mobile e React Native, Expo e Expo Go, componentes essenciais, StyleSheet e Flexbox, estado, FlatList e Alert, depuração e a passagem do app web para o celular. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e29b-revisao-react-native",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual é a diferença essencial entre um app híbrido e um app React Native?",
+      "options": {
+        "a": "O híbrido roda um site dentro de uma WebView; o React Native transforma o JavaScript em componentes nativos reais",
+        "b": "O híbrido é escrito em Kotlin e o React Native em Swift",
+        "c": "O React Native exige duas bases de código, uma por sistema; o híbrido usa uma só",
+        "d": "Não há diferença: os dois empacotam uma página web"
+      },
+      "answer": "a",
+      "explanation": "No híbrido, a interface é uma página web dentro do app. No React Native, cada `View` e `Text` vira um componente nativo do sistema, com a mesma base de código JavaScript para Android e iOS. Kotlin e Swift são as linguagens do desenvolvimento nativo."
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "O que o Expo oferece a quem desenvolve em React Native?",
+      "options": {
+        "a": "Criar o projeto com um único comando",
+        "b": "Rodar o app no celular sem instalar Android Studio ou Xcode",
+        "c": "Publicar o app nas lojas sem nenhuma configuração",
+        "d": "Pacotes prontos para câmera, localização e outros recursos do aparelho"
+      },
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "O Expo gera o projeto, roda no celular pelo Expo Go e traz pacotes para os recursos do aparelho. Publicar nas lojas continua exigindo contas, configuração e build; o Expo ajuda, mas não elimina esse trabalho.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Para iniciar o servidor de desenvolvimento do app Expo e exibir o QR code, você roda npx expo ___ na pasta do projeto.",
+      "answer": [
+        [
+          "start"
+        ]
+      ],
+      "explanation": "`npx expo start` liga o servidor e mostra o QR code que o Expo Go lê. Com `-c` ele limpa o cache e com `--tunnel` funciona mesmo em redes diferentes."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Ao ler o QR code, o Expo Go mostra \"Something went wrong\" e o app não abre. Qual é a primeira coisa a verificar?",
+      "options": {
+        "a": "Se o celular e o computador estão na mesma rede Wi-Fi",
+        "b": "Se o Node.js está instalado no celular",
+        "c": "Se o VS Code está aberto no projeto",
+        "d": "Se o app.json tem um ícone definido"
+      },
+      "answer": "a",
+      "explanation": "O Expo Go baixa o app do servidor que roda no seu computador; se os dois não estão na mesma rede (ou um firewall bloqueia), a conexão falha. O plano B é `npx expo start --tunnel`. Node.js roda no computador, não no celular."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que acontece ao renderizar este trecho no React Native?\n\n```jsx\n<View>\n  Minhas tarefas\n  <Text>3 pendentes</Text>\n</View>\n```",
+      "options": {
+        "a": "Mostra as duas linhas normalmente",
+        "b": "Erro na tela vermelha: texto solto fora de um componente Text",
+        "c": "Mostra só \"3 pendentes\" e ignora o texto solto",
+        "d": "Mostra só \"Minhas tarefas\""
+      },
+      "answer": "b",
+      "explanation": "No React Native todo texto precisa estar dentro de `Text`. \"Minhas tarefas\" está direto na `View`, o que gera o erro \"Text strings must be rendered within a <Text> component\" e para o app.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A imagem remota abaixo não aparece na tela. O que falta?\n\n```jsx\n<Image source={{ uri: 'https://exemplo.com/foto.png' }} />\n```",
+      "options": {
+        "a": "O atributo alt com a descrição",
+        "b": "Um style com width e height",
+        "c": "Usar require em vez de uri",
+        "d": "Nada: imagens remotas demoram a carregar"
+      },
+      "answer": "b",
+      "explanation": "Imagens remotas não têm tamanho conhecido antes de carregar, então ocupam zero pixels. É preciso informar `width` e `height` no `style`. `require` serve para imagens locais da pasta `assets/`."
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "No React Native, Pressable aceita qualquer conteúdo e estilo próprio, enquanto Button recebe apenas um título e tem aparência fixa do sistema.",
+      "answer": true,
+      "explanation": "`Button` é rápido de usar, mas só aceita `title`, `onPress` e `color`. `Pressable` envolve o que você quiser (Text, Image, View) e recebe `style`, por isso é a escolha para botões com identidade visual."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Qual objeto de estilo está escrito corretamente para o StyleSheet do React Native?",
+      "options": {
+        "a": "{ 'font-size': '18px' }",
+        "b": "{ fontSize: 18 }",
+        "c": "{ fontSize: '18px' }",
+        "d": "{ font-size: 18 }"
+      },
+      "answer": "b",
+      "explanation": "No StyleSheet as propriedades ficam em camelCase e os números não levam unidade: `fontSize: 18`. `'18px'` é uma string com unidade, que não é válida."
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Como os dois textos ficam na tela?\n\n```jsx\n<View style={{ flexDirection: 'row', justifyContent: 'center' }}>\n  <Text>Título</Text>\n  <Text>Alta</Text>\n</View>\n```",
+      "options": {
+        "a": "Lado a lado, juntos no centro da linha",
+        "b": "Um embaixo do outro, centralizados",
+        "c": "Lado a lado, um em cada extremidade da linha",
+        "d": "Lado a lado, colados à esquerda"
+      },
+      "answer": "a",
+      "explanation": "`flexDirection: 'row'` coloca os filhos lado a lado e `justifyContent: 'center'` os agrupa no centro do eixo principal (a linha). Para um em cada extremidade seria `space-between`; sem `row`, ficariam um embaixo do outro.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Quais trechos aplicam estilos corretamente no React Native?",
+      "options": {
+        "a": "style={estilos.cartao}",
+        "b": "style=\"cartao\"",
+        "c": "style={[estilos.cartao, concluida && estilos.concluida]}",
+        "d": "className={estilos.cartao}"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "`style` recebe um objeto do StyleSheet ou um array de objetos (o `false` do `&&` é ignorado, o que permite o estilo condicional). String em `style` e `className` são hábitos da web que não existem no React Native.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "No TextInput do React Native, qual prop entrega o texto digitado diretamente, como string, sem e.target.value?",
+      "options": {
+        "a": "onChange",
+        "b": "onChangeText",
+        "c": "onInput",
+        "d": "onSubmit"
+      },
+      "answer": "b",
+      "explanation": "`onChangeText` recebe o texto pronto, por isso `onChangeText={setTexto}` funciona. `onChange` existe, mas entrega um evento nativo sem `target`, e `onInput` e `onSubmit` são da web."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "Qual prop falta nesta FlatList para desenhar cada tarefa na tela?\n\n```jsx\n<FlatList\n  data={tarefas}\n  keyExtractor={(item) => String(item.id)}\n/>\n```",
+      "options": {
+        "a": "renderItem={({ item }) => <CartaoTarefa titulo={item.titulo} />}",
+        "b": "children={tarefas.map((t) => <CartaoTarefa titulo={t.titulo} />)}",
+        "c": "item={<CartaoTarefa />}",
+        "d": "map={(item) => <CartaoTarefa titulo={item.titulo} />}"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` percorre `data` por você e chama `renderItem` para cada item, entregando um objeto `{ item, index }`. Colocar um `map` como filho faz a lista perder a eficiência e não é a forma correta.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "Como abrir a caixa nativa de confirmação antes de remover uma tarefa?",
+      "options": {
+        "a": "window.confirm('Remover?')",
+        "b": "Alert.alert('Remover?', 'Esta ação não pode ser desfeita', [{ text: 'Cancelar' }, { text: 'Remover', onPress: () => removerTarefa(id) }])",
+        "c": "console.log('Remover?')",
+        "d": "Alert('Remover?', () => removerTarefa(id))"
+      },
+      "answer": "b",
+      "explanation": "`Alert.alert` recebe título, mensagem e uma lista de botões; cada botão é um objeto com `text` e, se precisar agir, `onPress`. `window.confirm` é do navegador e `Alert` não é chamado diretamente como função."
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "Onde aparece a saída de um console.log em um app rodando no Expo Go?",
+      "options": {
+        "a": "No console do navegador, aba Console",
+        "b": "No terminal onde npx expo start está rodando",
+        "c": "Em uma caixa na tela do celular",
+        "d": "No arquivo app.json"
+      },
+      "answer": "b",
+      "explanation": "O Expo envia os logs do celular para o terminal do servidor de desenvolvimento. O console do navegador só vale para apps web; na tela do celular aparecem apenas os erros (tela vermelha) e os avisos (amarelo)."
+    },
+    {
+      "id": "q15",
+      "type": "truefalse",
+      "prompt": "Um aviso amarelo (warning) no Expo interrompe a execução do app até que o problema seja corrigido.",
+      "answer": false,
+      "explanation": "O aviso amarelo avisa, mas o app continua rodando; é a tela vermelha que para o app. Mesmo assim, avisos como key faltando merecem correção."
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Qual é a tradução correta deste campo do app web para o React Native?\n\n```jsx\n<input value={texto} onChange={(e) => setTexto(e.target.value)} />\n```",
+      "options": {
+        "a": "<TextInput value={texto} onChangeText={setTexto} />",
+        "b": "<TextInput value={texto} onChange={(e) => setTexto(e.target.value)} />",
+        "c": "<input value={texto} onChangeText={setTexto} />",
+        "d": "<Text value={texto} onChangeText={setTexto} />"
+      },
+      "answer": "a",
+      "explanation": "O componente é `TextInput` e o evento é `onChangeText`, que já entrega a string. `e.target.value` não existe no React Native, `input` é uma tag HTML e `Text` só exibe texto.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "multiple",
+      "prompt": "Você vai levar o `minhas-tarefas` do navegador para o `minhas-tarefas-mobile`. Quais partes podem ser copiadas **sem mudar uma linha**?",
+      "options": {
+        "a": "A função `alternarConcluida`, que usa `map` e spread para criar um array novo",
+        "b": "A função `carregarTarefas`, com `fetch` e `async/await`, e o `useEffect` que a chama",
+        "c": "O JSX do cartão, com `li`, `span` e `button`",
+        "d": "O arquivo `CartaoTarefa.module.css`, com as classes do cartão"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Funções de estado, `map`, spread, `fetch`, `async/await` e `useEffect` são JavaScript e React, não navegador: rodam iguais no celular. O que desenha a tela muda: `li`, `span` e `button` não existem no React Native (viram `View`, `Text` e `Pressable`), e arquivos CSS não são lidos; os estilos viram objetos do `StyleSheet`.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "fill",
+      "prompt": "Você trocou o name no app.json, mas o Expo Go continua mostrando o nome antigo. Pare o servidor e rode npx expo start ___ para limpar o cache.",
+      "answer": [
+        [
+          "-c",
+          "--clear"
+        ]
+      ],
+      "explanation": "`-c` (ou `--clear`) limpa o cache do empacotador, que às vezes guarda versões antigas dos arquivos. É o caminho depois de mudar o `app.json` ou quando o código \"não muda\" nem com `r`. `--tunnel` muda só o caminho até o celular, não o cache."
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "Ao tocar em Adicionar, nenhuma tarefa aparece e não há erro. O `console.log(tarefas)` mostra no terminal o array crescendo a cada toque. Qual é a causa?\n\n```jsx\nfunction adicionarTarefa(titulo) {\n  const nova = { id: Date.now(), titulo, concluida: false };\n  tarefas.push(nova);\n  console.log(tarefas);\n}\n```",
+      "options": {
+        "a": "`push` altera o mesmo array e ninguém chama `setTarefas`, então a tela não é redesenhada",
+        "b": "A `FlatList` precisa estar dentro de uma `ScrollView` para mostrar itens novos",
+        "c": "O `console.log` dentro da função impede que a tela seja redesenhada",
+        "d": "`Date.now()` gera um `id` repetido e a `FlatList` descarta a tarefa nova"
+      },
+      "answer": "a",
+      "explanation": "A tela só muda quando o estado é trocado pelo `set`. O `push` muda o array por dentro, sem `setTarefas`: o terminal mostra o array maior, mas o React não fica sabendo. A correção é `setTarefas([...tarefas, nova])`. `FlatList` dentro de `ScrollView` só gera aviso amarelo, o `console.log` não interfere na tela e `Date.now()` muda a cada milissegundo.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "No cabeçalho abaixo, o título e o contador ficam lado a lado, mas colados no topo da linha. Qual propriedade, acrescentada a `linha`, centraliza os dois **na vertical**?\n\n```jsx\nconst estilos = StyleSheet.create({\n  linha: { flexDirection: 'row', justifyContent: 'space-between', height: 64 },\n});\n```",
+      "options": {
+        "a": "`alignItems: 'center'`",
+        "b": "`justifyContent: 'center'`",
+        "c": "`textAlign: 'center'`",
+        "d": "`flexDirection: 'column'`"
+      },
+      "answer": "a",
+      "explanation": "Com `flexDirection: 'row'`, o eixo principal é o horizontal e o cruzado é o vertical. `alignItems` age no eixo cruzado, então `'center'` centraliza na vertical. `justifyContent` age no eixo principal: com `'center'`, os dois se juntariam no meio da linha, ainda no topo. `textAlign` alinha o texto dentro do `Text`, e `column` empilharia os dois."
+    }
+  ]
+}

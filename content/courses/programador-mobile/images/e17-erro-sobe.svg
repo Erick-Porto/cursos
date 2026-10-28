@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 444" font-family="Inter, system-ui, sans-serif">
+  <title>O throw em freteDoCep sobe por resumoDaEntrega, que não tem try, até o catch de simularEntrega; o console.log do resumo não roda, o catch mostra a mensagem e o finally desliga o cronômetro</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .hc   { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c    { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .kw   { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .err  { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .errc { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .skip { opacity: 0.6; }
+    .strike { stroke: #b4bfd3; stroke-width: 2; }
+    .call { stroke: #b4bfd3; stroke-width: 2; fill: none; marker-end: url(#seta-cinza); }
+    .rota { stroke: #f87171; stroke-width: 3; fill: none; stroke-dasharray: 8 6; marker-end: url(#seta-erro); }
+    .mark { fill: none; stroke: #34d399; stroke-width: 3; }
+    .pilula { fill: #131c33; stroke: #f87171; stroke-width: 3; }
+    .sobe    { animation: sobe 8s infinite; }
+    .pega    { animation: pega 8s infinite; }
+    .sempre  { animation: sempre 8s infinite; }
+    @keyframes sobe {
+      0%, 4%   { opacity: 0; transform: translateY(232px); }
+      10%      { opacity: 1; transform: translateY(232px); }
+      22%, 30% { opacity: 1; transform: translateY(134px); }
+      44%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes pega   { 0%, 46% { opacity: 0; } 52%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes sempre { 0%, 62% { opacity: 0; } 68%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .sobe, .pega, .sempre { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta-cinza" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#b4bfd3"/></marker>
+    <marker id="seta-erro" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="444" rx="16" fill="#0b1020"/>
+
+  <!-- simularEntrega: quem chamou primeiro -->
+  <rect class="box" x="20" y="16" width="680" height="204" rx="10"/>
+  <path class="head" d="M30 16 H690 A10 10 0 0 1 700 26 V56 H20 V26 A10 10 0 0 1 30 16 Z"/>
+  <text class="hc" x="36" y="44">simularEntrega(itens, cep)</text>
+  <text class="kw" x="36" y="92">try</text>
+  <text class="c" x="146" y="92">resumoDaEntrega(itens, cep)</text>
+  <g class="skip">
+    <text class="c" x="146" y="128">console.log(resumo)</text>
+    <path class="strike" d="M142 121 L402 121"/>
+  </g>
+  <text class="m" x="420" y="128">não roda</text>
+  <text class="kw" x="36" y="164">catch</text>
+  <text class="c" x="146" y="164">console.log(erro.message)</text>
+  <text class="kw" x="36" y="200">finally</text>
+  <text class="c" x="146" y="200">console.timeEnd('simulação')</text>
+
+  <!-- quem foi chamado depois -->
+  <path class="call" d="M110 222 L110 248"/>
+  <rect class="box" x="20" y="254" width="470" height="76" rx="10"/>
+  <text class="c" x="36" y="284">resumoDaEntrega(itens, cep)</text>
+  <text class="m" x="36" y="316">sem try: o erro passa direto</text>
+
+  <path class="call" d="M110 332 L110 346"/>
+  <rect class="box" x="20" y="352" width="470" height="76" rx="10"/>
+  <text class="c" x="36" y="382">freteDoCep(valor, cep)</text>
+  <text class="errc" x="36" y="414">throw new CepInvalidoError(cep)</text>
+
+  <!-- caminho do erro -->
+  <path class="rota" d="M494 398 L690 398 L690 184"/>
+  <text class="err" x="676" y="348" text-anchor="end">o erro sobe</text>
+
+  <!-- o catch mais próximo pega o erro -->
+  <g class="pega">
+    <rect class="mark" x="28" y="140" width="460" height="34" rx="6"/>
+  </g>
+  <g class="sempre">
+    <rect class="mark" x="28" y="176" width="500" height="34" rx="6"/>
+    <text class="ok" x="534" y="200">roda sempre</text>
+  </g>
+
+  <!-- o erro, que viaja de freteDoCep até o catch -->
+  <g class="sobe">
+    <rect class="pilula" x="506" y="140" width="184" height="36" rx="18"/>
+    <text class="err" x="598" y="165" text-anchor="middle">CEP inválido</text>
+  </g>
+</svg>

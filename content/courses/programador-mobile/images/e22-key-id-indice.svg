@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" font-family="Inter, system-ui, sans-serif">
+  <title>Remover a primeira tarefa: com key igual ao id as outras mantêm a key; com key igual ao índice todas mudam de key</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .row  { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; }
+    .gone { fill: none; stroke: #f87171; stroke-width: 2; stroke-dasharray: 7 5; }
+    .top  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .code { font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .off  { fill: #b4bfd3; font-size: 22px; }
+    .strike { stroke: #b4bfd3; stroke-width: 2; }
+    .col  { fill: #b4bfd3; font-size: 22px; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; }
+    .mud  { fill: #fbbf24; }
+    .cap  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+  </style>
+  <rect width="720" height="370" rx="16" fill="#0b1020"/>
+
+  <text class="top" x="360" y="36" text-anchor="middle">Remover a primeira tarefa</text>
+
+  <!-- key={t.id} -->
+  <rect class="box" x="16" y="52" width="336" height="302" rx="12"/>
+  <text class="code ok" x="184" y="88" text-anchor="middle">key={t.id}</text>
+  <text class="col" x="336" y="122" text-anchor="end">key: antes → depois</text>
+
+  <rect class="gone" x="32" y="136" width="304" height="50" rx="8"/>
+  <text class="off" x="48" y="169">Estudar React</text>
+  <line class="strike" x1="46" y1="162" x2="190" y2="162"/>
+  <text class="no" x="320" y="169" text-anchor="end">removida</text>
+
+  <rect class="row" x="32" y="196" width="304" height="50" rx="8"/>
+  <text class="t" x="48" y="229">Fazer compras</text>
+  <text class="code ok" x="320" y="229" text-anchor="end">2 → 2</text>
+
+  <rect class="row" x="32" y="256" width="304" height="50" rx="8"/>
+  <text class="t" x="48" y="289">Ir à academia</text>
+  <text class="code ok" x="320" y="289" text-anchor="end">3 → 3</text>
+
+  <text class="cap" x="184" y="338" text-anchor="middle">as outras mantêm a key</text>
+
+  <!-- key={i} -->
+  <rect class="box" x="368" y="52" width="336" height="302" rx="12"/>
+  <text class="code mud" x="536" y="88" text-anchor="middle">key={i}</text>
+  <text class="col" x="688" y="122" text-anchor="end">key: antes → depois</text>
+
+  <rect class="gone" x="384" y="136" width="304" height="50" rx="8"/>
+  <text class="off" x="400" y="169">Estudar React</text>
+  <line class="strike" x1="398" y1="162" x2="542" y2="162"/>
+  <text class="no" x="672" y="169" text-anchor="end">removida</text>
+
+  <rect class="row" x="384" y="196" width="304" height="50" rx="8"/>
+  <text class="t" x="400" y="229">Fazer compras</text>
+  <text class="code mud" x="672" y="229" text-anchor="end">1 → 0</text>
+
+  <rect class="row" x="384" y="256" width="304" height="50" rx="8"/>
+  <text class="t" x="400" y="289">Ir à academia</text>
+  <text class="code mud" x="672" y="289" text-anchor="end">2 → 1</text>
+
+  <text class="cap" x="536" y="338" text-anchor="middle">todas mudam de key</text>
+</svg>

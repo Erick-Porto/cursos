@@ -1,0 +1,97 @@
+{
+  "title": "Quiz: E40 · Do protótipo ao código",
+  "description": "Seis questões sobre ler um protótipo, traduzi-lo em tokens, rotas e componentes do UI kit e passar a tela pelo checklist de entrega.",
+  "lesson": "e40a-do-prototipo-ao-codigo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No fluxo de trabalho de uma equipe de app, o que é o **protótipo** que o design entrega a você?",
+      "options": {
+        "a": "O desenho de alta fidelidade das telas, com cores, fontes, medidas e o fluxo entre elas",
+        "b": "Um esboço com caixas cinza que mostra só o que vai em cada tela",
+        "c": "A primeira versão do app em código, feita pelo designer para você revisar",
+        "d": "O documento que descreve o problema do usuário e as regras de negócio"
+      },
+      "answer": "a",
+      "explanation": "O protótipo é a versão final do desenho, quase igual ao app: cores, tipografia, medidas e, muitas vezes, cliques que levam de uma tela a outra. As caixas cinza sem cor nem fonte são o **wireframe**, etapa anterior; o código é sua parte do trabalho, depois do handoff.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O inspetor do Figma mostra o e-mail da tela Perfil: cor `#475569` (estilo **Texto suave**), Inter Regular 16 e 4 de distância do nome. Na Lojinha, `espaco` vai de `xs: 4` a `xl: 32` e `familia.regular` guarda a Inter Regular. Qual trecho traduz o protótipo do jeito certo?",
+      "options": {
+        "a": "`style={[estilos.email, { color: cores.textoSuave }]}` com `email: { fontFamily: familia.regular, fontSize: fonte.corpo, marginTop: espaco.xs }`",
+        "b": "`style={estilos.email}` com `email: { color: '#475569', fontFamily: familia.regular, fontSize: 16, marginTop: 4 }`",
+        "c": "`style={[estilos.email, { color: '#475569' }]}` com `email: { fontFamily: familia.regular, fontSize: fonte.corpo, marginTop: espaco.xs }`",
+        "d": "`style={[estilos.email, { color: cores.textoSuave }]}` com `email: { fontFamily: 'Inter', fontSize: '16px', marginTop: espaco.sm }`"
+      },
+      "answer": "a",
+      "explanation": "Cada valor vira o token do papel: a cor vem do tema no array de estilos, e tamanho e espaço vêm de `fonte` e `espaco` no `StyleSheet`. A **c** é a mais tentadora porque usa tokens no `StyleSheet`, mas deixa o hex fixo: no tema escuro o e-mail continua cinza-escuro sobre fundo escuro. A **b** fixa tudo, e a **d** usa unidade em string, a família sem o peso e `espaco.sm`, que vale 8.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No protótipo da tela Perfil há uma foto redonda de 72 por 72. Quando o usuário não tem foto, ela mostra as iniciais \"AS\". No UI kit da Lojinha, o `Avatar` aceita `tamanho` igual a `'sm'` (32), `'md'` (48) ou `'lg'` (72). O que você escreve?",
+      "options": {
+        "a": "`<Avatar nome={usuario.nome} uri={usuario.foto} tamanho=\"lg\" />`",
+        "b": "`<Image source={{ uri: usuario.foto }} style={{ width: 72, height: 72, borderRadius: 36 }} />`",
+        "c": "`<Badge texto=\"AS\" tom=\"neutro\" />` ao lado de uma `Image` de 72",
+        "d": "`<Avatar nome={usuario.nome} uri={usuario.foto} style={{ width: 72, height: 72 }} />`"
+      },
+      "answer": "a",
+      "explanation": "A medida do protótipo coincide com uma variante do kit, então a tradução é a variante: `tamanho=\"lg\"`. O `Avatar` já mostra as iniciais quando falta `uri`. A **b** desenha o círculo, mas perde as iniciais e duplica o que o kit faz; a **d** redesenha pelo `style`: largura e altura mudam, mas o raio e as iniciais continuam calculados para o `md`, e o círculo vira um quadrado arredondado.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "O protótipo da tela Perfil é um único desenho: Ana Souza, dados carregados, tema claro, frame de 390 de largura. Quais situações **o protótipo não mostra** e você precisa tratar antes de entregar a tela?",
+      "options": {
+        "a": "O que aparece enquanto os dados do usuário carregam",
+        "b": "Um nome com 40 caracteres, que pode quebrar ou cortar",
+        "c": "A tela com o tema escuro ativado",
+        "d": "A distância entre o avatar e o nome",
+        "e": "A tela com a fonte do sistema em 200%"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Um protótipo costuma mostrar só o caminho feliz. Carregando, texto longo, tema escuro e fonte grande ficam por sua conta, e o checklist de entrega existe para não esquecer nenhum. A distância entre avatar e nome está no desenho: basta medir no inspetor com Alt.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "O protótipo mostra 15 de espaço entre o cartão e o botão, e a escala da Lojinha é 4, 8, 16, 24 e 32. Para a tela ficar fiel ao desenho, o certo é escrever `marginTop: 15` no `StyleSheet`.",
+      "answer": false,
+      "explanation": "Fidelidade é seguir a intenção do design, não o pixel solto. Um valor fora da escala quase sempre é descuido no desenho: use o token mais próximo (`espaco.md`, 16) e confirme com o designer. Números soltos se espalham pelo código e ninguém lembra de atualizá-los.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "No protótipo, cada linha da lista de opções tem 56 de altura. Para a linha crescer quando o usuário aumenta a fonte do sistema, em vez de cortar o texto, complete o estilo:\n\n```jsx\nopcao: { ___: 56, flexDirection: 'row', alignItems: 'center' },\n```",
+      "answer": [
+        [
+          "minHeight"
+        ]
+      ],
+      "explanation": "`minHeight: 56` garante a altura do desenho e deixa a linha crescer se o texto precisar. Com `height: 56`, a linha fica presa e o texto em fonte grande é cortado, um problema que o protótipo nunca mostra.",
+      "points": 2
+    }
+  ]
+}

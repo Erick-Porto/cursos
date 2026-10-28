@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo: no trava.js, a thread fica presa 2 s no laço e a Bia só é atendida depois do pedido da Ana; no espera.js, a thread fica livre, a Bia é atendida na hora e o pedido da Ana chega aos 2 s</title>
+  <style>
+    .box   { fill: #131c33; stroke-width: 2; }
+    .ana   { stroke: #60a5fa; }
+    .bia   { stroke: #fbbf24; }
+    .presa { stroke: #f87171; stroke-dasharray: 8 5; }
+    .livre { stroke: #34d399; }
+    .ok    { fill: #34d399; }
+    .nome  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .t-ok  { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .t-pre { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .t-liv { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .arq   { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .s     { fill: #b4bfd3; font-size: 22px; }
+    .eixo  { stroke: #2a3a5c; stroke-width: 2; }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <!-- trava.js: a thread gira no laço e a Bia espera junto -->
+  <text class="arq" x="24" y="104">trava.js</text>
+  <rect class="box ana" x="160" y="72" width="72" height="48" rx="8"/>
+  <text class="nome" x="196" y="104" text-anchor="middle">Ana</text>
+  <rect class="box presa" x="240" y="72" width="264" height="48" rx="8"/>
+  <text class="t-pre" x="372" y="104" text-anchor="middle">presa no laço</text>
+  <rect class="ok" x="512" y="72" width="96" height="48" rx="8"/>
+  <text class="t-ok" x="560" y="104" text-anchor="middle">Ana ok</text>
+  <rect class="box bia" x="616" y="72" width="72" height="48" rx="8"/>
+  <text class="nome" x="652" y="104" text-anchor="middle">Bia</text>
+
+  <!-- espera.js: a thread fica livre e a Bia é atendida na hora -->
+  <text class="arq" x="24" y="214">espera.js</text>
+  <rect class="box ana" x="160" y="182" width="72" height="48" rx="8"/>
+  <text class="nome" x="196" y="214" text-anchor="middle">Ana</text>
+  <rect class="box bia" x="240" y="182" width="72" height="48" rx="8"/>
+  <text class="nome" x="276" y="214" text-anchor="middle">Bia</text>
+  <rect class="box livre" x="320" y="182" width="184" height="48" rx="8"/>
+  <text class="t-liv" x="412" y="214" text-anchor="middle">thread livre</text>
+  <rect class="ok" x="512" y="182" width="96" height="48" rx="8"/>
+  <text class="t-ok" x="560" y="214" text-anchor="middle">Ana ok</text>
+
+  <!-- eixo do tempo -->
+  <line class="eixo" x1="160" y1="262" x2="700" y2="262"/>
+  <line class="eixo" x1="196" y1="254" x2="196" y2="270"/>
+  <line class="eixo" x1="560" y1="254" x2="560" y2="270"/>
+  <text class="s" x="196" y="298" text-anchor="middle">0 s</text>
+  <text class="s" x="560" y="298" text-anchor="middle">2 s</text>
+</svg>

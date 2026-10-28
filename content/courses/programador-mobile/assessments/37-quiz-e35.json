@@ -1,0 +1,152 @@
+{
+  "title": "Quiz: E35 · Formulários e validação",
+  "description": "Dez questões sobre teclado, foco no próximo campo, KeyboardAvoidingView, Switch, validação, máscara e envio com try, catch e finally.",
+  "lesson": "e35b-validacao-e-feedback",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No campo de e-mail do cadastro, qual combinação de props deixa a digitação mais confortável no celular?",
+      "options": {
+        "a": "`keyboardType=\"email-address\"`, `autoCapitalize=\"none\"` e `autoComplete=\"email\"`",
+        "b": "`keyboardType=\"default\"`, `autoCapitalize=\"words\"` e `autoComplete=\"name\"`",
+        "c": "`keyboardType=\"email-address\"`, `autoCapitalize=\"none\"` e `secureTextEntry`",
+        "d": "`keyboardType=\"numeric\"`, `autoCapitalize=\"none\"` e `autoComplete=\"email\"`"
+      },
+      "answer": "a",
+      "explanation": "`email-address` deixa o `@` e o ponto à mão, `autoCapitalize=\"none\"` evita o \"Ana@email.com\" e `autoComplete=\"email\"` deixa o aparelho sugerir o e-mail salvo. A alternativa com `secureTextEntry` é a mais tentadora, porque usa o teclado certo, mas esconderia o e-mail com pontos: isso só faz sentido na senha.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete o código para que o botão Próximo do teclado leve o cursor ao campo de e-mail:\n\n```jsx\nconst emailRef = useRef(null);\n\n<Campo rotulo=\"Nome\" returnKeyType=\"next\"\n  onSubmitEditing={() => emailRef.current.___()} />\n<Campo ref={emailRef} rotulo=\"E-mail\" />\n```",
+      "answer": [
+        [
+          "focus"
+        ]
+      ],
+      "explanation": "`.focus()` põe o cursor no campo guardado em `emailRef.current` e abre o teclado dele. `.blur()` faria o contrário, tirando o foco. E `returnKeyType=\"next\"` sozinho só muda o desenho do botão: sem o `onSubmitEditing` chamando `.focus()`, o foco não sai do lugar.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Quais escolhas deixam o cadastro da Lojinha melhor de usar no celular?",
+      "options": {
+        "a": "`keyboardType=\"phone-pad\"` no campo de telefone",
+        "b": "Validar cada campo ao sair dele e de novo ao tocar em Criar conta",
+        "c": "Mostrar \"Dados inválidos\" num `Alert` quando qualquer campo estiver errado",
+        "d": "`KeyboardAvoidingView` para o teclado não esconder o botão do rodapé",
+        "e": "Validar o e-mail a cada letra digitada, para o erro aparecer o quanto antes"
+      },
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "Teclado certo, validação ao sair e ao enviar e botão sempre visível são a base de um formulário bom no celular. O alerta genérico não diz qual campo corrigir nem como. Validar a cada letra parece cuidadoso, mas acusa erro antes de o usuário terminar: depois do primeiro \"a\", qualquer e-mail ainda é inválido.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "No iOS, o sistema encolhe a tela sozinho quando o teclado abre; por isso o `KeyboardAvoidingView` só é necessário no Android.",
+      "answer": false,
+      "explanation": "Falso: no iOS o teclado sempre cobre o que está embaixo, e é o `KeyboardAvoidingView` com `behavior=\"padding\"` que afasta os campos e o botão. No Android, o resultado varia com o aparelho e a configuração; por isso o `behavior` é escolhido com `Platform.OS` e você testa nos dois sistemas.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O usuário cola `11 98765 43210` no campo de telefone. O que o `mascararTelefone` do E06, em `src/utils/validar.js`, devolve?\n\n```javascript\nexport function mascararTelefone(texto) {\n  const d = texto.replace(/\\D/g, '').slice(0, 11);\n  return d\n    .replace(/^(\\d{2})(\\d)/, '($1) $2')\n    .replace(/(\\d{5})(\\d)/, '$1-$2');\n}\n\nmascararTelefone('11 98765 43210');\n```",
+      "options": {
+        "a": "`'(11) 98765-4321'`",
+        "b": "`'(11) 98765-43210'`",
+        "c": "`'11 98765 43210'`",
+        "d": "`'(11) 9876-54321'`"
+      },
+      "answer": "a",
+      "explanation": "`replace(/\\D/g, '')` tira os espaços e sobra `119876543210`, com 12 dígitos; `slice(0, 11)` corta o zero do fim. O primeiro `replace` põe o DDD entre parênteses e o segundo põe o hífen depois dos 5 dígitos seguintes. A alternativa terminada em `43210` é a mais tentadora, mas ignora o corte do `slice(0, 11)`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Enquanto o cadastro é enviado, o botão deve dizer \"Enviando...\" e não aceitar um segundo toque. Qual linha faz isso com o `Botao` do UI kit?",
+      "options": {
+        "a": "`<Botao titulo={enviando ? 'Enviando...' : 'Criar conta'} onPress={enviar} desabilitado={enviando} />`",
+        "b": "`<Botao titulo={enviando ? 'Enviando...' : 'Criar conta'} onPress={enviar} desabilitado={!enviando} />`",
+        "c": "`<Botao titulo={enviando ? 'Enviando...' : 'Criar conta'} onPress={enviar()} desabilitado={enviando} />`",
+        "d": "`<Botao titulo={enviando ? 'Enviando...' : 'Criar conta'} onPress={enviar} />`"
+      },
+      "answer": "a",
+      "explanation": "O texto e o `desabilitado` dependem do mesmo estado: `enviando` é `true` durante o envio e `false` no resto do tempo. Com `desabilitado={!enviando}`, a lógica se inverte e o botão trava justamente quando não há envio. `onPress={enviar()}` chama a função na renderização, em vez de esperar o toque. Sem `desabilitado`, o texto muda, mas o toque duplo ainda cria duas contas.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Ao abrir a tela de cadastro, o app quebra com `Too many re-renders. React limits the number of renders to prevent an infinite loop.` Qual linha causa o problema?\n\n```jsx\n<Campo\n  rotulo=\"E-mail\"\n  value={valores.email}\n  onChangeText={(t) => alterar('email', t)}\n  onBlur={aoSair('email')}\n  erro={erros.email}\n/>\n```",
+      "options": {
+        "a": "`onBlur={aoSair('email')}`, que roda durante a renderização e muda o estado",
+        "b": "`onChangeText={(t) => alterar('email', t)}`, que cria uma função nova a cada renderização",
+        "c": "`erro={erros.email}`, porque `erros.email` é `undefined` na primeira renderização",
+        "d": "`value={valores.email}`, porque um campo controlado redesenha a tela a cada letra"
+      },
+      "answer": "a",
+      "explanation": "Sem arrow function, `aoSair('email')` é executada enquanto a tela é desenhada: ela chama `setErros`, que pede outro desenho, que executa `aoSair` de novo, sem fim. A correção é `onBlur={() => aoSair('email')}`. A arrow function do `onChangeText`, que pode parecer suspeita, é justamente o jeito certo: só roda quando o usuário digita. E `erros.email` indefinido é normal: o `Campo` apenas não mostra mensagem.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No E17, o `freteDoCep` **lança** um `CepInvalidoError` quando o CEP não serve. No cadastro, `validarEmail` **devolve** a mensagem de erro, ou `null`. Por que a validação do formulário devolve em vez de lançar?",
+      "options": {
+        "a": "Para mostrar todos os erros de uma vez, um em cada campo; um `throw` pararia no primeiro",
+        "b": "Porque o `ErroDeNegocio` do E17 só funciona no Node, e não no app do Expo",
+        "c": "Porque um `throw` em `src/utils/` fecharia o app na hora, sem chance de captura",
+        "d": "Porque o `try...catch` não funciona dentro de um componente React"
+      },
+      "answer": "a",
+      "explanation": "`validarCadastro` chama as regras de todos os campos e junta as mensagens num objeto, para a tela mostrar cada uma no seu lugar. Com `throw`, a primeira regra que falhasse interromperia as outras. O `throw` continua certo para o que interrompe o envio, como a recusa do servidor em `criarConta`. A opção c é a tentadora, mas um `throw` pode ser capturado em qualquer lugar acima dele, inclusive na tela.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O servidor recusa o e-mail e o botão fica em \"Enviando...\" para sempre. O que falta neste `enviar`?\n\n```jsx\nasync function enviar() {\n  setEnviando(true);\n  try {\n    const conta = await criarConta(valores);\n    Alert.alert('Conta criada', `Boas-vindas, ${conta.nome}!`);\n    setEnviando(false);\n  } catch (erro) {\n    if (!(erro instanceof ErroDeNegocio)) throw erro;\n    setErros({ email: erro.message });\n  }\n}\n```",
+      "options": {
+        "a": "Levar o `setEnviando(false)` para um bloco `finally`, que roda com ou sem erro",
+        "b": "Trocar o `await` por `.then()`, porque `await` não espera Promises rejeitadas",
+        "c": "Tirar o `throw erro` do `catch`, que impede o resto da função de rodar",
+        "d": "Chamar `setEnviando(false)` antes do `await`, para o botão destravar mais cedo"
+      },
+      "answer": "a",
+      "explanation": "Quando `criarConta` rejeita, o `try` para no `await` e pula direto para o `catch`: o `setEnviando(false)` que ficou no `try` nunca roda. O `finally` do E17 roda nos dois caminhos e destrava o botão. Destravar antes do `await` deixaria o usuário tocar de novo durante o envio e criar duas contas; e o `throw erro` só relança o que não é `ErroDeNegocio`, que é bug.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No cadastro, com o teclado aberto, o usuário toca no `Switch` dos termos. Só o teclado fecha, e ele precisa tocar de novo para ligar o `Switch`. O que resolve?",
+      "options": {
+        "a": "`keyboardShouldPersistTaps=\"handled\"` no `ScrollView` que envolve os campos",
+        "b": "`onValueChange={setTermos()}` no `Switch`, para ele reagir na hora",
+        "c": "`returnKeyType=\"done\"` no último campo, para o teclado fechar antes",
+        "d": "`behavior=\"height\"` na `KeyboardAvoidingView`, também no iOS"
+      },
+      "answer": "a",
+      "explanation": "Sem `keyboardShouldPersistTaps=\"handled\"`, o primeiro toque dentro do `ScrollView` serve só para fechar o teclado. Com ele, o toque chega ao `Switch` ou ao botão que o recebeu. `onValueChange={setTermos()}` chamaria a função na renderização, em vez de esperar o toque; o `returnKeyType` só muda o botão do teclado; e o `behavior` da `KeyboardAvoidingView` decide como afastar o conteúdo, não quem recebe o toque.",
+      "points": 1
+    }
+  ]
+}

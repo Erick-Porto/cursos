@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Faixas de versão a partir de 2.4.1: o til aceita só correções e para antes de 2.5.0; o circunflexo aceita também recursos novos e para antes de 3.0.0</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ver  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .code { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .axis { stroke: #b4bfd3; stroke-width: 2; fill: none; marker-end: url(#seta); }
+    .til  { stroke: #34d399; stroke-width: 3; fill: none; }
+    .circ { stroke: #a78bfa; stroke-width: 3; fill: none; }
+    .lim  { stroke-width: 2; stroke-dasharray: 5 5; fill: none; }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b4bfd3"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <!-- faixa ^ -->
+  <text x="70" y="52" class="code" fill="#a78bfa">^2.4.1</text>
+  <text x="170" y="52" class="t">correções e recursos novos</text>
+  <path d="M 70 80 L 70 68 L 530 68 L 530 80" class="circ"/>
+  <path d="M 530 80 L 530 176" class="lim" stroke="#a78bfa"/>
+
+  <!-- faixa ~ -->
+  <text x="70" y="116" class="code" fill="#34d399">~2.4.1</text>
+  <text x="170" y="116" class="t">só correções</text>
+  <path d="M 70 144 L 70 132 L 250 132 L 250 144" class="til"/>
+  <path d="M 250 144 L 250 176" class="lim" stroke="#34d399"/>
+
+  <!-- reta de versões -->
+  <path d="M 40 190 L 692 190" class="axis"/>
+  <circle cx="70" cy="190" r="9" fill="#e8edf7"/>
+  <circle cx="190" cy="190" r="9" fill="#e8edf7"/>
+  <circle cx="320" cy="190" r="9" fill="#e8edf7"/>
+  <circle cx="450" cy="190" r="9" fill="#e8edf7"/>
+  <circle cx="610" cy="190" r="10" fill="#0b1020" stroke="#f87171" stroke-width="3"/>
+
+  <text x="70" y="230" text-anchor="middle" class="ver">2.4.1</text>
+  <text x="190" y="230" text-anchor="middle" class="ver">2.4.9</text>
+  <text x="320" y="230" text-anchor="middle" class="ver">2.5.0</text>
+  <text x="450" y="230" text-anchor="middle" class="ver">2.9.3</text>
+  <text x="610" y="230" text-anchor="middle" class="ver">3.0.0</text>
+
+  <!-- o que cada versão é -->
+  <text x="190" y="272" text-anchor="middle" class="m">correção</text>
+  <text x="385" y="272" text-anchor="middle" class="m">recursos novos</text>
+  <text x="610" y="272" text-anchor="middle" class="no">versão maior</text>
+  <text x="610" y="302" text-anchor="middle" class="m">fora das faixas</text>
+</svg>

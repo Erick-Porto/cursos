@@ -1,0 +1,145 @@
+{
+  "title": "Quiz: E11 · this, módulos, referência e cópia",
+  "description": "Dez questões sobre o this em métodos e callbacks, módulos e barris, valor e referência, cópias e Object.freeze.",
+  "lesson": "e11b-referencia-e-copia",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple",
+      "prompt": "O objeto abaixo está num arquivo do `lojinha-regras`. Quais linhas imprimem `Semana do Áudio: 10% de desconto` **um segundo depois**?\n\n```javascript\nconst promocao = {\n  nome: 'Semana do Áudio',\n  percentual: 10,\n  anunciar() {\n    console.log(`${this.nome}: ${this.percentual}% de desconto`);\n  },\n};\n```",
+      "options": {
+        "a": "`setTimeout(() => promocao.anunciar(), 1000);`",
+        "b": "`setTimeout(promocao.anunciar.bind(promocao), 1000);`",
+        "c": "`setTimeout(promocao.anunciar, 1000);`",
+        "d": "`setTimeout(promocao.anunciar(), 1000);`",
+        "e": "`const anunciar = promocao.anunciar; setTimeout(() => anunciar(), 1000);`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "A arrow roda depois de 1 segundo e chama `promocao.anunciar()` com ponto; o `bind` devolve uma cópia da função com o `this` preso à promoção. Passar `promocao.anunciar` entrega a função solta, e o temporizador a chama sem nada antes do ponto: sai `undefined: undefined% de desconto`. Com parênteses, o aviso sai na hora e o `setTimeout` recebe `undefined`. Guardar o método numa constante também o solta do objeto: a chamada `anunciar()` não tem ponto.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Ao rodar `promocao.participantes(produtos)`, o Node lança `TypeError: Cannot read properties of undefined (reading 'categoria')`. Por quê?\n\n```javascript\nconst promocao = {\n  categoria: 'audio',\n  participantes(lista) {\n    return lista.filter(function (produto) {\n      return produto.categoria === this.categoria;\n    });\n  },\n};\n```",
+      "options": {
+        "a": "O `filter` chama a `function` sem nada antes do ponto, então o `this` dela é `undefined`; com uma arrow, o `this` seria o do método",
+        "b": "Algum produto da lista não tem o campo `categoria`, e o `filter` para no primeiro que falta",
+        "c": "Dentro de um objeto, métodos precisam ser escritos como arrow para enxergar o `this`",
+        "d": "O `this` de `participantes` é a própria `lista`, que não tem o campo `categoria`"
+      },
+      "answer": "a",
+      "explanation": "Cada `function` recebe o próprio `this` na chamada, e o `filter` a chama sem ponto: em módulo, `this` é `undefined`, e ler `this.categoria` quebra. A arrow não tem `this` próprio e usa o do método, que é a promoção. O erro fala em ler `categoria` de `undefined`, não de um produto: se faltasse o campo num produto, a comparação daria só `false`. E o método como arrow é o erro contrário.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Escrever o método como arrow, `anunciar: () => console.log(this.nome)`, garante que o `this` dentro dele seja o objeto `promocao`.",
+      "answer": false,
+      "explanation": "A arrow não recebe `this` na chamada: usa o `this` do lugar onde foi escrita, que no topo de um módulo é `undefined`. Por isso `promocao.anunciar()` lança `TypeError` lendo `nome`. A arrow serve **dentro** do método, nos callbacks de `filter` e `map`; o método em si usa a forma curta, `anunciar() { ... }`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O arquivo `src/data/promocao.js` termina em `export default promocao;`. Um script começa assim e, ao rodar com `node`, para na primeira linha com `SyntaxError: The requested module '../data/promocao.js' does not provide an export named 'promocao'`. Qual é a causa?\n\n```javascript\nimport { promocao } from '../data/promocao.js';\n```",
+      "options": {
+        "a": "As chaves pedem um export nomeado `promocao`, e o arquivo só tem o default: o certo é `import promocao from '../data/promocao.js'`",
+        "b": "O caminho não pode ter a extensão `.js` num import do Node",
+        "c": "Um export default só pode ser importado por um barril `index.js`",
+        "d": "O objeto `promocao` tem métodos, e módulos só exportam dados"
+      },
+      "answer": "a",
+      "explanation": "Chaves no import pedem um export **nomeado**; sem chaves, você recebe o default, com o nome que quiser. O Node confere os nomes antes de rodar a primeira linha, por isso o script para na largada. A extensão é obrigatória no Node, e não proibida. O default pode ser importado direto do arquivo, e um módulo exporta qualquer valor, inclusive objetos com métodos.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o barril das regras e o import do script, que roda com `node`:\n\n```javascript\n// src/regras/index.js\nexport ___ from './precos.js';\nexport ___ from './carrinho.js';\n\n// src/scripts/promocao.js\nimport { calcularDesconto } from '../regras/___';\n```",
+      "answer": [["*"], ["*"], ["index.js"]],
+      "explanation": "`export * from './precos.js'` reexporta todos os nomeados do arquivo, sem copiá-los. No Node, o import do barril precisa do nome do arquivo: `'../regras/index.js'`. Importar só a pasta, `'../regras'`, dá `ERR_UNSUPPORTED_DIR_IMPORT`, mesmo que o Jest aceite.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual destes imports quebra a organização combinada do `lojinha-regras`?",
+      "options": {
+        "a": "Em `src/regras/frete.js`: `import { paraCentavos } from './index.js';`",
+        "b": "Em `src/regras/carrinho.js`: `import { paraCentavos } from './precos.js';`",
+        "c": "Em `src/regras/frete.js`: `import { memoize } from '../utils/funcoes.js';`",
+        "d": "Em `src/scripts/promocao.js`: `import { calcularDesconto } from '../regras/index.js';`"
+      },
+      "answer": "a",
+      "explanation": "Um arquivo de `regras/` importando o próprio barril cria um ciclo: o barril importa `frete.js`, que importa o barril. Com constantes, o ciclo quebra com `ReferenceError: Cannot access ... before initialization`. Dentro da pasta, importe direto do arquivo, como o `carrinho.js` faz. Uma regra importar de `utils/` desce a tabela, e o script de fora usar o barril é exatamente o papel dele.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que aparece no console?\n\n```javascript\nconst item = { nome: 'Fone Bluetooth', qtd: 1 };\nconst noPedido = item;\nnoPedido.qtd = 3;\nconsole.log(item.qtd);\n```",
+      "options": {
+        "a": "`3`",
+        "b": "`1`",
+        "c": "Um `TypeError`, porque `item` foi declarado com `const`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "`noPedido = item` copia a referência, não o objeto: as duas variáveis apontam o mesmo objeto, e mudar `qtd` por uma muda pela outra. O `const` só impede trocar a referência (`item = outroObjeto`); ele não trava o conteúdo, por isso não há erro. O `1` seria a resposta se a atribuição copiasse o objeto, o que só acontece com primitivos, como números e textos.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no console?\n\n```javascript\nfunction aplicarCupom(pedido) {\n  pedido.desconto = 20;\n  return pedido;\n}\n\nconst pedido = { subtotal: 200, desconto: 0 };\nconst comCupom = aplicarCupom(pedido);\nconsole.log(pedido.desconto, comCupom === pedido);\n```",
+      "options": {
+        "a": "`20 true`",
+        "b": "`0 false`",
+        "c": "`20 false`",
+        "d": "`0 true`"
+      },
+      "answer": "a",
+      "explanation": "A função recebe a referência do pedido, não uma cópia: escrever em `pedido.desconto` altera o objeto de quem chamou. E ela devolve o mesmo objeto que recebeu, por isso `comCupom === pedido` é `true`. Quem marcou `0 false` imaginou que o parâmetro é uma cópia. Para não mexer no original, a regra devolve um objeto novo: `return { ...pedido, desconto: 20 };`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Sem rodar, o que aparece no console?\n\n```javascript\nconst carrinho = [{ id: 1, nome: 'Fone Bluetooth', qtd: 1 }];\nconst copia = [...carrinho];\ncopia.push({ id: 5, nome: 'Garrafa Térmica', qtd: 1 });\ncopia[0].qtd = 4;\nconsole.log(carrinho.length, carrinho[0].qtd);\n```",
+      "options": {
+        "a": "`1 4`",
+        "b": "`2 4`",
+        "c": "`1 1`",
+        "d": "`2 1`"
+      },
+      "answer": "a",
+      "explanation": "O spread faz uma cópia rasa: o array `copia` é novo, então o `push` entra só nele e `carrinho` continua com um item. Mas os objetos de dentro não foram copiados: `copia[0]` e `carrinho[0]` são o mesmo fone, e a `qtd` muda pelos dois. Quem responde `1 1` acha que o spread copia todos os níveis; para isso, cada nível alterado precisa do seu próprio spread.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Num arquivo do `lojinha-regras`, `pedido` tem uma data em `criadoEm` e um objeto em `entrega`. Quais afirmações estão corretas?",
+      "options": {
+        "a": "Em `structuredClone(pedido)`, a `entrega` é outro objeto e `criadoEm` continua sendo um `Date`",
+        "b": "Em `JSON.parse(JSON.stringify(pedido))`, `criadoEm` volta como texto",
+        "c": "Com `const promocao = Object.freeze({ percentual: 10 })`, a linha `promocao.percentual = 50` lança `TypeError`",
+        "d": "`Object.freeze(itens)` também impede `itens[0].qtd = 3`",
+        "e": "`[{ id: 7 }].includes({ id: 7 })` é `true`, porque os dois objetos têm o mesmo conteúdo"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `structuredClone` copia todos os níveis e preserva datas; o JSON de ida e volta transforma a data em texto. Num módulo, escrever num objeto congelado lança `TypeError`. Mas o congelamento é raso: `Object.freeze(itens)` trava o array, não os objetos de dentro; para isso existe o `congelarTudo`. E o `includes` compara referências: um objeto novo, mesmo igual por dentro, é outro endereço, por isso o certo é procurar pelo `id`.",
+      "points": 2
+    }
+  ]
+}

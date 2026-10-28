@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>O map percorre as 4 categorias e monta uma seção para cada uma: o title vem do nome e o data traz os produtos daquele slug</title>
+  <style>
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .hd   { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .sub  { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .chip { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bar  { fill: #34d399; }
+    .bt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .cel  { fill: #131c33; stroke: #34d399; stroke-width: 1.5; }
+    .ct   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; text-anchor: middle; }
+    .arr  { stroke: #a78bfa; stroke-width: 3; fill: none; }
+    .tip  { fill: #a78bfa; }
+    .sec  { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-out; }
+    .s1 { animation-name: s1; }
+    .s2 { animation-name: s2; }
+    .s3 { animation-name: s3; }
+    .s4 { animation-name: s4; }
+    @keyframes s1 { 0%, 6%  { opacity: 0; transform: translateX(-16px); } 14%, 92% { opacity: 1; transform: translateX(0); } 98%, 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 22% { opacity: 0; transform: translateX(-16px); } 30%, 92% { opacity: 1; transform: translateX(0); } 98%, 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 38% { opacity: 0; transform: translateX(-16px); } 46%, 92% { opacity: 1; transform: translateX(0); } 98%, 100% { opacity: 0; } }
+    @keyframes s4 { 0%, 54% { opacity: 0; transform: translateX(-16px); } 62%, 92% { opacity: 1; transform: translateX(0); } 98%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .sec { animation: none; } }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <text class="hd" x="40" y="38">categorias</text>
+  <text class="hd" x="182" y="38">.map</text>
+  <text class="hd" x="252" y="38">secoes</text>
+  <text class="sub" x="52" y="68">slug</text>
+  <text class="sub" x="256" y="68">title</text>
+  <text class="m" x="424" y="68">data: ids dos produtos</text>
+
+  <!-- as categorias já existem -->
+  <rect class="chip" x="40" y="80" width="136" height="52" rx="8"/>
+  <text class="code" x="52" y="114">'audio'</text>
+  <rect class="chip" x="40" y="144" width="136" height="52" rx="8"/>
+  <text class="code" x="52" y="178">'casa'</text>
+  <rect class="chip" x="40" y="208" width="136" height="52" rx="8"/>
+  <text class="code" x="52" y="242">'esporte'</text>
+  <rect class="chip" x="40" y="272" width="136" height="52" rx="8"/>
+  <text class="code" x="52" y="306">'livros'</text>
+
+  <!-- uma seção por categoria -->
+  <g class="sec s1">
+    <path class="arr" d="M 184 106 L 228 106"/><path class="tip" d="M 238 106 L 226 99 L 226 113 Z"/>
+    <rect class="bar" x="244" y="80" width="168" height="52" rx="8"/>
+    <text class="bt" x="258" y="114">Áudio</text>
+    <rect class="cel" x="424" y="80" width="76" height="52" rx="6"/><text class="ct" x="462" y="114">1</text>
+    <rect class="cel" x="508" y="80" width="76" height="52" rx="6"/><text class="ct" x="546" y="114">2</text>
+    <rect class="cel" x="592" y="80" width="76" height="52" rx="6"/><text class="ct" x="630" y="114">3</text>
+  </g>
+  <g class="sec s2">
+    <path class="arr" d="M 184 170 L 228 170"/><path class="tip" d="M 238 170 L 226 163 L 226 177 Z"/>
+    <rect class="bar" x="244" y="144" width="168" height="52" rx="8"/>
+    <text class="bt" x="258" y="178">Casa</text>
+    <rect class="cel" x="424" y="144" width="76" height="52" rx="6"/><text class="ct" x="462" y="178">4</text>
+    <rect class="cel" x="508" y="144" width="76" height="52" rx="6"/><text class="ct" x="546" y="178">5</text>
+    <rect class="cel" x="592" y="144" width="76" height="52" rx="6"/><text class="ct" x="630" y="178">6</text>
+  </g>
+  <g class="sec s3">
+    <path class="arr" d="M 184 234 L 228 234"/><path class="tip" d="M 238 234 L 226 227 L 226 241 Z"/>
+    <rect class="bar" x="244" y="208" width="168" height="52" rx="8"/>
+    <text class="bt" x="258" y="242">Esporte</text>
+    <rect class="cel" x="424" y="208" width="76" height="52" rx="6"/><text class="ct" x="462" y="242">7</text>
+    <rect class="cel" x="508" y="208" width="76" height="52" rx="6"/><text class="ct" x="546" y="242">8</text>
+    <rect class="cel" x="592" y="208" width="76" height="52" rx="6"/><text class="ct" x="630" y="242">9</text>
+  </g>
+  <g class="sec s4">
+    <path class="arr" d="M 184 298 L 228 298"/><path class="tip" d="M 238 298 L 226 291 L 226 305 Z"/>
+    <rect class="bar" x="244" y="272" width="168" height="52" rx="8"/>
+    <text class="bt" x="258" y="306">Livros</text>
+    <rect class="cel" x="424" y="272" width="76" height="52" rx="6"/><text class="ct" x="462" y="306">10</text>
+    <rect class="cel" x="508" y="272" width="76" height="52" rx="6"/><text class="ct" x="546" y="306">11</text>
+    <rect class="cel" x="592" y="272" width="76" height="52" rx="6"/><text class="ct" x="630" y="306">12</text>
+  </g>
+
+  <text class="m" x="40" y="360">o filter põe em data os produtos com aquele slug</text>
+</svg>

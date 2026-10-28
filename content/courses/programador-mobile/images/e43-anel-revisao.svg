@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 360" font-family="Inter, system-ui, sans-serif">
+  <title>Revisão cruzada em anel: a equipe A revisa a B, a B revisa a C, a C revisa a D e a D, a última, revisa a A</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 20px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="16" markerHeight="16" refX="13" refY="8" orient="auto"><path d="M0,0 L16,8 L0,16 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="560" height="360" rx="16" fill="#0b1020"/>
+
+  <rect class="box" x="205" y="27" width="150" height="54" rx="12"/>
+  <text class="t" x="280" y="62" text-anchor="middle">Equipe A</text>
+  <rect class="box" x="385" y="153" width="150" height="54" rx="12"/>
+  <text class="t" x="460" y="188" text-anchor="middle">Equipe B</text>
+  <rect class="box" x="205" y="279" width="150" height="54" rx="12"/>
+  <text class="t" x="280" y="314" text-anchor="middle">Equipe C</text>
+  <rect class="box" x="25" y="153" width="150" height="54" rx="12"/>
+  <text class="t" x="100" y="188" text-anchor="middle">Equipe D</text>
+
+  <path class="line" d="M 355 54 Q 460 54 460 147"/>
+  <path class="line" d="M 460 207 Q 460 306 361 306"/>
+  <path class="line" d="M 205 306 Q 100 306 100 213"/>
+  <path class="line" d="M 100 153 Q 100 54 199 54"/>
+
+  <text class="lbl" x="404" y="118" text-anchor="middle">revisa</text>
+  <text class="lbl" x="404" y="258" text-anchor="middle">revisa</text>
+  <text class="lbl" x="156" y="258" text-anchor="middle">revisa</text>
+  <text class="lbl" x="156" y="118" text-anchor="middle">revisa</text>
+
+  <text class="m" x="280" y="174" text-anchor="middle">ninguém revisa</text>
+  <text class="m" x="280" y="202" text-anchor="middle">quem o revisa</text>
+</svg>

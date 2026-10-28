@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 370" font-family="Inter, system-ui, sans-serif">
+  <title>Nativo: duas bases, Kotlin e Swift, e tela nativa; híbrido: uma base em HTML, CSS e JS e tela da web na WebView; React Native: uma base em JS e React e tela nativa, sem WebView</title>
+  <style>
+    .painel { fill: none; stroke: #2a3a5c; stroke-width: 1.5; }
+    .chip   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .nativa { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .web    { fill: #131c33; stroke: #fbbf24; stroke-width: 3; stroke-dasharray: 8 6; }
+    .titulo { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t      { fill: #e8edf7; font-size: 22px; }
+    .m      { fill: #b4bfd3; font-size: 22px; }
+    .seta   { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#ponta); }
+  </style>
+  <defs>
+    <marker id="ponta" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="370" rx="16" fill="#0b1020"/>
+
+  <!-- Nativo -->
+  <rect class="painel" x="15" y="16" width="220" height="338" rx="12"/>
+  <text class="titulo" x="125" y="54" text-anchor="middle">Nativo</text>
+  <rect class="chip" x="28" y="76" width="92" height="44" rx="8"/>
+  <text class="t" x="74" y="106" text-anchor="middle">Kotlin</text>
+  <rect class="chip" x="130" y="76" width="92" height="44" rx="8"/>
+  <text class="t" x="176" y="106" text-anchor="middle">Swift</text>
+  <path class="seta" d="M 74 124 L 74 180"/>
+  <path class="seta" d="M 176 124 L 176 180"/>
+  <rect class="nativa" x="30" y="190" width="190" height="80" rx="10"/>
+  <text class="t" x="125" y="238" text-anchor="middle">tela nativa</text>
+  <text x="125" y="312" text-anchor="middle" font-size="22" font-weight="700" fill="#fbbf24">2 bases</text>
+  <text class="m" x="125" y="340" text-anchor="middle">de código</text>
+
+  <!-- Híbrido -->
+  <rect class="painel" x="250" y="16" width="220" height="338" rx="12"/>
+  <text class="titulo" x="360" y="54" text-anchor="middle">Híbrido</text>
+  <rect class="chip" x="265" y="76" width="190" height="44" rx="8"/>
+  <text class="t" x="360" y="106" text-anchor="middle">HTML, CSS, JS</text>
+  <path class="seta" d="M 360 124 L 360 180"/>
+  <rect class="web" x="265" y="190" width="190" height="80" rx="10"/>
+  <text class="t" x="360" y="223" text-anchor="middle">tela da web</text>
+  <text class="m" x="360" y="255" text-anchor="middle">na WebView</text>
+  <text x="360" y="312" text-anchor="middle" font-size="22" font-weight="700" fill="#34d399">1 base</text>
+  <text class="m" x="360" y="340" text-anchor="middle">de código</text>
+
+  <!-- React Native -->
+  <rect class="painel" x="485" y="16" width="220" height="338" rx="12"/>
+  <text class="titulo" x="595" y="54" text-anchor="middle">React Native</text>
+  <rect class="chip" x="500" y="76" width="190" height="44" rx="8"/>
+  <text class="t" x="595" y="106" text-anchor="middle">JS + React</text>
+  <path class="seta" d="M 595 124 L 595 180"/>
+  <rect class="nativa" x="500" y="190" width="190" height="80" rx="10"/>
+  <text class="t" x="595" y="223" text-anchor="middle">tela nativa</text>
+  <text class="m" x="595" y="255" text-anchor="middle">sem WebView</text>
+  <text x="595" y="312" text-anchor="middle" font-size="22" font-weight="700" fill="#34d399">1 base</text>
+  <text class="m" x="595" y="340" text-anchor="middle">de código</text>
+</svg>

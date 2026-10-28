@@ -1,0 +1,110 @@
+{
+  "title": "Quiz: E32 · Toque, ícones, imagens e fontes",
+  "description": "Sete questões sobre feedback de toque, ícones, imagens remotas, fontes, splash e StatusBar no Lojinha.",
+  "lesson": "e32b-fontes-e-identidade-visual",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "fill",
+      "prompt": "Complete para o botão ficar translúcido enquanto o dedo está encostado nele:\n\n```jsx\n<Pressable\n  onPress={comprar}\n  style={({ ___ }) => [estilos.botao, pressed && { opacity: 0.7 }]}\n>\n  <Text style={estilos.texto}>Comprar</Text>\n</Pressable>\n```",
+      "answer": [
+        [
+          "pressed"
+        ]
+      ],
+      "explanation": "Quando `style` recebe uma função, o `Pressable` a chama com um objeto que tem `pressed`: `true` enquanto o dedo está no botão, desestruturado no parâmetro como no E09. É por isso que `pressed && ...` só funciona dentro de `({ pressed }) => ...`. Não existe `onPress` nem `pressionado` nesse objeto: `onPress` é a prop que recebe a função do toque.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Usuários erram o toque neste botão de favorito. Qual mudança resolve sem alterar o desenho do ícone?\n\n```jsx\n<Pressable onPress={favoritar}>\n  <Ionicons name=\"heart-outline\" size={24} color={cores.texto} />\n</Pressable>\n```",
+      "options": {
+        "a": "Adicionar `hitSlop={10}` ao `Pressable`",
+        "b": "Trocar para `size={44}` no `Ionicons`",
+        "c": "Adicionar `android_ripple={{ borderless: true }}` ao `Pressable`",
+        "d": "Adicionar `disabled={false}` ao `Pressable`"
+      },
+      "answer": "a",
+      "explanation": "`hitSlop` estende a área sensível para fora do componente: 24 + 10 de cada lado chega aos 44 por 44 recomendados, e o ícone continua com 24. `size={44}` também aumenta a área, mas muda o desenho para um coração gigante. `android_ripple` é só feedback visual, e só no Android: não aumenta a área de toque.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual linha mostra um ícone de carrinho que acompanha o tema claro e o escuro do Lojinha?",
+      "options": {
+        "a": "`<Ionicons name=\"cart-outline\" size={24} color={cores.primaria} />`",
+        "b": "`<Ionicons name=\"cart-outline\" size={24} color=\"#6d28d9\" />`",
+        "c": "`<Ionicons icon=\"cart-outline\" size={24} color={cores.primaria} />`",
+        "d": "`<Ionicons name=\"carrinho\" size={24} color={cores.primaria} />`"
+      },
+      "answer": "a",
+      "explanation": "O `Ionicons` recebe `name`, `size` e `color`, e a cor vem de `useTema()` para mudar junto com o tema. Com `\"#6d28d9\"` fixo, o ícone fica igual no escuro, onde pode sumir no fundo. A prop se chama `name`, não `icon`, e os nomes são em inglês, como estão em icons.expo.fyi: `carrinho` vira um ponto de interrogação.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Sobre o `Image` do pacote `expo-image`, quais afirmações são verdadeiras?",
+      "options": {
+        "a": "`contentFit=\"cover\"` faz o papel do `resizeMode` da `Image` do React Native",
+        "b": "`placeholder` mostra algo, como um blurhash, enquanto a foto baixa",
+        "c": "`transition={300}` faz a foto entrar com um esmaecimento de 300 milissegundos",
+        "d": "Com `expo-image`, uma imagem remota dispensa `width` e `height`",
+        "e": "Por padrão, a foto é baixada de novo toda vez que o cartão aparece"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "`contentFit`, `placeholder` e `transition` são as props que o `expo-image` acrescenta. O tamanho continua obrigatório: sem `width` e `height`, a imagem remota fica com tamanho zero, como na `Image` do React Native. E o `expo-image` guarda a foto em cache no aparelho por padrão, por isso ela aparece na hora na segunda vez.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Imagine que o carregamento da fonte Inter falha. O que o usuário vê com este `App.js`?\n\n```jsx\nSplashScreen.preventAutoHideAsync();\n\nexport default function App() {\n  const [fontesCarregadas, erroFonte] = useFonts({ Inter_400Regular, Inter_700Bold });\n\n  useEffect(() => {\n    if (fontesCarregadas) SplashScreen.hideAsync();\n  }, [fontesCarregadas]);\n\n  if (!fontesCarregadas) return null;\n  // return com TemaProvider e Inicio\n}\n```",
+      "options": {
+        "a": "A splash fica na tela para sempre e o app nunca abre",
+        "b": "O app abre normalmente com a fonte do sistema",
+        "c": "A tela vermelha com o erro de carregamento da fonte",
+        "d": "O app abre com a Inter, carregada numa segunda tentativa"
+      },
+      "answer": "a",
+      "explanation": "Com erro, `fontesCarregadas` nunca vira `true`: o `hideAsync()` não roda e o componente devolve `null` para sempre, então a splash não some. A correção é testar os dois valores: `if (fontesCarregadas || erroFonte)` no `useEffect` e `if (!fontesCarregadas && !erroFonte) return null`. Só assim o app abriria com a fonte do sistema, que é a alternativa tentadora.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `App.js` carrega `useFonts({ Inter_400Regular, Inter_700Bold })` e o `tokens.js` tem `familia = { regular: 'Inter_400Regular', negrito: 'Inter_700Bold' }`. Qual estilo põe o preço da tela do produto no topo da hierarquia, em Inter negrito?",
+      "options": {
+        "a": "`preco: { fontFamily: familia.negrito, fontSize: fonte.destaque }`",
+        "b": "`preco: { fontFamily: 'Inter', fontWeight: 'bold', fontSize: fonte.destaque }`",
+        "c": "`preco: { fontFamily: familia.regular, fontWeight: 'bold', fontSize: fonte.pequena }`",
+        "d": "`preco: { fontFamily: familia.negrito, fontSize: fonte.corpo }`"
+      },
+      "answer": "a",
+      "explanation": "O topo da hierarquia é `fonte.destaque`, e o negrito vem da família `Inter_700Bold`, guardada em `familia.negrito`. `'Inter'` não é uma chave do `useFonts`: o texto volta para a fonte do sistema. `fontWeight` sobre a regular dá negrito falso ou nenhum. A última tem a fonte certa, mas no tamanho do corpo do texto: o preço não se destaca.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "No Lojinha, que tem um botão para alternar entre tema claro e escuro, `<StatusBar style=\"auto\" />` mantém o relógio e a bateria sempre visíveis.",
+      "answer": false,
+      "explanation": "`\"auto\"` segue o tema do sistema, não o botão do app. Com o celular no claro e o Lojinha no escuro, a barra fica com ícones escuros sobre fundo escuro e o relógio some. A solução é ler o tema do app: `<StatusBar style={escuro ? 'light' : 'dark'} />`.",
+      "points": 1
+    }
+  ]
+}

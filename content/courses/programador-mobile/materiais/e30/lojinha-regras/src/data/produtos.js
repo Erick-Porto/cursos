@@ -1,0 +1,35 @@
+export const categorias = [
+  { slug: 'audio', nome: 'Áudio' },
+  { slug: 'casa', nome: 'Casa' },
+  { slug: 'esporte', nome: 'Esporte' },
+  { slug: 'livros', nome: 'Livros' },
+];
+
+export const produtos = [
+  { id: 1, nome: 'Fone Bluetooth', preco: 199.9, categoria: 'audio', destaque: true, avaliacao: 4.6, estoque: 8,
+    imagem: 'https://picsum.photos/seed/fone/400/400', descricao: 'Fone sem fio com 20 horas de bateria.' },
+  { id: 2, nome: 'Caixa de Som Portátil', preco: 249.9, categoria: 'audio', destaque: false, avaliacao: 4.4, estoque: 6,
+    imagem: 'https://picsum.photos/seed/caixa/400/400', descricao: 'Som potente e resistente a respingos.' },
+  { id: 3, nome: 'Microfone USB', preco: 329.9, categoria: 'audio', destaque: false, avaliacao: 4.3, estoque: 5,
+    imagem: 'https://picsum.photos/seed/microfone/400/400', descricao: 'Para podcasts, aulas e chamadas de vídeo.' },
+  { id: 4, nome: 'Luminária de Mesa', preco: 89.9, categoria: 'casa', destaque: true, avaliacao: 4.5, estoque: 2,
+    imagem: 'https://picsum.photos/seed/luminaria/400/400', descricao: 'Luz de LED com três níveis de brilho.' },
+  { id: 5, nome: 'Garrafa Térmica', preco: 79.9, categoria: 'casa', destaque: false, avaliacao: 4.7, estoque: 10,
+    imagem: 'https://picsum.photos/seed/garrafa/400/400', descricao: 'Mantém o café quente por 12 horas.' },
+  { id: 6, nome: 'Jogo de Panelas', preco: 459.9, categoria: 'casa', destaque: false, avaliacao: 4.2, estoque: 5,
+    imagem: 'https://picsum.photos/seed/panelas/400/400', descricao: 'Cinco panelas antiaderentes com tampa de vidro.' },
+  { id: 7, nome: 'Tênis de Corrida', preco: 349.9, categoria: 'esporte', destaque: true, avaliacao: 4.8, estoque: 1,
+    imagem: 'https://picsum.photos/seed/tenis/400/400', descricao: 'Leve, com amortecimento para treinos longos.' },
+  { id: 8, nome: 'Tapete de Yoga', preco: 119.9, categoria: 'esporte', destaque: false, avaliacao: 4.4, estoque: 7,
+    imagem: 'https://picsum.photos/seed/yoga/400/400', descricao: 'Antiderrapante, com 6 mm de espessura.' },
+  { id: 9, nome: 'Bola de Futebol', preco: 99.9, categoria: 'esporte', destaque: false, avaliacao: 4.1, estoque: 9,
+    imagem: 'https://picsum.photos/seed/bola/400/400', descricao: 'Bola de campo costurada à mão.' },
+  { id: 10, nome: 'Lógica de Programação', preco: 69.9, categoria: 'livros', destaque: true, avaliacao: 4.9, estoque: 6,
+    imagem: 'https://picsum.photos/seed/logica/400/400', descricao: 'Do zero aos algoritmos, com exercícios resolvidos.' },
+  { id: 11, nome: 'Livro de Receitas', preco: 59.9, categoria: 'livros', destaque: false, avaliacao: 4.5, estoque: 8,
+    imagem: 'https://picsum.photos/seed/receitas/400/400', descricao: 'Cem receitas rápidas para o dia a dia.' },
+  { id: 12, nome: 'Guia de Viagem', preco: 74.9, categoria: 'livros', destaque: false, avaliacao: 4.0, estoque: 5,
+    imagem: 'https://picsum.photos/seed/viagem/400/400', descricao: 'Roteiros e dicas para viajar gastando pouco.' },
+];
+
+export const produtosPorId = new Map(produtos.map((p) => [p.id, p])); // um produto por id (E12)

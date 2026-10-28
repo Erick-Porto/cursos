@@ -1,0 +1,160 @@
+{
+  "title": "Quiz: E43 · Qualidade de telas, dados no aparelho e login",
+  "description": "Dez questões sobre o checklist de qualidade, a revisão do PR de outra equipe, o AsyncStorage com a trava carregado, o SecureStore e o login com o AuthContext.",
+  "lesson": "e43b-dados-no-aparelho-e-login",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A equipe da agenda quer ver no celular o estado **vazio** da tela \"Meus agendamentos\", que busca os dados no json-server. O que ela faz?",
+      "options": {
+        "a": "Deixa `\"agendamentos\": []` no `db.json` e abre a tela de novo",
+        "b": "Para o json-server com Ctrl + C e abre a tela de novo",
+        "c": "Coloca um atraso temporário de 2 segundos no `pedir` da `api/`",
+        "d": "Troca o tema do celular para o escuro e percorre a tela"
+      },
+      "answer": "a",
+      "explanation": "Com a coleção vazia, o servidor responde com sucesso e uma lista sem itens: é o caso do `EstadoVazio`, com uma ação como \"Agendar\". Parar o json-server, a alternativa mais tentadora, faz o pedido falhar e mostra o estado de erro. O atraso temporário serve para ver o carregando, e trocar o tema testa outro item do checklist.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "truefalse",
+      "prompt": "Um `.catch((e) => console.log(e))` na busca do cardápio cumpre o estado de erro do checklist, porque o erro foi tratado e o app não fecha.",
+      "answer": false,
+      "explanation": "O `console.log` escreve no terminal de quem desenvolve; no celular do cliente, a tela fica em branco ou no carregando para sempre. O estado de erro do checklist pede que a tela mostre o problema em português, com o `EstadoErro` e uma saída como \"Tentar novamente\".",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Na revisão, este botão de \"Meus agendamentos\" reprovou no item **Acessibilidade**. Qual mudança resolve?\n\n```jsx\n<Pressable onPress={() => confirmarCancelamento(agendamento)}>\n  <Ionicons name=\"close-circle-outline\" size={24} color={cores.perigo} />\n</Pressable>\n```",
+      "options": {
+        "a": "Acrescentar `accessibilityRole=\"button\"`, `accessibilityLabel={'Cancelar agendamento das ' + agendamento.hora}` e `hitSlop={10}`",
+        "b": "Trocar `size={24}` por `size={44}`, que deixa o alvo grande e faz o leitor de tela anunciar o ícone",
+        "c": "Acrescentar `accessibilityLabel=\"ícone\"`, para o leitor de tela falar alguma coisa ao focar o botão",
+        "d": "Trocar `cores.perigo` por `cores.texto`, porque o vermelho não tem contraste suficiente nos dois temas"
+      },
+      "answer": "a",
+      "explanation": "Botão só com ícone precisa de papel e de um rótulo que faça sentido sozinho, e o `hitSlop` de 10 de cada lado leva o alvo de 24 a 44. Aumentar o ícone, a opção mais tentadora, resolve o alvo, mas o leitor continua sem nada para falar. \"ícone\" não diz o que o botão faz, e a cor do token `perigo` não é o problema apontado.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Na revisão cruzada, você testou no celular o PR \"Tela do cardápio\" da equipe vizinha. Quais comentários seguem o que a aula pede?",
+      "options": {
+        "a": "**Tema:** no modo escuro, o nome dos itens some. A linha 18 usa `color: '#222'`; que tal `cores.texto`?",
+        "b": "**Estados:** com o json-server parado, a lista fica em branco. Falta um `EstadoErro` com \"Tentar novamente\".",
+        "c": "Prefiro `function` a arrow function nesta tela; troque todas antes do merge.",
+        "d": "**Toque:** dois toques rápidos em Fazer pedido criaram dois pedidos no `db.json`. Dá para travar o botão enquanto envia?",
+        "e": "A descrição está clara e o código parece certo, então envio com Approve sem precisar rodar."
+      },
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "Os três comentários certos citam o item do checklist, dizem o que acontece no celular e sugerem uma correção. Pedir a troca de `function` por arrow é gosto pessoal: não quebra nada nem fere o checklist, e não deve bloquear o merge. Aprovar pela descrição, sem rodar, é justamente o que a revisão existe para evitar.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o envio de \"Novo lançamento\" para que o botão destrave tanto no sucesso quanto na falha e não aceite um segundo toque enquanto salva:\n\n```jsx\nasync function salvar() {\n  setEnviando(true);\n  try {\n    await adicionar(valores);\n    setToastVisivel(true);\n  } catch {\n    Alert.alert('Não foi possível salvar', 'Confira a conexão e tente de novo.');\n  } ___ {\n    setEnviando(false);\n  }\n}\n\n<Botao titulo=\"Salvar\" onPress={salvar} ___={enviando} />\n```",
+      "answer": [
+        [
+          "finally"
+        ],
+        [
+          "desabilitado"
+        ]
+      ],
+      "explanation": "O bloco `finally` roda depois do `try` e do `catch`, em qualquer caminho, e por isso é o lugar de `setEnviando(false)`. A prop `desabilitado` do `Botao` do kit trava o toque enquanto `enviando` é `true`, o que evita dois lançamentos iguais no `db.json`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Quatro PRs pedem merge no fim da sprint. Segundo o checklist de qualidade, qual deles está pronto?",
+      "options": {
+        "a": "Saldo do mês: 4 estados forçados no celular, testada no escuro e com TalkBack, `saldoDoMes` com 3 testes verdes",
+        "b": "Cardápio: bonito no claro e no escuro, mas sem `EstadoVazio`, porque \"o cardápio nunca fica vazio\"",
+        "c": "Horários livres: 4 estados e testes certos, com botões de horário de 32 de altura e sem `hitSlop`",
+        "d": "Resumo do pedido: tudo certo no celular, mas `totalDoPedido` sem teste, porque \"é só uma soma\""
+      },
+      "answer": "a",
+      "explanation": "Só o PR do saldo passa nos itens que se aplicam a ele. O cardápio fica vazio, sim, numa categoria sem itens ou com o `db.json` zerado, e a tela não pode ficar em branco. Botões de 32 sem `hitSlop` ficam abaixo dos 44 por 44. E uma soma de dinheiro é exatamente onde centavos se perdem: regra sem teste reprova, por mais simples que pareça.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "No app da lanchonete, quais destes dados devem ser guardados no **AsyncStorage**?",
+      "options": {
+        "a": "Os itens do carrinho, como array convertido com `JSON.stringify`",
+        "b": "O tema escolhido pelo cliente",
+        "c": "O token de acesso devolvido pelo login",
+        "d": "A senha digitada, para entrar sozinho na próxima vez",
+        "e": "Os pedidos feitos, que a cozinha acompanha"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Carrinho e tema são lista e preferência do cliente, sem segredo: AsyncStorage, sempre como texto JSON. O token é a alternativa mais tentadora, porque também precisa sobreviver ao fechar o app, mas abre a conta sem senha e o AsyncStorage não criptografa: ele vai para o SecureStore. A senha não fica em lugar nenhum, e os pedidos vão para o servidor, porque a cozinha também precisa vê-los.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Complete a função `ler` de `src/servicos/armazenamento.js`, que devolve o valor salvo já convertido, ou o padrão quando não há nada salvo:\n\n```javascript\nexport async function ler(chave, padrao = null) {\n  try {\n    const texto = await AsyncStorage.___(chave);\n    return texto === null ? padrao : JSON.___(texto);\n  } catch (erro) {\n    console.warn(`Não foi possível ler ${chave}`, erro);\n    return padrao;\n  }\n}\n```",
+      "answer": [
+        [
+          "getItem"
+        ],
+        [
+          "parse"
+        ]
+      ],
+      "explanation": "`AsyncStorage.getItem` devolve o texto gravado, ou `null` quando a chave não existe. `JSON.parse` transforma esse texto de volta em array ou objeto. `setItem` e `JSON.stringify` fazem o caminho de ida, na função `salvar`. Se o texto estiver quebrado, o `parse` lança erro e o `catch` devolve o padrão.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O cliente fecha o app da lanchonete com 3 itens no carrinho e, ao abrir de novo, o carrinho está vazio. O `CarrinhoProvider` está assim:\n\n```jsx\nuseEffect(() => {\n  salvar('lanchonete.carrinho', itens);\n}, [itens]);\n\nuseEffect(() => {\n  async function carregar() {\n    dispatch({ type: 'carregar', itens: await ler('lanchonete.carrinho', []) });\n  }\n  carregar();\n}, []);\n```\n\nQual é a causa?",
+      "options": {
+        "a": "No primeiro desenho, o efeito de salvar grava o `[]` inicial por cima do carrinho salvo, antes de a leitura terminar: falta a trava `carregado`",
+        "b": "Falta `await` antes de `salvar`, e sem ele o AsyncStorage não grava nada",
+        "c": "O AsyncStorage apaga os dados do app sempre que o sistema fecha o app",
+        "d": "A ação `carregar` deveria somar os itens salvos aos atuais, em vez de trocar a lista"
+      },
+      "answer": "a",
+      "explanation": "Os efeitos rodam já no primeiro desenho, quando `itens` ainda é `[]`. Sem a trava, o `salvar` grava essa lista vazia e a leitura, que vem depois, encontra o `[]`. Com `if (carregado)` no efeito de salvar e `setCarregado(true)` depois do `dispatch`, nada é gravado antes da leitura. Sem `await`, a gravação acontece do mesmo jeito; o efeito só não espera por ela. O AsyncStorage persiste depois de fechar o app, e somar os itens não resolve: o salvo já foi apagado.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Com uma sessão salva e ainda válida, o app da equipe sempre abre na tela Entrar. O layout das abas está assim:\n\n```jsx\nexport default function LayoutAbas() {\n  const { usuario } = useAuth();\n  if (!usuario) return <Redirect href=\"/entrar\" />;\n  return <Tabs>{/* abas */}</Tabs>;\n}\n```\n\nQual é a causa?",
+      "options": {
+        "a": "No primeiro desenho, a sessão ainda está sendo restaurada e `usuario` é `null`: o `Redirect` dispara antes de o `/auth/me` responder. Falta tratar `carregando` antes",
+        "b": "O `Redirect` deveria ser um `router.push('/entrar')` chamado direto no corpo do componente",
+        "c": "O token vence sempre que o app fecha, então a sessão nunca vale ao reabrir",
+        "d": "O token deveria ficar no AsyncStorage, que é lido mais rápido que o SecureStore"
+      },
+      "answer": "a",
+      "explanation": "Ler o token no SecureStore e chamar o `/auth/me` leva um tempo; até lá, `usuario` vale `null`. Sem olhar `carregando`, o layout manda para Entrar no primeiro desenho e nada leva a pessoa de volta às abas. O certo é `if (carregando) return <EstadoCarregando />;` antes do `Redirect`. Navegar no corpo do componente quebra a renderização, o token vence pelo prazo e não ao fechar o app, e trocar o cofre pelo AsyncStorage deixaria o token sem criptografia sem resolver a espera.",
+      "points": 2
+    }
+  ]
+}

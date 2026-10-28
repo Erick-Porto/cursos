@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>O clique chama setContador, o React chama Contador() de novo e o botão passa de Cliques: 0 para Cliques: 1</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .btn  { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .ok   { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .b    { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .seta { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#ponta); }
+    .s1 { animation: p1 8s infinite; }
+    .s2 { animation: p2 8s infinite; }
+    .s3 { animation: p3 8s infinite; }
+    @keyframes p1 { 0%, 10% { opacity: 0; transform: translateY(6px); } 18%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes p2 { 0%, 32% { opacity: 0; transform: translateY(6px); } 40%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes p3 { 0%, 54% { opacity: 0; transform: translateY(6px); } 62%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .s1, .s2, .s3 { animation: none; } }
+  </style>
+  <defs>
+    <marker id="ponta" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- antes -->
+  <text class="m" x="30" y="44">antes</text>
+  <rect class="btn" x="30" y="60" width="180" height="80" rx="14"/>
+  <text class="b" x="120" y="109" text-anchor="middle">Cliques: 0</text>
+
+  <!-- 1: o clique chama setContador -->
+  <g class="s1">
+    <path class="seta" d="M 216 100 L 330 100"/>
+    <text class="lbl" x="272" y="86" text-anchor="middle">clique</text>
+    <rect class="box" x="340" y="60" width="360" height="80" rx="12"/>
+    <text class="t code" x="520" y="93" text-anchor="middle">setContador(contador + 1)</text>
+    <text class="m" x="520" y="126" text-anchor="middle">guarda o valor 1</text>
+  </g>
+
+  <!-- 2: o React chama Contador() de novo -->
+  <g class="s2">
+    <path class="seta" d="M 520 146 L 520 210"/>
+    <text class="lbl" x="506" y="186" text-anchor="end">pede redesenho</text>
+    <rect class="box" x="340" y="220" width="360" height="80" rx="12"/>
+    <text class="t" x="520" y="253" text-anchor="middle">React chama <tspan class="code">Contador()</tspan></text>
+    <text class="m" x="520" y="286" text-anchor="middle">de novo</text>
+  </g>
+
+  <!-- 3: o JSX novo vai para a tela -->
+  <g class="s3">
+    <path class="seta" d="M 334 260 L 220 260"/>
+    <text class="lbl" x="276" y="246" text-anchor="middle">JSX novo</text>
+    <rect class="ok" x="30" y="220" width="180" height="80" rx="14"/>
+    <text class="b" x="120" y="269" text-anchor="middle">Cliques: 1</text>
+    <text class="m" x="30" y="336">depois</text>
+  </g>
+</svg>

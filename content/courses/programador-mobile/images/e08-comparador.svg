@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>O sinal do comparador decide a ordem: negativo põe a antes de b, positivo põe b antes de a, zero mantém os dois</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .b    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .ca   { fill: #131c33; stroke: #a78bfa; stroke-width: 2.5; }
+    .cb   { fill: #131c33; stroke: #60a5fa; stroke-width: 2.5; }
+    .la   { fill: #a78bfa; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lb   { fill: #60a5fa; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .axis { stroke: #b4bfd3; stroke-width: 2.5; fill: none; marker-start: url(#ponta); marker-end: url(#ponta); }
+  </style>
+  <defs>
+    <marker id="ponta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto-start-reverse"><path d="M0,0 L14,7 L0,14 z" fill="#b4bfd3"/></marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <!-- eixo do sinal -->
+  <text class="b" x="44" y="48">negativo</text>
+  <text class="b" x="676" y="48" text-anchor="end">positivo</text>
+  <text class="b" x="360" y="48" text-anchor="middle">0</text>
+  <path class="axis" d="M44 72 L676 72"/>
+  <path d="M360 60 L360 84" stroke="#b4bfd3" stroke-width="2.5"/>
+
+  <!-- negativo: a antes de b -->
+  <rect class="ca" x="132" y="106" width="60" height="60" rx="10"/>
+  <text class="la" x="162" y="145" text-anchor="middle">a</text>
+  <rect class="cb" x="208" y="106" width="60" height="60" rx="10"/>
+  <text class="lb" x="238" y="145" text-anchor="middle">b</text>
+  <text class="t" x="200" y="204" text-anchor="middle">a vem antes de b</text>
+
+  <!-- zero: empate -->
+  <text class="m" x="360" y="132" text-anchor="middle">empate:</text>
+  <text class="m" x="360" y="160" text-anchor="middle">mantém</text>
+
+  <!-- positivo: b antes de a -->
+  <rect class="cb" x="452" y="106" width="60" height="60" rx="10"/>
+  <text class="lb" x="482" y="145" text-anchor="middle">b</text>
+  <rect class="ca" x="528" y="106" width="60" height="60" rx="10"/>
+  <text class="la" x="558" y="145" text-anchor="middle">a</text>
+  <text class="t" x="520" y="204" text-anchor="middle">b vem antes de a</text>
+
+  <!-- exemplo -->
+  <rect x="44" y="232" width="632" height="74" rx="10" fill="#131c33" stroke="#2a3a5c" stroke-width="1.5"/>
+  <text class="code" x="64" y="264">(a, b) =&gt; a - b</text>
+  <text class="ok" x="64" y="294">59.9 - 89.9 é negativo: 59.9 vem antes de 89.9</text>
+</svg>

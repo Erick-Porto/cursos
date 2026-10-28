@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>A mesma chamada forma.totalAPagar(199.9) dá 189.9 no Pix e 243.44 no cartão em 10x, cada um com o próprio método; o boleto não tem o método, o JavaScript procura na mãe Pagamento e devolve 199.9</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #fbbf24; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .res  { fill: #34d399; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .busca { stroke: #a78bfa; stroke-width: 3; fill: none; stroke-dasharray: 8 6; marker-end: url(#seta); }
+    .r1 { animation: r1 8s infinite; }
+    .r2 { animation: r2 8s infinite; }
+    .r3 { animation: r3 8s infinite; }
+    @keyframes r1 { 0%, 6%  { opacity: 0; transform: translateY(-10px); } 12%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
+    @keyframes r2 { 0%, 24% { opacity: 0; transform: translateY(-10px); } 30%, 92% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(0); } }
+    @keyframes r3 { 0%, 44% { opacity: 0; } 52%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .r1, .r2, .r3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- a chamada -->
+  <text class="m" x="28" y="52">a mesma chamada</text>
+  <text class="code" x="28" y="90">forma.totalAPagar(199.9)</text>
+
+  <!-- classe mãe -->
+  <rect class="box" x="460" y="20" width="240" height="92" rx="10"/>
+  <path class="head" d="M470 20 H690 A10 10 0 0 1 700 30 V60 H460 V30 A10 10 0 0 1 470 20 Z"/>
+  <text class="h" x="580" y="48" text-anchor="middle">Pagamento</text>
+  <text class="t" x="580" y="96" text-anchor="middle">totalAPagar(valor)</text>
+
+  <!-- filhas -->
+  <rect class="box" x="20" y="190" width="220" height="110" rx="10"/>
+  <path class="head" d="M30 190 H230 A10 10 0 0 1 240 200 V230 H20 V200 A10 10 0 0 1 30 190 Z"/>
+  <text class="h" x="130" y="218" text-anchor="middle">PagamentoPix</text>
+  <text class="t" x="130" y="262" text-anchor="middle">método próprio</text>
+
+  <rect class="box" x="250" y="190" width="220" height="110" rx="10"/>
+  <path class="head" d="M260 190 H460 A10 10 0 0 1 470 200 V230 H250 V200 A10 10 0 0 1 260 190 Z"/>
+  <text class="h" x="360" y="218" text-anchor="middle">PagamentoCartao</text>
+  <text class="t" x="360" y="262" text-anchor="middle">método próprio</text>
+  <text class="m" x="360" y="290" text-anchor="middle">parcelas: 10</text>
+
+  <rect class="box" x="480" y="190" width="220" height="110" rx="10"/>
+  <path class="head" d="M490 190 H690 A10 10 0 0 1 700 200 V230 H480 V200 A10 10 0 0 1 490 190 Z"/>
+  <text class="h" x="590" y="218" text-anchor="middle">PagamentoBoleto</text>
+  <text class="m" x="590" y="262" text-anchor="middle">sem o método</text>
+
+  <!-- respostas, uma de cada vez -->
+  <g class="r1">
+    <text class="res" x="130" y="350" text-anchor="middle">→ 189.9</text>
+  </g>
+  <g class="r2">
+    <text class="res" x="360" y="350" text-anchor="middle">→ 243.44</text>
+  </g>
+  <g class="r3">
+    <path class="busca" d="M590 186 L590 120"/>
+    <text class="lbl" x="576" y="160" text-anchor="end">procura na mãe</text>
+    <text class="res" x="590" y="350" text-anchor="middle">→ 199.9</text>
+  </g>
+</svg>

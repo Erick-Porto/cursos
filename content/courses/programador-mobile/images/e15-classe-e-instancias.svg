@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>A classe Produto é o molde com os campos id, nome e preco e o método emDestaque; cada new Produto cria uma instância com os próprios valores, como fone e caixa</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .f    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .v    { fill: #e8edf7; font-size: 22px; }
+    .name { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .meth { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .new  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .note { fill: #b4bfd3; font-size: 22px; }
+    .blank { stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .arr  { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="40" y="38">o molde: escrito uma vez</text>
+  <text class="lbl" x="360" y="38">instâncias: uma por produto</text>
+
+  <!-- a classe -->
+  <rect class="box" x="40" y="56" width="240" height="270" rx="12"/>
+  <path class="head" d="M52 56 H268 A12 12 0 0 1 280 68 V102 H40 V68 A12 12 0 0 1 52 56 Z"/>
+  <text class="h" x="58" y="87">class Produto</text>
+  <text class="f" x="58" y="142">id</text>
+  <path class="blank" d="M132 148 H262"/>
+  <text class="f" x="58" y="184">nome</text>
+  <path class="blank" d="M132 190 H262"/>
+  <text class="f" x="58" y="226">preco</text>
+  <path class="blank" d="M132 232 H262"/>
+  <path d="M40 252 H280" stroke="#2a3a5c" stroke-width="1.5"/>
+  <text class="meth" x="58" y="294">emDestaque()</text>
+
+  <!-- new -->
+  <path class="arr" d="M284 132 L354 120"/>
+  <text class="new" x="296" y="112">new</text>
+  <path class="arr" d="M284 228 L354 262"/>
+  <text class="new" x="296" y="274">new</text>
+
+  <!-- instâncias -->
+  <rect class="box" x="360" y="56" width="330" height="128" rx="12"/>
+  <text class="name" x="378" y="88">fone</text>
+  <text class="f" x="378" y="120">id</text>
+  <text class="v" x="464" y="120">1</text>
+  <text class="f" x="378" y="148">nome</text>
+  <text class="v" x="464" y="148">Fone Bluetooth</text>
+  <text class="f" x="378" y="176">preco</text>
+  <text class="v" x="464" y="176">199.9</text>
+
+  <rect class="box" x="360" y="198" width="330" height="128" rx="12"/>
+  <text class="name" x="378" y="230">caixa</text>
+  <text class="f" x="378" y="262">id</text>
+  <text class="v" x="464" y="262">2</text>
+  <text class="f" x="378" y="290">nome</text>
+  <text class="v" x="464" y="290">Caixa de Som Portátil</text>
+  <text class="f" x="378" y="318">preco</text>
+  <text class="v" x="464" y="318">249.9</text>
+
+  <text class="note" x="360" y="362" text-anchor="middle">12 no catálogo, todas com os métodos do molde</text>
+</svg>

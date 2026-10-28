@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Enquanto carregando é true a tela mostra Carregando...; no try a lista aparece, no catch aparece a mensagem de erro, e o finally desliga o carregando nos dois casos</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .h    { font-size: 22px; font-weight: 700; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+  </style>
+  <defs>
+    <marker id="ponta-ok" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="ponta-erro" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- esperando a resposta -->
+  <rect class="box" x="30" y="95" width="240" height="120" rx="12"/>
+  <path d="M30 135 V107 A12 12 0 0 1 42 95 H258 A12 12 0 0 1 270 107 V135 Z" fill="#fbbf24"/>
+  <text class="h code" x="150" y="123" text-anchor="middle" fill="#0b1020">carregando: true</text>
+  <text class="t" x="150" y="183" text-anchor="middle">Carregando...</text>
+
+  <!-- deu certo -->
+  <path d="M 274 135 L 390 84" stroke="#34d399" stroke-width="3" fill="none" marker-end="url(#ponta-ok)"/>
+  <rect class="box" x="400" y="16" width="290" height="124" rx="12"/>
+  <path d="M400 56 V28 A12 12 0 0 1 412 16 H678 A12 12 0 0 1 690 28 V56 Z" fill="#34d399"/>
+  <text class="h" x="545" y="44" text-anchor="middle" fill="#06281c"><tspan class="code">try</tspan>: deu certo</text>
+  <text class="t" x="420" y="90">delectus aut autem</text>
+  <text class="t" x="420" y="124">quis ut nam facilis</text>
+
+  <!-- falhou -->
+  <path d="M 274 175 L 390 226" stroke="#f87171" stroke-width="3" stroke-dasharray="8 6" fill="none" marker-end="url(#ponta-erro)"/>
+  <rect class="box" x="400" y="170" width="290" height="124" rx="12"/>
+  <path d="M400 210 V182 A12 12 0 0 1 412 170 H678 A12 12 0 0 1 690 182 V210 Z" fill="#f87171"/>
+  <text class="h" x="545" y="198" text-anchor="middle" fill="#0b1020"><tspan class="code">catch</tspan>: falhou</text>
+  <text class="t" x="420" y="244">Não foi possível</text>
+  <text class="t" x="420" y="278">carregar as tarefas.</text>
+
+  <text class="m" x="360" y="336" text-anchor="middle"><tspan class="code" fill="#e8edf7">finally</tspan>: <tspan class="code" fill="#e8edf7">setCarregando(false)</tspan> nos dois casos</text>
+</svg>

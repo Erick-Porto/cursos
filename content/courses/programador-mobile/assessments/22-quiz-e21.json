@@ -1,0 +1,141 @@
+{
+  "title": "Quiz: E21 · Por que React e o primeiro projeto com Vite",
+  "description": "Dez questões sobre o problema que o React resolve, o jeito declarativo, componentes, o projeto criado com Vite e as regras do JSX.",
+  "lesson": "e21b-primeiro-projeto-vite",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Ao clicar no botão, o número na tela não muda. Qual é o problema?\n\n```javascript\nlet total = 0\nconst span = document.querySelector('#total')\nconst botao = document.querySelector('#botao')\n\nbotao.addEventListener('click', () => {\n  total = total + 1\n})\n```",
+      "options": {
+        "a": "`total` deveria ser declarado com `const`",
+        "b": "A variável `total` muda, mas ninguém escreve o valor novo na tela: falta `span.textContent = total`",
+        "c": "`addEventListener` precisa receber `'onclick'` em vez de `'click'`",
+        "d": "`querySelector` não aceita o `#` antes do id"
+      },
+      "answer": "b",
+      "explanation": "Em JavaScript puro, dados e tela vivem separados: mudar a variável não muda o DOM. Falta a linha que escreve o valor no `span`. `const` impediria a soma (o valor muda, por isso é `let`), `'click'` é o nome correto do evento e `#total` é a forma certa de buscar por id. Esse esquecimento é exatamente o problema que o React resolve.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual destas frases descreve a tela do jeito **declarativo**, como o React faz?",
+      "options": {
+        "a": "Encontre o span, leia o número, some 1 e escreva o resultado de volta",
+        "b": "A tela mostra `Cliques: {total}`; quando `total` mudar, redesenhe o que for preciso",
+        "c": "Recarregue a página inteira a cada clique para o valor novo aparecer",
+        "d": "Apague todo o HTML e escreva de novo, linha por linha, a cada clique"
+      },
+      "answer": "b",
+      "explanation": "Declarativo é dizer o que a tela deve mostrar e deixar o React executar as mudanças, como o `filter` diz o que você quer da lista sem listar os passos. A opção que manda encontrar o span, ler e escrever de volta é imperativa: lista os passos, como o JavaScript puro. Recarregar a página ou reescrever todo o HTML são formas de atualizar, mas não têm a ver com declarar o resultado.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A tela inicial de um app de delivery mostra uma lista de restaurantes, cada um com foto, nome, nota e tempo de entrega. Pensando em componentes React, qual é a divisão mais adequada?",
+      "options": {
+        "a": "Um componente `CartaoRestaurante`, repetido para cada restaurante dentro de um componente `ListaRestaurantes`",
+        "b": "Um componente diferente para cada restaurante, como `CartaoPizzaria` e `CartaoSushi`",
+        "c": "Um único componente `App` com todo o HTML da tela",
+        "d": "Um componente para cada tag HTML usada, como `Imagem`, `Nome` e `Nota`"
+      },
+      "answer": "a",
+      "explanation": "Componente é um molde: o mesmo `CartaoRestaurante` recebe dados diferentes e desenha cada restaurante. Um componente por restaurante não reutiliza nada; um `App` gigante é justamente o problema que os componentes resolvem; e um componente por tag só repete o que o HTML já faz.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Quem usa React não precisa conhecer HTML, porque o React substitui as tags como `<ul>` e `<button>`.",
+      "answer": false,
+      "explanation": "O JSX que você escreve em React vira HTML no navegador, então as tags continuam lá e você precisa saber o que cada uma faz. React organiza a tela em componentes; ele não troca o HTML por outra coisa.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Com o terminal do VS Code ainda na pasta do `lojinha-regras`, você roda `npm run dev` para ver o `minhas-tarefas`. O terminal responde `npm error Missing script: \"dev\"`. O que aconteceu?",
+      "options": {
+        "a": "O `npm` leu o `package.json` do `lojinha-regras`, que não tem o script `dev`: falta `cd` para a pasta `minhas-tarefas`",
+        "b": "O Node.js não está instalado no computador",
+        "c": "A porta 5173 já está ocupada por outro servidor",
+        "d": "O `--eslint` do `npm create vite` removeu o script `dev` do `package.json`"
+      },
+      "answer": "a",
+      "explanation": "O `npm run` procura o script no `package.json` da pasta atual. O do `lojinha-regras` tem `test`, `lint` e `verificar`, mas não `dev`, que só existe no projeto criado pelo Vite. Sem Node.js, o próprio `npm` nem seria reconhecido; porta ocupada só faz o Vite subir na 5174; e o `--eslint` só escolhe o linter. Numa pasta sem nenhum `package.json`, o erro seria outro: `Could not read package.json`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Em um projeto gerado pelo Vite, qual arquivo é o ponto de partida do JavaScript: ele encontra a `div#root` e pede ao React para renderizar o componente `App`?",
+      "options": {
+        "a": "`index.html`",
+        "b": "`src/main.jsx`",
+        "c": "`src/App.jsx`",
+        "d": "`package.json`"
+      },
+      "answer": "b",
+      "explanation": "`src/main.jsx` chama `createRoot(document.getElementById('root')).render(<App />)`. O `index.html` só tem a `div` vazia e a tag `script` que carrega o `main.jsx`; o `App.jsx` é o componente renderizado, não quem renderiza; o `package.json` lista scripts e pacotes.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Este componente não compila. Qual erro impede a compilação?\n\n```jsx\nfunction Cabecalho() {\n  return (\n    <h1 class=\"titulo\">Minhas Tarefas</h1>\n    <p>Organize seu dia</p>\n  )\n}\n\nexport default Cabecalho\n```",
+      "options": {
+        "a": "O `return` devolve dois elementos irmãos sem um elemento raiz em volta",
+        "b": "O atributo `class` deveria ser `className`",
+        "c": "Falta o `export default` no fim do arquivo",
+        "d": "O nome do componente deveria começar com letra minúscula"
+      },
+      "answer": "a",
+      "explanation": "JSX exige um único elemento raiz: `<h1>` e `<p>` precisam ficar dentro de um fragmento `<>...</>` ou de uma `div`. O `class` está errado também, mas gera apenas um aviso no console, não impede a compilação. O `export default` está presente, e componentes devem começar com maiúscula.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "truefalse",
+      "prompt": "Em JSX, a tag `<img src=\"logo.png\">` pode ficar sem fechamento, exatamente como no HTML.",
+      "answer": false,
+      "explanation": "No JSX toda tag fecha. Tags sem conteúdo, como `img`, `br` e `input`, terminam com `/>`: `<img src=\"logo.png\" />`. Deixá-la aberta quebra a compilação.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "Considere o trecho abaixo dentro de um componente.\n\n```jsx\n<p>Total: {2 + 2}</p>\n```\n\nO texto que aparece na tela é \"Total: ___\".",
+      "answer": [
+        [
+          "4"
+        ]
+      ],
+      "explanation": "As chaves `{}` abrem uma janela para o JavaScript: a expressão `2 + 2` é calculada e só o resultado, 4, aparece. Se o trecho estivesse em HTML puro, a tela mostraria o texto literal \"{2 + 2}\".",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O `App.jsx` tem `import Saudacao from './components/Saudacao.jsx'` e usa `<Saudacao />`. A tela fica em branco e o Console diz que o módulo `does not provide an export named 'default'`. Este é o arquivo do componente:\n\n```jsx\nfunction Saudacao() {\n  const nome = 'Ana'\n  return <p>Bem-vinda, {nome}!</p>\n}\n```\n\nO que conserta o erro?",
+      "options": {
+        "a": "Acrescentar `export default Saudacao` no fim do arquivo",
+        "b": "Trocar `<Saudacao />` por `<saudacao />` no `App`",
+        "c": "Envolver o `<p>` em um fragmento `<>...</>`",
+        "d": "Rodar `npm install` de novo"
+      },
+      "answer": "a",
+      "explanation": "Como nos módulos do E11, o `import` sem chaves pede o export padrão, e o arquivo não exporta nada. Com `export default Saudacao`, o `App` recebe a função. Com letra minúscula, o React trataria `saudacao` como uma tag HTML desconhecida; um único `<p>` já é a raiz; e o `npm install` não muda o seu código.",
+      "points": 2
+    }
+  ]
+}

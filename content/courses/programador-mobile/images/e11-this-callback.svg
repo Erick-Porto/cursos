@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>O this de anunciar depende da chamada: com promocao antes do ponto, o this é a promoção e a frase sai certa; chamado pelo setTimeout, sem nada antes do ponto, o this não é a promoção e a frase sai com undefined</title>
+  <style>
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .hl    { fill: none; stroke: #34d399; stroke-width: 2.5; }
+    .okc   { fill: #34d399; }
+    .okt   { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .noc   { fill: #131c33; stroke: #f87171; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .not   { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .no    { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .line  { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .sep   { stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <!-- chamada direta: com ponto -->
+  <text class="m" x="36" y="44">chamada direta</text>
+  <rect class="hl" x="30" y="68" width="116" height="36" rx="6"/>
+  <text class="code" x="36" y="94">promocao</text>
+  <text class="code" x="150" y="94">.anunciar()</text>
+  <text class="ok" x="36" y="140">promocao antes do ponto</text>
+  <path class="line" d="M300 86 L336 86"/>
+  <rect class="okc" x="346" y="64" width="300" height="44" rx="8"/>
+  <text class="okt" x="496" y="94" text-anchor="middle">this = promocao</text>
+  <text class="ok" x="346" y="140">Semana do Áudio: 10%</text>
+
+  <line class="sep" x1="24" y1="172" x2="696" y2="172"/>
+
+  <!-- setTimeout: sem ponto -->
+  <text class="m" x="36" y="214">o setTimeout, um segundo depois</text>
+  <text class="code" x="36" y="264">anunciar()</text>
+  <text class="no" x="36" y="310">nada antes do ponto</text>
+  <path class="line" d="M300 256 L336 256"/>
+  <rect class="noc" x="346" y="234" width="300" height="44" rx="8"/>
+  <text class="not" x="496" y="264" text-anchor="middle">this ≠ promocao</text>
+  <text class="no" x="346" y="310">undefined: undefined%</text>
+</svg>

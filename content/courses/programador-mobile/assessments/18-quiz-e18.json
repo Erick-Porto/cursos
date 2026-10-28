@@ -1,0 +1,152 @@
+{
+  "title": "Quiz: E18 · Event loop e Promises no checkout",
+  "description": "Dez questões sobre a thread do JavaScript, o event loop, timers, callbacks, Promises e testes assíncronos do checkout.",
+  "lesson": "e18b-promises",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `lojinha-regras`, um colega simulou a espera do servidor com um laço `while` de 3 segundos, logo antes de imprimir o resumo de outro pedido. O que acontece nesses 3 segundos?",
+      "options": {
+        "a": "Nada de diferente: o laço roda em segundo plano enquanto o resto do script segue",
+        "b": "Nenhuma outra linha do script roda, nem um timer que já venceu, porque o JavaScript roda numa thread só e ela está ocupada",
+        "c": "O Node encerra o script, porque laços `while` sem nada dentro das chaves são proibidos",
+        "d": "Só os `console.log` param; os timers continuam rodando os seus callbacks normalmente"
+      },
+      "answer": "b",
+      "explanation": "O JavaScript roda numa única thread. Um laço síncrono a ocupa inteira: nenhuma outra linha roda e nenhum callback sai da fila até ele terminar, nem o de um timer que já venceu. Não existe \"segundo plano\" para código síncrono, que é a confusão mais comum. O Node não encerra o script por causa do laço. No app, o mesmo laço deixaria a tela congelada e os toques sem resposta.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Em que ordem as mensagens aparecem no terminal?\n\n```javascript\nconsole.log('1: cliente escolheu Pix');\nsetTimeout(() => console.log('2: timer'), 0);\nPromise.resolve().then(() => console.log('3: Pix gerado'));\nconsole.log('4: fim do script');\n```",
+      "options": {
+        "a": "1, 2, 3, 4",
+        "b": "1, 4, 2, 3",
+        "c": "1, 4, 3, 2",
+        "d": "1, 3, 4, 2"
+      },
+      "answer": "c",
+      "explanation": "Primeiro roda todo o código síncrono: 1 e 4. Quando a pilha esvazia, o event loop roda as microtarefas, como o `then` da Promise (3), e só depois a próxima tarefa da fila, o callback do `setTimeout` (2). A ordem 1, 4, 2, 3 é a mais tentadora, porque o timer foi agendado antes; mas atraso 0 não fura a fila de microtarefas. Nenhum callback interrompe o código que está rodando, por isso 3 nunca aparece antes de 4.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Um `try/catch` em volta da chamada `setTimeout(() => { throw new Error('CEP inválido'); }, 800)` captura esse erro quando ele acontece.",
+      "answer": false,
+      "explanation": "O `try` termina assim que o `setTimeout` agenda o callback. Quando o callback roda, 800 ms depois, ele vem da fila de tarefas com a pilha vazia, fora do `try`, e o erro derruba o script. Por isso callbacks assíncronos recebem o erro como primeiro parâmetro, e Promises o entregam ao `catch`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete para que o \"aguardando...\" pare tanto quando o frete chega quanto quando o CEP é inválido:\n\n```javascript\nconst aguardando = setInterval(() => console.log('aguardando...'), 200);\nconsultarFrete(cep)\n  .then((valor) => console.log('Frete:', valor))\n  .catch((erro) => console.log('Erro:', erro.message))\n  .___(() => clearInterval(aguardando));\n```",
+      "answer": [
+        [
+          "finally"
+        ]
+      ],
+      "explanation": "`finally` roda quando a Promise encerra, cumprida ou rejeitada, e por isso é o lugar de parar o \"aguardando...\". Com o `clearInterval` só no `then`, o CEP inválido deixa a mensagem repetindo para sempre e o script não termina; só no `catch`, quem repete para sempre é o caso de sucesso.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre Promises estão corretas?",
+      "options": {
+        "a": "Uma Promise rejeitada pode passar a cumprida se o servidor responder depois",
+        "b": "`Promise.all` rejeita assim que uma das Promises da lista rejeita",
+        "c": "`Promise.allSettled` espera todas encerrarem e nunca rejeita",
+        "d": "`Promise.race` cancela as Promises que perderam a corrida",
+        "e": "O valor devolvido dentro de um `then` vira o valor recebido pelo próximo `then`"
+      },
+      "answer": [
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "Uma Promise encerra uma única vez: rejeitada não volta a mudar. `Promise.all` falha na primeira falha; `allSettled` devolve um relatório com o `status` de cada uma e nunca rejeita; o que um `then` devolve alimenta o próximo. `Promise.race` só adota o primeiro resultado: as perdedoras continuam rodando, e cancelar de verdade pede `AbortController`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O relatório da vitrine junta destaques, categorias e banners de três fontes independentes. Se os banners estiverem fora do ar, o relatório deve sair mesmo assim, com o que chegou. Qual combinação usar?",
+      "options": {
+        "a": "`Promise.all`, porque as três consultas começam ao mesmo tempo",
+        "b": "`Promise.allSettled`, porque relata o resultado de cada consulta sem rejeitar o conjunto",
+        "c": "`Promise.race`, porque imprime o que chegar primeiro",
+        "d": "Três `then` encadeados, um depois do outro, com um `catch` no fim"
+      },
+      "answer": "b",
+      "explanation": "`allSettled` espera as três e informa `fulfilled` ou `rejected` para cada uma: o relatório usa o que chegou e só avisa que faltaram os banners. `Promise.all` também roda em paralelo, mas rejeita inteiro na primeira falha e derrubaria o relatório. `race` ficaria só com a primeira consulta, e a corrente sequencial soma os tempos e também para no primeiro erro.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No terminal, apareceu `reserva recebida: undefined` e a cobrança começou antes de a reserva terminar. Qual é a causa?\n\n```javascript\nvalidarEstoque(itens)\n  .then(() => {\n    reservar(itens);\n  })\n  .then((reserva) => {\n    console.log('reserva recebida:', reserva);\n    return cobrar(total, pagamento);\n  });\n```",
+      "options": {
+        "a": "O primeiro `then` não devolve a Promise de `reservar`, então a corrente segue sem esperar",
+        "b": "Falta um `catch` no fim da corrente",
+        "c": "`reservar` deveria ser chamada com `new Promise(reservar(itens))`",
+        "d": "Dois `then` seguidos rodam ao mesmo tempo, em paralelo"
+      },
+      "answer": "a",
+      "explanation": "Com chaves, a arrow só devolve o que vier depois de `return`. Sem ele, o primeiro `then` devolve `undefined` na hora e o segundo roda sem esperar a reserva. A correção é `return reservar(itens);` ou `.then(() => reservar(itens))`. Um `catch` no fim é necessário, mas não faria a corrente esperar; e os `then` de uma corrente rodam em sequência, nunca em paralelo.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No resumo do `npm test`, este teste aparece verde, mas o serviço devolve `status: 'pago'`. Por que ele passa?\n\n```javascript\ntest('pedido fica cancelado', () => {\n  finalizarCompra(pedido, () => {}, { atraso: 50, sortear: () => 1 }).then((r) => {\n    expect(r.status).toBe('cancelado');\n  });\n});\n```",
+      "options": {
+        "a": "Porque `sortear: () => 1` faz a etapa de confirmação devolver qualquer status",
+        "b": "Porque a função do teste não devolve a Promise: o Jest encerra o teste antes de o `expect` rodar",
+        "c": "Porque `toBe` compara só o tipo do valor, e os dois são texto",
+        "d": "Porque o atraso de 50 ms é curto demais para o Jest medir"
+      },
+      "answer": "b",
+      "explanation": "Sem `return`, a função do teste termina na hora e o Jest dá o teste por aprovado; o `expect` roda depois, quando o teste já acabou, e no máximo o erro aparece solto depois do resumo. A correção é `return finalizarCompra(...).then(...)` ou `return expect(finalizarCompra(...)).resolves.toMatchObject({ status: 'pago' })`. O sorteio injetado só decide se cada etapa falha, `toBe` compara valores e o atraso não muda o que o `expect` confere.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O script abaixo imprime 2, 1 e 0 e depois não imprime mais nada, mas o terminal não volta para o prompt. Por quê?\n\n```javascript\nlet restantes = 3;\nsetInterval(() => {\n  if (restantes === 0) return; // nada mais a contar\n  restantes = restantes - 1;\n  console.log(`O Pix expira em ${restantes} s`);\n}, 1000);\n```",
+      "options": {
+        "a": "Falta `clearInterval`: o timer continua agendado, e o Node só encerra o script quando não há mais nada para esperar",
+        "b": "O `return` dentro do callback trava a thread até alguém apertar Ctrl + C",
+        "c": "`restantes` foi declarada com `let`; com `const`, o timer pararia sozinho ao chegar a 0",
+        "d": "O `setInterval` precisa de um terceiro argumento com o número de repetições, senão nunca para"
+      },
+      "answer": "a",
+      "explanation": "O `return` encerra só aquela volta do callback; o timer segue agendado e roda a cada segundo, sem imprimir nada. Enquanto houver timer ativo, o Node não encerra o script. A correção é guardar o id (`const id = setInterval(...)`) e chamar `clearInterval(id)` ao chegar a 0. O `return` não trava nada: a thread fica livre entre as voltas; com `const`, a contagem nem funcionaria; e o `setInterval` não tem limite de repetições.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Na convenção de callbacks com erro primeiro, como `consultarFrete(cep, callback)` deve avisar quem chamou que o CEP é inválido?",
+      "options": {
+        "a": "`callback(new Error('CEP inválido'))`",
+        "b": "`throw new Error('CEP inválido')` dentro do `setTimeout`, para o `try/catch` de quem chamou",
+        "c": "`return new Error('CEP inválido')` no fim de `consultarFrete`",
+        "d": "`callback(null, new Error('CEP inválido'))`"
+      },
+      "answer": "a",
+      "explanation": "O erro vai no primeiro parâmetro; o resultado vai no segundo, só quando dá certo: `callback(null, 19.9)`. Lançar dentro do `setTimeout` derruba o script, porque o `try` de quem chamou já terminou. O `return` de `consultarFrete` acontece antes de o timer vencer, quando ainda não se sabe nada. E `callback(null, erro)` diz \"deu certo\" com um erro no lugar do valor.",
+      "points": 1
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Laboratório: o projeto lojinha-regras · E02</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, td code, h3 code, label code, summary code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); overflow-wrap: anywhere; }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+    a { color: var(--destaque); }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.2em;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    button { font: inherit; cursor: pointer; }
+
+    /* entrega */
+    .entrega { margin: 0; padding: 0; list-style: none; }
+    .entrega li + li { margin-top: 10px; }
+    .entrega label { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+    .entrega input { width: 22px; height: 22px; margin: 2px 0 0; flex: none; accent-color: var(--destaque); }
+    .entrega .feito { color: var(--texto-2); text-decoration: line-through; }
+    .contagem { margin: 16px 0 0; color: var(--texto-2); font-size: 0.9rem; }
+
+    /* passos */
+    ol.passos { margin: 0; padding: 0; list-style: none; counter-reset: passo; }
+    ol.passos > li { position: relative; margin-top: 20px; padding-left: 48px; }
+    ol.passos > li:first-child { margin-top: 0; }
+    ol.passos > li::before {
+      counter-increment: passo;
+      content: counter(passo);
+      position: absolute;
+      left: 0;
+      top: -2px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+    ol.passos p { margin: 0; }
+    ol.passos p + p, ol.passos .codigo + p, ol.passos details + p { margin-top: 8px; }
+    ol.passos ul { margin: 6px 0 0; padding-left: 1.2em; }
+    ol.passos li li + li { margin-top: 4px; }
+    @media (max-width: 480px) {
+      ol.passos > li { padding-left: 0; padding-top: 40px; }
+    }
+
+    /* código */
+    .codigo { margin-top: 10px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+
+    /* resposta escondida */
+    details { margin-top: 10px; padding: 10px 14px; border: 1px dashed var(--borda); border-radius: 12px; }
+    details summary { cursor: pointer; font-weight: 600; }
+    details[open] summary { margin-bottom: 6px; }
+
+    /* avisos e tabelas */
+    .aviso, .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .aviso { border-left-color: var(--alerta); background: var(--alerta-suave); }
+    .aviso p, .dica p { margin: 0; }
+    .aviso p + p, .dica p + p { margin-top: 8px; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    tbody tr:last-child td { border-bottom: 0; }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      ol.passos > li::before { background: #000; color: #fff; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-square-check" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-list-ordered" viewBox="0 0 24 24"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M12 19h8"/><path d="m4 17 6-6-6-6"/></symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2"/><path d="M6.453 15h11.094"/><path d="M8.5 2h7"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E02 · Laboratório</p>
+      <h1>Laboratório: o projeto lojinha-regras</h1>
+      <p class="lead">
+        Hoje nasce a pasta que acompanha você até o E20: os dados da Lojinha, um script que grava o catálogo
+        em JSON e um relatório no terminal, tudo com um <code>package.json</code> e um pacote instalado do npm.
+        Tempo: 70 minutos. Rode todos os comandos no terminal do VS Code, aberto na pasta <code>lojinha-regras</code>.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-entrega">
+      <h2 id="t-entrega"><svg class="ico"><use href="#i-square-check"/></svg>O que entregar</h2>
+      <div class="cartao">
+        <ul class="entrega">
+          <li><label><input type="checkbox" id="e-pastas"><span>Pasta <code>lojinha-regras</code> com <code>src/data/</code> e <code>src/scripts/</code></span></label></li>
+          <li><label><input type="checkbox" id="e-produtos"><span><code>src/data/produtos.js</code> com as 4 categorias e os 12 produtos</span></label></li>
+          <li><label><input type="checkbox" id="e-json"><span><code>src/data/catalogo.json</code> gravado pelo gerador, não digitado à mão</span></label></li>
+          <li><label><input type="checkbox" id="e-relatorio"><span>Relatório certo com e sem categoria (confira na tabela de saídas)</span></label></li>
+          <li><label><input type="checkbox" id="e-package"><span><code>package.json</code> com <code>"type": "module"</code> e os scripts <code>catalogo</code> e <code>relatorio</code></span></label></li>
+          <li><label><input type="checkbox" id="e-pacote"><span><code>picocolors</code> em <code>dependencies</code>, com título em negrito e "Sem imagem" em amarelo</span></label></li>
+          <li><label><input type="checkbox" id="e-caros"><span>Linha "Acima de R$ 200" no relatório</span></label></li>
+          <li><label><input type="checkbox" id="e-envio"><span>Enviados no sistema: o conteúdo do <code>package.json</code> e a saída de <code>npm run relatorio casa</code></span></label></li>
+        </ul>
+        <p class="contagem" id="contagem">0 de 8 itens prontos. As marcações ficam só neste navegador.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-passos">
+      <h2 id="t-passos"><svg class="ico"><use href="#i-list-ordered"/></svg>Passo a passo</h2>
+      <div class="cartao">
+        <ol class="passos">
+          <li>
+            <h3>Abra a pasta <code>lojinha-regras</code> no VS Code</h3>
+            <p>Se ainda não existe, crie na sua pasta de projetos: <code>mkdir lojinha-regras</code>, <code>cd lojinha-regras</code> e <code>code .</code>. O <code>ola.js</code> da aula pode ser apagado.</p>
+            <p>Abra o terminal integrado pelo menu <strong>Terminal</strong>, <strong>New Terminal</strong>. Ele já começa na pasta do projeto.</p>
+          </li>
+          <li id="produtos">
+            <h3>Crie <code>src/data/produtos.js</code></h3>
+            <p>No painel esquerdo, ícone <strong>New File</strong>, e digite o caminho inteiro: <code>src/data/produtos.js</code>. O VS Code cria as pastas junto. Cole o arquivo abaixo e salve com <kbd>Ctrl</kbd> + <kbd>S</kbd>. São dados: copie, não digite.</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>src/data/produtos.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-produtos">Copiar</button></div>
+<pre><code id="c-produtos">export const categorias = [
+  { slug: 'audio', nome: 'Áudio' },
+  { slug: 'casa', nome: 'Casa' },
+  { slug: 'esporte', nome: 'Esporte' },
+  { slug: 'livros', nome: 'Livros' },
+];
+
+export const produtos = [
+  { id: 1, nome: 'Fone Bluetooth', preco: 199.9, categoria: 'audio', destaque: true, avaliacao: 4.6,
+    imagem: 'https://picsum.photos/seed/fone/400/400', descricao: 'Fone sem fio com 20 horas de bateria.' },
+  { id: 2, nome: 'Caixa de Som Portátil', preco: 249.9, categoria: 'audio', destaque: false, avaliacao: 4.4,
+    imagem: 'https://picsum.photos/seed/caixa/400/400', descricao: 'Som potente e resistente a respingos.' },
+  { id: 3, nome: 'Microfone USB', preco: 329.9, categoria: 'audio', destaque: false, avaliacao: 4.3,
+    imagem: 'https://picsum.photos/seed/microfone/400/400', descricao: 'Para podcasts, aulas e chamadas de vídeo.' },
+  { id: 4, nome: 'Luminária de Mesa', preco: 89.9, categoria: 'casa', destaque: true, avaliacao: 4.5,
+    imagem: 'https://picsum.photos/seed/luminaria/400/400', descricao: 'Luz de LED com três níveis de brilho.' },
+  { id: 5, nome: 'Garrafa Térmica', preco: 79.9, categoria: 'casa', destaque: false, avaliacao: 4.7,
+    imagem: 'https://picsum.photos/seed/garrafa/400/400', descricao: 'Mantém o café quente por 12 horas.' },
+  { id: 6, nome: 'Jogo de Panelas', preco: 459.9, categoria: 'casa', destaque: false, avaliacao: 4.2,
+    imagem: 'https://picsum.photos/seed/panelas/400/400', descricao: 'Cinco panelas antiaderentes com tampa de vidro.' },
+  { id: 7, nome: 'Tênis de Corrida', preco: 349.9, categoria: 'esporte', destaque: true, avaliacao: 4.8,
+    imagem: 'https://picsum.photos/seed/tenis/400/400', descricao: 'Leve, com amortecimento para treinos longos.' },
+  { id: 8, nome: 'Tapete de Yoga', preco: 119.9, categoria: 'esporte', destaque: false, avaliacao: 4.4,
+    imagem: 'https://picsum.photos/seed/yoga/400/400', descricao: 'Antiderrapante, com 6 mm de espessura.' },
+  { id: 9, nome: 'Bola de Futebol', preco: 99.9, categoria: 'esporte', destaque: false, avaliacao: 4.1,
+    imagem: 'https://picsum.photos/seed/bola/400/400', descricao: 'Bola de campo costurada à mão.' },
+  { id: 10, nome: 'Lógica de Programação', preco: 69.9, categoria: 'livros', destaque: true, avaliacao: 4.9,
+    imagem: 'https://picsum.photos/seed/logica/400/400', descricao: 'Do zero aos algoritmos, com exercícios resolvidos.' },
+  { id: 11, nome: 'Livro de Receitas', preco: 59.9, categoria: 'livros', destaque: false, avaliacao: 4.5,
+    imagem: 'https://picsum.photos/seed/receitas/400/400', descricao: 'Cem receitas rápidas para o dia a dia.' },
+  { id: 12, nome: 'Guia de Viagem', preco: 74.9, categoria: 'livros', destaque: false, avaliacao: 4.0,
+    imagem: 'https://picsum.photos/seed/viagem/400/400', descricao: 'Roteiros e dicas para viajar gastando pouco.' },
+];</code></pre>
+            </div>
+          </li>
+          <li>
+            <h3>Crie e rode o gerador: <code>src/scripts/gerar-catalogo.js</code></h3>
+            <p>Este você digita, linha por linha: é digitando que se aprende a ler um erro.</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>src/scripts/gerar-catalogo.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-gerar">Copiar</button></div>
+<pre><code id="c-gerar">import fs from 'node:fs';
+import { categorias, produtos } from '../data/produtos.js';
+
+const catalogo = { categorias, produtos };
+const texto = JSON.stringify(catalogo, null, 2);
+fs.writeFileSync('src/data/catalogo.json', texto);
+
+console.log('catalogo.json gravado com', produtos.length, 'produtos');</code></pre>
+            </div>
+            <p>Rode da raiz do projeto: <code>node src/scripts/gerar-catalogo.js</code>. A saída é <code>catalogo.json gravado com 12 produtos</code>, e o arquivo <code>src/data/catalogo.json</code> aparece no painel. Abra e veja o mesmo catálogo, agora em JSON.</p>
+          </li>
+          <li>
+            <h3>Crie e rode o relatório: <code>src/scripts/relatorio-catalogo.js</code></h3>
+            <div class="codigo">
+              <div class="codigo-topo"><span>src/scripts/relatorio-catalogo.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-relatorio">Copiar</button></div>
+<pre><code id="c-relatorio">import fs from 'node:fs';
+
+const texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');
+const catalogo = JSON.parse(texto);
+const categoria = process.argv[2];
+
+let lista = catalogo.produtos;
+let titulo = 'todas as categorias';
+if (categoria) {
+  lista = lista.filter((produto) =&gt; produto.categoria === categoria);
+  titulo = categoria;
+}
+
+const destaques = lista.filter((produto) =&gt; produto.destaque);
+const semImagem = lista.filter((produto) =&gt; produto.imagem === '');
+const soma = lista.reduce((total, produto) =&gt; total + produto.preco, 0);
+const media = soma / lista.length;
+
+console.log('Relatório do catálogo:', titulo);
+console.log('Produtos:', lista.length);
+console.log('Em destaque:', destaques.length);
+console.log('Preço médio: R$', media.toFixed(2));
+console.log('Sem imagem:', semImagem.length);</code></pre>
+            </div>
+            <p>Rode <code>node src/scripts/relatorio-catalogo.js</code> e depois com uma categoria no fim: <code>audio</code>, <code>casa</code>, <code>esporte</code> ou <code>livros</code>. Compare com a <a href="#saidas">tabela de saídas</a>.</p>
+          </li>
+          <li>
+            <h3>Crie o <code>package.json</code></h3>
+            <p>No terminal: <code>npm init -y</code>. Rode o relatório de novo. Se aparecer <code>Cannot use import statement outside a module</code>, ou um aviso <code>MODULE_TYPELESS_PACKAGE_JSON</code>, falta o <code>"type": "module"</code>.</p>
+            <p>Edite o arquivo até ficar assim. Se o npm escreveu <code>"type": "commonjs"</code>, troque por <code>"module"</code>; se não escreveu a linha, acrescente. Cuidado com as vírgulas: cada linha termina com vírgula, menos a última de cada bloco.</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>package.json</span><button class="copiar nao-imprime" type="button" data-alvo="#c-package">Copiar</button></div>
+<pre><code id="c-package">{
+  "name": "lojinha-regras",
+  "version": "1.0.0",
+  "description": "Regras de negócio da Lojinha",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" &amp;&amp; exit 1",
+    "catalogo": "node src/scripts/gerar-catalogo.js",
+    "relatorio": "node src/scripts/relatorio-catalogo.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module"
+}</code></pre>
+            </div>
+            <p>Agora os comandos têm nome: <code>npm run catalogo</code>, <code>npm run relatorio</code> e <code>npm run relatorio audio</code>. Só <code>npm run</code>, sem nome, lista os scripts.</p>
+          </li>
+          <li>
+            <h3>Instale o <code>picocolors</code> e pinte o relatório</h3>
+            <p>No terminal: <code>npm install picocolors</code>. Confira as três novidades: a seção <code>dependencies</code> no <code>package.json</code>, a pasta <code>node_modules/</code> e o arquivo <code>package-lock.json</code>.</p>
+            <p>No relatório, acrescente a segunda linha de <code>import</code> no topo e troque o primeiro e o último <code>console.log</code>:</p>
+            <div class="codigo">
+              <div class="codigo-topo"><span>trechos de relatorio-catalogo.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-cores">Copiar</button></div>
+<pre><code id="c-cores">import pc from 'picocolors';
+
+console.log(pc.bold('Relatório do catálogo:'), titulo);
+console.log(pc.yellow('Sem imagem:'), semImagem.length);</code></pre>
+            </div>
+            <p><code>npm run relatorio</code>: o título sai em negrito e o "Sem imagem" em amarelo.</p>
+          </li>
+          <li>
+            <h3>Teste o "Sem imagem"</h3>
+            <p>No <code>src/data/catalogo.json</code>, procure a Bola de Futebol e esvazie a imagem: <code>"imagem": ""</code>. Salve e rode <code>npm run relatorio esporte</code>: <code>Sem imagem: 1</code>.</p>
+            <p>Para desfazer, não edite de volta: rode <code>npm run catalogo</code>. O gerador grava o JSON de novo a partir do <code>produtos.js</code>, e o relatório volta a <code>Sem imagem: 0</code>.</p>
+          </li>
+          <li>
+            <h3>Acrescente a linha "Acima de R$ 200"</h3>
+            <p>A dona da loja quer saber quantos produtos passam de R$ 200. Siga o modelo da linha <code>destaques</code>: um <code>filter</code> com a condição <code>produto.preco &gt; 200</code> e um <code>console.log</code> com o <code>.length</code>, logo depois do "Em destaque".</p>
+            <details>
+              <summary>Ver uma resposta</summary>
+              <div class="codigo">
+                <div class="codigo-topo"><span>as duas linhas novas</span><button class="copiar nao-imprime" type="button" data-alvo="#c-caros">Copiar</button></div>
+<pre><code id="c-caros">const caros = lista.filter((produto) =&gt; produto.preco &gt; 200);
+
+console.log('Acima de R$ 200:', caros.length);</code></pre>
+              </div>
+              <p>A primeira vai junto das outras contas; a segunda, depois do <code>console.log</code> do "Em destaque". O Fone, de R$ 199,90, não entra.</p>
+            </details>
+          </li>
+          <li>
+            <h3>Apague o <code>node_modules</code> e recupere</h3>
+            <p>Apague a pasta <code>node_modules</code> pelo painel do VS Code e rode o relatório: <code>Cannot find package 'picocolors'</code>. Agora <code>npm install</code>, sem nome de pacote: o npm lê o <code>package.json</code> e o lock e baixa tudo de novo. O relatório volta a funcionar.</p>
+          </li>
+          <li>
+            <h3>Entregue</h3>
+            <p>Na entrega do laboratório E02, no sistema, cole o conteúdo do <code>package.json</code> e a saída de <code>npm run relatorio casa</code>. Guarde a pasta: no E03 ela vai para o GitHub.</p>
+          </li>
+        </ol>
+      </div>
+
+      <div class="aviso">
+        <p>Rode tudo da raiz do <code>lojinha-regras</code>. Com <code>node</code>, um terminal aberto em <code>src/scripts/</code> faz o relatório procurar <code>src/scripts/src/data/catalogo.json</code> e falhar com <code>ENOENT</code>. Com <code>npm run</code>, o npm já roda a partir da raiz.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-saidas" id="saidas">
+      <h2 id="t-saidas"><svg class="ico"><use href="#i-terminal"/></svg>Saídas esperadas</h2>
+      <div class="cartao tabela">
+        <table>
+          <thead>
+            <tr><th>Comando</th><th class="num">Produtos</th><th class="num">Em destaque</th><th class="num">Acima de R$ 200</th><th class="num">Preço médio</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>npm run relatorio</code></td><td class="num">12</td><td class="num">4</td><td class="num">4</td><td class="num">R$ 181.98</td></tr>
+            <tr><td><code>npm run relatorio audio</code></td><td class="num">3</td><td class="num">1</td><td class="num">2</td><td class="num">R$ 259.90</td></tr>
+            <tr><td><code>npm run relatorio casa</code></td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">R$ 209.90</td></tr>
+            <tr><td><code>npm run relatorio esporte</code></td><td class="num">3</td><td class="num">1</td><td class="num">1</td><td class="num">R$ 189.90</td></tr>
+            <tr><td><code>npm run relatorio livros</code></td><td class="num">3</td><td class="num">1</td><td class="num">0</td><td class="num">R$ 68.23</td></tr>
+          </tbody>
+        </table>
+        <p class="contagem">Em todas, <code>Sem imagem: 0</code>. O preço sai com ponto (<code>181.98</code>): no E05 você escreve o <code>formatarPreco</code>, que mostra <code>R$ 181,98</code>.</p>
+      </div>
+      <p>O relatório completo, depois dos passos 6 e 8:</p>
+      <div class="codigo">
+        <div class="codigo-topo"><span>src/scripts/relatorio-catalogo.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-final">Copiar</button></div>
+<pre><code id="c-final">import fs from 'node:fs';
+import pc from 'picocolors';
+
+const texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');
+const catalogo = JSON.parse(texto);
+const categoria = process.argv[2];
+
+let lista = catalogo.produtos;
+let titulo = 'todas as categorias';
+if (categoria) {
+  lista = lista.filter((produto) =&gt; produto.categoria === categoria);
+  titulo = categoria;
+}
+
+const destaques = lista.filter((produto) =&gt; produto.destaque);
+const caros = lista.filter((produto) =&gt; produto.preco &gt; 200);
+const semImagem = lista.filter((produto) =&gt; produto.imagem === '');
+const soma = lista.reduce((total, produto) =&gt; total + produto.preco, 0);
+const media = soma / lista.length;
+
+console.log(pc.bold('Relatório do catálogo:'), titulo);
+console.log('Produtos:', lista.length);
+console.log('Em destaque:', destaques.length);
+console.log('Acima de R$ 200:', caros.length);
+console.log('Preço médio: R$', media.toFixed(2));
+console.log(pc.yellow('Sem imagem:'), semImagem.length);</code></pre>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-erros">
+      <h2 id="t-erros"><svg class="ico"><use href="#i-triangle-alert"/></svg>Erros comuns</h2>
+      <div class="cartao tabela">
+        <table>
+          <thead>
+            <tr><th>Mensagem</th><th>Causa provável</th><th>O que fazer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ENOENT: no such file or directory</code> com <code>src\scripts\src\data</code></td><td>Terminal aberto dentro de <code>src/scripts/</code></td><td><code>cd ..</code> duas vezes, ou use <code>npm run</code></td></tr>
+            <tr><td><code>Cannot find module</code> apontando para <code>data\produtos</code></td><td><code>import</code> sem a extensão</td><td><code>'../data/produtos.js'</code>, com o <code>.js</code></td></tr>
+            <tr><td><code>Cannot use import statement outside a module</code></td><td><code>"type": "commonjs"</code> no <code>package.json</code></td><td>Troque por <code>"type": "module"</code></td></tr>
+            <tr><td><code>EJSONPARSE</code> ao rodar qualquer <code>npm run</code></td><td>Vírgula sobrando ou faltando no <code>package.json</code></td><td>A mensagem diz a linha; compare com o modelo do passo 5</td></tr>
+            <tr><td><code>SyntaxError</code> no <code>JSON.parse</code></td><td><code>catalogo.json</code> editado à mão com erro</td><td><code>npm run catalogo</code> grava o arquivo de novo</td></tr>
+            <tr><td><code>Cannot find package 'picocolors'</code></td><td>Faltou <code>npm install</code>, ou terminal fora da raiz</td><td><code>npm install</code> na raiz do projeto</td></tr>
+            <tr><td><code>Missing script: "relatorio"</code></td><td>Script fora do bloco <code>"scripts"</code>, ou nome diferente</td><td><code>npm run</code> lista os nomes que existem</td></tr>
+            <tr><td><code>Preço médio: R$ NaN</code></td><td>Nenhum produto na categoria: nome errado ou com maiúscula</td><td>Use o <code>slug</code>: <code>audio</code>, <code>casa</code>, <code>esporte</code>, <code>livros</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-extra">
+      <h2 id="t-extra"><svg class="ico"><use href="#i-flask"/></svg>Terminou antes?</h2>
+      <div class="cartao">
+        <ul class="lista" style="margin-top: 0">
+          <li>Acrescente a avaliação média, no modelo do preço médio: some <code>produto.avaliacao</code> em vez de <code>produto.preco</code>. Para o catálogo inteiro, dá <code>4.45</code>.</li>
+          <li>Pinte de verde, com <code>pc.green</code>, a linha "Em destaque". A lista de cores está na página do pacote, em npmjs.com.</li>
+          <li>Rode <code>npx prettier --check src</code> e conte quantos arquivos o Prettier aponta. Não use o <code>--write</code> por enquanto: o estilo da equipe é combinado no E03.</li>
+          <li>Ajude quem está ao lado a achar o erro, sem pegar o teclado.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer>Material do encontro E02 do curso Programador Mobile. As marcações ficam só neste navegador.</footer>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Lista de entrega: as marcações ficam no localStorage deste
+    // navegador; sem ele, a página funciona igual, só não lembra.
+    // ---------------------------------------------------------------
+    const CHAVE = 'pm-e02-laboratorio-lojinha-regras'
+    const caixas = [...document.querySelectorAll('.entrega input[type="checkbox"]')]
+    const contagem = document.querySelector('#contagem')
+
+    function lerMarcacoes() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(CHAVE) || '[]')
+        return Array.isArray(lista) ? lista : []
+      } catch {
+        return []
+      }
+    }
+
+    function gravarMarcacoes(ids) {
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(ids))
+      } catch {
+        // sem armazenamento disponível: segue sem lembrar
+      }
+    }
+
+    function atualizar() {
+      const feitos = caixas.filter((c) => c.checked)
+      for (const c of caixas) c.nextElementSibling.classList.toggle('feito', c.checked)
+      contagem.textContent = `${feitos.length} de ${caixas.length} itens prontos. As marcações ficam só neste navegador.`
+      gravarMarcacoes(feitos.map((c) => c.id))
+    }
+
+    const salvas = lerMarcacoes()
+    for (const c of caixas) {
+      c.checked = salvas.includes(c.id)
+      c.addEventListener('change', atualizar)
+    }
+    atualizar()
+
+    // botões "Copiar" dos blocos de código
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>

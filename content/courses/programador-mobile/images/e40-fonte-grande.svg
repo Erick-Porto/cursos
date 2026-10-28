@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 292" font-family="Inter, system-ui, sans-serif">
+  <title>Fonte no máximo: o título Meus pedidos quebra em duas linhas; com height: 56 a linha fica presa e corta o texto, com minHeight: 56 a linha cresce</title>
+  <style>
+    .code  { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .linha { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1.5; }
+    .txt   { fill: #0f172a; font-size: 22px; }
+    .gde   { fill: #0f172a; font-size: 34px; }
+    .ico   { fill: none; stroke: #6d28d9; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .seta  { fill: none; stroke: #475569; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .depois { animation: cresce 6s ease-in-out infinite; }
+    @keyframes cresce {
+      0%, 30%  { opacity: 0; }
+      45%, 90% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .depois { animation: none; }
+    }
+  </style>
+  <defs>
+    <clipPath id="presa"><rect x="40" y="80" width="300" height="64"/></clipPath>
+    <g id="recibo"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></g>
+  </defs>
+  <rect width="720" height="292" rx="16" fill="#0b1020"/>
+
+  <text class="code" x="40" y="48" fill="#f87171">height: 56</text>
+  <text class="code" x="380" y="48" fill="#34d399">minHeight: 56</text>
+
+  <!-- antes: fonte padrão, as duas linhas iguais -->
+  <g>
+    <rect class="linha" x="40" y="80" width="300" height="64" rx="8"/>
+    <use href="#recibo" class="ico" transform="translate(52 101) scale(0.9)"/>
+    <text class="txt" x="86" y="120">Meus pedidos</text>
+    <path class="seta" d="M316 106 l6 6 -6 6"/>
+    <rect class="linha" x="380" y="80" width="300" height="64" rx="8"/>
+    <use href="#recibo" class="ico" transform="translate(392 101) scale(0.9)"/>
+    <text class="txt" x="426" y="120">Meus pedidos</text>
+    <path class="seta" d="M656 106 l6 6 -6 6"/>
+    <text class="m" x="360" y="264" text-anchor="middle">fonte padrão</text>
+  </g>
+
+  <!-- depois: fonte no máximo; esta camada cobre a de baixo -->
+  <g class="depois">
+    <rect x="24" y="64" width="672" height="220" fill="#0b1020"/>
+
+    <rect class="linha" x="40" y="80" width="300" height="64" rx="8"/>
+    <use href="#recibo" class="ico" transform="translate(52 101) scale(0.9)"/>
+    <g clip-path="url(#presa)">
+      <text class="gde" x="86" y="114">Meus</text>
+      <text class="gde" x="86" y="154">pedidos</text>
+    </g>
+    <path class="seta" d="M316 106 l6 6 -6 6"/>
+    <path d="M32 144 H348" stroke="#f87171" stroke-width="3" stroke-dasharray="8 5"/>
+    <text x="40" y="182" font-size="22" font-weight="700" fill="#f87171">texto cortado</text>
+
+    <rect class="linha" x="380" y="80" width="300" height="104" rx="8"/>
+    <use href="#recibo" class="ico" transform="translate(392 121) scale(0.9)"/>
+    <text class="gde" x="426" y="124">Meus</text>
+    <text class="gde" x="426" y="164">pedidos</text>
+    <path class="seta" d="M656 126 l6 6 -6 6"/>
+    <text x="380" y="222" font-size="22" font-weight="700" fill="#34d399">a linha cresce</text>
+
+    <text class="m" x="360" y="264" text-anchor="middle">fonte no máximo</text>
+  </g>
+</svg>

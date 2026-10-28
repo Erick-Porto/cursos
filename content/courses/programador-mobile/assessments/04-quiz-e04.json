@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E04 · Testes automatizados e integração contínua",
+  "description": "Dez questões sobre Jest, matchers, arrange-act-assert, TDD, cobertura, o script verificar, variáveis de ambiente e o CI no GitHub Actions.",
+  "lesson": "e04b-automacao-e-integracao-continua",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O teste abaixo falha com `Received: serializes to the same string`, embora a primeira categoria do catálogo seja mesmo Áudio. Qual troca faz o teste passar?\n\n```javascript\nimport { categorias } from './produtos.js';\n\ntest('a primeira é Áudio', () => {\n  expect(categorias[0]).toBe({ slug: 'audio', nome: 'Áudio' });\n});\n```",
+      "options": {
+        "a": "Trocar `toBe(...)` por `toEqual(...)`",
+        "b": "Trocar `toBe(...)` por `toContain(...)`",
+        "c": "Trocar `test` por `describe`, que compara objetos",
+        "d": "Escrever `expect(() => categorias[0]).toBe(...)`, com arrow function"
+      },
+      "answer": "a",
+      "explanation": "`toBe` pergunta se é o mesmo valor; para objetos e arrays, isso significa o mesmo na memória, e o objeto escrito no teste é outro, ainda que com o mesmo conteúdo. `toEqual` compara campo por campo. `toContain` procura um item dentro de uma lista ou um trecho dentro de um texto, e `categorias[0]` não é nenhum dos dois. `describe` só agrupa testes, e a arrow function dentro do `expect` é para o `toThrow`.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "O `lojinha-regras` vai ler o endereço da API de um arquivo `.env`. Quais práticas estão corretas?",
+      "options": {
+        "a": "Rodar o script com `node --env-file=.env` e ler o valor em `process.env.API_URL`",
+        "b": "Pôr o `.env` no `.gitignore` e fazer commit de um `.env.example` com as mesmas variáveis",
+        "c": "Colocar o token pessoal do GitHub no `.env.example`, para a dupla não precisar pedir",
+        "d": "Escrever um teste do Jest que depende do `API_URL` vindo do `.env`",
+        "e": "Acrescentar uma variável nova no `.env` e no `.env.example` no mesmo commit"
+      },
+      "answer": [
+        "a",
+        "b",
+        "e"
+      ],
+      "explanation": "O `--env-file` faz o Node ler o `.env` e entregar cada linha em `process.env`; o `.env` fica fora do Git e o `.env.example` mostra a todos o que configurar, por isso os dois mudam juntos. O `.env.example` vai para o repositório público: token nele é segredo exposto, e no modelo um segredo aparece só com o nome, vazio. O Jest não lê o `.env`, e o runner do CI nem tem o arquivo: um teste que depende dele quebra lá.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Com o script `\"verificar\": \"eslint . && jest\"`, se o lint encontrar um erro, os testes rodam mesmo assim e o resultado final é o dos testes.",
+      "answer": false,
+      "explanation": "O `&&` só executa o segundo comando quando o primeiro termina com código de saída `0`. Com erro no lint, o `jest` nem começa e o `verificar` termina com falha. É o comportamento desejado: nada passa se uma das verificações falhar.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o arquivo `src/utils/texto.test.js` para agrupar os casos do `abreviar` e conferir que um nome longo cortado tem os três pontos:\n\n```javascript\nimport { abreviar } from './texto.js';\n\n___('abreviar', () => {\n  test('corta um nome longo e põe reticências', () => {\n    expect(abreviar('Caixa de Som Portátil', 15)).___('...');\n  });\n});\n```",
+      "answer": [
+        [
+          "describe"
+        ],
+        [
+          "toContain"
+        ]
+      ],
+      "explanation": "`describe` agrupa os testes de uma função e dá o nome que aparece no relatório. `toContain` passa quando o texto contém o trecho pedido. `toBe('...')` falharia, porque o texto inteiro é `Caixa de Som...`, e não só os três pontos.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Você vai criar o `boasVindas(nome)` com TDD, e a função ainda não existe no `texto.js`. Qual é a ordem dos passos?",
+      "options": {
+        "a": "Escrever o teste e vê-lo falhar; escrever o mínimo de código para ele passar; melhorar o código com todos os testes verdes",
+        "b": "Escrever a função; escrever o teste e vê-lo passar; refatorar se sobrar tempo",
+        "c": "Escrever o teste e a função juntos; rodar `npm test` uma vez no fim; fazer o commit",
+        "d": "Refatorar o código existente; escrever o teste; corrigir a função se o teste falhar"
+      },
+      "answer": "a",
+      "explanation": "TDD é vermelho, verde, refatorar. O teste vem primeiro e precisa falhar: é a prova de que ele detecta o que falta. Escrever a função antes e testar depois, a opção mais tentadora, não garante isso, porque um teste que já nasce verde pode não estar conferindo nada. A refatoração vem por último, protegida pelos testes.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No ciclo do TDD, o teste abaixo ficou vermelho com a versão `return 'Olá, ' + nome + '!';` do `boasVindas`. Qual é o próximo passo certo?\n\n```plaintext\nexpect(boasVindas('  Ana ')).toBe('Olá, Ana!')\n\nExpected: \"Olá, Ana!\"\nReceived: \"Olá,   Ana !\"\n```",
+      "options": {
+        "a": "Mudar a função para usar `nome.trim()` e rodar os testes de novo",
+        "b": "Trocar o esperado do teste para `'Olá,   Ana !'`, que é o que a função devolve",
+        "c": "Apagar o caso com espaços, porque o caso `'Ana'` já passa",
+        "d": "Trocar `toBe('Olá, Ana!')` por `toContain('Ana')`, que aceita a diferença"
+      },
+      "answer": "a",
+      "explanation": "No verde, o código muda para cumprir o teste, e não o contrário. O `trim()` tira os espaços das pontas do nome, e a mensagem sai certa. Copiar o valor recebido para o teste transforma o bug em regra; apagar o caso esconde o problema; e o `toContain('Ana')` passaria com a mensagem errada, sem conferir mais nada.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Depois de `npm test -- --coverage`, o relatório mostra esta linha. O que a coluna **% Funcs** indica?\n\n```plaintext\nFile      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s\ntexto.js  |      50 |       50 |      50 |   66.66 | 8\n```",
+      "options": {
+        "a": "Só metade das funções de `texto.js` foi chamada por algum teste",
+        "b": "Metade dos testes de `texto.js` falhou",
+        "c": "As funções de `texto.js` têm 50% de chance de conter um bug",
+        "d": "Só metade das funções de `texto.js` é exportada"
+      },
+      "answer": "a",
+      "explanation": "Cobertura mede o que os testes executaram: em `texto.js`, uma de duas funções foi chamada, e a linha 8 nunca rodou. Ela não conta falhas, que aparecem no resumo `Tests:`, nem mede chance de bug: até 100% de cobertura pode esconder um teste sem `expect`. O relatório aponta onde falta teste.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No teste abaixo, em qual das três partes fica a linha `const curto = abreviar(nome, limite);`?\n\n```javascript\ntest('não passa do limite', () => {\n  const nome = 'Caixa de Som Portátil';\n  const limite = 15;\n  const curto = abreviar(nome, limite);\n  expect(curto).toHaveLength(limite);\n});\n```",
+      "options": {
+        "a": "Act: a chamada da função que está sendo testada",
+        "b": "Arrange: a preparação dos dados de entrada",
+        "c": "Assert: a conferência do resultado",
+        "d": "Em nenhuma: o resultado deveria ir direto para o `expect`"
+      },
+      "answer": "a",
+      "explanation": "Arrange prepara a entrada (`nome` e `limite`), act chama a função uma vez (`abreviar(nome, limite)`) e assert confere com `expect`. Guardar o resultado num nome não muda a parte: a linha é a ação. Escrever a chamada dentro do `expect` também funciona, mas separar as três partes deixa o teste mais fácil de ler.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No GitHub Actions, o passo **Lint e testes** começa e não termina: fica rodando até o job ser cancelado pelo `timeout-minutes`. Na sua máquina, `npm test` mostra os testes passando e continua aberto, esperando. Veja o `package.json`. Qual é a causa mais provável?\n\n```json\n\"scripts\": {\n  \"lint\": \"eslint .\",\n  \"test\": \"jest --watchAll\",\n  \"verificar\": \"eslint . && jest --watchAll\"\n}\n```",
+      "options": {
+        "a": "O `--watchAll` deixa o Jest esperando mudanças nos arquivos em vez de terminar",
+        "b": "O `npm ci` não instalou o Jest, porque ele está em `devDependencies`",
+        "c": "O runner Linux não consegue rodar testes escritos no Windows",
+        "d": "Falta o `.env` no repositório, e o Jest espera o arquivo aparecer"
+      },
+      "answer": "a",
+      "explanation": "Com `--watchAll`, o Jest observa os arquivos para rodar de novo a cada mudança, e por isso continua aberto na sua máquina. No CI ninguém muda arquivo, e o passo só para no tempo limite. Nos scripts, fica só `jest`; para observar, rode `npm test -- --watch` no seu terminal. O `npm ci` instala também as `devDependencies`, o Linux roda o mesmo JavaScript, e o Jest nem lê o `.env`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O `lojinha-regras` tem o workflow `verificar.yml` rodando em todo PR para a `main` e o selo verde no README. Mesmo assim, um PR com um teste vermelho foi mesclado. O que faltou?",
+      "options": {
+        "a": "Uma regra de proteção na `main` exigindo que o check `verificar` passe antes do merge",
+        "b": "Atualizar o selo do README, que só muda uma vez por dia",
+        "c": "Trocar `npm ci` por `npm install` no workflow, para testar com as versões mais novas",
+        "d": "Rodar o workflow também no evento `push` de todas as branches"
+      },
+      "answer": "a",
+      "explanation": "O workflow só informa o resultado; quem impede o merge é a regra de proteção da branch, com **Require status checks to pass before merging** e o job `verificar` escolhido (e **Do not allow bypassing the above settings**, para valer também para quem é dono). O selo se atualiza a cada execução, mas não bloqueia nada. Rodar em mais eventos ou trocar o `npm ci` não muda o fato: sem regra, um check vermelho não desabilita o merge.",
+      "points": 2
+    }
+  ]
+}

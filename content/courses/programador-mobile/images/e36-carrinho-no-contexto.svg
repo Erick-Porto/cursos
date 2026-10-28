@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>O CarrinhoProvider fica acima da pilha: o Detalhe chama adicionar, e itens e total descem do contexto até o Carrinho; entre telas irmãs, props não passam</title>
+  <style>
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .prov  { fill: #131c33; stroke: #34d399; stroke-width: 2; }
+    .frame { fill: none; stroke: #2a3a5c; stroke-width: 2; stroke-dasharray: 8 6; }
+    .t     { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .up    { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta-up); }
+    .down  { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-down); }
+    .no    { stroke: #f87171; stroke-width: 3; fill: none; }
+    .sobe  { animation: sobe 8s ease-out infinite; }
+    .desce { animation: desce 8s ease-out infinite; }
+    .total { animation: total 8s ease-out infinite; }
+    @keyframes sobe {
+      0%, 8%   { opacity: 0; transform: translateY(16px); }
+      20%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes desce {
+      0%, 36%  { opacity: 0; transform: translateY(-16px); }
+      48%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes total {
+      0%, 52%  { opacity: 0; }
+      60%, 92% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .sobe, .desce, .total { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta-up" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="seta-down" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- contexto acima da pilha -->
+  <rect class="prov" x="190" y="24" width="340" height="80" rx="12"/>
+  <text class="code" x="360" y="56" text-anchor="middle" fill="#e8edf7">CarrinhoProvider</text>
+  <text class="m" x="360" y="88" text-anchor="middle">itens, quantidade, total</text>
+
+  <!-- a pilha e as telas irmãs -->
+  <rect class="frame" x="24" y="188" width="672" height="168" rx="14"/>
+  <text class="code" x="44" y="224" fill="#b4bfd3">Stack</text>
+
+  <rect class="box" x="40" y="246" width="144" height="84" rx="10"/>
+  <text class="t" x="112" y="280" text-anchor="middle">Início</text>
+  <text class="m" x="112" y="312" text-anchor="middle">vitrine</text>
+
+  <rect class="box" x="212" y="246" width="200" height="84" rx="10"/>
+  <text class="t" x="312" y="280" text-anchor="middle">Detalhe</text>
+  <text class="m" x="312" y="312" text-anchor="middle">Fone Bluetooth</text>
+
+  <rect class="box" x="500" y="246" width="180" height="84" rx="10"/>
+  <text class="t" x="590" y="280" text-anchor="middle">Carrinho</text>
+  <text class="ok total" x="590" y="312" text-anchor="middle">R$ 199,90</text>
+
+  <!-- entre irmãs, props não passam -->
+  <text class="m" x="456" y="282" text-anchor="middle" style="fill: #f87171">props</text>
+  <path class="no" d="M 416 300 L 496 300" stroke-dasharray="6 5"/>
+  <path class="no" d="M 448 292 L 464 308 M 464 292 L 448 308"/>
+
+  <!-- o Detalhe chama adicionar no contexto -->
+  <g class="sobe">
+    <path class="up" d="M 312 244 L 312 110"/>
+    <text class="code" x="298" y="160" text-anchor="end" fill="#a78bfa">adicionar(produto)</text>
+  </g>
+
+  <!-- itens e total descem até o Carrinho -->
+  <g class="desce">
+    <path class="down" d="M 460 106 L 584 242"/>
+    <text class="code" x="520" y="156" fill="#34d399">itens, total</text>
+  </g>
+</svg>

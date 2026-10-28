@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>process.argv[2] entrega o texto '2': somado direto com 1, o + junta os textos e dá '21'; convertido com Number antes, o + soma e dá 3</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bad  { fill: #131c33; stroke: #f87171; stroke-width: 3; stroke-dasharray: 8 5; }
+    .ok   { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .big  { font-size: 32px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- de onde vem o valor: o argumento do comando -->
+  <rect class="box" x="160" y="22" width="400" height="56" rx="10"/>
+  <text class="m" x="360" y="58" text-anchor="middle"><tspan class="code">process.argv[2]</tspan> entrega <tspan class="code">'2'</tspan></text>
+
+  <path class="line" d="M290 78 L206 124"/>
+  <path class="line" d="M430 78 L514 124"/>
+
+  <!-- sem conversão -->
+  <rect class="box" x="40" y="128" width="300" height="56" rx="10"/>
+  <text class="code" x="190" y="164" text-anchor="middle">textoQtd + 1</text>
+  <path class="line" d="M190 184 L190 236"/>
+  <text class="lbl" x="206" y="218" fill="#f87171">junta</text>
+  <rect class="bad" x="80" y="240" width="220" height="72" rx="10"/>
+  <text class="big" x="145" y="287" text-anchor="middle" fill="#f87171">'21'</text>
+  <text class="m" x="245" y="284" text-anchor="middle">string</text>
+
+  <!-- com conversão -->
+  <rect class="box" x="380" y="128" width="300" height="56" rx="10"/>
+  <text class="code" x="530" y="164" text-anchor="middle">Number(textoQtd) + 1</text>
+  <path class="line" d="M530 184 L530 236"/>
+  <text class="lbl" x="546" y="218" fill="#34d399">soma</text>
+  <rect class="ok" x="420" y="240" width="220" height="72" rx="10"/>
+  <text class="big" x="485" y="287" text-anchor="middle" fill="#34d399">3</text>
+  <text class="m" x="585" y="284" text-anchor="middle">number</text>
+</svg>

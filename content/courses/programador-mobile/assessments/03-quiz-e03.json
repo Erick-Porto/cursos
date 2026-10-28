@@ -1,0 +1,145 @@
+{
+  "title": "Quiz: E03 · Git, GitHub, lint, formatação e depuração",
+  "description": "Dez questões sobre commits, .gitignore, Pull Requests, conflitos, ESLint, Prettier e breakpoints no lojinha-regras.",
+  "lesson": "e03b-lint-formatacao-e-depuracao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "fill",
+      "prompt": "Complete o ciclo do primeiro commit do `lojinha-regras`:\n\n```bash\ngit ___ .\ngit ___ -m \"E03: projeto lojinha-regras\"\n```",
+      "answer": [["add"], ["commit"]],
+      "explanation": "O `git add .` leva tudo o que mudou para a área de preparação, e o `git commit -m` grava a fotografia só do que foi preparado, com a mensagem. Sem o `add`, o `commit` responde que não há nada preparado.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O `git status` do `lojinha-regras` mostra:\n\n```plaintext\nChanges to be committed:\n\tmodified:   src/data/produtos.js\n\nChanges not staged for commit:\n\tmodified:   package.json\n\nUntracked files:\n\tsrc/scripts/destaques.js\n```\n\nO que entra no commit se você rodar `git commit -m \"Adiciona o script destaques\"` agora?",
+      "options": {
+        "a": "Só o `produtos.js`, o único que está em *Changes to be committed*",
+        "b": "Os três arquivos, porque todos aparecem no `git status`",
+        "c": "O `package.json` e o `produtos.js`, que o Git já acompanhava",
+        "d": "Nada: o Git recusa o commit enquanto houver arquivo novo"
+      },
+      "answer": "a",
+      "explanation": "O commit grava só o que está na área de preparação. O `package.json` mudou, mas não passou pelo `git add`; essa é a alternativa mais tentadora, porque o Git já acompanha o arquivo. O `destaques.js` nem é acompanhado ainda. E o Git não recusa o commit: ele grava o que foi preparado e deixa o resto onde está.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "O `package-lock.json` é gerado pelo npm a cada instalação; por isso, ele deve ficar no `.gitignore`, como o `node_modules/`.",
+      "answer": false,
+      "explanation": "O lock é gerado pelo npm, mas é ele que registra a versão exata de cada pacote. Com ele no commit, toda a equipe instala as mesmas versões; sem ele, cada `npm install` pode escolher outra versão dentro da faixa do `package.json`. O `node_modules/` fica fora porque é recriado a partir do `package.json` e do lock.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais práticas deixam um Pull Request fácil de revisar?",
+      "options": {
+        "a": "Tratar de um assunto só, como a correção da categoria com maiúscula",
+        "b": "Escrever na descrição o que muda e um \"Como testar\" com os comandos",
+        "c": "Usar commits como `ajustes` e `aaa`, porque o que importa é o código",
+        "d": "Incluir a pasta `node_modules/` para o revisor não precisar rodar `npm install`",
+        "e": "Escrever `Closes #1` na descrição para ligar o PR à Issue que ele resolve"
+      },
+      "answer": ["a", "b", "e"],
+      "explanation": "Um assunto por PR, uma descrição com \"Como testar\" e o `Closes #1`, que fecha a Issue no merge, deixam claro o que revisar e por quê. Mensagens como `ajustes` não contam a história do código, e quem revisa lê também os commits. O `node_modules/` fica fora do Git pelo `.gitignore`: qualquer pessoa o recria com `npm install`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Depois de `git merge main`, o `produtos.js` ficou como abaixo. Você e a Ana combinaram que o preço certo é `179.9`. O que conclui o merge?\n\n```javascript\n<<<<<<< HEAD\n    preco: 179.9,\n=======\n    preco: 189.9,\n>>>>>>> main\n```",
+      "options": {
+        "a": "Deixar só a linha `preco: 179.9,`, apagar as três marcas, rodar `git add` no arquivo e `git commit`",
+        "b": "Apagar só a linha `preco: 189.9,` e fazer o commit com as marcas, que o Git remove sozinho",
+        "c": "Rodar `git push --force`, que envia a sua versão por cima da `main`",
+        "d": "Rodar `git commit` direto, porque o Git usa a versão de `HEAD` quando há marcas"
+      },
+      "answer": "a",
+      "explanation": "O arquivo final precisa ficar como deve ser: a linha combinada e nenhuma marca. O `git add` avisa ao Git que o conflito foi resolvido e o `git commit` conclui o merge. O Git não remove marcas sozinho: commitadas, elas quebram todo script que importa o `produtos.js` com `SyntaxError`. Com o arquivo ainda em conflito, o `git commit` é recusado, e o `--force` apagaria do GitHub o trabalho de quem enviou antes.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Seu PR, da branch `feature/preco-fone-b`, mostra no GitHub *This branch has conflicts that must be resolved*: a `main` recebeu outro PR que mudou a mesma linha. Qual sequência resolve sem perder o trabalho de ninguém?",
+      "options": {
+        "a": "`git switch main`, `git pull`, `git switch feature/preco-fone-b`, `git merge main`, resolver, `git add`, `git commit` e `git push`",
+        "b": "`git switch feature/preco-fone-b`, `git merge main` e `git push`, sem `git pull` antes",
+        "c": "`git switch main`, `git merge feature/preco-fone-b` e `git push --force` na `main`",
+        "d": "Fechar o PR, apagar a branch e refazer a mudança direto na `main`"
+      },
+      "answer": "a",
+      "explanation": "Primeiro a `main` local precisa receber o PR do colega (`git pull`); depois, o `git merge main` na sua branch faz o conflito aparecer no seu computador, onde você o resolve e envia, e o PR se atualiza. Sem o `git pull`, a opção mais tentadora, a `main` local ainda é a antiga: o merge não traz nada e o conflito continua no GitHub. O `--force` na `main` apaga o PR do colega, e trabalhar direto na `main` foge da revisão.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com o `eslint.config.js` abaixo, o `npm run lint` acusa `'process' is not defined` e `'console' is not defined` em todos os scripts, que rodam sem erro no Node. O que falta?\n\n```javascript\nimport js from '@eslint/js';\nimport { defineConfig } from 'eslint/config';\n\nexport default defineConfig([js.configs.recommended]);\n```",
+      "options": {
+        "a": "Um bloco com `languageOptions: { globals: globals.node }`, importando `globals` do pacote `globals`",
+        "b": "Trocar o `import` por `require`, porque o ESLint só lê CommonJS",
+        "c": "Apagar o `js.configs.recommended`, que é rígido demais para scripts",
+        "d": "Instalar o Prettier, que ensina ao ESLint os nomes do Node"
+      },
+      "answer": "a",
+      "explanation": "O ESLint não sabe onde o código roda. O `globals.node` avisa que `process`, `console` e os outros nomes do Node existem. Trocar por `require` quebra: com `\"type\": \"module\"`, o Node recusa com `require is not defined in ES module scope`. Apagar o `recommended` some com os erros, mas também com todas as regras úteis, e o Prettier só cuida da aparência.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Quais destes problemas o `npm run lint`, com as regras recomendadas e os globais do Node, aponta sem rodar o script?",
+      "options": {
+        "a": "`lista.filter((produto) => produto.categoria === categria)`, com o nome digitado errado",
+        "b": "`import path from 'node:path';` no topo de um script que nunca usa `path`",
+        "c": "Um produto com a chave `preco` escrita duas vezes no `produtos.js`",
+        "d": "A média dos livros dividida pelos 12 produtos do catálogo em vez dos 3 livros",
+        "e": "O preço da Garrafa Térmica escrito entre aspas no `catalogo.json`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O nome que não existe cai em `no-undef`, o import sem uso em `no-unused-vars` e a chave repetida em `no-dupe-keys`. A média dividida pelo número errado é código válido: nenhuma regra entende a conta. E o ESLint não lê o `catalogo.json`; um preço em texto só aparece rodando, no `R$ NaN`, e o depurador mostra de onde ele vem.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Na revisão de um PR do `lojinha-regras`, quase todos os comentários são sobre aspas, ponto e vírgula e quebras de linha. O que resolve isso de vez?",
+      "options": {
+        "a": "Prettier com o `.prettierrc` no repositório e a formatação ao salvar ligada no editor",
+        "b": "Rodar `npm run lint` antes de cada commit",
+        "c": "Um breakpoint em cada arquivo alterado antes de abrir o PR",
+        "d": "Pedir aos colegas que revisem só depois do merge"
+      },
+      "answer": "a",
+      "explanation": "O Prettier reescreve o arquivo inteiro num estilo fixo, e o `.prettierrc` versionado garante que a equipe toda formate igual; com a formatação ao salvar, ninguém nem pensa nisso. O lint é a alternativa mais tentadora, mas as regras recomendadas vigiam nomes, imports e chaves repetidas, não o estilo. O breakpoint serve para ver o código rodando.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No VS Code, o script está pausado num breakpoint na linha marcada. Você quer ver, linha a linha, o que acontece **dentro** de `somar`. Qual comando usa?\n\n```javascript\nfunction somar(total, produto) {\n  return total + produto.preco;\n}\n\nconst soma = produtos.reduce(somar, 0); // pausado aqui\n```",
+      "options": {
+        "a": "Step Into (<kbd>F11</kbd>)",
+        "b": "Step Over (<kbd>F10</kbd>)",
+        "c": "Continue (<kbd>F5</kbd>)",
+        "d": "Step Out (<kbd>Shift</kbd> + <kbd>F11</kbd>)"
+      },
+      "answer": "a",
+      "explanation": "Step Into entra na função chamada e para na linha do `return` de `somar`, com o primeiro produto. Step Over é o mais tentador, mas roda o `reduce` inteiro de uma vez e para na linha seguinte, já com a soma pronta. Continue segue até o próximo breakpoint, e Step Out termina o trecho atual e volta para quem chamou.",
+      "points": 1
+    }
+  ]
+}

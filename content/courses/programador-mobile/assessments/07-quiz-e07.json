@@ -1,0 +1,158 @@
+{
+  "title": "Quiz: E07 · Decisões, repetições e funções",
+  "description": "Dez questões sobre if e else if, for e for...of, acumulador e contador, formas de escrever funções, parâmetros, escopo e funções puras nas regras do carrinho.",
+  "lesson": "e07b-funcoes-e-parametros",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Quantas parcelas a função abaixo devolve para um produto de exatamente **R$ 300,00**?\n\n```javascript\nfunction maximoDeParcelas(preco) {\n  if (preco < 50) {\n    return 1;\n  } else if (preco < 300) {\n    return 3;\n  } else if (preco < 1000) {\n    return 6;\n  } else {\n    return 10;\n  }\n}\n```",
+      "options": {
+        "a": "6",
+        "b": "3",
+        "c": "10",
+        "d": "1"
+      },
+      "answer": "a",
+      "explanation": "O JavaScript testa de cima para baixo e para no primeiro `true`. `300 < 50` é falso; `300 < 300` também é falso, porque `<` não inclui o próprio valor; `300 < 1000` é verdadeiro, e a função devolve 6. A resposta tentadora é 3, de quem lê `preco < 300` como \"até 300\". É por isso que os testes conferem a borda de cada faixa.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O carrinho tem 2 Fones Bluetooth (R$ 199,90 cada), 1 Luminária de Mesa (R$ 89,90) e 1 Tênis de Corrida (R$ 349,90), em três linhas. Quanto vale `caros` no fim do laço?\n\n```javascript\nlet caros = 0;\nfor (const item of itens) {\n  if (item.preco > 100) {\n    caros++;\n  }\n}\n```",
+      "options": {
+        "a": "2",
+        "b": "3",
+        "c": "1",
+        "d": "4"
+      },
+      "answer": "a",
+      "explanation": "O laço dá uma volta por **linha** do carrinho, três ao todo. O contador soma 1 na linha do Fone e na do Tênis, que passam de R$ 100; a Luminária fica de fora. A resposta tentadora é 3, de quem conta as duas unidades do Fone: o `caros++` roda uma vez por volta, e a `qtd` nem aparece no código.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Complete `subtotal`, que soma o carrinho em centavos e devolve o valor em reais:\n\n```javascript\nexport function subtotal(itens) {\n  let centavos = ___;\n  for (const item ___ itens) {\n    centavos += paraCentavos(item.preco) * item.qtd;\n  }\n  return paraReais(centavos);\n}\n```",
+      "answer": [
+        [
+          "0"
+        ],
+        [
+          "of"
+        ]
+      ],
+      "explanation": "O acumulador começa no neutro da soma, `0`, e nasce antes do laço; assim, o carrinho vazio devolve 0. O `for...of` entrega cada item do carrinho, então `item.preco` e `item.qtd` existem. Com `in`, `item` seria a posição em texto (`'0'`, `'1'`), `item.preco` daria `undefined` e o subtotal viraria `NaN`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Com um carrinho de **3 itens**, o que acontece ao rodar este trecho?\n\n```javascript\nlet unidades = 0;\nfor (let i = 0; i <= itens.length; i++) {\n  unidades += itens[i].qtd;\n}\n```",
+      "options": {
+        "a": "Na quarta volta, `i` vale 3, `itens[3]` é `undefined` e o script para com `TypeError: Cannot read properties of undefined (reading 'qtd')`",
+        "b": "Soma as três quantidades certinho, porque o `<=` garante que o último item entra",
+        "c": "O laço nunca termina, porque `i` nunca fica maior que `itens.length`",
+        "d": "Soma só os dois primeiros itens, porque as posições começam em 0"
+      },
+      "answer": "a",
+      "explanation": "As posições de 3 itens são 0, 1 e 2. Com `<=`, a condição ainda vale quando `i` chega a 3, e o laço dá uma quarta volta: `itens[3]` não existe, e ler `.qtd` de `undefined` derruba o script. A tentadora é a b: o último item já entra com `<`, na volta em que `i` vale 2. O laço termina, sim, mas só depois do erro. A correção é `i < itens.length`, ou um `for...of`, que não tem índice para errar.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Num arquivo de regras, uma função é chamada na linha 3, mas só é escrita na linha 10. Em qual destas formas a chamada funciona sem erro?",
+      "options": {
+        "a": "`function subtotal(itens) { ... }`, uma declaração",
+        "b": "`const subtotal = (itens) => { ... };`, uma arrow function",
+        "c": "`const subtotal = function (itens) { ... };`, uma expressão",
+        "d": "`let subtotal = (itens) => { ... };`, uma arrow guardada em `let`"
+      },
+      "answer": "a",
+      "explanation": "Declarações são içadas (hoisting): o JavaScript as conhece antes de executar o arquivo, e por isso podem ser chamadas antes da linha em que aparecem. A expressão é a alternativa mais tentadora, porque também usa a palavra `function`, mas ali a função é só o valor de uma constante. Expressões e arrows guardadas em `const` ou `let` só existem depois da linha que as cria; antes dela, a chamada lança `Cannot access 'subtotal' before initialization`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Com a função abaixo, a chamada `textoDoFrete(0)` devolve `'Frete grátis'`.\n\n```javascript\nfunction textoDoFrete(frete) {\n  if (frete === 0) {\n    const texto = 'Frete grátis';\n  }\n  return texto;\n}\n```",
+      "answer": false,
+      "explanation": "Uma `const` vive só no bloco em que nasceu, aqui o `{ }` do `if`. Na linha do `return`, `texto` não existe mais, e a chamada lança `ReferenceError: texto is not defined`. A correção é declarar a variável no bloco da função, antes do `if` (`let texto = formatarPreco(frete);`), e só trocar o valor dentro dele.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Em quais chamadas o parâmetro `parcelas` vale **3** dentro da função?\n\n```javascript\nfunction textoDasParcelas(preco, parcelas = 3) {\n  const resultado = parcelar(preco, parcelas);\n  return `${parcelas}x de ${formatarPreco(resultado.valor)}`;\n}\n```",
+      "options": {
+        "a": "`textoDasParcelas(199.9)`",
+        "b": "`textoDasParcelas(199.9, undefined)`",
+        "c": "`textoDasParcelas(199.9, null)`",
+        "d": "`textoDasParcelas(199.9, 0)`",
+        "e": "`textoDasParcelas(3, 199.9)`"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "O valor padrão só entra quando o argumento falta ou chega como `undefined`: é o caso de a e b. `null` e `0` são valores de verdade, e a função os recebe como vieram, sem usar o padrão; com eles, a divisão de `parcelar` quebra. Na e, os argumentos são lidos por posição: `preco` vale 3 e `parcelas` vale 199.9.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Quais destas funções do `lojinha-regras` são **puras**?",
+      "options": {
+        "a": "`const totalDoItem = (preco, qtd) => preco * qtd;`",
+        "b": "`removerItem(itens, id)`, que cria `const novos = []`, dá `push` em `novos` só dos itens que ficam e devolve `novos`",
+        "c": "`function adicionarBrinde(itens) { itens.push(brinde); return itens; }`",
+        "d": "`function imprimirTotal(itens) { console.log(subtotal(itens)); }`",
+        "e": "`const sortearCupom = () => Math.random() < 0.1;`"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "Uma função pura devolve sempre o mesmo resultado para as mesmas entradas e não muda nada fora dela. `totalDoItem` e `removerItem` cumprem as duas regras: a segunda dá `push` numa lista nova, criada lá dentro, e não mexe na recebida. `adicionarBrinde` é a mais tentadora, porque devolve uma lista, mas o `push` altera o array de quem chamou. `imprimirTotal` tem efeito: imprime no terminal. `sortearCupom` lê o sorteio, então cada chamada pode dar um resultado diferente.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que a chamada da última linha devolve?\n\n```javascript\nconst totalDoItem = (preco, qtd) => {\n  preco * qtd;\n};\n\ntotalDoItem(50, 3);\n```",
+      "options": {
+        "a": "`undefined`",
+        "b": "`150`",
+        "c": "`NaN`",
+        "d": "Nada: o arquivo para com `SyntaxError`"
+      },
+      "answer": "a",
+      "explanation": "Com chaves, a arrow tem um corpo comum, e corpo sem `return` devolve `undefined`: a conta é feita e jogada fora. O retorno implícito, que daria `150`, só existe sem chaves: `(preco, qtd) => preco * qtd`. O código é válido, então não há `SyntaxError`, e os dois argumentos são números, então não há `NaN`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Na chamada `aplicarDescontos(200, 10, 5)`, quanto vale `percentuais` dentro da função?\n\n```javascript\nfunction aplicarDescontos(preco, ...percentuais) {\n  let centavos = paraCentavos(preco);\n  for (const p of percentuais) {\n    centavos = centavos - Math.round((centavos * p) / 100);\n  }\n  return paraReais(centavos);\n}\n```",
+      "options": {
+        "a": "`[10, 5]`",
+        "b": "`[200, 10, 5]`",
+        "c": "`10`",
+        "d": "`5`"
+      },
+      "answer": "a",
+      "explanation": "O parâmetro rest junta numa lista os argumentos que **sobram** depois dos parâmetros comuns. O 200 já foi para `preco`, então `percentuais` recebe `[10, 5]`, e o `for...of` aplica os dois descontos, um depois do outro. A tentadora é a b, de quem acha que o rest pega todos os argumentos. Sem nenhum percentual, como em `aplicarDescontos(200)`, ele chega como lista vazia, `[]`, e o laço não dá nenhuma volta.",
+      "points": 1
+    }
+  ]
+}

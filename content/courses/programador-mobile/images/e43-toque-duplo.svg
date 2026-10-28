@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Dois toques rápidos em Salvar: o primeiro envia e trava o botão, o segundo é barrado, e o finally destrava com um lançamento só no db.json</title>
+  <style>
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 22px; }
+    .t    { fill: #e8edf7; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .sep  { stroke: #2a3a5c; stroke-width: 1.5; }
+    .on   { fill: #34d399; }
+    .onT  { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .off  { fill: #131c33; stroke: #34d399; stroke-width: 2; stroke-dasharray: 7 5; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .r1 { animation: a1 8s infinite; }
+    .r2 { animation: a2 8s infinite; }
+    .r3 { animation: a3 8s infinite; }
+    @keyframes a1 { 0% { opacity: 0; } 6%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes a2 { 0%, 28% { opacity: 0; } 34%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes a3 { 0%, 56% { opacity: 0; } 62%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .r1, .r2, .r3 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <line class="sep" x1="24" y1="116" x2="696" y2="116"/>
+  <line class="sep" x1="24" y1="216" x2="696" y2="216"/>
+
+  <!-- rótulos fixos: a ordem no tempo -->
+  <text class="lbl" x="32" y="74">toque 1</text>
+  <text class="lbl" x="32" y="174">toque 2</text>
+  <text class="lbl code" x="32" y="274">finally</text>
+
+  <!-- 1: o primeiro toque envia e trava o botão -->
+  <g class="r1">
+    <rect class="on" x="150" y="38" width="196" height="56" rx="12"/>
+    <text class="onT" x="248" y="74" text-anchor="middle">Salvar</text>
+    <text class="code t" x="376" y="58">setEnviando(true)</text>
+    <text class="m" x="376" y="92">adicionar() chama a api/</text>
+  </g>
+
+  <!-- 2: o segundo toque encontra o botão desabilitado -->
+  <g class="r2">
+    <rect class="off" x="150" y="138" width="196" height="56" rx="12"/>
+    <text class="m" x="248" y="174" text-anchor="middle">Salvando...</text>
+    <text class="no" x="376" y="158">toque barrado</text>
+    <text class="code m" x="376" y="192">desabilitado={enviando}</text>
+  </g>
+
+  <!-- 3: a resposta chega e o finally destrava -->
+  <g class="r3">
+    <rect class="on" x="150" y="238" width="196" height="56" rx="12"/>
+    <text class="onT" x="248" y="274" text-anchor="middle">Salvar</text>
+    <text class="code t" x="376" y="258">setEnviando(false)</text>
+    <text class="ok" x="376" y="292">1 lançamento no db.json</text>
+  </g>
+</svg>

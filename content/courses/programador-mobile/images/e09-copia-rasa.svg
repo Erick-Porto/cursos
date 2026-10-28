@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Cópia rasa: pedido e copia são objetos diferentes, cada um com o seu status, mas o campo entrega dos dois aponta para a mesma entrega, cujo numero virou '210' para ambos</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c    { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cw   { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .warn { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .dot  { fill: #a78bfa; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- pedido -->
+  <rect class="box" x="24" y="20" width="290" height="152" rx="10"/>
+  <path class="head" d="M34 20 H304 A10 10 0 0 1 314 30 V60 H24 V30 A10 10 0 0 1 34 20 Z"/>
+  <text class="h" x="40" y="48">pedido</text>
+  <text class="c" x="40" y="92">id: 104</text>
+  <text class="c" x="40" y="124">status: 'pago'</text>
+  <text class="c" x="40" y="156">entrega:</text>
+  <circle class="dot" cx="290" cy="149" r="7"/>
+
+  <!-- copia -->
+  <rect class="box" x="24" y="188" width="290" height="152" rx="10"/>
+  <path class="head" d="M34 188 H304 A10 10 0 0 1 314 198 V228 H24 V198 A10 10 0 0 1 34 188 Z"/>
+  <text class="h" x="40" y="216">copia</text>
+  <text class="c" x="40" y="260">id: 104</text>
+  <text class="c" x="40" y="292">status: 'enviado'</text>
+  <text class="c" x="40" y="324">entrega:</text>
+  <circle class="dot" cx="290" cy="317" r="7"/>
+
+  <!-- a mesma entrega -->
+  <text class="lbl" x="568" y="104" text-anchor="middle">mesma entrega</text>
+  <rect class="box" x="440" y="120" width="256" height="122" rx="10"/>
+  <path class="head" d="M450 120 H686 A10 10 0 0 1 696 130 V160 H440 V130 A10 10 0 0 1 450 120 Z"/>
+  <text class="h" x="456" y="148">entrega</text>
+  <text class="c" x="456" y="192">cep: '01310-100'</text>
+  <text class="cw" x="456" y="226">numero: '210'</text>
+  <text class="warn" x="568" y="276" text-anchor="middle">numero muda nos dois</text>
+
+  <path class="line" d="M297 149 C 360 149, 380 170, 432 172"/>
+  <path class="line" d="M297 317 C 370 317, 380 230, 432 214"/>
+</svg>

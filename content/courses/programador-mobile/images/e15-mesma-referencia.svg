@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>O erro: pedido e historico[0] apontam para o mesmo Pedido 1042; pedido.status = 'pago' muda o status dentro dele; historico.push(pedido) faz historico[1] apontar para o mesmo objeto, e o histórico mostra pago duas vezes</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .bold { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .act  { fill: #fbbf24; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .nocode { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ref  { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+    .antigo { opacity: 0.6; animation: antigo 8s infinite; }
+    .p1 { animation: p1 8s infinite; }
+    .p2 { animation: p2 8s infinite; }
+    .p3 { animation: p3 8s infinite; }
+    @keyframes antigo { 0%, 12% { opacity: 1; } 18%, 100% { opacity: 0.6; } }
+    @keyframes p1 { 0%, 12% { opacity: 0; } 18%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes p2 { 0%, 36% { opacity: 0; } 42%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes p3 { 0%, 60% { opacity: 0; } 66%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .antigo, .p1, .p2, .p3 { animation: none; } }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="130" y="40" text-anchor="middle">etiquetas</text>
+  <text class="lbl" x="510" y="40" text-anchor="middle">um objeto só</text>
+
+  <!-- etiquetas -->
+  <rect class="box" x="30" y="62" width="200" height="52" rx="10"/>
+  <text class="bold" x="130" y="96" text-anchor="middle">pedido</text>
+  <path class="ref" d="M232 88 L326 112"/>
+
+  <rect class="box" x="30" y="136" width="200" height="52" rx="10"/>
+  <text class="bold" x="130" y="170" text-anchor="middle">historico[0]</text>
+  <path class="ref" d="M232 162 L326 162"/>
+
+  <g class="p2">
+    <rect class="box" x="30" y="210" width="200" height="52" rx="10"/>
+    <text class="bold" x="130" y="244" text-anchor="middle">historico[1]</text>
+    <path class="ref" d="M232 236 L326 212"/>
+  </g>
+
+  <!-- o objeto Pedido -->
+  <rect class="box" x="330" y="62" width="360" height="200" rx="12"/>
+  <text class="bold" x="350" y="100">Pedido 1042</text>
+  <text class="m" x="350" y="156">status</text>
+  <text class="code antigo" x="440" y="156">'pendente'</text>
+  <g class="p1">
+    <path d="M436 148 L576 148" stroke="#f87171" stroke-width="3"/>
+    <text class="ok" x="440" y="208">'pago'</text>
+  </g>
+
+  <!-- o que aconteceu -->
+  <text class="act p1" x="30" y="316">pedido.status = 'pago'</text>
+  <text class="code p2" x="30" y="352">historico.push(pedido)</text>
+  <g class="p3">
+    <rect x="326" y="58" width="368" height="208" rx="14" fill="none" stroke="#f87171" stroke-width="3" stroke-dasharray="8 5"/>
+    <text class="nocode" x="400" y="316">['pago', 'pago']</text>
+    <text class="no" x="400" y="352">uma caixa, duas posições</text>
+  </g>
+</svg>

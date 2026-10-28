@@ -1,0 +1,145 @@
+{
+  "title": "Quiz: E12 · Map, Set e TypeScript",
+  "description": "Dez questões sobre Set e Map nos favoritos e no catálogo, a escolha da coleção certa e a primeira conferência de tipos com TypeScript.",
+  "lesson": "e12b-typescript",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre `Set` e `Map` estão corretas?",
+      "options": {
+        "a": "`new Set([1, 5, 1]).size` é `2`",
+        "b": "Num `Map` montado com ids numéricos, `get('7')` não encontra a chave `7`",
+        "c": "`JSON.stringify(new Set([7, 1]))` devolve o texto `'[7,1]'`",
+        "d": "`for (const [id, produto] of produtosPorId)` percorre um `Map` em pares de chave e valor",
+        "e": "Um `Set` tem `map` e `filter`, como um array"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O `Set` descarta repetidos, então sobram `1` e `5`. `Map` e `Set` comparam como o `===`: o texto `'7'` não é o número `7`. O `for...of` num `Map` entrega pares `[chave, valor]`. `JSON.stringify` não sabe escrever `Set` nem `Map` e devolve `'{}'`: converta antes com `[...favoritos]`. E `Set` não tem `map` nem `filter`: espalhe num array para usá-los.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete o `alternarFavorito` de `src/regras/favoritos.js` para que ele ligue e desligue o id sem mudar o Set recebido:\n\n```javascript\nexport function alternarFavorito(favoritos, id) {\n  const novo = ___ Set(favoritos);\n  if (novo.___(id)) {\n    novo.delete(id);\n  } else {\n    novo.add(id);\n  }\n  return novo;\n}\n```",
+      "answer": [["new"], ["has"]],
+      "explanation": "`new Set(favoritos)` cria outro Set com os mesmos ids, e o `add` e o `delete` acontecem nele: o Set de quem chamou fica intacto. `has(id)` pergunta se o id já está lá, para decidir entre tirar e pôr. Sem o `new`, chamar `Set(favoritos)` lança `TypeError: Constructor Set requires 'new'`; `includes` é método de array e não existe no Set.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Um colega escreveu a regra abaixo. O id entra nos favoritos, mas o teste \"alternar não altera o Set recebido\" fica vermelho. Qual é a causa?\n\n```javascript\nexport function alternarFavorito(favoritos, id) {\n  if (favoritos.has(id)) {\n    favoritos.delete(id);\n  } else {\n    favoritos.add(id);\n  }\n  return favoritos;\n}\n```",
+      "options": {
+        "a": "`add` e `delete` mudam o próprio Set que a função recebeu, e ela devolve essa mesma referência",
+        "b": "Um `Set` não pode ser passado como argumento; só arrays e objetos podem",
+        "c": "O `return favoritos` devolve uma cópia sem o novo id, e o original fica com ele",
+        "d": "Falta `Object.freeze(favoritos)` antes do `add`, que impediria o Set de mudar"
+      },
+      "answer": "a",
+      "explanation": "O Set é passado por referência: `favoritos` dentro da função é o mesmo Set de quem chamou, e o `add` e o `delete` mudam esse Set por dentro. A função ainda devolve a mesma referência, então `novo === original` dá `true`. A correção é trabalhar num `new Set(favoritos)`. O `return` não copia nada, e o `Object.freeze` não protege um Set: os valores não ficam em propriedades, e o `add` continua funcionando.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O script de favoritos tem um `Set` de ids e precisa achar o produto de cada id sem percorrer o catálogo a cada busca. Qual estrutura guarda o catálogo para isso?",
+      "options": {
+        "a": "`new Map(produtos.map((p) => [p.id, p]))`, consultado com `get(id)`",
+        "b": "`new Set(produtos)`, consultado com `has(id)`",
+        "c": "`new WeakMap()`, com o id de cada produto como chave",
+        "d": "O próprio array, consultado com `produtos.includes(id)`"
+      },
+      "answer": "a",
+      "explanation": "O `Map` guarda pares chave e valor, e `get(id)` vai direto ao produto: é o `produtosPorId` de `src/data/produtos.js`. Um `Set` de produtos só diz se um objeto está lá, e `has(7)` procura o número 7, não um produto com id 7. O `WeakMap` só aceita objetos como chave: `set(7, produto)` lança `TypeError`. E `includes(id)` compara um número com objetos: dá sempre `false`, além de percorrer a lista.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O comando abaixo imprime `false`, mesmo com o 7 entre os favoritos. Por quê?\n\n```javascript\n// node src/scripts/conferir.js 7\nconst id = process.argv[2];\nconsole.log(ehFavorito(new Set([7, 1]), id));\n```",
+      "options": {
+        "a": "`process.argv` traz o texto `'7'`, e o Set compara como o `===`: `has('7')` não acha o número `7`",
+        "b": "`process.argv[2]` é o caminho do script; o `7` está em `process.argv[3]`",
+        "c": "`has` só encontra valores colocados com `add`, não os passados ao construtor",
+        "d": "O Set criado dentro da chamada já está vazio quando o `has` roda"
+      },
+      "answer": "a",
+      "explanation": "Os argumentos do comando chegam sempre como texto, e o `Set` compara como o `===`: `'7'` e `7` são valores diferentes. A correção é `ehFavorito(favoritos, Number(id))`. O `process.argv[0]` é o caminho do Node e o `[1]` é o do script, então o primeiro argumento está mesmo em `[2]`. Os valores do construtor entram no Set como os do `add`, e nada ali esvazia o Set.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O histórico de buscas da Lojinha guarda as 5 mais recentes, a mais nova na frente e sem repetir: buscar de novo um termo que já está lá o leva para a frente. Qual coleção combina com essa regra?",
+      "options": {
+        "a": "Array: a posição importa, a busca nova vai para o começo e a fila é cortada em 5",
+        "b": "Set: ele já descarta os repetidos sozinho",
+        "c": "Map: o termo como chave e a posição como valor",
+        "d": "Objeto: uma chave por termo buscado"
+      },
+      "answer": "a",
+      "explanation": "A regra depende de posição: a busca nova entra no começo com `unshift`, e o `slice(0, 5)` corta a fila. O `Set` é a resposta tentadora, mas um `add` de um termo que já está lá não o move para a frente, e o Set não tem índice, `unshift` nem `slice`. Map e objeto respondem bem a \"qual o valor desta chave?\", não a \"qual é a ordem?\". Set fica para \"está ou não está?\", como os favoritos.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "Se `rascunhos/tipos.ts` tiver um erro de tipo, `node --experimental-strip-types rascunhos/tipos.ts` se recusa a rodar e mostra o erro do TypeScript.",
+      "answer": false,
+      "explanation": "O Node remove os tipos sem conferi-los e roda o JavaScript que sobra: com um erro de tipo, o programa roda do mesmo jeito, e `totalDoItem('79,90', 2)` imprime `NaN`. Quem aponta o erro é o editor, enquanto você digita, e o `npx tsc --noEmit`, na pasta inteira.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Com o código abaixo num arquivo `.ts`, qual chamada o TypeScript sublinha?\n\n```typescript\ntype Produto = { id: number; nome: string; preco: number };\n\nfunction formatarPreco(valor: number): string {\n  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });\n}\n\nconst garrafa: Produto = { id: 5, nome: 'Garrafa Térmica', preco: 79.9 };\n```",
+      "options": {
+        "a": "`formatarPreco(garrafa.nome)`",
+        "b": "`formatarPreco(garrafa.preco)`",
+        "c": "`formatarPreco(garrafa.preco * 2)`",
+        "d": "`const texto: string = formatarPreco(79.9)`"
+      },
+      "answer": "a",
+      "explanation": "`garrafa.nome` é `string`, e o parâmetro `valor` espera `number`: o editor mostra `Argument of type 'string' is not assignable to parameter of type 'number'`. `garrafa.preco` e `garrafa.preco * 2` são números, e o retorno de `formatarPreco` é `string`, o mesmo tipo anotado em `texto`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Com `strict: true`, o `npx tsc --noEmit` aponta `'produto' is possibly 'undefined'` na última linha. O que o aviso indica, e qual é a melhor resposta?\n\n```typescript\nfunction nomeDoProduto(produtos: Produto[], id: number): string {\n  const produto = produtos.find((p) => p.id === id);\n  return produto.nome;\n}\n```",
+      "options": {
+        "a": "O `find` pode não achar nenhum produto; trate o caso com `if (produto === undefined)` antes de usar `produto.nome`",
+        "b": "O TypeScript se enganou, porque o id sempre existe; escreva `produto!.nome` para seguir em frente",
+        "c": "O `strict` está rígido demais; desligue-o no `tsconfig.json`",
+        "d": "Falta tipo na variável; declare `const produto: any` para o aviso sumir"
+      },
+      "answer": "a",
+      "explanation": "O tipo de `produto` é `Produto | undefined`, porque o `find` devolve `undefined` quando não acha nada, como com o id 99. É o `Cannot read properties of undefined (reading 'nome')` do Node, apontado antes de rodar. Depois do `if`, o tipo estreita para `Produto`. O `!`, o `any` e desligar o `strict` só calam o aviso, e o `TypeError` volta quando o programa roda.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Num arquivo `.ts` conferido com `npx tsc --noEmit` e `strict: true`, quais destes problemas o TypeScript aponta antes de rodar?",
+      "options": {
+        "a": "`produto.preço` num objeto do tipo `Produto`, que só tem `preco`",
+        "b": "`ehFavorito(favoritos, '7')` com o parâmetro `id` anotado como `number`",
+        "c": "`status === 'entrege'` com `status` do tipo `'pendente' | 'pago' | 'enviado' | 'entregue' | 'cancelado'`",
+        "d": "Um preço digitado errado pelo cliente, que chega pelo `process.argv` com o programa rodando",
+        "e": "Frete grátis a partir de R$ 15 quando a regra da loja é R$ 150, com todos os tipos certos"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Campo inexistente, texto onde se espera número e comparação com um valor fora da união são erros de tipo: o editor e o `tsc` os apontam sem rodar. O valor que chega com o programa rodando não passa pelo TypeScript, porque os tipos são removidos antes. E a regra de negócio errada, com os tipos certos, é código válido: quem a pega é um teste.",
+      "points": 2
+    }
+  ]
+}

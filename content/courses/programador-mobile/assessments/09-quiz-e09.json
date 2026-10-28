@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E09 · Programação funcional com arrays",
+  "description": "Dez questões sobre map, filter, reduce, find, some e every, regras que não alteram o que recebem, spread, cópia rasa, desestruturação e flatMap.",
+  "lesson": "e09b-imutabilidade-spread-e-desestruturacao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A regra do checkout só deixa fechar o pedido se **todos** os itens do carrinho tiverem quantidade entre 1 e 10. Qual expressão responde a essa pergunta com `true` ou `false`?",
+      "options": {
+        "a": "`itens.every((item) => item.qtd >= 1 && item.qtd <= 10)`",
+        "b": "`itens.some((item) => item.qtd >= 1 && item.qtd <= 10)`",
+        "c": "`itens.filter((item) => item.qtd >= 1 && item.qtd <= 10)`",
+        "d": "`itens.find((item) => item.qtd >= 1 && item.qtd <= 10)`"
+      },
+      "answer": "a",
+      "explanation": "`every` devolve `true` só se todos os itens passarem no teste e para no primeiro que falha. `some` é a opção mais tentadora, mas devolve `true` se um único item passar. `filter` devolve um array, não `true` ou `false`; `find` devolve um item ou `undefined`. Lembre que `every` em lista vazia devolve `true`: confira também `itens.length > 0`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o valor de `vitrine` depois deste código?\n\n```javascript\nconst produtos = [\n  { nome: 'Fone Bluetooth', preco: 199.9, destaque: true },\n  { nome: 'Microfone USB', preco: 329.9, destaque: false },\n  { nome: 'Luminária de Mesa', preco: 89.9, destaque: true },\n  { nome: 'Tênis de Corrida', preco: 349.9, destaque: true },\n];\n\nconst vitrine = produtos\n  .filter((p) => p.destaque && p.preco < 300)\n  .map((p) => p.nome);\n```",
+      "options": {
+        "a": "`['Fone Bluetooth', 'Luminária de Mesa']`",
+        "b": "`['Fone Bluetooth', 'Luminária de Mesa', 'Tênis de Corrida']`",
+        "c": "`[true, false, true, false]`",
+        "d": "`['Fone Bluetooth', undefined, 'Luminária de Mesa', undefined]`"
+      },
+      "answer": "a",
+      "explanation": "O `filter` mantém só os produtos em destaque **e** abaixo de R$ 300: o fone e a luminária (o tênis está em destaque, mas custa mais). Depois, o `map` troca cada objeto pelo seu nome. Uma lista de `true` e `false` sairia de um `map` com a condição; `undefined` no meio aparece quando se usa `map` tentando filtrar.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Cada corpo abaixo é de uma regra do carrinho que recebe `itens` e devolve o carrinho com a mudança (`criarItem` monta um item novo `{ id, nome, preco, qtd }`). Quais deles **não alteram** o array `itens` recebido nem os objetos dentro dele?",
+      "options": {
+        "a": "`return [...itens, criarItem(produto, 1)];`",
+        "b": "`itens.push(criarItem(produto, 1)); return itens;`",
+        "c": "`return itens.filter((i) => i.id !== id);`",
+        "d": "`itens.sort((x, y) => x.preco - y.preco); return itens;`",
+        "e": "`return itens.map((i) => { if (i.id === id) { return { ...i, qtd }; } return i; });`",
+        "f": "`const copia = [...itens]; copia.find((i) => i.id === id).qtd = qtd; return copia;`"
+      },
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "Spread, `filter` e `map` devolvem arrays novos, e o `map` cria um objeto novo só para o item alterado. `push` e `sort` alteram o próprio array: quem guardou o carrinho antigo vê a mudança, e o \"novo\" é o mesmo de antes. A opção `f` é a armadilha: `[...itens]` copia só a lista, e o objeto achado pelo `find` é o mesmo do original, que passa a ter a `qtd` nova.",
+      "points": 3
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Depois deste código, `pedido.entrega.numero` continua valendo `'200'`.\n\n```javascript\nconst pedido = {\n  id: 104,\n  status: 'pago',\n  entrega: { cep: '01310-100', numero: '200' },\n};\n\nconst copia = { ...pedido };\ncopia.entrega.numero = '210';\n```",
+      "answer": false,
+      "explanation": "O spread faz uma cópia rasa: `copia` é um objeto novo, mas `copia.entrega` e `pedido.entrega` são o mesmo objeto. Alterar o número pela cópia altera o pedido original, que passa a mostrar `'210'`. Para mudar só a cópia, copie também o nível de dentro: `{ ...pedido, entrega: { ...pedido.entrega, numero: '210' } }`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete a `contarItens`, que devolve o total de unidades do carrinho. A soma precisa funcionar também com o carrinho vazio.\n\n```javascript\nexport function contarItens(itens) {\n  return itens.___((soma, item) => soma + item.qtd, ___);\n}\n```",
+      "answer": [
+        [
+          "reduce"
+        ],
+        [
+          "0"
+        ]
+      ],
+      "explanation": "`reduce` junta a lista num valor só, e o segundo argumento é o valor inicial do acumulador. Com `0`, a lista vazia devolve 0 e a primeira volta já soma números. Sem ele, o primeiro item (um objeto) viraria o acumulador, e a lista vazia lançaria um `TypeError`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Ao montar um objeto com spread, como `{ ...item, qtd: 3 }` ou `{ qtd: 3, ...item }`, o que acontece quando a mesma chave aparece mais de uma vez?",
+      "options": {
+        "a": "Fica o valor que aparece por último no objeto",
+        "b": "Fica o valor que aparece primeiro no objeto",
+        "c": "Os valores da mesma chave são somados",
+        "d": "O JavaScript lança um erro de chave duplicada"
+      },
+      "answer": "a",
+      "explanation": "As propriedades são escritas da esquerda para a direita, e cada uma sobrescreve a anterior de mesmo nome. Por isso `{ ...item, qtd: 3 }` troca a quantidade, enquanto `{ qtd: 3, ...item }` mantém a do `item`. A ideia de que o primeiro valor vence é o erro mais comum; o spread não soma valores nem reclama de chave repetida.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com o fone (`qtd: 1`) e duas luminárias (`qtd: 2`) no carrinho, o script imprime `[object Object]2`. Com o carrinho vazio, o Node para com um `TypeError`. Qual é a causa?\n\n```javascript\nconst quantidade = itens.reduce((soma, item) => soma + item.qtd);\n```",
+      "options": {
+        "a": "Falta o valor inicial `0`: o `reduce` usa o primeiro item, um objeto, como acumulador, e não tem o que usar com a lista vazia",
+        "b": "O campo `qtd` é texto, e o `+` está juntando textos em vez de somar números",
+        "c": "O `reduce` não aceita arrow function: a função precisa ser escrita com `function`",
+        "d": "Falta `return` dentro da arrow function, então cada volta devolve `undefined`"
+      },
+      "answer": "a",
+      "explanation": "Sem valor inicial, o `reduce` começa com o primeiro item como acumulador. Objeto mais número vira texto: `[object Object]` seguido de `2`. Com a lista vazia não existe primeiro item, e o `reduce` lança `Reduce of empty array with no initial value`. Uma `qtd` em texto não produziria `[object Object]`: esse pedaço vem do objeto usado como acumulador. E a arrow sem chaves já devolve o valor da expressão, sem precisar de `return`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Para a lista \"Comprar de novo\", o código abaixo junta os itens dos pedidos. Quais são os valores de `primeiro` e `outros`?\n\n```javascript\nconst pedidos = [\n  { id: 101, itens: [{ nome: 'Fone Bluetooth' }, { nome: 'Garrafa Térmica' }] },\n  { id: 102, itens: [{ nome: 'Tênis de Corrida' }] },\n];\n\nconst [primeiro, ...outros] = pedidos.flatMap(({ itens }) => itens);\n```",
+      "options": {
+        "a": "`primeiro` é o item Fone Bluetooth, e `outros` tem 2 itens: Garrafa Térmica e Tênis de Corrida",
+        "b": "`primeiro` é o array de itens do pedido 101, e `outros` tem 1 elemento: o array do pedido 102",
+        "c": "`primeiro` é o pedido 101 inteiro, e `outros` tem 1 elemento: o pedido 102",
+        "d": "`primeiro` é o item Fone Bluetooth, e `outros` tem 1 item: a Garrafa Térmica"
+      },
+      "answer": "a",
+      "explanation": "`({ itens }) => itens` desestrutura cada pedido e devolve a sua lista; o `flatMap` achata as listas num único array com três itens. A desestruturação de array põe a primeira posição em `primeiro`, e o rest junta as outras duas em `outros`. Com `map` no lugar de `flatMap`, o resultado seria um array de arrays, e `primeiro` seria a lista do pedido 101.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Quanto valem `titulo` e `qtd` depois desta linha?\n\n```javascript\nconst { nome: titulo, qtd = 1 } = { id: 4, nome: 'Luminária de Mesa', preco: 89.9 };\n```",
+      "options": {
+        "a": "`titulo` é `'Luminária de Mesa'` e `qtd` é `1`",
+        "b": "`titulo` é `undefined` e `qtd` é `1`, porque o objeto não tem a chave `titulo`",
+        "c": "`titulo` é `'Luminária de Mesa'` e `qtd` é `undefined`, porque o objeto não tem a chave `qtd`",
+        "d": "A linha lança um erro, porque o objeto não tem a chave `qtd`"
+      },
+      "answer": "a",
+      "explanation": "`nome: titulo` lê a chave `nome` e guarda o valor numa constante chamada `titulo`: é um jeito de renomear. `qtd = 1` é um valor padrão, usado quando a chave não existe ou vale `undefined`, como aqui. A desestruturação não lança erro por chave faltando; sem o padrão, `qtd` seria `undefined`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "truefalse",
+      "prompt": "Depois deste código, `antes` continua com um item só.\n\n```javascript\nconst antes = [{ id: 1, nome: 'Fone Bluetooth', preco: 199.9, qtd: 1 }];\nconst depois = antes;\ndepois.push({ id: 5, nome: 'Garrafa Térmica', preco: 79.9, qtd: 1 });\n```",
+      "answer": false,
+      "explanation": "`const depois = antes` não copia a lista: as duas variáveis guardam a mesma referência, o endereço do mesmo array. O `push` por `depois` muda esse array, e `antes` passa a ter dois itens. Para ter uma lista nova e deixar a antiga como estava, use `const depois = [...antes, novo]`.",
+      "points": 1
+    }
+  ]
+}

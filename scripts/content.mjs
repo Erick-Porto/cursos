@@ -452,8 +452,9 @@ const MAX_MATERIAL_BYTES = 2 * 1024 * KB
 function validateMaterialFile(file, course, ctx, report) {
   const mw = rel(file)
   const path = file.slice(join(course.dir, 'materiais').length + 1).split(/[\\/]/)
-  if (path.some((p) => !/^[a-z0-9._-]+$/.test(p))) {
-    report.error(mw, 'nomes em materiais/ usam só minúsculas, números, ponto, hífen e underline (o endereço vira URL)')
+  // maiúsculas são aceitas (componentes como Avatar.js); o link precisa repetir a grafia exata
+  if (path.some((p) => !/^[A-Za-z0-9._-]+$/.test(p))) {
+    report.error(mw, 'nomes em materiais/ usam só letras sem acento, números, ponto, hífen e underline (o endereço vira URL)')
   }
   const bytes = statSync(file).size
   if (bytes > MAX_MATERIAL_BYTES) report.warn(mw, `${Math.round(bytes / KB)} KB; materiais vão junto com o site, mantenha até ${MAX_MATERIAL_BYTES / KB / KB} MB`)
@@ -533,9 +534,26 @@ function validateProse(text, where, course, ctx, report, opts = {}) {
       report.error(where, `material não encontrado: ${m[2]} (arquivo em materiais/, ou <pasta>.zip para baixar uma pasta)`)
       continue
     }
+    // o Windows acha o arquivo com qualquer grafia; o GitHub Pages, não
+    const wrongCase = exactCaseMismatch(join(course.dir, 'materiais'), (isFile ? path : path.slice(0, -4)).split('/'))
+    if (wrongCase) {
+      report.error(where, `link de material com maiúsculas e minúsculas diferentes do arquivo (${m[2]}; no disco: ${wrongCase})`)
+      continue
+    }
     ctx.materials?.add(path)
   }
   return count
+}
+
+/** Devolve o nome real do primeiro trecho do caminho cuja grafia difere do disco, ou null. */
+function exactCaseMismatch(base, parts) {
+  let dir = base
+  for (const part of parts.filter(Boolean)) {
+    const names = readdirSync(dir)
+    if (!names.includes(part)) return names.find((n) => n.toLowerCase() === part.toLowerCase()) ?? part
+    dir = join(dir, part)
+  }
+  return null
 }
 
 function checkAlt(alt, src, where, report) {

@@ -1,0 +1,110 @@
+{
+  "title": "Quiz: E33 · Componentes e UI kit",
+  "description": "Sete questões sobre props, style externo, ...rest, variantes, componentes compostos e a organização do UI kit da Lojinha.",
+  "lesson": "e33b-variantes-e-boas-praticas",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O `Botao` da Lojinha vai ganhar as variantes `primaria`, `secundaria` e `fantasma`, e outras podem surgir. Qual implementação escala melhor?",
+      "options": {
+        "a": "Um objeto que mapeia cada nome de variante para suas cores, consultado com a prop: `variantes(cores)[variante]`",
+        "b": "Um `if` e um `else if` para cada variante, escolhendo as cores dentro do componente",
+        "c": "Um componente por variante: `BotaoPrimario`, `BotaoSecundario` e `BotaoFantasma`",
+        "d": "As props `corFundo` e `corTexto`, para que cada tela escolha as cores do botão"
+      },
+      "answer": "a",
+      "explanation": "Com o mapa, uma variante nova é uma linha a mais no objeto e a regra fica num lugar só, como uma ordem nova nos `comparadores` do E08. A fileira de `if` funciona, mas cresce a cada caso e espalha a regra pelo componente. Três componentes repetem o mesmo código, e `corFundo`/`corTexto` devolvem às telas a decisão que o kit devia padronizar.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O `Cartao` abaixo está pronto e é usado em várias telas. Na tela do carrinho, um cartão precisa de 16 de margem embaixo. Qual é o jeito certo, sem alterar o componente?\n\n```jsx\nexport default function Cartao({ children, style, ...rest }) {\n  const { cores } = useTema();\n  return (\n    <View style={[estilos.cartao, { backgroundColor: cores.superficie }, style]} {...rest}>\n      {children}\n    </View>\n  );\n}\n```",
+      "options": {
+        "a": "`<Cartao style={{ marginBottom: espaco.md }}>...</Cartao>`",
+        "b": "`<Cartao margemInferior={16}>...</Cartao>`",
+        "c": "Copiar `Cartao.js` para `CartaoComMargem.js` e somar `marginBottom: 16` nos estilos",
+        "d": "Somar `marginBottom: espaco.md` em `estilos.cartao` dentro de `Cartao.js`"
+      },
+      "answer": "a",
+      "explanation": "O `style` de fora entra por último no array, então a margem pedida pela tela é aplicada e vence em caso de conflito. `margemInferior` não existe nas props e cairia no `...rest`, sem efeito. Mudar `estilos.cartao` resolve o carrinho, mas põe margem em todos os cartões do app; copiar o arquivo cria duas peças para manter.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Com o `Botao` abaixo, você quer um botão pequeno \"Ver todos\", sem padding lateral, que o leitor de tela anuncie como \"Ver todos os produtos\". Qual chamada faz isso sem mudar o componente?\n\n```jsx\nconst tamanhos = {\n  sm: { minHeight: 36, paddingHorizontal: espaco.md },\n  md: { minHeight: 44, paddingHorizontal: espaco.lg },\n};\n\nexport default function Botao({ titulo, tamanho = 'md', style, ...rest }) {\n  return (\n    <Pressable style={[estilos.base, tamanhos[tamanho], style]} {...rest}>\n      <Text>{titulo}</Text>\n    </Pressable>\n  );\n}\n```",
+      "options": {
+        "a": "`<Botao titulo=\"Ver todos\" tamanho=\"sm\" style={{ paddingHorizontal: 0 }} accessibilityLabel=\"Ver todos os produtos\" />`",
+        "b": "`<Botao titulo=\"Ver todos os produtos\" tamanho=\"sm\" paddingHorizontal={0} />`",
+        "c": "`<Botao titulo=\"Ver todos\" tamanho={36} style={{ paddingHorizontal: 0 }} rest={{ accessibilityLabel: 'Ver todos os produtos' }} />`",
+        "d": "`<Botao titulo=\"Ver todos\" style={[tamanhos.sm, { paddingHorizontal: 0 }]} label=\"Ver todos os produtos\" />`"
+      },
+      "answer": "a",
+      "explanation": "`tamanho=\"sm\"` escolhe a linha do mapa, o `style` de fora vem por último e zera o padding, e `accessibilityLabel` não foi desestruturado: cai no `...rest` e chega ao `Pressable`. Na alternativa b, o texto visível muda e `paddingHorizontal` vira prop solta, sem efeito. `tamanho={36}` não é chave do mapa, `rest` não é uma prop e `label` não existe no `Pressable`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Com `Cartao.Cabecalho = Cabecalho` e `Cartao.Corpo = Corpo` escritos no arquivo `Cartao.js`, uma tela que importa só o `Cartao` já pode usar `<Cartao.Cabecalho />` e `<Cartao.Corpo />`.",
+      "answer": true,
+      "explanation": "Em JavaScript, a função `Cartao` também é um objeto, como o `ProdutoAntigo` do E17 com o seu `prototype`, e `Cabecalho` e `Corpo` viram propriedades dela. Quem importa `Cartao` leva a família inteira, sem imports extras. Se a atribuição for esquecida, `Cartao.Corpo` é `undefined` e a tela vermelha avisa `Element type is invalid`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "O arquivo `Botao.js` termina com `export default function Botao`. Complete o índice do kit para que `import { Botao } from '../components/ui'` funcione:\n\n```javascript\n// src/components/ui/index.js\nexport { ___ as Botao } from './Botao';\n```",
+      "answer": [
+        [
+          "default"
+        ]
+      ],
+      "explanation": "`export { default as Botao } from './Botao'` pega o export padrão do arquivo e o reexporta com o nome `Botao`, como no barril do E11. Escrever `export { Botao } from './Botao'` procura um export nomeado `Botao`, que não existe: o import chega `undefined`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que aparece na tela com `<Avatar nome=\"Ana Clara Souza\" tamanho=\"lg\" />`?\n\n```jsx\nconst medidas = { sm: 32, md: 48, lg: 72 };\n\nfunction iniciais(nome) {\n  return nome.split(' ').filter(Boolean).slice(0, 2)\n    .map((parte) => parte[0].toUpperCase()).join('');\n}\n\nexport default function Avatar({ uri, nome = '', tamanho = 'md' }) {\n  const lado = medidas[tamanho];\n  const forma = { width: lado, height: lado, borderRadius: lado / 2 };\n  if (uri) return <Image source={{ uri }} style={forma} />;\n  return <View style={forma}><Text>{iniciais(nome)}</Text></View>;\n}\n```",
+      "options": {
+        "a": "Um círculo de 72 com as letras \"AC\"",
+        "b": "Um círculo de 72 com as letras \"ACS\"",
+        "c": "Um círculo de 48 com as letras \"AC\", porque o padrão é `md`",
+        "d": "Um espaço vazio de 72, esperando a foto carregar"
+      },
+      "answer": "a",
+      "explanation": "Sem `uri`, o componente cai no segundo `return` e mostra as iniciais. `slice(0, 2)` fica só com \"Ana\" e \"Clara\", por isso \"AC\" e não \"ACS\". O tamanho foi passado como `lg`, então o padrão `md` não vale e `medidas.lg` dá 72. Não há foto para esperar: a `Image` só aparece quando existe `uri`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais práticas deixam o UI kit da Lojinha mais fácil de usar e de manter?",
+      "options": {
+        "a": "Dar a cada peça uma responsabilidade: o `Badge` só desenha o selo, e a tela decide quando ele aparece",
+        "b": "Nomear as variantes pelo papel, como `tom=\"perigo\"`, e não pela cor, como `tom=\"vermelho\"`",
+        "c": "Manter a tela `Galeria` com todas as variantes, conferida nos dois temas",
+        "d": "Copiar o JSX do `Botao` para cada tela, para ajustar os detalhes ali mesmo",
+        "e": "Criar uma prop para cada detalhe visual: `corFundo`, `corTexto`, `raio` e `padding`"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Uma responsabilidade por peça, nomes de papel e uma Galeria viva mantêm o padrão e mostram na hora o efeito de cada mudança. Copiar o JSX por tela é exatamente o problema que o kit resolve. Uma prop por detalhe visual parece flexível, mas devolve às telas as decisões de aparência e cada tela sai do padrão de um jeito.",
+      "points": 2
+    }
+  ]
+}

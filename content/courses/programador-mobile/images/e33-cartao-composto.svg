@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>O cartão do Pedido #1042: o Cartao desenha a moldura, Cartao.Cabecalho põe o título e o selo em linha e Cartao.Corpo empilha o texto e o botão</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .ttl  { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .card { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .cab  { fill: none; stroke: #a78bfa; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .cor  { fill: none; stroke: #60a5fa; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .ok   { fill: none; stroke: #34d399; stroke-width: 2; }
+    .okt  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .neu  { fill: none; stroke: #b4bfd3; stroke-width: 2; }
+    .neut { fill: #b4bfd3; font-size: 22px; font-weight: 700; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- Cartao: a moldura -->
+  <rect class="card" x="40" y="36" width="400" height="236" rx="14"/>
+
+  <!-- Cartao.Cabecalho -->
+  <rect class="cab" x="56" y="52" width="368" height="64" rx="8"/>
+  <text class="ttl" x="72" y="92">Pedido #1042</text>
+  <rect class="neu" x="274" y="64" width="134" height="40" rx="8"/>
+  <text class="neut" x="290" y="91">A caminho</text>
+
+  <!-- Cartao.Corpo -->
+  <rect class="cor" x="56" y="132" width="368" height="124" rx="8"/>
+  <text class="m" x="72" y="168">2 itens · R$ 259,80</text>
+  <rect class="ok" x="72" y="190" width="164" height="48" rx="8"/>
+  <text class="okt" x="90" y="222">Acompanhar</text>
+
+  <!-- rótulos -->
+  <path d="M 424 84 L 466 84" stroke="#a78bfa" stroke-width="2"/>
+  <text class="code" x="476" y="80" fill="#a78bfa">Cartao.Cabecalho</text>
+  <text class="m" x="476" y="108">título e children</text>
+  <text class="m" x="476" y="134">na mesma linha</text>
+
+  <path d="M 424 194 L 466 194" stroke="#60a5fa" stroke-width="2"/>
+  <text class="code" x="476" y="190" fill="#60a5fa">Cartao.Corpo</text>
+  <text class="m" x="476" y="218">children em coluna,</text>
+  <text class="m" x="476" y="244">com gap entre eles</text>
+
+  <path d="M 440 272 L 466 298" stroke="#b4bfd3" stroke-width="2"/>
+  <text class="code" x="476" y="300" fill="#e8edf7">Cartao</text>
+  <text class="m" x="560" y="300">a moldura</text>
+</svg>

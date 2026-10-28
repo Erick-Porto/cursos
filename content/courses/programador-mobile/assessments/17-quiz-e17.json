@@ -1,0 +1,139 @@
+{
+  "title": "Quiz: E17 · Protótipos e erros",
+  "description": "Dez questões sobre a cadeia de protótipos, o que class e extends criam por baixo, throw, try, catch e finally, erros próprios e testes de exceção.",
+  "lesson": "e17b-tratamento-de-erros",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "truefalse",
+      "prompt": "Na classe `Produto` do E15, o getter `precoFormatado` é copiado para dentro de cada instância criada com `Produto.deJSON(...)`, e por isso aparece em `Object.keys(fone)`.",
+      "answer": false,
+      "explanation": "Os dados atribuídos no `constructor` (`this.id`, `this.nome`, `this.preco`...) ficam no objeto. Métodos e getters ficam uma vez só em `Produto.prototype`, e a instância os alcança pela cadeia de protótipos. Por isso `Object.keys(fone)` lista só os dados, e o spread `{ ...fone }` perde o getter.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O `PagamentoBoleto` do E16 não declara `totalAPagar`, e mesmo assim `new PagamentoBoleto().totalAPagar(199.9)` devolve `199.9`. Onde o JavaScript encontra o método?",
+      "options": {
+        "a": "Em `Pagamento.prototype`, subindo a cadeia a partir de `PagamentoBoleto.prototype`",
+        "b": "No próprio objeto, porque o `super(...)` copia os métodos da mãe para ele",
+        "c": "Em `PagamentoBoleto.prototype`, porque o `extends` copia os métodos da mãe para a filha",
+        "d": "Em `Object.prototype`, onde ficam os métodos de todas as classes"
+      },
+      "answer": "a",
+      "explanation": "A busca começa no objeto, passa por `PagamentoBoleto.prototype`, que só tem o `vencimento`, e sobe pelo elo que o `extends` criou até `Pagamento.prototype`, onde acha `totalAPagar`. A alternativa do `extends` é a mais tentadora, mas ele não copia nada: só liga o protótipo da filha ao da mãe. O `super(...)` roda o constructor da mãe, que atribui dados, não métodos. E `Object.prototype` só tem o que vale para todo objeto, como `toString`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Com o `Produto` do E15 e `const fone = Produto.deJSON(produtos[0])`, quais afirmações estão corretas?",
+      "options": {
+        "a": "`typeof Produto` é `'function'`",
+        "b": "`fone.precoPara === Produto.prototype.precoPara` é `true`",
+        "c": "`fone.deJSON` é `undefined`, porque o estático mora na função `Produto`",
+        "d": "`{ ...fone } instanceof Produto` é `true`, porque o spread copia o protótipo",
+        "e": "Cada instância guarda uma cópia própria do método `precoPara`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A `class` cria uma função e um `prototype`. O `precoPara` existe uma vez, em `Produto.prototype`, e todas as instâncias usam a mesma função; o `this` diz de qual produto é o preço. O estático `deJSON` mora na função `Produto`, fora da cadeia do `fone`. Já o spread copia só as propriedades próprias: a cópia é um objeto literal, com `Object.prototype` como protótipo, e o `instanceof` responde `false`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Por que `new CepInvalidoError('123') instanceof ErroDeNegocio` é `true`?",
+      "options": {
+        "a": "Porque `ErroDeNegocio.prototype` está na cadeia de protótipos do erro, ligado pelo `extends`",
+        "b": "Porque o `instanceof` compara o `name` do erro com o nome da classe",
+        "c": "Porque o `super(...)` transforma o objeto num `ErroDeNegocio`, e ele deixa de ser `CepInvalidoError`",
+        "d": "Porque todo objeto lançado com `throw` vira instância de todas as classes de erro"
+      },
+      "answer": "a",
+      "explanation": "`instanceof` sobe a cadeia do objeto procurando `ErroDeNegocio.prototype`. A cadeia do erro é `CepInvalidoError.prototype`, `ErroDeNegocio.prototype`, `Error.prototype`, `Object.prototype`: achou no segundo elo. O `name` não entra na conta: é só um texto, que você escreve à mão. O erro continua sendo `CepInvalidoError` também, e o `throw` não muda a cadeia de nada.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "`freteDoCep` lança `CepInvalidoError` para o CEP `'123'`. O que aparece no terminal?\n\n```javascript\nfunction freteOuZero(cep) {\n  try {\n    console.log('1');\n    const frete = freteDoCep(100, cep);\n    console.log('2');\n    return frete;\n  } catch (erro) {\n    console.log('3');\n    return 0;\n  } finally {\n    console.log('4');\n  }\n}\n\nfreteOuZero('123');\n```",
+      "options": {
+        "a": "1, 3, 4",
+        "b": "1, 3",
+        "c": "1, 2, 3, 4",
+        "d": "1, 3, 4, 2"
+      },
+      "answer": "a",
+      "explanation": "O `throw` dentro de `freteDoCep` pula o `2` e leva ao `catch`, que imprime `3`. O `return 0` não impede o `finally`: ele roda antes de a função devolver o valor, e o `4` aparece. A resposta \"1, 3\" é a mais tentadora, porque parece que o `return` encerra tudo, mas o `finally` roda sempre: com erro, sem erro ou com `return`. O `2` nunca roda, porque nenhuma linha depois do `throw` é executada.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Nas regras da Lojinha, quais situações são **erros esperados**, que a regra lança como erro próprio e o script transforma em mensagem?",
+      "options": {
+        "a": "A cliente digita o CEP com 7 números",
+        "b": "O cupom digitado já expirou",
+        "c": "A quantidade pedida passa do estoque do produto",
+        "d": "O script lê `produto.nome` com `produto` igual a `undefined`",
+        "e": "O total sai `NaN` porque o preço chegou como texto"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "CEP, cupom e estoque dependem da situação, e a pessoa consegue resolver com uma boa mensagem: são `CepInvalidoError`, `CupomInvalidoError` e `EstoqueInsuficienteError`. Ler propriedade de `undefined` (um `TypeError`) e chegar a `NaN` somando texto são bugs: a culpa é do código. Um `catch` que os transformasse em mensagem esconderia o problema em vez de corrigi-lo.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "O teste `expect(freteDoCep(100, 'abc')).toThrow(CepInvalidoError);` passa quando `freteDoCep` lança o erro certo para o CEP inválido.",
+      "answer": false,
+      "explanation": "Sem a arrow function, `freteDoCep(100, 'abc')` roda antes de o `expect` receber qualquer coisa: a exceção estoura ali e o teste falha com o próprio erro. O `toThrow` precisa receber uma função para chamá-la por dentro: `expect(() => freteDoCep(100, 'abc')).toThrow(CepInvalidoError)`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Complete o erro próprio do cupom em `src/modelos/erros.js`:\n\n```javascript\nexport class CupomInvalidoError ___ ErroDeNegocio {\n  constructor(cupom, motivo) {\n    ___(motivo, 'CUPOM_INVALIDO');\n    this.name = 'CupomInvalidoError';\n    this.cupom = cupom;\n  }\n}\n```",
+      "answer": [["extends"], ["super"]],
+      "explanation": "`extends` liga `CupomInvalidoError.prototype` a `ErroDeNegocio.prototype` e, por ele, a `Error.prototype`: o `instanceof` responde `true` para as duas. `super(...)` chama o constructor da mãe, que guarda a `message` e o `codigo`. Ele vem antes de qualquer `this`; sem ele, o JavaScript lança `ReferenceError` ao criar o erro.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O CEP `01310000` é válido. Repare no erro de digitação na primeira linha do `try`. O que o script imprime?\n\n```javascript\ntry {\n  const frete = freteDoCep(subtotl, '01310000');\n  console.log(`Frete: ${formatarPreco(frete)}`);\n} catch (erro) {\n  console.log('Confira o CEP');\n}\n```",
+      "options": {
+        "a": "\"Confira o CEP\", e o bug do `subtotl` fica escondido",
+        "b": "Nada: o Node para com `ReferenceError: subtotl is not defined`",
+        "c": "\"Frete: R$ 9,90\", porque o CEP é válido",
+        "d": "A `message` do `CepInvalidoError`, com o CEP digitado"
+      },
+      "answer": "a",
+      "explanation": "`subtotl` não existe: o JavaScript lança um `ReferenceError` antes de `freteDoCep` rodar, e o `catch` genérico o transforma em \"Confira o CEP\". O `ReferenceError` na tela, a alternativa mais tentadora, seria até o melhor resultado, mas o `catch` engole o erro antes. Nenhum `CepInvalidoError` é lançado, porque `freteDoCep` nem chega a ser chamada. A correção é relançar o que não é erro de negócio, com `if (!(erro instanceof ErroDeNegocio)) throw erro;`, e mostrar `erro.message` nos casos esperados.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um colega escreveu `throw 'CEP inválido';` em `freteDoCep`. No `catch` de quem chama, o que `console.log(erro.message)` imprime?",
+      "options": {
+        "a": "`undefined`",
+        "b": "`CEP inválido`",
+        "c": "`Error: CEP inválido`",
+        "d": "Nada: o `catch` não captura um texto lançado"
+      },
+      "answer": "a",
+      "explanation": "O `throw` aceita qualquer valor, e o `catch` recebe exatamente o que foi lançado: aqui, uma string. Texto não tem a propriedade `message`, então sai `undefined`; também não tem `stack`, e `erro instanceof ErroDeNegocio` dá `false`. Por isso se lança sempre um `Error` ou um erro próprio, como `new CepInvalidoError(cep)`.",
+      "points": 1
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Grade com numColumns igual a 2: os 12 produtos viram 6 linhas de dois, cada linha estilizada pelo columnWrapperStyle e com o separador só entre as linhas</title>
+  <style>
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cel  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ct   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; text-anchor: middle; }
+    .row  { fill: none; stroke: #a78bfa; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .sep  { fill: #fbbf24; fill-opacity: 0.25; stroke: #fbbf24; stroke-width: 1.5; }
+    .lead { fill: none; stroke-width: 2; }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <text class="code" x="40" y="42" fill="#e8edf7">data={produtos} numColumns={2}</text>
+
+  <!-- linha 1 -->
+  <rect class="row" x="40" y="62" width="272" height="64" rx="10"/>
+  <rect class="cel" x="48" y="70" width="120" height="48" rx="6"/>
+  <rect class="cel" x="184" y="70" width="120" height="48" rx="6"/>
+  <text class="ct" x="108" y="102">[0]</text>
+  <text class="ct" x="244" y="102">[1]</text>
+
+  <!-- separador entre as linhas -->
+  <rect class="sep" x="40" y="130" width="272" height="14" rx="4"/>
+
+  <!-- linha 2 -->
+  <rect class="row" x="40" y="148" width="272" height="64" rx="10"/>
+  <rect class="cel" x="48" y="156" width="120" height="48" rx="6"/>
+  <rect class="cel" x="184" y="156" width="120" height="48" rx="6"/>
+  <text class="ct" x="108" y="188">[2]</text>
+  <text class="ct" x="244" y="188">[3]</text>
+
+  <text class="m" x="176" y="250" text-anchor="middle">linhas 3 a 5</text>
+
+  <!-- linha 6 -->
+  <rect class="row" x="40" y="272" width="272" height="64" rx="10"/>
+  <rect class="cel" x="48" y="280" width="120" height="48" rx="6"/>
+  <rect class="cel" x="184" y="280" width="120" height="48" rx="6"/>
+  <text class="ct" x="108" y="312">[10]</text>
+  <text class="ct" x="244" y="312">[11]</text>
+
+  <!-- rótulos -->
+  <path class="lead" d="M 312 94 L 336 94" stroke="#a78bfa"/>
+  <text class="code" x="344" y="90" fill="#a78bfa">columnWrapperStyle</text>
+  <text class="m" x="344" y="118">estiliza cada linha de dois</text>
+
+  <path class="lead" d="M 312 137 L 336 166" stroke="#fbbf24"/>
+  <text class="code" x="344" y="172" fill="#fbbf24">ItemSeparatorComponent</text>
+  <text class="m" x="344" y="200">só entre as linhas</text>
+
+  <path class="lead" d="M 304 304 L 336 304" stroke="#b4bfd3"/>
+  <text class="m" x="344" y="298">célula com flex: 1</text>
+  <text class="m" x="344" y="326">as duas dividem a largura</text>
+</svg>

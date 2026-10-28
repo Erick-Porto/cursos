@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>As faixas de maximoDeParcelas em ordem: abaixo de 50 dá 1x, até 300 dá 3x, até 1000 dá 6x e o else dá 10x; o Fone Bluetooth de R$ 199,90 cai na faixa de 3x</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .hit  { fill: none; stroke: #34d399; stroke-width: 3; }
+    .cond { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .res  { fill: #e8edf7; font-size: 30px; font-weight: 700; }
+    .tick { stroke: #b4bfd3; stroke-width: 2; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- as quatro faixas, na ordem dos testes -->
+  <rect class="box" x="30" y="36" width="165" height="104"/>
+  <text class="cond" x="112" y="76" text-anchor="middle">&lt; 50</text>
+  <text class="res" x="112" y="122" text-anchor="middle">1x</text>
+
+  <rect class="box" x="195" y="36" width="165" height="104"/>
+  <text class="cond" x="277" y="76" text-anchor="middle">&lt; 300</text>
+  <text class="res" x="277" y="122" text-anchor="middle">3x</text>
+
+  <rect class="box" x="360" y="36" width="165" height="104"/>
+  <text class="cond" x="442" y="76" text-anchor="middle">&lt; 1000</text>
+  <text class="res" x="442" y="122" text-anchor="middle">6x</text>
+
+  <rect class="box" x="525" y="36" width="165" height="104"/>
+  <text class="cond" x="607" y="76" text-anchor="middle">else</text>
+  <text class="res" x="607" y="122" text-anchor="middle">10x</text>
+
+  <rect class="hit" x="196.5" y="37.5" width="162" height="101"/>
+
+  <!-- eixo de preço -->
+  <path class="tick" d="M30 140 V156 M195 140 V156 M360 140 V156 M525 140 V156"/>
+  <text class="m" x="30" y="184">R$ 0</text>
+  <text class="m" x="195" y="184" text-anchor="middle">R$ 50</text>
+  <text class="m" x="360" y="184" text-anchor="middle">R$ 300</text>
+  <text class="m" x="525" y="184" text-anchor="middle">R$ 1.000</text>
+
+  <!-- o Fone cai na segunda faixa -->
+  <path d="M294 198 L284 216 L304 216 Z" fill="#34d399"/>
+  <text class="ok" x="294" y="246" text-anchor="middle">Fone Bluetooth, R$ 199,90: 3x</text>
+  <text class="m" x="360" y="282" text-anchor="middle">cada faixa começa onde a anterior parou</text>
+</svg>

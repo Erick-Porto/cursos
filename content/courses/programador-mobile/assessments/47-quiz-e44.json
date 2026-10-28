@@ -1,0 +1,141 @@
+{
+  "title": "Quiz: E44 · Publicação com EAS e portfólio",
+  "description": "Nove questões sobre o APK de preview com EAS Build, segredos no app, EAS Update, README que recruta e portfólio.",
+  "lesson": "e44b-portfolio-e-readme",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O `eas.json` da equipe já tem o perfil `preview` configurado para gerar APK. Qual comando gera o APK na nuvem?",
+      "options": {
+        "a": "`eas build --profile preview --platform android`",
+        "b": "`eas build:configure --profile preview`",
+        "c": "`npx expo start --profile preview`",
+        "d": "`eas update --channel preview --platform android`"
+      },
+      "answer": "a",
+      "explanation": "`eas build` compila o app nos servidores do EAS; `--profile preview` escolhe o perfil do `eas.json` e `--platform android` diz para qual sistema. O `eas build:configure` só cria o `eas.json` e liga o projeto ao expo.dev. O `npx expo start` sobe o servidor de desenvolvimento para o Expo Go, e o `eas update` envia JavaScript novo para um build que já existe, sem gerar arquivo instalável.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete o perfil `preview` do `eas.json` para gerar um arquivo que o Android instala direto e um link de instalação para compartilhar:\n\n```json\n\"preview\": {\n  \"distribution\": \"___\",\n  \"android\": {\n    \"buildType\": \"___\"\n  }\n}\n```",
+      "answer": [
+        [
+          "internal"
+        ],
+        [
+          "apk"
+        ]
+      ],
+      "explanation": "`distribution: \"internal\"` faz o build ganhar um link de instalação que qualquer pessoa com o link pode abrir. `buildType: \"apk\"` troca o formato padrão, o AAB, que só a Play Store aceita, pelo APK, que o Android instala sem loja.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Tudo o que vai no `env` do perfil do `eas.json` ou numa variável `EXPO_PUBLIC_` acaba dentro do APK. Quais destes valores podem ir para lá?",
+      "options": {
+        "a": "A URL da API da equipe, como `http://192.168.0.15:3000`",
+        "b": "O nome do ambiente, como `preview`",
+        "c": "A chave pública (anon) do Supabase, com RLS ligado nas tabelas",
+        "d": "A chave `service_role` do Supabase",
+        "e": "A chave secreta do gateway de pagamento"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Qualquer pessoa que baixa o APK consegue ler o que está dentro dele, então ali só cabem valores públicos: a URL da API, o nome do ambiente e a chave anon do Supabase, que foi feita para ficar no app e depende do RLS para proteger os dados. A `service_role` ignora o RLS e a chave do gateway movimenta dinheiro: as duas ficam só no servidor, nunca no app nem no Git.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Com o EAS Update configurado, um `eas update` consegue entregar uma biblioteca nova com código nativo aos celulares que já têm o APK instalado, sem gerar outro build.",
+      "answer": false,
+      "explanation": "O EAS Update envia só o JavaScript e as imagens. Biblioteca com código nativo, permissão nova ou ícone mudam o que foi compilado no build, e por isso pedem um build novo e uma nova instalação.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A equipe gerou o APK com o perfil abaixo. Ele instala, abre com o ícone certo, mas a lista de serviços mostra \"Network request failed\". O `json-server` está ligado, o celular está na mesma Wi-Fi e o navegador do celular abre `http://192.168.0.15:3000/servicos` sem problema. No Expo Go, o app funcionava. Qual é a causa mais provável?\n\n```json\n\"preview\": {\n  \"distribution\": \"internal\",\n  \"android\": { \"buildType\": \"apk\" },\n  \"env\": { \"EXPO_PUBLIC_API_URL\": \"http://192.168.0.15:3000\" }\n}\n```",
+      "options": {
+        "a": "O APK é um build de release, que bloqueia `http://` por padrão; falta o `usesCleartextTraffic` do `expo-build-properties` e um build novo",
+        "b": "O `.env` ficou no `.gitignore`, e por isso a URL da API não chegou ao build",
+        "c": "O APK só consegue falar com a API quando o `npx expo start` está rodando no computador",
+        "d": "O `json-server` não aceita pedidos vindos de um app instalado, só do Expo Go"
+      },
+      "answer": "a",
+      "explanation": "O Expo Go aceita `http://`, mas o APK é um build de release, e o Android bloqueia tráfego sem criptografia por padrão. Com `[\"expo-build-properties\", { \"android\": { \"usesCleartextTraffic\": true } }]` nos plugins e um build novo, o pedido passa. O `.env` ignorado seria a causa se a URL não estivesse no `env` do perfil, mas ela está. O APK não depende do `npx expo start`, e o `json-server` responde a qualquer cliente da rede, como mostra o navegador do celular.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual destes valores é válido para `android.package` no `app.json` do app Agenda Fácil?",
+      "options": {
+        "a": "`com.suaequipe.agendafacil`",
+        "b": "`com.sua-equipe.agenda-facil`",
+        "c": "`Agenda Fácil`",
+        "d": "`agendafacil`"
+      },
+      "answer": "a",
+      "explanation": "O `android.package` é o identificador único do app: partes separadas por ponto, cada uma começando com letra, sem hífen, espaço nem acento. Hífen, a opção mais tentadora, não é aceito. `Agenda Fácil` é o `name`, o que aparece embaixo do ícone, e `agendafacil` tem uma parte só: o identificador precisa de pelo menos um ponto.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na seção **Decisões** do README do app de cardápio, qual frase ajuda mais quem avalia o projeto?",
+      "options": {
+        "a": "\"Usamos Context com useReducer no carrinho, porque três telas leem e alteram os mesmos itens; uma biblioteca de estado resolveria, mas seria mais uma coisa para a equipe aprender em duas semanas.\"",
+        "b": "\"Usamos Context.\"",
+        "c": "\"Escolhemos as tecnologias mais modernas do mercado para garantir a qualidade do app.\"",
+        "d": "\"O Context é o melhor gerenciador de estado do React, por isso foi usado em todo o projeto.\""
+      },
+      "answer": "a",
+      "explanation": "Uma decisão bem escrita diz o que a equipe escolheu, por que e qual alternativa ficou de fora: é exatamente o que o avaliador ou o recrutador pergunta na entrevista. \"Usamos Context\" informa a escolha sem o motivo. As outras duas são opiniões genéricas que não falam do problema deste app.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No portfólio, o que deve acompanhar o link do repositório do app feito em equipe?",
+      "options": {
+        "a": "Uma frase sobre o app, o vídeo, o APK e o que você fez, com verbos e resultados",
+        "b": "Só o link: quem quiser saber mais lê o código",
+        "c": "A frase \"Fiz o app\", para mostrar domínio completo do projeto",
+        "d": "A nota que a equipe recebeu no Demo Day"
+      },
+      "answer": "a",
+      "explanation": "Quem avalia quer saber o que o app faz, ver que ele funciona e entender a sua parte, como \"construí a tela de horários livres e a regra de conflito, com 6 testes\". \"Fiz o app\" num projeto de três pessoas soa como apropriação e vira pergunta difícil na entrevista. Só o link exige que a pessoa leia o código, coisa que quase ninguém faz.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No portfólio, ao lado dos apps, você fixa o repositório `lojinha-regras`, que não tem nenhuma tela. O que faz esse projeto convencer quem avalia?",
+      "options": {
+        "a": "O README com o selo verde do CI e o `npm test`: as regras da loja conferidas a cada push",
+        "b": "Um APK numa Release, como nos apps, para o recrutador instalar e testar",
+        "c": "Nada: projeto sem tela não conta para uma vaga de programador mobile",
+        "d": "O número de commits do histórico, porque quanto mais commits, melhor"
+      },
+      "answer": "a",
+      "explanation": "O `lojinha-regras` prova lógica: preço, carrinho, frete e checkout em JavaScript puro, com testes Jest e o CI do E04 rodando a cada push. O selo verde no README mostra isso em segundos. Ele é um projeto Node, então não existe APK para gerar; e vagas mobile pedem justamente JavaScript e testes, o que ele mostra melhor que uma tela. Número de commits, sozinho, não diz nada sobre a qualidade.",
+      "points": 1
+    }
+  ]
+}

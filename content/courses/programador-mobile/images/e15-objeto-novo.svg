@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>O certo: historico[0] aponta para o Pedido 1042 pendente e historico[1] para outro Pedido 1042, pago, criado por comStatus; o histórico mostra pendente e pago</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .bold { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .yes  { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .met  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ref  { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+    .refok { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#setaok); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+    <marker id="setaok" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="130" y="40" text-anchor="middle">histórico</text>
+  <text class="lbl" x="510" y="40" text-anchor="middle">dois objetos</text>
+
+  <!-- etiquetas -->
+  <rect class="box" x="30" y="70" width="200" height="56" rx="10"/>
+  <text class="bold" x="130" y="106" text-anchor="middle">historico[0]</text>
+  <path class="ref" d="M232 98 L326 98"/>
+
+  <rect class="box" x="30" y="196" width="200" height="56" rx="10"/>
+  <text class="bold" x="130" y="232" text-anchor="middle">historico[1]</text>
+  <path class="refok" d="M232 224 L326 224"/>
+
+  <!-- o pedido original, intacto -->
+  <rect class="box" x="330" y="56" width="360" height="84" rx="12"/>
+  <text class="bold" x="350" y="90">Pedido 1042</text>
+  <text class="m" x="350" y="124">status</text>
+  <text class="code" x="440" y="124">'pendente'</text>
+
+  <!-- comStatus cria outro -->
+  <path class="ref" d="M650 142 L650 178"/>
+  <text class="met" x="340" y="168">comStatus('pago')</text>
+
+  <!-- o pedido novo -->
+  <rect x="330" y="182" width="360" height="84" rx="12" fill="#131c33" stroke="#34d399" stroke-width="2.5"/>
+  <text class="bold" x="350" y="216">Pedido 1042</text>
+  <text class="m" x="350" y="250">status</text>
+  <text class="ok" x="440" y="250">'pago'</text>
+
+  <text class="ok" x="30" y="308">['pendente', 'pago']</text>
+  <text class="yes" x="30" y="342">o pendente ficou intacto para quem o guardou</text>
+</svg>

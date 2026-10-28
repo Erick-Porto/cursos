@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Dois caminhos do arquivo .ts: o editor e o npx tsc --noEmit conferem os tipos e apontam o erro; o Node só remove os tipos e roda o JavaScript que sobra, mesmo com erro de tipo</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .file { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .warn { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .confere { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-ok); }
+    .remove  { stroke: #fbbf24; stroke-width: 3; fill: none; stroke-dasharray: 8 5; marker-end: url(#seta-warn); }
+  </style>
+  <defs>
+    <marker id="seta-ok" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+    <marker id="seta-warn" viewBox="0 0 10 10" markerWidth="5" markerHeight="5" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- o arquivo -->
+  <rect x="24" y="140" width="170" height="92" rx="12" class="box"/>
+  <text x="109" y="180" text-anchor="middle" class="file">tipos.ts</text>
+  <text x="109" y="212" text-anchor="middle" class="m">com tipos</text>
+
+  <!-- caminho 1: quem confere -->
+  <path d="M 198 168 C 222 168, 210 76, 234 76" class="confere"/>
+  <rect x="240" y="28" width="250" height="96" rx="12" class="box"/>
+  <text x="365" y="66" text-anchor="middle" class="t">editor e terminal</text>
+  <text x="365" y="102" text-anchor="middle" class="code">npx tsc --noEmit</text>
+  <path d="M 494 76 L 524 76" class="confere"/>
+  <text x="536" y="68" class="ok">conferem</text>
+  <text x="536" y="100" class="m">apontam o erro</text>
+
+  <!-- caminho 2: quem roda -->
+  <path d="M 198 204 C 222 204, 210 288, 234 288" class="remove"/>
+  <rect x="240" y="240" width="210" height="96" rx="12" class="box"/>
+  <text x="345" y="278" text-anchor="middle" class="t">node</text>
+  <text x="345" y="312" text-anchor="middle" class="m">remove os tipos</text>
+  <path d="M 454 288 L 490 288" class="remove"/>
+  <rect x="498" y="240" width="198" height="96" rx="12" class="box"/>
+  <text x="597" y="278" text-anchor="middle" class="t">JavaScript</text>
+  <text x="597" y="312" text-anchor="middle" class="m">roda e imprime</text>
+
+  <text x="360" y="368" text-anchor="middle" class="warn">erro de tipo não impede o programa de rodar</text>
+</svg>

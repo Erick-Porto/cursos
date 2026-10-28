@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 330" font-family="Inter, system-ui, sans-serif">
+  <title>Os eixos trocam com a direção: em row, justifyContent age na horizontal e alignItems na vertical; em column, o padrão, justifyContent age na vertical e alignItems na horizontal</title>
+  <style>
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .jc    { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ai    { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .view  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .item  { fill: #0b1020; stroke: #b4bfd3; stroke-width: 2; }
+    .princ { fill: none; stroke: #34d399; stroke-width: 4; marker-end: url(#seta-princ); }
+    .cruz  { fill: none; stroke: #a78bfa; stroke-width: 4; stroke-dasharray: 9 6; marker-end: url(#seta-cruz); }
+  </style>
+  <defs>
+    <marker id="seta-princ" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#34d399"/></marker>
+    <marker id="seta-cruz" markerWidth="4" markerHeight="4" refX="2" refY="2" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L4,2 L0,4 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="330" rx="16" fill="#0b1020"/>
+
+  <!-- direção row -->
+  <text x="40" y="40"><tspan class="m">direção </tspan><tspan class="code">row</tspan></text>
+  <rect class="view" x="40" y="56" width="280" height="210" rx="12"/>
+  <path class="princ" d="M 58 74 L 296 74"/>
+  <text class="jc" x="302" y="106" text-anchor="end">justifyContent</text>
+  <path class="cruz" d="M 58 74 L 58 232"/>
+  <text class="ai" x="74" y="250">alignItems</text>
+  <rect class="item" x="84" y="128" width="44" height="44" rx="6"/>
+  <rect class="item" x="136" y="128" width="44" height="44" rx="6"/>
+  <rect class="item" x="188" y="128" width="44" height="44" rx="6"/>
+
+  <!-- direção column -->
+  <text x="400" y="40"><tspan class="m">direção </tspan><tspan class="code">column</tspan><tspan class="m"> (padrão)</tspan></text>
+  <rect class="view" x="400" y="56" width="280" height="210" rx="12"/>
+  <path class="princ" d="M 418 74 L 418 232"/>
+  <text class="jc" x="434" y="250">justifyContent</text>
+  <path class="cruz" d="M 418 74 L 656 74"/>
+  <text class="ai" x="662" y="106" text-anchor="end">alignItems</text>
+  <rect class="item" x="444" y="96" width="40" height="40" rx="6"/>
+  <rect class="item" x="444" y="142" width="40" height="40" rx="6"/>
+  <rect class="item" x="444" y="188" width="40" height="40" rx="6"/>
+
+  <text class="m" x="360" y="306" text-anchor="middle">seta cheia: eixo principal · tracejada: eixo cruzado</text>
+</svg>

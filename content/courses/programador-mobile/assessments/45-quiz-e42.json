@@ -1,0 +1,144 @@
+{
+  "title": "Quiz: E42 · Arquitetura do app e estado global",
+  "description": "Dez questões sobre a organização por funcionalidade, a API da equipe com json-server, a paginação do useProdutos, o Context linha a linha, o useReducer e o Jest no app.",
+  "lesson": "e42b-estado-global-e-hooks",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O carrinho da lanchonete começa vazio, mas o contexto é criado com `createContext(null)`. Por que `null`?",
+      "options": {
+        "a": "Para que o `useCarrinho` perceba quando não há `CarrinhoProvider` acima e lance um erro claro",
+        "b": "Porque `null` é a forma de o React representar o carrinho vazio",
+        "c": "Porque `createContext` só aceita `null` como argumento",
+        "d": "Para que o `CarrinhoProvider` não precise receber a prop `value`"
+      },
+      "answer": "a",
+      "explanation": "O argumento de `createContext` é o valor padrão, devolvido por `useContext` só quando não existe Provider acima do componente. Com `null`, a guarda do hook (`if (!valor) throw ...`) transforma o Provider esquecido num erro com nome. O carrinho vazio é outra coisa: é o estado inicial, `[]`, e mora dentro do Provider. `createContext` aceita qualquer valor, e o Provider sempre precisa do `value`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O json-server está no ar e `http://localhost:3000/produtos` abre no navegador do computador. No celular, com o Expo Go, o cardápio mostra \"Sem conexão\". O `.env` está assim:\n\n```bash\nEXPO_PUBLIC_API_URL=http://localhost:3000\n```\n\nO que resolve?",
+      "options": {
+        "a": "Trocar `localhost` pelo IP do computador na rede Wi-Fi e recarregar o app",
+        "b": "Trocar a porta 3000 pela 8081, que é a porta que o Metro já usa",
+        "c": "Trocar `http` por `https`, porque o celular só aceita endereços seguros",
+        "d": "Mover o `db.json` para `src/data/` e importá-lo direto na tela"
+      },
+      "answer": "a",
+      "explanation": "No celular, `localhost` é o próprio celular, onde não há json-server nenhum. O app precisa do IP do computador na rede, como `http://192.168.0.15:3000`, e de um recarregamento completo (a tecla `r` no terminal do Expo; na dúvida, `npx expo start -c`). A porta 8081 é do Metro, que não serve a API. O json-server não tem certificado, então `https` não responde. Importar o `db.json` daria dados fixos dentro do app, sem POST nem PATCH.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Complete a receita do contexto do carrinho:\n\n```jsx\nconst CarrinhoContext = ___(null);\n\nexport function useCarrinho() {\n  const valor = ___(CarrinhoContext);\n  if (!valor) throw new Error('useCarrinho precisa estar dentro do CarrinhoProvider');\n  return valor;\n}\n```",
+      "answer": [["createContext"], ["useContext"]],
+      "explanation": "`createContext` cria o canal e recebe o valor padrão; `useContext` sobe a árvore e devolve o `value` do Provider mais próximo, ou o padrão quando não há Provider. `useState` e `useReducer` criam estado dentro de um componente: não leem o que outro componente fornece.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "No app Expo, o `npm test` precisa de um preset para entender o JSX e os módulos do React Native. Complete o `package.json`:\n\n```json\n\"scripts\": { \"test\": \"jest\" },\n\"jest\": { \"preset\": \"___\" }\n```",
+      "answer": [["jest-expo"]],
+      "explanation": "O preset `jest-expo` traz para o Jest a configuração do Expo, e entra no projeto com `npx expo install jest-expo jest -- --save-dev`. No `lojinha-regras`, o Jest do E04 lia código do Node com o `babel-jest` e o `@babel/preset-env`; no app, sem o preset, o `npm test` para em \"Cannot use import statement outside a module\". O `test` e o `expect` continuam os mesmos.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "A equipe da lanchonete roda `npx json-server db.json --port 3000` com as coleções `categorias`, `produtos` e `pedidos`. Quais afirmações estão corretas?",
+      "options": {
+        "a": "Cada chave do `db.json`, como `produtos`, vira uma rota: `GET /produtos`",
+        "b": "`POST /pedidos` devolve o pedido criado, com um `id` gerado pelo servidor",
+        "c": "`PATCH /pedidos/xR31m` com `{ \"status\": \"pronto\" }` muda o status e mantém os itens e o total",
+        "d": "`PUT /pedidos/xR31m` com `{ \"status\": \"pronto\" }` também mantém os itens e o total",
+        "e": "Os dados ficam guardados no celular, por isso o app funciona com o computador desligado"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Cada coleção do arquivo vira uma rota; o POST responde 201 com o objeto e o `id` que o servidor criou, em texto; o PATCH altera só os campos enviados. O PUT é o distrator mais tentador: ele troca o objeto inteiro, e o pedido fica só com `status` e `id`. O json-server roda no computador e grava no `db.json` de lá: computador desligado, API fora do ar.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um aluno trocou a regra do `lojinha-regras` por este trecho no reducer do carrinho. Ao tocar em \"Adicionar\", um `console.log` mostra o lanche na lista, mas o número na aba não muda. Por quê?\n\n```javascript\ncase 'adicionar':\n  itens.push({ ...acao.produto, qtd: 1 });\n  return itens;\n```",
+      "options": {
+        "a": "O `push` altera o array atual e o reducer devolve a mesma referência; o React compara referências e conclui que nada mudou",
+        "b": "Falta `await` antes do `push`, e o item entra depois da renderização",
+        "c": "Um reducer não pode usar `switch`; cada ação precisa de uma função separada",
+        "d": "Falta chamar `setItens(itens)` depois do `push` para avisar o React"
+      },
+      "answer": "a",
+      "explanation": "O reducer precisa devolver um estado novo. Com `push`, o array é o mesmo objeto de antes, e o React, que compara referências, não renderiza de novo. A correção é devolver a lista nova da regra: `return adicionarItem(itens, acao.produto);`, a do E09, que não muta. Chamar `setItens` dentro do reducer, a opção mais tentadora, não existe nesse modelo: o reducer é puro e quem guarda o resultado é o `useReducer`. `push` não é assíncrono, e `switch` é a forma usual de um reducer.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na lanchonete, o botão \"Enviar pedido\" fica na tela Carrinho. Qual organização segue as camadas da aula?",
+      "options": {
+        "a": "`TelaCarrinho` chama `criarPedido(pedido)` de `src/api/pedidos.js` e, se der certo, `esvaziar()` do `useCarrinho`",
+        "b": "`TelaCarrinho` faz `fetch('http://192.168.0.15:3000/pedidos', ...)` direto, porque só ela envia pedidos",
+        "c": "O `carrinhoReducer` ganha um `case 'enviar'` que faz o POST e devolve o carrinho vazio",
+        "d": "`src/api/pedidos.js` importa o `useCarrinho` para ler os itens e enviar o pedido sozinho"
+      },
+      "answer": "a",
+      "explanation": "As chamadas descem: a tela responde ao toque, a `api/` fala com o servidor e o contexto guarda o carrinho. O reducer com POST é a opção mais tentadora, mas o reducer precisa ser puro: sem rede, sem espera e testável sem servidor. O `fetch` na tela espalha o IP pelo código, e a `api/` importando um hook inverte as camadas: ela não conhece React nem telas.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um app guarda tudo num `AppContext`: tema, carrinho e cliente. A equipe percebe que cada toque em \"+\" redesenha telas que só leem as cores do tema. Qual é a melhor correção para o tamanho do projeto?",
+      "options": {
+        "a": "Dividir em contextos por assunto, como `TemaContext` e `CarrinhoContext`, cada um com seu Provider e seu hook",
+        "b": "Trocar o `useState` do `AppContext` por `useReducer`, mantendo um contexto só",
+        "c": "Guardar o tema no `db.json` e buscá-lo no json-server a cada tela",
+        "d": "Colocar um `AppProvider` dentro de cada tela, para que cada uma tenha o seu"
+      },
+      "answer": "a",
+      "explanation": "Todo componente que lê um contexto renderiza de novo quando o `value` dele muda. Separado por assunto, o carrinho muda e só quem lê o carrinho redesenha. Trocar por `useReducer`, a opção mais tentadora, organiza as ações, mas o `value` continua mudando para todos. Buscar o tema na rede deixa as telas mais lentas, e um Provider por tela cria estados separados: o carrinho de uma tela não apareceria na outra.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "A Lojinha pede 20 produtos por página à DummyJSON e já mostra 40 na grade. Qual chamada busca a próxima página?",
+      "options": {
+        "a": "`listarProdutos({ limite: 20, pular: 40 })`",
+        "b": "`listarProdutos({ limite: 20, pular: 60 })`",
+        "c": "`listarProdutos({ limite: 20, pular: 3 })`",
+        "d": "`listarProdutos({ limite: 60, pular: 0 })`"
+      },
+      "answer": "a",
+      "explanation": "`pular` vira o `skip` da DummyJSON: quantos produtos pular. Quem já tem 40 pula 40 e recebe do 41 ao 60; por isso o `useProdutos` usa `produtos.length`. Com 60, a opção mais tentadora para quem pensa em \"página 3 vezes 20\", os produtos 41 a 60 nunca aparecem. `pular: 3` confunde o número da página com a quantidade, e `limite: 60` com `pular: 0` baixa de novo os 40 que já estão na tela.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um colega fez a trava do `carregarMais` com estado. Ao rolar rápido até o fim, os produtos 21 a 40 aparecem duas vezes e o terminal avisa `Encountered two children with the same key`. Qual é a correção?\n\n```javascript\nconst [buscando, setBuscando] = useState(false);\n\nasync function carregarMais() {\n  if (buscando || produtos.length >= total) return;\n  setBuscando(true);\n  await buscarPagina(produtos.length, setCarregandoMais);\n  setBuscando(false);\n}\n```",
+      "options": {
+        "a": "Trocar o estado por `const buscando = useRef(false)` e ler e gravar `buscando.current`",
+        "b": "Aumentar o `onEndReachedThreshold` para 1, para o fim ser detectado mais cedo",
+        "c": "Usar o índice do item no `keyExtractor`, para o aviso de chave repetida sumir",
+        "d": "Trocar o `await` por `.then()`, para o pedido terminar antes da segunda chamada"
+      },
+      "answer": "a",
+      "explanation": "`setBuscando(true)` só muda o valor na próxima renderização: a segunda chamada do `onEndReached`, logo em seguida, ainda lê `false` e pede `skip=20` de novo. O `useRef` muda na hora, e a segunda chamada já encontra a trava ligada. Um limite maior faz o evento disparar mais cedo, não menos vezes. O índice na chave só esconde o aviso: os produtos continuam repetidos. E `.then()` é a mesma Promise com outra escrita, sem mudar quando a resposta chega.",
+      "points": 2
+    }
+  ]
+}

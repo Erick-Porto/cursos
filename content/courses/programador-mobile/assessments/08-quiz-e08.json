@@ -1,0 +1,145 @@
+{
+  "title": "Quiz: E08 · Arrays e objetos",
+  "description": "Dez questões sobre métodos de array, ordenação com comparadores, objetos, Object.entries, JSON e as regras do histórico de buscas.",
+  "lesson": "e08b-objetos-e-colecoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O relatório do catálogo deve imprimir os nomes `['Livros', 'Áudio', 'Casa']` na ordem `Áudio`, `Casa`, `Livros`. Qual chamada faz isso?",
+      "options": {
+        "a": "`nomes.sort((a, b) => a.localeCompare(b, 'pt-BR'))`",
+        "b": "`nomes.sort()`",
+        "c": "`nomes.sort((a, b) => a - b)`",
+        "d": "`nomes.sort((a, b) => a > b)`"
+      },
+      "answer": "a",
+      "explanation": "`localeCompare` com `'pt-BR'` devolve negativo, zero ou positivo seguindo as regras do português, e o Á fica junto do A. O `sort()` sem comparador, a opção mais tentadora, compara os códigos dos caracteres e manda o `Áudio` para o fim. Subtrair textos dá `NaN`, e um comparador que devolve `true` ou `false` nunca devolve negativo, então a ordem sai errada.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o conteúdo de `precos` depois destas linhas?\n\n```javascript\nconst precos = [89.9, 119.9, 59.9];\nprecos.sort();\n```",
+      "options": {
+        "a": "`[119.9, 59.9, 89.9]`",
+        "b": "`[59.9, 89.9, 119.9]`",
+        "c": "`[119.9, 89.9, 59.9]`",
+        "d": "`[89.9, 119.9, 59.9]`"
+      },
+      "answer": "a",
+      "explanation": "Sem comparador, o `sort` transforma cada número em texto e compara caractere a caractere: \"1\" vem antes de \"5\", que vem antes de \"8\". A ordem crescente certa só sai com `precos.sort((a, b) => a - b)`. O array também não fica como estava: o `sort` sempre ordena o próprio array.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "No `lojinha-regras`, o mesmo array `produtos` é importado pelos scripts, pelas regras e pelos testes. Quais linhas, escritas no script da vitrine, **alteram** esse array e, por isso, mudam o que os outros arquivos veem?",
+      "options": {
+        "a": "`produtos.sort((a, b) => a.preco - b.preco)`",
+        "b": "`produtos.slice().sort((a, b) => a.preco - b.preco)`",
+        "c": "`produtos.slice(0, 4)`",
+        "d": "`produtos.splice(0, 1)`",
+        "e": "`produtos.find((p) => p.destaque)`"
+      },
+      "answer": [
+        "a",
+        "d"
+      ],
+      "explanation": "`sort` ordena no lugar e `splice` corta o próprio array: os dois mudam o catálogo que os outros arquivos leem. Em `produtos.slice().sort(...)`, o `slice()` cria uma cópia antes, e o `sort` mexe só nela. `slice(0, 4)` devolve um array novo e `find` só procura: nenhum dos dois toca no original.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Com `const favoritos = [3, 7];`, a expressão `favoritos.includes('7')` devolve `true`.",
+      "answer": false,
+      "explanation": "`includes` compara com `===`, e o texto `'7'` é diferente do número `7`. Isso acontece de verdade no laboratório: tudo o que chega por `process.argv`, como em `node src/scripts/favoritos.js 7`, é texto. Converta com `Number(texto)` antes de procurar.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete para obter os pares `[chave, valor]` do objeto e imprimir com eles as ordens que o script da vitrine aceita:\n\n```javascript\nconst rotulosDeOrdem = { nome: 'Nome', preco: 'Menor preço' };\nconst pares = Object.___(rotulosDeOrdem);\n// [['nome', 'Nome'], ['preco', 'Menor preço']]\n```",
+      "answer": [
+        [
+          "entries"
+        ]
+      ],
+      "explanation": "`Object.entries` devolve um array de pares `[chave, valor]`, pronto para um `for...of` que imprime uma linha por par. `Object.keys` devolveria só `['nome', 'preco']`, e `Object.values`, só os rótulos.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Qual é o resultado de `registrarBusca(['fone', 'garrafa', 'tênis'], 'Garrafa')`?\n\n```javascript\nexport function registrarBusca(historico, termo, limite = 5) {\n  const limpo = termo.trim();\n  if (limpo === '') return historico;\n  const novo = historico.slice();\n  const repetida = novo.findIndex((t) => t.toLowerCase() === limpo.toLowerCase());\n  if (repetida !== -1) novo.splice(repetida, 1);\n  novo.unshift(limpo);\n  return novo.slice(0, limite);\n}\n```",
+      "options": {
+        "a": "`['Garrafa', 'fone', 'tênis']`",
+        "b": "`['Garrafa', 'fone', 'garrafa', 'tênis']`",
+        "c": "`['fone', 'garrafa', 'tênis']`",
+        "d": "`['fone', 'tênis', 'Garrafa']`"
+      },
+      "answer": "a",
+      "explanation": "O `findIndex` compara em minúsculas e acha `'garrafa'` na posição 1; o `splice` tira essa entrada da cópia e o `unshift` põe `'Garrafa'` na frente. Sem o `toLowerCase`, a busca entraria repetida. O histórico não fica igual, porque a busca repetida sobe para o começo, e o `unshift` põe no começo, não no fim.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Qual expressão devolve `349.9`?\n\n```javascript\nconst produto = { id: 7, nome: 'Tênis de Corrida', preco: 349.9 };\nconst campo = 'preco';\n```",
+      "options": {
+        "a": "`produto[campo]`",
+        "b": "`produto.campo`",
+        "c": "`produto['campo']`",
+        "d": "`produto[preco]`"
+      },
+      "answer": "a",
+      "explanation": "Com colchete e sem aspas, a chave vem do valor da variável `campo`, que é `'preco'`. `produto.campo` e `produto['campo']` procuram uma chave chamada literalmente \"campo\" e devolvem `undefined`. `produto[preco]` procura uma variável `preco`, que não existe, e dá erro.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Com esta versão de `aplicarFiltros`, o comando `node src/scripts/vitrine.js preco`, sem categoria, termina com \"Primeiro do catálogo: Livro de Receitas\" em vez de \"Fone Bluetooth\". Qual é a causa?\n\n```javascript\nexport function aplicarFiltros(lista, filtros = {}) {\n  let base = lista;\n  if (filtros.categoria) {\n    base = [];\n    for (const produto of lista) {\n      if (produto.categoria === filtros.categoria) base.push(produto);\n    }\n  }\n  return base.sort(comparadores[filtros.ordem]);\n}\n```",
+      "options": {
+        "a": "Sem categoria, `base` é o próprio array `produtos`, e o `sort` o reordena no lugar",
+        "b": "O `push` dentro do laço acrescenta itens ao array `produtos`",
+        "c": "`comparadores[filtros.ordem]` deveria ser `comparadores.filtros.ordem`",
+        "d": "O comparador de preço devolve um número em vez de `true` ou `false`"
+      },
+      "answer": "a",
+      "explanation": "Sem categoria, o `if` não roda e `base` continua apontando para a mesma `lista` recebida, que é o catálogo; o `sort` muda esse array, lido também pelo resto do script. A correção é `base.slice().sort(...)`. O `push` mexe no array novo criado com `base = []`, não em `produtos`. `comparadores.filtros.ordem` procuraria uma chave chamada \"filtros\". E o comparador deve mesmo devolver número.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "truefalse",
+      "prompt": "Depois de `const texto = JSON.stringify(comparadores);`, o `JSON.parse(texto)` devolve um objeto com as funções `nome`, `preco` e `avaliacao` prontas para usar no `sort`.",
+      "answer": false,
+      "explanation": "JSON só leva dados: funções e `undefined` somem no `stringify`, e `JSON.stringify(comparadores)` dá `'{}'`. Por isso os dados viajam como JSON e as regras ficam no código, e os favoritos são guardados como um array de ids, como `[3, 7]`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Qual destas linhas **derruba** o programa com `TypeError`?\n\n```javascript\nconst pedido = {\n  cliente: { nome: 'Ana Souza' },\n  itens: [{ nome: 'Fone Bluetooth' }, { nome: 'Tênis de Corrida' }],\n};\n```",
+      "options": {
+        "a": "`pedido.entrega.prazo`",
+        "b": "`pedido.entrega`",
+        "c": "`pedido.itens[2]`",
+        "d": "`pedido.cliente['nome']`"
+      },
+      "answer": "a",
+      "explanation": "`pedido.entrega` não existe e dá `undefined`, sem erro; ler `prazo` **dentro** de `undefined` é que lança o `TypeError`. A posição 2 de `itens` também não existe e só devolve `undefined`. `pedido.cliente['nome']` é `'Ana Souza'`. Quando uma parte pode faltar, confira antes de ler dentro dela; no E13, o `?.` faz isso numa linha.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>hitSlop de 10 em volta de um ícone de 24: a área de toque passa a ter 44 por 44 sem mudar o desenho</title>
+  <style>
+    .area  { fill: #a78bfa; fill-opacity: 0.14; stroke: #a78bfa; stroke-width: 2.5; stroke-dasharray: 9 6; }
+    .icone { fill: #131c33; stroke: #b4bfd3; stroke-width: 2; }
+    .dez   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .t     { fill: #e8edf7; font-size: 22px; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .soma  { fill: #34d399; font-size: 26px; font-weight: 700; }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+  <g transform="translate(45 0)">
+
+  <!-- área de toque com hitSlop -->
+  <rect class="area" x="60" y="50" width="220" height="220" rx="6"/>
+  <!-- o próprio ícone de 24 -->
+  <rect class="icone" x="110" y="100" width="120" height="120" rx="4"/>
+  <g transform="translate(122 112) scale(4)" fill="none" stroke="#e8edf7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- heart (lucide) -->
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+  </g>
+  <text class="dez" x="170" y="83" text-anchor="middle">10</text>
+  <text class="dez" x="170" y="253" text-anchor="middle">10</text>
+  <text class="dez" x="85" y="168" text-anchor="middle">10</text>
+  <text class="dez" x="255" y="168" text-anchor="middle">10</text>
+
+  <!-- legenda -->
+  <rect class="icone" x="330" y="74" width="26" height="26" rx="3"/>
+  <text class="t" x="370" y="95">desenho do ícone: 24</text>
+  <rect class="area" x="330" y="124" width="26" height="26" rx="3"/>
+  <text class="t" x="370" y="145">área de toque: 44</text>
+  <text class="code" x="330" y="210">hitSlop={10}</text>
+  <text class="soma" x="330" y="256">24 + 10 + 10 = 44</text>
+  </g>
+</svg>

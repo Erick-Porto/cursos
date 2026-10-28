@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 432" font-family="Inter, system-ui, sans-serif">
+  <title>Ordem do event loop: primeiro o código atual roda inteiro (1 e 2), depois as microtarefas, como o then (3), e por último as tarefas, como o setTimeout de 0 ms (4)</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .s    { fill: #b4bfd3; font-size: 22px; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .out  { fill: #e8edf7; font-size: 22px; }
+    .c1   { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .c2   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .c3   { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .h    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .a1   { stroke: #e8edf7; stroke-width: 3; fill: none; marker-end: url(#p1); }
+    .a2   { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#p2); }
+    .a3   { stroke: #fbbf24; stroke-width: 3; fill: none; marker-end: url(#p3); }
+    .f1   { animation: f1 8s infinite; }
+    .f2   { animation: f2 8s infinite; }
+    .f3   { animation: f3 8s infinite; }
+    @keyframes f1 { 0%, 4%  { opacity: 0; } 10%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes f2 { 0%, 32% { opacity: 0; } 38%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes f3 { 0%, 60% { opacity: 0; } 66%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .f1, .f2, .f3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="p1" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#e8edf7"/></marker>
+    <marker id="p2" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+    <marker id="p3" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="432" rx="16" fill="#0b1020"/>
+
+  <!-- de onde vem o que roda -->
+  <rect class="box" x="24" y="24" width="208" height="88" rx="12"/>
+  <text class="c1" x="128" y="60" text-anchor="middle">Código atual</text>
+  <text class="s" x="128" y="94" text-anchor="middle">o script inteiro</text>
+
+  <rect class="box" x="256" y="24" width="208" height="88" rx="12"/>
+  <text class="c2" x="360" y="60" text-anchor="middle">Microtarefas</text>
+  <text class="s mono" x="360" y="94" text-anchor="middle">then</text>
+
+  <rect class="box" x="488" y="24" width="208" height="88" rx="12"/>
+  <text class="c3" x="592" y="60" text-anchor="middle">Tarefas</text>
+  <text class="s mono" x="592" y="94" text-anchor="middle">setTimeout</text>
+
+  <!-- pilha -->
+  <rect class="box" x="24" y="172" width="672" height="56" rx="12"/>
+  <text class="h" x="360" y="208" text-anchor="middle">Pilha de chamadas</text>
+
+  <!-- terminal -->
+  <rect class="box" x="24" y="248" width="672" height="162" rx="12"/>
+
+  <!-- 1: síncrono, inteiro -->
+  <g class="f1">
+    <path class="a1" d="M 128 114 L 128 164"/>
+    <text class="out mono" x="44" y="284">1. Cliente escolheu Pix</text>
+    <text class="out mono" x="44" y="318">2. Fim do código atual</text>
+    <text class="c1" x="676" y="284" text-anchor="end">código atual</text>
+    <text class="c1" x="676" y="318" text-anchor="end">código atual</text>
+  </g>
+
+  <!-- 2: pilha vazia, microtarefas -->
+  <g class="f2">
+    <path class="a2" d="M 360 114 L 360 164"/>
+    <text class="out mono" x="44" y="352">3. Pix gerado</text>
+    <text class="c2" x="676" y="352" text-anchor="end">microtarefa</text>
+  </g>
+
+  <!-- 3: depois das microtarefas, a tarefa -->
+  <g class="f3">
+    <path class="a3" d="M 592 114 L 592 164"/>
+    <text class="out mono" x="44" y="386">4. Timer de 0 ms</text>
+    <text class="c3" x="676" y="386" text-anchor="end">tarefa</text>
+  </g>
+</svg>

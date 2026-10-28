@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>Tela empilhada e modal: o Detalhe desliza da lateral e cobre a vitrine; os Filtros sobem de baixo e a vitrine continua aparecendo atrás</title>
+  <style>
+    .phone { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .tela  { fill: #0b1020; }
+    .card  { fill: #2a3a5c; }
+    .over  { fill: #131c33; stroke: #a78bfa; stroke-width: 2; }
+    .h     { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .t     { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .chip  { fill: none; stroke: #34d399; stroke-width: 2; }
+    .ok    { fill: #34d399; }
+    .okt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .chev  { fill: none; stroke: #e8edf7; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+    .lado  { animation: lado 8s ease-out infinite; }
+    .baixo { animation: baixo 8s ease-out infinite; }
+    @keyframes lado {
+      0%, 8%   { opacity: 1; transform: translateX(190px); }
+      24%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes baixo {
+      0%, 44%  { opacity: 1; transform: translateY(210px); }
+      62%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .lado, .baixo { animation: none; }
+    }
+  </style>
+  <defs>
+    <clipPath id="tela-esq"><rect x="90" y="76" width="180" height="240" rx="14"/></clipPath>
+    <clipPath id="tela-dir"><rect x="450" y="76" width="180" height="240" rx="14"/></clipPath>
+  </defs>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <text class="h" x="180" y="46" text-anchor="middle">Tela empilhada</text>
+  <text class="h" x="540" y="46" text-anchor="middle">Modal</text>
+
+  <!-- celular da esquerda: vitrine e o Detalhe empilhado -->
+  <rect class="phone" x="80" y="66" width="200" height="260" rx="22"/>
+  <rect class="tela" x="90" y="76" width="180" height="240" rx="14"/>
+  <text class="m" x="106" y="108">Início</text>
+  <path class="card" d="M102 124h74v60h-74z M186 124h74v60h-74z M102 194h74v60h-74z M186 194h74v60h-74z"/>
+  <g clip-path="url(#tela-esq)">
+    <g class="lado">
+      <rect class="over" x="90" y="76" width="180" height="240" rx="14"/>
+      <path class="chev" d="M114 98 L106 106 L114 114"/>
+      <text class="t" x="124" y="114">Detalhe</text>
+      <rect class="card" x="102" y="132" width="156" height="104" rx="8"/>
+      <rect class="ok" x="102" y="254" width="156" height="40" rx="8"/>
+    </g>
+  </g>
+
+  <!-- celular da direita: vitrine e os Filtros como modal -->
+  <rect class="phone" x="440" y="66" width="200" height="260" rx="22"/>
+  <rect class="tela" x="450" y="76" width="180" height="240" rx="14"/>
+  <text class="m" x="466" y="108">Início</text>
+  <path class="card" d="M462 124h74v60h-74z M546 124h74v60h-74z M462 194h74v60h-74z M546 194h74v60h-74z"/>
+  <g clip-path="url(#tela-dir)">
+    <g class="baixo">
+      <rect class="over" x="450" y="120" width="180" height="210" rx="14"/>
+      <text class="t" x="466" y="154">Filtros</text>
+      <rect class="chip" x="466" y="174" width="64" height="30" rx="15"/>
+      <rect class="ok" x="540" y="174" width="74" height="30" rx="15"/>
+      <rect class="chip" x="466" y="214" width="84" height="30" rx="15"/>
+      <rect class="ok" x="466" y="254" width="148" height="40" rx="8"/>
+      <text class="okt" x="540" y="281" text-anchor="middle">Aplicar</text>
+    </g>
+  </g>
+
+  <!-- legendas -->
+  <text class="lbl" x="180" y="364" text-anchor="middle">desliza da lateral</text>
+  <text class="m" x="180" y="398" text-anchor="middle">avancei um passo</text>
+  <text class="lbl" x="540" y="364" text-anchor="middle">sobe de baixo</text>
+  <text class="m" x="540" y="398" text-anchor="middle">parei para resolver algo</text>
+</svg>

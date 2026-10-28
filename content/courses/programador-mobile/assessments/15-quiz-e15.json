@@ -1,0 +1,154 @@
+{
+  "title": "Quiz: E15 · Classes: modelando produto e pedido",
+  "description": "Dez questões sobre classes, instâncias, this, métodos estáticos, getters, setters e como mudar um pedido sem estragar quem guardou o antigo.",
+  "lesson": "e15b-metodos-estaticos-getters-e-setters",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na Lojinha, `Produto` é declarado com `class Produto { ... }` e o script da vitrine cria `const fone = new Produto(dados)`. Qual afirmação descreve essa relação?",
+      "options": {
+        "a": "`Produto` é a classe, o molde escrito uma vez; `fone` é uma instância, com os próprios valores e os métodos da classe",
+        "b": "`Produto` e `fone` são instâncias; a classe é o array `produtos` de `src/data/produtos.js`, de onde vêm os dados",
+        "c": "`fone` é a classe, porque guarda os dados; `Produto` é só o nome do arquivo em `src/modelos/`",
+        "d": "`Produto` é uma instância de `fone`, criada quando o `constructor` termina"
+      },
+      "answer": "a",
+      "explanation": "A classe é o molde: declara campos e métodos uma vez. Cada `new Produto(dados)` cria uma instância com os seus valores, que usa os métodos da classe. Os itens de `produtos.js` são só dados, objetos literais sem métodos, e a relação nunca é ao contrário: a instância vem da classe.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A classe `Produto` tem `get precoFormatado() { return formatarPreco(this.preco); }`. Qual linha imprime o preço formatado do produto no terminal?",
+      "options": {
+        "a": "`console.log(produto.precoFormatado);`",
+        "b": "`console.log(produto.precoFormatado());`",
+        "c": "`console.log(Produto.precoFormatado);`",
+        "d": "`console.log(produto.get.precoFormatado);`"
+      },
+      "answer": "a",
+      "explanation": "Getter se lê como propriedade, sem parênteses: o valor é calculado na hora a partir do `this.preco` daquela instância. Com parênteses, a opção mais tentadora, o getter já devolveu o texto e o JavaScript tenta chamar um texto: `TypeError: produto.precoFormatado is not a function`. Pela classe não há instância nem preço, e o resultado é `undefined`; `get` só aparece na declaração.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Você quer transformar todos os produtos de `src/data/produtos.js` em instâncias. A classe tem:\n\n```javascript\nstatic listaDeJSON(lista) {\n  return lista.map((obj) => Produto.deJSON(obj));\n}\n```\n\nQual chamada funciona?",
+      "options": {
+        "a": "`const vitrine = Produto.listaDeJSON(produtos);`",
+        "b": "`const vitrine = new Produto().listaDeJSON(produtos);`",
+        "c": "`const vitrine = produtos.listaDeJSON();`",
+        "d": "`const vitrine = Produto.listaDeJSON;`"
+      },
+      "answer": "a",
+      "explanation": "Método `static` pertence à classe e é chamado pelo nome dela, com a lista como argumento. Pela instância ele não existe, e `new Produto()` sem objeto quebraria antes, no `constructor` que desestrutura os campos. Arrays não têm `listaDeJSON`, e sem parênteses você guarda a função em vez de chamá-la.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Um script guarda as versões do pedido num histórico:\n\n```javascript\nconst pendente = new Pedido(dados);\nconst historico = [pendente];\n```\n\nQuais formas de registrar o pagamento deixam `historico.map((p) => p.status)` igual a `['pendente', 'pago']`?",
+      "options": {
+        "a": "`historico.push(pendente.comStatus('pago'));`",
+        "b": "`historico.push(new Pedido({ ...pendente.paraJSON(), status: 'pago' }));`",
+        "c": "`pendente.status = 'pago'; historico.push(pendente);`",
+        "d": "`const pago = pendente; pago.status = 'pago'; historico.push(pago);`",
+        "e": "`pendente.comStatus('pago'); historico.push(pendente);`"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "As duas primeiras criam **outro** `Pedido` com status `'pago'` e deixam o original intacto em `historico[0]`; a segunda é exatamente o que `comStatus` faz por dentro. Mudar `pendente` e guardá-lo de novo põe a mesma referência nas duas posições, e o histórico mostra `['pago', 'pago']`; `const pago = pendente` não copia nada, só cria outra etiqueta para o mesmo objeto. E `comStatus` sozinho cria um pedido que ninguém guarda: o histórico fica `['pendente', 'pendente']`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "`pedido.comStatus('pago')` troca o status do próprio `pedido` e devolve o mesmo objeto, já alterado.",
+      "answer": false,
+      "explanation": "`comStatus` cria e devolve **outro** `Pedido`, com os mesmos dados e o status novo; o original continua como estava. É isso que protege quem já guardou o pedido antigo, como um histórico. Por isso o retorno precisa ser usado, como em `const pago = pedido.comStatus('pago')`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Complete a fábrica do `Produto`, que os scripts chamam como `Produto.deJSON(dados)`:\n\n```javascript\nexport default class Produto {\n  ___ deJSON(obj) {\n    return ___ Produto(obj);\n  }\n}\n```",
+      "answer": [
+        [
+          "static"
+        ],
+        [
+          "new"
+        ]
+      ],
+      "explanation": "`static` faz o método pertencer à classe, e por isso a chamada é `Produto.deJSON(...)`, sem instância. Dentro dele, `new` cria a instância e roda o `constructor` com o objeto recebido. Sem `new`, o JavaScript para com `TypeError`: uma classe não pode ser chamada como função comum.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Para guardar o pedido em arquivo, alguém gravou `JSON.stringify(pedido)`, sendo `pedido` uma instância de `Pedido` com status `'pago'`. Ao ler de volta, `new Pedido(JSON.parse(texto))` aparece como **pendente**. O status é guardado assim:\n\n```javascript\nset status(valor) {\n  if (!STATUS.includes(valor)) throw new Error(`Status inválido: ${valor}`);\n  this._status = valor;\n}\n```\n\nO que explica o problema?",
+      "options": {
+        "a": "O `JSON.stringify` copia só os campos do próprio objeto: gravou `_status`, não `status`, e o `constructor` usou o padrão `'pendente'`",
+        "b": "O `JSON.parse` devolve os textos em maiúsculas, e o setter recusa `'PAGO'` em silêncio",
+        "c": "O setter roda de novo ao criar o pedido e sempre volta o status para `'pendente'`",
+        "d": "Instâncias não viram texto: o `JSON.stringify` devolveu `undefined` e o pedido foi criado vazio"
+      },
+      "answer": "a",
+      "explanation": "`JSON.stringify` e o spread só enxergam os campos guardados no objeto: `id`, `itens`, `_status`, `frete` e `desconto`. O getter `status` mora na classe e fica de fora. Ao recriar, o `constructor` não encontra `status` e aplica o padrão. O setter não troca valores válidos, só recusa os inválidos, e com erro, não em silêncio. A correção é gravar `pedido.paraJSON()`, que devolve exatamente os dados que o `constructor` espera.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O `Pedido` valida o status num setter, e o `constructor` faz `this.status = status`. O que acontece nesta linha?\n\n```javascript\nconst pedido = new Pedido({ id: 7, itens: [], status: 'aprovado' });\n```",
+      "options": {
+        "a": "Lança um erro com a mensagem `Status inválido: aprovado`, porque a atribuição do `constructor` passa pelo setter",
+        "b": "Cria o pedido com status `'aprovado'`, porque o setter só roda nas atribuições feitas depois do `constructor`",
+        "c": "Cria o pedido com status `'pendente'`, o valor padrão, e ignora o valor inválido em silêncio",
+        "d": "Entra em repetição infinita até `Maximum call stack size exceeded`"
+      },
+      "answer": "a",
+      "explanation": "Toda atribuição a `status`, inclusive a do `constructor`, chama o setter, que recusa valores fora da lista com `throw`. Assim, um pedido inválido nem chega a existir. O padrão `'pendente'` só vale quando o campo não vem. A repetição infinita aconteceria se o setter fizesse `this.status = valor` em vez de `this._status = valor`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que a última linha imprime?\n\n```javascript\nclass Produto {\n  constructor(nome, preco) {\n    this.nome = nome;\n    this.preco = preco;\n  }\n\n  precoPara(qtd) {\n    return paraReais(paraCentavos(this.preco) * qtd);\n  }\n}\n\nconst fone = new Produto('Fone Bluetooth', 199.9);\nconst caixa = new Produto('Caixa de Som Portátil', 249.9);\nconsole.log(caixa.precoPara(2));\n```",
+      "options": {
+        "a": "`499.8`",
+        "b": "`399.8`",
+        "c": "`NaN`",
+        "d": "`TypeError: Cannot read properties of undefined (reading 'preco')`"
+      },
+      "answer": "a",
+      "explanation": "Dentro do método, `this` é a instância que vem antes do ponto na chamada: aqui, `caixa`, com preço 249.9. O `399.8` seria o resultado de `fone.precoPara(2)`: o método é um só, mas o `this` muda a cada chamada, e não fica preso ao primeiro produto criado. O `TypeError` aparece quando o método é chamado solto, sem objeto antes do ponto.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Qual teste do Jest confere que o `Pedido` recusa o status `'aprovado'`?",
+      "options": {
+        "a": "`expect(() => new Pedido({ status: 'aprovado' })).toThrow('Status inválido');`",
+        "b": "`expect(new Pedido({ status: 'aprovado' })).toThrow('Status inválido');`",
+        "c": "`expect(new Pedido({ status: 'aprovado' }).status).toBe('Status inválido');`",
+        "d": "`expect(() => new Pedido({ status: 'aprovado' })).toBe('Status inválido');`"
+      },
+      "answer": "a",
+      "explanation": "`toThrow` precisa receber uma função: o Jest a chama e captura o erro. Sem a arrow, a opção mais tentadora, o `new Pedido(...)` roda antes do `expect`, o erro estoura ali e o teste falha. O `.status` nem chega a ser lido, porque o pedido inválido não existe. E `toBe` compara a função com um texto: nunca são iguais.",
+      "points": 1
+    }
+  ]
+}

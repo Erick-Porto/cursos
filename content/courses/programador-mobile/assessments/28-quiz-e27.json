@@ -1,0 +1,116 @@
+{
+  "title": "Quiz: E27 · Componentes nativos e StyleSheet",
+  "description": "Oito questões sobre os componentes do React Native, a área segura, o StyleSheet e o alinhamento com Flexbox.",
+  "lesson": "e27b-estilo-com-stylesheet",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Na web você organiza a tela com `div`. Qual componente do React Native faz esse papel de caixa que agrupa outros elementos?",
+      "options": {
+        "a": "`View`",
+        "b": "`Text`",
+        "c": "`Container`",
+        "d": "`Div`"
+      },
+      "answer": "a",
+      "explanation": "`View` é a caixa que organiza e não mostra nada sozinha, como a `div`. `Text` serve só para texto, e `Container` e `Div` não existem no React Native."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que acontece ao rodar este trecho no celular?\n\n```jsx\n<View>\n  Minhas Tarefas\n  <Text>3 pendentes</Text>\n</View>\n```",
+      "options": {
+        "a": "Aparecem \"Minhas Tarefas\" e \"3 pendentes\", um abaixo do outro",
+        "b": "Tela vermelha: há texto solto fora de um componente `Text`",
+        "c": "Aparece só \"3 pendentes\"; o texto solto é ignorado em silêncio",
+        "d": "Aviso amarelo no terminal, mas a tela funciona normalmente"
+      },
+      "answer": "b",
+      "explanation": "No React Native todo texto precisa estar dentro de `Text`. \"Minhas Tarefas\" está direto na `View`, e isso derruba o app com a tela vermelha. Não é um aviso nem um texto ignorado: é erro."
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Uma `Image` remota, com `source={{ uri: 'https://...' }}`, aparece no tamanho original mesmo sem `width` e `height` no estilo.",
+      "answer": false,
+      "explanation": "O aparelho não conhece o tamanho de uma imagem da internet antes de baixá-la. Sem `width` e `height`, ela ocupa zero pixels e não aparece, sem nenhum erro. Só a imagem local, carregada com `require`, tem o tamanho lido do arquivo."
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Na web você tinha `<button onClick={salvar}>Salvar</button>`. Qual é a versão em React Native de um botão que você pode estilizar livremente?",
+      "options": {
+        "a": "`<Pressable onPress={salvar}><Text>Salvar</Text></Pressable>`",
+        "b": "`<Button onClick={salvar}>Salvar</Button>`",
+        "c": "`<Pressable onClick={salvar}>Salvar</Pressable>`",
+        "d": "`<Button title=\"Salvar\" onPress={salvar} />`"
+      },
+      "answer": "a",
+      "explanation": "`Pressable` aceita qualquer conteúdo e estilo próprio, e responde ao toque com `onPress`. A opção com `Button` e `onPress` funciona, mas tem a aparência fixa do sistema. `onClick` não existe no React Native, e texto solto dentro de `Pressable` quebra o app."
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Quais destes trechos estão corretos em um componente React Native?",
+      "options": {
+        "a": "`fontSize: 18` dentro de `StyleSheet.create`",
+        "b": "`font-size: '18px'` dentro de `StyleSheet.create`",
+        "c": "`style={[estilos.cartao, concluida && estilos.concluida]}`",
+        "d": "`style=\"padding: 16\"` direto no componente"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "No StyleSheet as propriedades são camelCase e os números não têm unidade, e `style` aceita um objeto ou um array, em que `false` é ignorado. `font-size` com hífen é erro de sintaxe em um objeto JavaScript, `'18px'` não é aceito e `style` nunca recebe uma string.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "No React Native, quando você não informa `flexDirection`, os filhos de uma `View` se organizam na direção ___, diferente do padrão da web.",
+      "answer": [
+        [
+          "column",
+          "'column'"
+        ]
+      ],
+      "explanation": "O padrão do React Native é `column`: os filhos empilham um abaixo do outro. Na web, o padrão do Flexbox é `row`. Por isso, para colocar itens lado a lado no celular, você precisa escrever `flexDirection: 'row'`."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Como os dois textos aparecem na tela?\n\n```jsx\n<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>\n  <Text style={{ fontSize: 28 }}>Estudar React Native</Text>\n  <Text style={{ fontSize: 12 }}>alta</Text>\n</View>\n```",
+      "options": {
+        "a": "Um abaixo do outro, encostados à esquerda",
+        "b": "Lado a lado, o título na esquerda e \"alta\" na direita, alinhados pelo meio da altura",
+        "c": "Lado a lado, os dois juntos no centro da linha",
+        "d": "Lado a lado, o título na esquerda e \"alta\" na direita, com \"alta\" colado no topo"
+      },
+      "answer": "b",
+      "explanation": "`flexDirection: 'row'` coloca os textos na mesma linha; `justifyContent: 'space-between'` empurra o primeiro para a esquerda e o último para a direita; `alignItems: 'center'` alinha o texto pequeno ao meio da altura do grande. Com `center` em `justifyContent`, eles ficariam juntos no meio; sem `alignItems`, \"alta\" ficaria no topo."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No iPhone de um colega, o título \"Minhas Tarefas\" aparece escondido atrás do relógio e da câmera. Qual é a correção?",
+      "options": {
+        "a": "`SafeAreaView` em volta do conteúdo da tela, com `SafeAreaProvider` envolvendo o app",
+        "b": "`ScrollView` no lugar da `View` de fora, para o título poder rolar",
+        "c": "`marginTop: 40` no título, um valor que serve em qualquer aparelho",
+        "d": "Remover o `StatusBar` do `App.js` para liberar o topo da tela"
+      },
+      "answer": "a",
+      "explanation": "A área segura é a parte da tela que o notch e a barra de status não cobrem; o `SafeAreaView` de `react-native-safe-area-context` coloca o conteúdo dentro dela, e o `SafeAreaProvider` envolve o app uma vez. Um `marginTop` fixo até acerta em um aparelho, mas sobra ou falta nos outros, porque cada modelo tem um recorte diferente. `ScrollView` só faz rolar, e o `StatusBar` muda a aparência da barra, não o espaço que ela ocupa."
+    }
+  ]
+}

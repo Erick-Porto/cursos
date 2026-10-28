@@ -1,0 +1,156 @@
+{
+  "title": "Quiz: E05 · Tipos, operadores e regras de preço",
+  "description": "Dez questões sobre tipos, conversão do texto do terminal, operadores, ternário e dinheiro em centavos.",
+  "lesson": "e05b-operadores-e-dinheiro",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Você roda `node src/scripts/compra.js 2`. Que valor `process.argv[2]` guarda?",
+      "options": {
+        "a": "A string `'2'`, porque os argumentos do comando sempre chegam como texto",
+        "b": "O número `2`, porque o Node converte o que parece número",
+        "c": "O número `2` no Windows e a string `'2'` no Linux e no macOS",
+        "d": "`NaN`, até que o valor seja convertido com `Number`"
+      },
+      "answer": "a",
+      "explanation": "O `process.argv` é uma lista de textos: o Node não tenta adivinhar o tipo, em nenhum sistema. A alternativa mais tentadora é a da conversão automática, mas o `2` digitado chega como `'2'`. Por isso você guarda o texto e converte com `Number` ou `parseInt(texto, 10)` antes da conta. `NaN` só aparece se a conversão falhar.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O comando entregou `qtd = '2'`. O que esta linha imprime no terminal?\n\n```javascript\nconsole.log(`Total: ${qtd + 1} itens`);\n```",
+      "options": {
+        "a": "Total: 21 itens",
+        "b": "Total: 3 itens",
+        "c": "Total: ${qtd + 1} itens",
+        "d": "Total: NaN itens"
+      },
+      "answer": "a",
+      "explanation": "A template string calcula a expressão dentro de `${ }`. Como `qtd` é texto, `'2' + 1` concatena e vira `'21'`. O 3 só apareceria com a conversão antes da conta: `Number(qtd) + 1`. O `${qtd + 1}` literal apareceria com aspas comuns em vez de crases, e `NaN` exigiria uma conversão que falhou, o que não acontece com `'2'`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual afirmação sobre `const`, `let` e `var` está correta?",
+      "options": {
+        "a": "`const` impede reatribuir o nome; use `let` só quando o valor precisa mudar",
+        "b": "`const` congela o objeto: mudar `fone.preco` de um `const fone` dá erro",
+        "c": "`var` e `let` funcionam igual; `var` é só a forma mais antiga",
+        "d": "`let` serve para números e `const` serve para textos"
+      },
+      "answer": "a",
+      "explanation": "`const` prende o nome ao valor: reatribuir é erro, e por isso ela é o padrão. `let` fica para o que precisa receber outro valor, como um total que vai somando. A `const` não congela o conteúdo: os campos de um objeto ainda podem mudar. `var` não é igual a `let`: ignora os blocos `{ }` e vale na função inteira. Nenhuma das três depende do tipo do valor.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Em JavaScript, `0.1 + 0.2 === 0.3` é `true`.",
+      "answer": false,
+      "explanation": "`0.1 + 0.2` dá `0.30000000000000004`: o `number` guarda decimais em binário, e 0,1 não tem representação exata. Por isso as regras de preço da Lojinha fazem a conta em centavos inteiros, que são exatos, e só voltam para reais no fim.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete a regra que divide o total em parcelas sem perder centavo. A primeira parcela leva o que sobrar da divisão.\n\n```javascript\nexport function parcelar(total, parcelas) {\n  const centavos = paraCentavos(total);\n  const valor = Math.___(centavos / parcelas);\n  const resto = centavos ___ parcelas;\n  return {\n    parcelas: parcelas,\n    valor: paraReais(valor),\n    primeira: paraReais(valor + resto),\n  };\n}\n```",
+      "answer": [
+        [
+          "floor",
+          "trunc"
+        ],
+        [
+          "%"
+        ]
+      ],
+      "explanation": "`Math.floor` arredonda a divisão para baixo: 19990 / 3 = 6663,33 vira 6663, uma parcela que cabe três vezes no total. O `%` devolve o resto: `19990 % 3` é 1, o centavo que vai para a primeira parcela. `Math.round` parece funcionar aqui, mas em 20000 / 3 = 6666,67 arredondaria para 6667 e as parcelas passariam do total.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Quais expressões resultam em `true`?",
+      "options": {
+        "a": "`'7' == 7`",
+        "b": "`'7' === 7`",
+        "c": "`Number('7') === 7`",
+        "d": "`Number.isNaN(Number('sete'))`",
+        "e": "`typeof null === 'null'`"
+      },
+      "answer": [
+        "a",
+        "c",
+        "d"
+      ],
+      "explanation": "O `==` converte o texto antes de comparar, então `'7' == 7` é `true`; é justamente por esconder a diferença de tipo que você usa `===`, e `'7' === 7` é `false`. Convertido com `Number`, o 7 passa no `===`. `Number('sete')` falha e dá `NaN`, que `Number.isNaN` reconhece. Já `typeof null` devolve `'object'`, um erro antigo da linguagem.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O script abaixo foi chamado **sem argumentos**: `node src/scripts/saudacao.js`. O que ele imprime?\n\n```javascript\nconst nome = process.argv[2] || 'Visitante';\nconst qtd = Number(process.argv[3] || '1');\nconst rotulo = qtd === 1 ? 'item' : 'itens';\nconsole.log(`${nome}, ${qtd} ${rotulo} no carrinho`);\n```",
+      "options": {
+        "a": "Visitante, 1 item no carrinho",
+        "b": "undefined, NaN itens no carrinho",
+        "c": "Visitante, 1 itens no carrinho",
+        "d": "Visitante, NaN item no carrinho"
+      },
+      "answer": "a",
+      "explanation": "Sem argumentos, `process.argv[2]` e `process.argv[3]` são `undefined`, que conta como falso: o `||` devolve o valor padrão, `'Visitante'` e `'1'`. `Number('1')` é `1`, e o ternário com `qtd === 1` escolhe `'item'`. A alternativa com `NaN` seria o resultado sem o `|| '1'`: `Number(undefined)` dá `NaN`, e aí `NaN === 1` é `false` e o rótulo vira `'itens'`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Para anunciar as parcelas do fone de R$ 199,90, um colega escreveu a regra abaixo, e o anúncio mostra \"ou 3x de R$ 66,63\". Qual é o problema?\n\n```javascript\nconst parcela = Math.round((199.9 / 3) * 100) / 100; // 66.63\n```",
+      "options": {
+        "a": "As 3 parcelas somam R$ 199,89: um centavo some, quando deveria ir para a primeira",
+        "b": "Nenhum: o `Math.round` já corrige o erro do ponto flutuante",
+        "c": "Deveria usar `Math.ceil`, que faz as 3 parcelas fecharem o total exato",
+        "d": "`199.9 / 3` dá `NaN`, porque a divisão não é exata"
+      },
+      "answer": "a",
+      "explanation": "Arredondar a parcela sozinha esquece o resto: 3 × 66,63 = 199,89. A regra certa divide em centavos com `Math.floor` e passa o resto, achado com `%`, para a primeira parcela: 66,64 + 66,63 + 66,63 = 199,90. `Math.ceil` daria 66,64 em todas e cobraria 199,92, dois centavos a mais. A divisão não exata dá um decimal, não `NaN`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Este teste do Jest falha, embora as parcelas de R$ 199,90 estejam certas. Por quê, e como corrigir?\n\n```javascript\ntest('a soma das parcelas fecha o total', () => {\n  expect(66.64 + 66.63 * 2).toBe(199.9);\n});\n```",
+      "options": {
+        "a": "Em reais, a soma dá `199.89999999999998`; some em centavos inteiros, ou compare com `toBeCloseTo`",
+        "b": "O `toBe` só compara textos; para números, use `toEqual`",
+        "c": "A primeira parcela deveria ser 66,63, e então a soma fecharia",
+        "d": "O valor esperado precisa estar entre aspas: `toBe('199.9')`"
+      },
+      "answer": "a",
+      "explanation": "A conta com decimais em `number` carrega o erro do binário: `66.64 + 66.63 * 2` dá `199.89999999999998`, e o `toBe` exige o valor exato. Somando em centavos (`6664 + 6663 * 2` é `19990`), o resultado é exato; para decimais calculados, o `toBeCloseTo` aceita a diferença minúscula. O `toBe` compara números muito bem, sem aspas: `'199.9'` é texto e nunca seria igual a um número. E as parcelas 66,64 + 66,63 + 66,63 estão certas.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Com a função abaixo, o que `resumoDaCompra('3 unidades', 59.9)` devolve?\n\n```javascript\nexport function resumoDaCompra(textoQtd, preco) {\n  const qtd = parseInt(textoQtd, 10);\n  return Number.isNaN(qtd)\n    ? 'Digite a quantidade em números'\n    : `${qtd} x ${formatarPreco(preco)} = ${formatarPreco(qtd * preco)}`;\n}\n```",
+      "options": {
+        "a": "`'3 x R$ 59,90 = R$ 179,70'`",
+        "b": "`'Digite a quantidade em números'`",
+        "c": "`'NaN x R$ 59,90 = R$ NaN'`",
+        "d": "`'3 unidades x R$ 59,90 = R$ 179,70'`"
+      },
+      "answer": "a",
+      "explanation": "O `parseInt` lê os dígitos do começo e descarta o resto: `'3 unidades'` vira `3`. Como `3` não é `NaN`, o ternário escolhe a segunda mensagem, e o `formatarPreco` mostra `3 * 59.9` em reais. O aviso seria a resposta com `Number`, que exige o texto inteiro numérico e daria `NaN`. A mensagem com `NaN` sairia da versão sem o ternário e com um texto sem dígitos no começo, como `'dois'`. E o texto `'3 unidades'` não aparece porque a mensagem usa o `qtd` já convertido.",
+      "points": 2
+    }
+  ]
+}

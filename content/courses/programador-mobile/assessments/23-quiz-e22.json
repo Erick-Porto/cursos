@@ -1,0 +1,146 @@
+{
+  "title": "Quiz: E22 · Componentes, props e listas",
+  "description": "Dez questões sobre props, children, rest e spread, listas com map e key, renderização condicional e CSS Modules.",
+  "lesson": "e22b-listas-keys-estilos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Um componente é usado assim:\n\n```jsx\n<Card>\n  <h3>Estudar React</h3>\n</Card>\n```\n\nComo o componente `Card` acessa o `<h3>` que ficou entre a abertura e o fechamento da tag?",
+      "options": {
+        "a": "Pela prop especial `children`, que recebe tudo que fica dentro da tag",
+        "b": "Pela prop `props.h3`, criada automaticamente a partir do nome do elemento",
+        "c": "Pela prop `conteudo`, que o React adiciona a todo componente",
+        "d": "Não acessa: o React descarta o que fica entre as tags de um componente"
+      },
+      "answer": "a",
+      "explanation": "Tudo que fica entre a abertura e o fechamento da tag chega ao componente como a prop `children`. O React não cria props com o nome dos elementos filhos nem descarta esse conteúdo: ele só aparece na tela se o componente colocar `{children}` no seu JSX.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece na tela com o código abaixo?\n\n```jsx\nfunction CartaoTarefa({ titulo, prioridade = 'media' }) {\n  return <p>{titulo} - {prioridade}</p>\n}\n\n<CartaoTarefa titulo=\"Ler um livro\" />\n```",
+      "options": {
+        "a": "Ler um livro - media",
+        "b": "Ler um livro - undefined",
+        "c": "Ler um livro - (sem nada depois do traço)",
+        "d": "Um erro, porque a prop `prioridade` não foi passada"
+      },
+      "answer": "a",
+      "explanation": "Como `prioridade` não foi passada na tag, vale o valor padrão `'media'` definido na desestruturação. Sem o `= 'media'`, aí sim o resultado seria `undefined` e o React não mostraria nada depois do traço. Prop ausente nunca gera erro: ela só chega como `undefined`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual é o problema deste trecho de `ListaTarefas`?\n\n```jsx\n{tarefas.map((t, i) => (\n  <CartaoTarefa key={i} titulo={t.titulo} />\n))}\n```",
+      "options": {
+        "a": "Usa o índice como `key`: se a lista perder ou reordenar itens, o React pode reaproveitar cartões errados",
+        "b": "Falta a prop `key`: o React vai mostrar um aviso no console",
+        "c": "A função do `.map()` não pode receber dois parâmetros, só o item",
+        "d": "`titulo={t.titulo}` deveria ser escrito como `titulo=\"t.titulo\"`"
+      },
+      "answer": "a",
+      "explanation": "A `key` existe, então não há aviso; o problema é que o índice identifica a posição, não a tarefa. Ao remover a primeira tarefa, todas as outras mudam de índice e o React perde a referência de quem é quem. Use `key={t.id}`. O segundo parâmetro do `.map()` é válido (é o índice), e `titulo=\"t.titulo\"` passaria o texto literal \"t.titulo\".",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "O componente abaixo espera um texto, um número e um booleano:\n\n```jsx\nfunction CartaoTarefa({ titulo, pontos, concluida }) {\n  return <p>{titulo}: {pontos + 1} pontos</p>\n}\n```\n\nQuais formas de passar as props estão corretas?",
+      "options": {
+        "a": "`titulo=\"Estudar React\"`",
+        "b": "`pontos={10}`",
+        "c": "`concluida=\"true\"`",
+        "d": "`concluida={true}`"
+      },
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "Texto vai entre aspas; número e booleano vão entre chaves, para o JSX tratar como JavaScript. `concluida=\"true\"` entrega a string \"true\", não o booleano. Pelo mesmo motivo, `pontos=\"10\"` seria texto e `pontos + 1` resultaria em \"101\".",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O array abaixo é passado para `ListaTarefas`. O que aparece na tela?\n\n```jsx\nfunction ListaTarefas({ tarefas }) {\n  return (\n    <ul>\n      {tarefas.length === 0 && <li>Nenhuma tarefa</li>}\n      {tarefas.map((t) => (\n        <li key={t.id}>{t.concluida ? 'Concluída' : 'Pendente'}</li>\n      ))}\n    </ul>\n  )\n}\n\nconst tarefas = [\n  { id: 1, titulo: 'Estudar React', concluida: false },\n  { id: 2, titulo: 'Fazer compras', concluida: true },\n]\n```",
+      "options": {
+        "a": "Dois itens: \"Pendente\" e \"Concluída\"",
+        "b": "Três itens: \"Nenhuma tarefa\", \"Pendente\" e \"Concluída\"",
+        "c": "Dois itens: \"Estudar React\" e \"Fazer compras\"",
+        "d": "Um item: \"Nenhuma tarefa\""
+      },
+      "answer": "a",
+      "explanation": "O array tem dois itens, então `tarefas.length === 0` é falso e o `&&` não desenha nada. O `.map()` gera um `<li>` por tarefa, e o ternário escolhe o texto: `concluida: false` vira \"Pendente\", `concluida: true` vira \"Concluída\". O `titulo` existe no objeto, mas o componente não o exibe.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Dentro de um componente, você pode alterar uma prop recebida (por exemplo, `props.titulo = 'Novo título'`) para atualizar o que aparece na tela.",
+      "answer": false,
+      "explanation": "Props são somente leitura: quem define o valor é o componente pai. Em desenvolvimento, o React congela as props como o `Object.freeze` do E11b, e a atribuição lança `TypeError`. Se você precisa de um valor derivado, crie uma variável nova; se o dado muda com o tempo, use estado (E23).",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "Complete o atributo que aplica a classe `cartao` do CSS Module ao elemento:\n\n```jsx\nimport estilos from './CartaoTarefa.module.css'\n\n<div ___={estilos.cartao}>\n```",
+      "answer": [
+        [
+          "className",
+          "classname"
+        ]
+      ],
+      "explanation": "Em JSX, o atributo de classes é `className`, porque `class` é palavra reservada do JavaScript. O `import` de um arquivo `.module.css` devolve um objeto; `estilos.cartao` é o nome único gerado para a classe `.cartao` daquele componente.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Com o array `tarefas` vazio (`[]`), o que aparece na tela?\n\n```jsx\nfunction ListaTarefas({ tarefas }) {\n  return (\n    <section>\n      {tarefas.length && <p>Você tem tarefas</p>}\n    </section>\n  )\n}\n```",
+      "options": {
+        "a": "Um `0` solto dentro da `section`",
+        "b": "Nada: a `section` fica vazia",
+        "c": "O texto \"Você tem tarefas\"",
+        "d": "Um erro, porque `tarefas.length` não é booleano"
+      },
+      "answer": "a",
+      "explanation": "O `&&` devolve um dos lados: com a lista vazia, `tarefas.length` vale `0`, que é falsy, e o `&&` devolve o próprio `0`. O React não desenha `false`, `null` nem `undefined`, mas desenha números, então aparece um `0`. É a armadilha do zero do E13a; a correção é escrever a condição completa, como `tarefas.length > 0`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Qual é o valor de `resto` dentro do componente, no uso abaixo?\n\n```jsx\nfunction Botao({ variante = primario, children, ...resto }) {\n  return <button {...resto}>{children}</button>\n}\n\n<Botao type=\"submit\" disabled>Salvar</Botao>\n```",
+      "options": {
+        "a": "`{ type: submit, disabled: true }`",
+        "b": "`{ variante: primario, type: submit, disabled: true }`",
+        "c": "`{ children: Salvar, type: submit, disabled: true }`",
+        "d": "`[submit, true]`"
+      },
+      "answer": "a",
+      "explanation": "O rest junta só as props que não foram pedidas pelo nome. `variante` e `children` já foram desestruturadas, então ficam fora; `variante` nem foi passada, e o padrão não entra no `resto`. `disabled` sozinho na tag equivale a `disabled={true}`. O rest de um objeto devolve um objeto, não um array.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "truefalse",
+      "prompt": "Dentro de `ListaTarefas`, escrever `tarefas.sort((a, b) => a.id - b.id)` antes do `map` é seguro, porque o componente recebe a sua própria cópia do array.",
+      "answer": false,
+      "explanation": "O componente recebe o mesmo array do pai, por referência, como no E11b. O `sort` muda o array original, ou seja, altera uma prop, e props são somente leitura. Copie antes com spread, `[...tarefas].sort(...)`, ou prepare os dados com `filter`, que já devolve um array novo.",
+      "points": 1
+    }
+  ]
+}

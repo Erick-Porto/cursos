@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>O CarrinhoProvider, dentro do TemaProvider, envolve a Pilha; o ícone da aba, a TelaProduto e a TelaCarrinho leem o mesmo value com useCarrinho(), em qualquer profundidade</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .prov { fill: #0b1020; stroke: #34d399; stroke-width: 2.5; }
+    .le   { fill: #0b1020; stroke: #a78bfa; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .b    { font-weight: 700; }
+  </style>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <!-- TemaProvider por fora -->
+  <rect class="box" x="16" y="16" width="688" height="388" rx="16"/>
+  <text class="code" x="36" y="50" fill="#b4bfd3">TemaProvider</text>
+
+  <!-- CarrinhoProvider: a antena com o value -->
+  <rect class="prov" x="36" y="66" width="648" height="322" rx="14"/>
+  <text x="56" y="100"><tspan class="code b" fill="#34d399">CarrinhoProvider</tspan><tspan class="code" fill="#a78bfa" dx="12">value={valor}</tspan></text>
+
+  <!-- Pilha: o children -->
+  <rect class="box" x="56" y="118" width="608" height="254" rx="12"/>
+  <text class="code" x="76" y="152" fill="#e8edf7">Pilha</text>
+  <text x="644" y="152" text-anchor="end"><tspan class="m">leem com </tspan><tspan class="code" fill="#a78bfa">useCarrinho()</tspan></text>
+
+  <!-- quem lê, em qualquer profundidade -->
+  <rect class="le" x="76" y="170" width="568" height="56" rx="10"/>
+  <text class="t" x="96" y="206">ícone da aba</text>
+  <text class="code" x="624" y="206" text-anchor="end" fill="#a78bfa">quantidade</text>
+
+  <rect class="le" x="76" y="238" width="568" height="56" rx="10"/>
+  <text class="code" x="96" y="274" fill="#e8edf7">TelaProduto</text>
+  <text class="code" x="624" y="274" text-anchor="end" fill="#a78bfa">adicionar</text>
+
+  <rect class="le" x="76" y="306" width="568" height="56" rx="10"/>
+  <text class="code" x="96" y="342" fill="#e8edf7">TelaCarrinho</text>
+  <text class="code" x="624" y="342" text-anchor="end" fill="#a78bfa">itens, total</text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 364" font-family="Inter, system-ui, sans-serif">
+  <title>Função pura: totalDoItem(50, 3) devolve sempre 150 e não mexe em nada fora; função impura: adicionarBrinde dá push na lista itens que recebeu</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fn   { fill: #0b1020; stroke: #a78bfa; stroke-width: 2; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .h    { font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .warn { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .push { stroke: #fbbf24; stroke-width: 2.5; fill: none; stroke-dasharray: 7 5; marker-end: url(#seta-push); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+    <marker id="seta-push" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#fbbf24"/></marker>
+  </defs>
+  <rect width="720" height="364" rx="16" fill="#0b1020"/>
+
+  <!-- pura -->
+  <rect class="box" x="20" y="16" width="330" height="332" rx="12"/>
+  <text class="h" x="185" y="54" text-anchor="middle" fill="#34d399">Pura</text>
+  <text class="code" x="185" y="112" text-anchor="middle">50, 3</text>
+  <path class="line" d="M185 128 L185 186"/>
+  <rect class="fn" x="75" y="190" width="220" height="50" rx="10"/>
+  <text class="code" x="185" y="223" text-anchor="middle">totalDoItem</text>
+  <path class="line" d="M185 242 L185 274"/>
+  <text class="ok" x="185" y="302" text-anchor="middle">150</text>
+  <text class="m" x="185" y="334" text-anchor="middle">sempre a mesma saída</text>
+
+  <!-- impura -->
+  <rect class="box" x="370" y="16" width="330" height="332" rx="12"/>
+  <text class="h" x="535" y="54" text-anchor="middle" fill="#fbbf24">Impura</text>
+  <rect class="box" x="425" y="80" width="220" height="48" rx="8"/>
+  <text class="code" x="445" y="112">itens</text>
+  <text class="warn" x="627" y="112" text-anchor="end">+ Brinde</text>
+  <path class="line" d="M478 130 L478 186"/>
+  <path class="push" d="M592 188 L592 132"/>
+  <text class="warn" x="604" y="168" font-family="'JetBrains Mono', Consolas, monospace">push</text>
+  <rect class="fn" x="420" y="190" width="230" height="50" rx="10"/>
+  <text class="code" x="535" y="223" text-anchor="middle">adicionarBrinde</text>
+  <text class="m" x="535" y="334" text-anchor="middle">muda a lista que recebeu</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Eixos do Flexbox: em column o eixo principal é vertical e o cruzado é horizontal; em row os dois trocam de lugar</title>
+  <style>
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .item  { fill: #60a5fa; }
+    .it    { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .note  { fill: #b4bfd3; font-size: 22px; }
+    .main  { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-main); }
+    .cross { stroke: #a78bfa; stroke-width: 3; fill: none; stroke-dasharray: 8 6; marker-end: url(#seta-cross); }
+    .lmain { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .lcross { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="seta-main" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#34d399"/></marker>
+    <marker id="seta-cross" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- column (padrão) -->
+  <text x="36" y="46"><tspan class="code">'column'</tspan><tspan class="note"> (padrão)</tspan></text>
+  <rect class="box" x="36" y="66" width="140" height="224" rx="10"/>
+  <rect class="item" x="52" y="80" width="56" height="50" rx="6"/>
+  <rect class="item" x="52" y="142" width="56" height="50" rx="6"/>
+  <rect class="item" x="52" y="204" width="56" height="50" rx="6"/>
+  <text class="it" x="80" y="113" text-anchor="middle">A</text>
+  <text class="it" x="80" y="175" text-anchor="middle">B</text>
+  <text class="it" x="80" y="237" text-anchor="middle">C</text>
+  <path class="main" d="M 198 70 L 198 282"/>
+  <text class="lmain" x="212" y="184">principal</text>
+  <path class="cross" d="M 40 316 L 168 316"/>
+  <text class="lcross" x="184" y="324">cruzado</text>
+
+  <!-- row -->
+  <text class="code" x="340" y="46">'row'</text>
+  <rect class="box" x="340" y="66" width="250" height="170" rx="10"/>
+  <rect class="item" x="356" y="80" width="56" height="50" rx="6"/>
+  <rect class="item" x="422" y="80" width="56" height="50" rx="6"/>
+  <rect class="item" x="488" y="80" width="56" height="50" rx="6"/>
+  <text class="it" x="384" y="113" text-anchor="middle">A</text>
+  <text class="it" x="450" y="113" text-anchor="middle">B</text>
+  <text class="it" x="516" y="113" text-anchor="middle">C</text>
+  <path class="main" d="M 344 262 L 578 262"/>
+  <text class="lmain" x="465" y="298" text-anchor="middle">principal</text>
+  <path class="cross" d="M 612 70 L 612 226"/>
+  <text class="lcross" x="626" y="158">cruzado</text>
+
+  <!-- legenda -->
+  <path d="M 36 358 L 72 358" stroke="#34d399" stroke-width="3"/>
+  <text x="82" y="366"><tspan class="lmain">principal: </tspan><tspan class="code">justifyContent</tspan></text>
+  <path d="M 400 358 L 436 358" stroke="#a78bfa" stroke-width="3" stroke-dasharray="8 6"/>
+  <text x="446" y="366"><tspan class="lcross">cruzado: </tspan><tspan class="code">alignItems</tspan></text>
+</svg>

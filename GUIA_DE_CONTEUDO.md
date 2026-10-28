@@ -819,7 +819,7 @@ materiais/
 - Tudo em `materiais/` é público para quem tiver o endereço; só o roteiro é restrito ao instrutor.
   Nunca coloque gabarito de prova ou de quiz em materiais.
 - Questões (`assessments/*.json`) não têm links para materiais (erro).
-- Nomes só com minúsculas, números, ponto, hífen e underline (o caminho vira URL). Sem emojis.
+- Nomes sem acento nem espaço: letras, números, ponto, hífen e underline (o caminho vira URL). Maiúsculas valem para componentes (`Avatar.js`), mas o link precisa repetir a grafia exata: o GitHub Pages diferencia maiúsculas. Sem emojis.
   Até 2 MB por arquivo (aviso).
 - O validador confere se cada link aponta para um arquivo (ou, no caso do `.zip`, para uma pasta) e
   avisa sobre página HTML sem link em nenhuma aula, roteiro ou descrição.

@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>preverEntrega(5) a partir de quinta, 9 de outubro de 2025: a cada volta, a data pula para o próximo dia útil; de sexta, pula direto para segunda, sem parar no sábado e no domingo, e a entrega chega na quinta, 16</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fds  { fill: #0b1020; stroke: #2a3a5c; stroke-width: 1.5; stroke-dasharray: 6 5; }
+    .wd   { fill: #b4bfd3; font-size: 22px; }
+    .d    { fill: #e8edf7; font-size: 28px; font-weight: 700; }
+    .dim  { opacity: 0.65; }
+    .code { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .badge { fill: #34d399; }
+    .n    { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .no   { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .cur  { fill: none; stroke: #a78bfa; stroke-width: 3; }
+    .curl { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .fim  { fill: none; stroke: #34d399; stroke-width: 4; }
+    .ok   { fill: #34d399; font-size: 24px; font-weight: 700; }
+    .anda { animation: anda 8s infinite; }
+    .chega { animation: chega 8s infinite; }
+    @keyframes anda {
+      0%       { opacity: 0; transform: translateX(-588px); }
+      4%, 12%  { opacity: 1; transform: translateX(-588px); }
+      15%, 24% { opacity: 1; transform: translateX(-504px); }
+      28%, 38% { opacity: 1; transform: translateX(-252px); }
+      41%, 50% { opacity: 1; transform: translateX(-168px); }
+      53%, 62% { opacity: 1; transform: translateX(-84px); }
+      65%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes chega { 0%, 67% { opacity: 0; } 73%, 94% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .anda, .chega { animation: none; }
+    }
+  </style>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <text class="code" x="27" y="40">preverEntrega(5, new Date(2025, 9, 9))</text>
+  <text class="m" x="27" y="72">a cada volta, data pula para o próximo dia útil</text>
+
+  <!-- de quinta, 9, a quinta, 16 de outubro de 2025 -->
+  <rect class="box" x="27" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="66" y="142" text-anchor="middle">qui</text>
+  <text class="d" x="66" y="180" text-anchor="middle">9</text>
+  <rect class="box" x="111" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="150" y="142" text-anchor="middle">sex</text>
+  <text class="d" x="150" y="180" text-anchor="middle">10</text>
+  <g class="dim">
+    <rect class="fds" x="195" y="112" width="78" height="84" rx="8"/>
+    <text class="wd" x="234" y="142" text-anchor="middle">sáb</text>
+    <text class="d" x="234" y="180" text-anchor="middle">11</text>
+    <rect class="fds" x="279" y="112" width="78" height="84" rx="8"/>
+    <text class="wd" x="318" y="142" text-anchor="middle">dom</text>
+    <text class="d" x="318" y="180" text-anchor="middle">12</text>
+  </g>
+  <rect class="box" x="363" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="402" y="142" text-anchor="middle">seg</text>
+  <text class="d" x="402" y="180" text-anchor="middle">13</text>
+  <rect class="box" x="447" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="486" y="142" text-anchor="middle">ter</text>
+  <text class="d" x="486" y="180" text-anchor="middle">14</text>
+  <rect class="box" x="531" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="570" y="142" text-anchor="middle">qua</text>
+  <text class="d" x="570" y="180" text-anchor="middle">15</text>
+  <rect class="box" x="615" y="112" width="78" height="84" rx="8"/>
+  <text class="wd" x="654" y="142" text-anchor="middle">qui</text>
+  <text class="d" x="654" y="180" text-anchor="middle">16</text>
+
+  <!-- número da volta em que a data chega a cada dia útil -->
+  <text class="m" x="66" y="236" text-anchor="middle">pedido</text>
+  <rect class="badge" x="132" y="210" width="36" height="36" rx="18"/>
+  <text class="n" x="150" y="236" text-anchor="middle">1</text>
+  <rect class="badge" x="384" y="210" width="36" height="36" rx="18"/>
+  <text class="n" x="402" y="236" text-anchor="middle">2</text>
+  <rect class="badge" x="468" y="210" width="36" height="36" rx="18"/>
+  <text class="n" x="486" y="236" text-anchor="middle">3</text>
+  <rect class="badge" x="552" y="210" width="36" height="36" rx="18"/>
+  <text class="n" x="570" y="236" text-anchor="middle">4</text>
+  <rect class="badge" x="636" y="210" width="36" height="36" rx="18"/>
+  <text class="n" x="654" y="236" text-anchor="middle">5</text>
+
+  <!-- o resultado -->
+  <g class="chega">
+    <rect class="fim" x="613" y="110" width="82" height="88" rx="9"/>
+    <text class="ok" x="693" y="292" text-anchor="end">Chega até qui., 16 de out.</text>
+  </g>
+
+  <!-- a variável data: pula de dia útil em dia útil e revela o número da volta -->
+  <g class="anda">
+    <rect x="700" y="202" width="700" height="52" fill="#0b1020"/>
+    <rect class="cur" x="610" y="106" width="88" height="96" rx="10"/>
+    <text class="curl" x="654" y="98" text-anchor="middle">data</text>
+  </g>
+
+  <!-- fim de semana: desenhado por cima, sempre visível -->
+  <text class="no" x="276" y="236" text-anchor="middle">pulados</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 304" font-family="Inter, system-ui, sans-serif">
+  <title>Da branch à main: a branch fix/categoria-maiuscula sai da main e recebe dois commits, o Pull Request é aprovado na revisão e o merge cria um commit que junta tudo à main</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .br   { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .pr   { fill: #131c33; stroke: #60a5fa; stroke-width: 2.5; }
+    .main { stroke: #34d399; stroke-width: 4; fill: none; }
+    .ramo { stroke: #a78bfa; stroke-width: 4; fill: none; }
+    .mg   { stroke: #34d399; stroke-width: 4; fill: none; marker-end: url(#seta); }
+    .s1 { animation: s1 8s infinite; }
+    .s2 { animation: s2 8s infinite; }
+    .s3 { animation: s3 8s infinite; }
+    @keyframes s1 { 0%, 4%  { opacity: 0; transform: translateY(10px); } 12%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 26% { opacity: 0; transform: translateY(10px); } 34%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 48% { opacity: 0; transform: translateY(10px); } 56%, 94% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .s1, .s2, .s3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" markerWidth="4" markerHeight="4" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="304" rx="16" fill="#0b1020"/>
+
+  <!-- main -->
+  <text x="40" y="58" class="ok">main</text>
+  <path d="M 40 90 L 692 90" class="main"/>
+  <circle cx="90" cy="90" r="11" fill="#34d399"/>
+
+  <!-- 1: a branch nasce e recebe commits -->
+  <g class="s1">
+    <path d="M 90 90 C 90 150, 120 196, 180 196 L 380 196" class="ramo"/>
+    <circle cx="220" cy="196" r="11" fill="#a78bfa"/>
+    <circle cx="310" cy="196" r="11" fill="#a78bfa"/>
+    <text x="120" y="270" class="br">fix/categoria-maiuscula</text>
+  </g>
+
+  <!-- 2: Pull Request e revisão -->
+  <g class="s2">
+    <rect x="380" y="156" width="200" height="80" rx="12" class="pr"/>
+    <text x="480" y="189" text-anchor="middle" class="t">Pull Request</text>
+    <text x="480" y="221" text-anchor="middle" class="m">revisão: <tspan class="ok">Approve</tspan></text>
+  </g>
+
+  <!-- 3: merge na main -->
+  <g class="s3">
+    <path d="M 584 196 C 640 196, 640 160, 640 112" class="mg"/>
+    <circle cx="640" cy="90" r="14" fill="#34d399" stroke="#0b1020" stroke-width="3"/>
+    <text x="622" y="142" text-anchor="end" class="ok">merge</text>
+  </g>
+</svg>

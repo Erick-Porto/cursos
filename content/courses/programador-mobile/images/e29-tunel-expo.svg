@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Sem túnel, computador e celular precisam estar no mesmo Wi-Fi; com npx expo start --tunnel, o app passa pela internet e o colega abre de qualquer rede, enquanto o computador estiver ligado</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .cmd  { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .warn { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .rede { fill: none; stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 8 6; }
+    .liga { fill: none; stroke: #34d399; stroke-width: 3; }
+    .ico  { fill: none; stroke: #e8edf7; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .nuvem { fill: none; stroke: #a78bfa; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+  <line x1="360" y1="28" x2="360" y2="270" stroke="#2a3a5c" stroke-width="2"/>
+
+  <!-- sem túnel: mesma rede -->
+  <text class="cmd" x="184" y="48" text-anchor="middle">npx expo start</text>
+  <rect class="rede" x="36" y="68" width="296" height="196" rx="16"/>
+  <text class="lbl" x="184" y="98" text-anchor="middle">mesmo Wi-Fi</text>
+  <!-- laptop -->
+  <g class="ico" transform="translate(80 118) scale(2.5)">
+    <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/>
+  </g>
+  <!-- smartphone -->
+  <g class="ico" transform="translate(228 118) scale(2.5)">
+    <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>
+  </g>
+  <line class="liga" x1="146" y1="148" x2="232" y2="148"/>
+  <text class="t" x="110" y="216" text-anchor="middle">computador</text>
+  <text class="t" x="258" y="216" text-anchor="middle">celular</text>
+  <text class="m" x="184" y="250" text-anchor="middle">só na mesma rede</text>
+
+  <!-- com túnel: pela internet -->
+  <text class="cmd" x="540" y="48" text-anchor="middle">npx expo start --tunnel</text>
+  <!-- laptop -->
+  <g class="ico" transform="translate(398 118) scale(2.5)">
+    <path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/>
+  </g>
+  <!-- cloud -->
+  <g class="nuvem" transform="translate(510 118) scale(2.5)">
+    <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>
+  </g>
+  <!-- smartphone -->
+  <g class="ico" transform="translate(622 118) scale(2.5)">
+    <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>
+  </g>
+  <line class="liga" x1="472" y1="148" x2="512" y2="148"/>
+  <line class="liga" x1="572" y1="148" x2="628" y2="148"/>
+  <text class="t" x="428" y="216" text-anchor="middle">computador</text>
+  <text class="lbl" x="540" y="216" text-anchor="middle">túnel</text>
+  <text class="t" x="652" y="216" text-anchor="middle">colega</text>
+  <text class="m" x="540" y="250" text-anchor="middle">de qualquer rede</text>
+
+  <text class="warn" x="360" y="316" text-anchor="middle">desligou o computador, o app some</text>
+</svg>

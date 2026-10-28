@@ -1,0 +1,137 @@
+{
+  "title": "Quiz: E24 · Efeitos e hooks próprios",
+  "description": "Dez questões sobre useEffect, dependências, limpeza, carregando e erro, as regras dos hooks, useDebounce e useTarefas.",
+  "lesson": "e24b-hooks-proprios",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No código abaixo, qual é o papel do `[]` passado como segundo argumento?\n\n```jsx\nuseEffect(() => {\n  iniciar()\n}, [])\n```",
+      "options": {
+        "a": "Faz o efeito rodar uma única vez, logo após a primeira renderização",
+        "b": "Faz o efeito rodar antes de o componente aparecer na tela",
+        "c": "Faz o efeito rodar depois de toda renderização do componente",
+        "d": "Impede o efeito de rodar até que alguém chame `iniciar()`"
+      },
+      "answer": "a",
+      "explanation": "O array vazio diz a React que o efeito não depende de nenhum valor, então ele roda só depois da primeira renderização (ao montar). Rodar depois de toda renderização é o que acontece quando o segundo argumento é omitido. Efeitos nunca rodam antes de a tela ser desenhada.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na primeira renderização deste componente, em que ordem as letras aparecem no console?\n\n```jsx\nfunction App() {\n  console.log('A')\n  useEffect(() => {\n    console.log('B')\n  }, [])\n  console.log('C')\n  return <p>Minhas Tarefas</p>\n}\n```",
+      "options": {
+        "a": "A, B, C",
+        "b": "A, C, B",
+        "c": "B, A, C",
+        "d": "C, A, B"
+      },
+      "answer": "b",
+      "explanation": "O corpo da função roda de cima para baixo (A e depois C) e React desenha a tela. Só então o efeito é executado e imprime B. A ordem A, B, C é tentadora porque segue a posição no código, mas `useEffect` apenas registra a função; ela roda depois da renderização.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O efeito abaixo deixa o título da aba igual ao número de tarefas pendentes. Ao abrir o app, a aba mostra \"(3) Minhas Tarefas\". A pessoa conclui uma tarefa e o `Cabecalho` passa a mostrar 2 pendentes. O que a aba mostra?\n\n```jsx\nconst pendentes = tarefas.filter((t) => !t.concluida).length\n\nuseEffect(() => {\n  document.title = `(${pendentes}) Minhas Tarefas`\n}, [])\n```",
+      "options": {
+        "a": "\"(3) Minhas Tarefas\": com `[]`, o efeito não roda de novo quando `pendentes` muda",
+        "b": "\"(2) Minhas Tarefas\": o efeito roda de novo sempre que o componente redesenha",
+        "c": "\"(2) Minhas Tarefas\": `document.title` acompanha a variável sozinho",
+        "d": "Nada: com `[]`, o efeito nunca roda"
+      },
+      "answer": "a",
+      "explanation": "O efeito usa `pendentes`, mas o array está vazio: ele roda só ao montar e a aba fica presa no primeiro número. Todo valor do componente usado no efeito entra no array: `[pendentes]`. Rodar após toda renderização seria o comportamento sem o segundo argumento, e `document.title` é um texto comum, que só muda quando alguém o atribui.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O usuário abre o app sem internet. Com o código abaixo, o que aparece na tela?\n\n```jsx\nconst [carregando, setCarregando] = useState(true)\nconst [erro, setErro] = useState(null)\n\nasync function iniciar() {\n  try {\n    const lista = await carregarTarefas()\n    setTarefas(lista)\n    setCarregando(false)\n  } catch (e) {\n    setErro('Não foi possível carregar as tarefas.')\n  }\n}\n\n// no JSX:\n{carregando && <p>Carregando...</p>}\n{erro && <p>{erro}</p>}\n```",
+      "options": {
+        "a": "Apenas a mensagem de erro",
+        "b": "\"Carregando...\" e a mensagem de erro ao mesmo tempo",
+        "c": "Apenas \"Carregando...\", porque o `catch` não roda sem internet",
+        "d": "A lista vazia, sem nenhuma mensagem"
+      },
+      "answer": "b",
+      "explanation": "O `fetch` falha, o `catch` roda e define `erro`, mas `setCarregando(false)` está dentro do `try`, depois da linha que falhou, e nunca executa. Então `carregando` continua `true` e as duas mensagens aparecem juntas. A correção é mover `setCarregando(false)` para um bloco `finally`, que roda com ou sem erro.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Um efeito devolve a limpeza `return () => controle.abort()`. Em quais momentos React chama essa limpeza?",
+      "options": {
+        "a": "Antes de rodar o efeito de novo, porque uma dependência mudou",
+        "b": "Quando o componente sai da tela",
+        "c": "Logo depois que o `fetch` termina com sucesso",
+        "d": "A cada `setTarefas`, mesmo que nenhuma dependência tenha mudado"
+      },
+      "answer": ["a", "b"],
+      "explanation": "React chama a limpeza da renderização anterior antes de rodar o efeito de novo e quando o componente desmonta. Por isso ela serve para cancelar o pedido que não serve mais. O fim do `fetch` não chama a limpeza, e um `setTarefas` sem mudança nas dependências redesenha a tela sem rodar o efeito nem a limpeza.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "No `npm run dev`, a aba Rede mostra duas requisições para `todos`, a primeira cancelada. Isso prova que o `useEffect` está sem o array de dependências.",
+      "answer": false,
+      "explanation": "Em desenvolvimento, o `<StrictMode>` do `main.jsx` monta o componente, desmonta e monta de novo, para testar a limpeza. A limpeza cancela o primeiro pedido e só o segundo chega à tela. Sem o array, as requisições não parariam em duas: seriam dezenas, uma a cada renderização.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais trechos, dentro do componente `App`, quebram as regras dos hooks?",
+      "options": {
+        "a": "`if (carregando) return <p>Carregando...</p>` seguido, na linha de baixo, de `const [aberto, setAberto] = useState(false)`",
+        "b": "`<button onClick={() => useTarefas()}>Recarregar</button>`",
+        "c": "`const buscaAtrasada = useDebounce(busca, 300)` no topo da função, antes do `return`",
+        "d": "`function limpar() { setBusca('') }`, chamada pelo botão Limpar"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Hooks só podem ser chamados no topo, sempre na mesma ordem. Com o `return` antecipado, o `useState` existe em algumas renderizações e em outras não, e React perde a conta. No `onClick`, o hook rodaria no clique, fora da renderização. `useDebounce` no topo segue a regra, e `setBusca` não é um hook: é a função que o `useState` devolveu, e pode ser chamada em eventos.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No `App`, você criou a busca atrasada. Qual combinação mostra cada letra no campo na hora e só faz a requisição depois da pausa?\n\n```jsx\nconst [busca, setBusca] = useState('')\nconst buscaAtrasada = useDebounce(busca, 300)\n```",
+      "options": {
+        "a": "`<input value={busca} onChange={(e) => setBusca(e.target.value)} />` e `useTarefas(buscaAtrasada)`",
+        "b": "`<input value={buscaAtrasada} onChange={(e) => setBusca(e.target.value)} />` e `useTarefas(buscaAtrasada)`",
+        "c": "`<input value={busca} onChange={(e) => setBusca(e.target.value)} />` e `useTarefas(busca)`",
+        "d": "`<input value={busca} onChange={useDebounce} />` e `useTarefas(busca)`"
+      },
+      "answer": "a",
+      "explanation": "O campo fica ligado a `busca`, que muda a cada letra, e o `useTarefas` recebe `buscaAtrasada`, que só muda depois de 300 ms sem digitação. Com `value={buscaAtrasada}`, o campo trava e as letras aparecem atrasadas. Passar `busca` ao `useTarefas` deixa o `useDebounce` sem efeito: cada letra vira uma requisição. Hook não pode ser usado como função de evento.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "Complete o `useDebounce`: a limpeza cancela o agendamento anterior antes de o próximo começar.\n\n```javascript\nuseEffect(() => {\n  const temporizador = setTimeout(() => setAtrasado(valor), espera)\n  return () => ___(temporizador)\n}, [valor, espera])\n```",
+      "answer": [["clearTimeout", "clearTimeout()"]],
+      "explanation": "`clearTimeout` cancela o que o `setTimeout` agendou e ainda não rodou, como no `debounce` do E10a. A cada letra, React chama a limpeza da renderização anterior, que cancela o agendamento antigo; só o último sobrevive à pausa. Sem a limpeza, todas as letras disparariam, só que atrasadas.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "truefalse",
+      "prompt": "Se o `App` e o componente `Resumo` chamarem `useTarefas()`, os dois passam a dividir a mesma lista: concluir uma tarefa no `App` também muda o `Resumo`.",
+      "answer": false,
+      "explanation": "Cada chamada de um hook cria estados próprios e faz a própria busca: são duas listas que não se enxergam. Um hook divide a lógica, não os dados. Para dividir a mesma lista, ela fica num lugar só, no `App`, e desce por props.",
+      "points": 1
+    }
+  ]
+}

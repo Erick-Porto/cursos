@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>O Botao desestrutura titulo e onPress; o accessibilityLabel sobra no rest e chega ao Pressable pelo {...rest}</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .b    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .sig  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .chip { fill: #131c33; stroke: #60a5fa; stroke-width: 2; }
+    .rest { fill: none; stroke: #a78bfa; stroke-width: 2.5; stroke-dasharray: 8 5; }
+    .mv { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .m1 { animation-name: m1; }
+    .m2 { animation-name: m2; }
+    .m3 { animation-name: m3; }
+    @keyframes m1 {
+      0%, 8%   { transform: translate(-32px, -200px); opacity: 1; }
+      24%      { transform: translate(0, 0); }
+      90%      { opacity: 1; }
+      96%, 100% { transform: translate(0, 0); opacity: 0; }
+    }
+    @keyframes m2 {
+      0%, 22%  { transform: translate(-52px, -200px); opacity: 1; }
+      38%      { transform: translate(0, 0); }
+      90%      { opacity: 1; }
+      96%, 100% { transform: translate(0, 0); opacity: 0; }
+    }
+    @keyframes m3 {
+      0%, 36%  { transform: translate(-64px, -200px); opacity: 1; }
+      54%      { transform: translate(0, 0); }
+      90%      { opacity: 1; }
+      96%, 100% { transform: translate(0, 0); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) { .mv { animation: none; } }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- o que a tela passa -->
+  <text class="m" x="40" y="44">a tela passa três props ao Botao</text>
+  <rect class="chip" x="40" y="62" width="152" height="44" rx="8"/>
+  <text class="code" x="52" y="91">titulo="+"</text>
+  <rect class="chip" x="208" y="62" width="112" height="44" rx="8"/>
+  <text class="code" x="220" y="91">onPress</text>
+  <rect class="chip" x="336" y="62" width="262" height="44" rx="8"/>
+  <text class="code" x="348" y="91">accessibilityLabel</text>
+
+  <!-- a desestruturação -->
+  <text class="sig" x="40" y="152">Botao({ titulo, onPress, style, ...rest })</text>
+
+  <!-- onde cada prop chega -->
+  <rect class="box" x="40" y="176" width="640" height="160" rx="12"/>
+  <text class="b" x="56" y="208">Pressable</text>
+  <rect class="box" x="56" y="224" width="184" height="96" rx="10"/>
+  <text class="b" x="72" y="250">Text</text>
+  <rect class="rest" x="392" y="224" width="276" height="96" rx="10"/>
+  <text class="sig" x="406" y="250">{...rest}</text>
+
+  <g class="mv m1">
+    <rect class="chip" x="72" y="262" width="152" height="44" rx="8"/>
+    <text class="code" x="84" y="291">titulo="+"</text>
+  </g>
+  <g class="mv m2">
+    <rect class="chip" x="260" y="262" width="112" height="44" rx="8"/>
+    <text class="code" x="272" y="291">onPress</text>
+  </g>
+  <g class="mv m3">
+    <rect class="chip" x="400" y="262" width="262" height="44" rx="8"/>
+    <text class="code" x="412" y="291">accessibilityLabel</text>
+  </g>
+</svg>

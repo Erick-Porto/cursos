@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E10 · Closures, recursão e decomposição",
+  "description": "Dez questões sobre funções como valor, funções de alta ordem, closures, memoize, debounce, decomposição em regras e recursão.",
+  "lesson": "e10b-recursao-e-decomposicao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O script da vitrine usa a função abaixo. Qual afirmação descreve o código?\n\n```javascript\nfunction daCategoria(categoria) {\n  return (produto) => produto.categoria === categoria;\n}\n\nconst deAudio = produtos.filter(daCategoria('audio'));\n```",
+      "options": {
+        "a": "`daCategoria` é uma função de alta ordem: devolve uma função, e essa função lembra `categoria` por closure",
+        "b": "`daCategoria('audio')` percorre a lista e devolve os produtos de áudio, que o `filter` só repassa",
+        "c": "A arrow devolvida perde `categoria` quando `daCategoria` termina, por isso o `filter` a recebe de novo",
+        "d": "`daCategoria` é o callback do `filter`, que a chama uma vez para cada produto da lista"
+      },
+      "answer": "a",
+      "explanation": "`daCategoria('audio')` não filtra nada: fabrica e devolve o teste `(produto) => ...`, e quem filtra é o `filter`. Como devolve uma função, `daCategoria` é de alta ordem; a arrow devolvida continua enxergando `categoria` depois que `daCategoria` terminou, e isso é a closure. A alternativa mais tentadora é a última: o callback do `filter` é a arrow devolvida, não `daCategoria`, que roda uma vez só, antes do `filter`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que o script abaixo imprime?\n\n```javascript\nfunction criarContador() {\n  let total = 0;\n  return () => {\n    total = total + 1;\n    return total;\n  };\n}\n\nconst a = criarContador();\nconst b = criarContador();\na();\na();\nb();\nconsole.log(a(), b());\n```",
+      "options": {
+        "a": "`3 2`",
+        "b": "`5 5`",
+        "c": "`3 1`",
+        "d": "`ReferenceError: total is not defined`"
+      },
+      "answer": "a",
+      "explanation": "Cada chamada de `criarContador` cria um `total` novo, numa closure própria. `a` foi chamada duas vezes antes do `console.log` e chega a 3 na terceira; `b` foi chamada uma vez e chega a 2. `5 5` seria o resultado se os dois contadores dividissem um único `total`. `3 1` esquece que o próprio `console.log` chama `b()` de novo. Não há `ReferenceError`: o `total` só é lido dentro das arrows, que o enxergam pela closure.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Com a função abaixo, chamar `freteDoResumo(80, '01001000')` duas vezes seguidas calcula o frete uma vez só, porque a segunda chamada sai do cache.\n\n```javascript\nfunction freteDoResumo(subtotal, cep) {\n  const freteComCache = memoize(calcularFrete);\n  return freteComCache(subtotal, cep);\n}\n```",
+      "answer": false,
+      "explanation": "A cada chamada de `freteDoResumo`, a linha do `memoize` cria outra função memoizada, com uma closure nova e um cache vazio: o frete é calculado nas duas vezes. O cache só dura se o `memoize` for criado uma vez, fora da função, como em `export const calcularFreteComCache = memoize(calcularFrete);` no topo de `src/regras/frete.js`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o teste com o número de vezes que a função original roda:\n\n```javascript\nconst calcular = jest.fn(calcularFrete);\nconst calcularComCache = memoize(calcular);\n\ncalcularComCache(80, '01001000');\ncalcularComCache(80, '20040020');\ncalcularComCache(80, '01001000');\ncalcularComCache(200, '01001000');\n\nexpect(calcular).toHaveBeenCalledTimes(___);\n```",
+      "answer": [
+        [
+          "3",
+          "três",
+          "tres"
+        ]
+      ],
+      "explanation": "A espiã criada por `jest.fn()` anota cada chamada real. A chave do cache é o texto dos argumentos: `[80,\"01001000\"]` calcula, `[80,\"20040020\"]` é outra chave e calcula, a terceira repete a primeira e sai do cache, e `[200,\"01001000\"]` muda o subtotal, então é outra chave e calcula. Total: 3.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual destas funções da Lojinha pode ser memoizada com segurança?",
+      "options": {
+        "a": "`calcularFrete(subtotal, cep)`, que decide o frete só pelo subtotal e pelo CEP recebidos",
+        "b": "Uma função que imprime \"Produto adicionado\" no terminal com `console.log`",
+        "c": "Uma função que calcula a data de entrega a partir da data de hoje, lida dentro dela",
+        "d": "Uma função que sorteia um cupom de desconto com `Math.random()`"
+      },
+      "answer": "a",
+      "explanation": "Só funções puras podem ser memoizadas: mesmos argumentos, mesmo resultado, sem efeito. `calcularFrete` é assim. Memoizada, a mensagem do terminal apareceria só na primeira vez. A data de entrega é a armadilha mais comum: os argumentos se repetem, mas o dia muda, e o cache devolveria a data de ontem. O sorteio deixaria de sortear.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Com `const buscar = debounce(mostrar, 300);`, um script chama `buscar('f')` em 0 ms, `buscar('fo')` em 100 ms e `buscar('fone')` em 500 ms. O que acontece com `mostrar`?",
+      "options": {
+        "a": "Roda duas vezes: com `'fo'`, perto de 400 ms, e com `'fone'`, perto de 800 ms",
+        "b": "Roda uma vez, com `'fone'`, perto de 800 ms",
+        "c": "Roda três vezes, cada uma 300 ms depois da sua chamada",
+        "d": "Roda uma vez, com `'f'`, perto de 300 ms, e ignora as outras"
+      },
+      "answer": "a",
+      "explanation": "Cada chamada cancela o agendamento anterior e agenda `mostrar` para 300 ms depois. A chamada de 100 ms cancela a de `'f'` e agenda `'fo'` para 400 ms. A próxima só chega em 500 ms, quando `'fo'` já rodou: houve uma pausa maior que 300 ms. Então `'fone'` é agendado para 800 ms. A alternativa de uma busca só seria certa se as chamadas viessem sem pausas: o debounce espera pausas, não a palavra inteira.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O script `src/scripts/resumo-do-carrinho.js` soma os itens com um `for`, decide o frete com um `if` e imprime com `console.log`. Qual divisão segue a organização do `lojinha-regras`?",
+      "options": {
+        "a": "As contas vão para `resumoDoCarrinho(itens, cep)` em `src/regras/`, que devolve um objeto; o script chama a regra e só imprime",
+        "b": "O script inteiro vai para `src/regras/`, para que o Jest possa rodá-lo",
+        "c": "`resumoDoCarrinho(itens, cep)` imprime as três linhas com `console.log` e não devolve nada",
+        "d": "O script continua igual, e os testes comparam o que ele imprimiu no terminal"
+      },
+      "answer": "a",
+      "explanation": "A regra calcula e devolve; o script monta os dados, chama a regra e imprime. Assim o `expect` testa o objeto devolvido, e no E30 a mesma regra serve à tela do app. A mais tentadora é a que imprime dentro da regra: ela continua sem nada para o `expect` conferir, porque devolve `undefined`. Mover o script para `src/regras/` não separa nada: a conta segue presa à impressão.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Em qual destas tarefas da Lojinha a recursão é a escolha mais indicada?",
+      "options": {
+        "a": "Somar o preço de todos os itens do carrinho",
+        "b": "Contar os produtos de uma categoria cujas subcategorias podem ter outras subcategorias, sem limite de níveis",
+        "c": "Separar os 4 produtos em destaque dos 12 do catálogo",
+        "d": "Conferir se o CEP digitado tem 8 dígitos"
+      },
+      "answer": "b",
+      "explanation": "Recursão combina com árvores de profundidade desconhecida: cada subcategoria tem o mesmo formato da categoria, e a função chama a si mesma para cada uma até chegar às que não têm subcategorias (o caso base). O carrinho é uma lista plana: somá-lo com recursão funciona, mas um laço ou um `reduce` é mais simples de ler e não corre o risco de estourar a pilha com listas grandes. Separar os destaques e validar o CEP também são trabalhos de `filter`, laço ou condição.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "Complete `contarProdutos`, que conta os produtos de uma categoria e de todas as subcategorias dela, em qualquer profundidade:\n\n```javascript\nfunction contarProdutos(categoria) {\n  if (categoria.subcategorias.length === ___) {\n    return categoria.produtos.length;\n  }\n  let total = categoria.produtos.length;\n  for (const sub of categoria.subcategorias) {\n    total += ___(sub);\n  }\n  return total;\n}\n```",
+      "answer": [
+        [
+          "0"
+        ],
+        [
+          "contarProdutos"
+        ]
+      ],
+      "explanation": "A primeira lacuna é o caso base: uma categoria sem subcategorias (comprimento `0`) responde só com os próprios produtos, sem chamar a si mesma. A segunda é a chamada recursiva: a função chama `contarProdutos` para cada `sub`, um problema menor que a categoria original, e soma o resultado ao total.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um colega mudou uma linha de `contarProdutos`. A categoria Casa tem as subcategorias Cozinha e Iluminação. O que acontece com `contarProdutos(casa)`?\n\n```javascript\nfunction contarProdutos(categoria) {\n  if (categoria.subcategorias.length === 0) {\n    return categoria.produtos.length;\n  }\n  let total = categoria.produtos.length;\n  for (const sub of categoria.subcategorias) {\n    total += contarProdutos(categoria);\n  }\n  return total;\n}\n```",
+      "options": {
+        "a": "Devolve o total certo, porque o caso base continua no `if`",
+        "b": "Devolve só os produtos da própria Casa, porque o laço ignora as subcategorias",
+        "c": "As chamadas se empilham sem parar até estourar: `RangeError: Maximum call stack size exceeded`",
+        "d": "Devolve `undefined`, porque nenhuma chamada chega ao `return total`"
+      },
+      "answer": "c",
+      "explanation": "O laço chama a função de novo com a mesma `categoria`, não com `sub`: o problema não diminui. Casa tem subcategorias, então nunca entra no caso base, e cada chamada abre outra igual até a pilha de chamadas estourar. O caso base só resolve quando cada chamada recebe um problema menor que o anterior. Não há `undefined`: antes de qualquer `return`, o script quebra com o `RangeError`.",
+      "points": 2
+    }
+  ]
+}

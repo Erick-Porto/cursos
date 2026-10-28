@@ -1,0 +1,132 @@
+{
+  "title": "Quiz: E41 · Do briefing ao backlog e Git em equipe",
+  "description": "Oito questões sobre requisitos, histórias de usuário, MoSCoW, protótipo, quadro, branches, Pull Requests e a main protegida.",
+  "lesson": "e41b-trabalho-em-equipe-com-git",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No briefing **Cardápio e pedidos**, qual destes é um requisito **não funcional**?",
+      "options": {
+        "a": "O cardápio aparece em até 2 segundos numa conexão 4G",
+        "b": "O cliente acompanha a etapa atual do pedido feito",
+        "c": "Produto indisponível não entra no carrinho",
+        "d": "O cliente cancela o pedido enquanto ele está recebido"
+      },
+      "answer": "a",
+      "explanation": "Requisito não funcional diz **como** o app precisa se comportar, e vale para todas as telas: tempo de resposta, plataformas, temas, acessibilidade, segurança. As outras três dizem **o que** o app faz. A mais tentadora é a do produto indisponível, porque soa como uma restrição; mas é uma regra de negócio do cardápio, portanto funcional.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na Agenda de serviços, a equipe transformou um critério de aceite neste teste. Qual critério ele automatiza?\n\n```javascript\ntest('não deixa cancelar faltando menos de 2 horas', () => {\n  const agendamento = { data: '2026-10-20', hora: '14:30', status: 'agendado' };\n  const agora = new Date('2026-10-20T13:00:00');\n  expect(podeCancelar(agendamento, agora)).toBe(false);\n});\n```",
+      "options": {
+        "a": "Dado um corte às 14h30 de hoje, quando são 13h, então o botão Cancelar não aparece",
+        "b": "Dado um corte às 14h30 de hoje, quando são 12h, então o cliente consegue cancelar",
+        "c": "Dado que são 13h, quando abro o dia de hoje, então os horários antes das 14h não aparecem",
+        "d": "Dado um agendamento cancelado, quando abro Meus agendamentos, então ele some da lista"
+      },
+      "answer": "a",
+      "explanation": "O teste monta um agendamento às 14h30, fixa o relógio em 13h (1h30 antes) e espera `false`: com menos de 2 horas, não se cancela. Às 12h faltariam 2h30, e o cancelamento seria permitido, o contrário do que o teste afirma. A alternativa das 13h com horários escondidos fala da regra de antecedência para agendar, não de cancelar. Fixar `agora` no teste, em vez de usar a hora real, é o que deixa o resultado igual todo dia.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "A equipe da **Agenda de serviços** tem quatro encontros até o Demo Day. Quais histórias são **Must**, ou seja, sem elas não há app?",
+      "options": {
+        "a": "Como cliente, quero ver os horários livres de um dia, para escolher quando ir",
+        "b": "Como cliente, quero agendar um serviço num horário livre, para garantir meu atendimento",
+        "c": "Como cliente, quero pagar o corte pelo app, para não levar dinheiro",
+        "d": "Como cliente, quero receber um lembrete uma hora antes, para não esquecer",
+        "e": "Como cliente, quero cancelar um agendamento, para liberar o horário"
+      },
+      "answer": [
+        "a",
+        "b",
+        "e"
+      ],
+      "explanation": "Ver horários livres, agendar e cancelar formam o fluxo que resolve o problema do briefing: sem qualquer um deles, a barbearia volta ao caderno. O lembrete é um Could: melhora o app, mas a demo vive sem. O pagamento pelo app é um Won't desta vez: exige um serviço de pagamento e segurança que não cabem no prazo, e fica escrito no backlog para não voltar à discussão.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Você pegou a issue `#9`, \"Cancelar agendamento\". Qual combinação de nome de branch e primeira mensagem de commit segue os combinados da equipe?",
+      "options": {
+        "a": "Branch `feature/9-cancelar-agendamento` e commit `feat: permite cancelar até 2 horas antes`",
+        "b": "Branch `bruno` e commit `feat: cancelar`",
+        "c": "Branch `feature/sprint-1` e commit `ajustes no cancelamento`",
+        "d": "Branch `main` e commit `fix: cancelar agendamento`"
+      },
+      "answer": "a",
+      "explanation": "O nome da branch leva o tipo, o número da issue e poucas palavras, e a branch vive só o tempo dessa história. O commit tem o tipo `feat:`, porque é funcionalidade nova, e uma frase que começa por verbo. Uma branch com o nome da pessoa ou do sprint junta várias histórias e chega à `main` cheia de conflitos; \"ajustes\" não conta nada; e com a `main` protegida, o commit direto nela é recusado no push.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "No kickoff, o protótipo das 5 telas deve sair com as cores, as fontes e os ícones finais, para a equipe não precisar refazer nada quando começar o código.",
+      "answer": false,
+      "explanation": "O protótipo do kickoff é de baixa fidelidade: caixas, rótulos com texto real e setas, sem cor e sem fonte. O objetivo é testar o fluxo, com o teste do corredor, e mudar o desenho em um minuto quando alguém trava. Caprichar no visual agora gasta tempo e deixa a equipe com dó de mudar o fluxo; cores e fontes vêm dos tokens do tema, no código.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Complete a última linha da descrição do PR para que a issue 9 feche sozinha quando o PR entrar na `main`:\n\n```markdown\n### O que muda\nBotão Cancelar em Meus agendamentos, até 2 horas antes.\n\n### Como testar\n1. Agende para daqui a 3 horas e toque em Cancelar\n\n___ #9\n```",
+      "answer": [
+        [
+          "Closes",
+          "Close",
+          "Closed",
+          "Fixes",
+          "Fix",
+          "Fixed",
+          "Resolves",
+          "Resolve",
+          "Resolved"
+        ]
+      ],
+      "explanation": "Com `Closes #9` na descrição, o GitHub liga o PR à issue e a fecha no merge; a automação do Projects leva o cartão para Done. `Fixes` e `Resolves` têm o mesmo efeito. Escrever só `#9` cria um link, mas não fecha nada.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com a regra \"main protegida\" ativa, Bruno fez dois commits na `main` do computador dele e rodou `git push`. O terminal respondeu:\n\n```plaintext\nremote: - Changes must be made through a pull request.\n ! [remote rejected] main -> main (push declined due to repository rule violations)\n```\n\nO que ele deve fazer?",
+      "options": {
+        "a": "Criar uma branch ali mesmo com `git switch -c feature/9-cancelar-agendamento`, enviá-la com `git push -u origin` e abrir o PR",
+        "b": "Rodar `git push --force`, que passa por cima da regra quando o push é recusado",
+        "c": "Pedir a quem criou o repositório para desativar a regra até o fim do encontro",
+        "d": "Apagar a pasta do projeto e rodar `git clone` de novo, para a `main` local ficar igual à do GitHub"
+      },
+      "answer": "a",
+      "explanation": "A regra recusou o push, mas os dois commits continuam no computador do Bruno. Uma branch criada ali mesmo já contém os commits; ela vai para o GitHub e entra na `main` pelo PR revisado. Depois do merge, `git pull` na `main` deixa tudo igual. O `--force` também é bloqueado pela regra (Block force pushes). Desativar a regra derruba o combinado da equipe, e clonar de novo joga fora o trabalho que ainda não foi enviado.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Na daily, o quadro mostra: Ana com 3 cartões em **In Progress** há dois encontros e o PR do Bruno parado em **In review** desde ontem, sem revisão. Qual é a melhor decisão para a equipe?",
+      "options": {
+        "a": "Ana devolve dois cartões para Todo e revisa o PR do Bruno antes de pegar outra história",
+        "b": "Bruno aprova o próprio PR e faz o merge, para não perder mais tempo",
+        "c": "Ana puxa mais um cartão para adiantar o sprint enquanto Bruno espera",
+        "d": "A equipe usa a daily para revisar o código do PR, linha por linha, por 30 minutos"
+      },
+      "answer": "a",
+      "explanation": "O combinado é um cartão em In Progress por pessoa: três cartões abertos significam três histórias pela metade. Revisar o PR parado destrava o Bruno e leva uma história a Done, o que vale mais do que começar outra. O GitHub não deixa o autor aprovar o próprio PR, e a regra exige a aprovação de um colega. A daily só mostra os problemas em 5 minutos; a revisão acontece logo depois, com quem precisa.",
+      "points": 2
+    }
+  ]
+}

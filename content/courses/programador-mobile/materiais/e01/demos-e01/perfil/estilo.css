@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.cartao {
+  max-width: 360px;
+  margin: 48px auto;
+  padding: 32px 24px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+}
+
+.foto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.links a {
+  color: #0b7285;
+  font-weight: bold;
+}

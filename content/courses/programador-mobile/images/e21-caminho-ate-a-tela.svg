@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>O caminho até a tela: o index.html carrega o main.jsx, o main.jsx renderiza o App e o que o App devolve aparece dentro da div root</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .root { fill: none; stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 8 6; }
+    .code { font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .file { fill: #e8edf7; font-weight: 700; }
+    .dim  { fill: #b4bfd3; }
+    .hi   { fill: #a78bfa; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ui   { fill: #0b1020; stroke: #34d399; stroke-width: 2; }
+    .uit  { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .link { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+    .num  { fill: #a78bfa; }
+    .nt   { fill: #0b1020; font-size: 22px; font-weight: 700; }
+    .n1 { animation: passo1 8s infinite; }
+    .n2 { animation: passo2 8s infinite; }
+    .n3 { animation: passo3 8s infinite; }
+    .tela { animation: aparece 8s infinite; }
+    @keyframes passo1 {
+      0%, 4%   { opacity: 0; }
+      12%, 90% { opacity: 1; }
+      97%, 100% { opacity: 0; }
+    }
+    @keyframes passo2 {
+      0%, 24%  { opacity: 0; }
+      32%, 90% { opacity: 1; }
+      97%, 100% { opacity: 0; }
+    }
+    @keyframes passo3 {
+      0%, 44%  { opacity: 0; }
+      52%, 90% { opacity: 1; }
+      97%, 100% { opacity: 0; }
+    }
+    @keyframes aparece {
+      0%, 52%  { opacity: 0; transform: translateX(40px); }
+      64%, 90% { opacity: 1; transform: translateX(0); }
+      97%, 100% { opacity: 0; transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .n1, .n2, .n3, .tela { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- index.html no navegador -->
+  <rect class="box" x="20" y="20" width="300" height="260" rx="12"/>
+  <text class="code file" x="40" y="56">index.html</text>
+  <text class="m" x="40" y="92">carrega o <tspan class="code hi">main.jsx</tspan></text>
+  <rect class="root" x="40" y="112" width="260" height="148" rx="8"/>
+  <text class="code dim" x="56" y="144">&lt;div id="root"&gt;</text>
+
+  <!-- src/main.jsx -->
+  <rect class="box" x="420" y="20" width="280" height="110" rx="12"/>
+  <text class="code file" x="440" y="56">src/main.jsx</text>
+  <text class="code hi" x="440" y="100">render(&lt;App /&gt;)</text>
+
+  <!-- src/App.jsx -->
+  <rect class="box" x="420" y="170" width="280" height="110" rx="12"/>
+  <text class="code file" x="440" y="206">src/App.jsx</text>
+  <text class="m" x="440" y="250">devolve a tela</text>
+
+  <!-- 1: index.html carrega main.jsx -->
+  <g class="n1">
+    <path class="link" d="M 296 86 L 412 86"/>
+    <circle class="num" cx="366" cy="56" r="16"/>
+    <text class="nt" x="366" y="64" text-anchor="middle">1</text>
+  </g>
+
+  <!-- 2: main.jsx renderiza o App -->
+  <g class="n2">
+    <path class="link" d="M 560 132 L 560 162"/>
+    <circle class="num" cx="594" cy="150" r="16"/>
+    <text class="nt" x="594" y="158" text-anchor="middle">2</text>
+  </g>
+
+  <!-- 3: o JSX do App vira HTML dentro da div#root -->
+  <g class="n3">
+    <path class="link" d="M 418 226 L 294 204"/>
+    <circle class="num" cx="364" cy="246" r="16"/>
+    <text class="nt" x="364" y="254" text-anchor="middle">3</text>
+  </g>
+  <g class="tela">
+    <rect class="ui" x="56" y="164" width="228" height="76" rx="8"/>
+    <text class="uit" x="72" y="210">Minhas Tarefas</text>
+  </g>
+</svg>

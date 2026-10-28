@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>Breakpoint condicional no return de somar: com typeof produto.preco !== 'number', os produtos com preço em número seguem e o script pausa na Garrafa Térmica, cujo preço chegou como texto</title>
+  <style>
+    .panel { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cond  { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .stop  { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .hl    { fill: #fbbf24; fill-opacity: 0.14; stroke: #fbbf24; stroke-width: 2; }
+    .r1 { animation: r1 8s infinite; }
+    .r2 { animation: r2 8s infinite; }
+    .r3 { animation: r3 8s infinite; }
+    @keyframes r1 { 0%, 4%  { opacity: 0; transform: translateX(-12px); } 12%, 94% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; } }
+    @keyframes r2 { 0%, 24% { opacity: 0; transform: translateX(-12px); } 32%, 94% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; } }
+    @keyframes r3 { 0%, 46% { opacity: 0; transform: translateX(-12px); } 54%, 94% { opacity: 1; transform: translateX(0); } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .r1, .r2, .r3 { animation: none; }
+    }
+  </style>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <!-- o código, com o breakpoint condicional na linha do return -->
+  <rect x="24" y="20" width="672" height="140" rx="10" class="panel"/>
+  <g class="r3">
+    <rect x="68" y="76" width="620" height="34" rx="4" class="hl"/>
+  </g>
+  <text x="76" y="58" class="code">function somar(total, produto) {</text>
+  <text x="102" y="101" class="code">return total + produto.preco;</text>
+  <text x="76" y="144" class="code">}</text>
+  <path d="M 34 82 L 52 82 L 62 93 L 52 104 L 34 104 Z" fill="#fbbf24"/>
+
+  <text x="34" y="202" class="m">condição:</text>
+  <text x="146" y="202" class="cond">typeof produto.preco !== 'number'</text>
+
+  <!-- cada produto que o reduce entrega a somar -->
+  <g class="r1">
+    <text x="34" y="256" class="m">Fone Bluetooth</text>
+    <text x="250" y="256" class="code">199.9</text>
+    <text x="440" y="256" class="m">falsa: segue</text>
+  </g>
+  <g class="r2">
+    <text x="34" y="304" class="m">Luminária de Mesa</text>
+    <text x="250" y="304" class="code">89.9</text>
+    <text x="440" y="304" class="m">falsa: segue</text>
+  </g>
+  <g class="r3">
+    <text x="34" y="352" class="m">Garrafa Térmica</text>
+    <text x="250" y="352" class="code">"79.90"</text>
+    <text x="440" y="352" class="stop">verdadeira: pausa</text>
+  </g>
+</svg>

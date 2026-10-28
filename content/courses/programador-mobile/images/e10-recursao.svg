@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>contarProdutos(casa): as chamadas descem pela árvore até os casos base, Cozinha e Lâmpadas, e as respostas sobem somando até Casa devolver 7</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .base { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .val  { fill: #34d399; font-size: 26px; font-weight: 700; }
+    .call { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta-chama); }
+    .ret  { stroke: #34d399; stroke-width: 3; fill: none; stroke-dasharray: 8 5; marker-end: url(#seta-volta); }
+    .step { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: linear; }
+    .s1 { animation-name: s1; } .s2 { animation-name: s2; } .s3 { animation-name: s3; } .s4 { animation-name: s4; }
+    .s5 { animation-name: s5; } .s6 { animation-name: s6; } .s7 { animation-name: s7; }
+    @keyframes s1 { 0%, 3%  { opacity: 0; } 7%, 92%  { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s2 { 0%, 13% { opacity: 0; } 17%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s3 { 0%, 23% { opacity: 0; } 27%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s4 { 0%, 33% { opacity: 0; } 37%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s5 { 0%, 43% { opacity: 0; } 47%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s6 { 0%, 53% { opacity: 0; } 57%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes s7 { 0%, 63% { opacity: 0; } 68%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .step { animation: none; } }
+  </style>
+  <defs>
+    <marker id="seta-chama" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+    <marker id="seta-volta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- árvore -->
+  <rect class="box" x="275" y="20" width="170" height="70" rx="12"/>
+  <text class="t" x="360" y="50" text-anchor="middle">Casa</text>
+  <text class="m" x="360" y="78" text-anchor="middle">1 produto</text>
+
+  <rect class="box" x="40" y="170" width="180" height="70" rx="12"/>
+  <text class="t" x="130" y="200" text-anchor="middle">Cozinha</text>
+  <text class="m" x="130" y="228" text-anchor="middle">3 produtos</text>
+  <text class="base" x="130" y="270" text-anchor="middle">caso base</text>
+
+  <rect class="box" x="430" y="170" width="180" height="70" rx="12"/>
+  <text class="t" x="520" y="200" text-anchor="middle">Iluminação</text>
+  <text class="m" x="520" y="228" text-anchor="middle">1 produto</text>
+
+  <rect class="box" x="430" y="310" width="180" height="70" rx="12"/>
+  <text class="t" x="520" y="340" text-anchor="middle">Lâmpadas</text>
+  <text class="m" x="520" y="368" text-anchor="middle">2 produtos</text>
+  <text class="base" x="416" y="354" text-anchor="end">caso base</text>
+
+  <!-- legenda -->
+  <path class="call" d="M40 322 L92 322"/>
+  <text class="m" x="104" y="330">chama</text>
+  <path class="ret" d="M40 364 L92 364"/>
+  <text class="m" x="104" y="372">devolve</text>
+
+  <!-- 1. Casa chama Cozinha -->
+  <path class="call step s1" d="M290 92 L162 166"/>
+  <!-- 2. Cozinha devolve 3 (caso base) -->
+  <g class="step s2">
+    <path class="ret" d="M196 168 L318 96"/>
+    <text class="val" x="268" y="158">3</text>
+  </g>
+  <!-- 3. Casa chama Iluminação -->
+  <path class="call step s3" d="M428 92 L486 166"/>
+  <!-- 4. Iluminação chama Lâmpadas -->
+  <path class="call step s4" d="M496 242 L496 306"/>
+  <!-- 5. Lâmpadas devolve 2 (caso base) -->
+  <g class="step s5">
+    <path class="ret" d="M552 308 L552 246"/>
+    <text class="val" x="566" y="286">2</text>
+  </g>
+  <!-- 6. Iluminação devolve 1 + 2 = 3 -->
+  <g class="step s6">
+    <path class="ret" d="M560 168 L450 66"/>
+    <text class="val" x="530" y="122">1 + 2 = 3</text>
+  </g>
+  <!-- 7. Casa devolve 1 + 3 + 3 = 7 -->
+  <text class="val step s7" x="262" y="64" text-anchor="end">1 + 3 + 3 = 7</text>
+</svg>

@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>No celular, localhost:3000 aponta para o próprio aparelho; pelo IP do computador, 192.168.0.15:3000, no mesmo Wi-Fi, o app chega ao json-server</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#seta-ok); }
+    .no   { stroke: #f87171; stroke-width: 3; fill: none; stroke-dasharray: 9 6; marker-end: url(#seta-no); }
+  </style>
+  <defs>
+    <marker id="seta-ok" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+    <marker id="seta-no" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#f87171"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <!-- celular -->
+  <rect class="box" x="40" y="40" width="120" height="240" rx="18"/>
+  <text class="m" x="100" y="168" text-anchor="middle">app</text>
+  <text class="h" x="100" y="306" text-anchor="middle">celular</text>
+
+  <!-- localhost: volta para o próprio celular -->
+  <path class="no" d="M160 96 H222 A30 30 0 0 1 222 156 H164"/>
+  <g transform="translate(270 108) scale(1.5)" fill="none" stroke="#f87171" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="m15 9-6 6"/>
+    <path d="m9 9 6 6"/>
+  </g>
+  <text class="code" x="318" y="118" fill="#f87171">localhost:3000</text>
+  <text class="m" x="318" y="150">volta para o próprio celular</text>
+
+  <!-- IP do computador: atravessa o Wi-Fi -->
+  <path class="ok" d="M160 236 H464"/>
+  <g transform="translate(172 196) scale(1.1)" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <path d="m9 12 2 2 4-4"/>
+  </g>
+  <text class="code" x="206" y="220" fill="#34d399">192.168.0.15:3000</text>
+  <g transform="translate(232 248) scale(1.1)" fill="none" stroke="#b4bfd3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 20h.01"/>
+    <path d="M2 8.82a15 15 0 0 1 20 0"/>
+    <path d="M5 12.859a10 10 0 0 1 14 0"/>
+    <path d="M8.5 16.429a5 5 0 0 1 7 0"/>
+  </g>
+  <text class="m" x="266" y="272">mesmo Wi-Fi</text>
+
+  <!-- computador -->
+  <rect class="box" x="468" y="190" width="220" height="84" rx="10"/>
+  <path d="M468 274 L452 288 H704 L688 274 Z" fill="#131c33" stroke="#2a3a5c" stroke-width="2" stroke-linejoin="round"/>
+  <text class="code" x="578" y="224" text-anchor="middle" fill="#34d399">json-server</text>
+  <text class="m" x="578" y="258" text-anchor="middle">porta 3000</text>
+  <text class="h" x="578" y="306" text-anchor="middle">computador</text>
+</svg>

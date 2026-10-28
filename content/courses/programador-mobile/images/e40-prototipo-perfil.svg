@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 468" font-family="Inter, system-ui, sans-serif">
+  <title>Protótipo da tela Perfil com as medidas: foto de 72, nome 16 abaixo, e-mail 4 abaixo, cartão 24 abaixo com linhas de 56 e Sair 32 abaixo</title>
+  <style>
+    .nota { fill: #e8edf7; font-size: 22px; }
+    .num  { fill: #a78bfa; font-weight: 700; }
+    .guia { stroke: #a78bfa; stroke-width: 2; fill: none; }
+    .ponto { fill: #a78bfa; }
+    .opc  { fill: #0f172a; font-size: 22px; }
+    .ico  { fill: none; stroke: #6d28d9; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .seta { fill: none; stroke: #475569; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  </style>
+  <rect width="720" height="468" rx="16" fill="#0b1020"/>
+
+  <!-- frame do protótipo, tema claro -->
+  <rect x="40" y="16" width="300" height="436" rx="28" fill="#f1f5f9" stroke="#b4bfd3" stroke-width="2"/>
+
+  <!-- topo: foto, nome e e-mail -->
+  <circle cx="190" cy="74" r="36" fill="#6d28d9"/>
+  <text x="190" y="83" text-anchor="middle" font-size="24" font-weight="700" fill="#ffffff">AS</text>
+  <text x="190" y="146" text-anchor="middle" font-size="24" font-weight="700" fill="#0f172a">Ana Souza</text>
+  <text x="190" y="176" text-anchor="middle" font-size="22" fill="#475569">ana.souza@email.com</text>
+
+  <!-- cartão com 4 opções -->
+  <rect x="56" y="206" width="268" height="176" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+  <path d="M56 250 H324 M56 294 H324 M56 338 H324" stroke="#e2e8f0" stroke-width="1.5"/>
+  <g class="ico" transform="translate(66 217) scale(0.9)"><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 17.5v-11"/></g>
+  <g class="ico" transform="translate(66 261) scale(0.9)"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></g>
+  <g class="ico" transform="translate(66 305) scale(0.9)"><path d="M10.268 21a2 2 0 0 0 3.464 0"/><path d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/></g>
+  <g class="ico" transform="translate(66 349) scale(0.9)"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></g>
+  <text class="opc" x="100" y="236">Meus pedidos</text>
+  <text class="opc" x="100" y="280">Endereços</text>
+  <text class="opc" x="100" y="324">Notificações</text>
+  <text class="opc" x="100" y="368">Ajuda</text>
+  <path class="seta" d="M298 222 l6 6 -6 6 M298 266 l6 6 -6 6 M298 310 l6 6 -6 6 M298 354 l6 6 -6 6"/>
+
+  <!-- Sair -->
+  <g class="ico" transform="translate(146 399) scale(0.9)"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" x2="9" y1="12" y2="12"/></g>
+  <text x="178" y="418" font-size="22" font-weight="700" fill="#6d28d9">Sair</text>
+
+  <!-- medidas -->
+  <path class="guia" d="M230 74 H362 M264 137 H362 M318 170 H362 M326 206 H362 M332 252 V292 M332 272 H362 M238 411 H362"/>
+  <circle class="ponto" cx="230" cy="74" r="4"/>
+  <circle class="ponto" cx="264" cy="137" r="4"/>
+  <circle class="ponto" cx="318" cy="170" r="4"/>
+  <circle class="ponto" cx="326" cy="206" r="4"/>
+  <circle class="ponto" cx="238" cy="411" r="4"/>
+  <text class="nota" x="372" y="82">foto <tspan class="num">72 × 72</tspan></text>
+  <text class="nota" x="372" y="145">nome <tspan class="num">16</tspan> abaixo</text>
+  <text class="nota" x="372" y="178">e-mail <tspan class="num">4</tspan> abaixo</text>
+  <text class="nota" x="372" y="214">cartão <tspan class="num">24</tspan> abaixo</text>
+  <text class="nota" x="372" y="280">linhas de <tspan class="num">56</tspan></text>
+  <text class="nota" x="372" y="419">Sair <tspan class="num">32</tspan> abaixo</text>
+</svg>

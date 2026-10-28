@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 426" font-family="Inter, system-ui, sans-serif">
+  <title>Cadeia de boleto: o objeto, PagamentoBoleto.prototype com vencimento, o elo criado pelo extends, Pagamento.prototype com totalAPagar e descricao, e Object.prototype antes de null; a busca por boleto.totalAPagar passa pelos dois primeiros elos e acha o método em Pagamento.prototype</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .hit  { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .q    { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .ext  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .link { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#elo); }
+    .okl  { stroke: #34d399; stroke-width: 2.5; fill: none; marker-end: url(#seta-ok); }
+  </style>
+  <defs>
+    <marker id="elo" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#a78bfa"/></marker>
+    <marker id="seta-ok" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="426" rx="16" fill="#0b1020"/>
+
+  <!-- a cadeia de boleto -->
+  <rect class="box" x="24" y="16" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="46">boleto</text>
+  <text class="c" x="44" y="78">new PagamentoBoleto()</text>
+  <path class="link" d="M70 94 L70 110"/>
+
+  <rect class="box" x="24" y="114" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="144">PagamentoBoleto.prototype</text>
+  <text class="c" x="44" y="176">vencimento</text>
+
+  <!-- o elo que o extends cria -->
+  <path class="link" d="M70 192 L70 232"/>
+  <text class="ext" x="92" y="220">extends</text>
+
+  <rect class="hit" x="24" y="236" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="266">Pagamento.prototype</text>
+  <text class="c" x="44" y="298">totalAPagar, descricao</text>
+  <path class="link" d="M70 314 L70 330"/>
+
+  <rect class="box" x="24" y="334" width="380" height="76" rx="10"/>
+  <text class="h" x="44" y="364">Object.prototype</text>
+  <text class="m" x="44" y="396">toString; depois dele, null</text>
+
+  <!-- a busca por boleto.totalAPagar -->
+  <text class="q" x="462" y="46">boleto.totalAPagar</text>
+  <text class="m" x="462" y="80">1. não está aqui</text>
+  <text class="m" x="462" y="162">2. não está aqui</text>
+  <path class="okl" d="M454 272 L414 272"/>
+  <text class="ok" x="462" y="280">3. achado aqui</text>
+</svg>

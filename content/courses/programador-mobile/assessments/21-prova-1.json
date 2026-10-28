@@ -1,0 +1,297 @@
+{
+  "title": "Prova 1: Ambiente, linguagem e classes em JavaScript",
+  "description": "Prova do encontro E20, aplicada em sala na última hora. Cobre os encontros E01 a E20: a web e onde o JavaScript roda, Node, npm, Git, lint, depuração, Jest e CI; tipos, dinheiro em centavos, datas, funções, arrays, closures, módulos, Map e Set; decisões, laços, classes, herança, protótipos, erros, Promises, async e a API, tudo no lojinha-regras. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
+  "lesson": "e20b-revisao-javascript",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple",
+      "prompt": "Sobre a web e os lugares onde o JavaScript roda, quais afirmações estão corretas?",
+      "options": {
+        "a": "Numa página, o HTML dá a estrutura, o CSS a aparência e o JavaScript o comportamento",
+        "b": "`document` e `process` funcionam no navegador e no Node, porque fazem parte da linguagem",
+        "c": "O Node.js usa o V8, o motor do Chrome, somado a APIs próprias, como `fs` e `process`",
+        "d": "Um texto trocado na aba Elements do DevTools fica salvo no servidor do site"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "Cada linguagem da web tem o seu papel, e o runtime é o motor somado às APIs do lugar: o Node junta o V8 ao `fs` e ao `process`. O `document` é do navegador e o `process` é do Node; no lugar errado, cada um dá `is not defined`. O DevTools altera a cópia da página na memória: ao recarregar, tudo volta."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A sua dupla instalou o `picocolors` no `lojinha-regras` e abriu um PR. Na máquina dela, `npm run verificar` passa. No GitHub Actions, o passo **Instalar dependências** (`npm ci`) fica vermelho:\n\n```plaintext\nnpm error `npm ci` can only install packages when your package.json and\npackage-lock.json or npm-shrinkwrap.json are in sync.\nnpm error Missing: picocolors@1.1.1 from lock file\n```\n\nOs arquivos alterados no PR são só o `package.json` e o `relatorio-catalogo.js`. Qual é a correção?",
+      "options": {
+        "a": "Fazer o commit do `package-lock.json` atualizado, que anda junto com o `package.json`",
+        "b": "Trocar `npm ci` por `npm install` no workflow, que acerta o lock sozinho",
+        "c": "Fazer o commit da pasta `node_modules/`, para o runner não precisar instalar nada",
+        "d": "Apagar o `package-lock.json` do repositório, para o `npm ci` seguir só o `package.json`"
+      },
+      "answer": "a",
+      "explanation": "O runner começa do zero e só tem o que está no Git: um `package.json` com o pacote novo e um lock antigo, sem ele. O `npm ci` instala exatamente o lock e, quando os dois não batem, para em vez de consertar. Trocar por `npm install` esconderia a diferença, e cada máquina poderia ganhar uma versão. O `node_modules/` fica fora do Git, e sem lock o `npm ci` nem começa.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Sobre o Git e as ferramentas de qualidade do `lojinha-regras`, quais afirmações estão corretas?",
+      "options": {
+        "a": "O ESLint lê o código sem executá-lo e acusa um nome digitado errado, como `categria`, com a regra `no-undef`",
+        "b": "O Prettier aponta quando a média é dividida pelo número errado de produtos",
+        "c": "Um breakpoint só pausa o script que roda pelo depurador, como no JavaScript Debug Terminal",
+        "d": "Quando o `git push` é recusado, `git push --force` envia sem apagar o trabalho de ninguém",
+        "e": "Num conflito, você deixa o trecho combinado, apaga as marcas e conclui com `git add` e `git commit`"
+      },
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "O lint acha erros sem rodar nada, e o Prettier só cuida da aparência: nenhum dos dois entende a conta do preço médio, que é trabalho do depurador e dos testes. Num terminal comum, o script passa direto pelo breakpoint. O `--force` apaga do GitHub os commits de quem enviou antes: rode `git pull` e depois `git push`. No conflito, o Git para e espera você decidir; marca esquecida no arquivo quebra os scripts."
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete os dois testes com o matcher certo:\n\n```javascript\ntest('a primeira parcela leva o centavo que sobra', () => {\n  expect(parcelar(199.9, 3)).___({ parcelas: 3, valor: 66.63, primeira: 66.64 });\n});\n\ntest('CEP com 7 números é recusado', () => {\n  expect(() => freteDoCep(100, '0131000')).___(CepInvalidoError);\n});\n```",
+      "answer": [
+        [
+          "toEqual",
+          "toStrictEqual"
+        ],
+        [
+          "toThrow"
+        ]
+      ],
+      "explanation": "O `parcelar` devolve um objeto novo: o `toEqual` compara o conteúdo, campo por campo, e o `toBe` falharia com `serializes to the same string`. Para o erro, o `toThrow` com a classe confere que a função lançou um `CepInvalidoError`; a arrow deixa o Jest chamar a função dentro do `expect`, e sem ela o erro estouraria antes."
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A Caixa de Som Portátil custa R$ 249,90. O que `parcelar(249.9, 4)` devolve?\n\n```javascript\nexport function parcelar(total, parcelas) {\n  const centavos = paraCentavos(total);\n  const valor = Math.floor(centavos / parcelas);\n  const resto = centavos % parcelas;\n  return {\n    parcelas: parcelas,\n    valor: paraReais(valor),\n    primeira: paraReais(valor + resto),\n  };\n}\n```",
+      "options": {
+        "a": "`{ parcelas: 4, valor: 62.47, primeira: 62.49 }`",
+        "b": "`{ parcelas: 4, valor: 62.48, primeira: 62.48 }`",
+        "c": "`{ parcelas: 4, valor: 62.47, primeira: 62.47 }`",
+        "d": "`{ parcelas: 4, valor: 62.475, primeira: 62.475 }`"
+      },
+      "answer": "a",
+      "explanation": "Em centavos, 24990 dividido por 4 dá 6247,5: o `Math.floor` fica com 6247, e o `%` mostra que sobram 2 centavos, que vão para a primeira parcela (6249). R$ 62,49 mais 3 de R$ 62,47 fecham os R$ 249,90. Arredondar cada parcela para 62,48 cobraria 2 centavos a mais; esquecer o resto perderia 2.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O pedido saiu numa sexta-feira. O que o script imprime?\n\n```javascript\nconst sexta = new Date(2026, 9, 30); // sexta, 30 de outubro de 2026\nconst entrega = preverEntrega(2, sexta); // 2 dias úteis\nconsole.log(entrega.getMonth(), entrega.getDate(), sexta.getDate());\n```",
+      "options": {
+        "a": "`10 3 30`",
+        "b": "`11 3 30`",
+        "c": "`10 1 30`",
+        "d": "`10 3 3`"
+      },
+      "answer": "a",
+      "explanation": "Os dias úteis pulam o fim de semana: a sexta vai para segunda, 2 de novembro, e depois para terça, 3. No `Date`, o mês começa em 0, então novembro é 10. O `preverEntrega` cria datas novas com o `somarDias`, e a `sexta` continua no dia 30. Contar dias corridos daria domingo, 1; mudar a data recebida daria 3 nas duas.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "`removerItem(itens, id)`, do E07, devolve uma lista nova, sem o item, e não altera a lista que recebe. O script abaixo imprime `1`.\n\n```javascript\nconst itens = [\n  { id: 1, nome: 'Fone Bluetooth', preco: 199.9, qtd: 2 },\n  { id: 4, nome: 'Luminária de Mesa', preco: 89.9, qtd: 1 },\n];\nremoverItem(itens, 4);\nconsole.log(itens.length);\n```",
+      "answer": false,
+      "explanation": "Imprime `2`. A regra é pura: devolve a lista nova e deixa a recebida como estava. Chamar e jogar o resultado fora não muda nada; guarde o retorno, com `let itens` e `itens = removerItem(itens, 4);`."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que o script imprime?\n\n```javascript\nconst itens = [\n  { id: 1, nome: 'Fone Bluetooth', qtd: 1 },\n  { id: 7, nome: 'Tênis de Corrida', qtd: 2 },\n];\nconst a = itens.find((i) => i.id === 4);\nconst b = itens.findIndex((i) => i.qtd === 2);\nconst c = itens.indexOf({ id: 1, nome: 'Fone Bluetooth', qtd: 1 });\nconsole.log(a, b, c);\n```",
+      "options": {
+        "a": "`undefined 1 -1`",
+        "b": "`-1 1 0`",
+        "c": "`undefined 2 0`",
+        "d": "`null 1 -1`"
+      },
+      "answer": "a",
+      "explanation": "O `find` devolve o item ou `undefined`; o `findIndex` devolve a posição, que começa em 0, e o tênis está na 1. O `indexOf` compara com `===`, e um objeto escrito de novo é outro objeto, mesmo com os mesmos dados: `-1`. Em arrays de objetos, procure pelo `id` com `find` ou `findIndex`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Com o carrinho vazio, `const itens = [];`, qual expressão vale `true`?",
+      "options": {
+        "a": "`itens.every((i) => i.qtd >= 1 && i.qtd <= 10)`",
+        "b": "`itens.some((i) => i.qtd >= 1)`",
+        "c": "`itens.find((i) => i.id === 1) === null`",
+        "d": "`itens.reduce((soma, i) => soma + i.qtd) === 0`"
+      },
+      "answer": "a",
+      "explanation": "Com a lista vazia, o `every` não acha ninguém que falhe e devolve `true`: um carrinho vazio passaria na validação, e por isso o checkout confere também `itens.length > 0`. O `some` não acha ninguém e dá `false`. O `find` sem resultado devolve `undefined`, que não é `null` para o `===`. O `reduce` sem valor inicial lança `TypeError` com a lista vazia: passe o `0`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que o script imprime?\n\n```javascript\nfunction criarReserva(estoque) {\n  let restante = estoque;\n  return (qtd) => {\n    if (qtd > restante) return false;\n    restante -= qtd;\n    return true;\n  };\n}\n\nconst reservarLuminaria = criarReserva(2);\nconst reservarFone = criarReserva(8);\nconsole.log(reservarLuminaria(1), reservarLuminaria(2));\nconsole.log(reservarFone(2), reservarLuminaria(1));\n```",
+      "options": {
+        "a": "`true false`, depois `true true`",
+        "b": "`true true`, depois `true true`",
+        "c": "`true false`, depois `false true`",
+        "d": "`true false`, depois `true false`"
+      },
+      "answer": "a",
+      "explanation": "Cada chamada de `criarReserva` cria um `restante` próprio, que a arrow devolvida lembra por closure. A luminária começa com 2: reserva 1 e fica com 1, então o pedido de 2 é recusado. O fone tem o próprio contador, com 8. Na última chamada, a luminária ainda tem 1 e aceita. O `restante` não volta ao início a cada chamada, e as duas reservas não dividem o mesmo valor.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "O script `src/scripts/promocao.js` precisa do `formatarPreco`, exportado com nome em `src/utils/formatar.js`, e da `promocao`, o `export default` de `src/data/promocao.js`. Qual par de imports funciona ao rodar com `node`?",
+      "options": {
+        "a": "`import { formatarPreco } from '../utils/formatar.js';` e `import promocao from '../data/promocao.js';`",
+        "b": "`import formatarPreco from '../utils/formatar.js';` e `import { promocao } from '../data/promocao.js';`",
+        "c": "`import { formatarPreco } from '../utils/formatar';` e `import promocao from '../data/promocao';`",
+        "d": "`import { formatarPreco } from './utils/formatar.js';` e `import promocao from './data/promocao.js';`"
+      },
+      "answer": "a",
+      "explanation": "Export nomeado se importa com chaves e o nome exato; o `default`, sem chaves. No Node, o import de um arquivo seu leva a extensão `.js` e parte da pasta do próprio arquivo: de `src/scripts/`, é preciso subir com `../`. Trocar as chaves dá `does not provide an export named`; sem a extensão ou com `./`, o Node não acha o arquivo: `ERR_MODULE_NOT_FOUND`."
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "O catálogo tem os ids de 1 a 12, e `produtosPorId` é o `Map` de `src/data/produtos.js`. O que o script imprime?\n\n```javascript\nlet favoritos = new Set([4, 9, 4]);\nfavoritos = alternarFavorito(favoritos, 4);\nfavoritos = alternarFavorito(favoritos, 99);\nconst lista = listarFavoritos(favoritos, produtosPorId);\nconsole.log(favoritos.size, lista.length);\n```",
+      "options": {
+        "a": "`2 1`",
+        "b": "`2 2`",
+        "c": "`3 2`",
+        "d": "`1 1`"
+      },
+      "answer": "a",
+      "explanation": "O `Set` descarta o 4 repetido e nasce com o 4 e o 9. O primeiro `alternarFavorito` tira o 4; o segundo põe o 99, porque o Set não sabe quais ids existem: ficam 2. O `listarFavoritos` troca cada id pelo produto com `get` e descarta o `undefined` do 99, que não está no `Map`: sobra só a Bola de Futebol.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "Quanto vale `fretes`?\n\n```javascript\nconst pedidos = [\n  { id: 1, entrega: { cep: '01310-100', frete: 0 } },\n  { id: 2, entrega: null },\n  { id: 3, entrega: { cep: '20040-020', frete: 14.9 } },\n];\nconst fretes = pedidos.map((p) => p.entrega?.frete ?? 'retirada');\n```",
+      "options": {
+        "a": "`[0, 'retirada', 14.9]`",
+        "b": "`['retirada', 'retirada', 14.9]`",
+        "c": "`[0, undefined, 14.9]`",
+        "d": "Nada: o pedido 2 lança `TypeError`, porque `entrega` é `null`"
+      },
+      "answer": "a",
+      "explanation": "O `?.` para no `null` do pedido 2 e devolve `undefined`, sem erro; o `??` troca esse `undefined` por `'retirada'`. O frete grátis do pedido 1 continua `0`, porque o `??` só troca `null` e `undefined`. Com `||`, o `0` também viraria `'retirada'`.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "Com `FRETE_GRATIS_A_PARTIR_DE` igual a 150, o que o script imprime?\n\n```javascript\nexport function unidadesParaFreteGratis(subtotal, preco) {\n  const meta = paraCentavos(FRETE_GRATIS_A_PARTIR_DE);\n  let centavos = paraCentavos(subtotal);\n  let unidades = 0;\n  while (centavos < meta) {\n    centavos += paraCentavos(preco);\n    unidades++;\n  }\n  return unidades;\n}\n\nconsole.log(unidadesParaFreteGratis(69.9, 59.9));\nconsole.log(unidadesParaFreteGratis(150, 79.9));\n```",
+      "options": {
+        "a": "`2` e `0`",
+        "b": "`2` e `1`",
+        "c": "`1` e `0`",
+        "d": "`3` e `1`"
+      },
+      "answer": "a",
+      "explanation": "O `while` testa a condição antes de cada volta. Com R$ 69,90, são 6990 centavos: a primeira unidade leva a 12980, ainda abaixo de 15000, e a segunda a 18970, quando o laço para. Com R$ 150, a condição já nasce falsa e o laço roda zero vezes. Só o `do...while` daria sempre pelo menos uma volta.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "fill",
+      "prompt": "Complete a classe para que `fone.precoFormatado` devolva o preço formatado quando lido **sem parênteses**, como uma propriedade:\n\n```javascript\nexport default class Produto {\n  // constructor do E15\n\n  ___ precoFormatado() {\n    return formatarPreco(___.preco);\n  }\n}\n```",
+      "answer": [
+        [
+          "get"
+        ],
+        [
+          "this"
+        ]
+      ],
+      "explanation": "O `get` transforma o método num getter: ele é lido como propriedade e calculado na hora, a partir dos dados atuais. Dentro da classe, `this` é a instância, como o `fone`. Com parênteses, `fone.precoFormatado()` dá `is not a function`, porque o getter já devolveu o texto."
+    },
+    {
+      "id": "q16",
+      "type": "multiple",
+      "prompt": "Com as classes do E16:\n\n```javascript\nconst cartao = new PagamentoCartao(3);\nconst pedido = new Pedido({ id: 1, itens, pagamento: cartao });\n```\n\nQuais afirmações estão corretas?",
+      "options": {
+        "a": "`cartao instanceof Pagamento` é `true`: o cartão **é um** pagamento",
+        "b": "`pedido instanceof Pagamento` é `true`, porque o pedido guarda um pagamento",
+        "c": "Com um `PagamentoPix` no lugar do cartão, o `pedido.total` muda sem nenhum `if` no `Pedido`",
+        "d": "Fora da classe, `cartao.#parcelas = 12` muda o número de parcelas",
+        "e": "`cartao.totalAPagar === new PagamentoCartao(6).totalAPagar` é `true`: o método mora no protótipo"
+      },
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "`PagamentoCartao` estende `Pagamento`: o cartão é um pagamento. O pedido **tem** um pagamento: é composição, e ele não entra na família de `Pagamento`. O `total` chama `this.pagamento.totalAPagar(...)`, e cada forma responde do seu jeito: é o polimorfismo. Campo `#` só existe dentro da classe; fora dela, o arquivo nem roda (`SyntaxError`). Os métodos não são copiados para cada instância: todas acham o mesmo `totalAPagar` subindo a cadeia de protótipos.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "truefalse",
+      "prompt": "`freteDoCep` lança `CepInvalidoError` para o CEP `'123'`. A chamada `freteOuNull('123')` imprime `frete consultado` e devolve `null`.\n\n```javascript\nfunction freteOuNull(cep) {\n  try {\n    return freteDoCep(100, cep);\n  } catch (erro) {\n    if (!(erro instanceof CepInvalidoError)) throw erro;\n    return null;\n  } finally {\n    console.log('frete consultado');\n  }\n}\n```",
+      "answer": true,
+      "explanation": "O `throw` do `freteDoCep` desvia para o `catch`, que reconhece o erro esperado e devolve `null`. O `finally` roda sempre, inclusive depois de um `return`: imprime antes de a função devolver o valor. Um erro de outro tipo, como um bug, é relançado e também passa pelo `finally`."
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Em que ordem as linhas aparecem no terminal?\n\n```javascript\nconsole.log('A');\nPromise.resolve(2)\n  .then((n) => n * 10)\n  .then((n) => {\n    console.log(n);\n    throw new Error('sem estoque');\n  })\n  .then(() => console.log('reservado'))\n  .catch((erro) => console.log(erro.message))\n  .finally(() => console.log('fim'));\nconsole.log('B');\n```",
+      "options": {
+        "a": "A, B, 20, sem estoque, fim",
+        "b": "A, 20, sem estoque, fim, B",
+        "c": "A, B, 20, reservado, sem estoque, fim",
+        "d": "A, B, 2, sem estoque, fim"
+      },
+      "answer": "a",
+      "explanation": "Os callbacks de Promise são microtarefas: rodam depois de todo o código síncrono, mesmo com a Promise já cumprida, então A e B vêm primeiro. O valor devolvido num `then` vai para o próximo: o 2 vira 20. O `throw` rejeita a corrente, que pula o `then` do `'reservado'` e cai no `catch`; o `finally` roda no fim.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "multiple",
+      "prompt": "`buscarProduto(id)` usa o `pedir` do E19, que lança `ApiError`, com o código `'API_' + status`, quando `resposta.ok` é falso, e um `ErroDeNegocio` com o código `'SEM_CONEXAO'` quando a rede falha. A DummyJSON responde 404 para o id 9999. Quais afirmações estão corretas?\n\n```javascript\nasync function mostrar(id) {\n  try {\n    const produto = await buscarProduto(id);\n    console.log(produto.nome);\n  } catch (erro) {\n    console.log(erro.codigo);\n  }\n}\n```",
+      "options": {
+        "a": "`mostrar(9999)` imprime `API_404`",
+        "b": "O `fetch` rejeita com o 404, e é por isso que o erro chega ao `catch`",
+        "c": "Sem internet, `mostrar(1)` imprime `SEM_CONEXAO`",
+        "d": "Sem o `await` antes de `buscarProduto(id)`, o `catch` continuaria recebendo o `ApiError`",
+        "e": "Nos dois casos de erro, `erro instanceof ErroDeNegocio` é `true`"
+      },
+      "answer": [
+        "a",
+        "c",
+        "e"
+      ],
+      "explanation": "O `fetch` só rejeita quando a rede falha: o 404 chega como resposta, e é o `pedir` que confere `resposta.ok` e lança o `ApiError`. Sem rede, o `pedir` captura a falha do `fetch` e lança o `ErroDeNegocio` do `'SEM_CONEXAO'`. Os dois são da família `ErroDeNegocio`, porque `ApiError` a estende. Sem `await`, `produto` guarda a Promise: o script imprime `undefined`, e a rejeição escapa do `catch`.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "A Luminária de Mesa tem `estoque: 2`, o cupom `NATAL25` expirou e o CEP tem 7 números. O que o script imprime?\n\n```javascript\nexport function fecharPedido({ itens, cep, cupom, pagamento }) {\n  if (itens.length === 0) {\n    throw new ErroDeNegocio('Seu carrinho está vazio.', 'CARRINHO_VAZIO');\n  }\n  conferirEstoque(itens);\n  const valor = subtotal(itens);\n  const desconto = descontoDoCupom(cupom, valor);\n  const frete = freteDoCep(valor, cep);\n  return new Pedido({ itens, entrega: { cep, frete }, desconto, pagamento });\n}\n```\n\n```javascript\nconst itens = [{ ...luminaria, qtd: 3 }]; // a Luminária do catálogo, com qtd\ntry {\n  fecharPedido({ itens, cep: '0131000', cupom: 'NATAL25', pagamento: new PagamentoPix() });\n} catch (erro) {\n  console.log(erro.codigo);\n}\n```",
+      "options": {
+        "a": "`ESTOQUE_INSUFICIENTE`",
+        "b": "`CUPOM_INVALIDO`",
+        "c": "`CEP_INVALIDO`",
+        "d": "Nada: o pedido é montado, e os erros só aparecem no `finalizarCompra`"
+      },
+      "answer": "a",
+      "explanation": "O `fecharPedido` confere as regras na ordem e lança o **primeiro** erro que encontra. O `conferirEstoque` vem antes do cupom e do CEP, e 3 luminárias passam do estoque de 2: sai o `EstoqueInsuficienteError`, e as linhas de baixo nem rodam. Com 1 luminária, o erro seria o do cupom; sem cupom, o do CEP. Tudo isso acontece antes de qualquer `await`: a cobrança nem começa.",
+      "points": 2
+    }
+  ]
+}

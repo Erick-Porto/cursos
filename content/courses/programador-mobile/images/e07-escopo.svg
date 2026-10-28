@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Escopo: a função contarBemAvaliados enxerga NOTA_MINIMA, do módulo; o console.log de fora não enxerga o total de dentro e dá ReferenceError</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fn   { fill: #0b1020; stroke: #34d399; stroke-width: 2; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .name { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .no   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .see  { stroke: #34d399; stroke-width: 2.5; fill: none; marker-end: url(#seta-ok); }
+    .deny { stroke: #f87171; stroke-width: 2.5; fill: none; stroke-dasharray: 7 5; }
+  </style>
+  <defs>
+    <marker id="seta-ok" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- módulo -->
+  <rect class="box" x="20" y="16" width="680" height="328" rx="12"/>
+  <text class="lbl" x="40" y="50">escopo do módulo</text>
+  <text class="code" x="40" y="92">const NOTA_MINIMA = 4.5;</text>
+
+  <!-- função -->
+  <rect class="fn" x="40" y="150" width="320" height="174" rx="10"/>
+  <text class="name" x="60" y="186">contarBemAvaliados</text>
+  <text class="code" x="60" y="228">produtos</text>
+  <text class="code" x="60" y="266">let total = 0</text>
+  <text class="m" x="60" y="306">cada chamada tem o seu</text>
+
+  <!-- dentro enxerga fora -->
+  <path class="see" d="M200 148 L200 106"/>
+  <text class="ok" x="214" y="134">enxerga</text>
+
+  <!-- fora não enxerga dentro -->
+  <text class="code" x="440" y="268">console.log(total)</text>
+  <text class="no" x="440" y="226">não enxerga</text>
+  <path class="deny" d="M432 260 L368 260"/>
+  <path d="M366 244 L366 276" stroke="#f87171" stroke-width="4"/>
+  <text class="no" x="440" y="306">ReferenceError</text>
+</svg>

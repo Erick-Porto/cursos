@@ -1,0 +1,137 @@
+{
+  "title": "Quiz: E34 · FlatList e SectionList",
+  "description": "Nove questões sobre a moldura da FlatList, key estável, grade e carrossel, paginação com o paginar do E14, SectionList, puxar para atualizar e desempenho de listas.",
+  "lesson": "e34b-sectionlist-refresh-e-desempenho",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A tela Início mostra o catálogo de 6 em 6, com o `paginar` do E14. Qual prop da `FlatList` é chamada quando o usuário rola até perto do fim, para você carregar a próxima página?",
+      "options": {
+        "a": "`onEndReached`, com a distância definida em `onEndReachedThreshold`",
+        "b": "`onRefresh`, chamada quando a lista chega ao último item",
+        "c": "`ListFooterComponent`, que busca mais itens ao aparecer na tela",
+        "d": "`initialNumToRender`, que define quantos itens vêm em cada página"
+      },
+      "answer": "a",
+      "explanation": "`onEndReached` dispara quando falta a distância de `onEndReachedThreshold` para o fim (0.5 é meia tela). `onRefresh` é o gesto de puxar para atualizar, no topo da lista; o `ListFooterComponent` só desenha algo no rodapé, como a rodinha de carregamento, e não busca nada sozinho.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete a prop que transforma a lista em uma grade de 2 colunas:\n\n```jsx\n<FlatList\n  data={produtos}\n  ___={2}\n  keyExtractor={(item) => String(item.id)}\n  renderItem={({ item }) => <CartaoProduto produto={item} />}\n  columnWrapperStyle={estilos.linha}\n/>\n```",
+      "answer": [
+        [
+          "numColumns"
+        ]
+      ],
+      "explanation": "`numColumns` agrupa os itens em linhas com esse número de células, e `columnWrapperStyle` estiliza a `View` de cada linha. `horizontal` não faz grade: deita a lista em uma linha só, e nem pode ser usada junto com `numColumns`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Na tela Início, você quer o carrossel de destaques no topo, rolando junto com a grade de produtos, e a mensagem \"Nenhum produto por aqui\" quando `data` estiver vazio. Quais props da `FlatList` da grade resolvem as duas coisas?",
+      "options": {
+        "a": "`ListHeaderComponent` para o carrossel e `ListEmptyComponent` para a mensagem",
+        "b": "`ListFooterComponent` para o carrossel e `ItemSeparatorComponent` para a mensagem",
+        "c": "Uma `ScrollView` em volta do carrossel e da grade, e um `if` antes do `return`",
+        "d": "`horizontal` para o carrossel e `numColumns={0}` para a mensagem"
+      },
+      "answer": "a",
+      "explanation": "O `ListHeaderComponent` aparece antes do primeiro item e rola com a lista; um carrossel horizontal ali dentro não briga com a rolagem vertical. O `ListEmptyComponent` aparece só quando `data` está vazio. A `ScrollView` em volta é a opção tentadora, mas coloca uma lista vertical dentro de outra rolagem vertical: as duas brigam e a grade perde a virtualização.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual código monta, a partir de `categorias` e `produtos`, o array no formato que a prop `sections` da `SectionList` espera?",
+      "options": {
+        "a": "`categorias.map((c) => ({ title: c.nome, data: produtos.filter((p) => p.categoria === c.slug) }))`",
+        "b": "`categorias.map((c) => ({ nome: c.nome, itens: produtos.filter((p) => p.categoria === c.slug) }))`",
+        "c": "`categorias.map((c) => produtos.filter((p) => p.categoria === c.slug))`",
+        "d": "`produtos.filter((p) => p.categoria === 'audio' || p.categoria === 'casa')`"
+      },
+      "answer": "a",
+      "explanation": "`sections` é um array de objetos, cada um com o array de itens na chave `data`; `title` é a convenção para o texto do cabeçalho. A opção com `nome` e `itens` parece ter a forma certa, mas a `SectionList` procura `data` e quebra sem ela. A opção c gera arrays soltos, sem título, e a d devolve uma lista plana, sem grupos.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Sobre o desempenho de listas no React Native, quais afirmações são verdadeiras?",
+      "options": {
+        "a": "A `FlatList` mantém montados só os itens de uma janela em volta da área visível",
+        "b": "`getItemLayout` evita medir os itens, mas só funciona quando todos têm a mesma altura",
+        "c": "Antes de mudar `windowSize`, vale medir a rolagem com o monitor de desempenho",
+        "d": "Envolver o cartão em `React.memo` faz a lista montar só os itens visíveis"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "A virtualização monta uma janela de itens (por padrão, 10 telas acima e 10 abaixo da visível); `getItemLayout` calcula posições com uma altura fixa, e com alturas variáveis a conta sai errada; e otimizar sem medir só complica o código. `React.memo` não decide quais itens são montados, isso é a virtualização: ele só evita redesenhar um cartão cujas props não mudaram.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "No código abaixo, ao puxar a lista para baixo, a rodinha de carregamento some depois de 1,5 segundo.\n\n```jsx\nconst [atualizando, setAtualizando] = useState(false);\n\nfunction atualizar() {\n  setAtualizando(true);\n  setTimeout(() => setSecoes(montarSecoes()), 1500);\n}\n\n<SectionList sections={secoes} refreshing={atualizando} onRefresh={atualizar} />\n```",
+      "answer": false,
+      "explanation": "Quem controla a rodinha é `refreshing`. O `setTimeout` atualiza as seções, mas ninguém chama `setAtualizando(false)`: `atualizando` fica `true` e a rodinha gira para sempre. A lista não desliga o indicador sozinha ao receber dados novos.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "A tela Início tem um botão que alterna a grade entre 2 e 3 colunas. Ao tocar nele, aparece esta tela vermelha. Qual é a correção?\n\n```jsx\nconst [colunas, setColunas] = useState(2);\n\n<FlatList\n  data={produtos}\n  numColumns={colunas}\n  // keyExtractor, renderItem e columnWrapperStyle\n/>\n```\n\n```plaintext\nInvariant Violation: Changing numColumns on the fly is not supported.\nChange the key prop on FlatList when changing the number of columns\nto force a fresh render of the component.\n```",
+      "options": {
+        "a": "Dar à `FlatList` uma `key` que muda junto com as colunas, como `key={'grade-' + colunas}`",
+        "b": "Trocar o `keyExtractor` para usar o índice, que muda quando a grade muda",
+        "c": "Remover o `columnWrapperStyle`, que não aceita mais de 2 colunas",
+        "d": "Envolver a `FlatList` em uma `ScrollView` para ela se adaptar à largura"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` não aceita `numColumns` diferente com a lista já montada. Uma `key` nova na própria `FlatList` faz o React descartá-la e montar outra do zero, já com o novo número de colunas. O `keyExtractor` é a tentação, mas ele identifica os itens, não a lista; usar o índice só piora a identidade dos cartões.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A Início carrega o catálogo de 6 em 6. Ao chegar perto do fim, o usuário vê os 6 primeiros produtos sumirem e os 6 seguintes aparecerem no lugar deles. Qual linha causa isso?\n\n```jsx\nfunction carregarMais() {\n  const proxima = paginar(produtos, pagina + 1);\n  if (proxima.length === 0) return;\n  setVisiveis(proxima);\n  setPagina(pagina + 1);\n}\n```",
+      "options": {
+        "a": "`setVisiveis(proxima)`, que troca a lista pela página nova em vez de juntar as duas",
+        "b": "`if (proxima.length === 0) return`, que para a função antes da última página",
+        "c": "`paginar(produtos, pagina + 1)`, que devolve todas as páginas até a pedida",
+        "d": "`setPagina(pagina + 1)`, que deveria vir antes do `paginar` para a conta sair certa"
+      },
+      "answer": "a",
+      "explanation": "`paginar` devolve só a página pedida, e a tela precisa mostrar as anteriores também: `setVisiveis([...visiveis, ...proxima])` junta a página nova às que já estão na tela. A opção c é a tentadora, mas é o contrário: se o `paginar` devolvesse tudo até a página pedida, nada sumiria. O `if` só para quando o catálogo acabou, e a ordem do `setPagina` não muda a conta, porque `pagina + 1` já pede a próxima.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Ao filtrar a grade da Início por categoria, alguns cartões mostram por um instante a foto de um produto com o nome de outro, e as imagens piscam. Qual `keyExtractor` evita isso?",
+      "options": {
+        "a": "`(item) => String(item.id)`",
+        "b": "`(item, index) => String(index)`",
+        "c": "`() => String(Math.random())`",
+        "d": "`(item) => String(item.preco)`"
+      },
+      "answer": "a",
+      "explanation": "A key diz à lista qual cartão é qual entre um desenho e outro, então precisa vir de um campo que identifica o produto e nunca se repete, como o `id`. O índice é a opção tentadora, mas muda quando o filtro tira itens da lista: o cartão da posição 0 passa a ser de outro produto. `Math.random()` muda a cada desenho e recria tudo, e o preço pode se repetir entre produtos.",
+      "points": 1
+    }
+  ]
+}

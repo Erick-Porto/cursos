@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Ícone adaptativo do Android: backgroundColor e foregroundImage formam um quadrado que cada fabricante recorta em círculo, quadrado arredondado ou gota; o desenho no centro sobrevive a todos</title>
+  <style>
+    .fundo { fill: #6d28d9; }
+    .camada { fill: none; stroke: #b4bfd3; stroke-width: 2; stroke-dasharray: 7 5; }
+    .centro { fill: none; stroke: #e8edf7; stroke-width: 2; stroke-dasharray: 6 5; }
+    .code  { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .note  { fill: #b4bfd3; font-size: 22px; }
+    .t     { fill: #e8edf7; font-size: 22px; }
+    .lbl   { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .seta  { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#ponta); }
+  </style>
+  <defs>
+    <marker id="ponta" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#a78bfa"/></marker>
+    <g id="logo" fill="none" stroke="#f8fafc" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <!-- store (lucide) -->
+      <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/>
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+      <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/>
+      <path d="M2 7h20"/>
+      <path d="M22 7v3a2 2 0 0 1-2 2a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12a2 2 0 0 1-2-2V7"/>
+    </g>
+    <clipPath id="circulo"><circle cx="385" cy="120" r="55"/></clipPath>
+    <clipPath id="quadrado"><rect x="455" y="65" width="110" height="110" rx="26"/></clipPath>
+    <clipPath id="gota"><path d="M 635 65 L 690 65 L 690 120 A 55 55 0 1 1 635 65 Z"/></clipPath>
+  </defs>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- as duas camadas que você entrega -->
+  <rect class="fundo" x="40" y="40" width="160" height="160"/>
+  <use href="#logo" transform="translate(78 78) scale(3.5)"/>
+  <circle class="centro" cx="120" cy="120" r="60"/>
+  <rect class="camada" x="40" y="40" width="160" height="160"/>
+  <text x="40" y="248"><tspan class="code">backgroundColor</tspan><tspan class="note"> fundo</tspan></text>
+  <text x="40" y="282"><tspan class="code">foregroundImage</tspan><tspan class="note"> desenho</tspan></text>
+
+  <!-- o recorte de cada fabricante -->
+  <text class="lbl" x="263" y="104" text-anchor="middle">recorte</text>
+  <path class="seta" d="M 218 120 L 304 120"/>
+
+  <g clip-path="url(#circulo)">
+    <rect class="fundo" x="330" y="65" width="110" height="110"/>
+    <use href="#logo" transform="translate(353.5 88.5) scale(2.6)"/>
+  </g>
+  <g clip-path="url(#quadrado)">
+    <rect class="fundo" x="455" y="65" width="110" height="110"/>
+    <use href="#logo" transform="translate(478.5 88.5) scale(2.6)"/>
+  </g>
+  <g clip-path="url(#gota)">
+    <rect class="fundo" x="580" y="65" width="110" height="110"/>
+    <use href="#logo" transform="translate(603.5 88.5) scale(2.6)"/>
+  </g>
+  <text class="t" x="385" y="214" text-anchor="middle">círculo</text>
+  <text class="t" x="510" y="214" text-anchor="middle">quadrado</text>
+  <text class="t" x="510" y="242" text-anchor="middle">arredondado</text>
+  <text class="t" x="635" y="214" text-anchor="middle">gota</text>
+</svg>

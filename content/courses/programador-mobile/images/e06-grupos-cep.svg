@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>Grupos da regex do CEP: o grupo 1 captura 01310 e o grupo 2 captura 100; o match devolve o trecho inteiro na posição 0 e cada grupo nas posições 1 e 2</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .g1   { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .g2   { fill: #131c33; stroke: #60a5fa; stroke-width: 3; }
+    .c    { fill: #e8edf7; font-size: 24px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c1   { fill: #34d399; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c2   { fill: #60a5fa; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .l1   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .l2   { fill: #60a5fa; font-size: 22px; font-weight: 700; }
+    .idx  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <!-- a regex, peça por peça -->
+  <text class="code" x="28" y="82">regex</text>
+  <text class="l1" x="255" y="38" text-anchor="middle">grupo 1</text>
+  <text class="l2" x="465" y="38" text-anchor="middle">grupo 2</text>
+  <rect class="box" x="120" y="50" width="60" height="48" rx="8"/>
+  <text class="c" x="150" y="82" text-anchor="middle">/^</text>
+  <rect class="g1" x="190" y="50" width="130" height="48" rx="8"/>
+  <text class="c1" x="255" y="82" text-anchor="middle">(\d{5})</text>
+  <rect class="box" x="330" y="50" width="60" height="48" rx="8"/>
+  <text class="c" x="360" y="82" text-anchor="middle">-?</text>
+  <rect class="g2" x="400" y="50" width="130" height="48" rx="8"/>
+  <text class="c2" x="465" y="82" text-anchor="middle">(\d{3})</text>
+  <rect class="box" x="540" y="50" width="60" height="48" rx="8"/>
+  <text class="c" x="570" y="82" text-anchor="middle">$/</text>
+
+  <!-- o texto, embaixo da peça que casou com ele -->
+  <text class="code" x="28" y="148">texto</text>
+  <rect class="g1" x="190" y="118" width="130" height="48" rx="8"/>
+  <text class="c1" x="255" y="150" text-anchor="middle">01310</text>
+  <rect class="box" x="330" y="118" width="60" height="48" rx="8"/>
+  <text class="c" x="360" y="150" text-anchor="middle">-</text>
+  <rect class="g2" x="400" y="118" width="130" height="48" rx="8"/>
+  <text class="c2" x="465" y="150" text-anchor="middle">100</text>
+
+  <!-- o array do match -->
+  <text class="code" x="28" y="262">partes</text>
+  <text class="idx" x="210" y="218" text-anchor="middle">[0]</text>
+  <text class="idx" x="385" y="218" text-anchor="middle">[1]</text>
+  <text class="idx" x="525" y="218" text-anchor="middle">[2]</text>
+  <rect class="box" x="120" y="230" width="180" height="48" rx="8"/>
+  <text class="c" x="210" y="262" text-anchor="middle">'01310-100'</text>
+  <rect class="g1" x="320" y="230" width="130" height="48" rx="8"/>
+  <text class="c1" x="385" y="262" text-anchor="middle">'01310'</text>
+  <rect class="g2" x="470" y="230" width="110" height="48" rx="8"/>
+  <text class="c2" x="525" y="262" text-anchor="middle">'100'</text>
+  <text class="m" x="210" y="310" text-anchor="middle">trecho inteiro</text>
+  <text class="l1" x="385" y="310" text-anchor="middle">grupo 1</text>
+  <text class="l2" x="525" y="310" text-anchor="middle">grupo 2</text>
+</svg>

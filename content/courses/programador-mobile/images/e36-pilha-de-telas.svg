@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Pilha de telas: push coloca Detalhe 7 e depois Carrinho por cima do Início; back tira o Carrinho e o Detalhe 7 volta a aparecer como estava</title>
+  <style>
+    .card { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .top  { fill: #34d399; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .nt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .cap  { fill: #a78bfa; font-size: 24px; font-weight: 700; }
+    .sub  { fill: #b4bfd3; font-size: 22px; }
+    .in1   { animation: entra1 8s ease-out infinite; }
+    .in2   { animation: entra2 8s ease-out infinite; }
+    .col3  { animation: col3 8s ease-out infinite; }
+    .sai   { opacity: 0.25; animation: sai 8s ease-in-out infinite; }
+    .volta { animation: volta 8s ease-out infinite; }
+    @keyframes entra1 {
+      0%, 6%   { opacity: 0; transform: translateX(48px); }
+      16%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes entra2 {
+      0%, 28%  { opacity: 0; transform: translateX(48px); }
+      38%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes col3 {
+      0%, 46%  { opacity: 0; }
+      52%, 92% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes sai {
+      0%, 58%    { opacity: 1; transform: translateY(30px); }
+      70%, 100%  { opacity: 0.25; transform: translateY(0); }
+    }
+    @keyframes volta {
+      0%, 62%   { opacity: 0; }
+      70%, 100% { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .in1, .in2, .col3, .sai, .volta { animation: none; }
+    }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- coluna 1: push Detalhe 7 -->
+  <text class="cap" x="128" y="54" text-anchor="middle">1 · push</text>
+  <text class="sub" x="128" y="90" text-anchor="middle">Detalhe 7 entra</text>
+  <rect class="card" x="40" y="252" width="176" height="48" rx="10"/>
+  <text class="n" x="128" y="284" text-anchor="middle">Início</text>
+  <g class="in1">
+    <rect class="top" x="40" y="198" width="176" height="48" rx="10"/>
+    <text class="nt" x="128" y="230" text-anchor="middle">Detalhe 7</text>
+  </g>
+
+  <!-- coluna 2: push Carrinho -->
+  <text class="cap" x="360" y="54" text-anchor="middle">2 · push</text>
+  <text class="sub" x="360" y="90" text-anchor="middle">Carrinho entra</text>
+  <rect class="card" x="272" y="252" width="176" height="48" rx="10"/>
+  <text class="n" x="360" y="284" text-anchor="middle">Início</text>
+  <rect class="card" x="272" y="198" width="176" height="48" rx="10"/>
+  <text class="n" x="360" y="230" text-anchor="middle">Detalhe 7</text>
+  <g class="in2">
+    <rect class="top" x="272" y="144" width="176" height="48" rx="10"/>
+    <text class="nt" x="360" y="176" text-anchor="middle">Carrinho</text>
+  </g>
+
+  <!-- coluna 3: back -->
+  <g class="col3">
+    <text class="cap" x="592" y="54" text-anchor="middle">3 · back</text>
+    <text class="sub" x="592" y="90" text-anchor="middle">Carrinho sai</text>
+    <rect class="card" x="504" y="252" width="176" height="48" rx="10"/>
+    <text class="n" x="592" y="284" text-anchor="middle">Início</text>
+    <rect class="card" x="504" y="198" width="176" height="48" rx="10"/>
+    <text class="n" x="592" y="230" text-anchor="middle">Detalhe 7</text>
+    <g class="volta">
+      <rect class="top" x="504" y="198" width="176" height="48" rx="10"/>
+      <text class="nt" x="592" y="230" text-anchor="middle">Detalhe 7</text>
+    </g>
+    <g class="sai">
+      <rect class="top" x="504" y="114" width="176" height="48" rx="10"/>
+      <text class="nt" x="592" y="146" text-anchor="middle">Carrinho</text>
+    </g>
+  </g>
+
+  <!-- legenda -->
+  <rect class="top" x="96" y="320" width="22" height="22" rx="4"/>
+  <text class="sub" x="130" y="339">a tela visível; as de baixo continuam montadas</text>
+</svg>

@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 408" font-family="Inter, system-ui, sans-serif">
+  <title>Runtime é motor mais APIs: o navegador tem document e localStorage, o Node.js tem process e fs, o app no celular tem Alert e Vibration; a linguagem ECMAScript é a mesma nos três</title>
+  <style>
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .api  { fill: #fbbf24; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ling { fill: #34d399; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .col  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #2a3a5c; }
+    .sep  { stroke: #2a3a5c; stroke-width: 1.5; }
+  </style>
+  <rect width="720" height="408" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="360" y="34" text-anchor="middle">runtime = motor + APIs do lugar</text>
+
+  <!-- Navegador -->
+  <rect class="col" x="16" y="52" width="224" height="240" rx="12"/>
+  <path class="head" d="M28 52 H228 A12 12 0 0 1 240 64 V96 H16 V64 A12 12 0 0 1 28 52 Z"/>
+  <text class="h" x="128" y="82" text-anchor="middle">Navegador</text>
+  <text class="m" x="32" y="128">motor</text>
+  <text class="t" x="32" y="158">V8 no Chrome</text>
+  <path class="sep" d="M32 176 H224"/>
+  <text class="m" x="32" y="206">APIs</text>
+  <text class="api" x="32" y="238">document</text>
+  <text class="api" x="32" y="270">localStorage</text>
+
+  <!-- Node.js -->
+  <rect class="col" x="248" y="52" width="224" height="240" rx="12"/>
+  <path class="head" d="M260 52 H460 A12 12 0 0 1 472 64 V96 H248 V64 A12 12 0 0 1 260 52 Z"/>
+  <text class="h" x="360" y="82" text-anchor="middle">Node.js</text>
+  <text class="m" x="264" y="128">motor</text>
+  <text class="t" x="264" y="158">V8</text>
+  <path class="sep" d="M264 176 H456"/>
+  <text class="m" x="264" y="206">APIs</text>
+  <text class="api" x="264" y="238">process</text>
+  <text class="api" x="264" y="270">fs</text>
+
+  <!-- App no celular -->
+  <rect class="col" x="480" y="52" width="224" height="240" rx="12"/>
+  <path class="head" d="M492 52 H692 A12 12 0 0 1 704 64 V96 H480 V64 A12 12 0 0 1 492 52 Z"/>
+  <text class="h" x="592" y="82" text-anchor="middle">App no celular</text>
+  <text class="m" x="496" y="128">motor</text>
+  <text class="t" x="496" y="158">Hermes</text>
+  <path class="sep" d="M496 176 H688"/>
+  <text class="m" x="496" y="206">APIs</text>
+  <text class="api" x="496" y="238">Alert</text>
+  <text class="api" x="496" y="270">Vibration</text>
+
+  <!-- a linguagem, comum aos três -->
+  <rect x="16" y="308" width="688" height="84" rx="12" fill="#131c33" stroke="#34d399" stroke-width="2"/>
+  <text x="360" y="342" text-anchor="middle" font-size="22"><tspan font-weight="700" fill="#e8edf7">ECMAScript:</tspan><tspan fill="#b4bfd3" dx="8">a mesma linguagem nos três</tspan></text>
+  <text class="ling" x="360" y="374" text-anchor="middle">contas, textos, listas, funções</text>
+</svg>

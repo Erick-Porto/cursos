@@ -1,0 +1,126 @@
+{
+  "title": "Quiz: E20 · Checkout completo e revisão",
+  "description": "Nove questões sobre o checkout no terminal, com fecharPedido, await e Meus pedidos, e sobre temas de E01 a E20 no estilo da Prova 1.",
+  "lesson": "e20a-projeto-checkout",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No checkout, `fecharPedido` confere estoque, cupom e CEP e devolve um `Pedido`, mas não imprime, não cobra e não guarda nada. Por que ela foi escrita assim?",
+      "options": {
+        "a": "Para que cada caminho se teste no Jest sem efeitos e a mesma regra sirva ao script hoje e ao app no E30",
+        "b": "Porque uma função que lança erros próprios não pode chamar `console.log`",
+        "c": "Porque uma função síncrona não pode ser chamada antes de um `await`",
+        "d": "Porque o `Pedido` do E16 não pode ser impresso no terminal"
+      },
+      "answer": "a",
+      "explanation": "Uma função pura recebe dados e devolve um resultado, ou lança: o teste só compara o `Pedido` ou o erro, sem terminal, rede nem relógio no meio. Imprimir e cobrar ficam no script, que no E30 vira tela sem mexer na regra. Nada impede uma função que lança de usar `console.log`, e uma função síncrona pode rodar antes de um `await` (é o que o `comprar` faz). O `Pedido` tem até `toString()`."
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Ana leva um Fone Bluetooth (R$ 199,90) e uma Luminária de Mesa (R$ 89,90), usa o cupom `BEMVINDO10` (10%), informa um CEP de São Paulo (frete de R$ 9,90 abaixo de R$ 150) e paga no boleto. Pelas regras do checkout, quanto ela paga?",
+      "options": {
+        "a": "R$ 260,82",
+        "b": "R$ 247,78",
+        "c": "R$ 270,72",
+        "d": "R$ 289,80"
+      },
+      "answer": "a",
+      "explanation": "Os produtos somam R$ 289,80; o cupom tira 10% desse subtotal (R$ 28,98); o frete é grátis, porque os produtos passam de R$ 150; e o boleto não muda o valor: R$ 260,82. R$ 247,78 seria o Pix, com mais 5% de desconto. R$ 270,72 soma o frete de São Paulo, que não se cobra acima de R$ 150. R$ 289,80 esquece o cupom.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Nesta versão do `comprar`, a etapa de pagamento do `finalizarCompra` falha e rejeita com um `ErroDeNegocio`. O que acontece?\n\n```javascript\nasync function comprar(dados) {\n  try {\n    const pedido = fecharPedido(dados);\n    meusPedidos.push(registrar(pedido));\n    await finalizarCompra(pedido, mostrarEtapa);\n    console.log('Pedido confirmado');\n  } catch (erro) {\n    if (!(erro instanceof ErroDeNegocio)) throw erro;\n    console.log(`Não deu: ${erro.message}`);\n  }\n}\n```",
+      "options": {
+        "a": "Aparece \"Não deu\" com a mensagem do pagamento, mas o pedido já está em `meusPedidos`",
+        "b": "Aparece \"Não deu\", e o `catch` tira o pedido de `meusPedidos`",
+        "c": "O Node para com a pilha, porque a falha veio de uma Promise",
+        "d": "Aparece \"Pedido confirmado\", porque o `push` já tinha rodado"
+      },
+      "answer": "a",
+      "explanation": "O `push` roda antes do `await`: quando a cobrança rejeita, o pedido já foi registrado, e o `catch` só imprime, não desfaz nada. A ordem certa é `await` primeiro e `push` depois, para que uma falha pule o registro. A rejeição de um `await` vira exceção comum e cai no `catch`, que só relança o que não é `ErroDeNegocio`. E \"Pedido confirmado\" vem depois do `await`, que lançou.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "No script do checkout, quais situações são **erros esperados**, que viram \"Não deu\" com a `message` e deixam o script seguir para o próximo cliente?",
+      "options": {
+        "a": "O CEP da compra tem 7 números",
+        "b": "O cupom informado já expirou",
+        "c": "A quantidade passa do estoque do produto",
+        "d": "O código lê `pedido.pagamento.descricao` com o pagamento igual a `null`",
+        "e": "O total sai `NaN` porque o carrinho pediu um id que não existe no catálogo"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "CEP, cupom e estoque dependem da situação e se resolvem com uma boa mensagem: são `CepInvalidoError`, `CupomInvalidoError` e `EstoqueInsuficienteError`, todos `ErroDeNegocio`. Ler propriedade de `null` (um `TypeError`) e chegar a `NaN` com um produto inexistente são bugs: o `catch` relança o primeiro, e o segundo nem lança, o que pede uma guarda no `montarCarrinho`. Transformar bug em mensagem esconderia o problema.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o `comprar` para que ele espere a cobrança e a rejeição caia no `catch`:\n\n```javascript\n___ function comprar(dados) {\n  try {\n    const pedido = fecharPedido(dados);\n    const confirmacao = ___ finalizarCompra(pedido, mostrarEtapa);\n    meusPedidos.push(registrar(pedido, confirmacao));\n  } catch (erro) {\n    // ...\n  }\n}\n```",
+      "answer": [["async"], ["await"]],
+      "explanation": "`await` pausa o `comprar` até a Promise do `finalizarCompra` encerrar e, se ela rejeitar, lança o erro ali mesmo, dentro do `try`. Só dá para usar `await` dentro de uma função `async` (ou no nível de um módulo ES). Sem o `await`, `confirmacao` seria a Promise, o `push` rodaria na hora e a falha escaparia do `catch`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Trocar o laço do fim do script, `for (const compra of compras) { await comprar(compra); }`, por `compras.forEach(async (compra) => comprar(compra))` mantém a mesma saída, só que mais rápida.",
+      "answer": false,
+      "explanation": "O `forEach` chama a função de cada compra e não espera nenhuma: as cinco começam juntas, as linhas das etapas se misturam e `imprimirMeusPedidos`, logo depois do laço, roda antes de qualquer confirmação, mostrando \"Nenhum pedido por aqui\". O `for...of` com `await` faz uma compra de cada vez; para rodar em paralelo e ainda esperar todas, seria `await Promise.all(compras.map(comprar))`."
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O `package.json` do `lojinha-regras` tem `\"jest\": \"^30.1.0\"` em `devDependencies`. Num projeto sem `package-lock.json`, qual destas versões o `npm install` pode instalar?",
+      "options": {
+        "a": "30.5.2",
+        "b": "31.0.0",
+        "c": "29.7.0",
+        "d": "Só a 30.1.0, exatamente"
+      },
+      "answer": "a",
+      "explanation": "O `^` aceita correções e recursos novos da mesma versão principal: qualquer 30.x a partir da 30.1.0. A 31.0.0 muda a versão principal e pode quebrar o código, por isso fica de fora; a 29.7.0 é anterior ao mínimo. Versão exata seria `\"30.1.0\"`, sem símbolo. Com o `package-lock.json` no Git, todos instalam a mesma versão gravada nele."
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que este código imprime no Node?\n\n```javascript\nconst pedido = {\n  numero: 482913,\n  mostrar() {\n    console.log(this.numero);\n  },\n};\n\nsetTimeout(pedido.mostrar, 0);\n```",
+      "options": {
+        "a": "`undefined`",
+        "b": "`482913`",
+        "c": "`ReferenceError: numero is not defined`",
+        "d": "Nada, porque um `setTimeout` de 0 ms não chega a rodar"
+      },
+      "answer": "a",
+      "explanation": "O `this` é definido por quem chama o método. `pedido.mostrar()` teria `this` igual a `pedido`; aqui, a função vai solta para o `setTimeout`, que a chama sem o `pedido` na frente, e `this.numero` sai `undefined`. A correção é `setTimeout(() => pedido.mostrar(), 0)`. Não há `ReferenceError`, porque `this.numero` é leitura de propriedade, e o timer de 0 ms roda, só que depois do código síncrono.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Em que ordem os números aparecem no terminal?\n\n```javascript\nconsole.log('1');\nsetTimeout(() => console.log('2'), 0);\nPromise.resolve().then(() => console.log('3'));\nconsole.log('4');\n```",
+      "options": {
+        "a": "1, 4, 3, 2",
+        "b": "1, 2, 3, 4",
+        "c": "1, 4, 2, 3",
+        "d": "1, 3, 4, 2"
+      },
+      "answer": "a",
+      "explanation": "Primeiro roda todo o código síncrono: 1 e 4. Com a pilha vazia, o event loop esvazia a fila de microtarefas, onde está o `then`: 3. Só então pega a próxima tarefa, o `setTimeout`, mesmo com atraso 0: 2. A resposta \"1, 4, 2, 3\" é a mais tentadora, porque o `setTimeout` foi agendado antes, mas as microtarefas passam na frente dos timers."
+    }
+  ]
+}

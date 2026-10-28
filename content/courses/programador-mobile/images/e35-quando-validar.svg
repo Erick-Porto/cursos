@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Quando validar: ao digitar só se apaga o erro; ao sair do campo, o onBlur valida e mostra a mensagem; ao enviar, o onPress valida todos os campos</title>
+  <style>
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; text-anchor: middle; }
+    .ev   { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; text-anchor: middle; }
+    .m    { fill: #b4bfd3; font-size: 22px; text-anchor: middle; }
+    .mb   { fill: #b4bfd3; font-size: 22px; font-weight: 700; text-anchor: middle; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; text-anchor: middle; }
+    .err  { fill: #f87171; font-size: 22px; text-anchor: middle; }
+    .fv   { fill: #e8edf7; font-size: 22px; }
+    .fld  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .bad  { fill: #131c33; stroke: #f87171; stroke-width: 3; }
+    .anim { animation-duration: 8s; animation-iteration-count: infinite; animation-timing-function: ease-in-out; }
+    .marca { animation-name: marca; }
+    .sair  { animation-name: sair; }
+    .envio { animation-name: envio; }
+    @keyframes marca {
+      0%        { transform: translateX(-440px); opacity: 0; }
+      3%        { opacity: 1; }
+      12%       { transform: translateX(-440px); }
+      24%, 40%  { transform: translateX(-220px); }
+      52%       { transform: translateX(0); }
+      95%       { opacity: 1; }
+      99%, 100% { transform: translateX(0); opacity: 0; }
+    }
+    @keyframes sair  { 0%, 26% { opacity: 0; } 32%, 94% { opacity: 1; } 99%, 100% { opacity: 0; } }
+    @keyframes envio { 0%, 54% { opacity: 0; } 60%, 94% { opacity: 1; } 99%, 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .anim { animation: none; } }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- linha do tempo -->
+  <path d="M 60 92 L 660 92" stroke="#2a3a5c" stroke-width="3"/>
+  <circle cx="140" cy="92" r="7" fill="#b4bfd3"/>
+  <circle cx="360" cy="92" r="7" fill="#b4bfd3"/>
+  <circle cx="580" cy="92" r="7" fill="#b4bfd3"/>
+  <circle class="anim marca" cx="580" cy="92" r="15" fill="none" stroke="#a78bfa" stroke-width="3"/>
+
+  <!-- a cada tecla -->
+  <text class="h" x="140" y="36">a cada tecla</text>
+  <text class="ev" x="140" y="66">onChangeText</text>
+  <rect class="fld" x="50" y="116" width="180" height="48" rx="8"/>
+  <text class="fv" x="66" y="147">ana@</text>
+  <rect x="127" y="128" width="2" height="24" fill="#e8edf7"/>
+  <text class="m" x="140" y="200">nenhum aviso</text>
+  <text class="m" x="140" y="228">antes de terminar</text>
+  <text class="mb" x="140" y="276">só apaga o erro</text>
+
+  <!-- ao sair do campo -->
+  <g class="anim sair">
+    <text class="h" x="360" y="36">ao sair do campo</text>
+    <text class="ev" x="360" y="66">onBlur</text>
+    <rect class="bad" x="270" y="116" width="180" height="48" rx="8"/>
+    <text class="fv" x="286" y="147">ana@</text>
+    <text class="err" x="360" y="200">Use o formato</text>
+    <text class="err" x="360" y="228">nome@exemplo.com</text>
+    <text class="ok" x="360" y="276">valida o campo</text>
+  </g>
+
+  <!-- ao enviar -->
+  <g class="anim envio">
+    <text class="h" x="580" y="36">ao enviar</text>
+    <text class="ev" x="580" y="66">onPress</text>
+    <rect x="490" y="116" width="180" height="48" rx="8" fill="#34d399"/>
+    <text x="580" y="147" fill="#06281c" font-size="22" font-weight="700" text-anchor="middle">Criar conta</text>
+    <text class="m" x="580" y="200">pega o que ficou</text>
+    <text class="m" x="580" y="228">em branco</text>
+    <text class="ok" x="580" y="276">valida tudo</text>
+  </g>
+</svg>

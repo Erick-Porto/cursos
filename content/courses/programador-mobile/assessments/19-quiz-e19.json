@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E19 · Async/await e a API de verdade",
+  "description": "Dez questões sobre async e await, try/catch/finally, sequência e paralelo, fetch, erros de rede e de resposta, testes com fetch simulado e cancelamento de buscas no lojinha-regras.",
+  "lesson": "e19b-consumindo-a-api",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No script de detalhe do `lojinha-regras`, em qual situação o `catch` abaixo é executado?\n\n```javascript\ntry {\n  const resposta = await fetch(URL_BASE + '/products/' + id);\n  const produto = await resposta.json();\n  console.log(produto.title);\n} catch (erro) {\n  console.log('Sem conexão');\n}\n```",
+      "options": {
+        "a": "Quando o computador está sem internet e o pedido nem chega ao servidor",
+        "b": "Quando o produto não existe e a API responde com status 404",
+        "c": "Quando o servidor está com problema e responde com status 500",
+        "d": "Quando a API responde com qualquer status fora da faixa de 200 a 299"
+      },
+      "answer": "a",
+      "explanation": "O `fetch` só rejeita a Promise quando o pedido não chega ao servidor, como sem internet; aí o `await` lança e o `catch` roda. Um 404 ou um 500 é uma resposta como outra qualquer: a Promise é cumprida, o `catch` não roda e o terminal mostra `undefined`, porque o corpo de erro não tem `title`. Para tratar esses casos é preciso conferir `resposta.ok`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Você vai enviar o carrinho para `https://dummyjson.com/carts/add` com `fetch`. Quais itens precisam estar no segundo argumento para a API entender o pedido em JSON?",
+      "options": {
+        "a": "`method: 'POST'`",
+        "b": "`headers: { 'Content-Type': 'application/json' }`",
+        "c": "`body: JSON.stringify({ userId: 1, products })`",
+        "d": "`body: { userId: 1, products }`, sem converter",
+        "e": "`signal: controle.signal`"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "Um POST em JSON precisa do método, do cabeçalho `Content-Type` e do corpo convertido em texto com `JSON.stringify`. O `body` não aceita objeto: sem a conversão, o servidor recebe `[object Object]` e responde 400. O `signal` é opcional: serve para cancelar o pedido, não para o servidor entendê-lo.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "Uma função marcada com `async` que termina com `return 180` entrega o número 180 direto para quem a chama, sem Promise.",
+      "answer": false,
+      "explanation": "Uma função `async` sempre devolve uma Promise: o `return 180` cumpre essa Promise com 180, e um `throw` a rejeitaria. Quem chama precisa de `await` (ou `.then`) para ter o número. Sem isso, a variável guarda a Promise, e uma conta como `100 + valor` vira o texto `'100[object Promise]'`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete a função para esperar a resposta e lançar um erro quando o status não for de sucesso:\n\n```javascript\nasync function buscarProduto(id) {\n  const resposta = ___ fetch(URL_BASE + '/products/' + id);\n  if (!resposta.___) throw new ApiError(resposta.status);\n  return traduzirProduto(await resposta.json());\n}\n```",
+      "answer": [
+        [
+          "await"
+        ],
+        [
+          "ok"
+        ]
+      ],
+      "explanation": "Sem `await`, `resposta` seria a Promise, e não a resposta. A propriedade `ok` é `true` para os status de 200 a 299; com `!resposta.ok`, um 404 vira um `ApiError` com a mensagem \"Não encontramos esse produto.\". Conferir `resposta.status === 200` deixaria de fora o 201 de um POST.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No resumo do checkout, `consultarFrete` leva 800 ms, `consultarPrazo` leva 600 ms e `consultarCupom` leva 400 ms. Quanto tempo, aproximadamente, o trecho abaixo leva até as três constantes terem valor?\n\n```javascript\nconst [frete, prazo, desconto] = await Promise.all([\n  consultarFrete(cep),\n  consultarPrazo(cep),\n  consultarCupom(codigo),\n]);\n```",
+      "options": {
+        "a": "800 ms, o tempo da consulta mais lenta",
+        "b": "1800 ms, a soma das três consultas",
+        "c": "400 ms, o tempo da consulta mais rápida",
+        "d": "600 ms, a média das três consultas"
+      },
+      "answer": "a",
+      "explanation": "Com `Promise.all`, as três consultas começam juntas e o `await` espera a última terminar: o tempo é o da mais lenta. A soma, 1800 ms, seria o resultado de três `await` em sequência, um em cada linha. Quem fica com a primeira a terminar é o `Promise.race`, não o `Promise.all`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que o `console.log` mostra no terminal?\n\n```javascript\nasync function mostrarNome() {\n  const produto = buscarProduto(3);\n  console.log(produto.nome);\n}\n```",
+      "options": {
+        "a": "`undefined`, porque `produto` guarda uma Promise, que não tem `nome`",
+        "b": "O nome do produto 3, porque a função é `async` e espera sozinha",
+        "c": "Um erro de sintaxe, porque falta `await` dentro de uma função `async`",
+        "d": "O nome do produto 3, mas só depois de a resposta chegar"
+      },
+      "answer": "a",
+      "explanation": "Sem `await`, `buscarProduto(3)` devolve a Promise na hora, e uma Promise não tem a propriedade `nome`: o resultado é `undefined`. Marcar a função como `async` permite usar `await`, mas não espera nada sozinho. Esquecer o `await` não é erro de sintaxe: o código roda e falha em silêncio. A correção é `const produto = await buscarProduto(3);`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O `buscarAoDigitar` do `digitar.js`, ainda sem `AbortController`, recebe \"s\" e, um instante depois, \"shoes\". A resposta de \"shoes\" chega primeiro; a de \"s\" chega 2 segundos depois, e o terminal termina mostrando os resultados de \"s\" por último. Qual mudança resolve?",
+      "options": {
+        "a": "Guardar o `AbortController` da busca em andamento e chamar `abort()` quando chega um termo novo, ignorando o `AbortError`",
+        "b": "Aumentar a espera do `debounce` para 2 segundos",
+        "c": "Trocar os dois `await` por um `Promise.all` para os dois pedidos chegarem juntos",
+        "d": "Mostrar uma mensagem de erro sempre que duas buscas estiverem em andamento"
+      },
+      "answer": "a",
+      "explanation": "Com o controle guardado, o termo novo chama `abort()` no pedido de \"s\", que rejeita com `AbortError` e nunca chega a imprimir. Aumentar o debounce reduz a chance, mas não garante a ordem de chegada e deixa a busca lenta. `Promise.all` junta pedidos independentes; não sabe qual resultado é o atual. Duas buscas em andamento não são um erro para mostrar.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um teste de `buscarProduto` chama a DummyJSON de verdade. No dia em que a sala ficou sem internet, a suíte inteira ficou vermelha, sem nenhuma mudança no código. Qual é a melhor correção?",
+      "options": {
+        "a": "No teste, trocar `globalThis.fetch` por uma função que devolve na hora um objeto com `ok`, `status` e `json`",
+        "b": "Aumentar o tempo limite do teste para o pedido ter mais tempo de chegar",
+        "c": "Envolver o teste num `try/catch` para ele não falhar quando a rede cai",
+        "d": "Apagar o teste e conferir o `buscarProduto` só rodando o script no terminal"
+      },
+      "answer": "a",
+      "explanation": "Com um `fetch` simulado, o teste não depende da rede: responde na hora, sempre igual, e ainda permite provocar o 404 e a falta de conexão de propósito. Mais tempo não traz a internet de volta. Um `try/catch` em volta das conferências esconde as falhas de verdade. Testar só à mão perde a prova automática que o `npm test` dá a cada mudança.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O script abaixo mostra pontinhos enquanto calcula o frete. Com um CEP inválido, o terminal mostra \"CEP inválido\", mas os pontinhos continuam e o script nunca termina. Qual é a correção?\n\n```javascript\nconst pontos = setInterval(() => process.stdout.write('.'), 200);\ntry {\n  const valor = await consultarFrete(cep);\n  clearInterval(pontos);\n  console.log('\\nFrete: ' + formatarPreco(valor));\n} catch (erro) {\n  console.log('\\n' + erro.message);\n}\n```",
+      "options": {
+        "a": "Tirar o `clearInterval(pontos)` do `try` e colocá-lo num bloco `finally`",
+        "b": "Trocar o `await` por `.then`, que desliga o timer sozinho",
+        "c": "Mover o `clearInterval(pontos)` para a primeira linha do `try`",
+        "d": "Trocar o `setInterval` por um `setTimeout` de 200 ms"
+      },
+      "answer": "a",
+      "explanation": "Na falha, o `await` lança e pula o resto do `try`, inclusive o `clearInterval`; o timer segue vivo e mantém o Node rodando. O `finally` roda nos dois caminhos, com sucesso ou com erro. Com `.then`, o problema seria o mesmo sem um `.finally`. Desligar o timer no começo do `try` apaga os pontinhos antes da espera, e um `setTimeout` mostraria um ponto só.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um colega quer acelerar o `finalizarCompra` e propõe trocar os três `await` em sequência por:\n\n```javascript\nawait Promise.all([\n  validarEstoque(pedido.itens, config),\n  reservar(pedido.itens, config),\n  cobrar(pedido.total, pedido.pagamento, config),\n]);\n```\n\nQual é o problema?",
+      "options": {
+        "a": "A cobrança começa junto com a validação e a reserva: o cliente pode pagar por um produto que acabou de esgotar",
+        "b": "`Promise.all` não pode ser usado com `await`, só com `.then`",
+        "c": "`Promise.all` devolve os resultados na ordem em que as etapas terminam",
+        "d": "`Promise.all` só aceita duas Promises por vez"
+      },
+      "answer": "a",
+      "explanation": "No checkout, a ordem é regra de negócio: não se cobra sem estoque validado e sem reserva. Em paralelo, as três etapas começam juntas, e uma falha no estoque chega quando a cobrança já está em andamento. `Promise.all` funciona com `await`, devolve os resultados na ordem do array e aceita quantas Promises você passar: o paralelo serve para consultas independentes, como frete, prazo e cupom.",
+      "points": 2
+    }
+  ]
+}

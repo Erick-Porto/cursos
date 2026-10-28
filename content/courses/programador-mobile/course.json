@@ -1,0 +1,121 @@
+{
+  "slug": "programador-mobile",
+  "title": "Programador Mobile",
+  "subtitle": "Do primeiro script em JavaScript ao app publicado: JavaScript, React, React Native e o projeto integrador",
+  "level": "iniciante",
+  "estimated_hours": 180,
+  "tags": [
+    "mobile",
+    "javascript",
+    "react",
+    "react-native",
+    "expo"
+  ],
+  "icon": "smartphone",
+  "color": "#22d3ee",
+  "instructor_name": "Erick Ribeiro Porto",
+  "is_published": true,
+  "modules": [
+    {
+      "slug": "ambiente-js",
+      "title": "Ambiente JavaScript"
+    },
+    {
+      "slug": "linguagem-js",
+      "title": "Linguagem JavaScript"
+    },
+    {
+      "slug": "classes-e-controle",
+      "title": "Classes e estruturas de controle"
+    },
+    {
+      "slug": "react",
+      "title": "Introdução ao ambiente React"
+    },
+    {
+      "slug": "react-native",
+      "title": "Introdução ao ambiente React Native"
+    },
+    {
+      "slug": "layout-rn",
+      "title": "Layout e componentes React Native"
+    },
+    {
+      "slug": "integracao",
+      "title": "Integração de competências profissionais"
+    }
+  ],
+  "achievements": [
+    {
+      "slug": "primeiro-script",
+      "title": "Primeiro script",
+      "description": "Concluiu o Ambiente JavaScript: Node.js, npm, Git e testes prontos para programar.",
+      "icon": "terminal",
+      "rarity": "common",
+      "xp": 30,
+      "rule": {
+        "type": "lessons_completed",
+        "count": 8
+      }
+    },
+    {
+      "slug": "javascript-a-fundo",
+      "title": "JavaScript a fundo",
+      "description": "Concluiu as três unidades de JavaScript, do primeiro if ao checkout com a API de verdade.",
+      "icon": "braces",
+      "rarity": "rare",
+      "xp": 80,
+      "rule": {
+        "type": "lessons_completed",
+        "count": 40
+      }
+    },
+    {
+      "slug": "primeiro-componente",
+      "title": "Primeiro componente",
+      "description": "Concluiu a Introdução ao ambiente React: componentes, estado e dados externos.",
+      "icon": "code",
+      "rarity": "common",
+      "xp": 40,
+      "rule": {
+        "type": "lessons_completed",
+        "count": 49
+      }
+    },
+    {
+      "slug": "no-celular",
+      "title": "No celular",
+      "description": "Concluiu a Introdução ao ambiente React Native: o primeiro app rodando no próprio celular.",
+      "icon": "smartphone",
+      "rarity": "rare",
+      "xp": 60,
+      "rule": {
+        "type": "lessons_completed",
+        "count": 57
+      }
+    },
+    {
+      "slug": "ui-kit-pronto",
+      "title": "UI kit pronto",
+      "description": "Concluiu Layout e componentes React Native: a Lojinha com UI kit, navegação e acessibilidade.",
+      "icon": "layers",
+      "rarity": "epic",
+      "xp": 120,
+      "rule": {
+        "type": "lessons_completed",
+        "count": 79
+      }
+    },
+    {
+      "slug": "programador-mobile",
+      "title": "Programador Mobile",
+      "description": "Concluiu as 180 horas, do primeiro script ao app publicado no Demo Day.",
+      "icon": "rocket",
+      "rarity": "legendary",
+      "xp": 250,
+      "rule": {
+        "type": "course_completed"
+      }
+    }
+  ]
+}

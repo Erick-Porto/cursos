@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 404" font-family="Inter, system-ui, sans-serif">
+  <title>Camadas do app da lanchonete: a TelaCardapio chama o useCardapio, que chama listarProdutos na api/, que faz GET /produtos no json-server; as chamadas só descem e a resposta sobe até a tela</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .h    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .code { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .call { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .resp-t { fill: #60a5fa; font-size: 22px; font-weight: 700; }
+    .desce { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta-desce); }
+    .sobe  { stroke: #60a5fa; stroke-width: 3; fill: none; marker-end: url(#seta-sobe); }
+    .a1 { animation: a1 8s ease-out infinite; }
+    .a2 { animation: a2 8s ease-out infinite; }
+    .a3 { animation: a3 8s ease-out infinite; }
+    .r  { animation: r 8s ease-out infinite; }
+    @keyframes a1 {
+      0%, 4%   { opacity: 0; transform: translateY(-10px); }
+      10%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes a2 {
+      0%, 18%  { opacity: 0; transform: translateY(-10px); }
+      24%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes a3 {
+      0%, 32%  { opacity: 0; transform: translateY(-10px); }
+      38%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @keyframes r {
+      0%, 48%  { opacity: 0; transform: translateY(24px); }
+      58%, 92% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .a1, .a2, .a3, .r { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta-desce" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+    <marker id="seta-sobe" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#60a5fa"/></marker>
+  </defs>
+  <rect width="720" height="404" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="24" y="38">as chamadas descem</text>
+  <text class="resp-t" x="696" y="38" text-anchor="end">a resposta sobe</text>
+
+  <!-- camadas -->
+  <rect class="box" x="24" y="56" width="592" height="56" rx="10"/>
+  <text class="h" x="44" y="92">tela</text>
+  <text class="code" x="162" y="92">TelaCardapio</text>
+  <text class="m" x="600" y="92" text-anchor="end">desenha</text>
+
+  <rect class="box" x="24" y="148" width="592" height="56" rx="10"/>
+  <text class="h" x="44" y="184">hook</text>
+  <text class="code" x="162" y="184">useCardapio</text>
+  <text class="m" x="600" y="184" text-anchor="end">guarda o estado</text>
+
+  <rect class="box" x="24" y="240" width="592" height="56" rx="10"/>
+  <text class="h" x="44" y="276">api/</text>
+  <text class="code" x="162" y="276">cardapio.js</text>
+  <text class="m" x="600" y="276" text-anchor="end">fala com o servidor</text>
+
+  <rect class="box" x="24" y="332" width="592" height="56" rx="10"/>
+  <text class="h" x="44" y="368">servidor</text>
+  <text class="code" x="162" y="368">json-server</text>
+  <text class="m" x="600" y="368" text-anchor="end">lê e grava o db.json</text>
+
+  <!-- chamadas, uma de cada vez -->
+  <g class="a1">
+    <path class="desce" d="M96 114 V146"/>
+    <text class="call" x="116" y="138">useCardapio()</text>
+  </g>
+  <g class="a2">
+    <path class="desce" d="M96 206 V238"/>
+    <text class="call" x="116" y="230">listarProdutos()</text>
+  </g>
+  <g class="a3">
+    <path class="desce" d="M96 298 V330"/>
+    <text class="call" x="116" y="322">GET /produtos</text>
+  </g>
+
+  <!-- a resposta volta pelo mesmo caminho -->
+  <g class="r">
+    <path class="sobe" d="M664 376 V66"/>
+  </g>
+</svg>

@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>subtotal com for...of: centavos começa em 0, soma 39980 na volta do Fone (2 de 19990) e 8990 na volta da Luminária; sem mais itens, o laço termina e a função devolve paraReais(48970), 489.7</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .code { font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .dim  { fill: #b4bfd3; }
+    .v1   { fill: #06281c; font-size: 26px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .v2   { fill: #0b1020; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .tot  { fill: #e8edf7; font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .res  { fill: #34d399; font-size: 28px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+
+    .s1 { transform-box: fill-box; transform-origin: 0 0; animation: s1 8s ease-out infinite; }
+    .s2 { transform-box: fill-box; transform-origin: 0 0; animation: s2 8s ease-out infinite; }
+    .t1 { animation: t1 8s infinite; }
+    .t2 { animation: t2 8s infinite; }
+    .fim { animation: fim 8s infinite; }
+    @keyframes s1 {
+      0%, 6%   { opacity: 1; transform: scaleX(0); }
+      20%, 94% { opacity: 1; transform: scaleX(1); }
+      100%     { opacity: 0; transform: scaleX(1); }
+    }
+    @keyframes t1 {
+      0%, 16%  { opacity: 0; }
+      22%, 94% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes s2 {
+      0%, 34%  { opacity: 1; transform: scaleX(0); }
+      46%, 94% { opacity: 1; transform: scaleX(1); }
+      100%     { opacity: 0; transform: scaleX(1); }
+    }
+    @keyframes t2 {
+      0%, 44%  { opacity: 0; }
+      50%, 94% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes fim {
+      0%, 58%  { opacity: 0; transform: translateY(8px); }
+      66%, 94% { opacity: 1; transform: translateY(0); }
+      100%     { opacity: 0; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .s1, .s2, .t1, .t2, .fim { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- os itens do carrinho, na ordem em que o for...of os entrega -->
+  <rect class="box" x="30" y="22" width="280" height="52" rx="10"/>
+  <text class="t" x="46" y="56">Fone <tspan class="code">19990 × 2</tspan></text>
+  <rect class="box" x="390" y="22" width="300" height="52" rx="10"/>
+  <text class="t" x="406" y="56">Luminária <tspan class="code">8990 × 1</tspan></text>
+
+  <!-- o acumulador -->
+  <text class="code dim" x="30" y="116">let centavos = 0;</text>
+  <rect class="box" x="30" y="132" width="530" height="60" rx="8"/>
+  <g transform="translate(30 132)">
+    <rect class="s1" width="433" height="60" fill="#34d399"/>
+  </g>
+  <g transform="translate(463 132)">
+    <rect class="s2" width="97" height="60" fill="#60a5fa"/>
+  </g>
+  <text class="v1 t1" x="246" y="171" text-anchor="middle">39980</text>
+  <text class="v2 t2" x="511" y="170" text-anchor="middle">8990</text>
+
+  <!-- volta a volta -->
+  <text class="code t1" x="246" y="226" text-anchor="middle" fill="#34d399">volta 1: += 39980</text>
+  <text class="code t2" x="560" y="262" text-anchor="end" fill="#60a5fa">volta 2: += 8990</text>
+
+  <!-- a saída do laço -->
+  <g class="fim">
+    <text class="tot" x="576" y="172">48970</text>
+    <text class="t" x="30" y="300"><tspan fill="#fbbf24">sem mais itens</tspan>: o laço termina</text>
+    <text class="code" x="30" y="340" fill="#e8edf7">return paraReais(48970)</text>
+    <path class="line" d="M350 332 L400 332"/>
+    <text class="res" x="412" y="342">489.7</text>
+  </g>
+</svg>

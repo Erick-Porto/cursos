@@ -1,0 +1,137 @@
+{
+  "title": "Quiz: E01 · A web, o JavaScript e o ambiente",
+  "description": "Dez questões sobre as linguagens da web, o DevTools, onde o JavaScript roda e as ferramentas instaladas no primeiro encontro.",
+  "lesson": "e01b-ambiente-de-desenvolvimento",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Este trecho faz parte de uma página web. A que linguagem ele pertence e qual é o papel dele?\n\n```css\nbutton {\n  background: #22d3ee;\n  border-radius: 8px;\n}\n```",
+      "options": {
+        "a": "CSS: define a aparência do botão (cor de fundo e cantos arredondados)",
+        "b": "HTML: cria o botão na página",
+        "c": "JavaScript: faz o botão reagir ao clique",
+        "d": "JSON: guarda os dados do botão"
+      },
+      "answer": "a",
+      "explanation": "Um seletor seguido de propriedades entre chaves é a forma do CSS, que cuida da aparência. O HTML criaria o botão com a tag `<button>`, e o JavaScript daria comportamento a ele com `addEventListener`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais afirmações sobre o DevTools do navegador são verdadeiras?",
+      "options": {
+        "a": "A aba Elements mostra o HTML e o CSS da página e permite alterá-los ao vivo",
+        "b": "Uma alteração feita na aba Elements é salva no servidor quando você recarrega a página",
+        "c": "A aba Console executa JavaScript e mostra as mensagens de `console.log`",
+        "d": "Ele abre com F12 ou com o clique direito seguido de Inspecionar"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Elements e Console fazem exatamente isso, e F12 ou Inspecionar abrem o painel. A alteração em Elements muda só a cópia na memória do navegador (o DOM); ao recarregar, o arquivo original volta, porque o servidor nunca foi alterado.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No terminal, dentro do Node, você digita `document.title` e recebe:\n\n```plaintext\nUncaught ReferenceError: document is not defined\n```\n\nPor que isso acontece?",
+      "options": {
+        "a": "`document` é a página da aba, uma API do runtime do navegador; no Node não existe página",
+        "b": "Faltou instalar o `document` com o npm antes de usá-lo",
+        "c": "O Node usa um motor que não segue as regras do ECMAScript",
+        "d": "Faltaram aspas: o certo seria escrever `'document'.title`"
+      },
+      "answer": "a",
+      "explanation": "`document` não faz parte da linguagem: é uma API que o navegador oferece para mexer na página. O runtime do Node tem outras APIs, como `process` e `fs`, mas não tem página. A opção do npm é a mais tentadora, mas `document` não é um pacote. O Node usa o V8, o mesmo motor do Chrome, que segue o ECMAScript, e as aspas transformariam a palavra em um texto qualquer.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Quais linhas funcionam **tanto** no Console do navegador **quanto** no Node?",
+      "options": {
+        "a": "`console.log('Olá')`",
+        "b": "`2 + 2`",
+        "c": "`document.querySelector('button')`",
+        "d": "`process.version`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "A conta é da própria linguagem e roda em qualquer lugar, e os dois runtimes oferecem `console.log`. `document` só existe no navegador, onde há uma página; `process` só existe no Node e, no navegador, dá `process is not defined`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Quando o TC39 aprova um recurso novo para o ECMAScript, ele passa a funcionar na mesma hora em todos os motores: V8, JavaScriptCore, SpiderMonkey e Hermes.",
+      "answer": false,
+      "explanation": "O TC39 cuida da norma, o texto que diz como a linguagem funciona. Cada motor é um programa diferente, mantido por uma empresa, e adota as novidades no seu próprio ritmo. Por isso um recurso muito novo pode já existir no Chrome e ainda faltar em outro lugar.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "No terminal, o comando ___ cria uma pasta nova e o comando ___ entra nela.",
+      "answer": [["mkdir"], ["cd"]],
+      "explanation": "`mkdir` (de *make directory*) cria a pasta e `cd` (de *change directory*) entra nela; `cd ..` volta uma pasta. `ls` só lista o que existe na pasta atual.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "No terminal, o comando ___ mostra a versão do Node.js instalada e confirma que a instalação funcionou.",
+      "answer": [["node -v", "node --version"]],
+      "explanation": "`node -v` (ou `node --version`) imprime a versão do Node.js. `npm -v` confere o npm e `git --version` confere o Git: são os comandos da captura de tela do laboratório.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois de instalar, você confere a versão e o terminal mostra:\n\n```bash\n$ node -v\nv25.1.0\n```\n\nO que fazer?",
+      "options": {
+        "a": "Desinstalar e instalar a versão LTS, de primeiro número par, que é a que as ferramentas do curso esperam",
+        "b": "Nada: quanto maior o número, mais estável é a versão",
+        "c": "Rodar `npm -v` para trocar o Node pela versão LTS",
+        "d": "Fechar e abrir o terminal para o número da versão mudar"
+      },
+      "answer": "a",
+      "explanation": "Primeiro número ímpar indica a versão Current, que recebe novidades primeiro e muda rápido. A LTS tem número par e recebe correções por mais tempo. A opção do número maior é a tentação, mas mais novo não quer dizer mais estável. `npm -v` só mostra a versão do npm, e reabrir o terminal resolve o \"não é reconhecido\", não a versão errada.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Você instalou o Git com o terminal aberto. Ao digitar `git --version`, aparece que `git` não é reconhecido como comando. Qual é o primeiro passo?",
+      "options": {
+        "a": "Fechar o terminal e o VS Code e abrir de novo",
+        "b": "Desinstalar o Git e instalar outra versão",
+        "c": "Instalar o Git pelo npm, com `npm install git`",
+        "d": "Criar a conta no GitHub, que ativa o comando `git`"
+      },
+      "answer": "a",
+      "explanation": "O terminal só enxerga os programas que já existiam quando foi aberto. Reabrir resolve na maioria dos casos, inclusive o terminal de dentro do VS Code. Reinstalar é a tentação, mas raramente é preciso. O Git não vem do npm, e a conta no GitHub não tem relação com o programa instalado no computador.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Logo depois de instalar o Git, você roda:\n\n```bash\ngit config --global user.name \"Ana Souza\"\ngit config --global user.email \"ana@exemplo.com\"\n```\n\nPara que servem esses dois comandos?",
+      "options": {
+        "a": "Gravar o nome e o e-mail que vão assinar cada commit feito neste computador",
+        "b": "Criar a conta de Ana Souza no GitHub",
+        "c": "Fazer login no GitHub pelo terminal",
+        "d": "Dar um nome ao repositório do projeto"
+      },
+      "answer": "a",
+      "explanation": "O Git registra quem fez cada commit, e esses comandos dizem a ele quem você é, uma vez por computador. A conta no GitHub é criada no site, e o login não acontece aqui. Use o mesmo e-mail da conta no GitHub para que ele ligue os seus commits ao seu perfil.",
+      "points": 1
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 300" font-family="Inter, system-ui, sans-serif">
+  <title>Linha do tempo do pitch de 8 minutos: problema 1 min, solução 1 min, demo ao vivo 4 min, arquitetura 1 min e aprendizados 1 min; a demo ocupa metade</title>
+  <style>
+    .seg  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .demo { fill: #34d399; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .dT   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lead { stroke: #b4bfd3; stroke-width: 1.5; }
+    .head { stroke: #fbbf24; stroke-width: 4; stroke-linecap: round; }
+    .knob { fill: #fbbf24; }
+    .play { animation: play 8s linear infinite; }
+    @keyframes play {
+      0%       { transform: translateX(-640px); opacity: 1; }
+      80%, 94% { transform: translateX(0); opacity: 1; }
+      100%     { transform: translateX(0); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .play { animation: none; }
+    }
+  </style>
+  <rect width="720" height="300" rx="16" fill="#0b1020"/>
+
+  <!-- nomes das partes -->
+  <text class="n" x="40" y="56">Problema</text>
+  <line class="lead" x1="80" y1="66" x2="80" y2="118"/>
+  <text class="n" x="360" y="56" text-anchor="middle">Demo ao vivo</text>
+  <line class="lead" x1="360" y1="66" x2="360" y2="118"/>
+  <text class="n" x="680" y="56" text-anchor="end">Aprendizados</text>
+  <line class="lead" x1="640" y1="66" x2="640" y2="118"/>
+  <text class="n" x="160" y="104" text-anchor="middle">Solução</text>
+  <text class="n" x="560" y="104" text-anchor="middle">Arquitetura</text>
+
+  <!-- 1 minuto = 80 unidades -->
+  <rect class="seg" x="41" y="120" width="78" height="56" rx="8"/>
+  <text class="t" x="80" y="156" text-anchor="middle">1 min</text>
+  <rect class="seg" x="121" y="120" width="78" height="56" rx="8"/>
+  <text class="t" x="160" y="156" text-anchor="middle">1 min</text>
+  <rect class="demo" x="201" y="120" width="318" height="56" rx="8"/>
+  <text class="dT" x="360" y="156" text-anchor="middle">4 min: metade do pitch</text>
+  <rect class="seg" x="521" y="120" width="78" height="56" rx="8"/>
+  <text class="t" x="560" y="156" text-anchor="middle">1 min</text>
+  <rect class="seg" x="601" y="120" width="78" height="56" rx="8"/>
+  <text class="t" x="640" y="156" text-anchor="middle">1 min</text>
+
+  <text class="m" x="40" y="214">0:00</text>
+  <text class="m" x="680" y="214" text-anchor="end">8:00</text>
+  <text class="m" x="360" y="262" text-anchor="middle">depois: 4 minutos de perguntas da banca</text>
+
+  <!-- marcador do tempo: sem animação, fica no fim -->
+  <g class="play">
+    <line class="head" x1="680" y1="112" x2="680" y2="186"/>
+    <circle class="knob" cx="680" cy="108" r="7"/>
+  </g>
+</svg>

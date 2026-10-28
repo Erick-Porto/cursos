@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 412" font-family="Inter, system-ui, sans-serif">
+  <title>Os quatro projetos do curso: a pasta src do lojinha-regras e os componentes do Minhas Tarefas chegam à Lojinha, e o tema e o kit de UI da Lojinha dão a largada no app da equipe</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fim  { fill: #131c33; stroke: #34d399; stroke-width: 2.5; }
+    .h    { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .hb   { fill: #34d399; font-size: 24px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="412" rx="16" fill="#0b1020"/>
+
+  <!-- linha de cima: os dois projetos de base -->
+  <rect class="box" x="24" y="20" width="328" height="84" rx="12"/>
+  <text class="h" x="44" y="54">lojinha-regras</text>
+  <text class="m" x="44" y="88">E01 a E20 · Node</text>
+
+  <rect class="box" x="368" y="20" width="328" height="84" rx="12"/>
+  <text class="h" x="388" y="54">Minhas Tarefas</text>
+  <text class="m" x="388" y="88">E21 a E29 · React</text>
+
+  <!-- setas para a Lojinha -->
+  <path class="line" d="M 272 104 L 272 162"/>
+  <text class="lbl" x="258" y="142" text-anchor="end">pasta src/ no E30</text>
+  <path class="line" d="M 448 104 L 448 162"/>
+  <text class="lbl" x="462" y="142">componentes e hooks</text>
+
+  <rect class="box" x="176" y="164" width="368" height="84" rx="12"/>
+  <text class="h" x="196" y="198">Lojinha</text>
+  <text class="m" x="196" y="232">E30 a E40 · React Native</text>
+
+  <!-- seta para o app da equipe -->
+  <path class="line" d="M 360 248 L 360 306"/>
+  <text class="lbl" x="374" y="286">tema e kit de UI no E42</text>
+
+  <rect class="fim" x="176" y="308" width="368" height="84" rx="12"/>
+  <text class="hb" x="196" y="342">App da equipe</text>
+  <text class="m" x="196" y="376">E41 a E45 · APK e Demo Day</text>
+</svg>

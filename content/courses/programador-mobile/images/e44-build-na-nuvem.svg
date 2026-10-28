@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 296" font-family="Inter, system-ui, sans-serif">
+  <title>O eas build envia o projeto sem o .env; na nuvem da Expo o build passa pela fila, é compilado e assinado; o .apk chega ao celular por link ou QR code</title>
+  <style>
+    .node { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .ring { fill: none; stroke: #34d399; stroke-width: 3; }
+    .ico  { fill: none; stroke: #e8edf7; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+    .code { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .warn { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .line { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#seta); }
+    .p1 { animation: a1 8s infinite; }
+    .p2 { animation: a2 8s infinite; }
+    .p3 { animation: a3 8s infinite; }
+    @keyframes a1 { 0%, 4% { opacity: 0; } 12%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes a2 { 0%, 28% { opacity: 0; } 36%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes a3 { 0%, 54% { opacity: 0; } 62%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .p1, .p2, .p3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="296" rx="16" fill="#0b1020"/>
+
+  <!-- computador -->
+  <circle class="node" cx="96" cy="112" r="44"/>
+  <g class="ico" transform="translate(72 88) scale(2)"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/></g>
+  <text class="n" x="96" y="188" text-anchor="middle">computador</text>
+  <text class="m code" x="96" y="220" text-anchor="middle">eas build</text>
+
+  <!-- nuvem da Expo -->
+  <circle class="node" cx="360" cy="112" r="44"/>
+  <g class="ico" transform="translate(336 88) scale(2)"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></g>
+  <text class="n" x="360" y="188" text-anchor="middle">EAS Build</text>
+
+  <!-- celular -->
+  <circle class="node" cx="624" cy="112" r="44"/>
+  <g class="ico" transform="translate(600 88) scale(2)"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></g>
+  <text class="n" x="624" y="188" text-anchor="middle">celular</text>
+
+  <!-- 1: o projeto sobe sem os arquivos do .gitignore -->
+  <g class="p1">
+    <path class="line" d="M 146 112 L 308 112"/>
+    <text class="t" x="228" y="66" text-anchor="middle">projeto</text>
+    <text class="warn" x="228" y="94" text-anchor="middle">sem o .env</text>
+  </g>
+
+  <!-- 2: na nuvem, fila, compilação e assinatura -->
+  <g class="p2">
+    <circle class="ring" cx="360" cy="112" r="50"/>
+    <text class="m" x="360" y="220" text-anchor="middle">fila, compila, assina</text>
+  </g>
+
+  <!-- 3: o .apk chega ao celular -->
+  <g class="p3">
+    <path class="line" d="M 416 112 L 572 112"/>
+    <text class="t" x="492" y="66" text-anchor="middle">.apk por link</text>
+    <text class="t" x="492" y="94" text-anchor="middle">ou QR code</text>
+    <text class="ok" x="624" y="220" text-anchor="middle">instalado</text>
+  </g>
+
+  <text class="m" x="360" y="268" text-anchor="middle">pode fechar o terminal: o build continua na nuvem</text>
+</svg>

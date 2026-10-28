@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" font-family="Inter, system-ui, sans-serif">
+  <title>A Lojinha pede GET /products à DummyJSON; primeiro chegam o status 200 e os cabeçalhos, que cumprem o primeiro await, e depois o corpo em JSON, que cumpre o await de resposta.json()</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .h    { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .mono { font-family: 'JetBrains Mono', Consolas, monospace; font-weight: 400; }
+    .vida { stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 4 8; }
+    .ida  { stroke: #60a5fa; stroke-width: 3; fill: none; marker-end: url(#p-ida); }
+    .volta { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#p-volta); }
+    .m1 { animation: m1 7s infinite; }
+    .m2 { animation: m2 7s infinite; }
+    .m3 { animation: m3 7s infinite; }
+    @keyframes m1 {
+      0%, 4%   { opacity: 0; transform: translateX(-30px); }
+      12%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes m2 {
+      0%, 30%  { opacity: 0; transform: translateX(30px); }
+      38%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes m3 {
+      0%, 56%  { opacity: 0; transform: translateX(30px); }
+      64%, 94% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .m1, .m2, .m3 { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="p-ida" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#60a5fa"/></marker>
+    <marker id="p-volta" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="380" rx="16" fill="#0b1020"/>
+
+  <rect class="box" x="24" y="20" width="140" height="48" rx="10"/>
+  <text class="h" x="94" y="52" text-anchor="middle">Lojinha</text>
+  <rect class="box" x="524" y="20" width="172" height="48" rx="10"/>
+  <text class="h" x="610" y="52" text-anchor="middle">DummyJSON</text>
+  <line class="vida" x1="94" y1="68" x2="94" y2="364"/>
+  <line class="vida" x1="610" y1="68" x2="610" y2="364"/>
+
+  <!-- o pedido -->
+  <g class="m1">
+    <path class="ida" d="M 96 124 L 600 124"/>
+    <text class="t mono" x="352" y="110" text-anchor="middle">GET /products?limit=10&amp;skip=0</text>
+  </g>
+
+  <!-- a resposta chega: status e cabeçalhos -->
+  <g class="m2">
+    <path class="volta" d="M 608 214 L 104 214"/>
+    <text class="t" x="352" y="200" text-anchor="middle"><tspan class="mono">200 OK</tspan> e os cabeçalhos</text>
+    <text class="lbl" x="352" y="246" text-anchor="middle">1º await: o <tspan class="mono">fetch</tspan> entrega a resposta</text>
+  </g>
+
+  <!-- depois, o corpo inteiro -->
+  <g class="m3">
+    <path class="volta" d="M 608 314 L 104 314"/>
+    <text class="t" x="352" y="300" text-anchor="middle">corpo: <tspan class="mono">{ products, total, skip, limit }</tspan></text>
+    <text class="lbl" x="352" y="346" text-anchor="middle">2º await: <tspan class="mono">resposta.json()</tspan> entrega os dados</text>
+  </g>
+</svg>
