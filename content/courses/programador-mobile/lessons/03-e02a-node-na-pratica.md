@@ -1,13 +1,13 @@
 ---
 title: "Node na prática: o projeto lojinha-regras"
-summary: REPL, arquivos .js, process.argv, fs e JSON; nasce o lojinha-regras, com o catálogo e um relatório no terminal.
+summary: Seus primeiros programas no Node, explicados linha por linha; nasce o lojinha-regras, com o catálogo e um relatório.
 module: ambiente-js
 duration_minutes: 40
 objectives:
-  - Executar JavaScript no Node pelo REPL e por arquivos .js
-  - Ler os argumentos de um comando com process.argv
-  - Ler e gravar arquivos com fs e converter dados com JSON.parse e JSON.stringify
-  - Criar o projeto lojinha-regras com o catálogo da Lojinha e um relatório no terminal
+  - Rodar JavaScript no terminal, uma linha no REPL ou um arquivo inteiro com node
+  - Mostrar resultados com console.log e dar nome a valores com const
+  - Ler e gravar arquivos com fs e trocar dados em JSON
+  - Ler, linha por linha, os dois scripts do lojinha-regras, o gerador e o relatório
 ---
 
 # Node na prática: o projeto lojinha-regras
@@ -19,59 +19,69 @@ Programador Mobile · Encontro E02 · Aula 3 de 89
 ## O que você vai aprender
 
 :::goal
-- Testar JavaScript no REPL do Node e rodar arquivos com `node`
-- Mostrar resultados no terminal com `console.log`
-- Ler os argumentos do comando com `process.argv`
-- Ler e gravar arquivos com `fs` e converter dados com JSON
-- Criar o `lojinha-regras`, com o catálogo da Lojinha e um relatório
+- Rodar JavaScript no terminal, sem navegador
+- Escrever seu primeiro arquivo `.js` e ver o resultado
+- Ler e gravar arquivos do computador
+- Entender, linha por linha, um programa que responde perguntas sobre a loja
 :::
+
+Não precisa decorar nada. Estes slides ficam aqui para você rever quando quiser, no seu ritmo.
+
+---
+
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **script** | um arquivo com instruções que o computador segue, de cima para baixo |
+| **pasta raiz** | a pasta principal de um projeto, a mais de fora |
+| **argumento** | uma palavra extra que você escreve no comando, depois do nome do arquivo |
+| **JSON** | um jeito de escrever dados como texto, que qualquer programa entende |
+| **mensagem de erro** | o aviso que o computador mostra quando algo dá errado; ela diz o quê e onde |
+
+Esqueceu uma palavra? Volte a este slide.
 
 ---
 
 ## A pergunta da reunião
 
-A **Lojinha** é a loja online que você vai construir neste curso. O app de celular chega no E30; antes dele vêm os dados e as regras do negócio: preço, frete, carrinho, pedido.
+A **Lojinha** é a loja online que você vai construir neste curso. Antes do app, vêm os dados e as regras da loja.
 
-Na reunião de segunda, a dona da loja pergunta:
+Na reunião, a dona da loja pergunta:
 
-- Quantos produtos temos, e quantos estão em destaque?
-- Qual é o preço médio do catálogo? E o do áudio?
+- Quantos produtos temos? Quantos estão em destaque?
+- Qual é o preço médio? E só dos produtos de áudio?
 - Algum produto está sem foto?
 
-Contar à mão leva minutos com 12 produtos e uma tarde com 300. Um **script** de 20 linhas responde em um segundo, quantas vezes for preciso.
+Contar à mão leva minutos com 12 produtos e uma tarde com 300. Um **script** responde em um segundo, quantas vezes for preciso.
 
 :::question
-O que um script precisa saber fazer para responder a essas três perguntas?
+Se você fosse contar à mão, quais passos faria? Anote: o script de hoje faz os mesmos passos.
 :::
 
 ---
 
-## :icon[folder-tree] O projeto lojinha-regras
+## :icon[folder-tree] A pasta do projeto
 
-Hoje nasce a pasta que acompanha você até o E20. No terminal, dentro da sua pasta de projetos:
+Todo o JavaScript do curso fica numa pasta só, o **`lojinha-regras`**. No terminal, dentro da pasta de projetos que você criou no E01:
 
 ```bash
-mkdir lojinha-regras
-cd lojinha-regras
-code .
+mkdir lojinha-regras    # cria a pasta
+cd lojinha-regras       # entra nela
+code .                  # abre a pasta no VS Code
 ```
 
-Ao fim do encontro, ela terá esta forma:
+Essa é a **pasta raiz** do projeto. Ela acompanha você até o E20 e, no E30, o que estiver nela vai para o app da Lojinha.
 
-```plaintext
-lojinha-regras/
-└── src/
-    ├── data/       produtos.js e catalogo.json
-    └── scripts/    gerar-catalogo.js e relatorio-catalogo.js
-```
-
-A cada encontro chega uma pasta nova em `src/`: utilitários, regras de preço e de frete, carrinho, classes. No E30, essa `src/` vai inteira para o app da Lojinha.
+:::tip Confira sempre
+O terminal do VS Code mostra a pasta em que você está. O caminho precisa terminar em `lojinha-regras`.
+:::
 
 ---
 
-## :icon[terminal] O REPL: JavaScript na hora
+## :icon[terminal] O REPL: testar uma linha
 
-No E01, você digitou JavaScript no Console do navegador. O Node tem o mesmo recurso no terminal: o **REPL** (ler, avaliar, mostrar e repetir). Digite `node` e tecle <kbd>Enter</kbd>:
+No E01, você digitou `node` e o terminal passou a entender JavaScript. Esse modo se chama **REPL**: você digita uma linha, aperta <kbd>Enter</kbd> e vê o resultado na hora, como numa calculadora.
 
 ```bash
 $ node
@@ -79,23 +89,59 @@ $ node
 289.8
 > 'Fone ' + 'Bluetooth'
 'Fone Bluetooth'
-> const loja = 'Lojinha'
-undefined
-> loja
-'Lojinha'
 > .exit
 ```
 
-- Cada linha roda quando você tecla <kbd>Enter</kbd>, e o REPL mostra o resultado
-- Texto vai entre aspas; com texto, o `+` junta os pedaços
-- `const` dá um nome a um valor; a linha em si não tem resultado, por isso o `undefined`
-- Para sair: `.exit` ou <kbd>Ctrl</kbd> + <kbd>C</kbd> duas vezes
+- Número se escreve sem aspas; **texto**, entre aspas
+- Com números, o `+` soma; com textos, ele junta os pedaços
+- `.exit` sai do REPL e volta ao terminal de sempre
 
 ---
 
-## :icon[file-code] Rodando um arquivo
+## :icon[circle-help] E aquele undefined?
 
-Para mais de uma linha, escreva um arquivo. Na raiz do `lojinha-regras`, crie `ola.js`:
+No E01, depois da mensagem apareceu um `undefined`. Agora você entende:
+
+```bash
+> console.log('Olá')
+Olá
+undefined
+```
+
+- O **`console.log`** **escreve** na tela o que está entre os parênteses
+- O REPL sempre mostra o que a linha **devolve** como resultado. Uma conta como `2 + 2` devolve `4`
+- O `console.log` só escreve, não devolve nada. Quando não há nada, o REPL mostra **`undefined`**, que quer dizer "nada aqui"
+
+Não é erro. É o REPL avisando que aquela linha não teve resultado.
+
+---
+
+## :icon[file-code] Seu primeiro arquivo .js
+
+Para mais de uma linha, use um arquivo. No VS Code, crie `ola.js` na pasta raiz e escreva:
+
+```javascript
+console.log('Olá, Lojinha!');
+console.log('Total:', 199.9 + 89.9);
+```
+
+Salve com <kbd>Ctrl</kbd> + <kbd>S</kbd> e, no terminal, rode:
+
+```bash
+node ola.js
+# Olá, Lojinha!
+# Total: 289.8
+```
+
+- `node ola.js` lê o arquivo e segue as linhas **de cima para baixo**
+- A vírgula separa os valores dentro do `console.log`; na tela, eles aparecem com um espaço entre eles
+- O `;` marca o fim de cada instrução
+
+---
+
+## :icon[tag] const: um nome para um valor
+
+Em vez de repetir um valor, dê um nome a ele com **`const`**. Pense numa caixa com etiqueta: a etiqueta é o nome, e o valor fica dentro.
 
 ```javascript
 const loja = 'Lojinha';
@@ -111,17 +157,13 @@ node ola.js
 # Total do carrinho: 289.8
 ```
 
-- `console.log` mostra no terminal os valores entre parênteses, separados por um espaço
-- O `;` fecha cada instrução, e o script roda de cima para baixo e termina
-- Não há página: a saída aparece no próprio terminal em que você rodou o comando
-
-Você estuda `const`, texto e números a fundo no E05.
+O nome vai sem aspas: `loja` é a etiqueta, e `'Lojinha'` é o texto guardado nela. Você estuda nomes e valores a fundo no E05.
 
 ---
 
-## :icon[list] process.argv: os argumentos do comando
+## :icon[list] Argumento: uma palavra no comando
 
-O que você escreve depois do nome do arquivo chega ao script em **`process.argv`**, uma lista com as partes do comando:
+Dá para mandar uma informação ao script na hora de rodar: é só escrever depois do nome do arquivo. Essa palavra é o **argumento**.
 
 ```javascript
 const nome = process.argv[2];
@@ -133,111 +175,124 @@ node ola.js Ana     # Olá, Ana
 node ola.js         # Olá, undefined
 ```
 
-As posições da lista começam em 0. Com `console.log(process.argv)`, você vê todas:
-
-```plaintext
-[ 'C:\\Program Files\\nodejs\\node.exe', 'C:\\...\\lojinha-regras\\ola.js', 'Ana' ]
-```
-
-A posição 0 é o `node`, a 1 é o script e a 2 é o primeiro argumento seu. Sem argumento, a posição 2 fica vazia: `undefined`.
+- **`process.argv[2]`** guarda o primeiro argumento: a primeira palavra depois do nome do arquivo
+- Sem argumento, não chega nada: `undefined`
+- Por que o 2? O Node guarda o comando inteiro numa lista, e as posições 0 e 1 são o `node` e o arquivo. No E05 você vê isso de perto
 
 ---
 
 ## Pratique
 
 :::example Desafio
-Um script de frete é chamado assim:
+Com o `ola.js` do slide anterior, o que aparece em cada comando?
 
 ```bash
-node frete.js 01310-100 150
+node ola.js Maria
+node ola.js Maria Souza
+node ola.js "Maria Souza"
 ```
-
-1. O que guardam `process.argv[2]` e `process.argv[3]`?
-2. O script calcula `process.argv[3] + 10`. Qual é o resultado?
 :::
 
 :::tip Resposta
-1. `'01310-100'` e `'150'`: dois textos, inclusive o `150`. Tudo o que vem do comando chega como texto
-2. `'15010'`: com texto, o `+` junta em vez de somar. Para fazer a conta, converta antes:
-
-```javascript
-const subtotal = Number(process.argv[3]); // 150, agora um número
-console.log(subtotal + 10);               // 160
-```
+1. `Olá, Maria`
+2. `Olá, Maria` de novo. O espaço separa os argumentos: `Souza` é o segundo, e o script só usa o primeiro
+3. `Olá, Maria Souza`. Com aspas, o nome inteiro vira um argumento só
 :::
 
 ---
 
 ## :icon[database] Os dados da Lojinha
 
-O catálogo mora em `src/data/produtos.js`: 4 categorias e 12 produtos, 3 por categoria e 4 em destaque.
+Os produtos ficam em `src/data/produtos.js`. Cada produto é uma ficha com **campos**:
 
 ```javascript
-export const categorias = [
-  { slug: 'audio', nome: 'Áudio' },
-  { slug: 'casa', nome: 'Casa' },
-  { slug: 'esporte', nome: 'Esporte' },
-  { slug: 'livros', nome: 'Livros' },
-];
-
-export const produtos = [
-  { id: 1, nome: 'Fone Bluetooth', preco: 199.9, categoria: 'audio', destaque: true, avaliacao: 4.6,
-    imagem: 'https://picsum.photos/seed/fone/400/400', descricao: 'Fone sem fio com 20 horas de bateria.' },
-  // ... mais 11 produtos
-];
+{ id: 1, nome: 'Fone Bluetooth', preco: 199.9, categoria: 'audio', destaque: true }
 ```
 
-- `[ ]` é uma **lista** (array); `{ }` é um **objeto**, um grupo de campos `nome: valor`. Os dois ficam para o E08
-- `export` deixa outros arquivos usarem `categorias` e `produtos`
+- **`{ }`** guarda uma ficha, chamada **objeto**: cada campo tem nome, dois-pontos e valor
+- **`[ ]`** guarda uma **lista** de fichas, separadas por vírgula: são 12 produtos e 4 categorias
 - O preço é em reais, com ponto: `199.9`
+- `destaque: true` quer dizer "sim"; `false` seria "não"
+- O `export` no começo do arquivo deixa outros arquivos usarem as listas
 
-São dados, não precisam ser digitados: copie o arquivo inteiro da [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html).
+São dados prontos: copie o arquivo inteiro da [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html). Listas e objetos a fundo: E08.
 
 ---
 
-## :icon[file-text] fs: lendo e gravando arquivos
+## :icon[file-text] fs: o Node mexe em arquivos
 
-O módulo **`fs`** (*file system*) dá ao script acesso aos arquivos do computador, algo que o navegador não oferece:
+O navegador não pode abrir os arquivos do seu computador, por segurança. O Node pode, com o **`fs`** (de *file system*, sistema de arquivos):
 
 ```javascript
 import fs from 'node:fs';
 
-fs.writeFileSync('teste.txt', 'Olá, arquivo');         // cria ou substitui o arquivo
-const texto = fs.readFileSync('teste.txt', 'utf-8');   // lê o arquivo inteiro, como texto
-console.log(texto);                                    // Olá, arquivo
+fs.writeFileSync('teste.txt', 'Olá, arquivo');
+const texto = fs.readFileSync('teste.txt', 'utf-8');
+console.log(texto);   // Olá, arquivo
 ```
 
-- `import` traz um módulo para o script; o prefixo `node:` indica um que já vem com o Node
-- Com `'utf-8'`, o `readFileSync` devolve texto, com os acentos certos
-- O caminho parte da pasta em que você rodou o comando, não da pasta do script
-- Arquivo que não existe derruba o script com `ENOENT: no such file or directory`
+| Linha | O que faz |
+|---|---|
+| `import fs from 'node:fs'` | traz o `fs` para o script; ele já vem com o Node |
+| `writeFileSync` | **grava** um arquivo: cria ou substitui |
+| `readFileSync` | **lê** um arquivo e devolve o texto dele; o `'utf-8'` acerta os acentos |
+
+Tudo depois de `//` é um **comentário**: o Node ignora, é só um recado para quem lê.
 
 ---
 
-## :icon[braces] JSON: dados como texto
+## :icon[braces] JSON: dados escritos como texto
 
-**JSON** é texto escrito no formato dos objetos e listas do JavaScript. É assim que uma API manda dados (E19). Duas funções fazem a ponte:
+Um arquivo só guarda **texto**. Para gravar a lista de produtos num arquivo, ela vira texto num formato chamado **JSON**, que qualquer programa entende: um site, uma planilha, um app.
 
 ```javascript
-const produto = { id: 1, nome: 'Fone Bluetooth', preco: 199.9 };
+const produto = { nome: 'Fone Bluetooth', preco: 199.9 };
 
-const texto = JSON.stringify(produto);
-console.log(texto);          // {"id":1,"nome":"Fone Bluetooth","preco":199.9}
+const texto = JSON.stringify(produto);   // objeto vira texto
+console.log(texto);    // {"nome":"Fone Bluetooth","preco":199.9}
 
-const deVolta = JSON.parse(texto);
-console.log(deVolta.nome);   // Fone Bluetooth
+const deVolta = JSON.parse(texto);       // texto vira objeto
+console.log(deVolta.nome);               // Fone Bluetooth
 ```
 
-- `JSON.stringify` transforma objeto em texto; `JSON.parse`, texto em objeto
-- `deVolta.nome` lê o campo `nome` do objeto
-
-Regras do JSON: nomes e textos entre **aspas duplas**, nenhuma vírgula sobrando no fim e nada de comentários. Um JSON inválido faz o `JSON.parse` falhar com `SyntaxError`.
+- **`JSON.stringify`**: objeto para texto, para gravar ou enviar
+- **`JSON.parse`**: texto para objeto, para usar no código
+- `deVolta.nome` lê um campo: o nome do objeto, um ponto e o nome do campo
 
 ---
 
-## :icon[wrench] Gerando o catalogo.json
+## :icon[triangle-alert] As regras do JSON
 
-O primeiro script grava o catálogo como JSON. Crie `src/scripts/gerar-catalogo.js`:
+O JSON é mais exigente que o JavaScript:
+
+| Certo | Errado | Por quê |
+|---|---|---|
+| `{"nome": "Fone"}` | `{'nome': 'Fone'}` | JSON só aceita aspas duplas |
+| `{"preco": 199.9}` | `{"preco": 199,9}` | número usa ponto, não vírgula |
+| `{"a": 1, "b": 2}` | `{"a": 1, "b": 2,}` | vírgula sobrando no fim |
+
+Também não aceita comentários. Um JSON com erro faz o `JSON.parse` falhar com **`SyntaxError`**.
+
+Guarde estas regras: o `package.json` da aula 4 também é JSON.
+
+---
+
+## :icon[arrow-left-right] Ida e volta: arquivo, texto e objeto
+
+:::center
+![Diagrama: fs.readFileSync leva o catalogo.json do disco a um texto e JSON.parse leva o texto a um objeto; na volta, JSON.stringify faz o texto e fs.writeFileSync grava no disco](images/e02-disco-texto-objeto.svg)
+:::
+
+- **Para ler** (caminho de cima): `fs.readFileSync` tira o texto do arquivo, e `JSON.parse` transforma o texto em objeto
+- **Para gravar** (caminho de baixo): `JSON.stringify` transforma o objeto em texto, e `fs.writeFileSync` grava o texto no arquivo
+
+Só depois de virar objeto dá para contar e somar. Os dois scripts de hoje fazem um caminho cada um: o gerador grava, o relatório lê.
+
+---
+
+## :icon[wrench] Script 1: o gerador do catálogo
+
+O gerador grava os produtos num arquivo JSON. Crie `src/scripts/gerar-catalogo.js`:
 
 ```javascript
 import fs from 'node:fs';
@@ -250,33 +305,33 @@ fs.writeFileSync('src/data/catalogo.json', texto);
 console.log('catalogo.json gravado com', produtos.length, 'produtos');
 ```
 
+Rode da pasta raiz:
+
 ```bash
 node src/scripts/gerar-catalogo.js
 # catalogo.json gravado com 12 produtos
 ```
 
-- No `import`, o caminho parte do **arquivo do script**: `..` sobe uma pasta, e a extensão `.js` é obrigatória
-- `{ categorias, produtos }` junta as duas listas num objeto só
-- O `null, 2` grava o texto com recuo de 2 espaços, fácil de ler
-- `produtos.length` é a quantidade de itens da lista
+O arquivo `src/data/catalogo.json` aparece no painel do VS Code. Abra e veja o catálogo, agora em JSON.
 
 ---
 
-## :icon[arrow-left-right] Ida e volta: disco, texto e objeto
+## :icon[list-ordered] O gerador em português
 
-:::center
-![Diagrama: fs.readFileSync leva o catalogo.json do disco a um texto e JSON.parse leva o texto a um objeto; na volta, JSON.stringify faz o texto e fs.writeFileSync grava no disco](images/e02-disco-texto-objeto.svg)
-:::
-
-O gerador fez o caminho de baixo: objeto, texto, disco. O relatório faz o de cima: disco, texto, objeto. Só no objeto dá para contar e filtrar.
-
-Por que um JSON, se já existe o `produtos.js`? Porque JSON qualquer programa lê: uma planilha, um site, outra linguagem. O relatório lê o arquivo como leria um catálogo vindo de fora, e a API que você usa no E19 manda os produtos nesse mesmo formato.
+| Linha | O que ela diz |
+|---|---|
+| `import fs ...` | "vou usar o `fs` para gravar um arquivo" |
+| `import { categorias, produtos } ...` | "traga as duas listas do arquivo de dados". O `..` sobe uma pasta, e o `.js` no fim é obrigatório |
+| `const catalogo = ...` | "junte as duas listas num objeto só" |
+| `JSON.stringify(catalogo, null, 2)` | "transforme em texto". O `null, 2` organiza o texto em linhas, com recuo |
+| `fs.writeFileSync(...)` | "grave o texto em `src/data/catalogo.json`" |
+| `produtos.length` | a quantidade de itens da lista: 12 |
 
 ---
 
-## :icon[file-search] O relatório (1): ler e filtrar
+## :icon[file-search] Script 2: o relatório, parte 1
 
-Crie `src/scripts/relatorio-catalogo.js`. A primeira parte lê o JSON e, se o comando trouxer uma categoria, fica só com os produtos dela:
+O relatório lê o JSON e, se você passar uma categoria, fica só com os produtos dela. Crie `src/scripts/relatorio-catalogo.js`:
 
 ```javascript
 import fs from 'node:fs';
@@ -293,15 +348,26 @@ if (categoria) {
 }
 ```
 
-- `let` dá nome a um valor que ainda pode mudar: aqui, a lista e o título
-- `if (categoria) { ... }` só roda o que está entre chaves se veio uma categoria
-- `filter` passa por cada produto e fica com os que deixam a condição verdadeira; `===` compara se é igual
+No próximo slide, cada linha em português.
 
 ---
 
-## :icon[chart-bar] O relatório (2): contar e mostrar
+## :icon[list-ordered] A parte 1 em português
 
-A segunda parte responde às perguntas da reunião e imprime:
+1. Lê o `catalogo.json` como texto e transforma o texto em objeto
+2. Guarda em `categoria` o argumento do comando: `audio`, `casa`... ou nada
+3. Começa com a lista inteira e o título "todas as categorias"
+4. **`let`** é como o `const`, mas o valor pode ser trocado depois
+5. **`if (categoria) { ... }`**: faz o que está entre as chaves **só se** veio uma categoria
+6. **`filter`** funciona como uma peneira: olha produto por produto e fica só com os que passam no teste. O teste aqui é `produto.categoria === categoria`, e o `===` pergunta "é igual?"
+
+Hoje você só precisa ler e entender. Escrever `if` e `filter` sozinho vem com calma, no E07 e no E09.
+
+---
+
+## :icon[chart-bar] Script 2: o relatório, parte 2
+
+A segunda parte, logo abaixo da primeira, faz as contas e mostra as respostas:
 
 ```javascript
 const destaques = lista.filter((produto) => produto.destaque);
@@ -316,49 +382,100 @@ console.log('Preço médio: R$', media.toFixed(2));
 console.log('Sem imagem:', semImagem.length);
 ```
 
-```bash
-node src/scripts/relatorio-catalogo.js audio
-# Relatório do catálogo: audio
-# Produtos: 3
-# Em destaque: 1
-# Preço médio: R$ 259.90
-# Sem imagem: 0
-```
+---
 
-`reduce` soma os preços, começando do 0, e `toFixed(2)` mostra duas casas decimais. O ponto no lugar da vírgula fica para o E05, quando você escreve o `formatarPreco`.
+## :icon[list-ordered] A parte 2 em português
+
+| Linha | O que ela faz |
+|---|---|
+| `destaques` | peneira só os produtos em destaque |
+| `semImagem` | peneira os produtos com a imagem vazia (`''`, um texto sem nada) |
+| `soma` | **`reduce`** soma os preços um por um, começando do 0, como uma calculadora que vai acumulando |
+| `media` | divide a soma pela quantidade de produtos |
+| `.length` | diz quantos itens a lista tem |
+| `toFixed(2)` | mostra o número com 2 casas decimais: `259.90` |
+| `console.log(...)` | mostra cada resposta no terminal |
 
 ---
 
-## :icon[triangle-alert] Erros comuns
+## :icon[square-terminal] Rodando o relatório
 
-:::warning
-- Rodar o relatório de dentro de `src/scripts/`: o Node procura `src/scripts/src/data/catalogo.json` e falha com `ENOENT`. Rode sempre da raiz do `lojinha-regras`
-- Esquecer a extensão no `import` de um arquivo seu: `'../data/produtos'` dá `Cannot find module`
-- Confundir os dois caminhos: no `import`, ele parte do arquivo; no `fs`, da pasta do terminal
-- Editar o JSON à mão e deixar uma vírgula sobrando ou aspas simples: `SyntaxError` no `JSON.parse`
-- Somar um argumento sem converter: `'150' + 10` dá `'15010'`
-:::
+Sempre da pasta raiz, com ou sem categoria no fim:
+
+```bash
+node src/scripts/relatorio-catalogo.js audio
+```
+
+```plaintext
+Relatório do catálogo: audio
+Produtos: 3
+Em destaque: 1
+Preço médio: R$ 259.90
+Sem imagem: 0
+```
+
+- Sem categoria, ele mostra o catálogo inteiro: 12 produtos
+- Escreva a categoria como ela está no arquivo: `audio`, `casa`, `esporte` ou `livros`
+- O preço sai com ponto (`259.90`). No E05, você troca para `R$ 259,90`
+
+Pronto: as perguntas da reunião têm resposta, em um segundo.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+Erro faz parte: quem programa vê vários por dia. Leia a mensagem com calma: ela diz **o que** aconteceu e, quase sempre, **onde**.
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `ENOENT` | arquivo não encontrado | rodar da pasta raiz; conferir o nome do arquivo |
+| `Cannot find module` | o `import` aponta para um arquivo que não existe | conferir o caminho e o `.js` no fim |
+| `SyntaxError` | algo foi escrito errado | olhar a linha indicada: aspas, vírgula, parêntese |
+| `undefined` onde devia ter um valor | o valor não chegou | faltou o argumento? O nome do campo está certo? |
+
+---
+
+## :icon[folder-tree] O erro mais comum: a pasta errada
+
+O caminho dentro do `fs` parte da pasta **em que o terminal está**, não da pasta do script.
+
+```bash
+cd src/scripts
+node relatorio-catalogo.js
+# Error: ENOENT: no such file or directory,
+#   open '...\lojinha-regras\src\scripts\src\data\catalogo.json'
+```
+
+Veja o caminho da mensagem: o Node procurou `src\data` **dentro** de `src\scripts`, e lá não existe. A correção é voltar para a raiz:
+
+```bash
+cd ../..                                  # sobe duas pastas
+node src/scripts/relatorio-catalogo.js    # agora funciona
+```
+
+Na aula 4, o `npm run` acaba com esse problema.
 
 ---
 
 ## Resumo
 
 :::summary
-- `node` sozinho abre o REPL; `node arquivo.js` roda um script de cima para baixo
-- `console.log` mostra valores no terminal, e `process.argv[2]` traz o primeiro argumento, sempre como texto
-- `fs.readFileSync` e `fs.writeFileSync` leem e gravam arquivos, com caminho a partir da pasta do terminal
-- `JSON.parse` transforma texto em objeto, e `JSON.stringify` faz o caminho inverso
-- O `lojinha-regras` nasce com `src/data/produtos.js`, o gerador do `catalogo.json` e o relatório
+- `node` abre o REPL, para testar uma linha; `.exit` sai dele
+- `node arquivo.js` roda um script, de cima para baixo
+- `console.log(...)` mostra valores no terminal; `const` dá um nome a um valor
+- `process.argv[2]` é o primeiro argumento, a palavra depois do nome do arquivo
+- `fs.readFileSync` lê um arquivo e `fs.writeFileSync` grava, a partir da pasta do terminal
+- `JSON.parse` transforma texto em objeto e `JSON.stringify` faz o contrário
+- Erro: leia a mensagem. `ENOENT` quase sempre é a pasta errada
 :::
 
 ---
 
 ## :icon[arrow-right] Próximos passos
 
-O relatório funciona, mas o comando é comprido e o projeto ainda não diz a ninguém o que ele é nem do que precisa. Na aula 4, o `lojinha-regras` ganha um `package.json`:
+Na aula 4, o projeto ganha uma ficha de identidade, o `package.json`:
 
-- :icon[square-terminal] `npm run relatorio audio` no lugar de `node src/scripts/relatorio-catalogo.js audio`
-- :icon[package] um pacote instalado do npm, que colore o relatório
-- :icon[lock] as versões travadas, para todo computador rodar igual
+- :icon[square-terminal] `npm run relatorio audio`, um comando curto, que funciona de qualquer pasta do projeto
+- :icon[package] um pacote baixado da internet, que colore o relatório
 
-Depois, no laboratório, você monta o projeto inteiro no seu computador.
+Depois, no laboratório, você monta o projeto inteiro no seu computador, com a [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html) aberta ao lado.

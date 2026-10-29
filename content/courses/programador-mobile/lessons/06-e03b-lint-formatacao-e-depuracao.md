@@ -151,7 +151,7 @@ console.log('Preço médio: R$', (soma / produtos.length).toFixed(2));
 
 ## :icon[wand] Prettier: formatação sem discussão
 
-Um **formatador** reescreve o código num estilo fixo: aspas, ponto e vírgula, quebras de linha e recuo. O PR volta a discutir o que importa. No E02, o `npx prettier --check` reclamou do seu código porque o padrão dele é aspas duplas. Agora ele entra no projeto com o estilo do curso:
+Um **formatador** reescreve o código num estilo fixo: aspas, ponto e vírgula, quebras de linha e recuo. O PR volta a discutir o que importa. O padrão do Prettier é aspas duplas; no projeto, ele entra com o estilo do curso:
 
 ```bash
 npm install -D prettier
@@ -180,6 +180,7 @@ npx prettier --write .   # formata o projeto inteiro
 npx prettier --check .   # só confere, sem mudar nada
 ```
 
+- O **`npx`** roda uma ferramenta instalada no projeto, sem precisar criar um script para ela no `package.json`
 - O primeiro `--write` reescreve o `produtos.js`: cada produto passava de 100 caracteres e ganha uma propriedade por linha
 - Faça disso um commit só dele: misturada a uma correção, a formatação esconde a correção no diff
 - Quem escreve o `catalogo.json` é o `npm run catalogo`. Deixe-o fora: crie o `.prettierignore` com a linha `src/data/catalogo.json`

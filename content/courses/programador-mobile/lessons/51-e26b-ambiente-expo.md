@@ -66,7 +66,7 @@ cd minhas-tarefas-mobile
 npx expo start
 ```
 
-- `npx` baixa e roda o `create-expo-app` sem instalá-lo (o `npx` do E02); ele cria a pasta e instala as dependências, como o `npm create vite` do E21
+- `npx` baixa e roda o `create-expo-app` sem instalá-lo (o `npx` do E03); ele cria a pasta e instala as dependências, como o `npm create vite` do E21
 - `--template blank` gera o projeto mais simples: um `App.js` em JavaScript
 - `npx expo start` liga o **servidor de desenvolvimento** e mostra um QR code no terminal
 

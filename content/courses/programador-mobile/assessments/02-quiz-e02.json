@@ -1,6 +1,6 @@
 {
   "title": "Quiz: E02 · Node na prática e npm",
-  "description": "Dez questões sobre REPL, process.argv, fs e JSON, package.json, scripts, pacotes, faixas de versão e npx no lojinha-regras.",
+  "description": "Dez questões sobre o REPL, argumentos, arquivos e JSON, a leitura do relatório, o package.json, os scripts e os pacotes do lojinha-regras.",
   "lesson": "e02b-npm-e-package-json",
   "kind": "quiz",
   "passing_score": 70,
@@ -14,141 +14,135 @@
     {
       "id": "q1",
       "type": "single",
-      "prompt": "No REPL do Node, você digita `const total = 199.9 + 89.9` e tecla Enter. O REPL responde `undefined`. O que aconteceu?",
+      "prompt": "No REPL do Node, você digita `console.log('Olá')` e tecla Enter. Aparece:\n\n```bash\nOlá\nundefined\n```\n\nPor que aparece o `undefined`?",
       "options": {
-        "a": "A conta foi feita e guardada no nome `total`; a declaração com `const` não tem resultado para mostrar",
-        "b": "A conta falhou, porque o REPL não soma números com casas decimais",
-        "c": "O valor só fica guardado depois de um `console.log(total)`",
-        "d": "O REPL só guarda valores com `const` quando o código está num arquivo `.js`"
+        "a": "O `console.log` só escreve na tela e não devolve nenhum valor; o REPL mostra `undefined` para dizer \"nada aqui\"",
+        "b": "Deu erro: o texto deveria estar entre aspas duplas",
+        "c": "O REPL não sabe mostrar textos, só números",
+        "d": "Faltou o `;` no fim da linha"
       },
       "answer": "a",
-      "explanation": "O REPL mostra o resultado de cada linha. Uma declaração como `const total = ...` guarda o valor, mas não tem resultado próprio: daí o `undefined`. Digite `total` na linha seguinte e o REPL mostra `289.8`. O `console.log` só mostra valores, não guarda nada, e o REPL faz contas com decimais normalmente.",
+      "explanation": "O REPL sempre mostra o que a linha devolve. Uma conta como `2 + 2` devolve `4`. O `console.log` escreve `Olá` na tela, mas não devolve nada, e o REPL mostra `undefined`. Não é erro.",
       "points": 1
     },
     {
       "id": "q2",
       "type": "single",
-      "prompt": "Você roda o relatório assim:\n\n```bash\nnode src/scripts/relatorio-catalogo.js livros 5\n```\n\nO que guardam `process.argv[2]` e `process.argv[3]`?",
+      "prompt": "O arquivo `ola.js` tem:\n\n```javascript\nconst nome = process.argv[2];\nconsole.log('Olá,', nome);\n```\n\nO que aparece com `node ola.js Ana Souza`?",
       "options": {
-        "a": "`'livros'` e `'5'`, os dois como texto",
-        "b": "`'livros'` e `5`, um texto e um número",
-        "c": "O caminho do `node` e o caminho do script",
-        "d": "`'src/scripts/relatorio-catalogo.js'` e `'livros'`"
+        "a": "`Olá, Ana`",
+        "b": "`Olá, Ana Souza`",
+        "c": "`Olá, Souza`",
+        "d": "`Olá, undefined`"
       },
       "answer": "a",
-      "explanation": "As posições 0 e 1 de `process.argv` são o caminho do `node` e o do script; os seus argumentos começam na posição 2. Tudo o que vem do comando chega como texto, inclusive o `5`: a opção com o número é a mais tentadora, mas para fazer conta é preciso converter com `Number`, senão `'5' + 10` vira `'510'`.",
-      "points": 2
+      "explanation": "O espaço separa os argumentos. `process.argv[2]` é o primeiro, `Ana`; o `Souza` é o segundo, e o script não usa. Para mandar o nome inteiro como um argumento só, use aspas: `node ola.js \"Ana Souza\"`.",
+      "points": 1
     },
     {
       "id": "q3",
       "type": "fill",
       "prompt": "Complete o script para ler o catálogo como texto e transformá-lo em objeto:\n\n```javascript\nimport fs from 'node:fs';\n\nconst texto = fs.___('src/data/catalogo.json', 'utf-8');\nconst catalogo = JSON.___(texto);\nconsole.log(catalogo.produtos.length);\n```",
-      "answer": [
-        [
-          "readFileSync"
-        ],
-        [
-          "parse"
-        ]
-      ],
-      "explanation": "`fs.readFileSync` lê o arquivo inteiro e, com `'utf-8'`, devolve texto. `JSON.parse` transforma esse texto num objeto com `categorias` e `produtos`. `JSON.stringify` faz o caminho contrário, de objeto para texto, e é o que o gerador usa antes de gravar com `fs.writeFileSync`.",
+      "answer": [["readFileSync"], ["parse"]],
+      "explanation": "`fs.readFileSync` lê o arquivo e, com `'utf-8'`, devolve o texto dele. `JSON.parse` transforma o texto em objeto, e aí dá para usar `catalogo.produtos`. O caminho contrário, de objeto para texto, é o `JSON.stringify`.",
       "points": 2
     },
     {
       "id": "q4",
       "type": "single",
-      "prompt": "O relatório funciona com `node src/scripts/relatorio-catalogo.js`, rodado na raiz do `lojinha-regras`. Uma colega entra na pasta com `cd src/scripts`, roda `node relatorio-catalogo.js` e recebe `ENOENT: no such file or directory`, apontando para `...\\lojinha-regras\\src\\scripts\\src\\data\\catalogo.json`. O script lê o arquivo assim:\n\n```javascript\nconst texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');\n```\n\nPor que deu erro?",
+      "prompt": "Qual destas linhas é um JSON válido?",
       "options": {
-        "a": "O caminho do `fs` parte da pasta em que o comando foi rodado, agora `src/scripts/`, e passou a apontar para uma pasta que não existe",
-        "b": "O caminho do `fs` parte da pasta do script, e o certo seria escrever `'../data/catalogo.json'` em qualquer situação",
-        "c": "O Windows só aceita caminhos com `\\`, e o script usa `/`",
-        "d": "Faltou a extensão `.js` no nome do arquivo `catalogo.json`"
+        "a": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199.9}`",
+        "b": "`{'nome': 'Fone Bluetooth', 'preco': 199.9}`",
+        "c": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199,9}`",
+        "d": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199.9,}`"
       },
       "answer": "a",
-      "explanation": "No `fs`, um caminho como `'src/data/catalogo.json'` parte da pasta do terminal, não da pasta do script. Rodando de dentro de `src/scripts/`, ele vira `src/scripts/src/data/catalogo.json`, que não existe. A alternativa tentadora confunde com o `import`: lá, sim, o caminho parte do arquivo. A correção é rodar da raiz, que é de onde o `npm run` sempre roda. O Node aceita `/` também no Windows, e um arquivo JSON não leva `.js`.",
-      "points": 2
+      "explanation": "No JSON, nomes e textos vão entre aspas duplas, número usa ponto e não pode sobrar vírgula no fim. A **b** usa aspas simples, a **c** escreve o preço com vírgula e a **d** tem uma vírgula sobrando. As três fazem o `JSON.parse` falhar com `SyntaxError`.",
+      "points": 1
     },
     {
       "id": "q5",
       "type": "single",
-      "prompt": "Logo depois de `npm init -y`, o relatório passou a falhar com `SyntaxError: Cannot use import statement outside a module`. No `package.json` está `\"type\": \"commonjs\"`. Qual é a correção?",
+      "prompt": "Na pasta raiz do `lojinha-regras`, o relatório funciona. Uma colega entra em `src/scripts` com `cd src/scripts`, roda `node relatorio-catalogo.js` e recebe um erro `ENOENT` que termina em `src\\scripts\\src\\data\\catalogo.json`. O que aconteceu?",
       "options": {
-        "a": "Trocar a linha por `\"type\": \"module\"`",
-        "b": "Apagar as linhas de `import` do relatório",
-        "c": "Rodar `npm install` para baixar o suporte a `import`",
-        "d": "Apagar o `package.json`, porque sem ele o script funcionava"
+        "a": "O caminho do `fs` parte da pasta em que o terminal está; dentro de `src/scripts`, ele procura uma pasta que não existe",
+        "b": "O arquivo `catalogo.json` foi apagado",
+        "c": "O Node não aceita rodar arquivos de dentro de uma subpasta",
+        "d": "Faltou rodar `npm install`"
       },
       "answer": "a",
-      "explanation": "O campo `type` diz como o Node lê os `.js` do projeto: `commonjs` é o sistema antigo, que não conhece `import`; `module` é o dos módulos ES, o mesmo do app. Sem `package.json`, o Node percebia o `import` sozinho, e por isso apagar o arquivo parece resolver; mas o projeto perde os scripts e a lista de pacotes. Sem `import`, o relatório não tem o `fs`, e não há pacote a instalar para isso.",
+      "explanation": "O caminho `'src/data/catalogo.json'` parte da pasta do terminal. De dentro de `src/scripts`, ele vira `src/scripts/src/data/catalogo.json`, como a própria mensagem mostra. A correção é voltar para a raiz com `cd ../..`, ou usar `npm run relatorio`, que sempre roda da raiz.",
       "points": 1
     },
     {
       "id": "q6",
       "type": "single",
-      "prompt": "O `package.json` do `lojinha-regras` tem:\n\n```json\n\"scripts\": {\n  \"relatorio\": \"node src/scripts/relatorio-catalogo.js\"\n}\n```\n\nQual comando mostra o relatório só da categoria livros?",
+      "prompt": "No relatório, o que esta linha faz?\n\n```javascript\nconst destaques = lista.filter((produto) => produto.destaque);\n```",
       "options": {
-        "a": "`npm run relatorio livros`",
-        "b": "`npm relatorio livros`",
-        "c": "`npm run livros relatorio`",
-        "d": "`node relatorio livros`"
+        "a": "Passa produto por produto e fica só com os que estão em destaque",
+        "b": "Apaga do arquivo os produtos que não estão em destaque",
+        "c": "Coloca todos os produtos em destaque",
+        "d": "Conta quantos produtos existem no catálogo"
       },
       "answer": "a",
-      "explanation": "`npm run` seguido do nome do script roda o comando dele, e o que vem depois do nome vai para o script, que lê `livros` em `process.argv[2]`. Sem o `run`, o npm procura um comando próprio chamado `relatorio` e responde `Unknown command`: só `start` e `test` dispensam o `run`. O `node` precisa do caminho do arquivo, não do nome do script.",
+      "explanation": "O `filter` funciona como uma peneira: olha cada produto e guarda numa lista nova só os que passam no teste, aqui `produto.destaque`. A lista original e o arquivo não mudam. Para saber quantos são, o relatório usa `destaques.length`.",
       "points": 1
     },
     {
       "id": "q7",
       "type": "single",
-      "prompt": "Num `package.json`, uma biblioteca aparece como `\"~2.4.1\"`. Quais versões o npm pode instalar para ela?",
+      "prompt": "Logo depois do `npm init -y`, o relatório passou a falhar com `SyntaxError: Cannot use import statement outside a module`. No `package.json` está `\"type\": \"commonjs\"`. Como corrigir?",
       "options": {
-        "a": "De `2.4.1` até antes de `2.5.0`, como `2.4.7`",
-        "b": "De `2.4.1` até antes de `3.0.0`, como `2.9.0`",
-        "c": "Somente a `2.4.1`, exatamente",
-        "d": "Qualquer versão a partir de `2.4.1`, inclusive a `3.0.0`"
+        "a": "Trocar a linha por `\"type\": \"module\"`",
+        "b": "Apagar as linhas de `import` do relatório",
+        "c": "Rodar `npm install` de novo",
+        "d": "Apagar o `package.json`"
       },
       "answer": "a",
-      "explanation": "O `~` aceita só correções (o último número): de `2.4.1` até antes de `2.5.0`. A faixa até antes de `3.0.0` é a do `^`, que também aceita recursos novos e é a que o `npm install` grava por padrão. A versão exata se escreve sem símbolo, e nenhum dos dois símbolos aceita uma versão maior como `3.0.0`.",
+      "explanation": "O código usa `import`, e o modo `commonjs` não entende `import`. Com `\"type\": \"module\"`, o Node lê os arquivos do projeto no modo certo. Deixe uma linha `type` só.",
       "points": 1
     },
     {
       "id": "q8",
-      "type": "truefalse",
-      "prompt": "O `package-lock.json` é gerado pelo npm a cada instalação; por isso, quando você leva o projeto para outro computador, pode deixá-lo para trás, como o `node_modules/`.",
-      "answer": false,
-      "explanation": "O lock é gerado pelo npm, mas é ele que registra a versão exata de cada pacote. Com ele junto, o outro computador instala as mesmas versões; sem ele, o `npm install` pode escolher outra versão dentro da faixa do `package.json`. O `node_modules/` fica para trás porque é recriado a partir do `package.json` e do lock.",
+      "type": "single",
+      "prompt": "O `package.json` do `lojinha-regras` tem:\n\n```json\n\"scripts\": {\n  \"relatorio\": \"node src/scripts/relatorio-catalogo.js\"\n}\n```\n\nQual comando mostra o relatório só da categoria livros?",
+      "options": {
+        "a": "`npm run relatorio livros`",
+        "b": "`npm relatorio livros`",
+        "c": "`npm run livros`",
+        "d": "`node relatorio livros`"
+      },
+      "answer": "a",
+      "explanation": "`npm run` mais o apelido roda o comando do script, e o que vem depois do apelido vai para o script como argumento. Sem o `run`, o npm responde `Unknown command`.",
       "points": 1
     },
     {
       "id": "q9",
       "type": "multiple",
-      "prompt": "Na raiz do `lojinha-regras`, você roda `npm install picocolors`. O que muda no projeto?",
+      "prompt": "Na pasta raiz do `lojinha-regras`, você roda `npm install picocolors`. O que muda no projeto? Marque todas as certas.",
       "options": {
-        "a": "Aparece a pasta `node_modules/picocolors/`, com o código do pacote",
-        "b": "O `package.json` ganha a seção `dependencies` com `\"picocolors\": \"^1.1.1\"`",
-        "c": "O `package-lock.json` registra a versão exata instalada",
-        "d": "O `relatorio-catalogo.js` ganha sozinho a linha `import pc from 'picocolors';`",
-        "e": "O `catalogo.json` é gravado de novo, agora com cores"
+        "a": "Aparece a pasta `node_modules/`, com o código do pacote",
+        "b": "O `package.json` ganha `\"picocolors\"` em `\"dependencies\"`",
+        "c": "Aparece o `package-lock.json`, com a versão exata instalada",
+        "d": "O relatório ganha sozinho a linha `import pc from 'picocolors'`"
       },
-      "answer": [
-        "a",
-        "b",
-        "c"
-      ],
-      "explanation": "O `npm install` baixa o pacote para o `node_modules`, anota a faixa em `dependencies` e grava a versão exata no lock. Ele não mexe no seu código: o `import` você escreve, e só então o relatório usa as cores. O `catalogo.json` só muda quando o gerador roda, e cor é coisa do terminal, não do arquivo.",
+      "answer": ["a", "b", "c"],
+      "explanation": "O `npm install` baixa o pacote para o `node_modules`, anota o nome em `dependencies` e grava a versão exata no `package-lock.json`. Ele não mexe no seu código: o `import` você escreve.",
       "points": 2
     },
     {
       "id": "q10",
       "type": "single",
-      "prompt": "O `lojinha-regras` não tem o Prettier no `package.json`. O que acontece quando você roda `npx prettier --check src`?",
+      "prompt": "No `package.json`, o pacote aparece como `\"picocolors\": \"^1.1.1\"`. O autor publicou as versões `1.2.0` e `2.0.0`. Sem `package-lock.json`, qual delas o `npm install` pode instalar?",
       "options": {
-        "a": "O npx baixa o Prettier, roda a verificação e descarta o pacote, sem mudar o `package.json`",
-        "b": "O npx acrescenta o Prettier em `dependencies` e cria a pasta `node_modules/prettier`",
-        "c": "O comando falha, porque o npx só roda pacotes listados no `package.json`",
-        "d": "O Prettier reescreve todos os arquivos de `src/` com o estilo dele"
+        "a": "A `1.2.0`, porque o primeiro número continua 1",
+        "b": "A `2.0.0`, porque é a mais nova",
+        "c": "Só a `1.1.1` exata, sem atualização",
+        "d": "Qualquer uma, porque o `^` aceita tudo"
       },
       "answer": "a",
-      "explanation": "Quando o pacote não está no `node_modules`, o `npx` baixa, roda e descarta: o projeto fica como estava. Se o pacote estivesse instalado, como o ESLint no E03, o `npx` usaria a versão do projeto. O `--check` só aponta os arquivos fora do padrão; quem reescreve é o `--write`.",
+      "explanation": "O `^` aceita correções e novidades, desde que o primeiro número, o principal, continue o mesmo. A `2.0.0` muda o primeiro número e pode quebrar o código, então fica de fora.",
       "points": 1
     }
   ]

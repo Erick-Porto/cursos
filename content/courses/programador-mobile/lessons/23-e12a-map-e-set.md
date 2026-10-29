@@ -79,7 +79,7 @@ new Set([{ id: 7 }, { id: 7 }]).size; // 2: nada foi descartado
 ```
 
 - Guarde **ids**, não produtos: um produto igual que vem de outro lugar é outro objeto, e o Set não o reconhece. São as etiquetas e caixas do E11
-- O id que chega pelo `process.argv` é texto, como no E02: converta com `Number` antes de perguntar
+- O id que chega pelo `process.argv` é texto, como no E05: converta com `Number` antes de perguntar
 
 ---
 

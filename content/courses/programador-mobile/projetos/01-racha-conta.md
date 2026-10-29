@@ -202,7 +202,7 @@ O que fazer:
 }
 ```
 
-Para a lista, `console.log(conta.itens)` funciona. O `console.table(conta.itens)`, citado na aula 4, mostra a mesma lista como tabela.
+Para a lista, `console.log(conta.itens)` funciona: ele mostra a lista inteira.
 
 Pronto quando `npm run racha` mostra algo assim:
 

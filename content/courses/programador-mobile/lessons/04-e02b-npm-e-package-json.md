@@ -1,13 +1,13 @@
 ---
 title: npm e o package.json
-summary: O package.json do lojinha-regras linha a linha, scripts, um pacote instalado, faixas de versão, lock e npx.
+summary: A ficha do projeto, comandos com nome, um pacote baixado da internet e o que levar para outro computador.
 module: ambiente-js
 duration_minutes: 40
 objectives:
-  - Criar o package.json com npm init e configurar o projeto como módulo ES
+  - Criar o package.json com npm init e deixar o projeto pronto para usar import
   - Dar nome aos comandos do projeto com scripts e rodá-los com npm run
-  - Instalar um pacote e explicar o papel do node_modules e do package-lock.json
-  - Interpretar as faixas de versão com ^ e ~ e executar ferramentas com npx
+  - Instalar um pacote e saber o papel do node_modules e do package-lock.json
+  - Recuperar um projeto copiado para outro computador com npm install
 ---
 
 # npm e o package.json
@@ -19,38 +19,55 @@ Programador Mobile · Encontro E02 · Aula 4 de 89
 ## O que você vai aprender
 
 :::goal
-- Criar o `package.json` do `lojinha-regras` e ler cada linha dele
-- Dar nome aos comandos com scripts: `npm run relatorio`
-- Instalar um pacote e entender o `node_modules` e o `package-lock.json`
-- Ler faixas de versão com `^` e `~`
-- Rodar uma ferramenta sem instalar, com `npx`
+- Criar a ficha do projeto, o `package.json`
+- Trocar comandos compridos por nomes curtos: `npm run relatorio`
+- Baixar e usar um pacote, código pronto feito por outra pessoa
+- Levar o projeto para outro computador sem perder nada
 :::
+
+Como na aula 3, estes slides servem para você rever em casa, passo a passo.
+
+---
+
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **npm** | o programa que baixa pacotes; veio junto com o Node no E01 |
+| **pacote** | código pronto, feito por outra pessoa, que você baixa e usa no seu projeto |
+| **`package.json`** | a ficha do projeto: o nome, os comandos e os pacotes de que ele precisa |
+| **script** (no npm) | um apelido para um comando comprido |
+| **dependência** | um pacote de que o projeto precisa para funcionar |
 
 ---
 
 ## Funciona no meu computador
 
-O relatório está pronto e, nesta aula, ganha cores com um pacote baixado da internet. Você copia a pasta `lojinha-regras` para o computador do laboratório, sem a pasta do pacote, que é grande, e roda o relatório:
+O relatório da aula 3 ganha cores nesta aula, com um pacote baixado da internet. Você copia a pasta para o computador do laboratório, roda o relatório e aparece:
 
 ```plaintext
 Error [ERR_MODULE_NOT_FOUND]: Cannot find package 'picocolors'
 ```
 
-O código é o mesmo. Faltou o que o código usa, e o outro computador não tem como adivinhar: nem quais pacotes instalar, nem em qual versão, nem qual comando roda o relatório.
+O código é o mesmo. Faltou o pacote que o código usa, e o outro computador não tem como adivinhar qual era.
 
 :::question
-Onde um projeto anota do que ele precisa, para qualquer computador instalar tudo igual com um comando?
+Pense numa receita de bolo. O que ela traz, além do modo de preparo, para qualquer pessoa conseguir repetir?
 :::
+
+A lista de ingredientes. O `package.json` é essa lista para o projeto.
 
 ---
 
-## :icon[package] npm init: nasce o package.json
+## :icon[package] npm init: nasce a ficha do projeto
 
-O **npm** é o gerenciador de pacotes que veio com o Node no E01. Na raiz do `lojinha-regras`:
+Na pasta raiz do `lojinha-regras`, rode:
 
 ```bash
 npm init -y
 ```
+
+O npm cria o arquivo `package.json`. O `-y` aceita as respostas padrão sem perguntar nada:
 
 ```json
 {
@@ -68,48 +85,35 @@ npm init -y
 }
 ```
 
-O **`package.json`** é a ficha do projeto: o que ele é, quais comandos tem e de quais pacotes precisa. É JSON, com as regras da aula 3. O `-y` aceita todas as respostas padrão; sem ele, o npm pergunta campo por campo.
-
----
-
-## :icon[file-code] O package.json linha a linha
-
-| Campo | O que guarda |
-|---|---|
-| `name` e `version` | nome e versão do projeto; o nome vem da pasta |
-| `description` | uma frase sobre o projeto: escreva "Regras de negócio da Lojinha" |
-| `main` | o arquivo de entrada quando outro projeto importa este; o `lojinha-regras` não usa |
-| `scripts` | comandos com nome; o `test` criado só mostra um erro até o E04 |
-| `keywords`, `author` e `license` | dados para quem publica o pacote no npm |
-| `type` | como o Node lê os arquivos `.js` do projeto |
-
-O npm escreve o arquivo e você edita no VS Code. Os pacotes que você instalar vão aparecer numa seção nova, `dependencies`.
+Hoje, só três campos importam: o **nome**, os **`scripts`** e o **`type`**. O resto pode ficar como está.
 
 ---
 
 ## :icon[circle-alert] "type": "module"
 
-Rode o relatório logo depois do `npm init`:
+Rode o relatório depois do `npm init`:
 
 ```plaintext
 SyntaxError: Cannot use import statement outside a module
 ```
 
-Sem `package.json`, o Node percebia o `import` e lia o arquivo como **módulo ES**. Agora quem manda é o campo `type`: com `"commonjs"`, ele lê os `.js` no sistema antigo do Node, o **CommonJS**, que não conhece `import`. Em versões mais antigas do npm, a linha `type` não aparece; aí o script roda, mas com o aviso `MODULE_TYPELESS_PACKAGE_JSON`.
-
-A correção é a mesma nos dois casos:
+O seu código usa `import`. O `"type": "commonjs"` diz ao Node para ler os arquivos num modo antigo, que não entende `import`. A correção é trocar uma palavra no `package.json`:
 
 ```json
 "type": "module"
 ```
 
-Com ela, todo `.js` do projeto usa `import` e `export`, como o app da Lojinha. Os dois sistemas de módulos voltam no E11.
+Salve e rode de novo: funciona.
+
+:::warning
+Deixe **uma** linha `type` só. Se houver duas, vale a última. Em computadores com npm mais antigo, a linha não aparece: aí, acrescente.
+:::
 
 ---
 
-## :icon[square-terminal] Scripts: comandos com nome
+## :icon[square-terminal] Scripts: apelidos para comandos
 
-Em `scripts`, cada linha é um nome e o comando que ele roda:
+Digitar `node src/scripts/relatorio-catalogo.js` toda vez cansa. Em `scripts`, você dá um apelido para cada comando:
 
 ```json
 "scripts": {
@@ -121,20 +125,64 @@ Em `scripts`, cada linha é um nome e o comando que ele roda:
 
 ```bash
 npm run catalogo          # grava o catalogo.json
-npm run relatorio audio   # o que vem depois do nome vai para o script
-npm run                   # lista os scripts do projeto
+npm run relatorio         # relatório do catálogo inteiro
+npm run relatorio audio   # o que vem depois do apelido vai para o script
+npm run                   # lista os apelidos que existem
 ```
 
-- O npm roda os scripts a partir da raiz do projeto, mesmo com o terminal numa subpasta: o `ENOENT` da aula 3 some
-- `npm test` dispensa o `run`; no E04, o `test` passa a rodar o Jest
-- Uma opção que começa com `--` precisa de um `--` antes: `npm test -- --watch`
-- Quem recebe o projeto descobre os comandos lendo o `package.json`
+O `test` já vem pronto e só mostra um erro por enquanto. Ele ganha função no E04.
+
+---
+
+## :icon[circle-check] Por que o npm run é melhor
+
+- **Funciona de qualquer pasta do projeto.** O npm sempre roda o comando a partir da pasta raiz. O `ENOENT` da pasta errada, da aula 3, some
+- **Quem recebe o projeto descobre os comandos** só de olhar o `package.json`
+- **Menos erro de digitação:** o caminho comprido fica escrito uma vez só
+
+Lembre o `run`: `npm relatorio` sem ele dá `Unknown command`.
+
+---
+
+## :icon[triangle-alert] Cuidado com as vírgulas
+
+O `package.json` é JSON, com as regras da aula 3. O erro mais comum é a vírgula:
+
+```json
+"scripts": {
+  "catalogo": "node src/scripts/gerar-catalogo.js",
+  "relatorio": "node src/scripts/relatorio-catalogo.js"
+},
+```
+
+- Cada linha dentro das chaves termina com vírgula, **menos a última**
+- Aspas duplas em tudo: nos nomes e nos comandos
+
+Vírgula faltando ou sobrando faz todo `npm run` falhar com **`EJSONPARSE`**. A mensagem traz a linha e a coluna: vá direto nelas.
+
+---
+
+## Pratique
+
+:::example Desafio
+Com os scripts do slide anterior, qual comando:
+
+1. Mostra o relatório só dos livros?
+2. Grava o `catalogo.json` de novo?
+3. Mostra quais apelidos existem?
+:::
+
+:::tip Resposta
+1. `npm run relatorio livros`
+2. `npm run catalogo`
+3. `npm run`, sem nada depois
+:::
 
 ---
 
 ## :icon[download] Instalando um pacote
 
-**Pacote** é código pronto, publicado por alguém no npm. O **picocolors** pinta texto no terminal:
+**Pacote** é código pronto. O **picocolors** pinta texto no terminal. Na pasta raiz:
 
 ```bash
 npm install picocolors
@@ -142,19 +190,21 @@ npm install picocolors
 # found 0 vulnerabilities
 ```
 
-| O que o comando fez | Onde |
-|---|---|
-| baixou o pacote | `node_modules/picocolors/` |
-| anotou a faixa de versão | `"dependencies": { "picocolors": "^1.1.1" }`, no `package.json` |
-| registrou a versão exata | `package-lock.json` |
+O comando faz três coisas:
 
-Ferramentas que só quem programa usa, como o ESLint do E03 e o Jest do E04, entram com `npm install -D`, numa seção à parte: **`devDependencies`**.
+| O que mudou | Onde |
+|---|---|
+| baixou o código do pacote | na pasta nova `node_modules/` |
+| anotou o pacote na ficha | no `package.json`, em `"dependencies"` |
+| anotou a versão exata | no arquivo novo `package-lock.json` |
+
+O `found 0 vulnerabilities` quer dizer que não há falha de segurança conhecida nesse pacote.
 
 ---
 
 ## :icon[sparkles] Usando o pacote no relatório
 
-No topo de `relatorio-catalogo.js`, importe o pacote; nas linhas do título e da imagem, use as cores:
+No topo do `relatorio-catalogo.js`, acrescente a segunda linha de `import`. Depois, troque o primeiro e o último `console.log`:
 
 ```javascript
 import fs from 'node:fs';
@@ -166,163 +216,110 @@ console.log(pc.bold('Relatório do catálogo:'), titulo);
 console.log(pc.yellow('Sem imagem:'), semImagem.length);
 ```
 
-- Um pacote se importa pelo **nome**, sem `./` e sem extensão: o Node procura em `node_modules`
-- `pc.bold` devolve o texto em negrito e `pc.yellow`, em amarelo
-- `npm run relatorio`: o título sai em negrito e o "Sem imagem" em amarelo
+- Pacote se importa pelo **nome**, sem `./` e sem `.js`: o Node procura dentro do `node_modules`
+- `pc.bold` deixa o texto em negrito, e `pc.yellow`, em amarelo
+
+Rode `npm run relatorio`: o título sai em negrito.
 
 ---
 
 ## :icon[folder] node_modules: grande e descartável
 
-O **`node_modules/`** guarda os pacotes baixados e os pacotes de que eles dependem. Hoje tem um só; no E04, o Jest e o Babel trazem mais de 200 pacotes e quase 7 mil arquivos.
+A pasta **`node_modules/`** guarda o código dos pacotes baixados. Hoje tem um pacote só; no E04, chega a mais de 200.
 
-- Apagou? `npm install` lê o `package.json` e o lock e baixa tudo de novo
-- Para levar o projeto, leve o resto e rode `npm install` no destino; no E03, o `.gitignore` deixa a pasta fora do Git
-- Não edite nada lá dentro: a próxima instalação desfaz a mudança
-- `Cannot find package` quase sempre é `npm install` que faltou, ou terminal na pasta errada
+- **Não vai junto** quando você leva o projeto: é grande e o npm baixa de novo
+- **Apagou?** Rode `npm install`, sem nome de pacote: o npm lê a ficha e baixa tudo outra vez
+- **Não mexa** em nada lá dentro: a próxima instalação desfaz a mudança
 
-Era o caso do computador do laboratório: a pasta chegou sem `node_modules`, e um `npm install` resolve.
+O erro `Cannot find package` quase sempre quer dizer: faltou rodar `npm install`.
 
 ---
 
-## :icon[tag] Versão semântica: X.Y.Z
+## :icon[lock] package-lock.json: a nota fiscal
 
-Quase todo pacote segue a **versão semântica** (semver): **MAJOR.MINOR.PATCH**, ou maior, menor e correção. Imagine uma biblioteca de datas na versão `2.4.1`:
+O `package.json` diz **quais** pacotes o projeto usa. O **`package-lock.json`** guarda a **versão exata** de cada um, como uma nota fiscal do que foi instalado.
 
-| Lançamento | Nova versão | O que significa para o seu projeto |
+- Com ele, todo computador instala as mesmas versões, e o projeto funciona igual em todos
+- **Vai junto** com o projeto, sempre
+- **Não edite à mão:** quem escreve nele é o npm
+
+Não apague o lock para "resolver" um erro: as versões deixam de ser as mesmas para todo mundo.
+
+---
+
+## :icon[tag] O ^ antes da versão
+
+No `package.json` aparece `"picocolors": "^1.1.1"`. A versão tem três números: **principal.novidade.correção**.
+
+| Versão nova do pacote | O `^` aceita? | Por quê |
 |---|---|---|
-| Correção | `2.4.2` | um bug corrigido; seu código não muda |
-| Menor | `2.5.0` | recurso novo; o que existia continua igual |
-| Maior | `3.0.0` | algo mudou de propósito e pode quebrar seu código |
+| `1.1.2` | sim | só corrige um defeito |
+| `1.2.0` | sim | traz novidade, sem quebrar o que já existia |
+| `2.0.0` | não | o primeiro número mudou: pode quebrar o seu código |
 
-Antes de subir uma versão maior, leia as notas de lançamento (o *changelog*). Semver é uma promessa do autor, não uma garantia: por isso a equipe trava as versões.
-
----
-
-## :icon[sliders-horizontal] Faixas: ^ e ~
-
-No `package.json`, o símbolo antes do número diz quais versões o npm pode instalar:
-
-:::center
-![Diagrama: numa reta de versões, a faixa ~2.4.1 vai até 2.4.9 e para antes de 2.5.0; a faixa ^2.4.1 vai até 2.9.3 e para antes de 3.0.0, a versão maior](images/e02-faixas-semver.svg)
-:::
-
-- **`"~2.4.1"`** aceita só correções (`2.4.9`); **`"^2.4.1"`** aceita também recursos novos (`2.9.3`); nenhum dos dois aceita `3.0.0`
-- Sem símbolo, `"2.4.1"` aceita só a própria `2.4.1`
-- O `npm install` grava `^` por padrão: o `"^1.1.1"` do picocolors aceita uma `1.2.0`, nunca uma `2.0.0`
+O `^` quer dizer: "pode atualizar, desde que o primeiro número continue o mesmo".
 
 ---
 
-## :icon[lock] package-lock.json: a versão exata
+## :icon[arrow-left-right] Levando o projeto para outro computador
 
-O `package.json` guarda a faixa que você pediu. O **`package-lock.json`** guarda a versão exata instalada de cada pacote e de cada dependência deles.
+| Arquivo ou pasta | Vai junto? |
+|---|---|
+| `src/` (o seu código) | sim |
+| `package.json` | sim |
+| `package-lock.json` | sim |
+| `node_modules/` | não |
 
-| Arquivo | Guarda | Vai junto com o projeto? |
-|---|---|---|
-| `package.json` | as faixas que você pediu | sim |
-| `package-lock.json` | a versão exata de tudo | sim |
-| `node_modules/` | os arquivos baixados | não |
-
-- O lock anda sempre junto com o `package.json`: no E03, os dois entram em todo commit que muda pacotes
-- Nunca edite o lock à mão: quem escreve nele é o npm
-- `npm install` respeita o lock; `npm ci` apaga o `node_modules` e instala exatamente o lock, como a integração contínua faz no E04
-
----
-
-## Pense
-
-:::question
-No `package.json` de um projeto, uma biblioteca de datas está como `"^2.4.1"`. O autor já publicou `2.4.3`, `2.6.0` e `3.0.0`.
-
-1. Sem `package-lock.json`, que versão um `npm install` instala?
-2. E se o lock que veio com o projeto registrou `2.4.1`?
-3. E se a faixa fosse `"~2.4.1"`, sem lock?
-:::
-
-:::tip Resposta
-1. `2.6.0`: a mais nova dentro do `^`, que para antes de `3.0.0`
-2. `2.4.1`, em todos os computadores: o lock manda enquanto a versão dele couber na faixa
-3. `2.4.3`: o `~` só aceita correções
-
-Com o lock junto, o computador do laboratório recebe as mesmas versões que o seu.
-:::
-
----
-
-## :icon[zap] npx: executar sem instalar
-
-O **`npx`** roda o comando de um pacote. Se o pacote está no `node_modules` do projeto, usa essa versão; se não está, baixa, roda e descarta, sem mexer no `package.json`.
+No outro computador, abra a pasta raiz e rode:
 
 ```bash
-npx prettier --check src
-# Need to install the following packages: prettier  Ok to proceed? (y)
-# [warn] Code style issues found in 4 files. Run Prettier with --write to fix.
+npm install
 ```
 
-O **Prettier** é um formatador de código. Ele reclamou de 4 arquivos porque ainda não conhece o estilo da equipe: prefere aspas duplas, por exemplo. No E03, ele entra no projeto com as regras combinadas.
-
-| Comando | O que acontece |
-|---|---|
-| `npx prettier --check src` | baixa o Prettier só para esta vez |
-| `npx eslint .` (E03) | usa o ESLint instalado no projeto |
-| `npx jest` (E04) | usa o Jest instalado no projeto |
+Pronto: o npm lê a ficha e a nota fiscal e baixa tudo. Era só isso que faltava no computador do laboratório, no começo da aula.
 
 ---
 
-## :icon[search-check] Como escolher um pacote
+## :icon[siren] Quando aparece um erro
 
-Antes de instalar, responda:
-
-1. **Precisa mesmo?** `toFixed`, `toLocaleString` e `console.table` já vêm com o JavaScript; não instale um pacote por uma função de cinco linhas
-2. **O nome está certo?** Pacotes falsos imitam nomes conhecidos: confira letra por letra na página do npmjs.com
-3. **Está vivo?** Última versão recente e issues respondidas no GitHub
-4. **Quantos usam?** Downloads por semana são sinal, não prova
-5. **O que ele traz junto?** O picocolors não depende de nenhum outro pacote
-6. **A licença permite uso comercial?** MIT, ISC e Apache permitem
-
-Depois de instalar, `npm audit` compara as versões com uma lista pública de falhas de segurança. A meta é `found 0 vulnerabilities`.
-
----
-
-## :icon[triangle-alert] Erros comuns
-
-:::warning
-- Rodar `npm` fora da raiz do projeto: `Could not read package.json`
-- Deixar o `"type": "commonjs"` do `npm init`: `Cannot use import statement outside a module`
-- Vírgula sobrando ao editar o `package.json`: `EJSONPARSE` e nenhum script roda
-- `npm relatorio` sem o `run`: `Unknown command`; só `start` e `test` dispensam
-- Copiar o projeto e não rodar `npm install`: `Cannot find package 'picocolors'`
-- Apagar o `package-lock.json` para "resolver" um erro: as versões deixam de ser as mesmas para todos
-:::
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Could not read package.json` | não há `package.json` nesta pasta | ir para a pasta raiz do projeto |
+| `Cannot use import statement outside a module` | o `type` não é `module` | trocar para `"type": "module"` |
+| `EJSONPARSE` | vírgula ou aspas erradas no `package.json` | ir na linha e coluna da mensagem |
+| `Missing script` | o apelido não existe | `npm run` lista os que existem |
+| `Unknown command` | faltou o `run` | `npm run relatorio` |
+| `Cannot find package` | o pacote não foi baixado | `npm install` na pasta raiz |
 
 ---
 
 ## Resumo
 
 :::summary
-- `npm init -y` cria o `package.json`, a ficha do projeto; `"type": "module"` libera `import` e `export` nos `.js`
-- `scripts` dão nome aos comandos: `npm run relatorio audio`, sempre a partir da raiz
-- `npm install` baixa para o `node_modules`, anota a faixa em `dependencies` e a versão exata no `package-lock.json`
-- `~` aceita correções e `^` aceita também recursos novos; nenhum aceita versão maior
-- `npx` roda uma ferramenta sem instalar no projeto
+- `npm init -y` cria o `package.json`, a ficha do projeto
+- `"type": "module"` deixa o projeto usar `import`
+- Em `scripts`, cada apelido roda um comando: `npm run relatorio audio`, sempre a partir da raiz
+- `npm install pacote` baixa para o `node_modules`, anota em `dependencies` e grava a versão exata no `package-lock.json`
+- Para levar o projeto: tudo, menos o `node_modules`. No destino, `npm install`
+- O `^` aceita correções e novidades, nunca um novo número principal
 :::
 
-Próximo encontro: o `lojinha-regras` vai para o GitHub, com Git, branch e Pull Request.
+Próximo encontro: o `lojinha-regras` vai para o GitHub.
 
 ---
 
 ## :icon[flask-conical] No laboratório
 
-O `lojinha-regras` completo no seu computador, seguindo a [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html).
+O `lojinha-regras` completo no seu computador. Siga a [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html): ela traz cada passo, o código para copiar e as saídas esperadas.
 
 :::steps
-1. Pastas `src/data/` e `src/scripts/`; o `ola.js` pode ser apagado
-2. `src/data/produtos.js` copiado da página do laboratório
-3. Gerador e relatório digitados e rodados da raiz
+1. Pastas `src/data/` e `src/scripts/`; copie o `produtos.js` da página
+2. Digite o gerador e rode: `node src/scripts/gerar-catalogo.js`
+3. Digite o relatório e rode, com e sem categoria
 4. `npm init -y`, `"type": "module"` e os scripts `catalogo` e `relatorio`
 5. `npm install picocolors` e as duas cores no relatório
-6. Imagem da Bola esvaziada no JSON, `npm run relatorio esporte` e `npm run catalogo` para desfazer
-7. Linha "Acima de R$ 200"; `node_modules` apagado e recuperado com `npm install`
+6. A linha "Acima de R$ 200"
+7. Em casa: o teste do "Sem imagem" e o `node_modules` apagado e recuperado
 :::
 
 **Entrega:** o `package.json` e a saída de `npm run relatorio casa`: 3 produtos, 1 em destaque, 1 acima de R$ 200 e preço médio `R$ 209.90`.
@@ -333,7 +330,7 @@ O `lojinha-regras` completo no seu computador, seguindo a [página do laboratór
 
 O **Racha-conta** divide a conta do restaurante entre amigos sem perder nenhum centavo. Ele cresce uma etapa por encontro, até o E07, num repositório só seu.
 
-Hoje, na pasta `racha-conta`:
+Hoje, na pasta `racha-conta`, ao lado do `lojinha-regras`:
 
 - `npm init -y`, com `"type": "module"`
 - `src/data/conta.json`: restaurante, pessoas, gorjeta e pelo menos 4 itens
