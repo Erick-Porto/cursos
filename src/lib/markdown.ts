@@ -85,6 +85,8 @@ export interface Slide {
   title: string
   html: string
   isCover: boolean
+  /** Slide de seção: um título "## ..." e um gancho opcional, grandes e centralizados. */
+  isSection: boolean
   wordCount: number
 }
 
@@ -301,12 +303,18 @@ export function renderLesson(source: string, opts: RenderOptions = {}): Slide[] 
         break
       }
     }
+    // seção: "## Título" e, se quiser, uma frase de gancho logo abaixo
+    const isSection =
+      index > 0 &&
+      tokens[0]?.type === 'heading_open' &&
+      tokens[0].tag === 'h2' &&
+      (tokens.length === 3 || (tokens.length === 6 && tokens[3].type === 'paragraph_open'))
     const html = md.renderer.render(tokens, md.options, {})
     const wordCount = part
       .replace(/```[\s\S]*?```/g, ' ')
       .split(/\s+/)
       .filter(Boolean).length
-    return { index, title: title || `Slide ${index + 1}`, html, isCover, wordCount }
+    return { index, title: title || `Slide ${index + 1}`, html, isCover, isSection, wordCount }
   })
 }
 

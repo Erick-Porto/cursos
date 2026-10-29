@@ -25,8 +25,6 @@ Programador Mobile · Encontro E02 · Aula 4 de 89
 - Levar o projeto para outro computador sem perder nada
 :::
 
-Como na aula 3, estes slides servem para você rever em casa, passo a passo.
-
 ---
 
 ## :icon[book-open] Palavras novas de hoje
@@ -59,9 +57,15 @@ A lista de ingredientes. O `package.json` é essa lista para o projeto.
 
 ---
 
-## :icon[package] npm init: nasce a ficha do projeto
+## O package.json
 
-Na pasta raiz do `lojinha-regras`, rode:
+Se o seu projeto tivesse uma ficha de cadastro, o que ela diria?
+
+---
+
+## :icon[package] package.json: a ficha do projeto
+
+O **`package.json`** é a ficha do projeto, como a lista de ingredientes de uma receita: o nome, os comandos e os pacotes de que ele precisa. Para criar, rode na pasta raiz do `lojinha-regras`:
 
 ```bash
 npm init -y
@@ -89,6 +93,34 @@ Hoje, só três campos importam: o **nome**, os **`scripts`** e o **`type`**. O 
 
 ---
 
+## :icon[package] Lendo a ficha de um projeto
+
+No fim desta aula, a ficha do `lojinha-regras` vai ter estes campos (os outros continuam lá):
+
+```json
+{
+  "name": "lojinha-regras",
+  "type": "module",
+  "scripts": {
+    "catalogo": "node src/scripts/gerar-catalogo.js",
+    "relatorio": "node src/scripts/relatorio-catalogo.js"
+  },
+  "dependencies": {
+    "picocolors": "^1.1.1"
+  }
+}
+```
+
+Só de ler, qualquer pessoa descobre:
+
+- **como o projeto se chama**: `name`
+- **quais comandos ele tem**: `scripts`
+- **de que pacotes ele precisa**: `dependencies`
+
+Em todo projeto JavaScript, o primeiro arquivo a abrir é o `package.json`.
+
+---
+
 ## :icon[circle-alert] "type": "module"
 
 Rode o relatório depois do `npm init`:
@@ -111,9 +143,15 @@ Deixe **uma** linha `type` só. Se houver duas, vale a última. Em computadores 
 
 ---
 
+## Scripts do npm
+
+Você decora o telefone dos amigos ou salva o contato com o nome?
+
+---
+
 ## :icon[square-terminal] Scripts: apelidos para comandos
 
-Digitar `node src/scripts/relatorio-catalogo.js` toda vez cansa. Em `scripts`, você dá um apelido para cada comando:
+Um **script do npm** é um apelido para um comando comprido, como um contato salvo com nome no celular. Os apelidos ficam em `scripts`, no `package.json`: o apelido à esquerda, o comando à direita.
 
 ```json
 "scripts": {
@@ -123,6 +161,16 @@ Digitar `node src/scripts/relatorio-catalogo.js` toda vez cansa. Em `scripts`, v
 },
 ```
 
+Para rodar, escreva `npm run` e o apelido: `npm run relatorio` faz o mesmo que `node src/scripts/relatorio-catalogo.js`.
+
+O `test` já vem pronto e só mostra um erro por enquanto. Ele ganha função no E04.
+
+---
+
+## :icon[square-terminal] Scripts na prática
+
+Com os apelidos `catalogo` e `relatorio` no `package.json`:
+
 ```bash
 npm run catalogo          # grava o catalogo.json
 npm run relatorio         # relatório do catálogo inteiro
@@ -130,7 +178,7 @@ npm run relatorio audio   # o que vem depois do apelido vai para o script
 npm run                   # lista os apelidos que existem
 ```
 
-O `test` já vem pronto e só mostra um erro por enquanto. Ele ganha função no E04.
+Nos próximos encontros, outros apelidos aparecem: `npm test` roda os testes (E04) e `npm run dev` abre o app React no navegador (E21). É o mesmo jeito de usar.
 
 ---
 
@@ -165,7 +213,7 @@ Vírgula faltando ou sobrando faz todo `npm run` falhar com **`EJSONPARSE`**. A 
 ## Pratique
 
 :::example Desafio
-Com os scripts do slide anterior, qual comando:
+O `package.json` tem os scripts `catalogo` e `relatorio`. Qual comando:
 
 1. Mostra o relatório só dos livros?
 2. Grava o `catalogo.json` de novo?
@@ -177,6 +225,12 @@ Com os scripts do slide anterior, qual comando:
 2. `npm run catalogo`
 3. `npm run`, sem nada depois
 :::
+
+---
+
+## Pacotes
+
+Para fazer um bolo, você planta o trigo ou compra a farinha pronta?
 
 ---
 
@@ -235,6 +289,12 @@ O erro `Cannot find package` quase sempre quer dizer: faltou rodar `npm install`
 
 ---
 
+## Versões dos pacotes
+
+Por que a loja guarda a nota fiscal de cada compra?
+
+---
+
 ## :icon[lock] package-lock.json: a nota fiscal
 
 O `package.json` diz **quais** pacotes o projeto usa. O **`package-lock.json`** guarda a **versão exata** de cada um, como uma nota fiscal do que foi instalado.
@@ -261,6 +321,12 @@ O `^` quer dizer: "pode atualizar, desde que o primeiro número continue o mesmo
 
 ---
 
+## Levar o projeto
+
+Numa mudança de casa, o que vai no caminhão e o que se compra de novo?
+
+---
+
 ## :icon[arrow-left-right] Levando o projeto para outro computador
 
 | Arquivo ou pasta | Vai junto? |
@@ -277,6 +343,12 @@ npm install
 ```
 
 Pronto: o npm lê a ficha e a nota fiscal e baixa tudo. Era só isso que faltava no computador do laboratório, no começo da aula.
+
+---
+
+## Mensagens de erro
+
+O npm também acende luzes no painel. Você sabe ler cada uma?
 
 ---
 

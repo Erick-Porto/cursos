@@ -151,6 +151,7 @@ entre aspas (`summary: "Monitoramento: métricas e ferramentas"`). Sem aspas, o 
 - **Todos os outros slides começam com `## Título do slide`.** Um único `##` por slide.
 - Use `###` só para subdivisões curtas dentro do slide.
 - Tamanho: de 8 a 20 slides por aula. Até 130 palavras por slide (aviso); 200 é o limite (erro).
+  Slides de seção (4.8) não entram na conta; o validador avisa acima de 40 slides de conteúdo.
 
 ### 4.3 Roteiro recomendado de uma aula
 
@@ -329,6 +330,51 @@ Nunca coloque código dentro de uma imagem: ele não pode ser copiado nem lido p
 - Referências a "slide anterior" ou "como vimos acima". O aluno pode navegar fora de ordem.
 - Imagens decorativas: banco de imagens, ilustrações genéricas, "pessoa sorrindo com notebook".
   Cada imagem responde a uma pergunta que o aluno teria.
+- Avisos sobre o próprio material: "estes slides servem para você rever em casa", "não precisa
+  decorar", "volte a este slide", "no próximo slide". Os slides servem à aula e à revisão; isso não
+  precisa ser dito. Recados de uso e de ritmo vão para o roteiro do instrutor.
+
+### 4.8 Slide de seção
+
+Um slide que tem só o título `## Nome do conceito` e, logo abaixo, **uma frase de gancho** é um slide
+de seção: a plataforma mostra os dois grandes, no centro, e destaca o título no sumário da aula.
+Cada conceito vem em **três slides**: a seção, a explicação e os exemplos de uso.
+
+```markdown
+## Constantes
+
+O que nunca muda no seu RG, nem depois de dez anos?
+
+---
+
+## :icon[tag] Constantes: um nome para um valor
+
+Uma **constante** é um valor guardado com um nome, que não muda depois de criado...
+
+---
+
+## :icon[tag] Constantes na prática
+
+**Caso 1: um valor usado em vários lugares.** ...
+```
+
+- **O gancho** prende a atenção: uma pergunta do cotidiano ou uma provocação curta, até 25 palavras
+  (ideal até 15). É ele que o instrutor lê para abrir a conversa.
+- **Exemplos de uso** ("... na prática"): 2 ou 3 casos concretos demonstrados, com código e saída,
+  tirados da Lojinha, do projeto ou do dia a dia. Não é a sintaxe de novo: é o conceito resolvendo algo.
+
+- **Para que serve:** é a pausa para a conversa em sala. O instrutor faz uma pergunta, ouve a turma
+  e explica com a analogia; o roteiro diz o que perguntar em cada um.
+- **O slide seguinte é a âncora de estudo:** ensina o mesmo conceito por escrito, completo, como se o
+  aluno não tivesse ouvido a conversa. Começa pela definição em palavras simples, com a analogia, e
+  traz um exemplo. É o slide que o aluno procura para revisar e estudar para a prova.
+- **Um por conceito novo**, em geral de 3 a 8 por aula. Os slides seguintes (exemplos, tradução do
+  código, prática) pertencem à mesma seção, até a próxima.
+- **Não ganham seção** os slides de rotina: capa, "O que você vai aprender", "Palavras novas de hoje",
+  o slide de problema que abre a aula, Resumo, Próximos passos, No laboratório e a etapa do projeto.
+- **Título:** de 1 a 4 palavras, o nome do conceito como se diz em sala ("Variáveis", "O REPL",
+  "Mensagens de erro"). Sem ícone: o validador avisa título longo, ícone, seção sem gancho, seção no fim
+  da aula e duas seções seguidas.
 
 ## 5. Mídia: imagens, diagramas, animações e ícones
 
@@ -744,6 +790,8 @@ Para remover do banco e do storage aulas, questões e imagens que você apagou d
 
 - [ ] Capa com `#`, demais slides com um único `##`
 - [ ] 8 a 20 slides, até 130 palavras cada
+- [ ] Um slide de seção antes de cada conceito novo, seguido da âncora que o ensina (4.8)
+- [ ] Turma iniciante: palavras novas, analogia da tabela 12.2 e tradução do código novo (seção 12)
 - [ ] Objetivos no início, resumo no fim
 - [ ] Pelo menos um exemplo concreto por conceito
 - [ ] Um `:::question` ou `:::example` no meio da aula
@@ -888,6 +936,105 @@ steps:
   válidos; avisa rubrica que não soma 100, etapas fora de ordem e projeto sem guia de correção.
 - Publicação: o `content:sync` envia enunciado e guia (tabelas `projects` e `project_guides`, migration
   0004). Remover um projeto com `--prune` apaga também as entregas e notas dele.
+
+## 12. Aulas para quem nunca programou
+
+Vale para o Programador Mobile e para todo curso cuja turma começa do zero. A turma sabe usar
+computador e celular, mas nunca escreveu código. Os slides são o material de estudo: quem faltou,
+quem se perdeu e quem estuda para a prova precisa conseguir aprender só com eles. Referência:
+o E02 (`lessons/03-e02a-node-na-pratica.md`, `lessons/04-e02b-npm-e-package-json.md` e `roteiros/02-e02.md`).
+
+### 12.1 Como escrever
+
+1. **Palavras novas de hoje.** Logo depois de "O que você vai aprender", uma tabela `Palavra | O que é`
+   com 3 a 6 termos da aula, explicados com palavras do dia a dia.
+2. **Toda palavra técnica é explicada na primeira vez que aparece na aula**, em **negrito**, mesmo que
+   já tenha aparecido em aula anterior. Lembrete curto basta: "a `const`, a caixa com etiqueta do E02".
+3. **Uma analogia do dia a dia por conceito abstrato**, a da tabela 12.2 quando existir. Sempre a mesma
+   para o mesmo conceito, no curso inteiro; nunca duas analogias para uma ideia.
+4. **Termo em inglês com tradução** na primeira vez: `fs` (*file system*, sistema de arquivos).
+5. **Antes do código, uma frase sobre o que ele faz. Depois do código novo, a tradução**: um slide
+   "... em português" (tabela `Linha | O que ela diz`) ou uma lista curta explicando cada parte nova.
+   A saída esperada aparece no slide, em comentário ou num bloco separado.
+6. **Frases curtas**, uma ideia por frase, voz ativa, "você". Nada de "simplesmente", "basta",
+   "obviamente": para quem começa, nada é óbvio.
+7. **Erros com nome.** Um slide "Quando aparece um erro" (tabela `A mensagem tem | Quer dizer | O que fazer`)
+   com as mensagens reais que a turma vai ver.
+8. **Pratique com resposta**: o desafio em `:::example` e a resposta em `:::tip Resposta`, para quem
+   estuda sozinho conferir.
+9. **O slide se basta.** Nada de "slide anterior" (4.7): se o exercício usa um código, repita o código.
+10. **Leitura antes da escrita.** Quando um recurso aparece antes do encontro em que é ensinado, diga
+    que hoje é só para ler e em que encontro ele volta ("escrever `filter` vem no E09").
+
+### 12.2 Analogias do curso
+
+Use estas. Para um conceito que não está aqui, crie uma analogia do cotidiano da turma (casa, comida,
+transporte, celular, loja) e mantenha-a nas aulas seguintes.
+
+| Conceito | Analogia |
+|---|---|
+| script, programa | receita: passos em ordem, de cima para baixo |
+| REPL | calculadora: uma linha, um resultado na hora |
+| mensagem de erro | luz do painel do carro: diz o que aconteceu e onde |
+| argumento de comando | o detalhe do pedido ("um lanche, de frango") |
+| variável (`const`, `let`) | caixa com etiqueta; `const` é a caixa lacrada, `let` a que deixa trocar o conteúdo |
+| tipos | o que cabe na caixa: número, texto, sim ou não |
+| objeto | ficha de cadastro: cada campo tem nome e valor |
+| array | fileira de gavetas numeradas a partir do 0 |
+| `if` / `else` | bifurcação na estrada: a condição escolhe o caminho |
+| laço (`for`, `while`) | conferir o carrinho item por item, até acabar |
+| função | receita com nome, guardada para usar quando quiser |
+| parâmetro e argumento | o espaço do ingrediente na receita e o ingrediente que você põe nele |
+| `return` | o prato pronto que a receita entrega; o `console.log` só mostra a foto do prato |
+| `filter` | peneira: fica só o que passa no teste |
+| `map` | linha de produção: cada item entra e sai transformado, na mesma quantidade |
+| `reduce` | calculadora que vai acumulando |
+| cópia com spread, imutabilidade | tirar uma cópia e mexer na cópia, sem rasurar o original |
+| referência | endereço de uma casa: dois papéis com o mesmo endereço levam à mesma casa |
+| closure | mochila: a função leva junto as variáveis do lugar onde nasceu |
+| recursão | bonecas russas: cada uma abre uma menor, até a última |
+| módulo, `import` e `export` | vitrine: o `export` põe na vitrine, o `import` pega de lá |
+| `Map` / `Set` | agenda de contatos (nome leva ao telefone) / lista de convidados sem nome repetido |
+| TypeScript | etiqueta "só cabe isto" na caixa, conferida antes de rodar |
+| classe e instância | forma de bolo e os bolos feitos com ela |
+| herança | o cartão é um tipo de pagamento: herda o que todo pagamento tem e acrescenta o seu |
+| polimorfismo | o mesmo pedido, "pague", e cada forma de pagamento faz do seu jeito |
+| encapsulamento | caixa eletrônico: você usa os botões, o cofre fica fechado |
+| `try` / `catch` | rede de proteção do trapezista |
+| event loop, callback | garçom que anota o pedido, atende outras mesas e volta quando a cozinha chama |
+| Promise | senha da lanchonete: o pedido vai ficar pronto ou vai ser cancelado |
+| `async` / `await` | esperar a senha ser chamada sem travar a fila |
+| API, `fetch` | o garçom: você pede pelo cardápio, a cozinha prepara, ele traz o prato (o JSON) |
+| `package.json` | lista de ingredientes do projeto |
+| pacote npm | ingrediente pronto: a farinha comprada, em vez de plantar o trigo |
+| `package-lock.json` | nota fiscal: a versão exata de cada pacote |
+| script do npm | contato salvo com nome no celular: um apelido para um comando comprido |
+| commit | foto do projeto naquele momento, com legenda |
+| branch | rascunho paralelo: dá para testar sem estragar a versão boa |
+| push / pull | mandar a sua cópia para a nuvem / trazer a da nuvem |
+| pull request | pedir para um colega revisar antes de juntar |
+| lint | corretor ortográfico do código |
+| teste automatizado | prova com gabarito que o computador corrige sozinho |
+| integração contínua | inspeção automática a cada entrega |
+| componente | peça de Lego: pequena, reaproveitável, encaixa em outras |
+| props | o pedido feito à peça: o pai diz como quer cada uma |
+| estado (`useState`) | placar do jogo: quando muda, a tela se redesenha |
+| `useEffect` | "depois de desenhar a tela, faça isto": buscar dados, ligar um relógio |
+| `key` de lista | crachá: cada item tem o seu, único |
+| flexbox | prateleira: a direção, o alinhamento e o espaço entre as caixas |
+| tokens de design | paleta de tintas com nome: o valor mora num lugar só |
+| `FlatList` | esteira: só desenha o que cabe na tela |
+| pilha de telas (stack) | pilha de cartas: a tela nova vai por cima, voltar tira a de cima |
+| abas (tabs) | abas de um fichário |
+| estado global, contexto | quadro de avisos da casa: todos os cômodos leem o mesmo |
+| armazenamento no aparelho | gaveta do celular: guarda mesmo depois de fechar o app |
+
+### 12.3 No roteiro
+
+- Cada slide de seção ganha uma entrada no bloco: `**Seção "Nome" (N min).**`, com a pergunta para a
+  turma, a resposta esperada e a frase da analogia; depois, o que fazer nos slides da seção.
+- Os minutos de cada bloco continuam somando o mesmo: a conversa da seção substitui a explicação
+  que antes era feita em cima do slide de conteúdo.
 
 ## Apêndice A: ícones inline disponíveis
 

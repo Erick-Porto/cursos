@@ -29,7 +29,11 @@ watch(
         <button
           type="button"
           class="sb__item"
-          :class="{ 'is-current': s.index === index, 'is-visited': s.index < index || s.index <= maxSlide }"
+          :class="{
+            'is-current': s.index === index,
+            'is-visited': s.index < index || s.index <= maxSlide,
+            'is-section': s.isSection,
+          }"
           @click="emit('select', s.index)"
         >
           <span class="sb__num">
@@ -86,6 +90,13 @@ watch(
 .sb__item:hover {
   background: var(--surface-2);
   color: var(--text);
+}
+
+/* slide de seção: abre um grupo no sumário */
+.sb__item.is-section {
+  margin-top: 6px;
+  color: var(--text);
+  font-weight: 700;
 }
 
 .sb__item.is-current {

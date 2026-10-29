@@ -25,8 +25,6 @@ Programador Mobile · Encontro E02 · Aula 3 de 89
 - Entender, linha por linha, um programa que responde perguntas sobre a loja
 :::
 
-Não precisa decorar nada. Estes slides ficam aqui para você rever quando quiser, no seu ritmo.
-
 ---
 
 ## :icon[book-open] Palavras novas de hoje
@@ -38,8 +36,6 @@ Não precisa decorar nada. Estes slides ficam aqui para você rever quando quise
 | **argumento** | uma palavra extra que você escreve no comando, depois do nome do arquivo |
 | **JSON** | um jeito de escrever dados como texto, que qualquer programa entende |
 | **mensagem de erro** | o aviso que o computador mostra quando algo dá errado; ela diz o quê e onde |
-
-Esqueceu uma palavra? Volte a este slide.
 
 ---
 
@@ -61,6 +57,12 @@ Se você fosse contar à mão, quais passos faria? Anote: o script de hoje faz o
 
 ---
 
+## O projeto
+
+Onde você guarda as fotos de uma viagem: espalhadas pelo celular ou numa pasta só?
+
+---
+
 ## :icon[folder-tree] A pasta do projeto
 
 Todo o JavaScript do curso fica numa pasta só, o **`lojinha-regras`**. No terminal, dentro da pasta de projetos que você criou no E01:
@@ -76,6 +78,30 @@ Essa é a **pasta raiz** do projeto. Ela acompanha você até o E20 e, no E30, o
 :::tip Confira sempre
 O terminal do VS Code mostra a pasta em que você está. O caminho precisa terminar em `lojinha-regras`.
 :::
+
+---
+
+## :icon[folder-tree] Pastas na prática
+
+O **`cd`** (de *change directory*, mudar de pasta) leva o terminal de uma pasta para outra:
+
+```bash
+cd lojinha-regras        # entra na pasta do projeto
+cd src                   # entra numa pasta de dentro dela
+cd ..                    # volta uma pasta, para a de fora
+cd ../..                 # volta duas pastas de uma vez
+```
+
+- **`..`** quer dizer "a pasta de fora", a que contém a atual
+- Perdeu-se? Olhe o caminho que o terminal mostra antes do cursor: ele diz onde você está
+
+Rodar um comando na pasta errada é o erro mais comum do dia. Você vai usar o `cd ..` para consertar.
+
+---
+
+## O REPL
+
+E se o computador respondesse na hora, como a calculadora do celular?
 
 ---
 
@@ -98,6 +124,25 @@ $ node
 
 ---
 
+## :icon[calculator] O REPL na prática
+
+Use o REPL para tirar uma dúvida rápida, sem criar arquivo nenhum:
+
+```bash
+> 120 / 4                 # a pizza de R$ 120 dividida por 4 amigos
+30
+> 89.9 * 2                # dois cabos de R$ 89,90
+179.8
+> 'Lojinha' + ' Online'   # juntar dois textos
+'Lojinha Online'
+```
+
+- **`/`** divide e **`*`** multiplica
+- O resultado aparece na linha de baixo, logo depois do <kbd>Enter</kbd>
+- No REPL, o que vem depois de `#` é só explicação deste slide: não precisa digitar
+
+---
+
 ## :icon[circle-help] E aquele undefined?
 
 No E01, depois da mensagem apareceu um `undefined`. Agora você entende:
@@ -116,9 +161,15 @@ Não é erro. É o REPL avisando que aquela linha não teve resultado.
 
 ---
 
+## Arquivos .js
+
+Por que escrever a receita no papel, se dá para cozinhar de cabeça?
+
+---
+
 ## :icon[file-code] Seu primeiro arquivo .js
 
-Para mais de uma linha, use um arquivo. No VS Code, crie `ola.js` na pasta raiz e escreva:
+Um **script** é um arquivo `.js` com instruções, como uma receita: o Node faz uma linha de cada vez, de cima para baixo. No VS Code, crie `ola.js` na pasta raiz e escreva:
 
 ```javascript
 console.log('Olá, Lojinha!');
@@ -133,15 +184,44 @@ node ola.js
 # Total: 289.8
 ```
 
-- `node ola.js` lê o arquivo e segue as linhas **de cima para baixo**
+- `node ola.js` roda o arquivo: o Node lê e faz cada linha, na ordem
 - A vírgula separa os valores dentro do `console.log`; na tela, eles aparecem com um espaço entre eles
 - O `;` marca o fim de cada instrução
 
 ---
 
-## :icon[tag] const: um nome para um valor
+## :icon[file-code] Scripts na prática
 
-Em vez de repetir um valor, dê um nome a ele com **`const`**. Pense numa caixa com etiqueta: a etiqueta é o nome, e o valor fica dentro.
+Um script guarda passos para repetir quantas vezes quiser. Este, `recibo.js`, mostra o recibo de um pedido:
+
+```javascript
+console.log('Pedido 1023');
+console.log('Fone Bluetooth:', 199.9);
+console.log('Cabo USB-C:', 49.9);
+console.log('Total:', 199.9 + 49.9);
+```
+
+```bash
+node recibo.js
+# Pedido 1023
+# Fone Bluetooth: 199.9
+# Cabo USB-C: 49.9
+# Total: 249.8
+```
+
+No REPL, as quatro linhas se perdem quando você sai. No arquivo, elas ficam: amanhã é só rodar de novo.
+
+---
+
+## Constantes
+
+O que nunca muda no seu RG, nem depois de dez anos?
+
+---
+
+## :icon[tag] Constantes: um nome para um valor
+
+Uma **constante** é um valor guardado com um nome, que não muda depois de criado. Pense numa caixa lacrada com etiqueta: a etiqueta é o nome, e o valor fica dentro. Ela nasce com **`const`**:
 
 ```javascript
 const loja = 'Lojinha';
@@ -158,6 +238,36 @@ node ola.js
 ```
 
 O nome vai sem aspas: `loja` é a etiqueta, e `'Lojinha'` é o texto guardado nela. Você estuda nomes e valores a fundo no E05.
+
+---
+
+## :icon[tag] Constantes na prática
+
+**Caso 1: um valor usado em vários lugares.** O frete é o mesmo para todo produto:
+
+```javascript
+const frete = 15;
+const fone = 199.9;
+const cabo = 49.9;
+
+console.log('Fone com frete:', fone + frete);   // Fone com frete: 214.9
+console.log('Cabo com frete:', cabo + frete);   // Cabo com frete: 64.9
+```
+
+Se o frete subir, você troca o `15` numa linha só, e todas as contas acompanham.
+
+**Caso 2: a caixa é lacrada.** Tentar trocar o valor de uma constante dá erro:
+
+```javascript
+const frete = 15;
+frete = 20;   // TypeError: Assignment to constant variable.
+```
+
+---
+
+## Argumentos
+
+Quando você pede um lanche, o que diz além de "quero um lanche"?
 
 ---
 
@@ -181,10 +291,38 @@ node ola.js         # Olá, undefined
 
 ---
 
+## :icon[list] Argumentos na prática
+
+O mesmo script dá respostas diferentes, conforme o argumento:
+
+```bash
+node ola.js Ana      # Olá, Ana
+node ola.js Bruno    # Olá, Bruno
+node ola.js 42       # Olá, 42
+```
+
+Daqui a pouco, o relatório da Lojinha usa um argumento para escolher a categoria:
+
+```bash
+node src/scripts/relatorio-catalogo.js audio    # só os produtos de áudio
+node src/scripts/relatorio-catalogo.js livros   # só os livros
+```
+
+Um script só, várias perguntas: o argumento é o detalhe do pedido.
+
+---
+
 ## Pratique
 
 :::example Desafio
-Com o `ola.js` do slide anterior, o que aparece em cada comando?
+O `ola.js` tem estas duas linhas:
+
+```javascript
+const nome = process.argv[2];
+console.log('Olá,', nome);
+```
+
+O que aparece em cada comando?
 
 ```bash
 node ola.js Maria
@@ -198,6 +336,12 @@ node ola.js "Maria Souza"
 2. `Olá, Maria` de novo. O espaço separa os argumentos: `Souza` é o segundo, e o script só usa o primeiro
 3. `Olá, Maria Souza`. Com aspas, o nome inteiro vira um argumento só
 :::
+
+---
+
+## Objetos e listas
+
+Que campos tem a sua ficha de cadastro na farmácia?
 
 ---
 
@@ -216,6 +360,31 @@ Os produtos ficam em `src/data/produtos.js`. Cada produto é uma ficha com **cam
 - O `export` no começo do arquivo deixa outros arquivos usarem as listas
 
 São dados prontos: copie o arquivo inteiro da [página do laboratório](materiais/e02/aluno/laboratorio-lojinha-regras.html). Listas e objetos a fundo: E08.
+
+---
+
+## :icon[database] Objetos e listas na prática
+
+Para ler um campo da ficha, use o nome dela, um ponto e o nome do campo. Para saber o tamanho da lista, use **`.length`**:
+
+```javascript
+const produto = { nome: 'Fone Bluetooth', preco: 199.9, destaque: true };
+console.log(produto.nome);       // Fone Bluetooth
+console.log(produto.preco);      // 199.9
+
+const categorias = ['audio', 'casa', 'esporte', 'livros'];
+console.log(categorias.length);  // 4
+console.log(categorias[0]);      // audio
+```
+
+- `categorias[0]` pega o item da posição 0: a lista começa a contar do zero
+- É assim que o relatório vai contar os produtos: `produtos.length`
+
+---
+
+## Ler e gravar arquivos
+
+Um site pode abrir as fotos do seu computador sem você escolher?
 
 ---
 
@@ -241,6 +410,33 @@ Tudo depois de `//` é um **comentário**: o Node ignora, é só um recado para 
 
 ---
 
+## :icon[file-text] Ler e gravar na prática
+
+Um recado que muda de horário. Gravar de novo **substitui** o texto antigo:
+
+```javascript
+import fs from 'node:fs';
+
+fs.writeFileSync('recado.txt', 'Reunião às 10h');
+console.log(fs.readFileSync('recado.txt', 'utf-8'));   // Reunião às 10h
+
+fs.writeFileSync('recado.txt', 'Reunião às 11h');
+console.log(fs.readFileSync('recado.txt', 'utf-8'));   // Reunião às 11h
+```
+
+Na Lojinha, hoje:
+
+- o **gerador** grava o catálogo no arquivo `catalogo.json`
+- o **relatório** lê esse arquivo para fazer as contas
+
+---
+
+## JSON
+
+Como mandar a lista de produtos para alguém que usa outro programa?
+
+---
+
 ## :icon[braces] JSON: dados escritos como texto
 
 Um arquivo só guarda **texto**. Para gravar a lista de produtos num arquivo, ela vira texto num formato chamado **JSON**, que qualquer programa entende: um site, uma planilha, um app.
@@ -258,6 +454,29 @@ console.log(deVolta.nome);               // Fone Bluetooth
 - **`JSON.stringify`**: objeto para texto, para gravar ou enviar
 - **`JSON.parse`**: texto para objeto, para usar no código
 - `deVolta.nome` lê um campo: o nome do objeto, um ponto e o nome do campo
+
+---
+
+## :icon[braces] JSON na prática
+
+O JSON aparece em muitos lugares do curso:
+
+| Onde | Para quê |
+|---|---|
+| `catalogo.json`, hoje | guardar os produtos num arquivo |
+| `package.json`, na aula 4 | a ficha do projeto |
+| a API de produtos, no E19 | o servidor manda os dados para o app |
+
+Assim fica um catálogo em JSON, com uma lista dentro de um objeto:
+
+```json
+{
+  "categorias": ["audio", "casa", "esporte", "livros"],
+  "produtos": [
+    { "id": 1, "nome": "Fone Bluetooth", "preco": 199.9 }
+  ]
+}
+```
 
 ---
 
@@ -287,6 +506,12 @@ Guarde estas regras: o `package.json` da aula 4 também é JSON.
 - **Para gravar** (caminho de baixo): `JSON.stringify` transforma o objeto em texto, e `fs.writeFileSync` grava o texto no arquivo
 
 Só depois de virar objeto dá para contar e somar. Os dois scripts de hoje fazem um caminho cada um: o gerador grava, o relatório lê.
+
+---
+
+## O gerador do catálogo
+
+Doze produtos digitados à mão: quanto tempo leva? E se um preço mudar?
 
 ---
 
@@ -329,6 +554,12 @@ O arquivo `src/data/catalogo.json` aparece no painel do VS Code. Abra e veja o c
 
 ---
 
+## O relatório do catálogo
+
+As perguntas da dona da loja, respondidas em um segundo. Como?
+
+---
+
 ## :icon[file-search] Script 2: o relatório, parte 1
 
 O relatório lê o JSON e, se você passar uma categoria, fica só com os produtos dela. Crie `src/scripts/relatorio-catalogo.js`:
@@ -347,8 +578,6 @@ if (categoria) {
   titulo = categoria;
 }
 ```
-
-No próximo slide, cada linha em português.
 
 ---
 
@@ -419,6 +648,12 @@ Sem imagem: 0
 - O preço sai com ponto (`259.90`). No E05, você troca para `R$ 259,90`
 
 Pronto: as perguntas da reunião têm resposta, em um segundo.
+
+---
+
+## Mensagens de erro
+
+Quando acende uma luz no painel do carro, você ignora ou lê?
 
 ---
 

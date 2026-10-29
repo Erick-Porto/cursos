@@ -56,7 +56,7 @@ async function onClick(e: MouseEvent) {
         v-if="current"
         :key="current.index"
         class="slide md"
-        :class="{ 'slide--cover': current.isCover }"
+        :class="{ 'slide--cover': current.isCover, 'slide--section': current.isSection }"
         v-html="current.html"
       ></article>
     </Transition>
@@ -119,6 +119,46 @@ async function onClick(e: MouseEvent) {
 .slide--cover :deep(p) {
   color: var(--text-2);
   font-size: 1.1em;
+}
+
+/* slide de seção: só o título, no centro, para a conversa em sala */
+.slide--section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  min-height: 100%;
+}
+
+.slide.slide--section :deep(h2:first-child) {
+  font-size: clamp(2rem, 5vw + 1rem, 3.6rem);
+  line-height: 1.15;
+  margin: 0;
+  padding: 0 0 18px;
+  border-bottom: 0;
+  color: var(--text);
+}
+
+.slide.slide--section :deep(h2:first-child)::after {
+  left: 50%;
+  width: 96px;
+  height: 4px;
+  transform: translateX(-50%);
+  bottom: 0;
+}
+
+.slide.slide--section :deep(h2 .icon-inline) {
+  color: var(--primary);
+}
+
+/* o gancho, abaixo do título */
+.slide.slide--section :deep(p) {
+  max-width: 34ch;
+  margin: 28px auto 0;
+  font-size: clamp(1.1rem, 1.6vw + 0.7rem, 1.5rem);
+  line-height: 1.4;
+  color: var(--text-2);
 }
 
 .slide :deep(h2:first-child) {

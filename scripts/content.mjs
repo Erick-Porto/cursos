@@ -611,8 +611,28 @@ function checkAlt(alt, src, where, report) {
 function validateSlides(lesson, course, ctx, report) {
   const lw = rel(lesson.file)
   const { slides, body } = lesson
-  if (slides.length < 4) report.warn(lw, `apenas ${slides.length} slide(s); aulas costumam ter entre 8 e 20`)
-  if (slides.length > 30) report.warn(lw, `${slides.length} slides; considere dividir a aula`)
+  // slides de seção ("## Título" e, opcional, uma frase de gancho) não contam no tamanho da aula
+  const isSection = (s, i) => {
+    if (i === 0 || !/^##\s+\S/.test(s)) return false
+    const rest = s.split('\n').slice(1).filter((l) => l.trim())
+    return rest.length === 0 || (rest.length === 1 && !/^(\s*[-*|>!#:`<]|\s*\d+\.)/.test(rest[0]))
+  }
+  const content = slides.filter((s, i) => !isSection(s, i)).length
+  if (content < 4) report.warn(lw, `apenas ${content} slide(s) de conteúdo; aulas costumam ter entre 8 e 20`)
+  if (content > 40) report.warn(lw, `${content} slides de conteúdo; considere dividir a aula`)
+  slides.forEach((s, i) => {
+    if (!isSection(s, i)) return
+    const sw = `${lw} (slide ${i + 1})`
+    const next = slides[i + 1]
+    if (next === undefined) report.warn(sw, 'slide de seção no fim da aula; o slide seguinte a ele ensina o conceito')
+    else if (isSection(next, i + 1)) report.warn(sw, 'dois slides de seção seguidos; cada um abre um conceito')
+    const [head, ...rest] = s.split('\n').filter((l) => l.trim())
+    const title = head.replace(/^##\s+/, '').trim()
+    if (/:icon\[/.test(title)) report.warn(sw, 'slide de seção sem ícone: só o nome do conceito')
+    if (title.length > 40) report.warn(sw, `título de seção com ${title.length} caracteres; use de 1 a 4 palavras`)
+    if (!rest.length) report.warn(sw, 'slide de seção sem gancho: uma frase curta abaixo do título')
+    else if (wordCount(rest[0]) > 25) report.warn(sw, `gancho com ${wordCount(rest[0])} palavras; use até 25`)
+  })
 
   // "---" precisa de linha em branco antes (senão vira título setext no Markdown)
   const lines = body.split('\n')
