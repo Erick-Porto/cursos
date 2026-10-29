@@ -27,6 +27,19 @@ Programador Mobile · Encontro E21 · Aula 42 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **Vite** | a ferramenta que cria o projeto React e o roda no navegador; o nome vem do francês, "rápido" |
+| **servidor local** | um site que roda só no seu computador, num endereço como `http://localhost:5173` |
+| **JSX** | o jeito de escrever a tela com tags, parecidas com as do HTML, dentro do JavaScript |
+| **compilar** | traduzir o código antes de rodar; o Vite traduz o JSX para JavaScript comum |
+| **hot reload** | recarga automática: salvou o arquivo, a página atualiza sozinha |
+| **fragmento** | `<>...</>`: agrupa tags sem criar uma tag a mais na página |
+
+---
+
 ## Por que um gerador de projeto?
 
 No E02, você montou o `lojinha-regras` à mão: `npm init`, `"type": "module"` e os scripts. Um projeto React precisa de bem mais: um servidor local, um tradutor do código React para JavaScript comum, recarga automática e uma estrutura de pastas. Montar isso à mão levaria uma tarde inteira e muitos erros.
@@ -39,9 +52,17 @@ Ao fim deste encontro, o app `minhas-tarefas` estará rodando no seu navegador e
 
 ---
 
-## :icon[rocket] Criando o projeto em 4 comandos
+## O Vite
 
-No terminal, dentro da pasta onde você guarda os projetos:
+Para cozinhar, é mais rápido montar a cozinha do zero ou chegar numa cozinha pronta?
+
+---
+
+## :icon[rocket] O Vite: a cozinha montada
+
+O **Vite** é um gerador de projeto: monta a estrutura toda com um comando e depois roda o projeto no navegador. É como chegar numa cozinha já montada, com fogão, panelas e bancada no lugar: você só cozinha.
+
+Para criar e ligar um projeto React, quatro comandos, na pasta onde você guarda os projetos:
 
 ```bash
 npm create vite@latest minhas-tarefas -- --template react --eslint
@@ -50,12 +71,7 @@ npm install
 npm run dev
 ```
 
-1. `npm create vite@latest`: baixa o gerador, como o `npx` do E02, e cria a pasta com o modelo **React** em JavaScript; `--eslint` traz o linter do E03
-2. `cd minhas-tarefas`: entra na pasta nova; os próximos comandos rodam aqui
-3. `npm install`: baixa o que o `package.json` lista, como no E02
-4. `npm run dev`: roda o script `dev`, como o `npm run relatorio` do E02, e mostra um endereço como `http://localhost:5173`
-
-Abra o endereço no navegador: a página de boas-vindas do Vite aparece.
+Abra no navegador o endereço que aparece no terminal: surge a página de boas-vindas do Vite.
 
 :::tip
 Se o gerador perguntar "Install with npm and start now?", escolha **No** com as setas: você roda os comandos você mesmo.
@@ -63,44 +79,20 @@ Se o gerador perguntar "Install with npm and start now?", escolha **No** com as 
 
 ---
 
-## :icon[folder-tree] O que cada arquivo faz
+## :icon[rocket] Os 4 comandos na prática
 
-| Arquivo | Função |
-|---|---|
-| `index.html` | a única página; tem a `<div id="root">` onde o React desenha tudo |
-| `src/main.jsx` | ponto de partida: liga o React à `div#root` e renderiza o `App` |
-| `src/App.jsx` | o componente principal; é aqui que você vai trabalhar |
-| `package.json` | o mesmo do E02: `"type": "module"`, scripts (`dev`, `build`, `lint`) e pacotes |
-| `node_modules/` | pacotes instalados pelo `npm install`; o `.gitignore` já o deixa fora do Git |
-| `vite.config.js` | configurações do Vite; raramente você mexe aqui |
-
-Também existem `src/App.css` e `src/index.css` (estilos), a pasta `public/` (arquivos estáticos) e o `eslint.config.js`, com as regras de lint para React (`npm run lint`).
-
----
-
-## :icon[route] O caminho até a tela
-
-Como o navegador chega ao seu componente? Três passos, sempre nesta ordem:
-
-:::center
-![Animação: o index.html carrega o main.jsx, o main.jsx renderiza o App e o que o App.jsx devolve aparece dentro da div root, na tela](images/e21-caminho-ate-a-tela.svg)
-:::
-
-O **`index.html`** tem uma `<div id="root"></div>` vazia e um `<script type="module" src="/src/main.jsx">`. O **`src/main.jsx`** encontra a `div#root` e pede ao React para renderizar o `App` dentro dela. Tudo o que o **`src/App.jsx`** devolver (e os componentes que ele usar) vira HTML ali dentro. O `getElementById` procura no DOM, como o `querySelector` da aula anterior.
-
-```jsx
-// src/main.jsx (resumido: o original também importa o index.css)
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
-
-createRoot(document.getElementById('root')).render(<App />)
-```
+| Comando | O que faz | O que aparece |
+|---|---|---|
+| `npm create vite@latest minhas-tarefas -- --template react --eslint` | baixa o gerador, como o `npx` do E03, e cria a pasta com o modelo **React** em JavaScript; o `--eslint` traz o linter do E03 | `Done. Now run:` e os três comandos seguintes |
+| `cd minhas-tarefas` | entra na pasta nova; os próximos comandos rodam aqui | o caminho do terminal termina em `minhas-tarefas` |
+| `npm install` | baixa o que o `package.json` lista, como no E02 | `found 0 vulnerabilities` |
+| `npm run dev` | roda o script `dev`, como o `npm run relatorio` do E02 | `Local: http://localhost:5173/` |
 
 ---
 
 ## :icon[refresh-cw] npm run dev e a recarga automática
 
-Com `npm run dev` ligado, o Vite vigia os arquivos. Salvou, a página atualiza sozinha: isso é o **hot reload**.
+Com `npm run dev` ligado, o Vite roda um **servidor local** e vigia os arquivos. Salvou, a página atualiza sozinha: isso é o **hot reload**.
 
 Demonstração: abra `src/App.jsx`, troque o texto do `<h1>` e salve com `Ctrl + S`. O texto do modelo muda entre versões do Vite; hoje ele é:
 
@@ -122,9 +114,58 @@ Olhe o navegador: o título mudou sem apertar F5.
 
 ---
 
+## Os arquivos do projeto
+
+Se a página começa com uma caixa vazia, quem coloca o conteúdo nela?
+
+---
+
+## :icon[folder-tree] O que cada arquivo faz
+
+Quase todo o seu trabalho fica em `src/` (de *source*, fonte), a pasta do código.
+
+| Arquivo | Função |
+|---|---|
+| `index.html` | a única página; tem a `<div id="root">` vazia, onde o React desenha tudo |
+| `src/main.jsx` | ponto de partida: liga o React à `div#root` e desenha o `App` |
+| `src/App.jsx` | o componente principal; é aqui que você trabalha |
+| `package.json` | como no E02: `"type": "module"`, scripts e pacotes |
+| `node_modules/` | pacotes do `npm install`; o `.gitignore` já o deixa fora do Git |
+| `vite.config.js` | configurações do Vite; você quase nunca mexe |
+
+Também vêm os estilos (`src/App.css` e `src/index.css`), a pasta `public/` e o `eslint.config.js`, do `npm run lint`.
+
+---
+
+## :icon[route] O caminho até a tela
+
+Como o navegador chega ao seu componente? Três passos, sempre nesta ordem:
+
+:::center
+![Animação: o index.html carrega o main.jsx, o main.jsx renderiza o App e o que o App.jsx devolve aparece dentro da div root, na tela](images/e21-caminho-ate-a-tela.svg)
+:::
+
+O **`index.html`** tem uma `<div id="root"></div>` vazia e um `<script type="module" src="/src/main.jsx">`. O **`src/main.jsx`** encontra a `div#root` e pede ao React para **renderizar** (desenhar) o `App` dentro dela. Tudo o que o **`src/App.jsx`** devolver vira HTML ali dentro. O `getElementById` procura no DOM, como o `querySelector` da aula anterior.
+
+```jsx
+// src/main.jsx (resumido: o original também importa o index.css)
+import { createRoot } from 'react-dom/client'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(<App />)
+```
+
+---
+
+## JSX
+
+Uma tag de HTML dentro de uma função JavaScript: pode isso?
+
+---
+
 ## :icon[braces] JSX: HTML dentro do JavaScript
 
-Abra `src/App.jsx`. Dentro de uma função JavaScript há algo que parece HTML:
+O **JSX** é o jeito de escrever a tela com tags dentro do JavaScript. Abra `src/App.jsx`:
 
 ```jsx
 function App() {
@@ -139,9 +180,12 @@ function App() {
 export default App
 ```
 
-Isso é **JSX**: uma sintaxe que descreve a tela com tags, dentro do JavaScript. O Vite traduz para JavaScript comum antes de chegar ao navegador. O `export default` é o dos módulos do E11: o arquivo entrega uma coisa principal.
+- `function App()` é um componente: uma função
+- `return ( ... )` devolve o pedaço de tela; os parênteses só agrupam as linhas
+- `<div>`, `<h1>` e `<p>` são as tags da tela, escritas em JSX
+- `export default App` é o dos módulos do E11: o arquivo entrega uma coisa principal
 
-Parece HTML, mas tem três regras próprias. Quebrou uma, a página não compila.
+O Vite **compila** o JSX, isto é, traduz para JavaScript comum antes de chegar ao navegador. Parece HTML, mas tem três regras próprias. Quebrou uma, a página não compila.
 
 ---
 
@@ -243,9 +287,29 @@ Error Lens sublinha a tag aberta na hora, e o Vite mostra o erro no navegador co
 
 ---
 
+## Chaves no JSX
+
+Numa página HTML, o que aparece se você escrever 2 + 2?
+
+---
+
 ## :icon[variable] Expressões com chaves
 
-Dentro do JSX, **chaves `{}`** abrem uma janela para o JavaScript. O que está entre elas é calculado e o resultado aparece na tela.
+Dentro do JSX, as **chaves `{}`** abrem uma janela para o JavaScript. O que está entre elas é calculado, e o resultado aparece na tela.
+
+```jsx
+<h1>Olá, {nome}</h1>
+```
+
+Em português: "escreva Olá, e depois o valor da variável `nome`".
+
+Vale qualquer **expressão**, isto é, algo que produz um valor: variável, conta, chamada de função, até o ternário do E05. Não vale `if` nem `for` soltos: eles são comandos, não expressões.
+
+---
+
+## :icon[variable] Chaves na prática
+
+Quatro expressões no mesmo componente:
 
 ```jsx
 function App() {
@@ -261,9 +325,12 @@ function App() {
 }
 ```
 
-Na tela: "Olá, Ana", "2 + 2 = 4", o ano atual e "ANA tem 3 letras".
-
-Vale qualquer **expressão** (algo que produz um valor): variável, conta, chamada de função, até o ternário do E05. Não vale `if` nem `for` soltos: eles são comandos, não expressões.
+| No JSX | Na tela |
+|---|---|
+| `Olá, {nome}` | Olá, Ana |
+| `2 + 2 = {2 + 2}` | 2 + 2 = 4 |
+| `Ano: {new Date().getFullYear()}` | o ano atual |
+| `{nome.toUpperCase()} tem {nome.length} letras` | ANA tem 3 letras |
 
 ---
 
@@ -274,14 +341,30 @@ JSX é HTML?
 
 Compare: `<div class="card">` funciona em HTML e quebra em JSX. `<p>{2 + 2}</p>` mostra 4 em JSX e mostra "{2 + 2}" em HTML.
 
-Se não é HTML, o que é? Para onde vai o JSX depois que o Vite o processa? Pense na resposta antes de avançar: ela explica as três regras.
+Se não é HTML, o que é? Para onde vai o JSX depois que o Vite o processa?
 :::
+
+:::tip Resposta
+JSX é JavaScript. O Vite traduz cada tag numa chamada de função, como `_jsxDEV("h1", ...)`. Por isso `class` conflita com a palavra reservada do JavaScript, e as chaves rodam JavaScript de verdade. As três regras vêm daí.
+:::
+
+---
+
+## Componentes
+
+Lembra das peças de Lego da aula 41? Como uma peça entra em outra?
 
 ---
 
 ## :icon[component] Seu primeiro componente: Saudacao
 
-Um **componente** é uma função que devolve JSX. Fica em um arquivo próprio (um módulo, como no E11), com nome iniciado em maiúscula, e sai com `export default`. Crie a pasta `src/components` e, dentro dela:
+Um **componente** é uma peça de Lego da tela: pequena, reaproveitável, encaixa em outras. No código, é uma função que devolve JSX. Como fazer um:
+
+- um arquivo próprio, um módulo como no E11, dentro de `src/components`
+- nome começando com letra maiúscula: `Saudacao`
+- `export default` no fim, para outros arquivos usarem
+
+Crie a pasta `src/components` e, dentro dela:
 
 ```jsx
 // src/components/Saudacao.jsx
@@ -293,7 +376,11 @@ function Saudacao() {
 export default Saudacao
 ```
 
-Para usar, o `App` importa e escreve como se fosse uma tag:
+---
+
+## :icon[component] Componentes na prática
+
+Para usar a peça, o `App` importa e escreve o nome como se fosse uma tag:
 
 ```jsx
 // src/App.jsx
@@ -309,11 +396,23 @@ function App() {
 }
 ```
 
+Na tela: "Minhas Tarefas" e, embaixo, "Bem-vinda, Ana!".
+
+- `import Saudacao from ...` traz a peça, sem chaves, porque ela saiu com `export default`
+- `<Saudacao />` encaixa a peça; a barra no fim fecha a tag (regra 3)
+- Escreva `<Saudacao />` duas vezes, e a frase aparece duas vezes: a mesma peça, usada de novo
+
+---
+
+## Mensagens de erro
+
+Acendeu uma luz no painel do carro: você ignora ou lê o que ela quer dizer?
+
 ---
 
 ## :icon[bug] Lendo uma mensagem de erro
 
-Erro não é fracasso: é o Vite dizendo onde olhar. Ele aparece no navegador (tela de fundo escuro) e no terminal.
+Uma **mensagem de erro** é a luz do painel do carro: diz o que aconteceu e onde. O Vite mostra o erro no navegador (tela de fundo escuro) e no terminal.
 
 ```plaintext
 [plugin:vite:oxc] Transform failed with 1 error:
@@ -331,21 +430,21 @@ Como ler, nesta ordem:
 3. **Help**: a sugestão de conserto, aqui o fragmento `<>...</>`
 4. Corrija e salve: a tela de erro some sozinha
 
-:::tip
-O formato muda entre versões do Vite, mas arquivo, linha e mensagem estão sempre lá. O resto costuma ser repetição.
-:::
+O formato muda entre versões do Vite, mas arquivo, linha e mensagem estão sempre lá.
 
 ---
 
-## :icon[triangle-alert] Erros comuns
+## :icon[siren] Quando aparece um erro
 
-:::warning
-- **Esquecer o `export default`.** A tela fica em branco e o Console diz "does not provide an export named 'default'". Todo componente termina com `export default Nome`.
-- **Usar `class` em vez de `className`.** O React avisa no Console: "Invalid DOM property `class`".
-- **Componente com letra minúscula.** `<saudacao />` é tratado como tag HTML desconhecida e aparece vazio. Componentes começam com maiúscula: `<Saudacao />`.
-- **Esquecer de fechar a tag.** `<img src="...">` sem `/>` quebra a compilação; procure a linha que o Vite aponta.
-- **Rodar `npm run dev` fora da pasta.** "Missing script: dev" (na pasta do `lojinha-regras`) ou "Could not read package.json": você não está em `minhas-tarefas`.
-:::
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `does not provide an export named 'default'` | faltou o `export default`; tela em branco | `export default Nome` no fim |
+| ``Invalid DOM property `class` `` | `class` no lugar de `className`; só um aviso | trocar por `className` |
+| `Adjacent JSX elements must be wrapped` | dois irmãos sem raiz | fragmento `<>...</>` |
+| `Expected corresponding JSX closing tag for 'img'` | uma tag sem `/>` | fechar com `/>` |
+| `Missing script: "dev"` ou `Could not read package.json` | o terminal está fora de `minhas-tarefas` | `cd minhas-tarefas` |
+
+Sem mensagem nenhuma: `<saudacao />`, com minúscula, vira tag HTML desconhecida e fica vazio.
 
 ---
 

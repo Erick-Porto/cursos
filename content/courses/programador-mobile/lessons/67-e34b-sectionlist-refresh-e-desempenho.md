@@ -26,6 +26,19 @@ Programador Mobile · Encontro E34 · Aula 67 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **seção** | um grupo da lista, com título próprio: "Áudio", "Casa" |
+| **cabeçalho fixo** | o título da seção que fica preso no topo enquanto você rola |
+| **puxar para atualizar** | o gesto de puxar a lista para baixo para buscar dados novos |
+| **virtualização** | desenhar só os itens perto da tela, e não a lista inteira |
+| **FPS** | quadros por segundo (*frames per second*): quantas vezes a tela se redesenha por segundo |
+| **otimizar** | mudar o código para ele ficar mais rápido ou gastar menos |
+
+---
+
 ## Listas com grupos e dados que mudam
 
 Abra a agenda de contatos: nomes agrupados por letra, e a letra atual fica presa no topo enquanto você rola. No app do banco, o extrato vem agrupado por dia; você puxa a tela para baixo, aparece uma rodinha e as transações novas chegam.
@@ -38,9 +51,15 @@ Com uma `FlatList`, dá para mostrar o título "Áudio" antes dos fones e "Casa"
 
 ---
 
+## SectionList
+
+Como o cardápio separa as entradas das bebidas?
+
+---
+
 ## :icon[list-tree] SectionList: uma lista de grupos
 
-A **`SectionList`** recebe a prop `sections`: um array de seções, cada uma com um `title` e o seu próprio `data`.
+A **`SectionList`** é uma lista dividida em grupos, as **seções**. Pense num cardápio: cada seção (Entradas, Pratos, Bebidas) tem um título e a sua própria lista de itens. Ela recebe a prop `sections`: um array de seções, cada uma com um `title` e o seu próprio `data`.
 
 ```javascript
 const secoes = [
@@ -56,7 +75,37 @@ const secoes = [
 | `data` | sim, com esse nome | o array de itens que a lista percorre na seção |
 | `title` | não; é convenção | o texto que você lê de volta no cabeçalho |
 
-Pense num cardápio: cada seção (Entradas, Pratos, Bebidas) tem um título e a sua própria lista de itens.
+---
+
+## :icon[list-tree] SectionList na prática
+
+Três listas com grupos, sempre no mesmo formato, `{ title, data }`:
+
+**1. Categorias da Lojinha:** um grupo por categoria.
+
+```javascript
+{ title: 'Áudio', data: [/* Fone Bluetooth, Caixa de Som Portátil, Microfone USB */] }
+```
+
+**2. Extrato do banco:** um grupo por dia.
+
+```javascript
+{ title: 'Hoje', data: [/* Pix recebido, Mercado, Farmácia */] }
+```
+
+**3. Projeto 6:** um grupo por cidade.
+
+```javascript
+{ title: 'Campinas, SP', data: [/* as 3 casas de Campinas */] }
+```
+
+Na tela: o título do grupo e, logo abaixo, os itens dele. Muda só o que vai dentro do `title` e do `data`.
+
+---
+
+## Montar as seções
+
+Os produtos chegam todos misturados. Como separar por categoria?
 
 ---
 
@@ -77,7 +126,21 @@ const secoes = categorias.map((categoria) => ({
 ![Animação: o map percorre as 4 categorias e monta uma seção de cada vez, Áudio, Casa, Esporte e Livros; o title vem do nome, e o data recebe do filter os 3 produtos com aquele slug](images/e34-categorias-viram-secoes.svg)
 :::
 
-São o `map` e o `filter` do E09: o `map` transforma as 4 categorias em 4 seções; o `filter` compara o `slug` da categoria com o campo `categoria` do produto. O `title` usa o `nome` ("Áudio"), feito para ler; o `slug` ("audio") é para comparar.
+São o `map` e o `filter` do E09. O `map` é a linha de produção: as 4 categorias entram e saem 4 seções. O `filter` é a peneira: fica só o produto cujo campo `categoria` é igual ao `slug` da categoria.
+
+---
+
+## :icon[list-ordered] As seções em português
+
+| Linha | O que ela diz |
+|---|---|
+| `categorias.map((categoria) => (...))` | "para cada categoria, monte uma seção" |
+| `({ ... })` | os parênteses em volta das chaves fazem a arrow function devolver um objeto |
+| `title: categoria.nome` | o título é o nome feito para ler: `'Áudio'` |
+| `produtos.filter((p) => ...)` | "dos produtos, fique com os desta categoria" |
+| `p.categoria === categoria.slug` | o teste da peneira: o `slug` (`'audio'`) é feito para comparar |
+
+Sem os parênteses, as chaves viram um bloco de código, e não um objeto: aqui, com dois campos, aparece um `SyntaxError`.
 
 ---
 
@@ -104,7 +167,15 @@ O segundo `filter` recebe as seções prontas e mantém só as que têm ao menos
 
 ---
 
+## Desenhar as seções
+
+Uma lista, dois desenhos: o do produto e o do título de cada grupo.
+
+---
+
 ## :icon[rows-3] renderItem e renderSectionHeader
+
+A `SectionList` desenha duas coisas: cada item, com o `renderItem`, e o título de cada seção, com o **`renderSectionHeader`**.
 
 ```jsx
 <SectionList
@@ -127,6 +198,12 @@ Na tela: "Áudio (3)", três cartões, "Casa (3)", mais três, e assim até Livr
 
 ---
 
+## Cabeçalho fixo
+
+Na agenda do celular, por que a letra fica presa no topo enquanto você rola?
+
+---
+
 ## :icon[pin] Cabeçalhos fixos no topo
 
 ::::columns
@@ -134,7 +211,7 @@ Na tela: "Áudio (3)", três cartões, "Casa (3)", mais três, e assim até Livr
 ![Animação: a lista rola, Áudio (3) fica preso no topo enquanto os itens passam por baixo, até Casa (3) subir, empurrá-lo e ocupar o lugar](images/e34-cabecalho-fixo.svg)
 :::
 :::col
-Com **`stickySectionHeadersEnabled`**, o cabeçalho da seção atual gruda no topo enquanto você rola, até ser empurrado pelo da seção seguinte. É a letra da agenda de contatos.
+Um **cabeçalho fixo** fica preso no topo enquanto você rola. Com **`stickySectionHeadersEnabled`** (*sticky* é "grudento"), o título da seção atual gruda no topo até ser empurrado pelo da seção seguinte. É a letra da agenda de contatos.
 :::
 ::::
 
@@ -154,9 +231,15 @@ Cabeçalho fixo precisa de **cor de fundo**. Sem ela, os cartões aparecem por t
 
 ---
 
+## Puxar para atualizar
+
+O que você faz no app do banco para ver se o Pix já caiu?
+
+---
+
 ## :icon[refresh-cw] Puxar para atualizar
 
-O gesto de puxar a lista para baixo pede duas coisas: **se** a lista está atualizando e **o que fazer** quando o usuário puxa.
+**Puxar para atualizar** é o gesto de puxar a lista para baixo e soltar: aparece uma rodinha, e o app busca os dados novos. Ele pede duas coisas: **se** a lista está atualizando e **o que fazer** quando o usuário puxa.
 
 ```jsx
 const [atualizando, setAtualizando] = useState(false);
@@ -173,8 +256,23 @@ function atualizar() {
 ```
 
 - `onRefresh`: chamada quando o usuário puxa e solta
-- `refreshing`: enquanto for `true`, a rodinha gira no topo
+- `refreshing`: enquanto for `true`, a rodinha gira no topo. É estado, o placar do E23: quando muda, a tela se redesenha
 - O `setTimeout` do E18 simula 1,5 s de rede; quem desliga a rodinha é você, com `false`
+
+---
+
+## :icon[refresh-cw] Quem desliga a rodinha
+
+A lista não desliga a rodinha sozinha, nem quando os dados novos chegam. A sequência é sempre esta:
+
+:::steps
+1. O usuário puxa e solta: a lista chama `atualizar`
+2. `setAtualizando(true)`: a rodinha aparece
+3. A busca acontece (hoje, o `setTimeout` de 1,5 s)
+4. `setAtualizando(false)`: a rodinha some
+:::
+
+Sem o passo 4, a rodinha gira para sempre.
 
 Prévia do E42: a busca na API entra no lugar do `setTimeout`, com `await`, e o `setAtualizando(false)` vai para o `finally` do E17. Assim a rodinha para mesmo quando a rede falha.
 
@@ -205,9 +303,17 @@ import { RefreshControl } from 'react-native';
 
 ---
 
+## Virtualização
+
+Se a lista tem mil produtos, o celular precisa desenhar os mil?
+
+---
+
 ## :icon[eye] O que a lista renderiza de verdade
 
-Coloque um `console.log` no `renderItem` e abra uma lista com 1.000 produtos:
+A `FlatList` e a `SectionList` são esteiras: só desenham o que cabe na tela. Isso se chama **virtualização**: a lista monta só os itens de uma janela em volta da área visível e desmonta os que ficam longe dela.
+
+Para ver, coloque um `console.log` no `renderItem` e abra uma lista com 1.000 produtos:
 
 ```jsx
 renderItem={({ item }) => {
@@ -216,7 +322,7 @@ renderItem={({ item }) => {
 }}
 ```
 
-O terminal não mostra 1.000 linhas. A lista **virtualiza**: monta só os itens de uma janela em volta da área visível e desmonta os que ficam longe dela.
+O terminal não mostra 1.000 linhas.
 
 - Na abertura: os 10 primeiros, para a tela aparecer logo
 - Logo depois: em lotes, os que cabem em cerca de 10 telas abaixo
@@ -248,9 +354,15 @@ Os padrões servem para a maioria das listas. Mexa neles só depois de medir.
 
 ---
 
+## Duas otimizações
+
+Num prédio de andares iguais, precisa medir para saber a altura do décimo?
+
+---
+
 ## :icon[zap] getItemLayout e React.memo
 
-Duas otimizações que você vai encontrar em projetos maiores. Por enquanto, saiba que existem e quando ajudam.
+**Otimizar** é mudar o código para ele ficar mais rápido. Estas duas você vai encontrar em projetos maiores. Por enquanto, saiba que existem e quando ajudam.
 
 ```jsx
 const ALTURA = 120; // todo item mede exatamente isso, separador incluído
@@ -261,14 +373,20 @@ const ALTURA = 120; // todo item mede exatamente isso, separador incluído
 />
 ```
 
-- **`getItemLayout`**: com altura fixa, a lista calcula a posição de cada item em vez de medir; rolar até um item distante fica instantâneo. Com altura variável, a conta sai errada
+- **`getItemLayout`**: pense num prédio com andares da mesma altura: o 10º andar fica a 10 alturas do chão, sem medir. Com altura fixa, a lista calcula a posição de cada item em vez de medir; rolar até um item distante fica instantâneo. Com altura variável, a conta sai errada
 - **`React.memo`**: `export default memo(CartaoProduto)`, com `memo` importado de `react`, faz o cartão só redesenhar quando as props mudam
+
+---
+
+## Medir primeiro
+
+O médico receita o remédio antes ou depois do exame?
 
 ---
 
 ## :icon[activity] Meça antes de otimizar
 
-Otimizar no escuro deixa o código mais difícil sem garantia de ganho. Siga a ordem:
+O médico examina antes de receitar. No código é igual: otimizar no escuro deixa o código mais difícil sem garantia de ganho. Siga a ordem:
 
 :::steps
 1. Reproduza: gere 1.000 produtos e role rápido no celular de verdade
@@ -285,7 +403,7 @@ O modo de desenvolvimento é mais lento que o app publicado. Compare medidas fei
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
-- Seção sem a chave `data` (como `itens` ou `produtos`): a `SectionList` quebra ao ler a seção
+- Seção sem a chave `data` (como `itens` ou `produtos`): a `SectionList` quebra ao ler a seção, com `Cannot read property 'length' of undefined`
 - Cabeçalho fixo sem cor de fundo: os cartões aparecem por trás do título
 - Esquecer o `setAtualizando(false)`: a rodinha gira para sempre
 - Passar `refreshing` e `onRefresh` e também um `refreshControl`: o `refreshControl` vence e os outros dois são ignorados

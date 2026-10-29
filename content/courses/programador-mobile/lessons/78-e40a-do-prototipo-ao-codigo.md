@@ -26,6 +26,19 @@ Programador Mobile · Encontro E40 · Aula 78 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **protótipo** | o desenho final das telas, com cores, letras e medidas, quase igual ao app |
+| **wireframe** | o rascunho: caixas cinza que mostram o que vai em cada tela |
+| **handoff** | (*passagem*) a entrega do desenho, de quem desenha para quem programa |
+| **Figma** | o programa, no navegador, em que o design desenha as telas |
+| **inspetor** | o painel do Figma que mostra as medidas, a cor e a fonte do que você selecionou |
+| **checklist** | a lista de conferência: item por item, antes de dizer "pronto" |
+
+---
+
 ## Por que isso importa
 
 Você entra na equipe de um banco digital. Na segunda-feira chega o link do Figma da nova tela **Perfil** e a tarefa: "implementar até sexta".
@@ -35,6 +48,24 @@ Você monta no olho: `padding: 15` aqui, `18` ali, um roxo copiado da imagem que
 :::question
 Como transformar um desenho em código que fica igual ao protótipo e não quebra no que o desenho não mostra?
 :::
+
+---
+
+## O protótipo
+
+Quem constrói uma casa segue o quê: o rascunho no guardanapo ou a planta?
+
+---
+
+## :icon[route] O que é um protótipo
+
+Um **protótipo** é o desenho de alta fidelidade das telas: cores, fontes e medidas finais, quase igual ao app. Pense na obra de uma casa:
+
+- o **wireframe** é o rascunho a lápis: onde fica cada cômodo
+- o **protótipo** é a planta do arquiteto, com todas as medidas escritas
+- você é quem constrói, seguindo a planta
+
+A passagem da planta para a obra chama-se **handoff**. No E30 você partiu de um wireframe, as caixas cinza da Lojinha. Hoje parte de um protótipo.
 
 ---
 
@@ -48,15 +79,13 @@ Como transformar um desenho em código que fica igual ao protótipo e não quebr
 | Implementação | você | as telas em código, ligadas aos dados |
 | Revisão | design e testes | diferenças e bugs para ajustar |
 
-**Protótipo** é o desenho de alta fidelidade: cores, fontes e medidas finais, quase igual ao app. A passagem do design para o código chama-se **handoff**.
-
-No E30 você partiu de um wireframe. Hoje parte do protótipo.
+O **fluxo clicável** são setas entre as telas: no Figma, tocar num botão do desenho leva à tela seguinte, como no app.
 
 ---
 
-## :icon[user] Exemplo: o protótipo da tela Perfil
+## :icon[user] O protótipo na prática
 
-Um frame de 390 por 844, tema claro, margem lateral de 16:
+Um frame (a moldura de uma tela no Figma) de 390 por 844, tema claro, margem lateral de 16:
 
 :::center
 ![Protótipo da tela Perfil com as medidas de cada elemento e dos espaços entre eles](images/e40-prototipo-perfil.svg)
@@ -73,9 +102,29 @@ Um frame de 390 por 844, tema claro, margem lateral de 16:
 
 ---
 
-## :icon[search] O que ler em um protótipo
+## Ler o protótipo
 
-No Figma, selecione um elemento e veja o painel de inspeção. Com <kbd>Alt</kbd> pressionado, o mouse sobre outro elemento mostra a distância.
+Na planta da casa, o pedreiro mede a parede no olho?
+
+---
+
+## :icon[search] O inspetor: as medidas da planta
+
+Na planta da casa, as medidas vêm escritas ao lado de cada parede: o pedreiro não mede no olho. No Figma, quem mostra as medidas é o **inspetor**:
+
+:::steps
+1. Clique num elemento do desenho, como o avatar
+2. No painel da direita, o inspetor mostra largura (W), altura (H), cor e fonte
+3. Com <kbd>Alt</kbd> pressionado, passe o mouse sobre outro elemento: aparece a distância entre os dois
+:::
+
+Confira se o frame está em **1x** (tamanho normal). Em 1x, **1 px do protótipo vale 1 ponto** no React Native, sem conversão. O avatar de 72 do desenho tem 72 pontos no app.
+
+---
+
+## :icon[search] Ler o protótipo na prática
+
+O que o inspetor mostra na tela Perfil:
 
 | O que ler | Onde aparece | Na tela Perfil |
 |---|---|---|
@@ -85,13 +134,19 @@ No Figma, selecione um elemento e veja o painel de inspeção. Com <kbd>Alt</kbd
 | Tipografia | família, peso, tamanho | Inter Bold 20 |
 | Estados | variantes do componente | botão normal, pressionado, desabilitado |
 
-Frame em 1x: **1 px do protótipo vale 1 ponto** no React Native, sem conversão. O avatar de 72 é o `tamanho="lg"` do kit.
+O **hex** é o código da cor, como `#475569`. O **estilo** é o nome que o designer deu a ela, como "Texto suave": é ele que diz a intenção. O avatar de 72 é o `tamanho="lg"` do kit.
+
+---
+
+## Tokens
+
+Se a marca trocar o roxo amanhã, quantos arquivos você vai ter de mudar?
 
 ---
 
 ## :icon[sliders-horizontal] No protótipo, no código: tokens
 
-Copie a **intenção**, não o número. Hex e números soltos ignoram o tema escuro e espalham valores que ninguém lembra de atualizar.
+Os **tokens** do E31 são a paleta de tintas com nome: o valor mora num lugar só, o `tokens.js`. Copie a **intenção** do desenho, não o número. Hex e números soltos ignoram o tema escuro e espalham valores que ninguém lembra de atualizar.
 
 | No protótipo | No código |
 |---|---|
@@ -103,8 +158,29 @@ Copie a **intenção**, não o número. Hex e números soltos ignoram o tema esc
 | raio 12 | `raio.md` |
 
 :::tip Número fora da escala
-Viu 15, 18 ou 22? Use o token mais próximo e confirme com o designer. Quase sempre é descuido no desenho, não intenção.
+Viu 15, 18 ou 22? Use o token mais próximo e confirme com o designer. Quase sempre é descuido no desenho.
 :::
+
+---
+
+## :icon[sliders-horizontal] Tokens na prática
+
+O e-mail da tela Perfil: Inter Regular 16, cor "Texto suave", 4 abaixo do nome.
+
+```jsx
+// Errado: tudo copiado do inspetor
+email: { color: '#475569', fontFamily: 'Inter', fontSize: 16, marginTop: 4 },
+
+// Certo: cada valor vira o token do papel
+<Text style={[estilos.email, { color: cores.textoSuave }]}>{usuario.email}</Text>
+email: { fontFamily: familia.regular, fontSize: fonte.corpo, marginTop: espaco.xs },
+```
+
+| Troca | Com número solto | Com token |
+|---|---|---|
+| Tema escuro | o e-mail continua cinza-escuro sobre fundo escuro e some | `cores.textoSuave` muda junto com o tema |
+| A marca muda o cinza | você caça `#475569` em todos os arquivos | muda uma linha no `tokens.js` |
+| O desenho diz 15 | `15` aqui, `16` ali | `espaco.md`, o 16 mais próximo |
 
 ---
 
@@ -130,9 +206,15 @@ Traduza cada valor do inspetor para o código da Lojinha:
 
 ---
 
+## Telas viram rotas
+
+Por que o carrinho fica numa aba e os filtros sobem por cima da tela?
+
+---
+
 ## :icon[layers] Telas viram rotas
 
-Cada frame é uma tela. As setas do modo protótipo mostram como se chega nela, e isso define o tipo de rota.
+Cada frame do protótipo é uma tela, e cada tela vira uma **rota**, um arquivo em `app/`. As setas do fluxo clicável mostram como se chega nela, e isso define o tipo de rota: a pilha de cartas (a tela nova vai por cima), as abas do fichário ou o modal.
 
 | Tela no protótipo | Como se chega | Rota |
 |---|---|---|
@@ -150,7 +232,38 @@ export { default } from '../../src/telas/Perfil';
 
 ---
 
+## :icon[layers] Rotas na prática
+
+Três setas do protótipo da Lojinha e o código que cada uma vira, como no E36 e no E37:
+
+```jsx
+// 1. Seta para a aba Perfil: o arquivo em app/(tabs)/ põe a aba na barra
+export { default } from '../../src/telas/Perfil';
+
+// 2. Seta do cartão para o Produto: empilha o Detalhe, com voltar
+router.push('/produto/' + id);
+
+// 3. Seta do botão de filtros: sobe o modal (presentation: 'modal' no layout raiz)
+<Link href="/filtros" asChild>{/* o botão de filtros */}</Link>
+```
+
+| Seta no protótipo | Tipo | Na tela |
+|---|---|---|
+| para a aba | abas do fichário | a barra de baixo ganha "Perfil" |
+| do cartão | pilha de cartas | o Detalhe entra por cima; voltar o tira |
+| dos filtros | modal | a tela sobe de baixo e fecha com `router.back()` |
+
+---
+
+## Componentes do kit
+
+Para montar um castelo de Lego, você fabrica as peças?
+
+---
+
 ## :icon[component] Elementos viram componentes do UI kit
+
+Os componentes do UI kit são as peças de Lego do E33: pequenas, reaproveitáveis, encaixam umas nas outras. Para cada elemento do desenho, procure a peça que já existe:
 
 | Elemento no protótipo | Componente | Props |
 |---|---|---|
@@ -160,7 +273,62 @@ export { default } from '../../src/telas/Perfil';
 | Linha com ícone, texto e seta | `OpcaoPerfil` | `icone`, `titulo`, `onPress` |
 | "Sair" roxo sem fundo | `Botao` | `variante="fantasma"`, `icone` |
 
-Antes de criar um componente, procure no UI kit. `OpcaoPerfil` só existe nesta tela, então fica no próprio `Perfil.js`. Se aparecer em outra tela, vai para `src/components/ui/`.
+`OpcaoPerfil` é peça nova e só existe nesta tela, então fica no próprio `Perfil.js`. Se aparecer em outra tela, vai para `src/components/ui/`.
+
+---
+
+## :icon[component] Componentes na prática
+
+Cada peça do kit, com as props do desenho, e o que aparece:
+
+```jsx
+<Avatar nome="Ana Souza" uri={null} tamanho="lg" />
+// um círculo roxo de 72 com "AS": sem foto, o Avatar mostra as iniciais
+
+<Divisor style={{ marginVertical: 0 }} />
+// a linha cinza de 1, sem a margem de 16 que o Divisor traz de fábrica
+
+<Botao titulo="Sair" variante="fantasma" icone="log-out-outline" onPress={sair} />
+// texto roxo com o ícone de saída, sem fundo nem borda
+```
+
+Nenhuma dessas peças ganhou `width`, `height` ou cor por fora: a medida do desenho já é uma variante do kit. O `style` de fora só posiciona, como a margem do `Divisor`.
+
+---
+
+## Checklist de entrega
+
+Antes de receber as chaves da casa nova, o que você confere?
+
+---
+
+## :icon[list-checks] Checklist de entrega de tela
+
+O protótipo mostra só o dia bom: dados carregados, nome curto, tema claro. O **checklist de entrega** é a vistoria antes de entregar as chaves: o que conferir antes de dizer "pronto".
+
+- :icon[hourglass] **4 estados**: carregando, erro, vazio e com dados
+- :icon[eye] **Acessibilidade**: o leitor de tela lê tudo com rótulo e papel; toques de 44 por 44; fonte em 200% sem cortar
+- :icon[sun] **2 temas**: claro e escuro, sem nenhuma cor fixa no código
+- :icon[smartphone] **2 tamanhos**: celular pequeno e tablet (ou celular deitado), com o nome mais longo que você imaginar
+- :icon[check-check] **Fidelidade**: lado a lado com o protótipo, cada medida virou token
+
+Faltou algum? Anote no README o que ficou pendente.
+
+---
+
+## :icon[list-checks] Checklist na prática
+
+Cada item se testa forçando o caso, sem esperar ele acontecer sozinho:
+
+| Item | Como forçar | O que conferir |
+|---|---|---|
+| Erro | `CHANCE_DE_ERRO = 1` | o `EstadoErro`, com "Tentar novamente" |
+| Vazio | `USUARIO_EXEMPLO = null` | "Você ainda não entrou" e o botão "Entrar" |
+| Texto longo | `nome: 'Maria Aparecida dos Santos Albuquerque'` | o nome quebra linha, sem cortar |
+| Fonte em 200% | `adb shell settings put system font_scale 2.0` | as linhas de 56 crescem |
+| Tema escuro | o botão de tema da Lojinha | o cartão escurece e nada some |
+
+Depois de cada teste, volte o valor: `CHANCE_DE_ERRO` em 0.3, o usuário da Ana e `font_scale 1.0`.
 
 ---
 
@@ -182,21 +350,15 @@ O protótipo é um único desenho: Ana Souza, nome curto, tema claro, tela de 39
 
 ---
 
-## :icon[list-checks] Checklist de entrega de tela
+## A tela Perfil
 
-Antes de dizer "pronto", passe a tela por estes itens. Eles cobrem o que o protótipo não diz.
-
-- :icon[hourglass] **4 estados**: carregando, erro, vazio e com dados. Force cada um à mão, como a `CHANCE_DE_ERRO = 1` do E39
-- :icon[eye] **Acessibilidade**: TalkBack ou VoiceOver lê cada elemento com rótulo e papel; toques de 44 por 44; fonte em 200% sem cortar
-- :icon[sun] **2 temas**: claro e escuro, sem nenhuma cor fixa no código
-- :icon[smartphone] **2 tamanhos**: celular pequeno e tablet (ou celular deitado), com o nome mais longo que você imaginar
-- :icon[check-check] **Fidelidade**: lado a lado com o protótipo, cada medida virou token
-
-Faltou algum? Anote no README o que ficou pendente.
+Com as peças prontas e a planta na mão, quanto tempo leva para montar uma tela?
 
 ---
 
 ## :icon[file-code] Perfil.js: o topo
+
+Montar a tela é montar o Lego seguindo o manual: o protótipo é o manual, e as peças vêm do UI kit. Começa pelo topo: avatar, nome e e-mail.
 
 ```jsx
 // imports omitidos: react-native, useTema, tokens e componentes do UI kit
@@ -220,6 +382,19 @@ export default function Perfil() {
 
 ---
 
+## :icon[list-ordered] O topo em português
+
+| Trecho | O que ele diz |
+|---|---|
+| `const usuario = { ... }` | os dados de exemplo da Ana, enquanto o app não tem login; `foto: null` quer dizer "sem foto" |
+| `<ScrollView style={{ backgroundColor: cores.fundo }}>` | "uma tela que rola, com o fundo do tema" |
+| `<Avatar ... tamanho="lg" />` | a foto redonda de 72 do protótipo; sem foto, o `Avatar` mostra "AS" |
+| `[estilos.nome, { color: cores.texto }]` | o tamanho e a fonte vêm do `StyleSheet`; a cor vem do tema |
+
+As medidas do desenho (16 abaixo do avatar, 4 abaixo do nome) viram `marginTop: espaco.md` e `marginTop: espaco.xs` nos estilos `nome` e `email`.
+
+---
+
 ## :icon[file-code] Perfil.js: opções e Sair
 
 ```jsx
@@ -240,9 +415,10 @@ const opcoes = [
 <Botao titulo="Sair" variante="fantasma" icone="log-out-outline" onPress={sair} style={estilos.sair} />
 ```
 
-- `i > 0 &&` põe a linha cinza só **entre** as opções, como no desenho
+- `opcoes.map((opcao, i) => ...)`: uma linha para cada opção; o `i` é a posição, de 0 a 3, e o título serve de crachá (`key`)
+- `i > 0 &&` põe a linha cinza só **entre** as opções, como no desenho: a primeira, de posição 0, fica sem
 - O `Divisor` do kit tem margem vertical de 16; aqui a linha de 56 já dá o respiro, então a margem sai
-- Quatro itens fixos dentro de uma `ScrollView`: `map` basta, sem `FlatList`
+- Quatro itens fixos dentro de uma `ScrollView`: o `map` resolve, sem `FlatList`
 
 ---
 
@@ -266,7 +442,9 @@ opcao: { minHeight: 56, flexDirection: 'row', alignItems: 'center', gap: espaco.
 textoOpcao: { flex: 1, fontFamily: familia.regular, fontSize: fonte.corpo },
 ```
 
-`flex: 1` no texto empurra a seta para a direita e faz um título longo quebrar linha, em vez de jogar a seta para fora da tela.
+- `pressed && { opacity: 0.6 }`: enquanto o dedo aperta, a linha fica mais clara, o retorno ao toque do E32
+- `chevron-forward` é a seta para a direita
+- `flex: 1` no texto empurra a seta para a direita e faz um título longo quebrar linha, em vez de jogar a seta para fora da tela
 
 ---
 
@@ -276,7 +454,10 @@ textoOpcao: { flex: 1, fontFamily: familia.regular, fontSize: fonte.corpo },
 ![Animação: a fonte vai ao máximo e o título Meus pedidos quebra em duas linhas; com height: 56 a linha corta o texto, com minHeight: 56 a linha cresce](images/e40-fonte-grande.svg)
 :::
 
-O protótipo mostra só a fonte padrão. Com a fonte do celular no máximo, o título cresce e o `flex: 1` o quebra em duas linhas. Com `height: 56`, a linha fica presa e corta o texto; com `minHeight: 56`, ela cresce junto.
+O protótipo mostra só a fonte padrão. Com a fonte do celular no máximo, o título cresce e o `flex: 1` o quebra em duas linhas.
+
+- `height: 56` é a caixa de sapato do E38: a linha fica presa e corta o texto
+- `minHeight: 56` é a sacola: tem 56 de partida e cresce junto com o texto
 
 ---
 

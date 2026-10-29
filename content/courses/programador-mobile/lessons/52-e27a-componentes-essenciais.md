@@ -26,6 +26,19 @@ Programador Mobile · Encontro E27 · Aula 52 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **componente nativo** | uma peça de tela do próprio Android ou iOS: um texto, uma imagem, um botão |
+| **imagem local** | uma imagem guardada na pasta do projeto, que vai junto com o app |
+| **imagem remota** | uma imagem que vem de um endereço na internet |
+| **rolagem** | deslizar o dedo para ver o que não coube na tela (*scroll*, em inglês) |
+| **notch** | o recorte no topo da tela, onde ficam a câmera e o alto-falante |
+| **área segura** | a parte da tela que o notch e a barra de status não cobrem |
+
+---
+
 ## Não existe div
 
 Você abre o `App.js` do `minhas-tarefas-mobile`, digita `<div>` por hábito e o Expo mostra uma tela vermelha.
@@ -40,7 +53,15 @@ Se não existe `div`, `p` nem `img`, com o que você monta a tela de perfil de u
 
 ---
 
+## Componentes nativos
+
+Se as peças de Lego fossem de outra marca, o que mudaria?
+
+---
+
 ## :icon[arrow-left-right] De HTML para React Native
+
+Os componentes continuam sendo peças de Lego (E22): pequenas, reaproveitáveis, uma encaixando na outra. No celular, as peças vêm de outra caixa, com outros nomes. Cada uma faz o papel de uma tag do HTML:
 
 | Na web (HTML) | No React Native | Para que serve |
 |---|---|---|
@@ -51,7 +72,7 @@ Se não existe `div`, `p` nem `img`, com o que você monta a tela de perfil de u
 | `button` | `Button` ou `Pressable` | responder ao toque |
 | área com rolagem | `ScrollView` | conteúdo maior que a tela |
 
-Todos vêm do pacote `react-native`, importados pelo nome:
+Todos vêm do pacote `react-native`, importados pelo nome, entre chaves:
 
 ```jsx
 import { View, Text, Image, TextInput, Pressable, ScrollView } from 'react-native';
@@ -59,9 +80,54 @@ import { View, Text, Image, TextInput, Pressable, ScrollView } from 'react-nativ
 
 ---
 
+## :icon[code-xml] Componentes nativos na prática
+
+Três pedaços da web traduzidos para o celular:
+
+```jsx
+// título: na web, <h1>Minhas Tarefas</h1>
+<Text>Minhas Tarefas</Text>
+
+// campo: na web, <input placeholder="Nova tarefa" />
+<TextInput placeholder="Nova tarefa" />
+
+// botão: na web, <button>Adicionar</button>
+<Pressable>
+  <Text>Adicionar</Text>
+</Pressable>
+```
+
+- O título e o texto do botão vão dentro de `Text`
+- O botão vira `Pressable`, com o texto dentro dele
+- Na tela, aparecem um título, um campo com a dica "Nova tarefa" e a palavra "Adicionar", ainda sem estilo
+
+---
+
+## View
+
+Para que serve uma caixa organizadora na prateleira?
+
+---
+
 ## View: a caixa que organiza
 
-`View` é a `div` do React Native: não mostra nada sozinha, só **agrupa** o que está dentro. Você aninha Views para dividir a tela em regiões.
+`View` é a `div` do React Native: uma **caixa** que não mostra nada sozinha. Ela só **agrupa** o que está dentro, como uma caixa organizadora na prateleira. Você coloca Views dentro de Views para dividir a tela em regiões.
+
+```jsx
+<View>
+  {/* o que fica junto vai aqui dentro */}
+</View>
+```
+
+- Uma `View` pode ter outras `View`, textos, imagens e botões dentro
+- Sem estilo, ela é invisível: só os filhos aparecem
+- O `{/* ... */}` é um comentário dentro do JSX: o app ignora
+
+---
+
+## View na prática
+
+Uma tela com duas regiões, o cabeçalho e a lista:
 
 ::::columns
 :::col
@@ -91,17 +157,22 @@ A View de fora é a tela; as duas de dentro são o cabeçalho e a lista. Sem est
 
 ---
 
+## Text
+
+Nos quadrinhos, onde fica a fala de um personagem?
+
+---
+
 ## Text: todo texto vive dentro de Text
 
-No React Native, **qualquer** texto (título, rótulo, número) precisa estar dentro de um `Text`. Para destacar um trecho, aninhe um `Text` dentro de outro:
+No React Native, **qualquer** texto (título, rótulo, número) precisa estar dentro de um `Text`. Pense no balão de fala dos quadrinhos: fala fora do balão não aparece.
 
 ```jsx
-<Text>
-  Prioridade: <Text style={{ fontWeight: 'bold' }}>alta</Text>
-</Text>
+<Text>Minhas Tarefas</Text>
 ```
 
-O `Text` de dentro herda a fonte do de fora e muda só o que você pedir. A prop `style` ganha uma aula inteira a seguir; aqui, repare só no aninhamento.
+- O texto vai entre a abertura `<Text>` e o fechamento `</Text>`
+- Um número calculado também vai dentro: `<Text>{pendentes} pendentes</Text>`
 
 :::warning Texto solto quebra o app
 `<View>Olá</View>` derruba o app com a tela vermelha `Text strings must be rendered within a <Text> component`. Envolva: `<View><Text>Olá</Text></View>`.
@@ -109,9 +180,48 @@ O `Text` de dentro herda a fonte do de fora e muda só o que você pedir. A prop
 
 ---
 
+## :icon[message-square] Text na prática
+
+Para destacar um trecho, **aninhe** um `Text` dentro de outro, ou seja, coloque um dentro do outro:
+
+```jsx
+<Text>
+  Prioridade: <Text style={{ fontWeight: 'bold' }}>alta</Text>
+</Text>
+```
+
+Na tela: "Prioridade: **alta**", com só a palavra "alta" em negrito.
+
+O `Text` de dentro herda a fonte do de fora e muda só o que você pedir: aqui, `fontWeight: 'bold'` deixa "alta" em negrito. A prop `style` ganha uma aula inteira, a aula 53; aqui, repare só no aninhamento.
+
+| Você quer mostrar | Escreva |
+|---|---|
+| um título | `<Text>Minhas Tarefas</Text>` |
+| um texto com um número | `<Text>{pendentes} pendentes</Text>` |
+| uma palavra destacada | um `Text` dentro de outro |
+
+---
+
+## Image
+
+Foto da galeria ou foto aberta por um link: qual a diferença?
+
+---
+
 ## Image: local e remota
 
-Uma imagem **local** fica na pasta `assets/` do projeto e entra com `require`, que pede ao Expo para embutir o arquivo no app (código continua com o `import` do E11). Uma imagem **remota** vem de um endereço na internet, em um objeto com `uri` (duas chaves: a janela do JSX, do E21, e o objeto literal, do E08).
+A `Image` mostra uma imagem. Ela vem de um de dois lugares, como uma foto salva na galeria ou uma foto aberta por um link:
+
+- **Local**: o arquivo fica em `assets/` e entra com `require`, que pede ao Expo para embutir o arquivo no app. Código continua com o `import` do E11
+- **Remota**: vem da internet, num objeto com `uri`, o endereço. As duas chaves são a janela do JSX (E21) e o objeto (E08)
+
+A imagem local já sabe o próprio tamanho. A remota não: ela precisa de `width` (largura) e `height` (altura).
+
+---
+
+## :icon[image] Image na prática
+
+Uma imagem de cada tipo:
 
 ```jsx
 import { Image } from 'react-native';
@@ -126,15 +236,37 @@ import { Image } from 'react-native';
 />
 ```
 
+Na tela: a `foto.png` no tamanho do arquivo e, embaixo, uma foto da internet num quadrado de 200 por 200.
+
 :::info
-O aparelho não sabe o tamanho de uma imagem remota antes de baixá-la. Sem `width` e `height`, ela ocupa zero pixels e simplesmente não aparece, sem nenhum erro.
+O aparelho não sabe o tamanho de uma imagem remota antes de baixá-la. Sem `width` e `height`, ela ocupa zero pixels e não aparece, sem nenhum erro.
 :::
+
+---
+
+## ScrollView
+
+Como você lê uma notícia que não cabe na tela do celular?
 
 ---
 
 ## ScrollView: quando o conteúdo passa da tela
 
-Uma `View` não rola. O que não cabe na tela fica cortado, sem aviso. Para o usuário deslizar o dedo e ver o resto, troque a View de fora por `ScrollView`.
+Uma `View` não rola: o que não cabe na tela fica cortado, sem aviso. A **`ScrollView`** é a caixa que rola. Como numa notícia comprida no celular, o usuário desliza o dedo e vê o resto.
+
+```jsx
+<ScrollView>
+  {/* conteúdo maior que a tela */}
+</ScrollView>
+```
+
+Para isso, troque a View de fora por `ScrollView`. Ela serve para telas com poucos itens fixos, escritos no JSX: um perfil, um formulário, um texto comprido.
+
+---
+
+## :icon[scroll-text] ScrollView na prática
+
+Trinta tarefas escritas à mão, mais do que cabe na tela:
 
 ```jsx
 import { ScrollView, Text } from 'react-native';
@@ -151,15 +283,37 @@ export default function Lista() {
 }
 ```
 
+Na tela: as primeiras tarefas e, ao deslizar o dedo para cima, as outras, até a Tarefa 30. Com `View` no lugar de `ScrollView`, as últimas ficariam cortadas.
+
 :::info
 Para listas longas, com dezenas ou centenas de itens, existe a `FlatList`, que só desenha o que está visível. Ela chega no E28.
 :::
 
 ---
 
+## TextInput
+
+No WhatsApp, onde você digita a mensagem?
+
+---
+
 ## TextInput: o campo de digitação
 
-`TextInput` é o `input` do celular. Ele abre o teclado ao receber o toque e avisa cada mudança pelo `onChangeText`.
+`TextInput` (entrada de texto) é o `input` do celular: o campo onde você digita, como o da mensagem no WhatsApp. Ao receber o toque, ele abre o teclado e avisa cada mudança pelo `onChangeText` ("quando o texto mudar").
+
+- `placeholder`: a dica cinza que aparece antes de digitar
+- `onChangeText` chama uma função a cada letra e entrega o **texto pronto**, não um evento. No E23 você escrevia `e.target.value`; aqui é só `texto`
+- Guardar o texto, com o `useState` do E23, é assunto do E28. Hoje o campo só mostra o texto no terminal
+
+:::tip
+Sem estilo, o campo pode parecer invisível, principalmente no iPhone. Toque onde ele deveria estar: o teclado abre.
+:::
+
+---
+
+## :icon[keyboard] TextInput na prática
+
+Um campo de nova tarefa que mostra no terminal tudo o que você digita:
 
 ```jsx
 import { TextInput } from 'react-native';
@@ -170,19 +324,27 @@ import { TextInput } from 'react-native';
 />
 ```
 
-- `placeholder`: a dica cinza que aparece antes de digitar
-- `onChangeText` entrega o **texto pronto**, não um evento. No formulário do E23 você escrevia `e.target.value`; aqui é só `texto`
-- Nesta aula o campo é só visual. Guardar o que foi digitado, com o mesmo `useState` do E23, é assunto do E28
+Toque no campo e digite "pão". No terminal do Expo, uma linha por letra, sempre com o texto inteiro até ali:
 
-:::tip
-Sem estilo, o campo pode parecer invisível, principalmente no iPhone. Toque onde ele deveria estar: o teclado abre.
-:::
+```plaintext
+ LOG  p
+ LOG  pã
+ LOG  pão
+```
+
+O `onChangeText` entrega o texto pronto: nada de `e.target.value`.
+
+---
+
+## Botões
+
+Camiseta de tamanho único ou roupa sob medida: qual fica do seu jeito?
 
 ---
 
 ## Button ou Pressable?
 
-Os dois respondem ao toque com `onPress`. A diferença é quanto você controla a aparência.
+Os dois respondem ao toque com `onPress` ("ao pressionar"). A diferença é quanto você controla a aparência: o `Button` é roupa pronta, de tamanho único; o `Pressable` é roupa sob medida.
 
 ```jsx
 import { Button, Pressable, Text } from 'react-native';
@@ -206,56 +368,29 @@ No projeto, use `Pressable`.
 
 ---
 
-## Pense
+## :icon[mouse-pointer-click] Botões na prática
 
-:::question
-Imagine a tela de um app de música tocando uma faixa: a capa do álbum, o nome da música, o nome do artista e três botões (anterior, tocar, próxima).
-
-O que vira `View`, o que vira `Text`, o que vira `Image` e o que vira `Pressable`?
-:::
-
-:::info Resposta
-- `Image`: a capa do álbum
-- `Text`: o nome da música e o nome do artista, cada um no seu `Text`
-- `Pressable`: os três botões, cada um com um `Text` dentro
-- `View`: a tela inteira, o bloco dos textos e a linha dos botões; ela não aparece, só organiza
-:::
-
----
-
-## :icon[smartphone] SafeAreaView: fora do notch
-
-::::columns
-:::col
-![Antes e depois: sem SafeAreaView, o título Minhas Tarefas fica atrás do relógio e da câmera; com SafeAreaView, ele começa abaixo da barra de status, dentro da área segura](images/e27-area-segura.svg)
-:::
-:::col
-Em celulares com notch ou barra de status, o conteúdo começa **atrás do relógio e da câmera**. A **área segura** é a parte da tela que nada cobre.
-:::
-::::
-
-Instale o pacote pelo Expo, que escolhe a versão compatível com o projeto:
-
-```bash
-npx expo install react-native-safe-area-context
-```
+Dois usos comuns do `Pressable`, com o que aparece no terminal a cada toque:
 
 ```jsx
-import { Text } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+// 1. um botão de texto
+<Pressable onPress={() => console.log('adicionar')}>
+  <Text>Adicionar</Text>
+</Pressable>
 
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <SafeAreaView>
-        <Text>Minhas Tarefas</Text>
-      </SafeAreaView>
-    </SafeAreaProvider>
-  );
-}
+// 2. um cartão inteiro que responde ao toque
+<Pressable onPress={() => console.log('abrir tarefa')}>
+  <Text>Estudar React Native</Text>
+  <Text>alta</Text>
+</Pressable>
 ```
 
-`SafeAreaProvider` envolve o app uma única vez; `SafeAreaView` envolve o conteúdo de cada tela.
+```plaintext
+ LOG  adicionar
+ LOG  abrir tarefa
+```
+
+O `Pressable` aceita vários filhos: no segundo caso, tocar em qualquer parte do cartão chama a mesma função.
 
 ---
 
@@ -280,19 +415,88 @@ export default function Perfil() {
 }
 ```
 
+Para ver no celular, importe no `App.js` (`import Perfil from './Perfil';`) e use `<Perfil />` na tela.
+
 Na tela: a foto, os dois textos e a palavra "Seguir", um abaixo do outro, colados no canto superior esquerdo e com a fonte padrão. Funciona, mas ainda não parece um app. Toque em "Seguir" e veja `seguindo` no terminal do Expo.
 
 ---
 
-## :icon[bug] Erros comuns
+## Pense
 
-:::warning
-- Texto solto fora de `Text`: `<View>Olá</View>` derruba o app na hora
-- `Image` remota sem `width` e `height`: nada aparece e nenhum erro avisa
-- `onClick` em vez de `onPress`: o botão não responde e ninguém reclama
-- `div`, `p` ou `span` por hábito: o React Native não conhece tags HTML
-- Esquecer o `import` de `react-native`: o componente fica indefinido e a tela vermelha aponta o nome
+:::question
+Imagine a tela de um app de música tocando uma faixa: a capa do álbum, o nome da música, o nome do artista e três botões (anterior, tocar, próxima).
+
+O que vira `View`, o que vira `Text`, o que vira `Image` e o que vira `Pressable`?
 :::
+
+:::tip Resposta
+- `Image`: a capa do álbum
+- `Text`: o nome da música e o nome do artista, cada um no seu `Text`
+- `Pressable`: os três botões, cada um com um `Text` dentro
+- `View`: a tela inteira, o bloco dos textos e a linha dos botões; ela não aparece, só organiza
+:::
+
+---
+
+## Área segura
+
+Num porta-retratos, o que acontece com a parte da foto atrás da moldura?
+
+---
+
+## :icon[smartphone] SafeAreaView: fora do notch
+
+::::columns
+:::col
+![Antes e depois: sem SafeAreaView, o título Minhas Tarefas fica atrás do relógio e da câmera; com SafeAreaView, ele começa abaixo da barra de status, dentro da área segura](images/e27-area-segura.svg)
+:::
+:::col
+Em celulares com notch ou barra de status, o conteúdo começa **atrás do relógio e da câmera**.
+
+É como a moldura de um porta-retratos: a parte da foto que fica atrás dela some. A **área segura** é a parte da tela que nada cobre.
+
+O **`SafeAreaView`** é uma `View` que começa dentro da área segura.
+:::
+::::
+
+---
+
+## :icon[download] Área segura na prática
+
+O `SafeAreaView` vem de um pacote à parte. Instale pelo Expo, que escolhe a versão compatível com o projeto (o `npm install` não escolhe):
+
+```bash
+npx expo install react-native-safe-area-context
+```
+
+```jsx
+import { Text } from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView>
+        <Text>Minhas Tarefas</Text>
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
+```
+
+`SafeAreaProvider` envolve o app uma única vez; `SafeAreaView` envolve o conteúdo de cada tela. Na tela: "Minhas Tarefas" logo abaixo do relógio, inteiro, em qualquer celular.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Text strings must be rendered within a <Text> component` | "texto precisa estar dentro de `<Text>`": há texto solto | envolver o texto em `<Text>` |
+| o nome `div`, `p` ou `span` | uma tag HTML, por hábito | trocar pelo componente: `View`, `Text` |
+| o nome de um componente, como `Pressable` | ele faltou no `import` | acrescentar ao `import { ... } from 'react-native'` |
+| nenhuma; a imagem não aparece | imagem remota sem tamanho | `width` e `height` no `style` |
+| nenhuma; o botão não responde | `onClick` no lugar de `onPress` | trocar por `onPress` |
 
 ---
 

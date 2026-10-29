@@ -27,6 +27,19 @@ Programador Mobile · Encontro E15 · Aula 29 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **classe** | o molde de um tipo de objeto, escrito uma vez, como uma forma de bolo |
+| **instância** | cada objeto criado a partir da classe, como cada bolo feito com a forma |
+| **`new`** | a palavra que cria uma instância nova a partir da classe |
+| **`constructor`** | a parte da classe que prepara cada instância nova (*constructor*, construtor) |
+| **propriedade** e **método** | os dados do objeto (nome, preço) e as funções que ele sabe fazer |
+| **`this`** | dentro de um método, o objeto que fez a chamada, o que vem antes do ponto |
+
+---
+
 ## A mesma regra em três lugares
 
 A loja decidiu: um produto fica **em destaque** quando a equipe o marcou ou quando a nota é 4,5 ou mais. A regra aparece no script da vitrine, no relatório do catálogo e na busca:
@@ -47,9 +60,15 @@ Onde essa regra deveria morar para que todo o código use a mesma, sem cópias?
 
 ---
 
+## Orientação a objetos
+
+E se a ficha de cadastro do produto soubesse fazer as próprias contas?
+
+---
+
 ## :icon[boxes] Orientação a objetos: dados que sabem responder
 
-Até aqui, o produto é um **objeto literal** só com dados, e as regras ficam em funções que recebem o produto. Na **orientação a objetos**, dados e regras ficam juntos: o objeto guarda as **propriedades** (nome, preço) e responde perguntas sobre si por meio de **métodos**.
+Até aqui, o produto é uma ficha de cadastro só com dados: um **objeto literal**. As regras ficam em funções que recebem a ficha. Na **orientação a objetos**, a ficha também sabe responder perguntas sobre si: o objeto guarda as **propriedades** (nome, preço) e responde por meio de **métodos**.
 
 ```javascript
 // função solta: a regra mora longe do dado
@@ -59,9 +78,22 @@ emDestaque(produto);
 produto.emDestaque();
 ```
 
-Você já usa objetos assim: `texto.trim()` limpa aquela string e `lista.includes(7)` procura naquele array.
+As funções puras de `src/regras/` continuam ótimas para cálculos isolados, como o frete. Classes servem para as **entidades** da loja, as coisas que ela guarda e acompanha: produto, pedido, pagamento.
 
-As funções puras de `src/regras/` continuam ótimas para cálculos isolados, como o frete. Classes servem para as **entidades** da loja: produto, pedido, pagamento.
+---
+
+## :icon[message-square] Orientação a objetos na prática
+
+Você já usa objetos que respondem sobre si. Repare no ponto: primeiro o objeto, depois o método.
+
+```javascript
+'  Fone Bluetooth  '.trim(); // 'Fone Bluetooth': o texto se limpa
+[1, 4, 7].includes(7);       // true: a lista procura em si mesma
+(199.9).toFixed(2);          // '199.90': o número se formata
+```
+
+- Ninguém passa o texto para o `trim`: ele já sabe qual texto limpar, o que vem antes do ponto
+- Hoje você cria objetos assim para a Lojinha: `produto.precoPara(2)`, `produto.emDestaque()`
 
 ---
 
@@ -87,9 +119,15 @@ Uma **classe** resolve isso: você escreve os métodos **uma vez** e cria quanto
 
 ---
 
+## Classe e instância
+
+Com uma forma de bolo, quantos bolos dá para fazer?
+
+---
+
 ## :icon[copy] Classe e instância
 
-Uma **classe** é o molde; uma **instância** é cada objeto criado a partir dele, como cada ficha preenchida a partir de uma ficha de cadastro em branco.
+Uma **classe** é a forma de bolo; cada **instância** é um bolo feito com ela. A forma é uma só e define o formato; cada bolo tem o seu recheio.
 
 :::center
 ![Diagrama: a classe Produto é o molde, com os campos id, nome e preco em branco e o método emDestaque; new cria as instâncias fone e caixa, cada uma com os próprios valores](images/e15-classe-e-instancias.svg)
@@ -115,14 +153,22 @@ console.log(fone.nome); // 'Fone Bluetooth'
 console.log(fone);      // Produto { id: 1, nome: 'Fone Bluetooth', preco: 199.9 }
 ```
 
-- `class Produto` declara o molde. O nome vai em **PascalCase**, com a primeira letra maiúscula: é o combinado que separa a classe (`Produto`) das variáveis e funções (`produto`, `calcularFrete`)
+- `class Produto` declara a forma. O nome vai em **PascalCase**, com a primeira letra maiúscula: é o combinado que separa a classe (`Produto`) das variáveis e funções (`produto`, `calcularFrete`)
 - O **`constructor`** roda uma vez para cada instância nova e prepara os dados dela
 - `this.nome = nome` cria a **propriedade** `nome` na instância, com o valor recebido
 - **`new Produto(...)`** cria a instância e chama o `constructor` com esses argumentos
 
 ---
 
+## O new
+
+O que precisa acontecer para a forma virar um bolo?
+
+---
+
 ## :icon[circle-plus] O que o new faz
+
+O **`new`** é a hora de fazer um bolo com a forma: ele pega a classe e entrega uma instância nova, pronta. Por dentro, são quatro passos:
 
 :::steps
 1. Cria um objeto vazio
@@ -156,13 +202,21 @@ const doCatalogo = { id: 1, nome: 'Fone Bluetooth', preco: 199.9 };
 console.log(doCatalogo instanceof Produto); // false
 ```
 
-As duas instâncias vêm do mesmo molde, mas cada uma guarda os próprios valores. O operador **`instanceof`** pergunta se um objeto foi criado por aquela classe.
+As duas instâncias vêm da mesma forma, mas cada uma guarda os próprios valores. O operador **`instanceof`** (*instância de*) pergunta se um objeto foi criado por aquela classe.
 
 Um objeto literal com os mesmos campos **não** é instância: ele tem os dados, mas não tem os métodos da classe.
 
 ---
 
+## Métodos
+
+Que perguntas um produto deveria saber responder sozinho?
+
+---
+
 ## :icon[square-function] Métodos: o que o produto sabe fazer
+
+Um **método** é uma função que mora dentro da classe: é a pergunta que você faz ao objeto. "Você é da categoria áudio?" "Quanto custam 2 de você?"
 
 ```javascript
 class Produto {
@@ -182,27 +236,66 @@ fone.ehDaCategoria('audio'); // true
 fone.precoPara(2);           // 399.8
 ```
 
-- Um **método** é uma função declarada dentro da classe, **sem** a palavra `function`
-- Entre os métodos não há vírgula: classe não é objeto literal
+- O método se escreve **sem** a palavra `function`, e entre os métodos não há vírgula: classe não é objeto literal
 - Você chama com ponto e parênteses, como qualquer função: `fone.precoPara(2)`
+
+---
+
+## :icon[store] Métodos na prática: a vitrine pergunta
+
+Com a categoria no `constructor`, cada produto responde por si. A vitrine só pergunta:
+
+```javascript
+const fone = new Produto(1, 'Fone Bluetooth', 199.9, 'audio');
+const luminaria = new Produto(4, 'Luminária de Mesa', 89.9, 'casa');
+
+for (const produto of [fone, luminaria]) {
+  console.log(produto.nome, produto.precoPara(3), produto.ehDaCategoria('casa'));
+}
+// Fone Bluetooth 599.7 false
+// Luminária de Mesa 269.7 true
+```
+
+O laço não sabe o preço de ninguém: cada produto faz a própria conta.
+
+---
+
+## O this
+
+Quando a Ana diz "eu" e o Bruno diz "eu", é a mesma pessoa?
 
 ---
 
 ## :icon[target] this: a instância antes do ponto
 
-Dentro de um método, **`this`** é a instância que fez a chamada, como no objeto literal do E11. O método é um só, escrito na classe; o `this` muda a cada chamada.
+O **`this`** funciona como a palavra "eu" numa frase: quem é o "eu" depende de quem está falando. Num método, quem fala é a instância **antes do ponto**, como no E11.
+
+```javascript
+precoPara(qtd) {
+  return paraReais(paraCentavos(this.preco) * qtd); // this.preco: "o meu preço"
+}
+```
+
+O método é um só, escrito na classe; o `this` muda a cada chamada. Por isso `this.preco` acha o preço de cada produto sem você passar o preço como argumento.
+
+:::info Método solto
+Como no E11, o método solto perde o `this`: depois de `const calcular = fone.precoPara;`, a chamada `calcular(2)` dá `TypeError`: não há ninguém antes do ponto.
+:::
+
+---
+
+## :icon[target] this na prática
+
+Olhe o que vem antes do ponto em cada chamada:
 
 | Chamada | `this` vale | Resultado |
 |---|---|---|
 | `fone.precoPara(2)` | `fone` | `399.8` |
 | `caixa.precoPara(2)` | `caixa` | `499.8` |
 | `fone.ehDaCategoria('casa')` | `fone` | `false` |
+| `caixa.ehDaCategoria('audio')` | `caixa` | `true` |
 
-Olhe o que vem **antes do ponto**: por isso `this.preco` acha o preço de cada produto sem você passar o preço como argumento.
-
-:::info Método solto
-Como no E11, o método solto perde o `this`: depois de `const calcular = fone.precoPara;`, a chamada `calcular(2)` dá `TypeError: Cannot read properties of undefined (reading 'preco')`. Chame com o ponto.
-:::
+Mesmo método, `this` diferente: o `precoPara` lê 199.9 quando o `fone` chama, e 249.9 quando a `caixa` chama.
 
 ---
 
@@ -233,11 +326,17 @@ O JavaScript para com `ReferenceError: preco is not defined`. Sozinho, `preco` p
 
 ---
 
+## Receber um objeto
+
+O que acontece se alguém escreve o telefone no campo do nome?
+
+---
+
 ## :icon[variable] Muitos campos: receba um objeto
 
-O produto do catálogo tem oito campos. Com oito parâmetros, a ordem vira armadilha: `new Produto('Fone Bluetooth', 199.9, 1)` não dá erro, só cria um produto de id `'Fone Bluetooth'`, chamado `199.9`, que custa R$ 1,00.
+Quando a classe tem muitos campos, o `constructor` recebe **um objeto só**, a ficha inteira, e tira cada campo pelo nome. Com oito parâmetros soltos, a ordem vira armadilha: `new Produto('Fone Bluetooth', 199.9, 1)` não dá erro, só cria um produto de id `'Fone Bluetooth'`, chamado `199.9`, que custa R$ 1,00.
 
-O jeito seguro é receber **um objeto** e desestruturar os campos pelo nome, com valores padrão, como no E09:
+O jeito seguro é desestruturar os campos pelo nome, com valores padrão, como no E09:
 
 ```javascript
 export default class Produto {
@@ -253,7 +352,42 @@ export default class Produto {
 }
 ```
 
-A ordem deixa de importar, campo ausente recebe o **valor padrão** e cada item de `src/data/produtos.js` já chega nesse formato: `new Produto(produtos[0])`.
+---
+
+## :icon[list-ordered] O constructor com objeto em português
+
+| Parte | O que ela diz |
+|---|---|
+| `constructor({ ... })` | "recebo uma ficha; tiro dela cada campo pelo nome" |
+| `id, nome, preco, ...` | "quero estes campos da ficha" |
+| `destaque = false` | "se a ficha não trouxer `destaque`, use `false`": é o **valor padrão** |
+| `this.id = id` | "guarde o `id` na instância" |
+
+A ordem deixa de importar, e campo ausente recebe o valor padrão. Cada item de `src/data/produtos.js` já chega nesse formato: `new Produto(produtos[0])`.
+
+---
+
+## :icon[id-card] Receber um objeto na prática
+
+**Caso 1: a ficha do catálogo entra inteira.**
+
+```javascript
+const fone = new Produto(produtos[0]);
+console.log(fone.nome, fone.destaque); // Fone Bluetooth true
+```
+
+**Caso 2: outra ordem, campos faltando.** Os nomes guiam cada valor, e o que falta usa o padrão:
+
+```javascript
+const caneca = new Produto({ preco: 39.9, nome: 'Caneca', id: 13 });
+console.log(caneca.nome, caneca.destaque, caneca.avaliacao); // Caneca false 0
+```
+
+---
+
+## Classes no projeto
+
+Em que pasta do lojinha-regras moram os dados? E as regras?
 
 ---
 
@@ -299,6 +433,10 @@ for (const produto of lista) {
 
 Os itens de `produtos.js` são **dados**: objetos literais, sem métodos. O `map` passa cada um pelo `new` e devolve instâncias, que já respondem `emDestaque()`. `node src/scripts/vitrine.js` imprime os 6 produtos em destaque.
 
+---
+
+## :icon[folder-tree] Cada pasta com o seu papel
+
 | Pasta | O que guarda | Exemplo |
 |---|---|---|
 | `src/data/` | dados crus | `produtos.js` |
@@ -306,11 +444,19 @@ Os itens de `produtos.js` são **dados**: objetos literais, sem métodos. O `map
 | `src/modelos/` | classes da loja | `Produto`, `Pedido` |
 | `src/scripts/` | o que roda no terminal | `vitrine.js` |
 
+Os dados ficam em `data`, as contas em `regras`, as entidades em `modelos`. Os scripts só juntam as peças e imprimem.
+
+---
+
+## Testar a classe
+
+Como o computador corrige sozinho a prova de uma classe?
+
 ---
 
 ## :icon[test-tube] Testando a classe com Jest
 
-A classe não depende de terminal nem de arquivo. Testar é criar uma instância com dados conhecidos e conferir o que ela responde. Em `src/modelos/Produto.test.js`:
+Um teste automatizado é uma prova com gabarito que o computador corrige sozinho (E04). A classe não depende de terminal nem de arquivo: testar é criar uma instância com dados conhecidos e conferir o que ela responde. Em `src/modelos/Produto.test.js`:
 
 ```javascript
 import Produto from './Produto.js';
@@ -334,6 +480,34 @@ Rode com `npm test`, como no E04.
 
 ---
 
+## :icon[test-tube] Testes na prática: verde e vermelho
+
+**Caso 1: mais uma regra com gabarito.** Cada método ganha o seu teste:
+
+```javascript
+test('ehDaCategoria compara a categoria', () => {
+  const produto = new Produto(dados); // a Luminária, da categoria casa
+  expect(produto.ehDaCategoria('casa')).toBe(true);
+  expect(produto.ehDaCategoria('audio')).toBe(false);
+});
+```
+
+**Caso 2: o teste pega o erro.** Apague o `this.` de `precoPara` e rode `npm test`: o teste do `precoPara` fica vermelho com `ReferenceError: preco is not defined`. Devolva o `this.`: verde de novo.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `cannot be invoked without 'new'` | faltou o `new` antes da classe | `new Produto(dados)` |
+| `preco is not defined` | o método leu `preco` sem o `this.` | `this.preco` |
+| `Cannot read properties of undefined` | o método foi chamado solto, sem objeto antes do ponto | chamar com o ponto: `fone.precoPara(2)` |
+| `Unexpected token ','` | vírgula entre os métodos da classe | apagar a vírgula |
+| `emDestaque is not a function` | o item de `produtos.js` ainda não passou pelo `new` | criar a instância antes |
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
@@ -350,7 +524,7 @@ Rode com `npm test`, como no E04.
 
 :::summary
 - A orientação a objetos junta dados (propriedades) e comportamento (métodos) no mesmo objeto
-- A classe é o molde; cada `new Produto(dados)` cria uma instância com os próprios valores
+- A classe é a forma; cada `new Produto(dados)` cria uma instância com os próprios valores
 - O `constructor` prepara a instância, e `this` é a instância que vem antes do ponto na chamada
 - `src/modelos/Produto.js` recebe um objeto do catálogo e concentra regras como `emDestaque()`
 - Uma classe se testa com Jest como uma função pura: dados conhecidos, resposta esperada

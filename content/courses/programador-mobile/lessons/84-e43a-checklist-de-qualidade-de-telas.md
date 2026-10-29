@@ -28,6 +28,19 @@ Programador Mobile · Encontro E43 · Aula 84 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **checklist** | a lista de conferência: cada item é marcado antes de dizer "pronto" |
+| **estado da tela** | o que a tela mostra em cada momento: carregando, erro, vazio ou com dados |
+| **leitor de tela** | o recurso do celular que lê a tela em voz alta: TalkBack no Android, VoiceOver no iPhone |
+| **alvo de toque** | a área que responde ao dedo; no mínimo, 44 por 44 |
+| **feedback** | a resposta do app a um toque: o botão muda, um aviso aparece |
+| **revisão cruzada** | uma equipe testa e comenta o PR de outra |
+
+---
+
 ## A demo que travou
 
 A equipe do app de cardápio mostra a sprint ao dono da lanchonete, no celular dele e no Wi-Fi da loja. No computador da equipe, tudo funcionava. No celular do cliente:
@@ -44,24 +57,57 @@ O que precisa ser verdade para uma tela estar pronta, e não só funcionando?
 
 ---
 
+## O checklist
+
+Antes de decolar, o piloto confia na memória ou numa lista?
+
+---
+
 ## :icon[list-checks] Pronto é passar nos 6 itens
 
-| Item | Pergunta | Como testar no celular |
-|---|---|---|
-| 4 estados | carrega, falha, esvazia e mostra? | json-server parado; coleção vazia |
-| Acessibilidade | o leitor entende e o dedo acerta? | leitor de tela; fonte máxima |
-| Tema | claro e escuro funcionam? | percorra a tela nos dois temas |
-| Formulário | dado errado é barrado? | envie vazio e com `0` |
-| Feedback de toque | todo toque responde? | toque duplo em enviar |
-| Testes das regras | o cálculo tem teste? | `npm test` verde |
+O **checklist de qualidade** é a lista que a equipe confere em cada tela antes do PR. É como o checklist do piloto: os mesmos itens, toda vez, mesmo com pressa.
+
+| Item | Pergunta |
+|---|---|
+| 4 estados | carrega, falha, esvazia e mostra? |
+| Acessibilidade | o leitor entende e o dedo acerta? |
+| Tema | claro e escuro funcionam? |
+| Formulário | dado errado é barrado? |
+| Feedback de toque | todo toque responde? |
+| Testes das regras | o cálculo tem teste? |
 
 O cartão só vai para **Done** com os 6 marcados: ponha-os no Checklist do modelo de PR do E41.
 
 ---
 
+## :icon[smartphone] O checklist na prática
+
+Cada item tem um jeito de testar no celular, em poucos segundos:
+
+| Item | Como testar no celular |
+|---|---|
+| 4 estados | json-server parado; coleção vazia |
+| Acessibilidade | leitor de tela; fonte máxima |
+| Tema | percorra a tela nos dois temas |
+| Formulário | envie vazio e com `0` |
+| Feedback de toque | toque duplo em enviar |
+| Testes das regras | `npm test` verde |
+
+Na "Meus agendamentos" da Agenda: com o json-server parado, a tela mostra o erro? Com o celular no escuro, o nome do serviço aparece?
+
+---
+
+## Os 4 estados
+
+Num balcão, o que um bom atendente diz enquanto você espera?
+
+---
+
 ## :icon[layout-grid] 1. Os 4 estados de cada tela
 
-Toda tela que busca dados no json-server passa por carregando, erro, vazio e dados. Na agenda, "Meus agendamentos":
+Toda tela que busca dados passa por quatro **estados**: carregando, erro, vazio e dados. Pense num bom atendente: ele nunca fica mudo. Diz "um momento", "deu um problema, vou tentar de novo", "hoje não tem" ou entrega o pedido.
+
+Na agenda, "Meus agendamentos":
 
 ```jsx
 // depois de todos os hooks da tela
@@ -77,16 +123,38 @@ if (agendamentos.length === 0) {
 return <FlatList data={agendamentos} /* ... */ />;
 ```
 
-| Estado | Como forçar |
-|---|---|
-| Carregando | atraso temporário no `pedir` da `api/`, que sai antes do commit |
-| Erro | <kbd>Ctrl</kbd> + <kbd>C</kbd> no terminal do json-server |
-| Vazio | `"agendamentos": []` no `db.json` |
-| Dados | registros reais, com um nome bem longo |
+Cada `if` devolve um estado e para; só chega ao `FlatList` quem tem dados. Os componentes vêm do kit do E39.
+
+---
+
+## :icon[layout-grid] Os 4 estados na prática
+
+Para conferir, force cada estado à mão:
+
+| Estado | Como forçar | O que aparece |
+|---|---|---|
+| Carregando | atraso temporário no `pedir` da `api/`, que sai antes do commit | a rodinha |
+| Erro | <kbd>Ctrl</kbd> + <kbd>C</kbd> no terminal do json-server | `EstadoErro` com "Tentar novamente" |
+| Vazio | `"agendamentos": []` no `db.json` | `EstadoVazio` com "Agendar" |
+| Dados | registros reais, com um nome bem longo | a lista, sem cortar o nome |
+
+O atraso temporário é uma linha só, no começo do `pedir`, que espera 2 segundos:
+
+```javascript
+await new Promise((resolver) => setTimeout(resolver, 2000));
+```
+
+---
+
+## Acessibilidade
+
+Para que serve a rampa na entrada de um prédio, e quem mais a usa?
 
 ---
 
 ## :icon[eye] 2. Acessibilidade: nome, papel e alvo
+
+**Acessibilidade** é a tela funcionar para todo mundo, inclusive quem usa leitor de tela ou fonte grande. É a rampa do prédio: feita para quem usa cadeira de rodas, ajuda também quem leva carrinho de bebê.
 
 Um horário da agenda, pronto para o leitor de tela e para o dedo:
 
@@ -104,13 +172,53 @@ Um horário da agenda, pronto para o leitor de tela e para o dedo:
 </Pressable>
 ```
 
-- O leitor anuncia o rótulo, o papel e o estado: selecionado ou desativado
-- Com a fonte do sistema no máximo, nada fica cortado nem sobreposto
-- Contraste de 4,5 para 1 e nada dito só por cor: o horário ocupado também aparece riscado
+- `accessibilityLabel` é o **nome** que o leitor fala; `accessibilityRole`, o **papel**: "botão"
+- `accessibilityState` diz o estado: selecionado ou desativado
+- `hitSlop` aumenta o **alvo** do toque sem mudar o desenho
+
+---
+
+## :icon[eye] Acessibilidade na prática
+
+Três conferências que reprovam muitas telas:
+
+- **Leitor de tela**: nos chips sem rótulo, ele fala só "14:30". Com `accessibilityLabel`, `accessibilityRole` e `accessibilityState`, ele anuncia o nome, o papel de botão e se está selecionado ou desativado
+- **Fonte no máximo**: com a fonte do sistema no máximo, nada fica cortado nem sobreposto; o texto quebra linha
+- **Nada dito só por cor**: o horário ocupado aparece cinza **e** riscado, para quem não distingue as cores
+
+E o botão só com ícone também ganha nome. Na mesma agenda, o de cancelar:
+
+```jsx
+accessibilityLabel={`Cancelar ${a.servicoNome} de ${a.data} às ${a.hora}`}
+```
+
+Contraste mínimo de 4,5 para 1 entre texto e fundo.
+
+---
+
+## Tema
+
+Parede pintada com uma tinta sem nome: o que acontece quando a casa troca de cores?
 
 ---
 
 ## :icon[sun] 3. Tema: nenhuma cor fixa
+
+Os **tokens** de cor, do E31, são uma paleta de tintas com nome: `cores.texto`, `cores.primaria`. O valor de cada uma mora num lugar só e troca com o tema. Uma **cor fixa**, como `'#222'`, é tinta sem nome: quando o tema muda, ela fica igual e some no fundo escuro.
+
+Como usar: em toda tela, pegue as cores do tema e use só elas.
+
+```jsx
+const { cores } = useTema();
+```
+
+- Texto, fundo, borda e ícone: sempre `cores.algumaCoisa`
+- Percorra cada tela nos dois temas, inclusive modais e barra de status
+- `Badge` de status sempre com `texto`, não só com `tom`: a cor reforça, a palavra informa
+
+---
+
+## :icon[sun] Tema na prática
 
 Cor escrita no código não troca com o tema. Na revisão, procure por ela:
 
@@ -125,9 +233,7 @@ Cor escrita no código não troca com o tema. Na revisão, procure por ela:
 ```
 
 - Ícone sem `color` sai preto e some no escuro
-- No VS Code, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> com regex `#[0-9a-fA-F]{3,6}` acha as cores fixas fora dos tokens
-- Percorra cada tela nos dois temas, inclusive modais e barra de status
-- `Badge` de status sempre com `texto`, não só com `tom`: a cor reforça, a palavra informa
+- No VS Code, <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd> com regex `#[0-9a-fA-F]{3,6}` acha as cores fixas. As de `tokens.js` estão certas; as das telas são o defeito
 
 ---
 
@@ -166,9 +272,15 @@ Fora do checklist, vale um comentário: a busca deveria morar no `useCardapio`, 
 
 ---
 
+## Formulário e toque
+
+Você aperta o botão do elevador duas vezes: vêm dois elevadores?
+
+---
+
 ## :icon[send] 4 e 5. Formulário e toque: validar, travar, avisar
 
-No controle de gastos, "Novo lançamento" segue a receita do cadastro do E35, agora gravando no json-server:
+O botão do elevador acende quando você aperta, e apertar de novo não chama outro. O botão de enviar faz o mesmo: **valida** os campos, **trava** enquanto envia e **avisa** o resultado. No controle de gastos, "Novo lançamento" segue a receita do cadastro do E35, agora gravando no json-server:
 
 ```jsx
 async function salvar() {
@@ -192,8 +304,20 @@ async function salvar() {
 <Botao titulo={enviando ? 'Salvando...' : 'Salvar'} onPress={salvar} desabilitado={enviando} />
 ```
 
+---
+
+## :icon[list-ordered] O salvar em português
+
+| Linha | O que ela diz |
+|---|---|
+| `validarLancamento(valores)` | "confira os campos e me dê as mensagens de erro" |
+| `Object.values(novos).some(Boolean)` | "alguma mensagem não está vazia? Então pare aqui" |
+| `setEnviando(true)` | "trave o botão" |
+| `await adicionar(valores)` | "grave no json-server e espere" |
+| `catch` | "falhou: avise com um `Alert`" |
+| `finally` | "deu certo ou errado: destrave o botão" |
+
 - **Validar**: o erro aparece no `Campo`, pela prop `erro`, antes de qualquer pedido à rede
-- **Travar**: o botão desabilitado barra o segundo toque e o lançamento duplicado; o `finally` destrava nos dois caminhos
 - **Avisar**: toast no sucesso; `Alert` na falha e antes de ação destrutiva, como "Cancelar este agendamento?"
 - **Responder**: todo `Pressable` muda ao toque com `pressed`
 
@@ -209,9 +333,15 @@ O primeiro toque chama `salvar`, que faz `setEnviando(true)`. Com `desabilitado=
 
 ---
 
+## Testes das regras
+
+Quem corrige uma prova que já vem com gabarito?
+
+---
+
 ## :icon[test-tube] 6. Testes das regras
 
-Regra que decide dinheiro, horário ou status mora numa função pura, sem React, com o teste ao lado:
+Um **teste automatizado** é uma prova com gabarito que o computador corrige sozinho, como no E04. Regra que decide dinheiro, horário ou status mora numa função pura, sem React, com o teste ao lado:
 
 ```javascript
 // src/features/lancamentos/saldo.js
@@ -222,6 +352,14 @@ export function saldoDoMes(lancamentos, mes) { // mes: '2026-10'
       (l.tipo === 'entrada' ? saldo + l.valorCentavos : saldo - l.valorCentavos), 0);
 }
 ```
+
+- `filter` fica só com os lançamentos do mês: `startsWith` pergunta se a data começa com `'2026-10'`
+- `reduce` vai acumulando: soma a entrada e desconta a saída, a partir do 0
+- O resultado é em centavos, como no briefing
+
+---
+
+## :icon[test-tube] Testes na prática
 
 ```javascript
 // saldo.test.js
@@ -241,11 +379,21 @@ test('mês sem lançamentos tem saldo zero', () => {
 });
 ```
 
+R$ 3.000,00 menos R$ 45,90 dá `295410` centavos; a saída de setembro fica de fora. `npm test` termina com `Tests: 2 passed, 2 total`.
+
 Teste um caso comum, um limite e um inválido. Nos outros apps: `horariosLivres(horarios, agendamentos)` e `textoDoStatus(status)`. `npm test` verde antes de abrir o PR.
 
 ---
 
+## Revisão cruzada
+
+O que um cliente oculto faz numa loja?
+
+---
+
 ## :icon[users] A revisão cruzada em anel
+
+Na **revisão cruzada**, uma equipe testa e comenta o PR de outra. É o cliente oculto: alguém de fora usa o app como cliente comum e conta o que viu.
 
 ::::columns
 :::col
@@ -267,16 +415,28 @@ Na revisão cruzada, você é o primeiro usuário de fora.
 :::steps
 1. Leia a descrição: a história e o "Como testar"
 2. Teste no celular da equipe autora, você no comando, item por item do checklist
-3. Em **Files changed**, procure cor fixa, `catch` só com `console.log` e regra sem teste
+3. Em **Files changed** (arquivos alterados), procure cor fixa, `catch` só com `console.log` e regra sem teste
 4. Comente na linha: item do checklist, o que acontece e uma sugestão
-5. Envie com **Comment** ou **Request changes**; o **Approve** que libera o merge é da própria equipe
-:::
-
-:::example Comentário que ajuda
-**Estados:** com o json-server parado, "Meus agendamentos" fica em branco. Que tal um `EstadoErro` com "Tentar novamente"?
+5. Envie com **Comment** (comentar) ou **Request changes** (pedir mudanças); o **Approve** (aprovar) que libera o merge é da própria equipe
 :::
 
 Comece por um ponto forte e comente o código, não a pessoa nem o seu gosto.
+
+---
+
+## :icon[message-square] Revisão na prática
+
+Um bom comentário diz o item do checklist, o que acontece no celular e uma sugestão:
+
+:::example Comentários que ajudam
+- **Estados:** com o json-server parado, "Meus agendamentos" fica em branco. Que tal um `EstadoErro` com "Tentar novamente"?
+- **Acessibilidade:** nos horários, o leitor de tela fala só "14:30". Dá para pôr `accessibilityRole` e `accessibilityLabel`?
+- **Ponto forte:** o toast "Agendamento cancelado" ficou claro e some sozinho.
+:::
+
+:::warning Comentários que não ajudam
+"Tá estranho" não diz o quê nem onde. "Eu faria com outra função" é gosto, não item do checklist.
+:::
 
 ---
 
@@ -319,4 +479,4 @@ Comece por um ponto forte e comente o código, não a pessoa nem o seu gosto.
 
 **Critérios**: telas novas com os 4 estados; nenhuma cor fixa; `npm test` verde; quadro em dia.
 
-Depois da pausa, a próxima aula traz os dados no aparelho e o login, e a sprint segue até a revisão cruzada.
+Depois da pausa, a aula 85 traz os dados no aparelho e o login, e a sprint segue até a revisão cruzada.

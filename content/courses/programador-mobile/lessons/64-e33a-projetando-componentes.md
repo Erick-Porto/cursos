@@ -26,6 +26,18 @@ Programador Mobile · Encontro E33 · Aula 64 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **UI kit** | o conjunto de peças visuais que todas as telas do app usam |
+| **reutilizável** | feito uma vez e usado em vários lugares, sem copiar |
+| **`children`** | o que você escreve entre a abertura e o fechamento da tag de um componente |
+| **variante** | uma versão com nome do mesmo componente, como `primaria` e `secundaria` |
+| **`...rest`** | o que sobrou das props, repassado inteiro a outro elemento |
+
+---
+
 ## O mesmo botão, seis cópias
 
 Num app de loja sem kit, há botão no cartão do produto, no detalhe, nos destaques, no carrinho, no cadastro e no perfil. Cada tela ganhou sua cópia do `Pressable`: uma com `raio.md`, outra com `raio.sm`, uma sem efeito de toque, outra com o texto em negrito.
@@ -40,9 +52,15 @@ Que mudança no código faria esse pedido acontecer em um lugar só?
 
 ---
 
+## UI kit
+
+O que dá para montar com uma caixa de Lego?
+
+---
+
 ## :icon[layers] UI kit: as peças do app
 
-Um **UI kit** é o conjunto de componentes visuais genéricos que todas as telas usam. Apps de banco, de delivery e de loja têm um kit interno, às vezes com dezenas de peças.
+Um **UI kit** (de *user interface*, interface do usuário) é o conjunto de componentes visuais genéricos que todas as telas usam. Cada componente é uma peça de Lego: pequena, reaproveitável, encaixa em outras. O kit é a caixa de peças do app.
 
 | Peça | Onde aparece na Lojinha |
 |---|---|
@@ -57,9 +75,15 @@ Os tokens padronizam cores e medidas; o kit padroniza **peças inteiras**.
 
 ---
 
+## Uma responsabilidade
+
+Uma peça de Lego sabe se vai virar casa ou carro?
+
+---
+
 ## :icon[target] Uma responsabilidade por componente
 
-Cada peça faz **uma coisa** e não sabe nada sobre a tela onde está. O `Badge` desenha um selo; quem decide se o produto está esgotado é a tela.
+Cada peça faz **uma coisa** e não sabe nada sobre a tela onde está. Uma peça de Lego não sabe se vai virar casa ou carro: quem decide é quem monta. O `Badge` desenha um selo; quem decide se o produto está esgotado é a tela.
 
 ```jsx
 // Faz tudo, e só serve para produto
@@ -73,15 +97,21 @@ Cada peça faz **uma coisa** e não sabe nada sobre a tela onde está. O `Badge`
 </Cartao>
 ```
 
-O `CartaoProduto` continua existindo, mas passa a ser uma **composição** de peças do kit, própria da Lojinha.
+O `CartaoProduto` continua existindo, mas passa a ser uma **composição**, uma montagem de peças do kit, própria da Lojinha.
 
 Teste rápido: se a peça serviria em outro app sem nenhuma mudança, ela é do kit.
 
 ---
 
+## Props claras
+
+No restaurante, você pede o prato do dia ou dita a receita ao cozinheiro?
+
+---
+
 ## :icon[sliders-horizontal] Props claras e poucas
 
-As props são o painel de controle do componente. Com botões demais no painel, ninguém sabe qual apertar.
+As **props** são o pedido feito à peça: quem usa diz como quer cada uma. Pedido bom fala da decisão ("é a ação principal"), não da receita ("fundo verde, letra branca, cantos de 8").
 
 ```jsx
 // Difícil de usar e fácil de sair do padrão
@@ -98,9 +128,15 @@ As props são o painel de controle do componente. Com botões demais no painel, 
 
 ---
 
+## children
+
+Uma moldura precisa saber qual quadro vai dentro dela?
+
+---
+
 ## :icon[boxes] children: o que vai dentro
 
-O **`children`** do E22 é tudo o que você escreve entre a abertura e o fechamento da tag. Como o `Card` daquela aula, o `Cartao` desenha a moldura e não precisa saber o que vai dentro.
+O **`children`** do E22 é tudo o que você escreve entre a abertura e o fechamento da tag. Pense numa moldura de quadro: ela é sempre a mesma, e o quadro dentro muda. Como o `Card` daquela aula, o `Cartao` desenha a moldura e não precisa saber o que vai dentro.
 
 ```jsx
 export default function Cartao({ children, style, ...rest }) {
@@ -120,13 +156,54 @@ const estilos = StyleSheet.create({
 });
 ```
 
-Imports de `react-native`, `useTema` e dos tokens omitidos. Dentro do `Cartao` cabe um produto, um endereço ou um formulário.
+Imports de `react-native`, `useTema` e dos tokens omitidos. O `{children}` entre as tags da `View` é onde o conteúdo aparece: um produto, um endereço ou um formulário. Na primeira linha, `style` e `...rest` também chegam: com eles, a tela posiciona a peça e passa outras props.
+
+---
+
+## :icon[boxes] children na prática
+
+Três telas, a mesma moldura. Muda só o que vai entre `<Cartao>` e `</Cartao>`:
+
+**1. Resumo do pedido, no carrinho:**
+
+```jsx
+<Cartao>
+  <Text>Resumo do pedido</Text>
+  <Text>2 itens · R$ 259,80</Text>
+</Cartao>
+```
+
+**2. Endereço, na entrega:**
+
+```jsx
+<Cartao>
+  <Text>Entregar em</Text>
+  <Text>Rua das Flores, 120</Text>
+</Cartao>
+```
+
+**3. Outras peças do kit dentro, num produto esgotado:**
+
+```jsx
+<Cartao>
+  <Badge texto="Esgotado" tom="perigo" />
+  <Botao titulo="Avise-me" variante="secundaria" />
+</Cartao>
+```
+
+Na tela: três cartões com a mesma borda, o mesmo fundo e os mesmos cantos.
+
+---
+
+## Style de fora
+
+Quem decide em que parede vai o quadro: a loja da moldura ou você?
 
 ---
 
 ## :icon[combine] style de fora, no fim do array
 
-Às vezes a tela precisa posicionar a peça: uma margem, uma largura. Todo componente do kit aceita `style` e o coloca **por último** no array, porque em conflito o último vence (a regra do array de estilos do E27).
+O `style` de fora é o prego na parede: a moldura vem pronta do kit, e a tela só escolhe onde pendurar, com uma margem ou uma largura. Todo componente do kit aceita `style` e o coloca **por último** no array, porque em conflito o último vence (a regra do array de estilos do E27).
 
 ```jsx
 <Cartao style={{ marginBottom: espaco.md }}>
@@ -146,7 +223,41 @@ Use o `style` de fora para **posicionar**, não para redesenhar. Se toda tela mu
 
 ---
 
+## :icon[combine] style de fora na prática
+
+Nos três casos, a tela só **posiciona** o cartão; a borda, o fundo e os cantos continuam os do kit.
+
+**1. No carrinho, um espaço embaixo de cada cartão:**
+
+```jsx
+<Cartao style={{ marginBottom: espaco.md }}>
+```
+
+**2. Na Galeria, o cartão ocupa a largura toda:**
+
+```jsx
+<Cartao style={{ width: '100%' }}>
+```
+
+**3. Dois cartões lado a lado, numa linha com `flexDirection: 'row'`, dividindo o espaço:**
+
+```jsx
+<Cartao style={{ flex: 1 }}>
+```
+
+Na tela: margem, largura e divisão mudam; a aparência do cartão é a mesma nos três.
+
+---
+
+## Variantes
+
+O copo P, M e G da lanchonete é o mesmo copo?
+
+---
+
 ## :icon[split] Variantes: o problema dos ifs
+
+Uma **variante** é uma versão com nome da mesma peça, escolhida por uma prop: `tom="perigo"`, `variante="secundaria"`. Pense no copo P, M e G da lanchonete: o copo é o mesmo, e o nome escolhe a versão.
 
 O `Badge` mostra "Novo", "Últimas unidades" e "Esgotado", cada um com uma cor. O primeiro impulso é um `if` por caso:
 
@@ -159,13 +270,11 @@ else if (tom === 'perigo') cor = cores.perigo;
 
 Funciona, mas cada caso novo pede mais um `else if`, a regra se espalha pelo componente e é fácil esquecer um. Quando chegarem tamanho e estado, os `if` se multiplicam.
 
-Uma **variante** é uma versão nomeada do componente, escolhida por uma prop: `tom="perigo"`, `variante="secundaria"`.
-
 ---
 
 ## :icon[tag] Mapa de variantes: o Badge
 
-Troque os `if` por um objeto: a chave é o valor da prop; o valor é o que muda. É o dicionário dos `comparadores` do E08, consultado com colchetes.
+Troque os `if` por um objeto: a chave é o valor da prop; o valor é o que muda. É o dicionário do E08, como o dos `comparadores`: você procura a palavra (a chave) com colchetes e lê o significado (o valor).
 
 ```jsx
 const corDoTom = {
@@ -183,7 +292,38 @@ export default function Badge({ texto, tom = 'neutro', style, ...rest }) {
 }
 ```
 
-Os quatro tons são os que o `tomDoStatus` do E13 devolve: `tom={tomDoStatus(pedido.status)}` funciona direto. Tom novo é uma linha no mapa. O tema não tinha cor de alerta: acrescente `alerta` em `cores.claro` e `cores.escuro` no `tokens.js`, nunca um hexadecimal no componente.
+Tom novo é uma linha no mapa. Os quatro tons são os que o `tomDoStatus` do E13 devolve: `tom={tomDoStatus(pedido.status)}` funciona direto. O tema não tinha cor de alerta: acrescente `alerta` em `cores.claro` e `cores.escuro` no `tokens.js`, nunca um hexadecimal no componente.
+
+---
+
+## :icon[list-ordered] O Badge em português
+
+| Linha | O que ela diz |
+|---|---|
+| `const corDoTom = { ... }` | o mapa: para cada tom, o nome da cor no tema |
+| `tom = 'neutro'` | "se a tela não disser o tom, use `neutro`" |
+| `corDoTom[tom]` | "procure o tom no mapa": `'perigo'` dá `'perigo'`, e `'neutro'` dá `'textoSuave'` |
+| `cores[...]` | "agora procure essa cor nas cores do tema da vez" |
+| `borderColor: cor` e `color: cor` | a borda e o texto ganham a cor encontrada |
+
+---
+
+## :icon[tag] Badge na prática
+
+O mesmo `Badge`, quatro selos:
+
+```jsx
+<Badge texto="Neutro" />
+<Badge texto="Novo" tom="sucesso" />
+<Badge texto="Últimas unidades" tom="alerta" />
+<Badge texto={textoDoStatus('pendente')} tom={tomDoStatus('pendente')} />
+```
+
+- Sem `tom`: cinza, porque o padrão é `neutro`
+- `sucesso` sai verde, e `alerta`, âmbar
+- O último usa as regras do E13: para um pedido `'pendente'`, `textoDoStatus` devolve `'Aguardando pagamento'`, e `tomDoStatus`, `'alerta'`
+
+Na tela: quatro selos com borda e texto da mesma cor; o último diz "Aguardando pagamento", em âmbar. A regra decide o texto e o tom; o `Badge` só desenha.
 
 ---
 
@@ -205,9 +345,17 @@ Três, separadas pelo **peso da ação**, não pela cor:
 
 ---
 
+## Repassar props
+
+O que o porteiro faz com uma carta que não é para ele?
+
+---
+
 ## :icon[corner-down-right] ...rest: repassando props nativas
 
-O `Pressable` aceita dezenas de props: `accessibilityLabel`, `testID`, `onLongPress`, `hitSlop`. Declarar uma a uma no `Botao` não acaba nunca. O **`...rest`** é o rest do E09, que você usou nas props no E22: junta tudo o que o componente não desestruturou, e o spread `{...rest}` repassa ao elemento nativo.
+O **`...rest`** junta as props que o componente não pegou pelo nome e as entrega, inteiras, ao elemento nativo. Pense no porteiro do prédio: a carta com o nome dele, ele abre; as outras, ele entrega ao morador sem abrir.
+
+O `Pressable` aceita dezenas de props: `accessibilityLabel`, `testID`, `onLongPress`, `hitSlop`. Declarar uma a uma no `Botao` não acaba nunca. O `...rest` é o rest do E09, que você usou nas props no E22, e o spread `{...rest}` repassa tudo.
 
 ```jsx
 export default function Botao({ titulo, onPress, style, ...rest }) {
@@ -230,15 +378,49 @@ export default function Botao({ titulo, onPress, style, ...rest }) {
 ![Animação: a tela passa titulo, onPress e accessibilityLabel ao Botao; titulo desce para o Text, onPress para o Pressable, e o accessibilityLabel, que o Botao não desestruturou, entra no rest e chega ao Pressable pelo {...rest}](images/e33-rest-repassa-props.svg)
 :::
 
-O `Botao` desestrutura `titulo` e `onPress` e usa cada um no seu lugar. O que ele não pediu, como o `accessibilityLabel`, sobra no `rest` e chega ao `Pressable` pelo `{...rest}`.
+- `{ titulo, onPress, style, ...rest }`: "pegue estas três pelo nome; o resto vai junto em `rest`"
+- `{...rest}` no `Pressable`: "espalhe aqui tudo o que está em `rest`"
+- O **`accessibilityLabel`** é o texto que o leitor de tela, o recurso que lê a tela em voz alta para quem não enxerga, fala no lugar do botão
 
 O leitor de tela anuncia "Adicionar ao carrinho", e não "mais".
 
 ---
 
+## :icon[corner-down-right] ...rest na prática
+
+Nenhuma destas props foi escrita no `Botao` ou no `Cartao`. Todas passam pelo `...rest`:
+
+**1. Segurar o dedo:** o `onLongPress` chega ao `Pressable`.
+
+```jsx
+<Botao titulo="Remover" onPress={remover} onLongPress={() => console.log('segurou')} />
+```
+
+No terminal, ao segurar o botão: `segurou`.
+
+**2. Um alvo maior:** o `hitSlop` do E32 chega ao `Pressable`.
+
+```jsx
+<Botao titulo="Ver todos" variante="fantasma" hitSlop={10} />
+```
+
+**3. Um texto para o leitor de tela no cartão:** o `accessibilityLabel` chega à `View` do `Cartao`.
+
+```jsx
+<Cartao accessibilityLabel="Resumo do pedido: 2 itens, 259 reais e 80 centavos">
+```
+
+---
+
+## O Avatar
+
+O que aparece no contato que não tem foto no seu celular?
+
+---
+
 ## :icon[user] Avatar: foto ou iniciais
 
-O `Avatar` mostra a foto do cliente. Sem `uri`, mostra as **iniciais** do nome sobre a cor primária, nunca um círculo vazio. A função `iniciais` só usa o que você já conhece: `split` (E06), `filter`, `slice`, `map` e `join` (E08 e E09).
+O **`Avatar`** é a peça que mostra a foto do cliente, num círculo. Sem `uri`, mostra as **iniciais** do nome sobre a cor primária, nunca um círculo vazio. A função `iniciais` só usa o que você já conhece: `split` (E06), `filter`, `slice`, `map` e `join` (E08 e E09).
 
 ```javascript
 function iniciais(nome = '') {
@@ -262,6 +444,22 @@ iniciais('joão'); // 'J'
 
 ---
 
+## :icon[list-ordered] As iniciais, passo a passo
+
+Com `'Ana Clara Souza'`, cada linha recebe o resultado da anterior:
+
+| Linha | O que ela diz | Resultado |
+|---|---|---|
+| `.split(' ')` | "corte o texto nos espaços" | `['Ana', 'Clara', 'Souza']` |
+| `.filter(Boolean)` | "tire os pedaços vazios", que aparecem com espaço duplo | `['Ana', 'Clara', 'Souza']` |
+| `.slice(0, 2)` | "fique com os dois primeiros" | `['Ana', 'Clara']` |
+| `.map(...)` | "de cada um, a primeira letra, em maiúscula" | `['A', 'C']` |
+| `.join('')` | "junte tudo, sem nada entre as letras" | `'AC'` |
+
+Com `'Ana  Clara'`, dois espaços, o `split` faz `['Ana', '', 'Clara']`, e o `filter` tira o `''`.
+
+---
+
 ## :icon[user] Avatar: o componente
 
 ```jsx
@@ -282,15 +480,38 @@ export default function Avatar({ uri, nome = '', tamanho = 'md', style, ...rest 
 }
 ```
 
-- `Image` vem do `expo-image`, como no `CartaoProduto`
 - `medidas` é outro mapa de variantes, agora de tamanho
+- `borderRadius: lado / 2`: cantos com metade do lado viram um círculo
+- `if (uri)`: com foto, devolve a `Image`, que vem do `expo-image`, como no `CartaoProduto`; sem foto, o segundo `return` desenha as iniciais
 - `estilos.iniciais` centraliza o texto com `alignItems` e `justifyContent: 'center'`
 
 Na tela: `<Avatar nome="Ana Clara" />` desenha um círculo de 48 com "AC".
 
 ---
 
+## :icon[user] Avatar na prática
+
+Os três tamanhos, com e sem foto:
+
+```jsx
+<Avatar nome="Ana Clara" tamanho="sm" />
+<Avatar nome="Bruno Lima" />
+<Avatar nome="Carla Dias" tamanho="lg" uri="https://picsum.photos/seed/carla/400/400" />
+```
+
+| Linha | Na tela |
+|---|---|
+| `nome="Ana Clara" tamanho="sm"` | círculo de 32 com "AC" |
+| `nome="Bruno Lima"` | círculo de 48 com "BL": `md` é o padrão |
+| `tamanho="lg"` com `uri` | a foto da Carla, redonda, com 72 |
+
+Sem `uri`, as iniciais aparecem sobre a cor primária, nos dois temas.
+
+---
+
 ## :icon[triangle-alert] Erros comuns
+
+Nenhum destes mostra mensagem: o app roda, mas sai do padrão.
 
 :::warning
 - Esquecer `{...rest}` no JSX: o `accessibilityLabel` que a tela passou some sem nenhum aviso

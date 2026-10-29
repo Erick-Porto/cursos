@@ -27,6 +27,19 @@ Programador Mobile · Encontro E45 · Aula 89 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **vaga júnior** | vaga de emprego para quem está começando na profissão |
+| **trilha** | um caminho de estudo, com rumo: o que aprender depois do curso |
+| **nativo** | app feito na linguagem do próprio sistema: Kotlin no Android, Swift no iPhone |
+| **full stack** | quem faz o app e também o servidor e o banco de dados; em inglês, "a pilha inteira" |
+| **portfólio** | a coleção dos seus melhores trabalhos, para mostrar a quem contrata |
+| **código aberto** | projeto com o código público, em que qualquer pessoa pode contribuir |
+
+---
+
 ## Por que isso importa
 
 Uma vaga júnior pede "experiência com React Native e consumo de APIs". Quem nunca trabalhou na área pensa: "não tenho experiência". Você tem: quatro projetos no GitHub, do primeiro script no terminal a um app feito em equipe, com backlog, PRs revisados, testes e APK.
@@ -39,7 +52,15 @@ Se um recrutador abrisse o seu GitHub agora, qual repositório veria primeiro, e
 
 ---
 
+## Quatro projetos
+
+Dá para chegar ao último degrau da escada sem pisar nos outros?
+
+---
+
 ## :icon[milestone] 180 horas, quatro projetos
+
+Cada projeto é um degrau de uma escada: programar, pensar em componentes, construir um app e entregar em equipe. Cada degrau é uma **prova**: um repositório que qualquer pessoa confere.
 
 | Projeto | Quando | O que ele prova |
 |---|---|---|
@@ -47,8 +68,6 @@ Se um recrutador abrisse o seu GitHub agora, qual repositório veria primeiro, e
 | Minhas Tarefas | E21 a E29, 36h | componentes, estado e hooks, da web ao celular |
 | Lojinha | E30 a E40, 44h | layout, UI kit, navegação e acessibilidade num app de 5 telas |
 | App da equipe | E41 a E45, 20h | Git em equipe, arquitetura, dados no aparelho, APK e Demo Day |
-
-O E01 preparou o ambiente; depois, o `lojinha-regras` foi de um script ao checkout completo. Cada projeto é um degrau: programar, pensar em componentes, construir um app e entregar em equipe.
 
 ---
 
@@ -58,7 +77,7 @@ O E01 preparou o ambiente; depois, o `lojinha-regras` foi de um script ao checko
 ![Diagrama: a pasta src do lojinha-regras foi copiada para a Lojinha no E30, os componentes e hooks do Minhas Tarefas também chegaram à Lojinha, e o tema e o kit de UI da Lojinha deram a largada no app da equipe no E42](images/e45-quatro-projetos.svg)
 :::
 
-Nada foi jogado fora. As regras de preço, carrinho e frete nasceram no terminal e chegaram ao app com a pasta `src/`. O tema e o kit de UI da Lojinha deram a largada no app da equipe. Na entrevista, essa é a sua história: o mesmo código, cada vez mais perto de quem usa.
+O E01 preparou o ambiente; depois, o `lojinha-regras` foi de um script ao checkout completo. Nada foi jogado fora: as regras de preço, carrinho e frete nasceram no terminal e chegaram ao app com a pasta `src/`. O tema e o kit de UI da Lojinha deram a largada no app da equipe. Na entrevista, essa é a sua história: o mesmo código, cada vez mais perto de quem usa.
 
 ---
 
@@ -76,12 +95,20 @@ Na linguagem das vagas:
 
 ---
 
+## As trilhas
+
+Do terminal saem várias linhas de ônibus. O que todas elas têm em comum?
+
+---
+
 ## :icon[route] Três trilhas
+
+Uma **trilha** é um caminho de estudo, com rumo. Pense nas linhas de ônibus que saem do mesmo terminal: o curso é o terminal, e cada linha leva a um bairro.
 
 | Trilha | O que você estuda | Ponto de partida |
 |---|---|---|
 | React Native | TypeScript, testes de componente e recursos nativos com Expo | é onde você está: aprofunde |
-| Nativo | Kotlin e Jetpack Compose (Android) ou Swift e SwiftUI (iOS) | tela, estado e lista se repetem; para iOS, você precisa de um Mac |
+| Nativo | Kotlin e Jetpack Compose (Android) ou Swift e SwiftUI (iOS, o sistema do iPhone) | tela, estado e lista se repetem; para iOS, você precisa de um Mac |
 | Full stack | Node.js, banco de dados e a sua própria API | você roda Node desde o E02: troque o `json-server` por um backend de verdade |
 
 ---
@@ -96,9 +123,15 @@ Não existe trilha errada. Escolha uma para os próximos seis meses e mude depoi
 
 ---
 
+## Vagas júnior
+
+Na lista de compras do mês, o que não pode faltar, e o que entra só se der?
+
+---
+
 ## :icon[briefcase] O que as vagas júnior pedem
 
-Leia dez vagas de "desenvolvedor mobile júnior" e os pedidos se repetem:
+Uma **vaga júnior** é para quem está começando na profissão. O anúncio funciona como a lista de compras do mês: tem o que não pode faltar e o que entra "se der". Leia dez vagas de "desenvolvedor mobile júnior" e os pedidos se repetem:
 
 ::::columns
 :::col
@@ -142,9 +175,15 @@ Ligue cada requisito desta vaga a uma prova que está no seu GitHub:
 
 ---
 
+## Portfólio
+
+O que o cabeleireiro mostra antes do primeiro corte de um cliente novo?
+
+---
+
 ## :icon[folder-open] Portfólio: provas, não promessas
 
-No E44 você montou o README, o vídeo e o LinkedIn do app da equipe. Agora feche o pacote dos quatro projetos:
+O **portfólio** é o álbum de fotos dos cortes do cabeleireiro (E44): mostra o que você já fez. Agora, feche o dos quatro projetos:
 
 - **Fixe** os repositórios no perfil (o GitHub aceita seis), com o projeto da equipe primeiro
 - Em cada README: problema, telas, como rodar e decisões, com o **vídeo** no topo; no `lojinha-regras`, o selo do CI
@@ -156,9 +195,23 @@ Depois do Demo Day, o post no LinkedIn ganha o que faltava: "apresentamos para u
 
 ---
 
+## :icon[folder-open] Portfólio na prática
+
+O mesmo projeto, mostrado de dois jeitos:
+
+| No portfólio | Promessa | Prova |
+|---|---|---|
+| App da equipe | "Fiz o app." | "Fiz a tela de horários e a regra que impede conflito, com 6 testes." |
+| `lojinha-regras` | só o código, sem README | README com o selo verde do CI e o `npm test` |
+| Lojinha | só o link do repositório | vídeo curto no topo do README e capturas das 5 telas |
+
+A prova deixa tudo à vista: quem lê confere em segundos, sem clonar nada.
+
+---
+
 ## :icon[store] Publicar na loja
 
-O APK roda em qualquer Android; na loja, o app chega a qualquer pessoa e pesa no currículo.
+As **lojas** são o supermercado dos apps (E44): o APK chega a quem recebe o link; na loja, o app chega a qualquer pessoa e pesa no currículo.
 
 | Item | Google Play | App Store |
 |---|---|---|
@@ -166,23 +219,63 @@ O APK roda em qualquer Android; na loja, o app chega a qualquer pessoa e pesa no
 | Exige | política de privacidade, capturas de tela, classificação etária | o mesmo, mais a revisão da Apple |
 | Com o EAS | `eas build --profile production` e `eas submit` | os mesmos comandos; o build roda na nuvem, sem Mac |
 
-As regras mudam com frequência: contas pessoais novas no Google Play, por exemplo, passam por um teste fechado antes da produção. Confira no Play Console e no App Store Connect.
+As regras mudam: contas pessoais novas no Google Play passam por um teste fechado antes da produção. Confira no Play Console e no App Store Connect.
+
+---
+
+## Comunidade
+
+Como você ficou sabendo deste curso?
 
 ---
 
 ## :icon[users] Comunidade
 
-Ninguém aprende sozinho, e muitas vagas chegam por indicação.
+Uma **comunidade** de programação é o grupo de pessoas que estudam o mesmo tema e se ajudam. É como esta turma, só que do tamanho do país. Ninguém aprende sozinho, e muitas vagas chegam por indicação.
 
-- Vá a meetups e eventos de React Native e de mobile, presenciais ou on-line
-- Entre na comunidade do Expo no Discord e acompanhe as novidades de cada SDK no blog
+- Vá a **meetups** (encontros sobre um tema) de React Native e de mobile, presenciais ou on-line
+- Entre na comunidade do Expo no Discord, um app de grupos de conversa, e acompanhe as novidades de cada SDK no blog
 - Responda dúvidas de quem está começando: explicar é a melhor revisão
-- Contribua com código aberto: issues marcadas como "good first issue" são a porta de entrada
+- Contribua com código aberto: issues marcadas como "good first issue" (boa primeira tarefa) são a porta de entrada
 - Mantenha contato com esta turma: seus colegas vão indicar uns aos outros
 
 ---
 
-## :icon[graduation-cap] Próximos estudos
+## :icon[users] Comunidade na prática
+
+Três jeitos de começar, já na primeira semana:
+
+:::example Num meetup
+"Oi, sou a Ana. Terminei um curso de 180 horas e fiz em equipe um app de agenda, com APK. Estou procurando a primeira vaga."
+:::
+
+:::example Numa dúvida de outra pessoa
+"O Network request failed só no APK costuma ser o `http://`: confira o `usesCleartextTraffic` e gere um build novo."
+:::
+
+:::example Numa issue "good first issue"
+"Posso pegar esta? Pretendo abrir o PR até sexta." Pergunte antes de começar, para duas pessoas não fazerem a mesma coisa.
+:::
+
+---
+
+## Próximos estudos
+
+O que rende mais na academia: um treino toda semana ou sete treinos num dia só?
+
+---
+
+## :icon[graduation-cap] Próximos estudos: um tema por vez
+
+Depois do curso, estude **um** tema por vez e aplique num app seu. É como a academia: um treino toda semana rende mais do que sete treinos num dia só e depois nada.
+
+Exemplo: um mês de testes de componente, aplicados na tela de login do app da equipe. Só depois, o próximo tema.
+
+Estudar cinco tecnologias ao mesmo tempo costuma terminar em nenhuma.
+
+---
+
+## :icon[library] Temas para estudar
 
 | Tema | Por que | Primeiro passo |
 |---|---|---|
@@ -192,7 +285,7 @@ Ninguém aprende sozinho, e muitas vagas chegam por indicação.
 | Mapas e câmera | recursos que só o celular tem | `react-native-maps` e `expo-camera` |
 | Arquitetura | apps e equipes maiores | cache de dados do servidor e estado global |
 
-Estude **um** tema por vez e aplique num app seu.
+**Cache**: uma cópia guardada no aparelho, para não buscar de novo.
 
 ---
 

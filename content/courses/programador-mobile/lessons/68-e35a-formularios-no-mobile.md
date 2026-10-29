@@ -27,6 +27,19 @@ Programador Mobile · Encontro E35 · Aula 68 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **formulário** | a tela que pede dados, campo por campo, como uma ficha de cadastro em papel |
+| **foco** | o campo que está recebendo o que você digita: o cursor pisca nele e o teclado abre |
+| **teclado virtual** | o teclado que aparece na tela do celular; ele muda conforme o campo |
+| **preenchimento automático** | a sugestão que aparece acima do teclado, com dados que o celular já conhece |
+| **ref** | um jeito de "segurar" um componente para mandar nele pelo código |
+| **interruptor** (`Switch`) | o botão de liga e desliga, como o do Wi-Fi nas configurações |
+
+---
+
 ## O cadastro que ninguém termina
 
 Você baixa um app de delivery com fome. Antes do primeiro pedido, ele pede um cadastro:
@@ -44,7 +57,27 @@ Qual foi o último cadastro que você abandonou no celular? O que mais irritou?
 
 ---
 
+## Formulário no celular
+
+Por que preencher um cadastro no celular cansa mais do que no computador?
+
+---
+
 ## :icon[smartphone] O que faz um formulário bom no celular
+
+Um **formulário** é a ficha de cadastro na tela: cada campo pede um dado, e o botão no fim envia tudo.
+
+No celular, metade da tela vira teclado. Por isso, um bom formulário no celular tem três coisas:
+
+1. **Teclado certo** para cada dado
+2. **Um campo por vez**, em sequência, com o botão do teclado levando ao próximo
+3. **Botão sempre visível**, mesmo com o teclado aberto
+
+Nesta aula, você monta o cadastro da Lojinha com essas três coisas: nome, e-mail, telefone, senha e um interruptor para aceitar os termos.
+
+---
+
+## :icon[laptop] Computador e celular: o que muda
 
 | No computador | No celular |
 |---|---|
@@ -53,17 +86,19 @@ Qual foi o último cadastro que você abandonou no celular? O que mais irritou?
 | Tela larga, campos lado a lado | Um campo por linha, com o rótulo acima |
 | Botão de enviar sempre à vista | O teclado cobre metade da tela e pode esconder o botão |
 
-Um bom formulário no celular tem três coisas:
+Cada linha da direita é um problema que esta aula resolve, de cima para baixo.
 
-1. **Teclado certo** para cada dado
-2. **Um campo por vez**, em sequência, com o botão do teclado levando ao próximo
-3. **Botão sempre visível**, mesmo com o teclado aberto
+---
+
+## O teclado certo
+
+Se o campo pede o telefone, por que o celular abriria um teclado de letras?
 
 ---
 
 ## :icon[keyboard] keyboardType: o teclado certo
 
-`keyboardType` diz ao sistema qual teclado abrir quando o campo recebe o foco.
+O celular tem vários teclados virtuais: de letras, de números, de discador. A prop **`keyboardType`** (tipo de teclado) escolhe qual deles abre quando o campo recebe o **foco**.
 
 | Valor | Teclado | Use para |
 |---|---|---|
@@ -77,12 +112,34 @@ Um bom formulário no celular tem três coisas:
 ```
 
 :::info
-O teclado é uma ajuda, não uma trava: o usuário ainda pode colar qualquer texto no campo. Validar continua necessário, e é o assunto da aula 69.
+O teclado ajuda, mas não trava: o usuário ainda pode colar qualquer texto no campo. Por isso a validação continua necessária. Ela é o assunto da aula 69.
 :::
 
 ---
 
-## autoCapitalize e autoComplete
+## :icon[keyboard] O teclado certo na prática
+
+Três campos da Lojinha e o teclado que cada um abre:
+
+```jsx
+<TextInput keyboardType="numeric" placeholder="Quantidade" />
+<TextInput keyboardType="phone-pad" placeholder="Celular" />
+<TextInput keyboardType="email-address" placeholder="E-mail" />
+```
+
+| Campo | Na tela, ao tocar no campo |
+|---|---|
+| Quantidade | um teclado só de números |
+| Celular | números grandes, como o discador do telefone |
+| E-mail | letras, com o `@` e o `.` ao lado do espaço |
+
+No e-mail, o teclado certo ainda deixa a primeira letra maiúscula. Quem resolve é o `autoCapitalize`.
+
+---
+
+## :icon[text] autoCapitalize e autoComplete
+
+Duas props fazem o usuário digitar menos e errar menos:
 
 ```jsx
 <TextInput
@@ -93,14 +150,17 @@ O teclado é uma ajuda, não uma trava: o usuário ainda pode colar qualquer tex
 />
 ```
 
-- **`autoCapitalize`**: `'sentences'` (padrão, maiúscula no início da frase), `'words'` para nomes, `'none'` para e-mail e senha
-- **`autoComplete`**: diz ao sistema que dado é esse, e o teclado sugere o que o aparelho já conhece: `'name'`, `'email'`, `'tel'`, `'new-password'`
+- **`autoCapitalize`** (maiúscula automática): `'sentences'` (padrão, maiúscula no início da frase), `'words'` para nomes, `'none'` para e-mail e senha
+- **`autoComplete`** (preenchimento automático): diz ao sistema que dado é esse, e o teclado sugere o que o aparelho já conhece: `'name'`, `'email'`, `'tel'`, `'new-password'`
+- `autoCorrect={false}` desliga o corretor. As chaves levam ao JSX um valor do JavaScript: aqui, o `false`
 
-Com `autoComplete`, o usuário preenche nome e e-mail com um toque na sugestão, sem digitar letra por letra.
+Com `autoComplete`, o usuário preenche nome e e-mail com um toque na sugestão.
 
 ---
 
 ## :icon[lock] secureTextEntry: a senha escondida
+
+Na senha, cada letra vira um ponto na tela, para ninguém ler por cima do ombro. É a prop **`secureTextEntry`** (entrada de texto segura):
 
 ```jsx
 const [mostrar, setMostrar] = useState(false);
@@ -117,15 +177,36 @@ const [mostrar, setMostrar] = useState(false);
 </Pressable>
 ```
 
-- `secureTextEntry` troca cada caractere por um ponto
+- `!mostrar` é o contrário de `mostrar`: com `mostrar` em `false`, a senha fica escondida
 - `autoComplete="new-password"` deixa o gerenciador de senhas do aparelho sugerir uma senha forte
 - O botão **Mostrar senha** ajuda quem digita com o polegar, no ônibus, a conferir o que escreveu
 
 ---
 
+## Pense
+
+:::question
+Qual `keyboardType` você usa para o **CEP**? E para o **e-mail**? Que outras props cada um precisa?
+:::
+
+:::tip Resposta
+- **CEP**: `keyboardType="numeric"`, porque o CEP só tem dígitos; o hífen vem do `mascararCep` do E06. Junte `autoComplete="postal-code"` para o aparelho sugerir o CEP salvo
+- **E-mail**: `keyboardType="email-address"` com `autoCapitalize="none"`, `autoCorrect={false}` e `autoComplete="email"`
+
+Só o teclado de e-mail não resolve: sem `autoCapitalize="none"`, a primeira letra vira maiúscula.
+:::
+
+---
+
+## O botão do teclado
+
+O que deveria acontecer quando você toca no botão do canto do teclado?
+
+---
+
 ## :icon[arrow-right] returnKeyType e onSubmitEditing
 
-O botão no canto do teclado também se configura.
+No canto do teclado há um botão, que no computador seria o <kbd>Enter</kbd>. A prop **`returnKeyType`** escolhe o que ele mostra:
 
 | `returnKeyType` | O botão mostra | Use no |
 |---|---|---|
@@ -141,13 +222,39 @@ O botão no canto do teclado também se configura.
 />
 ```
 
-**`onSubmitEditing`** é o evento disparado pelo toque nesse botão. Atenção: `returnKeyType="next"` só muda o desenho. Quem leva o foco ao próximo campo é o seu código.
+**`onSubmitEditing`** é o evento do toque nesse botão. Atenção: `returnKeyType="next"` só muda o desenho. Quem leva o foco ao próximo campo é o seu código.
 
 ---
 
-## useRef: o controle remoto do campo
+## :icon[arrow-right] O botão do teclado na prática
 
-Para mover o foco, você precisa "segurar" o próximo campo. **`useRef`** cria uma caixa `{ current }` que guarda um valor entre as renderizações, sem redesenhar a tela.
+```jsx
+<TextInput placeholder="Buscar produto" returnKeyType="search"
+  onSubmitEditing={() => console.log('buscar')} />
+<TextInput placeholder="Mensagem para a loja" returnKeyType="send"
+  onSubmitEditing={() => Alert.alert('Mensagem enviada')} />
+<TextInput placeholder="Senha" returnKeyType="done" onSubmitEditing={enviar} />
+```
+
+| Campo | O botão mostra | O toque faz |
+|---|---|---|
+| Busca | Buscar | escreve `buscar` no terminal |
+| Mensagem | Enviar | abre o alerta "Mensagem enviada" |
+| Senha | Concluído | chama `enviar`, que cria a conta |
+
+Repare na arrow function `() =>` nos dois primeiros: ela faz o código esperar o toque. No terceiro, `enviar` vai sem parênteses pelo mesmo motivo.
+
+---
+
+## useRef
+
+Como o código consegue pôr o cursor num campo sem ninguém tocar nele?
+
+---
+
+## :icon[target] useRef: o controle remoto do campo
+
+Para mover o foco, o código precisa "segurar" o próximo campo. Um **ref** funciona como um controle remoto apontado para o campo: com ele, o código manda no campo sem o usuário tocar nele. O hook **`useRef`** cria esse controle.
 
 ```jsx
 import { useRef } from 'react';
@@ -162,32 +269,52 @@ const emailRef = useRef(null);
 <TextInput ref={emailRef} placeholder="E-mail" />
 ```
 
-- `ref={emailRef}`: o React guarda o campo de e-mail em `emailRef.current`
-- `.focus()`: põe o cursor no campo e abre o teclado dele
-- Existem também `.blur()`, que tira o foco, e `.clear()`, que apaga o texto
-
-O `ref` é um controle remoto apontado para o campo; `.focus()` é o botão que você aperta.
+Na tela: no nome, o toque em Próximo leva o cursor ao e-mail, e o teclado continua aberto.
 
 ---
 
-## Pense
+## :icon[list-ordered] O foco em português
 
-:::question
-Qual `keyboardType` você usa para o **CEP**? E para o **e-mail**? Que outras props cada um precisa?
-:::
+| Linha | O que ela diz |
+|---|---|
+| `useRef(null)` | "crie um controle remoto, ainda sem apontar para nada" (`null` quer dizer "nada") |
+| `ref={emailRef}` | "aponte o controle para o campo de e-mail": o React guarda o campo em `emailRef.current` |
+| `onSubmitEditing={() => ...}` | "quando tocarem no botão do teclado, faça isto" |
+| `emailRef.current.focus()` | "aperte o botão de focar": o cursor vai ao e-mail e o teclado dele abre |
 
-:::tip Resposta
-- **CEP**: `keyboardType="numeric"`, porque o CEP só tem dígitos; o hífen vem do `mascararCep` do E06. Junte `autoComplete="postal-code"` para o aparelho sugerir o CEP salvo
-- **E-mail**: `keyboardType="email-address"` com `autoCapitalize="none"`, `autoCorrect={false}` e `autoComplete="email"`
+Por dentro, o ref é um objeto `{ current }` que guarda o mesmo valor entre as renderizações, sem redesenhar a tela.
 
-O teclado de e-mail sozinho não basta: sem `autoCapitalize="none"`, a primeira letra vira maiúscula.
-:::
+---
+
+## :icon[target] O foco na prática
+
+Três situações do cadastro em que o código aperta um botão do controle remoto:
+
+```jsx
+emailRef.current.focus(); // no Próximo do nome
+emailRef.current.focus(); // ao enviar com o e-mail errado
+senhaRef.current.blur();  // num botão "Fechar teclado"
+```
+
+| Situação | Na tela |
+|---|---|
+| Próximo no nome | o cursor pula para o e-mail, e o teclado continua aberto |
+| Enviar com o e-mail errado | o cursor volta ao e-mail, pronto para corrigir |
+| "Fechar teclado" | o campo perde o foco e o teclado desce |
+
+O controle tem mais um botão: `.clear()`, que apaga o texto do campo.
+
+---
+
+## KeyboardAvoidingView
+
+Onde foi parar o botão Criar conta quando o teclado subiu?
 
 ---
 
 ## :icon[layers] KeyboardAvoidingView: o teclado não cobre o botão
 
-O teclado ocupa quase metade da tela. No iOS, ele sempre cobre o que está embaixo; no Android, depende do aparelho e da configuração. **`KeyboardAvoidingView`** mede o teclado e afasta o conteúdo dele.
+O teclado ocupa quase metade da tela. No iOS, ele sempre cobre o que está embaixo; no Android, depende do aparelho. A **`KeyboardAvoidingView`** (vista que evita o teclado) é uma área elástica: quando o teclado sobe, ela encolhe e leva o conteúdo junto, para cima.
 
 ```jsx
 import { KeyboardAvoidingView, Platform } from 'react-native';
@@ -200,7 +327,7 @@ import { KeyboardAvoidingView, Platform } from 'react-native';
 </KeyboardAvoidingView>
 ```
 
-- `Platform.OS` vale `'ios'` ou `'android'`
+- `Platform.OS` vale `'ios'` ou `'android'`; o ternário diz "se for iOS, `'padding'`; se não, `'height'`"
 - `'padding'` acrescenta embaixo um espaço do tamanho do teclado
 - `'height'` encolhe a altura da área para caber acima do teclado
 - `flex: 1` é obrigatório: sem ele, a área tem só a altura do conteúdo e não há o que encolher
@@ -235,14 +362,21 @@ Sem ela, o teclado sobe por cima da tela e esconde o **Criar conta**. Com ela, a
 </SafeAreaView>
 ```
 
+- A `SafeAreaView` do E30 afasta tudo do entalhe; dentro dela, a área elástica
 - Os campos rolam no `ScrollView`; o botão fica no rodapé e sobe junto com o teclado
 - **`keyboardShouldPersistTaps="handled"`**: com o teclado aberto, um toque no `Switch` ou num botão dentro da rolagem funciona de primeira. Sem ele, o primeiro toque só fecha o teclado
 
 ---
 
+## Switch
+
+Como você liga o Wi-Fi do celular: digitando "sim" ou tocando num botão?
+
+---
+
 ## :icon[square-check] Switch para aceitar os termos
 
-O **`Switch`** é o interruptor de liga e desliga. Ele é controlado como o `TextInput`, mas com um `boolean`:
+O **`Switch`** é o interruptor de liga e desliga, como o do Wi-Fi nas configurações do celular. Ele guarda um `boolean`, sim ou não: `true` ligado, `false` desligado. É controlado como o `TextInput`:
 
 ```jsx
 const [termos, setTermos] = useState(false);
@@ -260,11 +394,42 @@ const [termos, setTermos] = useState(false);
 
 - `value`: ligado (`true`) ou desligado (`false`)
 - `onValueChange`: recebe o valor novo, pronto para o `set`
+- `trackColor`: a cor do trilho desligado (`false`) e ligado (`true`), do tema
+- `accessibilityLabel`: o que o leitor de tela fala ao chegar no interruptor
 - `estilos.linha` tem `flexDirection: 'row'`, `alignItems: 'center'` e `gap: espaco.sm`
 
 ---
 
+## :icon[square-check] O Switch na prática
+
+Um interruptor para receber ofertas por e-mail, com um texto que acompanha o estado:
+
+```jsx
+const [ofertas, setOfertas] = useState(false);
+
+<Switch value={ofertas} onValueChange={setOfertas} />
+<Text>{ofertas ? 'Você vai receber ofertas' : 'Sem ofertas por e-mail'}</Text>
+```
+
+| Momento | `ofertas` | Na tela |
+|---|---|---|
+| ao abrir | `false` | interruptor desligado e "Sem ofertas por e-mail" |
+| primeiro toque | `true` | trilho colorido e "Você vai receber ofertas" |
+| segundo toque | `false` | desligado de novo |
+
+Os termos do cadastro funcionam igual: `termos` começa em `false`, e só com `true` a conta pode ser criada.
+
+---
+
+## Campos encadeados
+
+Dá para criar a conta inteira sem tirar o dedo do teclado?
+
+---
+
 ## :icon[user-plus] Exemplo: os 5 campos do cadastro
+
+**Encadear** os campos é ligar um ao outro, como os vagões de um trem: o Próximo de cada campo leva ao seguinte, e o último envia.
 
 | Campo | `keyboardType` | `autoCapitalize` | `autoComplete` | `returnKeyType` |
 |---|---|---|---|---|
@@ -296,20 +461,26 @@ O `done` da senha chama `enviar` no `onSubmitEditing`: o usuário cria a conta s
   returnKeyType="done" onSubmitEditing={enviar} />
 ```
 
-- O `Campo` do UI kit repassa `...rest` ao `TextInput`. No React atual, `ref` é uma prop como as outras e chega lá junto
+- O `Campo` do UI kit (E33) repassa `...rest` ao `TextInput`. No React atual, `ref` é uma prop como as outras e chega lá junto
 - São três refs, criados com `useRef(null)`: `emailRef`, `telefoneRef` e `senhaRef`. O nome não precisa, porque nenhum campo pula para ele
 
 ---
 
-## :icon[bug] Erros comuns
+## Erros comuns
 
-:::warning
-- `onSubmitEditing={emailRef.current.focus()}` sem arrow function: roda na renderização, quando `current` ainda é `null`, e o app quebra
-- `emailRef.focus()` sem `.current`: o ref é a caixa; o campo está dentro dela
-- `keyboardType="email"`: o valor certo é `email-address`
-- `KeyboardAvoidingView` sem `flex: 1`: a área não ocupa a tela e nada sobe
-- `ScrollView` sem `keyboardShouldPersistTaps="handled"`: o usuário toca duas vezes no `Switch` e acha que o app travou
-:::
+O que a tela vermelha e o teclado teimoso estão tentando contar para você?
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| O que aparece | Quer dizer | O que fazer |
+|---|---|---|
+| tela vermelha `Cannot read property 'focus' of null` ao abrir | sem arrow function, o `.focus()` roda ao desenhar, com `current` ainda `null` | `() => emailRef.current.focus()` |
+| `emailRef.focus is not a function` | faltou o `.current`: o campo está dentro do ref | `emailRef.current.focus()` |
+| e-mail com o teclado de letras comum | `keyboardType="email"` não existe | `email-address` |
+| o teclado cobre o botão, mesmo com a `KeyboardAvoidingView` | falta `flex: 1`: a área não ocupa a tela | `style={{ flex: 1 }}` |
+| o primeiro toque no `Switch` só fecha o teclado | falta `keyboardShouldPersistTaps="handled"` no `ScrollView` | acrescentar a prop |
 
 ---
 

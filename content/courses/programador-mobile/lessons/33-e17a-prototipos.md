@@ -28,6 +28,19 @@ Programador Mobile · Encontro E17 · Aula 33 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **protótipo** | o objeto onde um objeto procura o que ele mesmo não tem |
+| **cadeia de protótipos** | a sequência de elos: o objeto, o protótipo dele, o protótipo do protótipo, até o fim |
+| **propriedade própria** | uma propriedade guardada no próprio objeto, e não num protótipo |
+| **sobrescrever** | ter um método com o mesmo nome num elo mais perto do objeto: ele é achado primeiro |
+| **`instanceof`** | a pergunta "este objeto é da família desta classe?" |
+| **açúcar sintático** | um jeito mais fácil de escrever algo que a linguagem já sabia fazer |
+
+---
+
 ## Métodos que não estão no objeto
 
 Pegue o `Produto` do E15 e pergunte ao objeto o que ele guarda:
@@ -43,7 +56,7 @@ fone.precoFormatado;  // 'R$ 199,90'
 `${fone}`;            // 'Fone Bluetooth, R$ 199,90': o toString do E15
 ```
 
-`Object.keys` lista só dados. O `console.log(fone)` também. Nem `precoPara`, nem `precoFormatado`, nem `toString` aparecem, e mesmo assim os três funcionam.
+`Object.keys(fone)` lista os nomes guardados no `fone`: só dados. O `console.log(fone)` também mostra só dados. Nem `precoPara`, nem `precoFormatado`, nem `toString` aparecem. Mesmo assim, os três funcionam.
 
 :::question
 Se os métodos não estão no `fone`, onde o JavaScript os encontra?
@@ -51,9 +64,17 @@ Se os métodos não estão no `fone`, onde o JavaScript os encontra?
 
 ---
 
+## Protótipo
+
+A receita não está no seu caderno. Onde você procura?
+
+---
+
 ## :icon[link-2] O protótipo: um elo escondido
 
-Todo objeto tem um elo escondido para outro objeto: o seu **protótipo**. Quando você lê uma propriedade que o objeto não tem, o JavaScript procura no protótipo.
+Pense no caderno de receitas de uma família. A receita não está no seu caderno? Você procura no caderno da sua mãe. O objeto faz igual.
+
+Todo objeto tem um elo escondido para outro objeto: o seu **protótipo** (*prototype*). Quando você lê uma propriedade que o objeto não tem, o JavaScript procura no protótipo.
 
 ```javascript
 const item = { nome: 'Fone Bluetooth', qtd: 1 }; // objeto literal, como no E08
@@ -64,15 +85,71 @@ Object.hasOwn(item, 'toString');  // false: não é dele...
 item.toString();                  // '[object Object]': ...veio do protótipo
 ```
 
-- **`Object.getPrototypeOf(obj)`** devolve o protótipo de `obj`
-- **`Object.hasOwn(obj, 'x')`** responde se `x` é uma propriedade **própria** de `obj`
-- `Object.prototype` é o protótipo de todo objeto literal: é lá que mora o `toString`
+O `item` não tem `toString`, e mesmo assim a última linha funciona: o JavaScript achou o método no protótipo.
 
 ---
 
-## :icon[list-tree] A cadeia de um array
+## :icon[list-ordered] O elo em português
 
-O protótipo também tem protótipo. A sequência de elos é a **cadeia de protótipos**, e ela termina em `null`.
+| Linha | O que ela diz |
+|---|---|
+| `Object.getPrototypeOf(item)` | "qual é o protótipo do `item`?" (*get prototype of*: pegue o protótipo de) |
+| `=== Object.prototype` | "é o `Object.prototype`?" Sim: ele é o protótipo de todo objeto escrito com `{ }`, e é lá que mora o `toString` |
+| `Object.hasOwn(item, 'nome')` | "o `nome` é do próprio `item`?" (*has own*: tem como seu). Sim: é uma **propriedade própria** |
+| `Object.hasOwn(item, 'toString')` | "e o `toString`, é dele?" Não: mora no protótipo |
+| `item.toString()` | funciona assim mesmo: o JavaScript procurou no protótipo |
+
+---
+
+## :icon[link-2] Protótipo na prática
+
+**Caso 1: o produto do E15.** Os dados moram no `fone`; os métodos, no protótipo dele.
+
+```javascript
+const fone = Produto.deJSON(produtos[0]);
+
+Object.hasOwn(fone, 'nome');      // true: o dado mora no fone
+Object.hasOwn(fone, 'precoPara'); // false: o método não mora nele...
+fone.precoPara(2);                // 399.8: ...e funciona, achado no protótipo
+```
+
+**Caso 2: um texto.** Todo texto também consulta um protótipo, o `String.prototype`.
+
+```javascript
+const cupom = 'bemvindo';
+cupom.toUpperCase();                            // 'BEMVINDO'
+Object.hasOwn(String.prototype, 'toUpperCase'); // true: mora no protótipo dos textos
+```
+
+É a resposta para os métodos que não apareciam no `Object.keys(fone)`: eles moram no protótipo.
+
+---
+
+## Cadeia de protótipos
+
+E se a sua mãe também não tiver a receita?
+
+---
+
+## :icon[arrow-up] A busca sobe até null
+
+O caderno da sua mãe aponta para o da avó: o protótipo também tem protótipo. Essa sequência de elos é a **cadeia de protótipos**. Ela termina em `null`, que quer dizer "nada".
+
+:::center
+![Diagrama: a cadeia de itens vai do próprio array para Array.prototype, com map, filter e push, depois para Object.prototype, com hasOwnProperty e toString, e termina em null; itens.map é achado em Array.prototype e itens.desconto chega a null e dá undefined](images/e17-cadeia-prototipos.svg)
+:::
+
+:::steps
+1. Procura no próprio objeto
+2. Não achou: sobe um elo e procura lá
+3. Repete até achar; em `null`, a resposta é `undefined`
+:::
+
+---
+
+## :icon[list-tree] A cadeia na prática
+
+Um array do carrinho e a cadeia dele, elo por elo:
 
 ```javascript
 const itens = [{ id: 1, qtd: 1 }];
@@ -84,27 +161,25 @@ Object.getPrototypeOf(Object.prototype);                     // null: fim da cad
 itens.desconto;                                              // undefined: ninguém tem
 ```
 
+- `itens.map` é achado no segundo elo, o `Array.prototype`
+- `itens.desconto` não é achado em nenhum: a busca chega a `null` e devolve `undefined`
+
 O `map`, o `filter` e o `push` do E08 e do E09 moram em `Array.prototype`. Eles existem **uma vez só** e servem a todos os arrays do programa: `[1].map === [2].map` é `true`.
 
 ---
 
-## :icon[arrow-up] A busca sobe até null
+## A class por dentro
 
-:::center
-![Diagrama: a cadeia de itens vai do próprio array para Array.prototype, com map, filter e push, depois para Object.prototype, com hasOwnProperty e toString, e termina em null; itens.map é achado em Array.prototype e itens.desconto chega a null e dá undefined](images/e17-cadeia-prototipos.svg)
-:::
-
-:::steps
-1. Procura no próprio objeto
-2. Não achou: sobe para o protótipo e procura lá
-3. Repete até achar ou chegar a `null`; em `null`, a resposta é `undefined`
-:::
+Se 12 bolos saem da mesma forma, a receita precisa estar escrita em cada bolo?
 
 ---
 
 ## :icon[blocks] O que a class cria por baixo
 
-`class Produto` cria duas coisas: uma **função**, a que o `new` chama, e o objeto **`Produto.prototype`**, onde ficam os métodos e os getters.
+A `class` do E15 é a forma de bolo, e cada instância é um bolo feito com ela. Por baixo, `class Produto` cria duas coisas:
+
+- uma **função**, a que o `new` chama para fazer cada bolo
+- o objeto **`Produto.prototype`**, o caderno que todos os produtos consultam: é lá que ficam os métodos e os getters
 
 ```javascript
 typeof Produto;                                     // 'function'
@@ -113,19 +188,46 @@ Object.hasOwn(Produto.prototype, 'precoFormatado'); // true: o getter também
 Object.getPrototypeOf(fone) === Produto.prototype;  // true: o passo 2 do new, no E15
 ```
 
+O `typeof` diz o tipo de um valor: a `class` é, por baixo, uma `'function'`.
+
+---
+
+## :icon[table] Onde mora cada coisa
+
 | Onde mora | O quê | Exemplo |
 |---|---|---|
 | na instância | o que o `constructor` atribui com `this` | `fone.nome` |
 | em `Produto.prototype` | métodos e getters | `fone.precoPara(2)` |
 | na função `Produto` | os estáticos | `Produto.deJSON(dados)` |
 
+A busca do `fone` passa pelo próprio `fone` e pelos protótipos. A função `Produto` não é um desses elos.
+
 Por isso `fone.deJSON` é `undefined`: o estático não está na cadeia do `fone`.
+
+---
+
+## :icon[users] Um método para todas as instâncias
+
+A família tem um caderno só, e todo mundo consulta o mesmo. Com os produtos é igual:
+
+```javascript
+const fone = Produto.deJSON(produtos[0]);
+const caixa = Produto.deJSON(produtos[1]);
+
+fone.precoPara === caixa.precoPara; // true: é a mesma função
+fone.precoPara(2);                  // 399.8: this é o fone
+caixa.precoPara(2);                 // 499.8: this é a caixa
+```
+
+- A função existe uma vez, em `Produto.prototype`: os 12 produtos não guardam 12 cópias dela
+- Quem diz de qual produto é o preço é o `this`, que vale o objeto antes do ponto, como no E15
+- Por ser compartilhado, mudar um protótipo muda todas as instâncias de uma vez. É por isso que ninguém mexe no protótipo dos outros
 
 ---
 
 ## :icon[history] Antes do class: função e prototype
 
-A palavra `class` chegou ao JavaScript em 2015. Antes, escrevia-se o mesmo mecanismo à mão, e você ainda encontra esse jeito em código antigo:
+A palavra `class` chegou ao JavaScript em 2015. Antes, o mesmo mecanismo era escrito à mão. Você ainda encontra esse jeito em código antigo:
 
 ```javascript
 function ProdutoAntigo(id, nome, preco) { // o "constructor" é uma função comum
@@ -142,24 +244,7 @@ const fone = new ProdutoAntigo(1, 'Fone Bluetooth', 199.9);
 fone.precoPara(2); // 399.8, achado em ProdutoAntigo.prototype
 ```
 
-A `class` faz o mesmo com menos chance de erro: junta tudo num bloco e proíbe chamar sem `new`. Por isso se diz que ela é **açúcar sintático**: um jeito mais claro de escrever o que a linguagem já fazia.
-
----
-
-## :icon[users] Um método para todas as instâncias
-
-```javascript
-const fone = Produto.deJSON(produtos[0]);
-const caixa = Produto.deJSON(produtos[1]);
-
-fone.precoPara === caixa.precoPara; // true: é a mesma função
-fone.precoPara(2);                  // 399.8: this é o fone
-caixa.precoPara(2);                 // 499.8: this é a caixa
-```
-
-- A função existe uma vez, em `Produto.prototype`: os 12 produtos não guardam 12 cópias dela
-- Quem diz de qual produto é o preço é o `this`, que vale o objeto antes do ponto, como no E15
-- Por ser compartilhado, mudar um protótipo muda todas as instâncias de uma vez. É por isso que ninguém mexe no protótipo dos outros
+A `class` faz o mesmo com menos chance de erro: junta tudo num bloco e proíbe chamar sem `new`. Por isso se diz que ela é **açúcar sintático**: um jeito mais doce, mais fácil, de escrever o que a linguagem já fazia.
 
 ---
 
@@ -185,19 +270,27 @@ Desenhe a cadeia de `fone`, criado com `Produto.deJSON(produtos[0])`, e diga em 
 
 ---
 
+## Herança por dentro
+
+O boleto nunca escreveu o próprio `totalAPagar`. Como ele sabe quanto cobrar?
+
+---
+
 ## :icon[git-fork] extends liga dois protótipos
+
+No E16, o boleto **é um tipo de** pagamento: herda o que todo pagamento tem e acrescenta o seu. Por dentro, `class PagamentoBoleto extends Pagamento` faz o protótipo da filha apontar para o da mãe. A cadeia ganha um elo.
 
 :::center
 ![Diagrama: a cadeia de boleto vai do objeto para PagamentoBoleto.prototype, que só tem vencimento, depois pelo elo criado pelo extends até Pagamento.prototype, com totalAPagar e descricao, e por fim Object.prototype e null; a busca por boleto.totalAPagar não acha nada nos dois primeiros elos e para no terceiro](images/e17-cadeia-pagamento.svg)
 :::
 
-`class PagamentoBoleto extends Pagamento` faz o protótipo da filha apontar para o da mãe: a cadeia ganha um elo. O boleto não declara `totalAPagar`, então a busca passa por `PagamentoBoleto.prototype` e acha o método em `Pagamento.prototype`. É o "o JavaScript sobe até `Pagamento`" do E16, agora com nome: **herdar** é achar o método num elo mais acima.
+O boleto não declara `totalAPagar`. A busca passa por `PagamentoBoleto.prototype` e sobe até `Pagamento.prototype`. É o "sobe até `Pagamento`" do E16, agora com nome: **herdar** é achar o método num elo mais acima.
 
 ---
 
 ## :icon[arrow-up-down] Sobrescrever e super
 
-**Sobrescrever** é pôr um método com o mesmo nome num elo mais perto do objeto, como o `toString` do `Produto` esconde o de `Object.prototype`. No Pix, a busca acha `totalAPagar` em `PagamentoPix.prototype` e para ali: o da mãe nem é visitado.
+**Sobrescrever** é pôr um método com o mesmo nome num elo mais perto do objeto. É ter a sua versão da receita no seu caderno: você nem abre o da avó. Assim o `toString` do `Produto` esconde o de `Object.prototype`. No Pix, a busca acha `totalAPagar` em `PagamentoPix.prototype` e para ali: o da mãe nem é visitado.
 
 ```javascript
 const pix = new PagamentoPix();
@@ -210,6 +303,29 @@ boleto.totalAPagar === Pagamento.prototype.totalAPagar; // true: subiu até a m�
 
 - `super.totalAPagar(valor)`, no `PagamentoCartao`, começa a busca **um elo acima**, em `Pagamento.prototype`, com o mesmo `this`
 - `super(...)` no constructor roda o constructor da mãe. Numa filha, é ele que cria o objeto: antes do `super`, o `this` ainda não existe
+
+---
+
+## :icon[credit-card] Herança na prática
+
+As três formas de pagamento do E16, com a mesma compra de R$ 199,90:
+
+```javascript
+const boleto = new PagamentoBoleto();
+const pix = new PagamentoPix();
+const cartao = new PagamentoCartao(3);
+
+boleto.totalAPagar(199.9); // 199.9: não achou no boleto, subiu até Pagamento
+pix.totalAPagar(199.9);    // 189.9: achou em PagamentoPix.prototype e parou
+cartao.totalAPagar(199.9); // 199.9: até 6x, o super.totalAPagar usa a regra da mãe
+pix.descricao;             // 'Pix com 5% de desconto': o super.descricao e o resto
+```
+
+| Chamada | Onde a busca parou | Por quê |
+|---|---|---|
+| `boleto.totalAPagar` | `Pagamento.prototype` | herdado |
+| `pix.totalAPagar` | `PagamentoPix.prototype` | sobrescrito |
+| `super.totalAPagar`, no cartão | `Pagamento.prototype` | começou um elo acima |
 
 ---
 
@@ -242,9 +358,28 @@ console.log(pix instanceof Pagamento);
 
 ---
 
+## instanceof
+
+Um Pix é um pagamento? E uma cópia do Pix, ainda é?
+
+---
+
 ## :icon[search-check] instanceof percorre a cadeia
 
-`x instanceof Classe` sobe a cadeia de `x` procurando `Classe.prototype`. Achou em qualquer elo: `true`.
+O **`instanceof`** (é instância de) pergunta: "este objeto é da família desta classe?". Para responder, ele sobe os cadernos da família procurando um nome.
+
+`x instanceof Classe` sobe a cadeia de `x` procurando `Classe.prototype`. Achou em qualquer elo: `true`. Chegou a `null` sem achar: `false`.
+
+```javascript
+const pix = new PagamentoPix();
+pix instanceof Pagamento; // true: Pagamento.prototype está na cadeia do pix
+```
+
+A resposta não depende do `name` nem de nenhum dado do objeto: só dos elos da cadeia.
+
+---
+
+## :icon[search-check] instanceof na prática
 
 | Expressão | Resultado | Por quê |
 |---|---|---|
@@ -254,13 +389,19 @@ console.log(pix instanceof Pagamento);
 | `pix instanceof PagamentoCartao` | `false` | outro ramo da família |
 | `{ ...pix } instanceof Pagamento` | `false` | a cópia é um objeto literal |
 
-Na aula 34, é assim que você separa os seus erros dos bugs: `erro instanceof ErroDeNegocio` vale para toda a família de erros da Lojinha.
+Na aula 34, o `instanceof` separa os seus erros dos bugs: `erro instanceof ErroDeNegocio` vale para toda a família de erros da Lojinha.
+
+---
+
+## Cópias e JSON
+
+A xerox da sua ficha leva junto o caderno de receitas da família?
 
 ---
 
 ## :icon[unlink] Cópias e JSON perdem a cadeia
 
-O spread e o `JSON.stringify` levam só as propriedades **próprias** do objeto. O que mora no protótipo fica para trás:
+O spread do E11 tira uma cópia do objeto, como uma xerox da ficha. O `JSON.stringify` do E02 transforma o objeto em texto. Os dois levam só as propriedades **próprias**: o que mora no protótipo, e o elo com ele, fica para trás.
 
 ```javascript
 const fone = Produto.deJSON(produtos[0]);
@@ -268,13 +409,43 @@ const copia = { ...fone };
 copia.nome;               // 'Fone Bluetooth': os dados vieram
 copia.precoFormatado;     // undefined: o getter ficou em Produto.prototype
 copia instanceof Produto; // false: o protótipo da cópia é Object.prototype
+```
 
+É a cópia rasa do E11 com mais um detalhe: ela copia só o que é **do próprio** objeto, e campos `#` também ficam de fora.
+
+---
+
+## :icon[arrow-left-right] Cópias e JSON na prática
+
+**Guardar e recuperar um produto.** O texto leva só os dados; a fábrica `deJSON` do E15 devolve o produto à família:
+
+```javascript
 const texto = JSON.stringify(fone);                // só os dados viram texto
 const deVolta = Produto.deJSON(JSON.parse(texto)); // a fábrica do E15 refaz a ligação
 deVolta.precoFormatado;   // 'R$ 199,90'
+deVolta instanceof Produto; // true: de volta à família
 ```
 
-É a cópia rasa do E11 com mais um detalhe: ela copia só o que é **do próprio** objeto, e campos `#` também ficam de fora. Por isso vale a regra do E15: para guardar, dados (`paraJSON`); para calcular, a classe; para mudar, uma instância nova (`comStatus`), nunca `{ ...this }`.
+Por isso vale a regra do E15:
+
+| Para | Use |
+|---|---|
+| guardar | os dados (`paraJSON`) |
+| calcular | a classe, com os métodos |
+| mudar | uma instância nova (`comStatus`), nunca `{ ...this }` |
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `fone.deJSON is not a function` | o estático foi chamado pela instância | chamar pela classe: `Produto.deJSON(dados)` |
+| `copia.precoPara is not a function` | a cópia com spread perdeu o protótipo | usar o original, ou recriar com `Produto.deJSON` |
+| `cannot be invoked without 'new'` | a classe foi chamada sem `new` | `new Produto(...)` |
+| `Cannot set properties of undefined` | uma função antiga, como `ProdutoAntigo`, foi chamada sem `new` | pôr o `new` antes |
+
+As quatro começam com `TypeError`: o valor existe, mas não é do tipo que o código esperava.
 
 ---
 

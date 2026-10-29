@@ -24,8 +24,21 @@ Programador Mobile · Encontro E42 · Aula 83 de 89
 - Explicar por que o contexto nasce `null` e para que serve a guarda no hook
 - Organizar as ações do carrinho com `useReducer` e as regras de `src/regras/carrinho.js`
 - Rodar o Jest no app com o preset `jest-expo` e testar o reducer
-- Reconhecer quando o Context não basta e o que o Zustand oferece
+- Reconhecer quando o Context não dá conta e o que o Zustand oferece
 :::
+
+---
+
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **contexto** | um jeito de várias telas lerem o mesmo dado, sem passar props de tela em tela |
+| **Provider** | o componente que entrega o valor do contexto a todos os que estão abaixo dele |
+| **guarda** | um `if` no começo da função que para tudo com um erro claro quando falta algo |
+| **reducer** | uma função que recebe o estado atual e uma ação e devolve o estado novo |
+| **ação** | um objeto que diz o que aconteceu, como `{ type: 'esvaziar' }` |
+| **preset** | um pacote de configurações prontas; aqui, o que ensina o Jest a ler o app |
 
 ---
 
@@ -41,18 +54,56 @@ O carrinho começa vazio, `[]`. Então por que o contexto nasce com `createConte
 
 ---
 
+## Tipos de estado
+
+Que recado fica só com você, e qual vai para o quadro da geladeira?
+
+---
+
 ## :icon[network] Quatro tipos de estado
 
-| Estado | Exemplo na lanchonete | Onde mora |
-|---|---|---|
-| local | a categoria escolhida | `useState` na tela |
-| compartilhado | o carrinho, o tema | um contexto acima das rotas |
-| do servidor | o cardápio, os pedidos e o status | no json-server; um hook busca |
-| do aparelho | o carrinho salvo, o nome do cliente | AsyncStorage, no E43 |
+O **estado** é o placar do app: o dado que, quando muda, faz a tela se redesenhar. Ele mora num lugar diferente conforme quem precisa dele:
+
+| Estado | Exemplo na lanchonete | Onde mora | Lembra |
+|---|---|---|---|
+| local | a categoria escolhida | `useState` na tela | o placar de uma mesa de jogo |
+| compartilhado | o carrinho, o tema | um contexto acima das rotas | o quadro de avisos da casa |
+| do servidor | o cardápio, os pedidos e o status | no json-server; um hook busca | a cozinha, pelo garçom |
+| do aparelho | o carrinho salvo, o nome do cliente | AsyncStorage, no E43 | a gaveta do celular |
+
+---
+
+## :icon[compass] Onde guardar cada dado
 
 - Comece **local**. Suba para um contexto só quando telas que não são mãe e filha precisam do mesmo dado
 - Dado do servidor quase nunca vira estado global: cada tela busca o que mostra, por um hook, como o `useProdutos`
 - Na dúvida: "se esta tela fechar, alguém sente falta deste dado?"
+
+:::example
+A categoria escolhida no Cardápio só importa ao Cardápio: estado local. O carrinho aparece em cinco telas: contexto. A lista de pedidos está no json-server: um hook que busca.
+:::
+
+---
+
+## Contexto
+
+Como avisar todo mundo da casa sem passar de cômodo em cômodo?
+
+---
+
+## :icon[megaphone] O contexto: um quadro de avisos
+
+Um **contexto** deixa várias telas lerem o mesmo dado, sem passar props de tela em tela. É o quadro de avisos da casa: todos os cômodos leem o mesmo aviso.
+
+A receita tem três peças:
+
+| Peça | No quadro de avisos | No código |
+|---|---|---|
+| `createContext` | fazer o quadro | cria o canal, ainda sem valor |
+| `Provider` | pendurar o quadro e escrever o aviso | entrega o `value` a quem está abaixo |
+| `useContext` | ir até o quadro e ler | devolve o `value` do Provider mais próximo |
+
+Na lanchonete, o aviso do quadro é o carrinho: cinco telas leem a mesma lista.
 
 ---
 
@@ -71,7 +122,7 @@ const CarrinhoContext = createContext(null);
 - O `[]` do carrinho vazio não é o padrão: é o estado inicial, e mora dentro do Provider
 - O `CarrinhoContext` não tem `export`: ninguém de fora usa o canal direto
 
-Pense num rádio: `createContext` escolhe a frequência, o Provider é a antena e `useContext` é o aparelho sintonizado.
+Sem Provider, é como procurar o quadro na parede e não achar: quem lê recebe o padrão, `null`.
 
 ---
 
@@ -125,6 +176,30 @@ O arquivo exporta duas coisas: o `CarrinhoProvider`, para o layout, e o `useCarr
 
 ---
 
+## :icon[megaphone] Contexto na prática
+
+Três telas leem o mesmo carrinho, cada uma o pedaço de que precisa:
+
+```jsx
+// app/(tabs)/_layout.js: o número na aba
+const { quantidade } = useCarrinho();
+
+// TelaProduto: o botão Adicionar
+const { adicionar } = useCarrinho();
+
+// TelaCarrinho: a lista, o total e o envio
+const { itens, total, esvaziar } = useCarrinho();
+```
+
+O cliente toca duas vezes em "Adicionar" no X-Burger. Na mesma hora:
+
+- o ícone da aba Carrinho mostra **2**
+- a TelaCarrinho lista o X-Burger com `qtd: 2`, e o `total` vira `45.8`
+
+Nenhuma tela passou props para outra: todas leram o mesmo quadro de avisos.
+
+---
+
 ## Pense
 
 :::question
@@ -132,16 +207,22 @@ Um colega escreve `createContext({ itens: [], adicionar: () => {} })` "para nunc
 :::
 
 :::tip Resposta
-Com o padrão falso, nada quebra e nada funciona: o toque chama a função vazia, o carrinho segue com zero itens e ninguém sabe por quê. O bug aparece no dia da demonstração.
+Com o padrão falso, nada quebra e nada funciona: o toque chama a função vazia, o carrinho segue com zero itens e ninguém sabe por quê. É um quadro pintado na parede: parece ter aviso, mas nunca muda. O bug aparece no dia da demonstração.
 
 Com `null` e a guarda, o app para na hora, com "useCarrinho precisa estar dentro do CarrinhoProvider". O erro diz o que falta e onde. É por isso que o contexto nasce `null`.
 :::
 
 ---
 
+## useReducer
+
+Como a calculadora chega ao total novo quando você aperta "+ 5"?
+
+---
+
 ## :icon[workflow] useReducer: muitas ações, um estado
 
-Com `useState`, cada função do Provider calcula a lista nova do seu jeito. Com **`useReducer`**, toda mudança passa por uma função só, o **reducer**:
+Com `useState`, cada função do Provider calcula a lista nova do seu jeito. Com **`useReducer`**, toda mudança passa por uma função só, o **reducer**. Ele lembra o `reduce` do E09, a calculadora que vai acumulando: recebe o estado atual e uma **ação**, a tecla apertada, e devolve o estado novo.
 
 ```jsx
 const [itens, dispatch] = useReducer(carrinhoReducer, []);
@@ -151,14 +232,22 @@ dispatch({ type: 'alterar', id: '2', qtd: 3 });
 dispatch({ type: 'esvaziar' });
 ```
 
+- `useReducer` recebe o reducer e o estado inicial, `[]`, e devolve o estado e o `dispatch`
+- `dispatch` (despachar, enviar) é apertar a tecla: entrega a ação ao reducer
+- A **ação** é um objeto com `type`, o que aconteceu, e os dados de que ela precisa
+
+---
+
+## :icon[scale] useState ou useReducer
+
 | | `useState` | `useReducer` |
 |---|---|---|
 | Muda com | `setItens(novaLista)` | `dispatch({ type, ... })` |
 | A regra mora | em cada função | no reducer, num lugar só |
-| Testar sem React | difícil | é só chamar a função |
+| Testar sem React | difícil | chame a função, como qualquer outra |
 | Combina com | um valor, poucas ações | várias ações no mesmo estado |
 
-A **ação** é um objeto com `type` e os dados de que ela precisa.
+O carrinho tem quatro ações sobre a mesma lista: adicionar, alterar, remover e esvaziar. É o caso do `useReducer`.
 
 ---
 
@@ -184,10 +273,26 @@ export function carrinhoReducer(itens, acao) {
 }
 ```
 
+- O `switch` do E13 escolhe o caminho pelo `type` da ação; `default` é o caminho de quando nenhum `case` combina
 - O reducer recebe o estado atual e a ação e **devolve** o estado novo; quem faz a conta é a regra, já testada no `lojinha-regras`
 - Cada regra devolve uma lista nova: nada de `push` em `itens`
 - É puro: nada de `fetch`, de `set...` ou de navegação aqui dentro
 - `alterarQuantidade` com 0 tira o item; ação com nome errado cai no `default`, que avisa na hora
+
+---
+
+## :icon[calculator] O reducer na prática
+
+Cada `dispatch` é uma tecla apertada; o reducer devolve o carrinho novo. Com `xBurger = { id: '1', nome: 'X-Burger', preco: 22.9 }`:
+
+| Ação enviada | Carrinho antes | Carrinho depois |
+|---|---|---|
+| `{ type: 'adicionar', produto: xBurger }` | vazio | X-Burger com `qtd: 1` |
+| a mesma ação, de novo | X-Burger com `qtd: 1` | X-Burger com `qtd: 2` |
+| `{ type: 'alterar', id: '1', qtd: 0 }` | X-Burger com `qtd: 2` | vazio, `[]` |
+| `{ type: 'pagar' }` | qualquer um | erro: `Ação desconhecida: pagar` |
+
+Com o carrinho do segundo passo, `contarItens` dá `2` e `subtotal` dá `45.8`: as mesmas regras do `lojinha-regras`.
 
 ---
 
@@ -235,13 +340,19 @@ function adicionar(produto) {
 - Chamar a regra uma vez a mais é seguro: ela só devolve uma lista nova, que aqui é descartada
 - Se ela lança, o `dispatch` nem acontece, e o carrinho segue igual
 - O `alterar` segue o mesmo molde, com `alterarQuantidade`
-- Na lanchonete, o produto não tem `estoque`: a regra nunca lança, e o `dispatch` direto basta
+- Na lanchonete, o produto não tem `estoque`: a regra nunca lança, e o `dispatch` direto resolve
+
+---
+
+## Jest no app
+
+Quem corrige uma prova escrita numa língua que não conhece?
 
 ---
 
 ## :icon[settings] Jest no app: o preset jest-expo
 
-No E30, os testes ficaram no `lojinha-regras`, porque o app ainda não rodava o Jest. Lá, o Jest do E04 lia código do Node com o `babel-jest`. O app tem JSX e módulos do React Native, e quem ensina o Jest a lê-los é o preset **`jest-expo`**:
+O **Jest** é o corretor da prova com gabarito do E04: roda os testes e diz o que passou. No E30, os testes ficaram no `lojinha-regras`, onde o `babel-jest` traduz o código do Node. O app tem JSX e módulos do React Native, que o Jest sozinho não lê. Quem ensina é o preset **`jest-expo`**, um pacote de configurações prontas:
 
 ```bash
 npx expo install jest-expo jest -- --save-dev
@@ -252,6 +363,7 @@ npx expo install jest-expo jest -- --save-dev
 "jest": { "preset": "jest-expo" }
 ```
 
+- `--save-dev` anota os dois em `devDependencies`: são ferramentas de quem desenvolve, como no E04
 - `test`, `expect`, `toEqual` e `toThrow` são os mesmos do E04
 - O `npm test` acha todo `*.test.js` do app: os do reducer e os das regras que vieram do `lojinha-regras`
 - No app da equipe, `npm test` verde antes de abrir cada PR
@@ -279,29 +391,34 @@ test('ação desconhecida lança erro', () => {
 ```
 
 - Sem tela, sem celular, sem json-server: o reducer é uma função, como as do `lojinha-regras`
+- No terminal, `npm test` termina com `Tests: 2 passed, 2 total`: os dois casos passaram
 - O último `expect` do primeiro teste prova que o estado antigo não foi alterado
 - As regras já têm testes próprios; aqui você testa o que o reducer acrescenta: as ações e o `default`
 
 ---
 
-## :icon[gauge] Quando o Context não basta
+## Quando o Context pesa
 
-O Context dá conta de um app de cinco telas. Ele pesa nestes casos:
+Se todos os avisos da casa ficam num quadro só, o que acontece a cada aviso novo?
 
-| Sinal | O que acontece | Saída |
-|---|---|---|
-| um `AppContext` com tudo | mudar o carrinho renderiza quem só lê o tema | um contexto por assunto |
-| cada item da lista lê o contexto | 40 cartões renderizam a cada "+" | ler no pai e passar props |
-| cardápio guardado no contexto | cópia velha, sem carregando nem erro | um hook que busca |
-| muitos contextos aninhados | o `_layout.js` vira uma pirâmide | uma biblioteca de estado |
+---
 
-Por isso o tema e o carrinho ficam em contextos separados: somar um lanche não redesenha quem só lê as cores.
+## :icon[gauge] Os sinais de que o Context pesa
+
+Um quadro só, com todos os avisos da casa, faz todo mundo parar a cada aviso novo. No Context, quem lê redesenha sempre que o `value` muda. Num app de cinco telas, tudo bem. Ele pesa assim:
+
+- **Um `AppContext` com tudo**: mudar o carrinho redesenha quem só lê o tema. Saída: um contexto por assunto
+- **Cada item da lista lê o contexto**: 40 cartões redesenham a cada "+". Saída: ler no pai e passar props
+- **Cardápio guardado no contexto**: cópia velha, sem carregando nem erro. Saída: um hook que busca
+- **Muitos contextos, um dentro do outro**: o `_layout.js` vira uma pirâmide. Saída: uma biblioteca de estado
+
+Por isso tema e carrinho moram em contextos separados.
 
 ---
 
 ## :icon[boxes] Zustand, como visão
 
-O **Zustand** é uma biblioteca pequena de estado global. Você cria uma **store**, que já é um hook, e não precisa de Provider:
+O **Zustand** é uma biblioteca pequena de estado global. Você cria uma **store** (depósito), que já é um hook, e não precisa de Provider: é um quadro de avisos que não precisa ser pendurado.
 
 ```javascript
 import { create } from 'zustand';
@@ -321,13 +438,19 @@ const itens = useCarrinhoStore((estado) => estado.itens);
 
 - A função passada ao hook é um **seletor**: o componente só renderiza de novo quando aquele pedaço muda
 - O reducer puro serve aqui também: a regra não depende de onde o estado mora
-- Instale com `npx expo install zustand` quando o Context pesar. No projeto integrador, Context e `useReducer` bastam
+- Instale com `npx expo install zustand` quando o Context pesar. No projeto integrador, Context e `useReducer` são suficientes
+
+---
+
+## Dados do servidor
+
+Duas mesas pedem o mesmo prato: chega um prato para as duas, ou um para cada?
 
 ---
 
 ## :icon[blocks] Dado do servidor: um hook por tela
 
-Em `src/features/pedidos/usePedidos.js`, com os imports de `react`, de `../../api/pedidos` e do `ErroDeNegocio`:
+Dado do servidor, como os pedidos, não vai para um contexto: cada tela o busca por um **hook de dados**, o amigo que cuida do pedido da mesa. Em `src/features/pedidos/usePedidos.js`, com os imports de `react`, de `../../api/pedidos` e do `ErroDeNegocio`:
 
 ```javascript
 export function usePedidos() {
@@ -354,6 +477,28 @@ export function usePedidos() {
 
 ---
 
+## :icon[blocks] Um hook por tela na prática
+
+A `TelaPedidos` só desenha o que o `usePedidos()` devolve:
+
+```jsx
+const { pedidos, carregando, erro, recarregar } = usePedidos();
+
+if (carregando) return <EstadoCarregando />;
+if (erro) return <EstadoErro mensagem={erro} onTentarNovamente={recarregar} />;
+return <FlatList data={pedidos} /* keyExtractor e renderItem */ />;
+```
+
+| Situação | O que a tela mostra |
+|---|---|
+| a resposta ainda não chegou | `EstadoCarregando` |
+| json-server desligado | `EstadoErro`, com "Tentar novamente" |
+| a lista chegou | os pedidos, do mais novo para o mais antigo |
+
+Duas telas com `usePedidos()` fazem dois pedidos e guardam duas listas: duas mesas, dois pratos.
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
@@ -368,6 +513,18 @@ export function usePedidos() {
 
 ---
 
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `precisa estar dentro do CarrinhoProvider` | o Provider não está acima da tela | pôr o Provider em volta da `Pilha`, no `_layout.js` |
+| `TypeError` que fala de `null` | contexto sem Provider e sem guarda | acrescentar a guarda no hook |
+| `Ação desconhecida` | o `type` da ação está escrito errado | conferir o nome no `dispatch` e no `case` |
+| `Missing script: "test"` | falta o script `test` no `package.json` | `"test": "jest"` em `scripts` |
+| `Cannot use import statement outside a module` | o Jest está sem o preset | `"jest": { "preset": "jest-expo" }` |
+
+---
+
 ## Resumo
 
 :::summary
@@ -375,7 +532,7 @@ export function usePedidos() {
 - `createContext(null)` cria o canal, o `Provider` entrega o `value` abaixo dele e `useContext` lê o Provider mais próximo
 - O `null` mais a guarda no hook transformam o Provider esquecido num erro claro
 - `useReducer` concentra as ações num reducer puro, que usa as regras do `lojinha-regras` e se testa com o Jest e o `jest-expo`
-- Context dividido por assunto basta no projeto; Zustand é a saída quando ele pesar
+- Context dividido por assunto dá conta do projeto; Zustand é a saída quando ele pesar
 :::
 
 ---

@@ -28,6 +28,19 @@ Programador Mobile · Encontro E42 · Aula 82 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **arquitetura** | a organização do app: em que pasta fica cada arquivo e quem chama quem |
+| **funcionalidade** | uma parte do app que a pessoa usa, como o carrinho ou o cardápio |
+| **camada** | uma parte do código com uma tarefa só: desenhar, guardar o estado ou falar com o servidor |
+| **json-server** | um programa que transforma um arquivo JSON numa API, no seu computador |
+| **endereço IP** | o número que identifica um aparelho na rede Wi-Fi, como `192.168.0.15` |
+| **paginação** | buscar uma lista em partes, de 20 em 20, em vez de tudo de uma vez |
+
+---
+
 ## Três pessoas, um app, um prazo
 
 A equipe do briefing **Cardápio e pedidos** dividiu o trabalho: Ana faz o cardápio, Bruno o carrinho e Carla o acompanhamento do pedido. Se o app seguir as pastas da Lojinha, os três mexem em `src/telas/` e `src/contexts/` ao mesmo tempo, e todo Pull Request vira conflito.
@@ -40,9 +53,24 @@ Se o cardápio está guardado no computador do Bruno, como o celular da Ana cons
 
 ---
 
-## :icon[folder-tree] Por funcionalidade: a árvore da lanchonete
+## Por funcionalidade
 
-A Lojinha separa os arquivos **por tipo**: todas as telas em `telas/`, todos os contextos em `contexts/`. Serve a um app pequeno, feito por uma pessoa. O app da equipe separa **por funcionalidade**: tudo do carrinho numa pasta só.
+Três irmãos, um material escolar: uma caixa de lápis para todos ou uma mochila para cada um?
+
+---
+
+## :icon[folder-tree] Por tipo ou por funcionalidade
+
+A **arquitetura** de um app é a organização das pastas e de quem chama quem. Há dois jeitos comuns de separar os arquivos:
+
+- **Por tipo**: todas as telas em `telas/`, todos os contextos em `contexts/`. É o jeito da Lojinha, um app pequeno, feito por uma pessoa
+- **Por funcionalidade**: tudo do carrinho numa pasta só, tudo do cardápio em outra. É o jeito do app da equipe
+
+Pense no material escolar de três irmãos. Por tipo, todos os lápis ficam numa caixa e todos os cadernos em outra: os três mexem nas mesmas caixas ao mesmo tempo. Por funcionalidade, cada um tem a sua mochila, com tudo o que usa. O que todos usam, como a impressora, fica na sala.
+
+---
+
+## :icon[folder-tree] A árvore da lanchonete
 
 ```plaintext
 app/                    só rotas finas e layouts
@@ -59,21 +87,42 @@ src/
 db.json                 os dados do json-server
 ```
 
-- Cada pasta de `features/` guarda telas, estado e regras de **uma** funcionalidade: cada pessoa trabalha na sua
+- Cada pasta de `features/` (funcionalidades) guarda telas, estado e regras de **uma** funcionalidade: cada pessoa trabalha na sua, como na mochila
 - O que todas usam fica fora: o kit, o tema e o que veio pronto do `lojinha-regras`
 - As telas levam o prefixo `Tela`, para não se misturar aos componentes da pasta
 
 ---
 
+## Camadas
+
+Num restaurante, quem vai até a cozinha buscar o prato?
+
+---
+
 ## :icon[layers] Camadas: quem chama quem
+
+Uma **camada** é uma parte do código com uma tarefa só. A tela desenha; o hook guarda o estado; a `api/` fala com o servidor; o servidor guarda os dados.
+
+Pense numa mesa de restaurante. Os amigos (a tela) só comem. Um deles cuida do pedido (o hook): anota, espera e avisa se atrasou. Quem vai à cozinha (o servidor) é o garçom (a `api/`). O prato volta pelo mesmo caminho.
 
 :::center
 ![Animação: a TelaCardapio chama o useCardapio, que chama listarProdutos na api/, que faz GET /produtos no json-server; as setas só descem, e a resposta sobe até a tela](images/e42-camadas.svg)
 :::
 
-As chamadas só **descem**: a tela chama o hook, o hook chama a `api/`, a `api/` chama o servidor. Nunca o contrário: a tela não chama `fetch`, o hook ou contexto não desenha e a `api/` não conhece telas. Fora dessa fila, `app/` só diz os endereços, sem lógica.
+---
 
-Uma funcionalidade usa outra só pela porta da frente: a `TelaProduto` chama `useCarrinho()` para adicionar o lanche, mas não importa o `carrinhoReducer` da pasta vizinha.
+## :icon[arrow-down] Camadas na prática
+
+As chamadas só **descem**; a resposta sobe pelo mesmo caminho. Três toques no app da lanchonete:
+
+| Toque | Tela | Hook ou contexto | `api/` | Servidor |
+|---|---|---|---|---|
+| abrir o cardápio | `TelaCardapio` | `useCardapio()` | `listarProdutos()` | `GET /produtos` |
+| "Adicionar" | `TelaProduto` | `adicionar` do `useCarrinho()` | nada | nada |
+| enviar o pedido | `TelaCarrinho` | `esvaziar()`, no fim | `criarPedido()` | `POST /pedidos` |
+
+- Nunca o contrário: a tela não chama `fetch`, o hook ou contexto não desenha, a `api/` não conhece telas. `app/` só diz os endereços
+- Uma funcionalidade usa outra pela porta da frente: a `TelaProduto` chama `useCarrinho()`, mas não importa o `carrinhoReducer` da pasta vizinha
 
 ---
 
@@ -101,9 +150,15 @@ Diga a pasta e o arquivo de cada peça do app da lanchonete:
 
 ---
 
+## json-server
+
+Onde a equipe de um restaurante testa os pratos antes de abrir?
+
+---
+
 ## :icon[server] json-server: a API da equipe
 
-O **json-server** transforma um arquivo JSON numa API de verdade, rodando no computador da equipe. Cada chave do arquivo vira uma rota, e cada escrita grava no próprio arquivo.
+O **json-server** transforma um arquivo JSON numa API de verdade, no computador da equipe. É uma cozinha de ensaio: atende pedidos como a de verdade, e a despensa é o arquivo `db.json`, onde cada escrita fica gravada.
 
 ```json
 {
@@ -120,16 +175,58 @@ O **json-server** transforma um arquivo JSON numa API de verdade, rodando no com
 npx json-server db.json --port 3000
 ```
 
-- Uma coleção por "coisa" do briefing, no plural: `produtos` vira a rota `/produtos`
+- Cada coleção, no plural, vira uma **rota**, o caminho no fim do endereço: `produtos` vira `/produtos`
 - Todo `id` é texto, entre aspas; `categoriaId` liga o produto à categoria
-- Na primeira vez, o `npx` pergunta se pode instalar: responda `y`. Fechou o terminal, a API sai do ar
-- Serve para desenvolver e apresentar: não tem login nem validação
+- `--port 3000`: a **porta** é a entrada do computador em que a API atende
+- Na primeira vez, responda `y` ao `npx`. Fechou o terminal, a API sai do ar
+- Não tem login nem validação: serve para desenvolver e apresentar
 
 ---
 
-## :icon[table] CRUD: quatro métodos, seis rotas
+## :icon[globe] json-server na prática
 
-**CRUD**: criar, ler, alterar e apagar:
+Com o servidor ligado, o navegador do computador já conversa com a API. Três endereços e o que cada um devolve:
+
+```plaintext
+http://localhost:3000/produtos
+→ a lista inteira: [ { "id": "1", "nome": "X-Burger", ... } ]
+
+http://localhost:3000/produtos?categoriaId=lanches
+→ só os produtos da categoria lanches
+
+http://localhost:3000/produtos/1
+→ um produto só: { "id": "1", "nome": "X-Burger", ... }
+```
+
+- O `?` filtra a lista por um campo; o `/1` abre a ficha de `id` `"1"`
+- Ao subir, o terminal do json-server lista os **Endpoints**, os endereços que ele atende
+- Mudou o preço no `db.json` com o servidor ligado? Recarregue a página: o servidor releu o arquivo
+
+---
+
+## CRUD
+
+O que dá para fazer com uma ficha de cadastro em papel?
+
+---
+
+## :icon[table] CRUD: criar, ler, alterar e apagar
+
+**CRUD** são as quatro ações sobre dados, pelas iniciais em inglês: *Create*, *Read*, *Update*, *Delete*. É o que você faz com uma ficha de cadastro em papel: preencher, ler, corrigir e jogar fora.
+
+Cada ação tem um **método**, a palavra que diz ao servidor o que fazer:
+
+| Ação | Método | Na ficha de papel |
+|---|---|---|
+| ler | `GET` (pegar) | ler a ficha |
+| criar | `POST` (enviar) | preencher uma ficha nova |
+| alterar um campo | `PATCH` (remendar) | corrigir só o telefone |
+| trocar tudo | `PUT` (pôr) | escrever outra ficha, só com o que você mandou |
+| apagar | `DELETE` (apagar) | jogar a ficha fora |
+
+---
+
+## :icon[route] CRUD na prática: seis rotas
 
 | Ação | Método e rota | Resposta |
 |---|---|---|
@@ -146,13 +243,25 @@ npx json-server db.json --port 3000
 
 ---
 
+## localhost e IP
+
+Se o celular disser "vá até a minha casa", que casa é essa?
+
+---
+
 ## :icon[wifi] Do celular ao computador: o IP
 
-No celular, `localhost` é o **próprio celular**. O json-server roda no computador: o app precisa do **IP do computador** na rede Wi-Fi.
+O **endereço IP** identifica um aparelho na rede Wi-Fi, como `192.168.0.15`. Já **`localhost`** quer dizer "este aparelho", como quem diz "minha casa": dito pelo celular, é a casa do celular.
+
+O json-server roda no computador. No celular, `localhost` é o **próprio celular**: o app precisa do **IP do computador** na rede Wi-Fi.
 
 :::center
 ![Diagrama: localhost:3000 volta ao próprio celular; 192.168.0.15:3000 chega ao json-server do computador pelo Wi-Fi](images/e42-localhost-ip.svg)
 :::
+
+---
+
+## :icon[search] Descobrir o IP e testar
 
 :::steps
 1. Descubra o IP: no Windows, `ipconfig` (linha "Endereço IPv4"); no macOS, `ipconfig getifaddr en0`. Ou leia o terminal do Expo: `exp://192.168.0.15:8081` já mostra o IP
@@ -160,13 +269,23 @@ No celular, `localhost` é o **próprio celular**. O json-server roda no computa
 3. Não apareceu? Confira o mesmo Wi-Fi, o servidor ligado e o firewall, que deve deixar o Node receber conexões na rede privada
 :::
 
+O **firewall** é a proteção do computador que decide quem pode se conectar a ele.
+
 O IP muda quando o computador troca de rede ou reinicia o roteador: confira no começo de cada encontro.
+
+---
+
+## Variáveis de ambiente
+
+Como o mesmo código acha um endereço diferente em cada computador?
 
 ---
 
 ## :icon[settings] EXPO_PUBLIC_API_URL: o endereço fora do código
 
-No E04, você usou `process.env` no Node, com `--env-file`. No app, quem lê o `.env` é o Expo, ao montar o código, e só chegam ao celular as variáveis que começam com **`EXPO_PUBLIC_`**.
+O IP muda de computador para computador. Por isso, o endereço fica fora do código, numa **variável de ambiente**, como o `process.env` do E04. Pense num bilhete na geladeira: o código é o mesmo para todos; o bilhete, com o endereço, é de cada casa.
+
+No app, quem lê o `.env` é o Expo, ao montar o código, e só chegam ao celular as variáveis que começam com **`EXPO_PUBLIC_`**.
 
 ```bash
 # .env: cada pessoa, com o IP do próprio computador
@@ -177,12 +296,6 @@ EXPO_PUBLIC_API_URL=http://192.168.0.15:3000
 # .env.example: no Git, o modelo para a equipe
 EXPO_PUBLIC_API_URL=http://IP-DO-SEU-COMPUTADOR:3000
 ```
-
-- O modelo do Expo não ignora o `.env`: acrescente a linha `.env` ao `.gitignore`
-- Escreva `http://`, o IP e a porta, sem barra no fim: os caminhos começam com `/`
-- Leia com ponto, `process.env.EXPO_PUBLIC_API_URL`: só assim o Expo troca pelo valor
-- Mudou o `.env`? Recarregue o app com `r` no terminal do Expo; na dúvida, `npx expo start -c`
-- Nada de segredo aqui: o que tem `EXPO_PUBLIC_` vai para dentro do app instalado
 
 ---
 
@@ -206,21 +319,46 @@ export const mudarStatus = (id, status) =>
   pedir('/pedidos/' + id, { method: 'PATCH', body: JSON.stringify({ status }) });
 ```
 
-- Sem `.env`, o `??` do E13 cai na DummyJSON: a Lojinha segue igual. Com `.env`, o app da equipe fala com o json-server
+- O `??` do E13 escolhe: sem `.env`, cai na DummyJSON, e a Lojinha segue igual. Com `.env`, o app da equipe fala com o json-server
 - O resto do `pedir` é o do E19: JSON pronto, "Sem conexão" sem rede e `ApiError` com 404 ou 500
 - O POST devolve o pedido com um `id` em texto, como `"xR31mCj8zuk"`: o app não inventa nem converte com `Number()`
 
 ---
 
-## :icon[arrow-down] A Lojinha em páginas: limit, skip e total
+## :icon[file-lock] Cuidados com o .env
+
+- O modelo do Expo não ignora o `.env`: acrescente a linha `.env` ao `.gitignore`
+- Escreva `http://`, o IP e a porta, sem barra no fim: os caminhos começam com `/`
+- Leia com ponto, `process.env.EXPO_PUBLIC_API_URL`: só assim o Expo troca pelo valor
+- Mudou o `.env`? Recarregue o app com `r` no terminal do Expo; na dúvida, `npx expo start -c`
+- Nada de segredo aqui: o que tem `EXPO_PUBLIC_` vai para dentro do app instalado
+
+No Git vai só o `.env.example`: cada pessoa copia, renomeia para `.env` e põe o próprio IP.
+
+---
+
+## Paginação
+
+Num rodízio, o garçom traz toda a comida de uma vez?
+
+---
+
+## :icon[arrow-down] Paginação: pedir em partes
+
+**Paginação** é buscar uma lista em partes, em vez de tudo de uma vez. É como um rodízio: o garçom traz uma rodada por vez e, quando ela acaba, você pede a próxima.
 
 A DummyJSON tem 194 produtos. Baixar todos ao abrir gasta o plano de dados de quem está no 4G e deixa o esqueleto mais tempo na tela. O app pede 20 e, perto do fim da rolagem, mais 20: o `onEndReached` que você preparou no E34, agora com o servidor.
+
+---
+
+## :icon[layers] limit, skip e total
 
 :::center
 ![Animação: a cada pedido de 20, o skip é a quantidade que já está na tela (0, 20, 40 até 180); a última página traz só 14 e, com 194 na tela, igual ao total, não há próxima página](images/e42-paginacao-skip.svg)
 :::
 
-- `skip` é quantos você **já tem**: `produtos.length`
+- `limit` (limite) é quantos vêm em cada pedido: 20
+- `skip` (pular) é quantos você **já tem**: `produtos.length`
 - `total` diz quando parar: com 194 na tela, não há próxima página
 
 ---
@@ -240,15 +378,22 @@ export async function listarProdutos({ limite = 20, pular = 0, sinal } = {}) {
 }
 ```
 
+- No caminho, o `?` começa os detalhes do pedido e o `&` separa um do outro; o `${...}` é a template string do E05
 - A tradução continua aqui: a tela nunca vê `products` nem `title`
 - O contrato mudou: quem esperava um array lê agora `.produtos`. No app, quem chama é o `useProdutos`
 - No Início, saem o `carregar` e a `simularRede` do E39, e os produtos deixam de vir de `src/data/produtos.js`
 
 ---
 
+## O hook useProdutos
+
+Na mesa do restaurante, o que faz o amigo que cuida do pedido?
+
+---
+
 ## :icon[variable] useProdutos (1): o que entra e o que sai
 
-Em `src/hooks/useProdutos.js`, com os imports de `react`, de `../api/produtos` e do `ErroDeNegocio`. É o molde do `useTarefas` do E24, agora com páginas:
+Um **hook de dados** é uma função `use...` que busca os dados de uma tela e guarda a espera, o erro e o resultado: é o amigo que cuida do pedido da mesa. Este fica em `src/hooks/useProdutos.js`, com os imports de `react`, de `../api/produtos` e do `ErroDeNegocio`. É o molde do `useTarefas` do E24, agora com páginas:
 
 ```javascript
 const LIMITE = 20;
@@ -300,6 +445,19 @@ export function useProdutos() {
 
 ---
 
+## :icon[list-ordered] A buscarPagina em português
+
+| Linha | O que ela diz |
+|---|---|
+| `buscando.current = true` | "anote: já pedi", a trava |
+| `setEsperando(true)` | "ligue a rodinha desta espera" |
+| `await listarProdutos(...)` | "peça a página à `api/` e espere a resposta" |
+| `setProdutos((atuais) => ...)` | "se recomeçou, troque a lista; se não, junte a página no fim" |
+| `catch (e)` | "erro esperado vira mensagem na tela; bug sobe" |
+| `finally` | "deu certo ou errado: solte a trava e pare a rodinha" |
+
+---
+
 ## :icon[chevrons-right] useProdutos (3): abrir, puxar e carregar mais
 
 ```javascript
@@ -335,7 +493,7 @@ Ao chegar no fim da grade, o `onEndReached` disparou duas vezes seguidas, antes 
 :::tip Resposta
 Os dois pedidos saem com `skip=20`, porque `produtos.length` ainda vale 20 nas duas chamadas. Os produtos 21 a 40 entram **duas vezes**, e o terminal avisa `Encountered two children with the same key`.
 
-O `useRef` muda na hora: a segunda chamada já lê `true` e para. Um `setBuscando(true)` só vale na próxima renderização, e a segunda chamada ainda veria `false`.
+O `useRef` muda na hora: a segunda chamada já lê `true` e para. Um `setBuscando(true)` só vale na próxima renderização, e a segunda chamada ainda veria `false`. É o amigo que anota "já pedi" na hora: quem chega um segundo depois já vê a anotação.
 :::
 
 ---
@@ -386,6 +544,17 @@ function desenharRodape() { // dentro do Inicio, antes dos returns
 - Pedir sem trava, ou com a trava num `useState`: a mesma página entra repetida
 - Ligar `carregando` no puxar para atualizar: a grade some e o esqueleto pisca
 :::
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| "Sem conexão" no celular | o app não chegou ao servidor | IP do computador no `.env`, mesmo Wi-Fi, json-server ligado |
+| `Unable to resolve` | um `import` aponta para um arquivo que o app não tem | copiar o arquivo que falta, como o `src/modelos/erros.js` |
+| `Encountered two children with the same key` | a mesma página entrou duas vezes | `buscando.current` no `if` do `carregarMais` |
+| `NaN` no lugar de um id | `Number()` num id do json-server | usar o id como texto |
 
 ---
 

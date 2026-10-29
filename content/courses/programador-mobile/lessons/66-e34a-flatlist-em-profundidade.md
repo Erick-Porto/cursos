@@ -26,6 +26,19 @@ Programador Mobile · Encontro E34 · Aula 66 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **key** | o crachá de cada item da lista: um texto único que diz quem ele é |
+| **cabeçalho e rodapé** | o que aparece antes do primeiro item e depois do último |
+| **estado vazio** | o que a lista mostra quando não tem nenhum item |
+| **grade** | itens lado a lado, em linhas e colunas |
+| **carrossel** | uma fileira de itens que rola para o lado |
+| **paginação** | trazer os itens aos poucos, uma página de cada vez |
+
+---
+
 ## Uma vitrine é feita de listas
 
 Abra o app de uma grande loja ou de delivery. No topo, um carrossel de ofertas que desliza para o lado. Embaixo, uma grade de produtos em 2 colunas. No fim, uma rodinha de "carregando mais" enquanto você rola. Buscou e não achou nada? Aparece uma mensagem e um botão para limpar a busca.
@@ -38,9 +51,15 @@ Na tela Início que você vai montar hoje, quantas listas existem? Qual delas ro
 
 ---
 
+## A FlatList
+
+Por que a esteira do caixa não leva o carrinho inteiro de uma vez?
+
+---
+
 ## :icon[list] Anatomia da FlatList
 
-No E28, a lista de tarefas usou `data`, `renderItem` e `keyExtractor`, e mostrou de passagem o cabeçalho e o estado vazio. A `FlatList` tem dezenas de props; estas são as que importam hoje, em quatro grupos:
+A **`FlatList`** do E28 é uma esteira: só desenha o que cabe na tela. Lá, a lista de tarefas usou `data`, `renderItem` e `keyExtractor`, e mostrou de passagem o cabeçalho e o estado vazio. A `FlatList` tem dezenas de props; estas são as de hoje, em quatro grupos:
 
 | Grupo | Props | Responde |
 |---|---|---|
@@ -48,8 +67,6 @@ No E28, a lista de tarefas usou `data`, `renderItem` e `keyExtractor`, e mostrou
 | Moldura | `ListHeaderComponent`, `ListFooterComponent`, `ListEmptyComponent`, `ItemSeparatorComponent` | o que fica em volta dos itens |
 | Forma | `numColumns`, `columnWrapperStyle`, `horizontal` | lista, grade ou carrossel |
 | Rolagem | `onEndReached`, `onEndReachedThreshold` | o que fazer perto do fim |
-
-Pense numa vitrine: os produtos são os itens; a placa no alto, as divisórias e o aviso de "vitrine vazia" são a moldura.
 
 ---
 
@@ -75,9 +92,15 @@ import { produtos } from '../data/produtos';
 
 ---
 
+## Key estável
+
+Numa festa, como a portaria sabe quem é quem, mesmo quando as pessoas trocam de lugar?
+
+---
+
 ## :icon[key] Key estável: a identidade do item
 
-A `FlatList` usa a key para saber **qual cartão é qual** entre um desenho e outro. Se a key de um item muda, ela joga o cartão fora e cria outro do zero.
+A **key** é o crachá do item: um texto único que diz quem ele é. A `FlatList` usa a key para saber **qual cartão é qual** entre um desenho e outro. Se a key muda, a lista joga o cartão fora e cria outro.
 
 | keyExtractor | Resultado |
 |---|---|
@@ -85,13 +108,45 @@ A `FlatList` usa a key para saber **qual cartão é qual** entre um desenho e ou
 | `(item, index) => String(index)` | quebra ao filtrar ou reordenar: cartões trocam de produto |
 | `() => String(Math.random())` | muda a cada desenho: tudo é recriado e as imagens piscam |
 
-Use um campo do próprio dado que nunca se repete, como `id` ou `slug`, e devolva sempre uma **string**.
+Use um campo do dado que nunca se repete, como `id` ou `slug`, sempre como **string**: o `String(...)` faz do número um texto.
+
+---
+
+## :icon[key] Key na prática
+
+Cada lista usa o campo que identifica o item e nunca se repete:
+
+**1. Produtos:** o `id`, um número, vira texto.
+
+```jsx
+keyExtractor={(item) => String(item.id)}
+```
+
+**2. Categorias:** o `slug`, que já é texto e não se repete.
+
+```jsx
+keyExtractor={(item) => item.slug}
+```
+
+**3. Buscas recentes, a lista sem repetição do E08:** o próprio texto da busca.
+
+```jsx
+keyExtractor={(item) => item}
+```
+
+Na tela, nada parece mudar. A diferença aparece ao filtrar ou reordenar: cada cartão continua com o seu produto, e as fotos não piscam.
+
+---
+
+## A moldura
+
+Num álbum de fotos, o que vem antes da primeira foto e depois da última?
 
 ---
 
 ## :icon[rows-3] Cabeçalho e rodapé que rolam junto
 
-`ListHeaderComponent` aparece antes do primeiro item; `ListFooterComponent`, depois do último. Os dois **rolam com a lista**.
+A **moldura** da lista é o que fica em volta dos itens. Pense num álbum de fotos: a capa vem antes da primeira foto, e a contracapa depois da última. Na `FlatList`, `ListHeaderComponent` aparece antes do primeiro item; `ListFooterComponent`, depois do último. Os dois **rolam com a lista**.
 
 ```jsx
 <FlatList
@@ -111,21 +166,15 @@ Precisa de um título que role junto com os produtos? Ele vai no `ListHeaderComp
 
 ---
 
-## Pense
+## Lista vazia
 
-:::question
-O `buscarProdutos` do E14 não achou nada para "geladeira", ou a API devolveu um array vazio. `data` chega como `[]`.
-
-O que a lista mostra para o usuário? E o que ela **deveria** mostrar?
-:::
+A busca não achou nada: tela em branco ou um aviso?
 
 ---
 
 ## :icon[package] ListEmptyComponent: a lista sem dados
 
-:::tip Resposta
-Sem tratamento, a lista não mostra nada: tela em branco, e o usuário acha que o app travou. Mostre o motivo e, se der, uma saída.
-:::
+O **estado vazio** é o que a lista mostra quando não tem nenhum item. O `buscarProdutos` do E14 não achou nada para "geladeira", ou a API devolveu um array vazio: `data` chega como `[]`. Sem tratamento, a lista não mostra nada: tela em branco, e o usuário acha que o app travou. O **`ListEmptyComponent`** aparece só nessa hora. Mostre o motivo e, se der, uma saída:
 
 ```jsx
 <FlatList
@@ -145,9 +194,49 @@ Com `flexGrow: 1`, o conteúdo ocupa a altura toda da lista. Assim, `vazio: { fl
 
 ---
 
+## :icon[package] Lista vazia na prática
+
+Cada lista vazia diz o motivo e, quando dá, oferece uma saída:
+
+**1. Carrinho vazio:** um convite para voltar às compras.
+
+```jsx
+ListEmptyComponent={
+  <View style={estilos.vazio}>
+    <Text style={estilos.textoVazio}>Seu carrinho está vazio</Text>
+    <Botao titulo="Ver produtos" onPress={verProdutos} />
+  </View>
+}
+```
+
+**2. Filtro de preço sem resultado:** só o motivo, em uma linha.
+
+```jsx
+ListEmptyComponent={<Text style={estilos.textoVazio}>Nenhum produto até R$ 50</Text>}
+```
+
+**3. Favoritos ainda vazios:** um ícone e a explicação de como encher a lista.
+
+```jsx
+ListEmptyComponent={
+  <View style={estilos.vazio}>
+    <Ionicons name="heart-outline" size={48} color={cores.textoSuave} />
+    <Text style={estilos.textoVazio}>Toque no coração de um produto para guardar aqui</Text>
+  </View>
+}
+```
+
+---
+
+## Separador
+
+Margem embaixo de cada cartão: o que sobra depois do último?
+
+---
+
 ## :icon[minus] ItemSeparatorComponent: o espaço entre itens
 
-Um componente desenhado **entre** cada par de itens: nunca antes do primeiro nem depois do último.
+O **separador** é a folha de papel fino entre as fotos do álbum: um componente desenhado **entre** cada par de itens, nunca antes do primeiro nem depois do último.
 
 ```jsx
 <FlatList
@@ -169,9 +258,40 @@ Para uma linha fina em vez de espaço, troque a `View` pelo `<Divisor />` do seu
 
 ---
 
+## Pratique
+
+:::example Desafio
+Esta lista tem a moldura inteira, mas a busca não achou nada:
+
+```jsx
+<FlatList
+  data={[]}
+  renderItem={({ item }) => <CartaoProduto produto={item} />}
+  ListHeaderComponent={<Text>Resultados</Text>}
+  ListFooterComponent={<Text>Fim da lista</Text>}
+  ListEmptyComponent={<Text>Nenhum produto encontrado</Text>}
+  ItemSeparatorComponent={() => <View style={estilos.separador} />}
+/>
+```
+
+Quais destes aparecem na tela: o cabeçalho, o rodapé, o estado vazio, o separador?
+:::
+
+:::tip Resposta
+O cabeçalho, o estado vazio e o rodapé, nessa ordem. O separador não aparece: sem itens, não há nada para separar.
+:::
+
+---
+
+## Grade
+
+Como os ovos ficam arrumados na caixa?
+
+---
+
 ## :icon[layout-grid] Grade com numColumns
 
-`numColumns={2}` distribui os itens em linhas de dois. Cada célula envolve o cartão numa `View` que divide a largura:
+Uma **grade** põe os itens lado a lado, em linhas e colunas, como uma caixa de ovos: cada linha tem o mesmo número de lugares. `numColumns={2}` distribui os itens em linhas de dois. Cada célula envolve o cartão numa `View` que divide a largura:
 
 ```jsx
 <FlatList
@@ -213,9 +333,39 @@ Três regras saem daí:
 
 ---
 
+## :icon[layout-grid] Grade na prática
+
+**1. Celular em pé:** duas colunas, cada célula com metade da largura.
+
+```jsx
+numColumns={2}
+```
+
+**2. Número ímpar de produtos:** a célula ganha um limite, e o último cartão fica com meia largura, em vez de esticar na linha toda.
+
+```jsx
+celula: { flex: 1, maxWidth: '50%' },
+```
+
+**3. Trocar de 2 para 3 colunas, num tablet:** a `key` da lista muda junto, e o React monta outra lista.
+
+```jsx
+<FlatList key={'grade-' + colunas} numColumns={colunas} /* demais props */ />
+```
+
+No E38, a largura da tela escolhe as colunas, e essa `key` volta.
+
+---
+
+## Carrossel
+
+Como você vê as ofertas que não cabem na largura da tela?
+
+---
+
 ## :icon[arrow-left-right] Carrossel de destaques com horizontal
 
-`horizontal` deita a lista: os itens ficam lado a lado e o dedo rola para o lado.
+Um **carrossel** é uma lista deitada: os itens ficam lado a lado, e o dedo rola para o lado. A prop `horizontal` faz isso.
 
 ```jsx
 const destaques = produtos.filter((p) => p.destaque);
@@ -234,6 +384,7 @@ const destaques = produtos.filter((p) => p.destaque);
 />
 ```
 
+- `destaques` é a peneira do E09: fica só o que tem `destaque: true`
 - `destaque: { width: 160 }`: na horizontal, o item precisa de **largura fixa**
 - `showsHorizontalScrollIndicator={false}` esconde a barrinha de rolagem
 - `carrossel: { gap: espaco.md }` afasta os cartões
@@ -262,6 +413,8 @@ const cabecalho = (
 />
 ```
 
+O `cabecalho` é um elemento pronto, guardado numa `const`: a grade o desenha antes do primeiro produto.
+
 ---
 
 ## :icon[layers] A tela Início por dentro
@@ -276,9 +429,15 @@ Lista horizontal dentro de lista vertical é permitido: as rolagens têm direç�
 
 ---
 
+## Carregar mais
+
+Você lê um livro de 300 páginas todas de uma vez?
+
+---
+
 ## :icon[arrow-down] Carregar mais ao chegar no fim
 
-Catálogos grandes chegam em **páginas**: 6 produtos agora, mais 6 quando o usuário se aproxima do fim. A conta da página você já escreveu: o `paginar` do E14, em `src/regras/catalogo.js`.
+**Paginação** é trazer os itens aos poucos, como as páginas de um livro: você lê uma e vira a próxima. Catálogos grandes chegam assim: 6 produtos agora, mais 6 quando o usuário se aproxima do fim. A conta da página você já escreveu: o `paginar` do E14, em `src/regras/catalogo.js`.
 
 ```jsx
 import { paginar } from '../regras/catalogo';
@@ -296,18 +455,59 @@ function carregarMais() {
 <FlatList data={visiveis} onEndReached={carregarMais} onEndReachedThreshold={0.5} />
 ```
 
-- `onEndReached`: chamada quando falta `onEndReachedThreshold` para o fim; `0.5` é **meia tela**
-- O spread do E09 **junta** a página nova às que já estão na tela
-- Prévia: no E42, a próxima página vem da DummyJSON, pelo `listarProdutos({ limite, pular })` do E19, com uma `ActivityIndicator` (a rodinha nativa) no `ListFooterComponent`
+---
+
+## :icon[list-ordered] O carregarMais em português
+
+| Linha | O que ela diz |
+|---|---|
+| `useState(1)` e `paginar(produtos, 1)` | começa na página 1, com os 6 primeiros produtos |
+| `paginar(produtos, pagina + 1)` | "pegue a página seguinte" |
+| `if (proxima.length === 0) return` | "veio vazia? Acabou o catálogo: pare aqui" |
+| `[...visiveis, ...proxima]` | "uma lista nova com os que já estão na tela **e** os novos": o spread do E09 **junta** as páginas |
+| `onEndReached={carregarMais}` | "perto do fim, chame `carregarMais`" |
+| `onEndReachedThreshold={0.5}` | "perto" é a meia tela que falta para o fim |
+
+Prévia: no E42, a próxima página vem da DummyJSON, pelo `listarProdutos({ limite, pular })` do E19, com uma `ActivityIndicator` (a rodinha nativa) no `ListFooterComponent`.
+
+---
+
+## :icon[arrow-down] Carregar mais na prática
+
+Com os 12 produtos da Lojinha e páginas de 6:
+
+```javascript
+paginar(produtos, 1); // os 6 primeiros: do Fone Bluetooth ao Jogo de Panelas
+paginar(produtos, 2); // os 6 seguintes: do Tênis de Corrida ao Guia de Viagem
+paginar(produtos, 3); // []: acabou o catálogo
+```
+
+O que acontece na tela enquanto o usuário rola:
+
+| Momento | `pagina` | Produtos na tela |
+|---|---|---|
+| Ao abrir | 1 | 6 |
+| Chegou perto do fim | 2 | 12: a página 2 foi juntada à 1 |
+| Chegou perto do fim de novo | 2 | 12: a página 3 veio vazia, e o `return` parou |
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Changing numColumns on the fly is not supported` | o número de colunas mudou com a lista na tela | trocar a `key` da `FlatList` junto: `key={'grade-' + colunas}` |
+| `columnWrapperStyle not supported for single column lists` | `columnWrapperStyle` numa lista de uma coluna, como o carrossel | no carrossel, `gap` no `contentContainerStyle` |
+| `VirtualizedLists should never be nested` (aviso amarelo) | lista vertical dentro de uma `ScrollView` vertical | tirar a `ScrollView`; o que rola junto vai no `ListHeaderComponent` |
 
 ---
 
 ## :icon[triangle-alert] Erros comuns
 
+Estes não mostram mensagem nenhuma:
+
 :::warning
 - Key pelo índice ou por `Math.random()`: cartões trocam de produto ao filtrar e as imagens piscam
-- Mudar `numColumns` com a lista na tela: tela vermelha `Changing numColumns on the fly is not supported`; troque a `key` junto
-- `columnWrapperStyle` em lista de uma coluna: tela vermelha, porque ele só vale com `numColumns` maior que 1
 - Grade com número ímpar de itens: o último cartão estica na linha inteira; limite a célula com `maxWidth: '50%'`
 - Carrossel sem largura fixa no item: cada cartão fica de um tamanho
 :::

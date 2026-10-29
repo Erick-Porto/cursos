@@ -27,6 +27,19 @@ Programador Mobile · Encontro E14 · Aula 28 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **chave** | o nome de um campo do objeto, como `audio` em `{ audio: 3 }` |
+| **`for...in`** | o laço que passa pelas **chaves** de um objeto, uma por volta |
+| **laço aninhado** | um laço dentro de outro laço |
+| **normalizar** | deixar dois textos no mesmo formato antes de comparar: sem acento e em minúsculas |
+| **paginar** | dividir uma lista longa em pedaços do mesmo tamanho, as **páginas** |
+| **breakpoint** | a linha onde o programa pausa para você olhar as variáveis (*break point*, ponto de parada) |
+
+---
+
 ## A busca que não acha o tênis
 
 O relatório do catálogo ganha uma busca pelo terminal. Quase todo mundo digita sem acento, e a comparação direta falha:
@@ -35,7 +48,7 @@ O relatório do catálogo ganha uma busca pelo terminal. Quase todo mundo digita
 'Tênis de Corrida'.toLowerCase().includes('tenis'); // false
 ```
 
-E tem mais: quem procura "corrida tenis" espera achar o "Tênis de Corrida", com as palavras fora de ordem.
+O `includes` pergunta se um texto contém outro. E tem mais: quem procura "corrida tenis" espera achar o "Tênis de Corrida", com as palavras fora de ordem.
 
 Para a busca funcionar, o código precisa passar por **cada produto**, deixar nome e termo no mesmo formato, conferir **cada palavra** do termo e guardar os produtos que combinam. É um laço dentro de outro.
 
@@ -45,9 +58,34 @@ Que passos a busca repete para cada produto? E o que ela devolve quando o termo 
 
 ---
 
+## for...in
+
+Numa ficha com "Telefone: 9999-0000", qual parte é o nome do campo?
+
+---
+
 ## :icon[braces] for...in: as chaves de um objeto
 
-O `for...of` percorre arrays (E07), strings, `Set` e `Map` (E12). Um objeto comum não: `for (const x of porCategoria)` dá `TypeError: porCategoria is not iterable`. Para as chaves de um objeto, existe o **`for...in`**:
+Um objeto é uma ficha de cadastro: cada campo tem nome e valor. O **`for...in`** lê a ficha campo por campo e, a cada volta, entrega o **nome** do campo, a **chave**:
+
+```javascript
+const ficha = { nome: 'Ana', cidade: 'Recife' };
+for (const chave in ficha) {
+  console.log(chave, '=', ficha[chave]);
+}
+// nome = Ana
+// cidade = Recife
+```
+
+- A cada volta, `chave` recebe o **nome** do campo, como texto: `'nome'`, depois `'cidade'`
+- O valor sai com colchetes: `ficha[chave]`. Com ponto, `ficha.chave` procuraria um campo chamado "chave"
+- O `Object.entries` do E08 faz o mesmo e entrega chave e valor juntos
+
+---
+
+## :icon[layers] for...in na prática: as categorias
+
+O catálogo guarda quantos produtos há em cada categoria. Duas perguntas, dois laços:
 
 ```javascript
 const porCategoria = { audio: 3, casa: 3, esporte: 3, livros: 3 };
@@ -56,11 +94,32 @@ for (const slug in porCategoria) {
   linhas.push(slug + ': ' + porCategoria[slug] + ' produtos');
 }
 // ['audio: 3 produtos', 'casa: 3 produtos', ...]
+
+let total = 0;
+for (const slug in porCategoria) total += porCategoria[slug];
+console.log(total); // 12
 ```
 
-- A cada volta, `slug` recebe o **nome** da chave, como texto
-- O valor sai com colchetes: `porCategoria[slug]`; `porCategoria.slug` procuraria uma chave chamada "slug"
-- O `Object.entries` do E08 faz o mesmo e entrega chave e valor juntos
+- O primeiro monta uma linha de texto por categoria, para o relatório
+- O segundo soma os valores: 12 produtos no catálogo
+- Em `porCategoria.slug`, o JavaScript procuraria uma chave chamada "slug" e devolveria `undefined`
+
+---
+
+## :icon[arrow-left-right] for...of ou for...in?
+
+| Laço | Percorre | A cada volta, entrega |
+|---|---|---|
+| `for...of` | arrays (E07), strings, `Set` e `Map` (E12) | o **item** |
+| `for...in` | objetos comuns | a **chave**, como texto |
+
+Um objeto comum não serve no `for...of`:
+
+```javascript
+for (const x of porCategoria) {} // TypeError: porCategoria is not iterable
+```
+
+*Iterable* quer dizer "dá para percorrer item por item". Regra da Lojinha: array com `for...of` ou `for`; objeto com `for...in` ou `Object.entries`.
 
 ---
 
@@ -77,11 +136,9 @@ for (const i in nomes) {
 
 | Risco | O que acontece |
 |---|---|
-| Posição em texto | `'0' + 1` concatena e vira `'01'` |
+| Posição em texto | `'0' + 1` junta os dois textos e vira `'01'` |
 | Chaves extras | passa também por propriedades acrescentadas ou herdadas (o E17 mostra de onde vêm as herdadas) |
 | Ordem | chaves numéricas primeiro, em ordem crescente, depois as outras |
-
-Regra da Lojinha: array com `for...of` ou `for`; objeto com `for...in` ou `Object.entries`.
 
 ---
 
@@ -99,14 +156,22 @@ for (const item in itens) {
 :::
 
 :::tip Resposta
-`NaN`. Com `in`, `item` recebe `'0'` e `'1'`, as posições em texto, e não os objetos. `'0'.preco` é `undefined`, e `undefined * undefined` dá `NaN`, que contamina toda a soma: o relatório imprimiria "R$ NaN". Trocar `in` por `of` resolve, uma palavra de diferença.
+`NaN`. Com `in`, `item` recebe `'0'` e `'1'`, as posições em texto, e não os objetos. `'0'.preco` é `undefined`, e `undefined * undefined` dá `NaN` (*not a number*, "não é um número"), que contamina toda a soma: o relatório imprimiria "R$ NaN". Trocar `in` por `of` resolve, uma palavra de diferença.
 :::
+
+---
+
+## Laços aninhados
+
+Enquanto o ponteiro das horas anda uma hora, quantas voltas dá o dos minutos?
 
 ---
 
 ## :icon[layers] Laços aninhados
 
-Num laço dentro de outro, para cada volta de fora o de dentro roda **inteiro**. Para contar os produtos de cada categoria:
+Um **laço aninhado** é um laço dentro de outro. Pense no relógio: a cada volta do ponteiro das horas, o dos minutos dá uma volta inteira. Para cada volta do laço de fora, o de dentro roda **inteiro**.
+
+Para contar os produtos de cada categoria:
 
 ```javascript
 function contarPorCategoria(categorias, produtos) {
@@ -122,7 +187,7 @@ function contarPorCategoria(categorias, produtos) {
 }
 ```
 
-O contador `quantos` nasce **dentro** do laço de fora: recomeça em 0 para cada categoria. São 4 categorias vezes 12 produtos: **48 voltas** do laço de dentro. Um `break` no laço de dentro sai só dele; o de fora segue para a próxima categoria.
+O contador `quantos` nasce **dentro** do laço de fora: recomeça em 0 para cada categoria. São 4 categorias vezes 12 produtos: **48 voltas** do laço de dentro.
 
 ---
 
@@ -145,11 +210,19 @@ for (const produto of produtos) {
 }
 ```
 
-São 12 voltas em vez de 48. Aninhe quando precisar mesmo cruzar duas listas, e saia do laço de dentro assim que tiver a resposta.
+São 12 voltas em vez de 48. Aninhe quando precisar mesmo cruzar duas listas. Um `break` no laço de dentro sai só dele: o de fora segue para a próxima volta.
+
+---
+
+## Busca por palavras
+
+Na lista de chamada, "ANA", "Ana" e "ana" são a mesma pessoa?
 
 ---
 
 ## :icon[search] Busca por palavras: as duas peças
+
+Na lista de chamada, "ANA", "Ana" e "ana" são a mesma pessoa. Para a busca pensar assim, o código **normaliza** os dois lados: nome e termo ficam sem acento e em minúsculas. São duas funções pequenas:
 
 ```javascript
 function normalizar(texto) {
@@ -165,8 +238,38 @@ function contemTodas(texto, palavras) {
 ```
 
 - `normalizar` é a limpeza de acentos do E06 com `toLowerCase` no fim: `'Tênis de Corrida'` vira `'tenis de corrida'`
-- `contemTodas` para na primeira palavra que falta, com `return` dentro do laço: é o `every` do E09 escrito à mão
+- `contemTodas` responde se o texto tem **todas** as palavras
 - As duas entram em `src/regras/catalogo.js`, abaixo do `aplicarFiltros` do E08, sem `export`: são peças internas da busca
+
+---
+
+## :icon[search-check] As duas peças na prática
+
+```javascript
+normalizar('Tênis de Corrida');                         // 'tenis de corrida'
+normalizar('Lógica de Programação');                    // 'logica de programacao'
+contemTodas('tenis de corrida', ['corrida', 'tenis']);  // true: as duas estão lá
+contemTodas('fone bluetooth', ['fone', 'mesa']);        // false: falta "mesa"
+```
+
+- Depois do `normalizar`, "LOGICA", "Lógica" e "logica" ficam iguais
+- A ordem das palavras não importa: o `contemTodas` procura cada uma no texto inteiro
+- Se faltar uma palavra só, a resposta já é `false`
+
+---
+
+## :icon[list-ordered] As duas peças em português
+
+| Linha | O que ela diz |
+|---|---|
+| `texto.normalize('NFD')` | "separe cada letra do seu acento": o `ê` vira `e` mais o `^` |
+| `.replace(...)` | "apague os acentos que ficaram soltos" |
+| `.toLowerCase()` | "passe tudo para minúsculas" |
+| `for (const palavra of palavras)` | "para cada palavra do termo..." |
+| `if (!texto.includes(palavra)) return false` | "...se o texto não tem esta palavra, responda não e pare aqui" |
+| `return true` | "passou por todas: responda sim" |
+
+O `return` dentro do laço para na primeira palavra que falta: é o `every` do E09 escrito à mão.
 
 ---
 
@@ -193,9 +296,31 @@ export function buscarProdutos(produtos, termo) {
 
 ---
 
+## :icon[list-ordered] buscarProdutos em português
+
+| Linha | O que ela diz |
+|---|---|
+| `normalizar(termo ?? '')` | "limpe o termo; se não veio termo, use um texto vazio" |
+| `.split(' ')` | "corte o termo nos espaços: uma palavra por item" |
+| `.filter((p) => p !== '')` | "jogue fora os pedaços vazios" |
+| `if (palavras.length === 0) return produtos` | "sem nenhuma palavra, devolva a vitrine toda" |
+| `for (const produto of produtos)` | "para cada produto..." |
+| `if (contemTodas(normalizar(produto.nome), palavras))` | "...se o nome limpo tem todas as palavras..." |
+| `encontrados.push(produto)` | "...guarde o produto" |
+
+Os dois lados passam pelo `normalizar`: o termo e o nome de cada produto.
+
+---
+
+## Paginação
+
+Num catálogo com 5 produtos por folha, em que folha está o 11º produto?
+
+---
+
 ## :icon[layout-list] paginar: um pedaço da lista por vez
 
-Ninguém lê 500 resultados de uma vez: a busca mostra páginas. Na página `p` de tamanho `t`, a primeira posição é `(p - 1) * t`. Os valores padrão são do E07:
+**Paginar** é dividir uma lista longa em pedaços do mesmo tamanho, como um catálogo impresso com 5 produtos por folha. Ninguém lê 500 resultados de uma vez. Na página `p` de tamanho `t`, a primeira posição é `(p - 1) * t`. Os valores padrão são do E07:
 
 ```javascript
 export function paginar(lista, pagina = 1, tamanho = 6) {
@@ -210,7 +335,22 @@ export function paginar(lista, pagina = 1, tamanho = 6) {
 }
 ```
 
-Aqui o `for` clássico entra porque você precisa das **posições**: começar em `inicio` e parar em `fim`. O `Math.min` impede passar do fim da lista.
+Aqui o `for` clássico entra porque você precisa das **posições**: começar em `inicio` e parar em `fim`.
+
+---
+
+## :icon[list-ordered] paginar em português
+
+| Linha | O que ela diz |
+|---|---|
+| `pagina = 1, tamanho = 6` | "se não disserem, página 1, com 6 itens" |
+| `if (pagina < 1 \|\| tamanho < 1) return []` | "página 0 ou tamanho 0: devolva uma lista vazia" |
+| `const inicio = (pagina - 1) * tamanho` | "pule os itens das páginas anteriores" |
+| `Math.min(inicio + tamanho, lista.length)` | "pare no fim da página ou no fim da lista, o que vier primeiro" |
+| `for (let i = inicio; i < fim; i++)` | "da posição de início até antes do fim..." |
+| `pedaco.push(lista[i])` | "...ponha o item na página" |
+
+O `Math.min` devolve o menor dos números que recebe.
 
 ---
 
@@ -236,7 +376,7 @@ export function paginar(lista, pagina = 1, tamanho = 6) {
 }
 ```
 
-- O `slice` do E08 faz o laço por dentro e não passa do fim: o `Math.min` sai
+- O `slice` do E08 copia um pedaço da lista: faz o laço por dentro e não passa do fim. Por isso o `Math.min` sai
 - `npm test` verde com as duas versões: o comportamento é o mesmo
 - Escreva o laço para entender; troque pelo método quando ele disser a mesma coisa em menos linhas
 
@@ -263,14 +403,20 @@ export function itemMaisCaro(itens) {
 }
 ```
 
-É o "melhor até agora", começando em `null`. O `>`, e não `>=`, mantém o primeiro no empate. Compare `preco`, não `preco * qtd`: 6 garrafas somam mais que 2 fones, mas o item mais caro é o fone. O `reduce` com `null` também resolve; o laço se lê de cima para baixo.
+É o acumulador "o melhor até agora", começando em `null`. O `>`, e não `>=`, mantém o primeiro no empate. Compare `preco`, não `preco * qtd`: 6 garrafas somam mais que 2 fones, mas o item mais caro é o fone. O `reduce` com `null` também resolve; o laço se lê de cima para baixo.
 :::
+
+---
+
+## Busca no terminal
+
+No E02, como o script recebia o nome de quem rodava o comando?
 
 ---
 
 ## :icon[terminal] A busca no terminal
 
-`src/scripts/buscar.js` junta as duas regras:
+O script `src/scripts/buscar.js` junta as duas regras. Ele recebe o termo pelos **argumentos**, o detalhe do pedido escrito depois do nome do arquivo (E02), e imprime uma página de resultados:
 
 ```javascript
 import { produtos } from '../data/produtos.js';
@@ -289,13 +435,42 @@ for (const produto of paginar(encontrados, pagina, 5)) {
 }
 ```
 
-`node src/scripts/buscar.js corrida tenis` acha o tênis; `node src/scripts/buscar.js de --pagina=2` mostra 4 dos 9 nomes com "de".
+---
+
+## :icon[list-ordered] O script em português
+
+| Linha | O que ela diz |
+|---|---|
+| `process.argv.slice(2)` | "as palavras digitadas depois do nome do arquivo" |
+| `args.find((a) => a.startsWith('--pagina='))` | "procure a palavra que começa com `--pagina=`" |
+| `opcao ? Number(...) : 1` | "achou? o número depois do `=`; não achou? página 1" |
+| `args.filter(...).join(' ')` | "as outras palavras, juntas de novo, são o termo" |
+| `paginar(encontrados, pagina, 5)` | "só os 5 da página pedida" |
+
+```bash
+node src/scripts/buscar.js corrida tenis
+# 1 produto(s) para "corrida tenis", página 1
+#   Tênis de Corrida: R$ 349,90
+
+node src/scripts/buscar.js de --pagina=2
+# 9 produto(s) para "de", página 2
+#   Bola de Futebol: R$ 99,90
+#   Lógica de Programação: R$ 69,90
+#   Livro de Receitas: R$ 59,90
+#   Guia de Viagem: R$ 74,90
+```
+
+---
+
+## Breakpoint
+
+Num vídeo, o que você faz para ver um lance de perto?
 
 ---
 
 ## :icon[bug] Breakpoint dentro do laço
 
-Um `console.log` num laço de 500 voltas enche o terminal. Pause o laço e olhe:
+Um **breakpoint** pausa o programa numa linha, como o botão de pausa de um vídeo: tudo para naquele quadro, e você olha os detalhes. Um `console.log` num laço de 500 voltas enche o terminal; o breakpoint mostra uma volta de cada vez.
 
 :::steps
 1. Em `catalogo.js`, clique à esquerda do número da linha do `if` dentro do laço de `buscarProdutos`: aparece um ponto vermelho
@@ -304,9 +479,30 @@ Um `console.log` num laço de 500 voltas enche o terminal. Pause o laço e olhe:
 4. Em **Variables**, veja `produto` e `encontrados`; <kbd>F5</kbd> segue até a próxima volta e <kbd>F10</kbd> anda uma linha
 :::
 
-:::tip Breakpoint condicional
-Clique com o botão direito no número da linha, escolha "Add Conditional Breakpoint" e escreva `produto.id === 7`: o programa só pausa na volta do tênis. Funciona igual com `npx jest catalogo` no mesmo terminal.
+---
+
+## :icon[pause] Breakpoint condicional
+
+Com 12 produtos, apertar <kbd>F5</kbd> volta a volta até o tênis cansa. O **breakpoint condicional** só pausa quando uma condição é verdadeira:
+
+:::steps
+1. Clique com o botão direito no número da linha e escolha "Add Conditional Breakpoint"
+2. Escreva `produto.id === 7` e aperte <kbd>Enter</kbd>
+3. Rode de novo no JavaScript Debug Terminal: o programa só pausa na volta do tênis
 :::
+
+Funciona igual com `npx jest catalogo` no mesmo terminal. Num terminal comum, o breakpoint não pausa.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `is not iterable` | `for...of` num objeto comum | `for...in` ou `Object.entries` |
+| `NaN` no total | `for...in` num array: a posição chegou no lugar do item | trocar `in` por `of` |
+| `Cannot find module` | o `import` aponta para um arquivo que não existe | conferir o caminho e o `.js` no fim |
+| o terminal não volta | laço infinito | <kbd>Ctrl</kbd> + <kbd>C</kbd>; conferir a condição e o passo |
 
 ---
 
@@ -315,7 +511,7 @@ Clique com o botão direito no número da linha, escolha "Add Conditional Breakp
 :::warning
 - `for...in` num array: posições em texto e `NaN` na soma
 - Normalizar só o termo: "Tênis de Corrida" nunca aparece, com ou sem acento na busca
-- `return true` dentro do laço de `contemTodas`: basta uma palavra, e "fone mesa" acha até a luminária
+- `return true` dentro do laço de `contemTodas`: uma palavra já serve, e "fone mesa" acha até a luminária
 - Página começando em 0 num lugar e em 1 no outro: a primeira página some ou se repete
 - Laço aninhado para uma conta que uma passada resolve
 - `push` ou `splice` na própria lista que o laço percorre: voltas a mais ou a menos

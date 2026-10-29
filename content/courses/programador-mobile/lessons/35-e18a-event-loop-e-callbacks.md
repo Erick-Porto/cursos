@@ -28,6 +28,19 @@ Programador Mobile · Encontro E18 · Aula 35 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **síncrono** | uma coisa de cada vez: a próxima linha só começa quando a anterior termina |
+| **assíncrono** | pedir agora e receber depois, sem ficar parado esperando |
+| **thread** | a linha de execução do programa; o JavaScript tem uma só |
+| **event loop** | o laço (*loop*) que entrega a próxima tarefa pronta quando o programa fica livre |
+| **callback** | uma função que você entrega para outra chamar depois: "me chame quando terminar" |
+| **timer** | um agendamento: "rode esta função daqui a tantos milissegundos" |
+
+---
+
 ## O programa que ficou parado
 
 Hoje o checkout do `lojinha-regras` responde na hora: somar os itens, calcular o frete e conferir o cupom levam microssegundos. No E19, ele passa a conversar com um servidor, e cada resposta leva de meio segundo a alguns segundos.
@@ -40,9 +53,17 @@ Como o programa espera o servidor e, ao mesmo tempo, continua fazendo outras coi
 
 ---
 
+## Síncrono
+
+O que acontece no restaurante se o único garçom esperar parado na cozinha?
+
+---
+
 ## :icon[list-ordered] Síncrono: uma linha de cada vez
 
-No código **síncrono**, cada linha só começa quando a anterior termina. É assim que as regras do `lojinha-regras` funcionam:
+Imagine um restaurante com um garçom só. No jeito **síncrono**, ele leva o pedido à cozinha e fica lá, parado, até o prato sair. Só depois atende a próxima mesa.
+
+No código síncrono, cada linha só começa quando a anterior termina. É assim que as regras do `lojinha-regras` funcionam:
 
 ```javascript
 const sub = subtotal(itens);                              // 1. soma os itens
@@ -59,7 +80,7 @@ console.log(formatarPreco(paraReais(centavos)));          // 4. imprime o total
 
 ## :icon[cpu] Uma thread para tudo
 
-O JavaScript roda numa **thread** só, uma única linha de execução. Enquanto ela está ocupada, nada mais do seu código acontece. Veja o que sai de `node trava.js`:
+O JavaScript roda numa **thread** (linha de execução) só: é o garçom sozinho. Enquanto ela está ocupada, nada mais do seu código acontece. Veja o que sai de `node trava.js`:
 
 ```javascript
 function esperarTravando(ms) {
@@ -73,13 +94,24 @@ console.log('2. Pedido da Ana confirmado');
 console.log('3. Bia consultou o frete'); // esperou 2 s sem motivo
 ```
 
+- `Date.now()` dá a hora de agora, em milissegundos (1 s = 1000 ms)
+- O `while` repete enquanto a hora não chega: gira sem fazer nada, e a thread fica presa
+
 O 1 aparece, o terminal fica 2 s parado e o 2 e o 3 saem juntos. A Bia não dependia da Ana, mas esperou na fila. No app, quem espera é o dedo do cliente: durante o laço, nenhum toque tem resposta.
+
+---
+
+## Assíncrono
+
+E como trabalha um bom garçom quando a cozinha demora?
 
 ---
 
 ## :icon[hourglass] Assíncrono: pedir agora, receber depois
 
-No código **assíncrono**, você pede algo que demora e diz o que fazer quando ficar pronto. A thread fica livre no meio tempo. Agora, `node espera.js`:
+No jeito **assíncrono**, o garçom anota o pedido, leva à cozinha e vai atender as outras mesas. Quando a cozinha chama, ele volta e serve.
+
+No código, você pede algo que demora e diz o que fazer quando ficar pronto. A thread fica livre no meio tempo. Agora, `node espera.js`:
 
 ```javascript
 console.log('1. Ana finalizou a compra');
@@ -89,9 +121,41 @@ setTimeout(() => {
 console.log('2. Bia consultou o frete'); // na hora
 ```
 
-No terminal aparecem **1 e 2 na hora e, dois segundos depois, 3**. O `setTimeout` agenda a função e devolve o controle na hora: a linha da Bia não espera.
+No terminal aparecem **1 e 2 na hora e, dois segundos depois, 3**. O **`setTimeout`** (marque um tempo) agenda a função para daqui a 2000 ms e devolve o controle na hora: a linha da Bia não espera.
 
-Aqui o `setTimeout` faz o papel do servidor. Você já o usou no `debounce` do E10. Hoje você vê o que acontece por baixo.
+Aqui o `setTimeout` faz o papel do servidor. Você já o usou no `debounce` do E10.
+
+---
+
+## :icon[hourglass] Assíncrono na prática
+
+**Caso 1: o "Processando..." aparece durante a espera.**
+
+```javascript
+console.log('Pagamento enviado.');
+setTimeout(() => console.log('Pagamento aprovado!'), 1500);
+console.log('Processando...');
+```
+
+```plaintext
+Pagamento enviado.
+Processando...
+Pagamento aprovado!        (1,5 s depois)
+```
+
+**Caso 2: quem fica pronto primeiro sai primeiro.** A ordem do texto não decide:
+
+```javascript
+setTimeout(() => console.log('Pedido da Ana pronto'), 2000);
+setTimeout(() => console.log('Pedido da Bia pronto'), 1000);
+console.log('Dois pedidos anotados');
+```
+
+```plaintext
+Dois pedidos anotados
+Pedido da Bia pronto       (1 s depois)
+Pedido da Ana pronto       (2 s depois)
+```
 
 ---
 
@@ -105,15 +169,24 @@ Os dois scripts esperam os mesmos 2 s pela Ana. No `trava.js`, a thread gira no 
 
 ---
 
+## O event loop
+
+Quem avisa o garçom que o prato ficou pronto? E quando ele vai buscar?
+
+---
+
 ## :icon[layers] As três peças por trás da espera
 
-| Peça | O que faz | No `espera.js` |
-|---|---|---|
-| **Pilha de chamadas** | guarda as funções que estão rodando agora | o `console.log` da Bia |
-| **Ambiente** | espera fora do JavaScript: timers, rede, disco | o timer de 2 s; no E19, a resposta do servidor |
-| **Fila de tarefas** | guarda os callbacks prontos para rodar | o callback do timer que já venceu |
+Três peças, ligadas pelo **event loop** (laço de eventos):
 
-O motor (o V8, no Node) só executa o que está na pilha. Quem conta o tempo e fala com a rede é o **ambiente**: o Node, o navegador ou, no celular, o React Native. A pilha é a mesma que o depurador do E03 mostra num breakpoint.
+| Peça | O que faz | No restaurante |
+|---|---|---|
+| **Pilha de chamadas** | roda as funções de agora | o que o garçom faz agora |
+| **Ambiente** | espera fora: timers, rede | a cozinha |
+| **Fila de tarefas** | guarda os callbacks prontos | os pratos prontos no balcão |
+| **Event loop** | leva a próxima tarefa à pilha vazia | o garçom livre olha o balcão |
+
+O V8, o motor do JavaScript no Node, só executa o que está na pilha. Quem conta o tempo e fala com a rede é o **ambiente**: o Node, o navegador ou, no celular, o React Native.
 
 ---
 
@@ -142,6 +215,8 @@ Regra de ouro: **um callback nunca interrompe código que já está rodando**. E
 
 Enquanto o callback espera no ambiente e na fila de tarefas, a pilha fica vazia e a thread fica livre para outro trabalho, como atender a Bia. Ele só volta à pilha pelo event loop, quando ela está vazia: por isso o 3 aparece por último.
 
+A pilha é a mesma que o depurador do E03 mostra num breakpoint.
+
 ---
 
 ## Pense
@@ -163,9 +238,15 @@ console.log('D: mostra o resumo');
 
 ---
 
+## Timers
+
+O timer da cozinha apitou, mas o garçom está ocupado. O prato sai na hora?
+
+---
+
 ## :icon[timer] setTimeout: espera mínima, não exata
 
-O número do `setTimeout` é o tempo **mínimo** até o callback entrar na fila. Se a thread estiver ocupada, ele espera mais:
+Um **timer** é um agendamento, como o timer da cozinha: quando ele apita, o prato vai para o balcão. Mas o garçom só leva o prato quando fica livre. O número do `setTimeout` é o tempo **mínimo** até o callback entrar na fila. Se a thread estiver ocupada, ele espera mais:
 
 ```javascript
 const inicio = Date.now();
@@ -178,13 +259,43 @@ while (Date.now() < fim) {} // 1 segundo de trabalho síncrono
 
 No Node, a saída mostra cerca de **1000 ms**, e não 100: o callback ficou na fila até o laço terminar.
 
-O `setTimeout` devolve um **id**. `clearTimeout(id)` cancela o agendamento antes de ele rodar, como o `debounce` do E10 faz a cada nova chamada.
+O `setTimeout` devolve um **id**, o número do agendamento. `clearTimeout(id)` (limpe o timer) cancela o agendamento antes de ele rodar, como o `debounce` do E10 faz a cada nova chamada.
+
+---
+
+## :icon[timer] Timers na prática
+
+**Caso 1: cancelar um lembrete.** A pessoa voltou à loja antes dos 3 s:
+
+```javascript
+const lembrete = setTimeout(() => console.log('Seu carrinho está esperando!'), 3000);
+clearTimeout(lembrete);
+console.log('Lembrete cancelado.');
+```
+
+```plaintext
+Lembrete cancelado.
+```
+
+O lembrete nunca aparece, e o script termina na hora: não sobrou timer para esperar.
+
+**Caso 2: atraso 0 não fura a fila.**
+
+```javascript
+setTimeout(() => console.log('2. o timer de 0 ms'), 0);
+console.log('1. o código atual');
+```
+
+```plaintext
+1. o código atual
+2. o timer de 0 ms
+```
 
 ---
 
 ## :icon[timer-reset] setInterval: o prazo do Pix
 
-`setInterval` repete o callback a cada intervalo, até `clearInterval`. O código Pix da Lojinha expira em 10 minutos; para testar, conte 10 segundos:
+`setInterval` (marque um intervalo) repete o callback a cada intervalo, como um alarme que toca de segundo em segundo até alguém desligar. Quem desliga é o `clearInterval`. O código Pix da Lojinha expira em 10 minutos; para testar, conte 10 segundos:
 
 ```javascript
 let restantes = 10; // na loja, 600: 10 minutos
@@ -207,9 +318,50 @@ const id = setInterval(() => {
 
 ---
 
+## :icon[list-ordered] O prazo do Pix em português
+
+| Linha | O que ela diz |
+|---|---|
+| `let restantes = 10` | os segundos que faltam; `let`, porque o valor muda |
+| `const id = setInterval(..., 1000)` | "rode esta função a cada 1000 ms" e guarde o número do timer |
+| `Math.floor(restantes / 60)` | os minutos inteiros, como no E05 |
+| `restantes % 60` | o resto da divisão: os segundos |
+| `String(...).padStart(2, '0')` | completa com zero à esquerda, como no E06: `9` vira `09` |
+| `clearInterval(id)` | desliga o alarme quando a contagem chega a 0 |
+
+A cada volta, a função enxerga o `restantes` atualizado: é a mochila da closure do E10.
+
+---
+
+## Callbacks
+
+Que recado você deixa na cozinha para não ficar esperando lá?
+
+---
+
 ## :icon[phone] Callbacks: "me chame quando terminar"
 
-Um **callback** é uma função que você entrega para outra chamar depois. Você já usa vários:
+Um **callback** (chamar de volta) é uma função que você entrega para outra chamar depois. No restaurante, é o recado que fica com a cozinha: "quando o prato ficar pronto, leve à mesa 4". Você não espera parado: deixa o recado e segue.
+
+```javascript
+function avisarPronto() {
+  console.log('Pedido pronto!');
+}
+
+setTimeout(avisarPronto, 1000); // entrega a função; quem a chama é o ambiente
+console.log('Pedido anotado.');
+```
+
+```plaintext
+Pedido anotado.
+Pedido pronto!
+```
+
+O `avisarPronto` vai **sem parênteses**: você entrega a função, não a chama. Com parênteses, ela rodaria na hora, e o `setTimeout` receberia o resultado dela.
+
+---
+
+## :icon[list] Callbacks que você já usa
 
 | Callback | Quem chama | Quando |
 |---|---|---|
@@ -224,7 +376,7 @@ O do `map` é **síncrono**: roda inteiro antes da próxima linha. O do timer e 
 
 ## :icon[circle-alert] Erro primeiro: a convenção dos callbacks
 
-Uma função assíncrona não devolve o resultado com `return`: quando ele chega, a função já terminou. Por convenção, o callback recebe primeiro o **erro** (ou `null`) e depois o resultado:
+Quando a cozinha não consegue fazer o prato, ela avisa primeiro: "acabou o frango". Uma função assíncrona não devolve o resultado com `return`: quando ele chega, a função já terminou. Por convenção, o callback recebe primeiro o **erro** (ou `null`, se deu certo) e depois o resultado:
 
 ```javascript
 function consultarFrete(cep, callback) {
@@ -246,9 +398,53 @@ Um `try/catch` em volta de `consultarFrete` não pega um erro lançado dentro do
 
 ---
 
+## :icon[list-ordered] O consultarFrete em português
+
+| Linha | O que ela diz |
+|---|---|
+| `function consultarFrete(cep, callback)` | recebe o CEP e a função que vai avisar no fim |
+| `setTimeout(() => { ... }, 800)` | finge que o servidor leva 800 ms |
+| `/^\d{5}-?\d{3}$/.test(cep)` | a regex do CEP do E06: "o CEP tem o formato certo?" |
+| `return callback(new Error(...))` | deu errado: avisa com o erro no primeiro lugar e para ali |
+| `callback(null, 19.9)` | deu certo: `null` no lugar do erro e o frete em segundo |
+| `(erro, valor) => { if (erro) ... }` | quem chama confere o erro antes de usar o valor |
+
+---
+
+## :icon[circle-alert] Erro primeiro na prática
+
+Com o mesmo `consultarFrete`, um callback com nome serve para os dois casos:
+
+```javascript
+function mostrar(erro, valor) {
+  if (erro) return console.log('Erro:', erro.message);
+  console.log('Frete:', valor);
+}
+
+consultarFrete('01310-100', mostrar);
+consultarFrete('123', mostrar);
+```
+
+```plaintext
+Frete: 19.9
+Erro: CEP inválido
+```
+
+- As duas respostas chegam 800 ms depois, na ordem em que foram pedidas
+- O `mostrar` vai sem parênteses: quem o chama é o `consultarFrete`, quando a resposta fica pronta
+- O script não cai no CEP errado: o erro chegou como parâmetro, não como `throw`
+
+---
+
+## Callback hell
+
+E se cada prato só pudesse ser pedido quando o anterior chegasse?
+
+---
+
 ## :icon[workflow] O checkout em callbacks
 
-As quatro etapas do checkout dependem uma da outra. Com callbacks, cada etapa entra **dentro** da anterior:
+Quando cada etapa espera a anterior, os callbacks entram um dentro do outro, como um recado dentro de outro recado. O código vira uma escada que desce para a direita: é o **callback hell** (inferno dos callbacks). O checkout tem quatro etapas, cada uma **dentro** da anterior:
 
 ```javascript
 validarEstoque(itens, (erro) => {
@@ -272,7 +468,7 @@ Funciona. Agora imagine acrescentar o cupom, o tempo limite do pagamento e o reg
 
 ## :icon[mountain] Callback hell: por que dói
 
-Esse formato tem nome: **callback hell**, ou pirâmide da perdição. Os problemas aparecem no primeiro ajuste:
+Esse formato também se chama pirâmide da perdição. Os problemas aparecem no primeiro ajuste:
 
 - Cada etapa nova empurra o código mais para a direita
 - O tratamento de erro se repete em todo nível; esqueça um e a falha some sem aviso
@@ -314,6 +510,6 @@ Na aula 36, você reescreve o checkout com **Promises**: estados, `then`, `catch
 
 No laboratório, o `finalizarCompra` do `lojinha-regras` passa por quatro etapas assíncronas, e o terminal mostra cada uma enquanto espera.
 
-:::tip Antes da próxima aula
+:::tip Para treinar
 Salve os exemplos desta aula em arquivos `.js` e rode cada um com `node`, prevendo a ordem antes de olhar a saída. Depois troque os atrasos e preveja de novo.
 :::

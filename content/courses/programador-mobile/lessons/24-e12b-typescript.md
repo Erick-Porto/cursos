@@ -28,6 +28,19 @@ Programador Mobile · Encontro E12 · Aula 24 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **TypeScript** | o JavaScript com tipos: o editor confere cada valor antes de rodar |
+| **tipo** | o que cabe numa variável ou num parâmetro: número, texto, sim ou não, um formato de objeto |
+| **anotação** | o tipo escrito depois de dois-pontos: `preco: number` |
+| **inferência** | o tipo que o TypeScript deduz sozinho, sem você escrever |
+| **união** | uma lista fechada de opções, separadas por `\|`: `'pago' \| 'enviado'` |
+| **`tsc`** | o compilador do TypeScript: confere os tipos de todos os arquivos de uma vez |
+
+---
+
 ## Um erro que só o cliente veria
 
 O `lojinha-regras` já tem regras de preço, carrinho e favoritos. Agora imagine o projeto com 40 arquivos e três pessoas mexendo no código:
@@ -42,9 +55,15 @@ E se o editor sublinhasse esses erros antes mesmo de você rodar o programa?
 
 ---
 
+## TypeScript
+
+Numa mudança, para que serve escrever "frágil" ou "cozinha" na caixa?
+
+---
+
 ## :icon[file-check] O que o TypeScript resolve
 
-O **TypeScript** é JavaScript com **tipos**: você descreve o formato dos dados, e o editor confere cada uso enquanto você digita.
+O **TypeScript** é JavaScript com **tipos**: uma etiqueta "só cabe número" na caixa, que o editor confere enquanto você digita.
 
 | Problema | Em JavaScript | Em TypeScript |
 |---|---|---|
@@ -61,7 +80,15 @@ TypeScript é degustação: o `lojinha-regras` e o app seguem em JavaScript.
 
 ---
 
+## Tipos básicos
+
+Que tipos de valor você já guardou numa variável, desde o E05?
+
+---
+
 ## :icon[variable] Tipos básicos e funções
+
+Um **tipo** diz o que cabe na caixa. A **anotação** é a etiqueta: o tipo escrito depois de dois-pontos.
 
 ```typescript
 const nome: string = 'Garrafa Térmica';
@@ -78,14 +105,29 @@ totalDoItem('79,90', 2);
 // Argument of type 'string' is not assignable to parameter of type 'number'.
 ```
 
-- O tipo vem depois de dois-pontos: `nome: tipo`
-- Na função, cada parâmetro tem o seu tipo, e o do retorno vem depois dos parênteses
-- `'79,90'` é exatamente o que o `process.argv` entrega (E02): o TypeScript lembra você de converter
+A última linha nem chega a rodar: o editor sublinha antes. Em português, a mensagem diz: "um argumento do tipo texto não cabe num parâmetro do tipo número".
+
+---
+
+## :icon[list-ordered] Os tipos em português
+
+| Anotação | O que ela diz |
+|---|---|
+| `nome: string` | "só cabe texto" (*string*, em inglês, é uma sequência de letras) |
+| `preco: number` | "só cabe número" |
+| `emDestaque: boolean` | "só cabe `true` ou `false`" |
+| `favoritos: number[]` | "uma lista só de números" |
+| `cupom: string \| null` | "texto ou nada" |
+| `(preco: number, qtd: number): number` | "recebe dois números e devolve um número": o tipo do retorno vem depois dos parênteses |
+
 - Os tipos são em minúsculas: `string`, `number`, `boolean`
+- `'79,90'` é exatamente o que o `process.argv` entrega (E02): o TypeScript lembra você de converter
 
 ---
 
 ## :icon[lightbulb] Inferência: o tipo que você não escreve
+
+Na **inferência**, o TypeScript olha o que você pôs na caixa e escreve a etiqueta sozinho:
 
 ```typescript
 const preco = 79.9;    // number, sem anotar nada
@@ -98,13 +140,52 @@ function dobro(valor: number) {
 }
 ```
 
-O TypeScript deduz o tipo pelo valor inicial e pelo `return`. Passe o mouse sobre um nome no VS Code: ele mostra o tipo que deduziu.
+A mensagem diz: "texto não cabe numa caixa de número". Passe o mouse sobre um nome no VS Code: ele mostra o tipo que deduziu.
 
 Regra prática: anote os **parâmetros** e os formatos de dados, como o produto; deixe a **inferência** cuidar das variáveis e dos retornos. Anote o retorno quando ele documenta a intenção, como o `: string` de uma função que formata preço.
 
 ---
 
+## :icon[list-checks] Tipos na prática
+
+**Caso 1: o preço que chega como texto.** A regra do Pix só aceita número:
+
+```typescript
+function precoComPix(preco: number): number {
+  return preco * 0.95;
+}
+precoComPix(Number('199.90')); // certo: o texto virou número
+precoComPix('199,90');
+// Argument of type 'string' is not assignable to parameter of type 'number'.
+```
+
+**Caso 2: a conta que vira texto.** No E05, `1 + '1'` dava `'11'`. Aqui, a inferência barra:
+
+```typescript
+let quantidade = 1;
+quantidade = quantidade + '1';
+// Type 'string' is not assignable to type 'number'.
+```
+
+**Caso 3: a lista de um tipo só.**
+
+```typescript
+const nomes: string[] = ['Fone Bluetooth', 'Bola de Futebol'];
+nomes.push(7);
+// Argument of type 'number' is not assignable to parameter of type 'string'.
+```
+
+---
+
+## type e interface
+
+O que um formulário de cadastro em branco já diz, antes de alguém preencher?
+
+---
+
 ## :icon[braces] type: o formato de um objeto
+
+Um objeto é uma ficha de cadastro. O **`type`** é o formulário em branco: diz quais campos a ficha tem e o que cabe em cada um.
 
 ```typescript
 type Produto = {
@@ -123,34 +204,13 @@ function rotulo(produto: Produto): string {
 
 - `type Nome = { ... }` dá nome a um formato; os campos são separados por `;`
 - `?` marca um campo **opcional**, que pode faltar
-- Com o tipo, o editor completa `produto.` com os campos certos e ainda sugere a correção do erro de digitação
-
----
-
-## :icon[tags] Uniões: só estes valores
-
-Um `string` qualquer aceita `'pagou'`, `'entrege'` e todo erro de digitação. Uma **união** de valores literais aceita só a lista que você definiu:
-
-```typescript
-type StatusPedido = 'pendente' | 'pago' | 'enviado' | 'entregue' | 'cancelado';
-
-function foiEntregue(status: StatusPedido): boolean {
-  return status === 'entrege';
-  // This comparison appears to be unintentional because the types
-  // 'StatusPedido' and '"entrege"' have no overlap.
-}
-
-foiEntregue('pagou');
-// Argument of type '"pagou"' is not assignable to parameter of type 'StatusPedido'.
-```
-
-O `|` também junta tipos: `string | null` é "texto ou nada". No E13, o `tomDoStatus` da Lojinha vai trabalhar com exatamente estes cinco valores.
+- O editor completa `produto.` com os campos certos e sugere a correção: "não existe `preço` em `Produto`; você quis dizer `preco`?"
 
 ---
 
 ## :icon[scale] interface e type
 
-Uma **interface** também descreve o formato de um objeto, e pode estender outra:
+Uma **interface** também descreve o formato de um objeto. Ela pode **estender** outra: aproveitar todos os campos dela e acrescentar os seus.
 
 ```typescript
 interface ItemCarrinho {
@@ -168,10 +228,36 @@ interface ItemComPresente extends ItemCarrinho {
 | | `type` | `interface` |
 |---|---|---|
 | Formato de objeto | sim | sim |
-| União de valores literais | sim | não |
 | Aproveitar outro formato | com `&` | com `extends` |
 
-Para objetos, os dois funcionam. Regra simples: `type` para uniões e dados; `interface` quando um formato vai estender outro. Em equipe, siga o padrão que o projeto já usa.
+Para objetos, os dois funcionam. Regra simples: `type` para os dados do dia a dia; `interface` quando um formato vai estender outro. Em equipe, siga o padrão que o projeto já usa.
+
+---
+
+## :icon[list-checks] type e interface na prática
+
+Com o `type Produto` e a `interface ItemComPresente` desta seção:
+
+**Caso 1: a vitrine com um produto incompleto.**
+
+```typescript
+const vitrine: Produto[] = [
+  { id: 1, nome: 'Fone Bluetooth', preco: 199.9, categoria: 'audio' },
+  { id: 5, nome: 'Garrafa Térmica', categoria: 'casa' },
+];
+// Property 'preco' is missing ... but required in type 'Produto'.
+```
+
+O Fone passa sem `imagem`, que é opcional; a Garrafa sem `preco`, não.
+
+**Caso 2: um campo que não existe no formato.**
+
+```typescript
+const garrafa: Produto = { id: 5, nome: 'Garrafa Térmica', preco: 79.9, categoria: 'casa', cor: 'azul' };
+// Object literal may only specify known properties, and 'cor' does not exist in type 'Produto'.
+```
+
+**Caso 3: o presente sem mensagem.** `const presente: ItemComPresente = { id: 1, nome: 'Fone Bluetooth', preco: 199.9, qtd: 1 };` dá `Property 'mensagem' is missing`: a interface estendida pede tudo do `ItemCarrinho`, mais a mensagem.
 
 ---
 
@@ -205,9 +291,74 @@ Três erros achados sem rodar nada.
 
 ---
 
+## Uniões
+
+Numa pergunta de múltipla escolha, dá para responder algo fora das opções?
+
+---
+
+## :icon[tags] Uniões: só estes valores
+
+Um `string` qualquer aceita `'pagou'`, `'entrege'` e todo erro de digitação. Uma **união** de valores aceita só a lista que você definiu, como uma pergunta de múltipla escolha: vale uma das opções, e nada mais.
+
+```typescript
+type StatusPedido = 'pendente' | 'pago' | 'enviado' | 'entregue' | 'cancelado';
+
+function foiEntregue(status: StatusPedido): boolean {
+  return status === 'entrege';
+  // This comparison appears to be unintentional because the types
+  // 'StatusPedido' and '"entrege"' have no overlap.
+}
+
+foiEntregue('pagou');
+// Argument of type '"pagou"' is not assignable to parameter of type 'StatusPedido'.
+```
+
+- As mensagens dizem: "`'entrege'` não está entre as opções" e "`'pagou'` não é um `StatusPedido`"
+- O `|` também junta tipos: `string | null` é "texto ou nada"
+- União só se escreve com `type`; a `interface` não faz união
+
+No E13, o `tomDoStatus` da Lojinha vai trabalhar com exatamente estes cinco valores.
+
+---
+
+## :icon[list-checks] Uniões na prática
+
+**Caso 1: as formas de pagamento da Lojinha.**
+
+```typescript
+type FormaDePagamento = 'pix' | 'cartao' | 'boleto';
+
+function temDesconto(forma: FormaDePagamento): boolean {
+  return forma === 'pix';
+}
+
+temDesconto('pix');    // true
+temDesconto('cheque');
+// Argument of type '"cheque"' is not assignable to parameter of type 'FormaDePagamento'.
+```
+
+**Caso 2: a categoria com maiúscula.** O editor ainda sugere a certa:
+
+```typescript
+type Categoria = 'audio' | 'casa' | 'esporte' | 'livros';
+const escolhida: Categoria = 'Audio';
+// Type '"Audio"' is not assignable to type 'Categoria'. Did you mean '"audio"'?
+```
+
+Ao digitar `temDesconto('`, o VS Code mostra as três opções da lista: você nem precisa decorar.
+
+---
+
+## O undefined
+
+Quando você busca na agenda um contato que não existe, o que o celular mostra?
+
+---
+
 ## :icon[circle-alert] undefined: o erro que mais derruba programa
 
-O `find` devolve o produto ou `undefined`, quando não acha nada. Com o `strict` ligado, o TypeScript não deixa você esquecer:
+O `find` devolve o produto ou `undefined`, quando não acha nada: é a busca que volta de mãos vazias. Com o **`strict`** (em inglês, rigoroso) ligado, o TypeScript não deixa você esquecer:
 
 ```typescript
 function nomeDoProduto(produtos: Produto[], id: number): string {
@@ -216,6 +367,14 @@ function nomeDoProduto(produtos: Produto[], id: number): string {
   // 'produto' is possibly 'undefined'.
 }
 ```
+
+O aviso diz: "`produto` pode ser `undefined`". É o `Cannot read properties of undefined (reading 'nome')` do Node, apontado antes de rodar. A saída é tratar, com um `if`, o caso de não achar nada.
+
+---
+
+## :icon[list-checks] undefined na prática
+
+**Caso 1: o produto que não existe.**
 
 ```typescript
 function nomeDoProduto(produtos: Produto[], id: number): string {
@@ -227,13 +386,27 @@ function nomeDoProduto(produtos: Produto[], id: number): string {
 }
 ```
 
-É o `Cannot read properties of undefined (reading 'nome')` do Node, apontado antes de rodar. Depois do `if`, o tipo **estreita** para `Produto`. Fuja dos atalhos que calam o aviso: `produto!.nome` e `any` só escondem o problema.
+Com o id 7, sai `'Tênis de Corrida'`; com o 99, `'Produto não encontrado'`. Depois do `if`, o tipo **estreita** para `Produto`: o aviso some.
+
+**Caso 2: o atalho que esconde o problema.**
+
+```typescript
+return produto!.nome; // o ! cala o aviso; com o id 99, o TypeError volta ao rodar
+```
+
+Fuja dos atalhos que calam o aviso: `produto!.nome` e o tipo `any` (qualquer coisa) só escondem o problema.
+
+---
+
+## Set e Map tipados
+
+Se a lista de convidados tivesse a etiqueta "só números", o texto '7' entraria?
 
 ---
 
 ## :icon[fingerprint] Set e Map com tipo
 
-Os sinais de menor e maior dizem o que vai dentro da coleção:
+Os sinais de menor e maior dizem o que vai dentro da coleção: é a etiqueta "só cabe isto" para cada item.
 
 ```typescript
 function ehFavorito(favoritos: Set<number>, id: number): boolean {
@@ -242,20 +415,45 @@ function ehFavorito(favoritos: Set<number>, id: number): boolean {
 
 ehFavorito(new Set([7, 1]), '7');
 // Argument of type 'string' is not assignable to parameter of type 'number'.
+```
 
+- `Set<number>` é "um Set de números"; `Map<number, Produto>` é "chaves número, valores `Produto`"
+- O `'7'` que na aula 23 respondia `false` em silêncio agora fica sublinhado
+
+---
+
+## :icon[list-checks] Set e Map tipados na prática
+
+**Caso 1: o `get` que pode não achar.**
+
+```typescript
 const produtosPorId = new Map<number, Produto>();
 const tenis = produtosPorId.get(7); // Produto | undefined
 console.log(tenis.nome);
 // 'tenis' is possibly 'undefined'.
 ```
 
-- `Set<number>` é "um Set de números"; `Map<number, Produto>` é "chaves número, valores `Produto`"
-- O `'7'` que na aula 23 respondia `false` em silêncio agora fica sublinhado
-- O `get` pode não achar a chave: o `strict` pede o mesmo `if` do `find`
+**Caso 2: o mesmo `if` do `find`.**
+
+```typescript
+if (tenis !== undefined) {
+  console.log(tenis.nome); // sem aviso: aqui o tênis existe
+}
+```
+
+O `get` pode não achar a chave: o `strict` pede o mesmo `if` do `find`, e o tipo estreita do mesmo jeito.
+
+---
+
+## Node e tsc
+
+Na mudança, quem carrega as caixas confere as etiquetas ou só carrega?
 
 ---
 
 ## :icon[play] Rodando um .ts no Node
+
+Um arquivo `.ts` é um arquivo TypeScript. O Node consegue rodá-lo: ele arranca as etiquetas de tipo, sem ler, e roda o JavaScript que sobra.
 
 ```typescript
 // rascunhos/tipos.ts
@@ -275,8 +473,8 @@ node --experimental-strip-types rascunhos/tipos.ts
 ```
 
 - O Node **remove** os tipos e roda o resto, sem conferir nada: o `'79,90'` vira `NaN`, sem erro
-- No Node 22 até a versão 22.17, a opção é obrigatória, e o aviso pode ser ignorado
-- Do 22.18 em diante, e no Node 24, `node rascunhos/tipos.ts` já basta
+- No Node 22 até a versão 22.17, a opção `--experimental-strip-types` (remover os tipos, experimental) é obrigatória, e o aviso pode ser ignorado
+- Do 22.18 em diante, e no Node 24, `node rascunhos/tipos.ts` já funciona, sem a opção
 
 ---
 
@@ -286,7 +484,7 @@ node --experimental-strip-types rascunhos/tipos.ts
 ![Diagrama: o tipos.ts segue dois caminhos; o editor e o npx tsc --noEmit conferem os tipos e apontam o erro, enquanto o node só remove os tipos e roda o JavaScript que sobra, mesmo com erro de tipo](images/e12-tsc-e-node.svg)
 :::
 
-O Node **remove** os tipos sem conferi-los: com um erro de tipo, o programa roda do mesmo jeito. Quem confere é o editor, arquivo por arquivo, e o compilador do TypeScript, o **tsc**, na pasta inteira.
+O Node **remove** os tipos sem conferi-los: com um erro de tipo, o programa roda do mesmo jeito. Quem confere é o editor, arquivo por arquivo, e o compilador do TypeScript, o **tsc** (*TypeScript compiler*), na pasta inteira.
 
 ---
 
@@ -311,9 +509,16 @@ rascunhos/tipos.ts:7:25 - error TS2345: Argument of type 'string' is not assigna
 Found 1 error in rascunhos/tipos.ts:7
 ```
 
+- `tipos.ts:7:25` é o arquivo, a linha 7 e a coluna 25: vá direto nelas
 - `strict` liga as checagens mais úteis; `--noEmit` só confere, sem gerar `.js`
 - `include` prende a conferência em `rascunhos/`: a `src/` segue em JavaScript e vai para o app no E30
 - Sem erros, o comando não imprime nada
+
+---
+
+## Quando adotar
+
+Você etiquetaria cada sacola da feira, ou só as caixas de uma mudança?
 
 ---
 
@@ -330,6 +535,19 @@ O custo existe: aprender a sintaxe, lidar com os tipos das bibliotecas e resisti
 
 ---
 
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `is not assignable to` | o valor não cabe no tipo pedido | converter (`Number(texto)`) ou corrigir o valor |
+| `does not exist on type` | esse campo não existe no formato | o `Did you mean` sugere o nome certo |
+| `is missing` | faltou um campo obrigatório | acrescentá-lo |
+| `is possibly 'undefined'` | o valor pode faltar | um `if (x === undefined)` antes de usar |
+| `Unknown file extension ".ts"` | Node 22 antigo, sem a opção | `node --experimental-strip-types ...` |
+| `No inputs were found` | o `.ts` está fora de `rascunhos/` | movê-lo para `rascunhos/` |
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
@@ -337,8 +555,8 @@ O custo existe: aprender a sintaxe, lidar com os tipos das bibliotecas e resisti
 - Usar `any` para calar o editor: a checagem desliga, e o erro volta ao rodar
 - Esperar que o `node` avise erro de tipo: ele só remove os tipos; confira com `npx tsc --noEmit`
 - Escrever `Number` e `String` como tipo: use `number` e `string`, em minúsculas
-- `node rascunhos/tipos.ts` sem a opção num Node 22 antigo: `Unknown file extension ".ts"`
 - Desligar o `strict` para sumir com os avisos de `undefined`
+- Esperar que o TypeScript ache regra errada: frete grátis a partir de `15`, e não `150`, tem o tipo certo. Regra se confere com teste
 :::
 
 ---

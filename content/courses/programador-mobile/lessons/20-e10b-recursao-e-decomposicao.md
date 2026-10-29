@@ -28,6 +28,18 @@ Programador Mobile · Encontro E10 · Aula 20 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **decomposição** | dividir um problema grande em funções pequenas, cada uma com um nome |
+| **de cima para baixo** (*top-down*) | começar pela função que o script precisa e só depois escrever as partes que ela chama |
+| **recursão** | uma função que chama a si mesma para resolver um pedaço menor do mesmo problema |
+| **caso base** | a situação em que a recursão responde sem chamar a si mesma; é onde ela para |
+| **pilha de chamadas** | as funções que esperam umas pelas outras, a mais nova por cima |
+
+---
+
 ## O resumo que só se confere no olho
 
 O `lojinha-regras` ganhou um script que imprime o resumo do carrinho: itens, frete e total. Para saber se o total está certo, você roda o script, lê o terminal e confere com a calculadora.
@@ -62,15 +74,23 @@ console.log(`Frete: R$ ${frete.toFixed(2)}`);
 console.log(`Total: R$ ${(centavos / 100 + frete).toFixed(2)}`);
 ```
 
+Três sinais de que ele faz coisas demais:
+
 - Calcula e imprime no mesmo lugar: o `expect` não alcança a conta
 - Refaz o que já existe: `subtotal` e `calcularFrete`, e a cópia do frete já está errada para o Rio
 - Soma reais com reais no total, o problema do E05
 
 ---
 
+## Decomposição
+
+Como você organiza uma festa grande sem esquecer nada?
+
+---
+
 ## :icon[workflow] Decomposição de cima para baixo
 
-**Decomposição** é dividir um problema grande em funções pequenas. **De cima para baixo** (top-down): você escreve primeiro a função que o script precisa, chamando partes que talvez ainda nem existam, e só depois desce para cada parte.
+**Decomposição** é dividir um problema grande em funções pequenas. Pense numa festa: "fazer a festa" vira convites, comida e música, e cada tarefa ganha um responsável. **De cima para baixo** (top-down): primeiro a função que o script precisa, chamando partes que talvez nem existam; depois, cada parte.
 
 :::center
 ![Diagrama: resumoDoCarrinho chama quatro partes: contarItens, do E09, subtotal, do E07, e calcularFreteComCache, da aula 19, que já existem, e somarReais, tracejada, que ainda não existe](images/e10-decomposicao.svg)
@@ -111,6 +131,26 @@ Lida de cima, a função conta a história: soma os itens, calcula o frete, mont
 
 ---
 
+## :icon[receipt] Decomposição na prática
+
+Quando `somarReais` existir, a mesma função atende carrinhos diferentes, e cada parte faz só a sua conta. Com a garrafa e o livro do script:
+
+```javascript
+resumoDoCarrinho(itens, '01001000');  // São Paulo
+// { quantidade: 2, valorItens: 139.8, frete: 9.9, total: 149.7 }
+
+resumoDoCarrinho(itens, '20040020');  // Rio de Janeiro
+// { quantidade: 2, valorItens: 139.8, frete: 19.9, total: 159.7 }
+
+const duasGarrafas = [{ id: 5, nome: 'Garrafa Térmica', preco: 79.9, qtd: 2 }];
+resumoDoCarrinho(duasGarrafas, '20040020');  // R$ 159,80: frete grátis
+// { quantidade: 2, valorItens: 159.8, frete: 0, total: 159.8 }
+```
+
+O frete do Rio, que o script copiado errava, agora sai certo: quem decide é o `calcularFrete`, num lugar só.
+
+---
+
 ## Pratique
 
 :::example Desafio
@@ -133,7 +173,15 @@ Cada valor vira centavos inteiros, a soma é exata e o resultado volta para reai
 
 ---
 
+## Regra e script
+
+Num restaurante, quem cozinha também precisa ir servir as mesas?
+
+---
+
 ## :icon[terminal] O script só imprime
+
+A conta e a impressão moram em lugares diferentes, como a cozinha e o salão de um restaurante: a cozinha prepara o prato (a regra calcula e devolve), o salão leva até a mesa (o script imprime).
 
 ```javascript
 // src/scripts/resumo-do-carrinho.js
@@ -156,7 +204,30 @@ console.log(`Total: ${formatarPreco(resumo.total)}`);
 | `src/regras/` | calcula e devolve, sem `console.log` | `expect` no Jest |
 | `src/scripts/` | monta os dados, chama as regras e imprime | rodando no terminal |
 
-No E30, `src/regras/` vai inteira para o app. Muda só quem chama: a tela no lugar do script.
+No E30, `src/regras/` vai inteira para o app. Muda só quem chama: a tela no lugar do script, um salão novo para a mesma cozinha.
+
+---
+
+## :icon[square-terminal] Regra e script na prática
+
+O script roda com os mesmos valores do "tudo junto", agora com vírgula, do `formatarPreco`:
+
+```plaintext
+$ node src/scripts/resumo-do-carrinho.js
+Itens (2): R$ 139,80
+Frete: R$ 9,90
+Total: R$ 149,70
+```
+
+Troque o CEP no script por `'20040020'` e rode de novo, sem tocar em regra nenhuma:
+
+```plaintext
+Itens (2): R$ 139,80
+Frete: R$ 19,90
+Total: R$ 159,70
+```
+
+O script decide os dados; a regra decide a conta.
 
 ---
 
@@ -181,6 +252,33 @@ describe('resumoDoCarrinho', () => {
 ```
 
 Rode `npm test`. O total que você conferia com a calculadora agora é conferido a cada `npm test`, e o CI do E04 faz o mesmo a cada `push`. Se alguém trocar o `somarReais` por um `+`, o teste acusa `149.70000000000002`.
+
+---
+
+## Recursão
+
+Como contar as bonecas russas, se cada uma esconde outra menor?
+
+---
+
+## :icon[repeat] Recursão: uma boneca dentro da outra
+
+**Recursão** é uma função que chama a si mesma para resolver um pedaço menor do mesmo problema. Pense nas bonecas russas: para contar, você abre uma e conta as de dentro do mesmo jeito, até a última, que não abre. Essa última é o **caso base**: a situação em que a função responde sem chamar a si mesma.
+
+```javascript
+function contarBonecas(boneca) {
+  if (boneca.dentro === null) {
+    return 1; // caso base: a menor, que não abre
+  }
+  return 1 + contarBonecas(boneca.dentro); // esta, mais as de dentro
+}
+
+const bonecas = { dentro: { dentro: { dentro: null } } };
+contarBonecas(bonecas); // 3
+```
+
+- Toda recursão tem duas partes: o caso base, que para, e a chamada com um problema **menor**
+- Sem caso base, ou sem diminuir o problema, a função nunca para
 
 ---
 
@@ -212,13 +310,13 @@ const casa = {
 };
 ```
 
-Cada subcategoria tem o mesmo formato da categoria. Quantos níveis existem? Não dá para saber: amanhã a loja cria Lâmpadas, Inteligentes. Um `for` dentro de outro só alcança os níveis que você escreveu.
+Cada subcategoria tem o mesmo formato da categoria, como cada boneca tem o formato da de fora. Quantos níveis existem? Não dá para saber: amanhã a loja cria Lâmpadas, Inteligentes. Um `for` dentro de outro só alcança os níveis que você escreveu.
 
 ---
 
 ## :icon[repeat] Recursão com caso base
 
-**Recursão** é uma função que chama a si mesma para resolver uma parte menor do mesmo problema. Toda recursão precisa de um **caso base**: a situação em que ela responde sem chamar a si mesma.
+Na árvore, cada categoria é uma boneca que pode ter outras dentro. `contarProdutos` conta os produtos da categoria e pede a cada subcategoria que conte os seus, do mesmo jeito:
 
 ```javascript
 function contarProdutos(categoria) {
@@ -237,7 +335,7 @@ function contarProdutos(categoria) {
 contarProdutos(casa); // 7
 ```
 
-A cada chamada, o problema diminui um nível, até chegar às folhas da árvore.
+A cada chamada, o problema diminui um nível, até chegar às folhas da árvore, as categorias sem subcategorias.
 
 ---
 
@@ -290,10 +388,20 @@ Com uma lista de 200 mil itens, essa versão estoura a pilha; o `for...of` do `s
 
 ---
 
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `RangeError: Maximum call stack size exceeded` | a recursão não para: falta o caso base, ou a chamada recebe o mesmo problema | conferir o caso base e se a chamada recebe `sub`, um problema menor |
+| `149.70000000000002` no teste do resumo | o total somou reais com `+` | usar `somarReais` |
+| `somarReais is not defined` | a função foi usada sem estar no `import` | juntá-la ao `import` de `./precos.js` |
+| `ERR_MODULE_NOT_FOUND` no `node`, com o Jest verde | `import` relativo sem o `.js` | `'./frete.js'`: o Node exige a extensão |
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
-- Recursão sem caso base, ou chamando com o mesmo problema: `Maximum call stack size exceeded`
 - Chamar `contarProdutos(sub)` sem somar o resultado: a chamada roda e o valor se perde
 - `console.log` dentro de uma regra: ela passa a ter efeito, e o teste enche o terminal; a regra devolve, o script imprime
 - Script que refaz a conta em vez de chamar a regra: duas versões da mesma regra, e uma delas fica velha

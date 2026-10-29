@@ -123,12 +123,12 @@
     {
       "id": "q9",
       "type": "single",
-      "prompt": "Qual é o valor de `resto` dentro do componente, no uso abaixo?\n\n```jsx\nfunction Botao({ variante = primario, children, ...resto }) {\n  return <button {...resto}>{children}</button>\n}\n\n<Botao type=\"submit\" disabled>Salvar</Botao>\n```",
+      "prompt": "Qual é o valor de `resto` dentro do componente, no uso abaixo?\n\n```jsx\nfunction Botao({ variante = 'primario', children, ...resto }) {\n  return <button {...resto}>{children}</button>\n}\n\n<Botao type=\"submit\" disabled>Salvar</Botao>\n```",
       "options": {
-        "a": "`{ type: submit, disabled: true }`",
-        "b": "`{ variante: primario, type: submit, disabled: true }`",
-        "c": "`{ children: Salvar, type: submit, disabled: true }`",
-        "d": "`[submit, true]`"
+        "a": "`{ type: 'submit', disabled: true }`",
+        "b": "`{ variante: 'primario', type: 'submit', disabled: true }`",
+        "c": "`{ children: 'Salvar', type: 'submit', disabled: true }`",
+        "d": "`['submit', true]`"
       },
       "answer": "a",
       "explanation": "O rest junta só as props que não foram pedidas pelo nome. `variante` e `children` já foram desestruturadas, então ficam fora; `variante` nem foi passada, e o padrão não entra no `resto`. `disabled` sozinho na tag equivale a `disabled={true}`. O rest de um objeto devolve um objeto, não um array.",

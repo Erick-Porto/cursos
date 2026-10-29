@@ -15,13 +15,30 @@ Programador Mobile · Encontro E40 · Aula 79 de 89
 
 ---
 
-## :icon[map] Mapa da unidade
+## O que você vai aprender
 
 :::goal
 - Rever cada tema em um slide e resolver cinco questões no estilo da Prova 4
 - Reconhecer as armadilhas que mais derrubam nota
 - Fechar a versão 1 da Lojinha no laboratório
 :::
+
+---
+
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **prova simulada** | um ensaio da prova: questões no mesmo estilo, com tempo marcado e correção na hora |
+| **escolha única** | questão com uma só alternativa certa |
+| **múltipla escolha** | questão em que você marca **todas** as alternativas certas; pode ser mais de uma |
+| **lacuna** | questão de completar: você escreve o nome exato que falta, como no código |
+| **armadilha** | a alternativa que parece certa, mas tem um detalhe errado |
+| **v1** | (*versão 1*) a primeira versão completa de um app, pronta para mostrar |
+
+---
+
+## :icon[map] Mapa da unidade
 
 Em onze encontros, a Lojinha foi do wireframe a um app navegável com 5 telas, apoiado nas regras que vieram do `lojinha-regras`. A prova cobre:
 
@@ -47,9 +64,19 @@ Em onze encontros, a Lojinha foi do wireframe a um app navegável com 5 telas, a
 :::
 ::::
 
+Hoje os temas vêm em quatro grupos. Cada grupo termina com uma questão comentada, no estilo da prova.
+
+---
+
+## Layout e visual
+
+A Lojinha começou como caixas cinza. O que a deixou com cara de app?
+
 ---
 
 ## :icon[columns-3] Flexbox e dimensões
+
+O **Flexbox** é a prateleira: a direção, o alinhamento e o espaço entre as caixas.
 
 - Toda `View` é flex em **coluna**; `flexDirection: 'row'` põe os filhos lado a lado
 - `justifyContent` distribui no eixo principal; `alignItems` e `alignSelf` alinham no eixo cruzado
@@ -72,6 +99,8 @@ Em onze encontros, a Lojinha foi do wireframe a um app navegável com 5 telas, a
 
 ## :icon[sun] Tokens e tema
 
+Os **tokens** são a paleta de tintas com nome: o valor mora num lugar só.
+
 - **Tokens** dão nome às decisões visuais em `src/theme/tokens.js`: `cores`, `espaco` (de 4 a 32), `fonte`, `familia` e `raio`
 - `cores.claro` e `cores.escuro` têm as mesmas chaves: `fundo`, `superficie`, `texto`, `textoSuave`, `primaria`, `borda`, `perigo`, `sucesso`
 - `useTema()` devolve `{ cores, espaco, fonte, raio, escuro, alternarTema }`; o tema inicial vem do `useColorScheme`
@@ -89,6 +118,8 @@ const { cores } = useTema();
 ---
 
 ## :icon[mouse-pointer-click] Toque, ícones, imagens e fontes
+
+Todo toque precisa de uma resposta na tela, e toda imagem, de um tamanho.
 
 - `Pressable` com `style={({ pressed }) => ...}` dá retorno visual ao toque
 - `Ionicons`, de `@expo/vector-icons`, recebe `name`, `size` e `color`
@@ -109,6 +140,8 @@ const { cores } = useTema();
 
 ## :icon[component] UI kit
 
+Cada componente do kit é uma peça de Lego: pequena, reaproveitável, encaixa nas outras.
+
 - Peças genéricas em `src/components/ui/`, reexportadas pelo `index.js`: `Botao`, `Cartao`, `Badge`, `Avatar`, `Campo`, `Divisor`
 - **Variantes** escolhidas por prop, com mapa de estilos: `variante` e `tamanho` no `Botao`, `tom` no `Badge`
 - `children` recebe o conteúdo; `style` de fora só posiciona; `...rest` repassa props nativas, como `accessibilityLabel`
@@ -124,124 +157,6 @@ import { Badge, Botao, Cartao } from '../components/ui';
     <Botao titulo="Comprar" tamanho="lg" icone="cart-outline" onPress={comprar} />
   </Cartao.Corpo>
 </Cartao>
-```
-
----
-
-## :icon[list] Listas
-
-- `FlatList`: `data`, `renderItem={({ item }) => ...}` e `keyExtractor` que devolve **string**
-- `numColumns={2}` monta a grade; `horizontal` monta o carrossel, com item de largura fixa
-- Trocar `numColumns` com a lista na tela exige trocar a `key` junto
-- `ListHeaderComponent` rola com a lista; `ListEmptyComponent` aparece com `data` vazio
-- `SectionList` agrupa por `sections` (`title` e `data`); `RefreshControl` faz o puxar para atualizar
-
-```jsx
-<FlatList
-  data={produtos}
-  keyExtractor={(item) => String(item.id)}
-  numColumns={2}
-  renderItem={({ item }) => <CartaoProduto produto={item} />}
-  ListHeaderComponent={<FlatList horizontal data={destaques} /* ... */ />}
-  ListEmptyComponent={<Text>Nenhum produto</Text>}
-/>
-```
-
----
-
-## :icon[keyboard] Formulários
-
-- `Campo` do kit envolve o `TextInput` com `rotulo` e `erro`
-- Teclado certo para cada campo: `keyboardType`, `autoCapitalize="none"`, `secureTextEntry`
-- Foco no próximo: `useRef(null)`, `returnKeyType="next"` e `onSubmitEditing` com arrow function
-- `KeyboardAvoidingView`, com `behavior` por plataforma, impede o teclado de cobrir o botão
-- Validação e máscara em funções puras: `validar.js` e `mascararTelefone`; termos com `Switch`
-
-```jsx
-const emailRef = useRef(null);
-
-<Campo rotulo="Nome" value={nome} onChangeText={setNome}
-  returnKeyType="next" onSubmitEditing={() => emailRef.current.focus()} />
-<Campo ref={emailRef} rotulo="E-mail" value={email} onChangeText={setEmail}
-  keyboardType="email-address" autoCapitalize="none" erro={erros.email} />
-```
-
----
-
-## :icon[layers] Navegação em pilha
-
-- Expo Router: cada arquivo em `app/` é uma rota; `app/_layout.js` monta o `Stack` e envolve tudo com `TemaProvider` e `CarrinhoProvider`, que usa as regras de `src/regras/carrinho.js`
-- `"main": "expo-router/entry"` no `package.json`: o `App.js` deixa de ser usado
-- `Link` ou `router.push('/produto/' + id)` empilham uma tela; voltar desempilha
-- Rota dinâmica `app/produto/[id].js`; `useLocalSearchParams()` devolve **string**
-- Título da tela com `<Stack.Screen options={{ title: ... }} />`
-
-```jsx
-// src/telas/Detalhe.js, aberta por app/produto/[id].js
-const { id } = useLocalSearchParams();
-const produto = produtos.find((p) => p.id === Number(id));
-
-<Stack.Screen options={{ title: produto.nome }} />
-```
-
----
-
-## :icon[navigation] Abas, modais e fluxos
-
-- `app/(tabs)/_layout.js` com `Tabs`; o grupo entre parênteses não aparece no endereço
-- `tabBarIcon` com `Ionicons`; `tabBarBadge` mostra a quantidade do carrinho
-- Pilha dentro da aba: `app/(tabs)/categorias/_layout.js` com `Stack`
-- Modal: `app/filtros.js` com `presentation: 'modal'` no layout raiz
-- Fluxo de entrada com `app/(auth)/entrar.js` e `Redirect`; o `scheme` do `app.json` abre links como `lojinha://produto/3`
-
-```jsx
-// app/(tabs)/_layout.js
-<Tabs>
-  <Tabs.Screen name="index" options={{ title: 'Início',
-    tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" color={color} size={size} /> }} />
-  <Tabs.Screen name="carrinho" options={{ title: 'Carrinho', tabBarBadge: quantidade || undefined }} />
-</Tabs>
-```
-
----
-
-## :icon[smartphone] Responsividade e acessibilidade
-
-- `useWindowDimensions()` devolve `width` e `height` atualizados ao girar; `width >= 600` pede 3 colunas
-- `maxFontSizeMultiplier` limita o crescimento da fonte; `allowFontScaling={false}` só em último caso
-- Leitor de tela: `accessibilityLabel`, `accessibilityRole`, `accessibilityState` e `accessibilityHint`
-- Área de toque mínima de 44 por 44; `hitSlop` amplia sem mudar o desenho
-- Contraste AA: 4,5 para 1 em texto comum; audite com TalkBack e VoiceOver
-
-```jsx
-const { width } = useWindowDimensions();
-const colunas = width >= 600 ? 3 : 2;
-<FlatList key={'grade-' + colunas} numColumns={colunas} /* ... */ />
-
-<Pressable onPress={remover} hitSlop={12} accessibilityRole="button"
-  accessibilityLabel="Remover Fone Bluetooth do carrinho">
-  <Ionicons name="trash-outline" size={20} color={cores.perigo} />
-</Pressable>
-```
-
----
-
-## :icon[sparkles] Animações e estados
-
-- `useRef(new Animated.Value(0)).current` guarda o valor entre as renderizações
-- `Animated.timing` (duração), `Animated.spring` (mola) e `Animated.stagger` (um depois do outro) só rodam com `.start()`
-- `useNativeDriver: true` anima no lado nativo, mas só `opacity` e `transform`
-- `interpolate` converte de 0 a 1 em outra faixa, como `translateY` de 20 a 0
-- Estados de tela no kit: `Esqueleto`, `EstadoCarregando`, `EstadoVazio` e `EstadoErro` com "Tentar novamente"
-
-```jsx
-const entrada = useRef(new Animated.Value(0)).current;
-useEffect(() => {
-  Animated.timing(entrada, { toValue: 1, duration: 300, useNativeDriver: true }).start();
-}, []);
-const subir = entrada.interpolate({ inputRange: [0, 1], outputRange: [20, 0] });
-
-<Animated.View style={{ opacity: entrada, transform: [{ translateY: subir }] }} />
 ```
 
 ---
@@ -265,12 +180,81 @@ O que aparece na tela?
 :::
 
 :::tip Resposta
-**b.** Com `row`, o eixo principal é o horizontal: `justifyContent: 'center'` junta A e B no meio da linha. O eixo cruzado é o vertical: `alignItems: 'flex-end'` leva os dois ao fundo dos 120. A **c** é a pegadinha de quem inverte os eixos. Na prova, ache primeiro o `flexDirection`: ele define o que cada propriedade controla.
+**b.** Com `row`, o eixo principal é o horizontal: `justifyContent: 'center'` junta A e B no meio da linha. O eixo cruzado é o vertical: `alignItems: 'flex-end'` leva os dois ao fundo dos 120. A **c** é a armadilha de quem inverte os eixos. Na prova, ache primeiro o `flexDirection`: ele define o que cada propriedade controla.
 :::
 
 ---
 
 ## Questão comentada 2
+
+:::question
+Quais trechos continuam legíveis quando o usuário troca para o tema escuro? Marque todos os corretos.
+
+- a) `style={[estilos.cartao, { backgroundColor: cores.superficie }]}`
+- b) `cartao: { backgroundColor: '#ffffff', padding: espaco.md }`, no `StyleSheet`
+- c) `<Ionicons name="cart-outline" size={24} color={cores.primaria} />`
+- d) `<Text style={{ color: 'black' }}>{produto.nome}</Text>`
+:::
+
+:::tip Resposta
+**a** e **c.** As duas leem a cor do `useTema()`, que troca junto com o tema. A **b** parece segura porque usa token no espaçamento, mas o fundo fixo continua branco, e o texto claro do tema escuro some sobre ele. A **d** pinta preto sobre fundo escuro.
+
+Regra: cor sempre do tema; hex só dentro do `tokens.js`.
+:::
+
+---
+
+## Listas e formulários
+
+Como mostrar 200 produtos sem o celular engasgar?
+
+---
+
+## :icon[list] Listas
+
+A `FlatList` é a esteira: só desenha o que cabe na tela. A `key` de cada item é o crachá.
+
+- `FlatList`: `data`, `renderItem={({ item }) => ...}` e `keyExtractor` que devolve **string**
+- `numColumns={2}` monta a grade; `horizontal` monta o carrossel, com item de largura fixa
+- Trocar `numColumns` com a lista na tela exige trocar a `key` junto
+- `ListHeaderComponent` rola com a lista; `ListEmptyComponent` aparece com `data` vazio
+- `SectionList` agrupa por `sections` (`title` e `data`); `RefreshControl` faz o puxar para atualizar
+
+```jsx
+<FlatList
+  data={produtos}
+  keyExtractor={(item) => String(item.id)}
+  numColumns={2}
+  renderItem={({ item }) => <CartaoProduto produto={item} />}
+  ListHeaderComponent={<FlatList horizontal data={destaques} /* ... */ />}
+  ListEmptyComponent={<Text>Nenhum produto</Text>}
+/>
+```
+
+---
+
+## :icon[keyboard] Formulários
+
+O `useRef` é o controle remoto do campo: com ele, um campo passa o foco ao próximo.
+
+- `Campo` do kit envolve o `TextInput` com `rotulo` e `erro`
+- Teclado certo para cada campo: `keyboardType`, `autoCapitalize="none"`, `secureTextEntry`
+- Foco no próximo: `useRef(null)`, `returnKeyType="next"` e `onSubmitEditing` com arrow function
+- `KeyboardAvoidingView`, com `behavior` por plataforma, impede o teclado de cobrir o botão
+- Validação e máscara em funções puras: `validar.js` e `mascararTelefone`; termos com `Switch`
+
+```jsx
+const emailRef = useRef(null);
+
+<Campo rotulo="Nome" value={nome} onChangeText={setNome}
+  returnKeyType="next" onSubmitEditing={() => emailRef.current.focus()} />
+<Campo ref={emailRef} rotulo="E-mail" value={email} onChangeText={setEmail}
+  keyboardType="email-address" autoCapitalize="none" erro={erros.email} />
+```
+
+---
+
+## Questão comentada 3
 
 :::question
 Ao girar o tablet, o app mostra a tela vermelha `Changing numColumns on the fly is not supported`. Qual é a correção?
@@ -290,12 +274,59 @@ const colunas = width >= 600 ? 3 : 2;
 :::
 
 :::tip Resposta
-**b.** A `FlatList` não troca o número de colunas com a lista na tela. Uma `key` nova faz o React descartar a lista antiga e montar outra, já com 3 colunas. A **a** faz a tela vermelha sumir só porque a largura nunca mais muda: o tablet deitado fica com 2 colunas. A **d** cria listas aninhadas.
+**b.** A `FlatList` não troca o número de colunas com a lista na tela. Uma `key` nova faz o React descartar a lista antiga e montar outra, já com 3 colunas: crachá novo, lista nova. A **a** faz a tela vermelha sumir só porque a largura nunca mais muda: o tablet deitado fica com 2 colunas. A **d** cria listas aninhadas.
 :::
 
 ---
 
-## Questão comentada 3
+## Navegação
+
+Como o app sabe para onde ir quando você toca em voltar?
+
+---
+
+## :icon[layers] Navegação em pilha
+
+A pilha é um monte de cartas: a tela nova vai por cima; voltar tira a de cima.
+
+- Expo Router: cada arquivo em `app/` é uma rota; `app/_layout.js` monta o `Stack` e envolve tudo com `TemaProvider` e `CarrinhoProvider`, que usa as regras de `src/regras/carrinho.js`
+- `"main": "expo-router/entry"` no `package.json`: o `App.js` deixa de ser usado
+- `Link` ou `router.push('/produto/' + id)` empilham uma tela; voltar desempilha
+- Rota dinâmica `app/produto/[id].js`; `useLocalSearchParams()` devolve **string**
+- Título da tela com `<Stack.Screen options={{ title: ... }} />`
+
+```jsx
+// src/telas/Detalhe.js, aberta por app/produto/[id].js
+const { id } = useLocalSearchParams();
+const produto = produtos.find((p) => p.id === Number(id));
+
+<Stack.Screen options={{ title: produto.nome }} />
+```
+
+---
+
+## :icon[navigation] Abas, modais e fluxos
+
+As abas são as divisórias de um fichário: cada uma abre uma parte do app.
+
+- `app/(tabs)/_layout.js` com `Tabs`; o grupo entre parênteses não aparece no endereço
+- `tabBarIcon` com `Ionicons`; `tabBarBadge` mostra a quantidade do carrinho
+- Pilha dentro da aba: `app/(tabs)/categorias/_layout.js` com `Stack`
+- Modal: `app/filtros.js` com `presentation: 'modal'` no layout raiz
+- Fluxo de entrada com `app/(auth)/entrar.js` e `Redirect`; o `scheme` do `app.json` abre links como `lojinha://produto/3`
+
+```jsx
+// app/(tabs)/_layout.js
+<Tabs>
+  <Tabs.Screen name="index" options={{ title: 'Início',
+    tabBarIcon: ({ color, size }) => <Ionicons name="home-outline" color={color} size={size} /> }} />
+  <Tabs.Screen name="carrinho" options={{ title: 'Carrinho', tabBarBadge: quantidade || undefined }} />
+</Tabs>
+```
+
+---
+
+## Questão comentada 4
 
 :::question
 Ao abrir `/produto/3`, a tela vermelha diz `Cannot read property 'nome' of undefined`. O produto de `id` 3 existe em `produtos.js`. Por quê?
@@ -317,22 +348,54 @@ Correção: `p.id === Number(id)`. Na prova, sempre que aparecer `useLocalSearch
 
 ---
 
-## Questão comentada 4
+## Qualidade
 
-:::question
-Quais trechos continuam legíveis quando o usuário troca para o tema escuro? Marque todos os corretos.
+A Lojinha funciona no seu celular. E no da sua avó, com a letra no máximo?
 
-- a) `style={[estilos.cartao, { backgroundColor: cores.superficie }]}`
-- b) `cartao: { backgroundColor: '#ffffff', padding: espaco.md }`, no `StyleSheet`
-- c) `<Ionicons name="cart-outline" size={24} color={cores.primaria} />`
-- d) `<Text style={{ color: 'black' }}>{produto.nome}</Text>`
-:::
+---
 
-:::tip Resposta
-**a** e **c.** As duas leem a cor do `useTema()`, que troca junto com o tema. A **b** parece segura porque usa token no espaçamento, mas o fundo fixo continua branco, e o texto claro do tema escuro some sobre ele. A **d** pinta preto sobre fundo escuro.
+## :icon[smartphone] Responsividade e acessibilidade
 
-Regra: cor sempre do tema; hex só dentro do `tokens.js`.
-:::
+O app responsivo é a mesa extensível; o leitor de tela é o narrador de rádio, que fala o que você escreveu para ele.
+
+- `useWindowDimensions()` devolve `width` e `height` atualizados ao girar; `width >= 600` pede 3 colunas
+- `maxFontSizeMultiplier` limita o crescimento da fonte; `allowFontScaling={false}` só em último caso
+- Leitor de tela: `accessibilityLabel`, `accessibilityRole`, `accessibilityState` e `accessibilityHint`
+- Área de toque mínima de 44 por 44; `hitSlop` amplia sem mudar o desenho
+- Contraste AA: 4,5 para 1 em texto comum; audite com TalkBack e VoiceOver
+
+```jsx
+const { width } = useWindowDimensions();
+const colunas = width >= 600 ? 3 : 2;
+<FlatList key={'grade-' + colunas} numColumns={colunas} /* ... */ />
+
+<Pressable onPress={remover} hitSlop={12} accessibilityRole="button"
+  accessibilityLabel="Remover Fone Bluetooth do carrinho">
+  <Ionicons name="trash-outline" size={20} color={cores.perigo} />
+</Pressable>
+```
+
+---
+
+## :icon[sparkles] Animações e estados
+
+O `Animated.Value` é o botão do dimmer; o esqueleto é o álbum de figurinhas, com o lugar de cada coisa antes de ela chegar.
+
+- `useRef(new Animated.Value(0)).current` guarda o valor entre as renderizações
+- `Animated.timing` (duração), `Animated.spring` (mola) e `Animated.stagger` (um depois do outro) só rodam com `.start()`
+- `useNativeDriver: true` anima no lado nativo, mas só `opacity` e `transform`
+- `interpolate` converte de 0 a 1 em outra faixa, como `translateY` de 20 a 0
+- Estados de tela no kit: `Esqueleto`, `EstadoCarregando`, `EstadoVazio` e `EstadoErro` com "Tentar novamente"
+
+```jsx
+const entrada = useRef(new Animated.Value(0)).current;
+useEffect(() => {
+  Animated.timing(entrada, { toValue: 1, duration: 300, useNativeDriver: true }).start();
+}, []);
+const subir = entrada.interpolate({ inputRange: [0, 1], outputRange: [20, 0] });
+
+<Animated.View style={{ opacity: entrada, transform: [{ translateY: subir }] }} />
+```
 
 ---
 
@@ -361,7 +424,15 @@ Com `hitSlop={12}`, a área vai a 44 por 44 sem mudar o desenho.
 
 ---
 
+## A prova
+
+Vinte questões, uma tentativa. O que fazer nos primeiros segundos de cada uma?
+
+---
+
 ## :icon[clipboard-check] Como será a prova
+
+A **Prova 4** é como o exame de direção: não cai nada que você não tenha feito nas aulas. São questões no estilo das cinco de hoje.
 
 | Item | Como é |
 |---|---|
@@ -371,13 +442,36 @@ Com `hitSlop={12}`, a área vai a 44 por 44 sem mudar o desenho.
 | Conteúdo | E30 a E40 (aulas 58 a 79) |
 | Onde | No sistema, na última hora do encontro |
 
-Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **verdadeiro ou falso** e **lacuna** (o nome exato, como `numColumns` ou `useLocalSearchParams`).
+---
+
+## :icon[clipboard-check] A prova na prática
+
+Os quatro tipos de questão, todos já vistos hoje:
+
+- **Escolha única**: uma alternativa certa, como na questão 1
+- **Múltipla escolha**: marque **todas** as corretas, como na questão 2
+- **Verdadeiro ou falso**: uma frase para julgar, como na questão 5
+- **Lacuna**: o nome exato, como no código: `numColumns`, `useLocalSearchParams`
 
 :::tip Leia o enunciado
 - Em código, ache primeiro o `flexDirection`, a origem de cada cor e o tipo de cada valor
 - Palavras como **não**, **sempre**, **só** e **todos** mudam a resposta
 - O gabarito não aparece ao enviar: ele é liberado depois da correção
 :::
+
+---
+
+## Resumo
+
+:::summary
+- Layout e visual: flex em coluna, `row` troca os eixos; cor do tema com `useTema()`, medidas dos tokens e peças repetidas no UI kit
+- Listas e formulários: `FlatList`, `SectionList` e `Campo`, com validação e preço pelas regras do `lojinha-regras`
+- Navegação: cada arquivo em `app/` é uma rota, com pilha, abas e modal; parâmetro de rota chega como string
+- Qualidade: rótulo e 44 por 44 no toque, fonte grande sem cortes, 4 estados e animação só com `opacity` e `transform`
+- Armadilhas: eixos trocados, cor fixa, `numColumns` sem trocar a `key`, `id` sem `Number` e ícone sem rótulo
+:::
+
+Enunciado fácil demais? Procure uma dessas armadilhas. Depois do laboratório, a **Prova 4**; no E41, o projeto em equipe.
 
 ---
 
@@ -408,17 +502,3 @@ No seu repositório `casas-de-adocao`:
 - link do repositório na página do projeto até o **início do E41**
 
 Commit: `Projeto 6: etapa 11, acabamento e entrega`. Enunciado completo e entrega: página do curso, em **Projetos**.
-
----
-
-## Resumo
-
-:::summary
-- Layout e visual: flex em coluna, `row` troca os eixos; cor do tema com `useTema()`, medidas dos tokens e peças repetidas no UI kit
-- Listas e formulários: `FlatList`, `SectionList` e `Campo`, com validação e preço pelas regras do `lojinha-regras`
-- Navegação: cada arquivo em `app/` é uma rota, com pilha, abas e modal; parâmetro de rota chega como string
-- Qualidade: rótulo e 44 por 44 no toque, fonte grande sem cortes, 4 estados e animação só com `opacity` e `transform`
-- Armadilhas: eixos trocados, cor fixa, `id` sem `Number`, `numColumns` sem trocar a `key` e ícone sem rótulo
-:::
-
-Enunciado fácil demais? Procure uma dessas armadilhas. Agora, a **Prova 4**. No E41, o projeto em equipe: um app novo, do briefing ao Demo Day.

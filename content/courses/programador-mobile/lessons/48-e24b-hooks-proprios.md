@@ -26,9 +26,21 @@ Programador Mobile · Encontro E24 · Aula 48 de 89
 
 ---
 
-## Por que isso importa
+## :icon[book-open] Palavras novas de hoje
 
-Depois da aula anterior, o `App.jsx` faz tudo: três estados, dois efeitos, o `AbortController`, as três funções do E23 e o JSX. São mais de 70 linhas.
+| Palavra | O que é |
+|---|---|
+| **hook** | "gancho", em inglês: uma função do React com nome começando por `use`, como `useState` e `useEffect` |
+| **hook próprio** | um hook escrito por você, que usa outros hooks por dentro |
+| **regras dos hooks** | três combinados que todo hook segue, para o React não se perder |
+| **debounce** | esperar a pessoa parar de digitar antes de agir |
+| **lint** | o corretor ortográfico do código: o `npm run lint` aponta erros antes de rodar |
+
+---
+
+## O App faz tudo
+
+Depois da aula 47, o `App.jsx` faz tudo: três estados, dois efeitos, o `AbortController`, as três funções do E23 e o JSX. São mais de 70 linhas.
 
 E o próximo pedido já chegou: **buscar uma tarefa pelo título**, no servidor. Cada letra digitada seria uma requisição, e mais estados se misturariam ao desenho.
 
@@ -38,9 +50,17 @@ Que partes do `App` falam de **tarefas** e que partes falam de **desenhar a tela
 
 ---
 
+## Hooks próprios
+
+Quando uma receita dá certo, como você faz para repetir?
+
+---
+
 ## :icon[blocks] Seu primeiro hook
 
-`useState` e `useEffect` são **hooks**: funções do React que começam com `use` e guardam algo do componente entre uma renderização e outra. Um **hook próprio** é uma função sua que começa com `use` e chama outros hooks.
+Um **hook** é uma função do React que começa com `use` e guarda algo do componente entre uma renderização e outra: `useState` guarda valores, `useEffect` guarda efeitos. Um **hook próprio** é uma receita sua, com nome começando por `use`, que leva outros hooks como ingredientes.
+
+O primeiro tira do `App` o efeito do título da aba:
 
 ```javascript
 // src/hooks/useTituloDaAba.js
@@ -62,11 +82,69 @@ Hook não tem JSX: arquivo `.js` em `src/hooks/`, com export nomeado, como os m�
 
 ---
 
+## :icon[blocks] Hooks próprios na prática
+
+A mesma receita serve em vários lugares. Um segundo hook, `useAlternar`, liga e desliga como um interruptor:
+
+```javascript
+// src/hooks/useAlternar.js
+import { useState } from 'react'
+
+export function useAlternar(inicial = false) {
+  const [ligado, setLigado] = useState(inicial)
+  function alternar() { setLigado(!ligado) }
+  return [ligado, alternar]
+}
+```
+
+```jsx
+useTituloDaAba('(2) Minhas Tarefas')     // na tela de tarefas
+useTituloDaAba('Carrinho: 3 itens')      // na tela do carrinho
+
+const [aberto, alternarAberto] = useAlternar()
+<button onClick={alternarAberto}>{aberto ? 'Fechar' : 'Ver detalhes'}</button>
+```
+
+| Chamada | O que você vê |
+|---|---|
+| `useTituloDaAba`, na tela de tarefas | a aba mostra "(2) Minhas Tarefas" |
+| `useTituloDaAba`, na tela do carrinho | a aba mostra "Carrinho: 3 itens" |
+| `useAlternar()`, a cada clique | Ver detalhes, Fechar, Ver detalhes... |
+
+---
+
+## :icon[file-code] O primeiro hook em português
+
+| Parte | O que ela diz |
+|---|---|
+| `export function useTituloDaAba(titulo)` | "este hook recebe um título e fica na vitrine do módulo" |
+| `useEffect(...)` | o mesmo efeito do título da aula 47, agora dentro do hook |
+| `[titulo]` | "rode de novo quando o título mudar" |
+| `useTituloDaAba(...)` no `App` | uma linha no lugar do efeito inteiro |
+
+O export é nomeado, então o `import` vai **com chaves**:
+
+```jsx
+import { useTituloDaAba } from './hooks/useTituloDaAba.js'
+```
+
+A tela continua igual: mudou só o lugar onde o código mora.
+
+---
+
+## Regras dos hooks
+
+Numa prateleira de potes sem rótulo, como você acha o açúcar?
+
+---
+
 ## :icon[list-checks] As regras dos hooks
+
+As **regras dos hooks** valem para todo hook, do React ou seu:
 
 1. **Só no topo** do componente ou de outro hook: nunca dentro de `if`, de `for`, de uma função de evento nem depois de um `return` antecipado
 2. **Só em componentes ou em hooks**: uma função comum, como `carregarTarefas`, não chama `useState`
-3. **O nome começa com `use`**: é assim que você, React e o lint reconhecem um hook
+3. **O nome começa com `use`**: é assim que você, o React e o lint reconhecem um hook
 
 ```jsx
 function enviar(event) {
@@ -79,9 +157,36 @@ O `npm run lint` do projeto Vite já traz a regra `rules-of-hooks` e aponta a li
 
 ---
 
+## :icon[list-checks] As regras na prática
+
+Uma quebra para cada regra, e o que o `npm run lint` responde:
+
+```jsx
+// regra 1: o hook dentro de um if
+if (pendentes > 0) useTituloDaAba('Há pendentes')
+
+// regra 2: o hook numa função comum
+async function carregarTarefas() {
+  const [tarefas, setTarefas] = useState([])
+}
+
+// regra 3: um hook sem "use" no nome
+function tituloDaAba(titulo) {
+  useEffect(() => { document.title = titulo }, [titulo])
+}
+```
+
+| Regra | O lint diz | Conserto |
+|---|---|---|
+| 1 | `React Hook "useTituloDaAba" is called conditionally` | chame sempre e escolha o valor: `useTituloDaAba(pendentes > 0 ? 'Há pendentes' : 'Tudo feito')` |
+| 2 | `React Hook "useState" is called in function "carregarTarefas"` | o estado fica no componente ou no hook; a função comum só busca |
+| 3 | `React Hook "useEffect" is called in function "tituloDaAba"` | dê o nome certo: `useTituloDaAba` |
+
+---
+
 ## :icon[list-ordered] React conta os hooks pela ordem
 
-React não sabe o nome dos seus estados. Ele guarda uma lista e entrega os valores **na ordem das chamadas**: o primeiro `useState` recebe o primeiro valor, o segundo recebe o segundo.
+O React não sabe o nome dos seus estados. Ele guarda os valores como potes sem rótulo numa prateleira e entrega **na ordem das chamadas**: o primeiro `useState` pega o primeiro pote, o segundo pega o segundo. Se um hook pula a vez, cada um pega o pote errado: sal no lugar do açúcar.
 
 ```jsx
 function Painel({ carregando }) {
@@ -96,13 +201,13 @@ function Painel({ carregando }) {
 | 1ª | `true` | nenhum |
 | 2ª | `false` | um `useState` |
 
-Na segunda, aparece um hook que não existia, e React para com `Rendered more hooks than during the previous render`. Correção: todos os hooks no topo, os `return` depois deles.
+Na segunda, aparece um hook que não existia, e o React para com `Rendered more hooks than during the previous render`. Correção: todos os hooks no topo, os `return` depois deles.
 
 ---
 
-## Pense
+## :icon[lightbulb] Pratique: certo ou errado?
 
-:::question
+:::example Desafio
 Quais destas linhas, dentro do componente `App`, quebram as regras dos hooks?
 
 ```jsx
@@ -126,7 +231,15 @@ function limpar() { setBusca('') }
 
 ---
 
+## useDebounce
+
+Por que a porta do elevador espera um pouco antes de fechar?
+
+---
+
 ## :icon[timer] useDebounce: o debounce do E10a vira hook
+
+O **debounce** espera a pessoa parar antes de agir, como o elevador que só fecha a porta quando ninguém entra por alguns segundos: cada pessoa que chega reinicia a espera.
 
 No E10a, `debounce(fn, 300)` guardava o `temporizador` numa closure. Dentro de um componente, essa closure nasceria de novo a cada renderização, com o temporizador vazio. O hook guarda o valor atrasado no estado e cancela pela limpeza do efeito:
 
@@ -146,13 +259,43 @@ export function useDebounce(valor, espera = 300) {
 }
 ```
 
+---
+
+## :icon[timer] useDebounce na prática
+
+```jsx
+const buscaAtrasada = useDebounce(busca, 300)   // a busca de tarefas
+const rascunhoAtrasado = useDebounce(texto, 1000) // um rascunho, salvo 1 s depois
+```
+
+| A pessoa | `busca` muda para | `buscaAtrasada` muda para |
+|---|---|---|
+| digita "qui" depressa, uma letra a cada 100 ms | q, qu, qui | só "qui", 300 ms depois da última letra |
+| digita "qui" devagar, uma letra a cada 500 ms | q, qu, qui | q, qu e qui, cada uma 300 ms depois da sua letra |
+| escreve um bilhete e para | o texto, a cada letra | `rascunhoAtrasado`: o texto todo, 1 segundo depois da pausa |
+
+O elevador só fecha a porta quando ninguém chega: quem digita depressa gera uma mudança só.
+
+---
+
+## :icon[list-ordered] useDebounce em português
+
+| Linha | O que ela diz |
+|---|---|
+| `espera = 300` | "se ninguém disser o tempo, espere 300 ms": valor padrão, como nas props do E22 |
+| `useState(valor)` | "a cópia atrasada começa igual ao valor" |
+| `setTimeout(() => setAtrasado(valor), espera)` | "daqui a `espera` ms, copie o valor" |
+| `return () => clearTimeout(temporizador)` | a limpeza: "cancele o agendamento, se ele ainda não rodou" |
+| `[valor, espera]` | "rode de novo quando o valor ou o tempo mudar" |
+| `return atrasado` | "entregue a cópia atrasada a quem chamou" |
+
 Recebe um valor que muda a cada letra e devolve uma cópia que só muda depois de `espera` ms sem mudanças.
 
 ---
 
 ## :icon[history] Cada letra, uma limpeza
 
-A pessoa digita "qui" depressa. A cada letra, `busca` muda, o `App` renderiza e o efeito do hook roda de novo. Antes, React chama a limpeza da renderização anterior, que lembra o **seu** `temporizador`:
+A pessoa digita "qui" depressa. A cada letra, `busca` muda, o `App` renderiza e o efeito do hook roda de novo. Antes, o React chama a limpeza da renderização anterior, que lembra o **seu** `temporizador`:
 
 | `busca` | Primeiro, a limpeza | Depois, o efeito |
 |---|---|---|
@@ -161,7 +304,7 @@ A pessoa digita "qui" depressa. A cada letra, `busca` muda, o `App` renderiza e 
 | "qui" | cancela "qu" | agenda "qui" |
 | pausa de 300 ms | nada | `atrasado` vira "qui" |
 
-Cada renderização cria as suas funções, e cada uma lembra as variáveis daquela renderização: é a closure do E10a, agora dentro do React.
+Cada renderização cria as suas funções, e cada uma lembra as variáveis daquela renderização: é a closure do E10a, a mochila, agora dentro do React.
 
 ---
 
@@ -183,7 +326,56 @@ const buscaAtrasada = useDebounce(busca, 300)
 - A busca no servidor vai usar `buscaAtrasada`: só muda depois da pausa
 - Enquanto as duas são diferentes, a pessoa ainda está digitando: "Buscando..."
 
-Quem recebe a `buscaAtrasada` é o próximo hook.
+Quem recebe a `buscaAtrasada` é o `useTarefas`, o hook das tarefas.
+
+---
+
+## useTarefas
+
+Se um hook cuidasse das tarefas, o que o App ainda precisaria dele?
+
+---
+
+## :icon[variable] useTarefas (1): o que entra e o que sai
+
+O **`useTarefas`** é o hook próprio que junta tudo o que fala de tarefas: os estados, o efeito que busca e as ações. Ele recebe a busca e devolve o que a tela precisa:
+
+```javascript
+// src/hooks/useTarefas.js
+import { useEffect, useState } from 'react'
+import { carregarTarefas } from '../api/tarefas.js'
+
+export function useTarefas(busca = '') {
+  const [tarefas, setTarefas] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [erro, setErro] = useState(null)
+  const [tentativa, setTentativa] = useState(0) // conta os "Tentar de novo"
+  // o efeito, recarregar e as funções do E23
+  return { tarefas, carregando, erro, recarregar,
+    adicionarTarefa, alternarConcluida, removerTarefa }
+}
+```
+
+- Entra a busca (sem busca, `''`); sai tudo o que a tela precisa para desenhar e para agir
+- `tarefas`, `carregando` e `erro` são os estados da aula 47, agora fora do `App`
+
+---
+
+## :icon[variable] useTarefas na prática
+
+```jsx
+const { tarefas, carregando, erro } = useTarefas('qui')
+```
+
+| Momento | `carregando` | `erro` | `tarefas` |
+|---|---|---|---|
+| logo depois de montar | `true` | `null` | `[]` |
+| a resposta chegou | `false` | `null` | 10 tarefas com "qui", como "quis ut nam facilis et officia qui" |
+| sem internet | `false` | `'Não foi possível carregar as tarefas.'` | `[]` |
+
+- Com `useTarefas()`, sem busca, chegam as 10 primeiras tarefas
+- Depois de `recarregar()`, o `carregando` volta a `true` e o efeito busca de novo
+- O `App` só lê esses três valores e escolhe o que desenhar
 
 ---
 
@@ -206,31 +398,9 @@ export async function carregarTarefas(busca, sinal) {
 }
 ```
 
+- O endereço junta os pedidos: `?` começa a lista, e `&` acrescenta mais um (`_limit=10` e `q=`)
 - `encodeURIComponent` protege espaços e acentos, como no `pesquisar` do E19
 - Busca vazia (`q=`) traz as 10 primeiras; os títulos são em latim: busque "qui" ou "dolor"
-
----
-
-## :icon[variable] useTarefas (1): o que entra e o que sai
-
-```javascript
-// src/hooks/useTarefas.js
-import { useEffect, useState } from 'react'
-import { carregarTarefas } from '../api/tarefas.js'
-
-export function useTarefas(busca = '') {
-  const [tarefas, setTarefas] = useState([])
-  const [carregando, setCarregando] = useState(true)
-  const [erro, setErro] = useState(null)
-  const [tentativa, setTentativa] = useState(0) // conta os "Tentar de novo"
-  // o efeito, recarregar e as funções do E23
-  return { tarefas, carregando, erro, recarregar,
-    adicionarTarefa, alternarConcluida, removerTarefa }
-}
-```
-
-- Entra a busca; sai tudo o que a tela precisa para desenhar e para agir
-- `tarefas`, `carregando` e `erro` são os estados da aula anterior, agora fora do `App`
 
 ---
 
@@ -254,6 +424,7 @@ export function useTarefas(busca = '') {
   }, [busca, tentativa])
 ```
 
+- É o efeito da aula 47, com a busca e a tentativa nas dependências
 - O efeito roda ao montar, a cada busca nova e a cada "Tentar de novo"
 - A limpeza cancela o pedido da busca anterior. O `useDebounce` corta os pedidos; o `abort` garante que uma resposta velha nunca cubra a nova: a dupla do E19
 
@@ -300,13 +471,22 @@ function App() {
 }
 ```
 
-Os hooks vêm no topo e em cadeia: o valor que um devolve é a entrada do outro. O `App` passou de mais de 70 para menos de 40 linhas.
+- As chaves em `const { tarefas, ... } = useTarefas(...)` são a desestruturação de objeto do E09b: pegam pelo nome o que o hook devolveu
+- Os hooks vêm no topo e em cadeia: o valor que um devolve é a entrada do outro
+
+O `App` passou de mais de 70 para menos de 40 linhas.
+
+---
+
+## Lógica, não dados
+
+Duas casas fazem a mesma receita de bolo. Comer um bolo diminui o outro?
 
 ---
 
 ## :icon[users] Um hook divide a lógica, não os dados
 
-Cada componente que chama `useTarefas()` ganha estados **próprios** e faz a sua busca:
+Um hook é uma receita. A mesma receita feita em duas cozinhas dá dois bolos: comer um não diminui o outro. Cada componente que chama `useTarefas()` ganha estados **próprios** e faz a sua busca:
 
 ```jsx
 function Resumo() {
@@ -323,15 +503,47 @@ No E42, a equipe cria hooks para a API do app (cada tela chama o seu) e usa um *
 
 ---
 
-## Erros comuns
+## :icon[users] Lógica ou dados na prática
 
-:::warning
-- Hook dentro de `if`, de `for`, de uma função de evento ou depois de um `return`: React perde a conta dos hooks
-- Passar `busca` em vez de `buscaAtrasada` ao `useTarefas`: o hook existe, mas cada letra vira uma requisição
-- Esquecer o `return () => clearTimeout(temporizador)`: todas as letras disparam, só que atrasadas
-- Esquecer `tentativa` nas dependências: "Tentar de novo" liga o "Carregando..." e nada mais acontece
-- Esperar que dois componentes com `useTarefas()` dividam a mesma lista
-:::
+Dois jeitos de mostrar o total de tarefas num `Resumo`:
+
+```jsx
+// jeito 1: o Resumo chama o hook de novo
+function Resumo() {
+  const { tarefas } = useTarefas()
+  return <p>{tarefas.length} tarefas</p>
+}
+
+// jeito 2: o App chama o hook uma vez e passa a lista por prop
+function Resumo({ tarefas }) {
+  return <p>{tarefas.length} tarefas</p>
+}
+<Resumo tarefas={tarefas} />
+```
+
+| A pessoa adiciona uma tarefa no `App` | O `Resumo` mostra | Aba Rede |
+|---|---|---|
+| jeito 1 | 10 tarefas: não muda, é outra lista | uma requisição a mais |
+| jeito 2 | 11 tarefas: é a mesma lista | nada a mais |
+
+---
+
+## Mensagens de erro
+
+O lint acende a luz antes de o app rodar. Você sabe ler o aviso?
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| O que aparece | Quer dizer | O que fazer |
+|---|---|---|
+| `Rendered more hooks than during the previous render` | hook depois de um `return` | todos os hooks no topo |
+| lint: `React Hook "..." is called conditionally` | hook dentro de `if` ou de um evento | chame sempre, no topo |
+| `does not provide an export named 'default'` | faltaram as chaves no `import` | `import { useTarefas } ...` |
+| uma requisição por letra | `useTarefas(busca)` | `useTarefas(buscaAtrasada)` |
+| todas as letras disparam, atrasadas | `useDebounce` sem limpeza | `return () => clearTimeout(temporizador)` |
+| "Tentar de novo" não busca | `tentativa` fora do array | `[busca, tentativa]` |
 
 ---
 
@@ -339,7 +551,7 @@ No E42, a equipe cria hooks para a API do app (cada tela chama o seu) e usa um *
 
 :::summary
 - Hook próprio é uma função sua, com nome começando por `use`, que chama outros hooks e tira lógica da tela
-- Regras: só no topo, só em componentes ou hooks, nome com `use`; React conta os hooks pela ordem
+- Regras: só no topo, só em componentes ou hooks, nome com `use`; o React conta os hooks pela ordem
 - `useDebounce` devolve um valor que só muda depois da pausa; a limpeza cancela o agendamento anterior
 - `useTarefas(busca)` busca, guarda `carregando` e `erro` e devolve `recarregar` e as ações; o `App` só desenha
 - Cada chamada de um hook tem estados próprios: o hook divide a lógica, não os dados

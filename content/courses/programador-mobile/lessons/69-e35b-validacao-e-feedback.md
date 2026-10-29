@@ -26,6 +26,19 @@ Programador Mobile · Encontro E35 · Aula 69 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **validação** | conferir se o que a pessoa digitou serve, antes de enviar |
+| **feedback** | a resposta do app ao que você fez: uma mensagem, uma cor, um "Enviando..." |
+| **perder o foco** (`onBlur`) | o momento em que o usuário sai do campo, tocando em outro lugar |
+| **máscara** | a função que arruma o texto enquanto a pessoa digita: `(11) 98765-4321` |
+| **função pura** | uma função que recebe dados e devolve um resultado, sem mexer em mais nada |
+| **`null`** | o valor que quer dizer "nada aqui"; nesta aula, "nenhum erro" |
+
+---
+
 ## "Dados inválidos"
 
 Você abre uma conta num app de banco. Preenche oito campos, toca em **Continuar** e recebe um alerta: "Dados inválidos". Qual dado? O que fazer? Você confere tudo, toca de novo e recebe o mesmo alerta.
@@ -40,13 +53,33 @@ Quando um app deveria avisar que o e-mail está errado: a cada letra, ao sair do
 
 ---
 
+## Validação
+
+O que o atendente confere na sua ficha antes de aceitar o cadastro?
+
+---
+
+## :icon[clipboard-check] Validação: conferir antes de enviar
+
+**Validação** é conferir os dados antes de enviar. Funciona como o atendente que confere a sua ficha no balcão: ele olha campo por campo e aponta o que falta, antes de aceitar.
+
+| Você digita | A validação responde |
+|---|---|
+| `ana@` no e-mail | Use o formato nome@exemplo.com |
+| nada no nome | Informe seu nome |
+| `ana@email.com` no e-mail | nada: está tudo certo |
+
+A resposta da validação é um **feedback**: o app conta o que aconteceu e o que fazer. Falta decidir **quando** conferir.
+
+---
+
 ## :icon[timer] Quando validar
 
 :::center
 ![Animação: uma linha do tempo do campo de e-mail; ao digitar ana@ nada aparece; ao sair do campo, o onBlur pinta a borda de vermelho e mostra Use o formato nome@exemplo.com; ao tocar em Criar conta, o onPress valida todos os campos](images/e35-quando-validar.svg)
 :::
 
-**`onBlur`** é o evento que o `TextInput` dispara quando perde o foco.
+**`onBlur`** é o evento que o `TextInput` dispara quando perde o foco: o usuário saiu do campo.
 
 A regra da Lojinha:
 
@@ -55,7 +88,15 @@ A regra da Lojinha:
 
 ---
 
+## Mensagens que ajudam
+
+Qual mensagem de erro de um app já deixou você sem saber o que fazer?
+
+---
+
 ## :icon[message-square] Mensagens que ajudam
+
+Uma mensagem de erro é como a luz do painel do carro: diz o que aconteceu e onde. No formulário, ela também diz como corrigir.
 
 | Ruim | Boa |
 |---|---|
@@ -73,9 +114,15 @@ Uma boa mensagem:
 
 ---
 
+## Regras fora da tela
+
+Se o login também pede e-mail, por que escrever a mesma regra duas vezes?
+
+---
+
 ## :icon[file-code] validar.js: a regra fora da tela
 
-O `src/utils/validar.js` veio do `lojinha-regras` com a pasta `src/`, no E30. Ele já tem o `ehCepValido` e as máscaras do E06. As regras do cadastro entram no fim dele:
+O `src/utils/validar.js` veio do `lojinha-regras` com a pasta `src/`, no E30. Ele já tem o `ehCepValido` e as máscaras do E06. As regras do cadastro entram no fim dele, como **funções puras**: recebem dados e devolvem um resultado, sem mexer na tela.
 
 ```javascript
 // src/utils/validar.js, depois do que veio do E06
@@ -89,13 +136,27 @@ export function validarSenha(senha) {
 }
 ```
 
-- São **funções puras**, como as do E07: recebem dados e devolvem um resultado, sem ler estado nem mudar a tela
 - `ehCepValido` responde sim ou não; `validarSenha` devolve a **mensagem de erro**, ou `null` quando está tudo certo, porque a tela precisa saber o que dizer
 - Fora do componente, a regra serve ao cadastro, ao login e à edição do perfil
 
 ---
 
+## :icon[list-ordered] As regras em português
+
+| Linha | O que ela diz |
+|---|---|
+| `export function validarObrigatorio(valor, rotulo)` | "esta regra recebe o valor e o nome do campo"; o `export` a põe na vitrine para a tela usar |
+| `valor.trim() === ''` | "sem os espaços das pontas, está vazio?" |
+| `` `Informe ${rotulo}` `` | a mensagem com o nome do campo: `Informe seu nome` |
+| `: null` | "se não, devolva `null`": nenhum erro |
+| `if (senha === '') return 'Crie uma senha'` | "senha vazia? devolva a mensagem e pare" |
+| `senha.length >= 8 ? null : '...'` | "8 caracteres ou mais? `null`; se não, a mensagem" |
+
+---
+
 ## :icon[mail] validarEmail
+
+O e-mail ganha uma regra com uma **expressão regular**, o molde de texto do E06:
 
 ```javascript
 const FORMATO_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -107,14 +168,26 @@ export function validarEmail(email) {
 }
 ```
 
-`FORMATO_EMAIL` é uma expressão regular, como a do CEP no E06. Duas peças são novas: `\s` é um espaço, e `[^\s@]` é uma classe com `^` dentro, que quer dizer "qualquer caractere **menos** espaço e `@`". Leia o molde assim: um trecho sem espaço nem `@`, um `@`, outro trecho, um ponto (`\.`) e mais um trecho.
-
 - `trim()` tira os espaços das pontas: o teclado às vezes põe um espaço depois da sugestão
 - O molde não garante que o e-mail existe; ele pega erros de digitação
 
 ---
 
-## :icon[table] Entradas e saídas
+## :icon[list-ordered] O molde do e-mail em português
+
+| Peça | O que ela diz |
+|---|---|
+| `^` e `$` | do início ao fim: o texto inteiro precisa seguir o molde (E06) |
+| `[^\s@]+` | um ou mais caracteres que **não** são espaço nem `@`. O `\s` é um espaço, e o `^` dentro dos colchetes quer dizer "menos" |
+| `@` | uma arroba |
+| `\.` | um ponto de verdade |
+| `FORMATO_EMAIL.test(limpo)` | "o texto segue o molde?": `true` ou `false` |
+
+Leia o molde inteiro assim: um trecho sem espaço nem `@`, um `@`, outro trecho, um ponto e mais um trecho. Só o `\s` e o `^` dentro dos colchetes são novidade; o resto você leu no CEP do E06.
+
+---
+
+## :icon[table] As regras na prática
 
 | Chamada | Devolve |
 |---|---|
@@ -129,9 +202,15 @@ export function validarEmail(email) {
 
 ---
 
+## Máscara
+
+Por que o formulário de papel já traz impressos os parênteses e o tracinho do telefone?
+
+---
+
 ## :icon[phone] A máscara de telefone já existe
 
-Uma **máscara** formata o texto enquanto o usuário digita. A do telefone você escreveu no E06, no mesmo `validar.js`:
+Uma **máscara** arruma o texto enquanto a pessoa digita, como os parênteses e o tracinho já impressos num formulário de papel: você escreve só os números. A do telefone você escreveu no E06, no mesmo `validar.js`:
 
 ```javascript
 export function mascararTelefone(texto) {
@@ -146,6 +225,25 @@ export function mascararTelefone(texto) {
 - Cada separador só aparece quando existe o dígito seguinte: é isso que deixa o usuário apagar
 
 No campo, ela roda a cada tecla: `onChangeText={(t) => setTelefone(mascararTelefone(t))}`. Não escreva outra em um arquivo novo: a regra do telefone mora num lugar só.
+
+---
+
+## :icon[phone] A máscara na prática
+
+O campo de celular do cadastro, com a máscara do E06 a cada tecla:
+
+```jsx
+<Campo rotulo="Celular" keyboardType="phone-pad" value={telefone}
+  onChangeText={(t) => setTelefone(mascararTelefone(t))} />
+```
+
+| O usuário | O campo mostra |
+|---|---|
+| digita `1198` | `(11) 98` |
+| digita os 11 dígitos, `11987654321` | `(11) 98765-4321` |
+| cola `(11) 98765-4321`, copiado de uma mensagem | `(11) 98765-4321`, igual |
+
+A máscara só olha os dígitos: digitado ou colado, com ou sem símbolos, o resultado é o mesmo.
 
 ---
 
@@ -173,9 +271,15 @@ Espaços e símbolos somem, o que passa de 11 dígitos é cortado e o hífen só
 
 ---
 
+## Erros como objeto
+
+Cinco campos, cinco erros possíveis: onde guardar tudo isso sem virar bagunça?
+
+---
+
 ## :icon[braces] Erros como objeto
 
-Com 5 campos, um `useState` para cada valor e outro para cada erro vira bagunça. Junte tudo em dois objetos com as mesmas chaves:
+Com 5 campos, um `useState` para cada valor e outro para cada erro vira bagunça. Junte tudo em dois **objetos** com as mesmas chaves, como duas fichas de cadastro iguais: na primeira, o que a pessoa digitou; na segunda, o problema de cada campo.
 
 ```jsx
 const VAZIO = { nome: '', email: '', telefone: '', senha: '', termos: false };
@@ -190,7 +294,7 @@ function alterar(campo, valor) {
 ```
 
 - `[campo]` é o colchete do E08 (`produto[campo]`), agora ao criar o objeto: o **valor** da variável vira o nome da chave, e `alterar('email', 'ana')` muda `valores.email`
-- O spread do E09 copia o objeto e troca só uma chave
+- O spread do E09 tira uma cópia do objeto e troca só uma chave
 - No campo: `onChangeText={(t) => alterar('email', t)}`
 
 ---
@@ -214,7 +318,10 @@ export function temErros(erros) {
 }
 ```
 
-A função devolve um objeto de erros com as mesmas chaves de `valores`; `temErros` junta o `Object.values` do E08 ao `some` do E09. Ao sair de um campo, a tela pega só a chave dele:
+- `validarCadastro` devolve a ficha de erros, com as mesmas chaves de `valores`
+- `temErros` junta o `Object.values` do E08 ao `some` do E09: pega as respostas da ficha e pergunta se alguma é uma mensagem. O `Boolean` conta o `null` como "não"
+
+Ao sair de um campo, a tela confere tudo e pega só a chave dele:
 
 ```jsx
 function aoSair(campo) {
@@ -226,7 +333,35 @@ function aoSair(campo) {
 
 ---
 
+## :icon[braces] A ficha de erros na prática
+
+```javascript
+validarCadastro({ ...VAZIO, email: 'ana@' }).email;
+// 'Use o formato nome@exemplo.com'
+
+temErros(validarCadastro(VAZIO)); // true: tudo em branco
+temErros({});                     // false: nenhum erro ainda
+```
+
+O objeto `erros` ao longo do preenchimento do e-mail:
+
+| Momento | `erros` | Na tela |
+|---|---|---|
+| ao abrir | `{}` | nenhuma mensagem |
+| sai do e-mail com `ana@` | `{ email: 'Use o formato nome@exemplo.com' }` | a mensagem embaixo do e-mail |
+| volta e digita | `{ email: null }` | a mensagem some |
+
+---
+
+## Erro no Campo
+
+Onde o erro do e-mail deveria aparecer: num alerta ou embaixo do e-mail?
+
+---
+
 ## :icon[component] Campo com a prop erro
+
+O `Campo` do UI kit (E33) ganha uma prop nova, **`erro`**: a mensagem que aparece embaixo da caixa. Como toda prop, é o pedido que a tela faz à peça: "mostre esta mensagem".
 
 ```jsx
 export default function Campo({ rotulo, erro, style, ...rest }) {
@@ -250,6 +385,24 @@ export default function Campo({ rotulo, erro, style, ...rest }) {
 - Com erro, a borda fica na cor `perigo` e mais grossa, e a mensagem aparece embaixo
 - Sem erro, o ternário devolve `null` e nada é desenhado
 - No fim do arquivo, um estilo novo: `erro: { fontSize: fonte.pequena, fontFamily: familia.regular }`; o `gap` do `campo` já afasta a mensagem da caixa
+
+---
+
+## :icon[component] O Campo com erro na prática
+
+```jsx
+<Campo rotulo="Nome" />
+<Campo rotulo="Nome" erro="Informe seu nome" />
+<Campo rotulo="E-mail" erro={erros.email} />
+```
+
+| Chamada | Na tela |
+|---|---|
+| sem `erro` | a caixa com a borda comum, sem mensagem |
+| `erro="Informe seu nome"` | borda na cor `perigo`, mais grossa, e "Informe seu nome" embaixo |
+| `erro={erros.email}` | depende da ficha: com `null`, nada; com um texto, a mensagem aparece |
+
+Ponha os dois primeiros na `Galeria` do E33 e troque o tema do celular: a cor `perigo` muda junto.
 
 ---
 
@@ -277,9 +430,15 @@ export default function Campo({ rotulo, erro, style, ...rest }) {
 
 ---
 
+## O envio
+
+O formato está certo, mas o e-mail já tem conta. Quem sabe disso?
+
+---
+
 ## :icon[server] O servidor também recusa
 
-Formato certo não basta: só o servidor sabe se o e-mail já tem conta. Até a Lojinha ter uma API de cadastro, `src/servicos/conta.js` faz esse papel:
+O **servidor** é o computador da loja, que guarda as contas. Ele é a cozinha do restaurante: só a cozinha sabe se o prato ainda existe. Do mesmo jeito, formato certo não diz se o e-mail já tem conta. Até a Lojinha ter uma API de cadastro, `src/servicos/conta.js` faz o papel do servidor:
 
 ```javascript
 import { ErroDeNegocio } from '../modelos/erros.js';
@@ -298,12 +457,13 @@ export async function criarConta(valores) {
 ```
 
 - `esperar` é o do E18, e `ErroDeNegocio`, o do E17: os dois vieram com a pasta `src/`
-- A validação **devolve** mensagens, porque o formulário mostra todos os erros de uma vez. O servidor **lança**, porque a recusa interrompe o envio, como o `freteDoCep` do E17
 - Com uma API de verdade, o corpo da função vira um `pedir` do E19, e a tela não muda
 
 ---
 
 ## :icon[send] Enviando: try, catch e finally
+
+O `try` é a rede de proteção do trapezista (E17): se o servidor recusar, o app cai no `catch` em vez de quebrar. O `finally` roda sempre, com queda ou sem queda.
 
 ```jsx
 async function enviar() {
@@ -324,20 +484,54 @@ async function enviar() {
 ```
 
 - No rodapé: `<Botao titulo={enviando ? 'Enviando...' : 'Criar conta'} onPress={enviar} desabilitado={enviando} />`. O botão desabilitado impede o toque duplo, que criaria duas contas
-- O `finally` do E17 garante que o botão volta, mesmo quando o servidor recusa
 - No sucesso, `setValores(VAZIO)` limpa o formulário
 
 ---
 
-## :icon[bug] Erros comuns
+## :icon[list-ordered] O envio em português
 
-:::warning
-- `onBlur={aoSair('email')}` sem arrow function: valida na renderização, muda o estado, renderiza de novo... e o app quebra com "Too many re-renders"
-- Validar no `onChangeText`: o campo fica vermelho na primeira letra
-- `erros.email = 'Informe seu e-mail'`: mudar o objeto direto não redesenha a tela; use `setErros` com spread
-- Contar os caracteres do telefone mascarado: `'(11) 98765-4321'` tem 15, não 11. Conte os dígitos
-- `setEnviando(false)` no fim do `try`, sem `finally`: quando o servidor recusa, o botão fica em "Enviando..." para sempre
-:::
+| Linha | O que ela diz |
+|---|---|
+| `validarCadastro` e `setErros(novos)` | "confira tudo e mostre os erros" |
+| `if (temErros(novos)) return` | "tem erro? pare aqui, sem chamar o servidor" |
+| `setEnviando(true)` | "o botão passa a dizer Enviando... e trava" |
+| `try { ... await criarConta(...) }` | "tente criar a conta e espere a resposta" |
+| `catch (erro)` | "recusou? um `ErroDeNegocio` vira mensagem no campo; outro erro é bug: relance" |
+| `finally` | "com ou sem erro, destrave o botão" |
+
+A validação **devolve** mensagens, porque o formulário mostra todos os erros de uma vez. O servidor **lança**, porque a recusa interrompe o envio, como o `freteDoCep` do E17.
+
+---
+
+## :icon[send] O envio na prática
+
+Três tentativas de criar a conta com o `enviar` da aula e o `criarConta` simulado:
+
+| Você preenche e toca em Criar conta | O que acontece |
+|---|---|
+| nada | todas as mensagens aparecem de uma vez, e o servidor nem é chamado |
+| tudo certo, com `bia@email.com` | "Enviando...", com o botão apagado; depois, o alerta "Conta criada" com o nome |
+| tudo certo, com `ana@email.com` | "Enviando..."; depois de 1,5 s, a recusa aparece embaixo do e-mail e o botão destrava |
+
+A recusa é a mensagem do `ErroDeNegocio`: "Este e-mail já tem conta. Use outro ou entre com ele." Toque duas vezes rápido no botão: o segundo toque não faz nada, porque ele está desabilitado.
+
+---
+
+## Erros comuns
+
+O botão ficou em "Enviando..." para sempre. O que deu errado?
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| O que aparece | Quer dizer | O que fazer |
+|---|---|---|
+| `Too many re-renders` ao abrir | sem arrow function, `aoSair('email')` roda ao desenhar e muda o estado, sem fim | `onBlur={() => aoSair('email')}` |
+| o campo fica vermelho na primeira letra | a validação está no `onChangeText` | validar no `onBlur` |
+| o erro não aparece | `erros.email = '...'` muda o objeto direto e não redesenha | `setErros` com spread |
+| telefone completo dado como incompleto | contou os 15 caracteres de `'(11) 98765-4321'` | contar os dígitos: são 11 |
+| botão preso em "Enviando..." | `setEnviando(false)` no fim do `try`: a recusa pula a linha | levar a linha para o `finally` |
 
 ---
 

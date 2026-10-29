@@ -26,6 +26,19 @@ Programador Mobile · Encontro E27 · Aula 53 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **estilo** | a aparência de um componente: cor, tamanho, espaço, alinhamento |
+| **`StyleSheet`** | (*folha de estilos*) o lugar do arquivo onde cada estilo ganha um nome |
+| **camelCase** | palavras juntas, cada nova começando com maiúscula: `fontSize` |
+| **Flexbox** | o jeito de organizar as caixas da tela: direção, alinhamento e espaço |
+| **eixo** | a linha em que os itens se enfileiram: na horizontal ou na vertical |
+| **padding** e **margin** | o espaço por dentro e o espaço por fora de uma caixa |
+
+---
+
 ## Onde está o CSS?
 
 No E22, no `minhas-tarefas` web, você criou `CartaoTarefa.module.css` e usou `className`. No `minhas-tarefas-mobile` isso não existe: o celular não tem navegador, e nenhuma regra CSS chega até ele.
@@ -40,7 +53,33 @@ A resposta do React Native: estilos são **objetos JavaScript**, escritos no mes
 
 ---
 
+## StyleSheet
+
+Onde você guarda as roupas, e como acha a certa na hora de sair?
+
+---
+
 ## StyleSheet.create e a prop style
+
+Um **estilo** é a roupa do componente: cor, tamanho, espaço. O `StyleSheet.create` é o guarda-roupa do arquivo: cada estilo ganha um nome, e a prop `style` veste o componente com ele.
+
+```jsx
+const estilos = StyleSheet.create({
+  titulo: { fontSize: 24 },
+});
+
+<Text style={estilos.titulo}>Minhas Tarefas</Text>
+```
+
+- `StyleSheet.create` recebe um objeto: cada chave (aqui, `titulo`) é um estilo nomeado
+- A prop `style` recebe um desses estilos: `style={estilos.titulo}`
+- O `StyleSheet` vem do `react-native`, no mesmo `import` do `View` e do `Text`
+
+---
+
+## :icon[layers] StyleSheet na prática
+
+Uma tela com dois estilos: o fundo da tela e o título.
 
 ```jsx
 import { View, Text, StyleSheet } from 'react-native';
@@ -59,15 +98,36 @@ const estilos = StyleSheet.create({
 });
 ```
 
-- `StyleSheet.create` recebe um objeto: cada chave (`tela`, `titulo`) é um estilo nomeado
-- A prop `style` recebe um desses estilos: `style={estilos.titulo}`
+- `tela` dá espaço de 16 por dentro e fundo cinza bem claro; `titulo`, letra 24 em negrito
 - A constante fica **no fim do arquivo**, e funciona porque só é usada quando o componente desenha a tela
+
+Na tela: "Minhas Tarefas" grande e em negrito, afastado das bordas, sobre um fundo quase branco.
+
+---
+
+## camelCase
+
+Como fica `font-size` sem o hífen, com as palavras emendadas?
 
 ---
 
 ## camelCase e sem unidades
 
-As propriedades são as do CSS, com três ajustes: nomes em **camelCase**, números **sem unidade** e valores de texto entre aspas.
+As propriedades são as do CSS, com três ajustes:
+
+- Nomes em **camelCase**: palavras juntas, cada nova com maiúscula, como as corcovas de um camelo. `font-size` vira `fontSize`
+- Números **sem unidade**: `18`, e não `18px`
+- Valores de texto entre aspas: `'bold'`, `'#1e293b'`
+
+:::info
+O número não é pixel: o aparelho o ajusta à densidade da tela, quantos pontos de luz cabem em cada centímetro. `fontSize: 18` tem o mesmo tamanho aparente num celular simples e num topo de linha.
+:::
+
+---
+
+## :icon[arrow-left-right] camelCase na prática
+
+Seis regras de CSS traduzidas para o `StyleSheet`:
 
 | CSS | StyleSheet |
 |---|---|
@@ -78,13 +138,31 @@ As propriedades são as do CSS, com três ajustes: nomes em **camelCase**, núme
 | `font-weight: bold;` | `fontWeight: 'bold'` |
 | `text-align: center;` | `textAlign: 'center'` |
 
-:::info
-O número não é pixel: é uma unidade independente de densidade, que o aparelho ajusta. `fontSize: 18` tem o mesmo tamanho aparente em um celular simples e em um topo de linha.
-:::
+Repare em cada linha: o hífen sai e a letra seguinte vira maiúscula; o `px` some; a cor e o `bold` ganham aspas; o `;` do fim vira vírgula entre as propriedades.
+
+---
+
+## Cores e espaçamento
+
+Numa mudança, para que serve o plástico-bolha dentro da caixa?
 
 ---
 
 ## Cores, bordas e espaçamento
+
+Pense numa caixa de mudança: o **`padding`** é o plástico-bolha por dentro, entre a caixa e o objeto; a **`margin`** é a distância entre esta caixa e as outras.
+
+| Propriedade | O que faz |
+|---|---|
+| `backgroundColor` | a cor de fundo |
+| `padding` | espaço por dentro, entre a borda e o conteúdo |
+| `margin` | espaço por fora, entre a caixa e o que está em volta |
+| `borderWidth` e `borderColor` | a largura e a cor da borda; sem largura, não há borda |
+| `borderRadius` | cantos arredondados |
+
+---
+
+## :icon[package] Espaçamento na prática
 
 Um cartão: fundo branco, cantos arredondados, borda fina, espaço por dentro e por fora.
 
@@ -112,9 +190,15 @@ Na tela: um retângulo branco com cantos redondos e contorno cinza-claro, afasta
 
 ---
 
+## Flexbox
+
+Numa prateleira, de que jeitos dá para arrumar três caixas?
+
+---
+
 ## Flexbox: flexDirection
 
-Toda `View` já é um contêiner **Flexbox**. `flexDirection` diz em que direção os filhos se enfileiram.
+O **Flexbox** organiza as caixas como numa prateleira: você escolhe a direção, o alinhamento e o espaço entre elas. Toda `View` já é uma prateleira para os seus filhos. A propriedade `flexDirection` (direção) diz em que sentido eles se enfileiram: `row` (linha), lado a lado, ou `column` (coluna), um embaixo do outro.
 
 ```jsx
 <View style={{ flexDirection: 'row' }}>
@@ -133,7 +217,7 @@ No React Native o padrão é `column`: os filhos empilham um abaixo do outro. Na
 
 ## justifyContent: o eixo principal
 
-`justifyContent` distribui os filhos **ao longo da direção** escolhida em `flexDirection`. Em `row`, é na horizontal; em `column`, na vertical.
+`justifyContent` (distribuir o conteúdo) espalha os filhos **ao longo da direção** escolhida em `flexDirection`: é o **eixo principal**. Em `row`, ele é horizontal; em `column`, vertical.
 
 :::center
 ![Animação: numa View com flexDirection row, os textos Estudar React Native e alta passam por flex-start, center e flex-end e param em space-between, um em cada ponta, com o espaço vazio no meio](images/e27-justify-content.svg)
@@ -148,13 +232,13 @@ No React Native o padrão é `column`: os filhos empilham um abaixo do outro. Na
 
 Na tela: o título grudado à esquerda, a prioridade grudada à direita e o espaço vazio no meio.
 
-Valores: `flex-start` (padrão, tudo no começo), `center` (tudo junto no centro), `flex-end` (tudo no fim) e `space-between` (primeiro no começo, último no fim, espaço igual entre eles).
+Valores: `flex-start` (padrão, tudo no começo), `center` (tudo junto no centro), `flex-end` (tudo no fim) e `space-between` (espaço entre: primeiro no começo, último no fim).
 
 ---
 
 ## alignItems: o eixo cruzado
 
-`alignItems` alinha os filhos no eixo **perpendicular** à direção. Em `row`, alinha na vertical; em `column`, na horizontal.
+`alignItems` (alinhar os itens) alinha os filhos no **eixo cruzado**, a linha que atravessa a direção. Em `row`, alinha na vertical; em `column`, na horizontal.
 
 :::center
 ![Diagrama dos eixos: em row, justifyContent age na horizontal e alignItems na vertical; em column, que é o padrão, os eixos trocam e justifyContent age na vertical e alignItems na horizontal](images/e27-eixos-flexbox.svg)
@@ -177,9 +261,54 @@ Em uma `View` comum (direção `column`), `alignItems: 'center'` centraliza os f
 
 ---
 
+## :icon[layout-grid] Flexbox na prática
+
+Três arrumações que aparecem em quase todo app:
+
+| Você quer | Estilo da `View` de fora |
+|---|---|
+| imagem e título lado a lado, alinhados pelo meio (um cabeçalho) | `flexDirection: 'row', alignItems: 'center'` |
+| título à esquerda e prioridade à direita (a linha de um cartão) | `flexDirection: 'row', justifyContent: 'space-between'` |
+| um título no meio da largura da tela | `alignItems: 'center'`, sem mudar a direção |
+
+O segundo caso, inteiro:
+
+```jsx
+<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+  <Text style={{ fontSize: 18 }}>Revisar Flexbox</Text>
+  <Text style={{ fontSize: 12 }}>media</Text>
+</View>
+```
+
+Na tela: "Revisar Flexbox" à esquerda, "media" à direita, os dois na mesma altura do meio. As três propriedades juntas: direção, espaço e alinhamento.
+
+---
+
+## Ocupar o espaço
+
+Se sobra um vão na prateleira, como uma caixa ocupa o vão inteiro?
+
+---
+
 ## flex: 1 para ocupar o espaço
 
-Uma `View` tem só a altura do seu conteúdo. Com `flex: 1`, ela **cresce** até preencher o espaço que sobra no pai.
+Uma `View` tem só a altura do seu conteúdo. Com `flex: 1`, ela **cresce** até preencher o espaço que sobra no pai, como uma caixa que estica até ocupar o vão vazio da prateleira.
+
+```jsx
+<View style={{ flex: 1 }}>
+  {/* ocupa todo o espaço que sobrar */}
+</View>
+```
+
+:::info
+Sem `flex: 1` no `SafeAreaView`, ele envolve só o conteúdo e a cor de fundo não cobre a tela inteira. É o primeiro estilo de toda tela.
+:::
+
+---
+
+## :icon[arrow-down] flex: 1 na prática
+
+Dois usos de uma vez: a tela inteira e a lista que empurra o botão.
 
 ```jsx
 <SafeAreaView style={{ flex: 1 }}>
@@ -192,11 +321,10 @@ Uma `View` tem só a altura do seu conteúdo. Com `flex: 1`, ela **cresce** até
 </SafeAreaView>
 ```
 
-Na tela: a lista estica até embaixo e **empurra o botão para o rodapé**.
+- O `SafeAreaView` com `flex: 1` ocupa a tela toda: uma cor de fundo nele pinta tudo
+- A `View` da lista com `flex: 1` estica e ocupa o que sobra depois do botão
 
-:::info
-Sem `flex: 1` no `SafeAreaView`, ele envolve só o conteúdo e a cor de fundo não cobre a tela inteira. É o primeiro estilo de toda tela.
-:::
+Na tela: a lista estica até embaixo e **empurra o botão para o rodapé**.
 
 ---
 
@@ -220,9 +348,15 @@ Quais três propriedades resolvem isso, e por quê?
 
 ---
 
+## O CartaoTarefa
+
+No E22, que props o CartaoTarefa recebia?
+
+---
+
 ## Exemplo: CartaoTarefa mobile
 
-A versão mobile do `CartaoTarefa`, com as mesmas props da versão web do E22 (`titulo`, `prioridade`, `concluida`). Em `src/components/CartaoTarefa.js`:
+A versão mobile do `CartaoTarefa`, com as mesmas props da versão web do E22 (`titulo`, `prioridade`, `concluida`): o pedido que o pai faz à peça. Em `src/components/CartaoTarefa.js`:
 
 ```jsx
 import { View, Text, Pressable, StyleSheet } from 'react-native';
@@ -242,7 +376,8 @@ export default function CartaoTarefa({ titulo, prioridade, concluida }) {
 }
 ```
 
-A `View` de dentro, `linha`, existe só para colocar título e prioridade lado a lado.
+- A `View` de dentro, `linha`, existe só para colocar título e prioridade lado a lado
+- O "Concluir", por enquanto, só escreve `concluir` no terminal; ele ganha função no E28
 
 ---
 
@@ -274,9 +409,15 @@ Na tela: um cartão branco de cantos redondos; na primeira linha, o título em n
 
 ---
 
+## Estilos em array
+
+Camiseta e casaco: quem olha para você vê qual dos dois?
+
+---
+
 ## Combinando estilos com array
 
-A prop `style` também aceita um **array**. Os estilos se somam e, em caso de conflito, o último vence. Um valor `false` é ignorado: com o `&&` do E13, o mesmo da lista vazia no E22, você liga um estilo por condição:
+A prop `style` também aceita um **array**: uma lista de estilos, vestidos em camadas. Eles se somam e, quando dois mexem na mesma propriedade, o último vence, como a roupa de cima. Um valor `false` é ignorado: com o `&&` do E13, o mesmo da lista vazia no E22, você liga um estilo por condição.
 
 ```jsx
 <View style={[estilos.cartao, concluida && estilos.concluida]}>
@@ -290,13 +431,25 @@ const estilos = StyleSheet.create({
 });
 ```
 
-Para destacar pela prioridade, a mesma ideia com uma comparação:
+Em português: "vista o `cartao`; se `concluida` for verdadeiro, vista também o `concluida` por cima". Se for falso, o `&&` entrega `false`, e o React Native ignora.
+
+---
+
+## Estilos em array na prática
+
+Três cartões, com os estilos `cartao`, `concluida` e `alta` do `StyleSheet.create`:
 
 ```jsx
 <View style={[estilos.cartao, prioridade === 'alta' && estilos.alta]}>
 ```
 
-Na tela: o cartão concluído fica meio transparente; a tarefa alta ganha uma faixa vermelha na borda esquerda, e o texto "alta" continua lá para quem não distingue cores.
+| O cartão | O array vira | Na tela |
+|---|---|---|
+| concluído | `[cartao, concluida]` | meio transparente (`opacity: 0.5`) |
+| de prioridade `alta` | `[cartao, alta]` | uma faixa vermelha de 4 na borda esquerda |
+| comum | `[cartao, false]` | só o `cartao`: o `false` é ignorado |
+
+O `prioridade === 'alta'` dá `true` ou `false`, e o `&&` faz o resto. O texto "alta" continua no cartão, para quem não distingue cores.
 
 ---
 
@@ -319,7 +472,7 @@ Nomeie cada estilo pelo **papel** que ele cumpre, não pela aparência. Se a cor
 ## :icon[bug] Erros comuns
 
 :::warning
-- `font-size` com hífen: dentro de um objeto JavaScript isso é erro de sintaxe. Escreva `fontSize`
+- `font-size` com hífen: dentro de um objeto JavaScript, isso é erro de sintaxe (`Unexpected token`). Escreva `fontSize`
 - Unidade `px`: `fontSize: '18px'` não funciona. Escreva `fontSize: 18`
 - Esquecer que o padrão é `column`: os itens empilham e parece que o Flexbox "não funcionou"
 - `style="padding: 16"` como texto: `style` recebe um objeto ou um array, nunca uma string
@@ -363,7 +516,7 @@ No repositório `gota`, ainda com valores fixos:
 
 - `SafeAreaProvider` e `SafeAreaView` com `flex: 1`; a [gota.png](materiais/projeto-5/gota.png) do curso em `assets/`
 - `Cabecalho`, `CartaoProgresso` (props `total` e `meta`) e `BotaoCopo` (prop `ml`) em `src/components/`
-- Barra de progresso com duas `View`, o trilho e o preenchimento; a largura do preenchimento em porcentagem, como texto: `'60%'`
+- Barra de progresso com duas `View`: o trilho, o fundo da barra, e o preenchimento, a parte colorida dentro dele. A largura do preenchimento vai em porcentagem, como texto: `'60%'`
 - Três `BotaoCopo` lado a lado: 200, 300 e 500 ml
 - `StyleSheet.create` no fim de cada arquivo
 

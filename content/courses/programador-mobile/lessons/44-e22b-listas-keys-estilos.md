@@ -18,12 +18,25 @@ Programador Mobile · Encontro E22 · Aula 44 de 89
 ## O que você vai aprender
 
 :::goal
-- Gerar um cartão por tarefa com o `map` do E09a
+- Gerar um cartão por tarefa com o `map` do E09
 - Dar uma `key` a cada item da lista e entender por que o React pede
 - Filtrar e ordenar antes de desenhar, sem mexer na prop
 - Mostrar ou esconder trechos da tela com `&&`, ternário e return antecipado
 - Estilizar o `CartaoTarefa` com CSS Modules
 :::
+
+---
+
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **renderizar** | desenhar na tela; o React renderiza o que o componente devolve |
+| **lista** | vários itens desenhados a partir de um array, um componente por item |
+| **key** | do inglês, "chave": o crachá único de cada item da lista |
+| **renderização condicional** | mostrar ou esconder um trecho da tela conforme uma condição |
+| **CSS Module** | um arquivo de estilo cujas classes valem só para um componente |
+| **classe dinâmica** | uma classe CSS escolhida pelo código, conforme os dados |
 
 ---
 
@@ -36,7 +49,7 @@ No `minhas-tarefas`, cada tarefa hoje é uma tag escrita à mão:
 <CartaoTarefa titulo="Fazer compras" prioridade="baixa" />
 ```
 
-Num app de verdade, as tarefas chegam de um formulário (E23) ou de um servidor (E24): você não sabe quantas serão. Por isso elas viram **dados**, um array de objetos como o catálogo da Lojinha no E08b:
+Num app de verdade, as tarefas chegam de um formulário (E23) ou de um servidor (E24): você não sabe quantas serão. Por isso elas viram **dados**, um array de objetos como o catálogo da Lojinha no E08:
 
 ```javascript
 const tarefas = [
@@ -49,14 +62,20 @@ const tarefas = [
 Essa forma acompanha o app até o React Native, no E29.
 
 :::question
-Qual método do E09a transforma cada item de um array em outra coisa, sem mudar o tamanho?
+Qual método do E09 transforma cada item de um array em outra coisa, sem mudar o tamanho?
 :::
+
+---
+
+## Listas com map
+
+Numa linha de produção, o que entra e o que sai?
 
 ---
 
 ## :icon[arrow-right] map gerando JSX
 
-No E09a, o `map` devolvia um texto por item. Se a função devolve JSX, o resultado é um array de elementos, e o React sabe desenhar um array: um atrás do outro.
+O `map` é a linha de produção do E09: cada item entra e sai transformado, na mesma quantidade. Se a função devolve JSX, cada tarefa entra como objeto e sai como um cartão. O React sabe desenhar um array de elementos: um atrás do outro.
 
 ```jsx
 function ListaTarefas({ tarefas }) {
@@ -74,25 +93,39 @@ function ListaTarefas({ tarefas }) {
 }
 ```
 
-Os parênteses em `(t) => ( ... )` só agrupam o JSX de várias linhas: é a arrow com retorno implícito do E07b.
+- `tarefas.map((t) => ( ... ))`: "para cada tarefa `t`, devolva um `CartaoTarefa`"
+- `titulo={t.titulo}`: passa o título daquela tarefa como prop
+- Os parênteses em `(t) => ( ... )` só agrupam o JSX de várias linhas: é a arrow com retorno implícito do E07
 
 ---
 
-## Três tarefas, três cartões
+## :icon[arrow-right] Listas na prática
 
 :::center
 ![Animação: o .map() percorre o array tarefas e, a cada volta, devolve um CartaoTarefa com o titulo e a prioridade do item; três itens viram três cartões](images/e22-map-cartoes.svg)
 :::
 
-A cada volta, o `.map()` recebe uma tarefa `t` e devolve um `<CartaoTarefa />` com os dados dela. Três tarefas no array, três cartões na tela. Trinta tarefas, trinta cartões, com o mesmo código.
+A cada volta, o `.map()` recebe uma tarefa `t` e devolve um `<CartaoTarefa />` com os dados dela:
+
+| No array | Na tela |
+|---|---|
+| 3 tarefas | 3 cartões |
+| 30 tarefas | 30 cartões, com o mesmo código |
+| `[]`, nenhuma | nenhum cartão |
 
 Só falta um detalhe: o console mostra um aviso sobre `key`.
 
 ---
 
-## :icon[key-round] key: a etiqueta de cada item
+## A key
 
-Em toda lista, o React pede uma prop **key** única em cada item. É assim que ele reconhece quem é quem quando a lista muda: item removido, inserido ou reordenado.
+Num evento com cem pessoas, como a organização sabe quem é quem?
+
+---
+
+## :icon[key-round] key: o crachá de cada item
+
+Em toda lista, o React pede uma prop **key** única em cada item. A `key` é o crachá: cada item tem o seu, e é por ele que o React reconhece quem é quem quando a lista muda (item removido, inserido ou reordenado).
 
 ```jsx
 {tarefas.map((t) => (
@@ -112,15 +145,15 @@ Sem `key`, o console avisa: `Each child in a list should have a unique "key" pro
 
 ---
 
-## Por que o id, e não o índice
+## :icon[key-round] Por que o id, e não o índice
 
-O `map` também entrega a posição: `tarefas.map((t, i) => ...)`. Usar `key={i}` parece fácil, mas o índice identifica a **posição**, não a tarefa.
+O `map` também entrega a posição: `tarefas.map((t, i) => ...)`. Mas o índice é o lugar na fila, não o crachá: ele identifica a **posição**, não a tarefa.
 
 :::center
 ![Diagrama: ao remover a primeira tarefa, com key igual ao id as outras mantêm a key (2 e 3); com key igual ao índice todas mudam de key (1 vira 0, 2 vira 1)](images/e22-key-id-indice.svg)
 :::
 
-Com `key={i}`, ao remover, inserir no início ou reordenar, os cartões trocam de conteúdo e o React redesenha todos; com `key={t.id}`, cada cartão acompanha sua tarefa. `key={Math.random()}` é pior: muda a cada desenho.
+Com `key={i}`, ao remover, inserir no início ou reordenar, os cartões trocam de conteúdo, e o React redesenha todos. Com `key={t.id}`, cada cartão acompanha a sua tarefa. `key={Math.random()}` é pior: muda a cada desenho.
 
 :::tip
 Regra prática: `key` é o `id` do dado. Índice só quando a lista nunca muda de ordem nem perde itens.
@@ -128,9 +161,31 @@ Regra prática: `key` é o `id` do dado. Índice só quando a lista nunca muda d
 
 ---
 
+## Preparar os dados
+
+Para fazer um bolo, você peneira a farinha antes ou depois de assar?
+
+---
+
 ## :icon[funnel] Filtrar e ordenar antes de desenhar
 
-A tela mostra os dados do jeito que você os preparar. Antes do `return`, use o `filter` do E09a e o spread do E09b:
+A tela mostra os dados do jeito que você os preparar. Antes do `return`, passe a lista pela peneira do E09, o `filter`: fica só o que passa no teste.
+
+```jsx
+const pendentes = tarefas.filter((t) => !t.concluida)
+```
+
+Em português: "das tarefas, fique só com as não concluídas". O `!` quer dizer "não". Para juntar duas listas numa ordem nova, use o spread do E09: `[...pendentes, ...concluidas]`.
+
+:::warning
+`tarefas.sort(...)` aqui dentro muda o array do pai, e props são somente leitura. Como no E08, copie antes: `[...tarefas].sort(...)`.
+:::
+
+---
+
+## :icon[funnel] Preparar os dados na prática
+
+Pendentes primeiro, com o contador em cima:
 
 ```jsx
 function ListaTarefas({ tarefas }) {
@@ -149,11 +204,7 @@ function ListaTarefas({ tarefas }) {
 }
 ```
 
-O contador de pendentes, que no E21 podia mentir, aqui não mente: ele é calculado dos mesmos dados a cada desenho.
-
-:::warning
-`tarefas.sort(...)` aqui dentro muda o array do pai, e props são somente leitura. Como no E08a, copie antes: `[...tarefas].sort(...)`.
-:::
+Com as três tarefas do começo da aula, a tela mostra "Pendentes: 2" e os cartões nesta ordem: Estudar React, Ir à academia, Fazer compras. O contador, que no E21 podia mentir, aqui não mente: ele sai dos mesmos dados a cada desenho.
 
 ---
 
@@ -163,7 +214,7 @@ O contador de pendentes, que no E21 podia mentir, aqui não mente: ele é calcul
 No `ListaTarefas`, mostre só as tarefas de prioridade alta e, acima delas, o texto "Urgentes: 2" com o número certo. Use `filter` e `map`, sem alterar `tarefas`.
 :::
 
-:::info Resposta
+:::tip Resposta
 ```jsx
 const urgentes = tarefas.filter((t) => t.prioridade === 'alta')
 
@@ -179,9 +230,29 @@ O `filter` devolve um array novo; `tarefas` continua com todas. A `key` continua
 
 ---
 
+## Mostrar ou esconder
+
+Numa bifurcação da estrada, quem escolhe o caminho?
+
+---
+
+## :icon[split] Renderização condicional
+
+**Renderização condicional** é mostrar ou esconder um trecho da tela conforme uma condição. É a bifurcação do `if`, do E07, agora na tela: a condição escolhe o caminho. São três formas:
+
+| Situação | Use |
+|---|---|
+| um trecho aparece ou não | `&&` |
+| um trecho ou outro | ternário |
+| o componente inteiro muda | `if` com `return` antes do JSX |
+
+O React não desenha `false`, `null` nem `undefined`. Por isso um componente também pode devolver `null`: não desenha nada.
+
+---
+
 ## :icon[eye] Mostrar ou nada: &&
 
-Lista vazia não deve ficar em branco. É o `&&` do E13a: se a esquerda é falsa, ele devolve a esquerda e para; se é verdadeira, devolve o JSX da direita.
+Lista vazia não deve ficar em branco. É o `&&` do E13: se a esquerda é falsa, ele devolve a esquerda e para; se é verdadeira, devolve o JSX da direita.
 
 ```jsx
 function ListaTarefas({ tarefas }) {
@@ -196,17 +267,17 @@ function ListaTarefas({ tarefas }) {
 }
 ```
 
-O React não desenha `false`, `null` nem `undefined`. Com o array vazio, o `map` não gera cartão e só o aviso aparece.
+Com o array vazio, o `map` não gera cartão, e só o aviso aparece. Com tarefas, o aviso some.
 
 :::warning
-O `0` ele desenha. `{tarefas.length && ...}` com a lista vazia mostra um `0` solto: é a armadilha do zero do E13a. Escreva a condição completa, `=== 0` ou `> 0`.
+O `0` ele desenha. `{tarefas.length && ...}` com a lista vazia mostra um `0` solto: é a armadilha do zero do E13. Escreva a condição completa, `=== 0` ou `> 0`.
 :::
 
 ---
 
 ## :icon[arrow-left-right] Isto ou aquilo: o ternário
 
-Quando há duas opções, use o ternário do E13b. Ele é uma expressão, por isso cabe entre as chaves do JSX; o `if`, como você viu no E21, não cabe.
+Quando há duas opções, use o ternário do E13. Ele é uma expressão, por isso cabe entre as chaves do JSX; o `if`, como você viu no E21, não cabe.
 
 ```jsx
 function CartaoTarefa({ titulo, prioridade, concluida }) {
@@ -231,7 +302,7 @@ function CartaoTarefa({ titulo, prioridade, concluida }) {
 
 ## :icon[corner-down-right] Return antecipado
 
-O `if` não cabe dentro do JSX, mas cabe **antes** do `return`. Quando a tela inteira muda, use a guard clause do E13b e saia cedo:
+O `if` não cabe dentro do JSX, mas cabe **antes** do `return`. Quando a tela inteira muda, use a guard clause do E13 e saia cedo:
 
 ```jsx
 function ListaTarefas({ tarefas }) {
@@ -249,13 +320,46 @@ function ListaTarefas({ tarefas }) {
 }
 ```
 
-| Situação | Use |
-|---|---|
-| um trecho aparece ou não | `&&` |
-| um trecho ou outro | ternário |
-| o componente inteiro muda | `if` com `return` antes do JSX |
+Com `[]`, o componente devolve só o aviso e para ali. Com tarefas, o `if` não entra, e a lista aparece.
 
-Um componente também pode devolver `null`: não desenha nada.
+---
+
+## Estilos
+
+Onde você guarda o estilo de um cartão: num arquivo da casa toda ou junto dele?
+
+---
+
+## Três formas de estilizar
+
+**Estilizar** é dar a aparência: cor, borda, espaço. No React, há três formas:
+
+| Forma | Como | Vantagem | Limite |
+|---|---|---|---|
+| CSS global | `index.css` importado no `main.jsx`; `className="cartao"` | simples, vale para o app todo | nomes de classe podem colidir |
+| CSS Modules | `CartaoTarefa.module.css`; `className={estilos.cartao}` | classe exclusiva do componente | precisa do `.module` no nome |
+| Inline | `style={{ color: 'red' }}` | rápido para um ajuste pontual | sem `:hover` nem media queries |
+
+Neste curso, o estilo de cada componente fica em **CSS Modules**. O `index.css` cuida só de fonte e cor de fundo.
+
+---
+
+## :icon[shapes] Estilos na prática
+
+O mesmo destaque, das três formas:
+
+```jsx
+// 1. CSS global: a classe .cartao do index.css vale para qualquer componente
+<div className="cartao">Estudar React</div>
+
+// 2. CSS Module: a classe .cartao deste componente, e de nenhum outro
+<div className={estilos.cartao}>Estudar React</div>
+
+// 3. Inline: um objeto, por isso as chaves duplas
+<p style={{ color: 'red' }}>Atrasada</p>
+```
+
+As chaves duplas do inline são as mesmas de `autor={{ nome: 'Ana' }}`, na aula 43: as de fora abrem o JavaScript, e as de dentro são o objeto. Sem `:hover`, `@media` nem seletores: só para um ajuste pequeno.
 
 ---
 
@@ -269,25 +373,21 @@ O cartão de uma tarefa precisa de borda, espaçamento e uma cor de destaque qua
 - E se o destaque de prioridade alta precisar de `:hover`?
 :::
 
----
-
-## Três formas de estilizar
-
-| Forma | Como | Vantagem | Limite |
-|---|---|---|---|
-| CSS global | `index.css` importado no `main.jsx`; `className="cartao"` | simples, vale para o app todo | nomes de classe podem colidir |
-| CSS Modules | `CartaoTarefa.module.css`; `className={estilos.cartao}` | classe exclusiva do componente | precisa do `.module` no nome |
-| Inline | `style={{ color: 'red' }}` | rápido para um ajuste pontual | sem `:hover` nem media queries |
-
-Neste curso, o estilo de cada componente fica em **CSS Modules**. O `index.css` cuida só de fonte e cor de fundo.
-
-:::warning
-Estilo inline é um objeto, por isso as chaves duplas, como em `autor={{ nome: 'Ana' }}` na aula E22a. Sem `:hover`, `@media` nem seletores: só para um ajuste pequeno.
+:::tip Resposta
+Junto do componente, num CSS Module. No CSS global, duas classes `.cartao` se misturam, e no que conflita vale a que carregou por último. O inline não aceita `:hover`.
 :::
 
 ---
 
-## :icon[file-code] CSS Modules na prática: o arquivo
+## CSS Modules
+
+Na turma há duas Anas: como vocês sabem de qual estão falando?
+
+---
+
+## :icon[file-code] CSS Modules: o arquivo
+
+Um **CSS Module** é um arquivo de estilo cujas classes valem só para um componente. Funciona como um sobrenome: há muitas Anas, mas Ana Souza e Ana Lima não se confundem. O Vite dá um sobrenome a cada classe.
 
 Crie `src/components/CartaoTarefa.module.css`. O nome termina em `.module.css`: é isso que avisa o Vite para tratar as classes como exclusivas do componente.
 
@@ -329,19 +429,36 @@ export default function CartaoTarefa({ titulo, prioridade, concluida }) {
 }
 ```
 
-`estilos.cartao` vale algo como `"_cartao_p62cn_1"`: um nome gerado, único. Por isso dois componentes podem ter `.cartao` sem conflito. Abra a aba Elements do DevTools, a do E01, e veja o nome real no HTML.
+| No código | No HTML da página |
+|---|---|
+| `estilos.cartao` | `_cartao_p62cn_1`, um nome gerado, único |
+| `estilos.alta` | `_alta_p62cn_8` |
+
+Por isso dois componentes podem ter `.cartao` sem conflito. Abra a aba Elements do DevTools, a do E01, e veja o nome real no HTML.
+
+---
+
+## Classes dinâmicas
+
+Como o cartão concluído sabe que precisa ficar riscado?
 
 ---
 
 ## :icon[zap] Classes dinâmicas
 
-Para juntar duas classes, monte a string com a **template string** do E05: crases e `${ }` para encaixar valores.
+Uma **classe dinâmica** é escolhida pelo código, conforme os dados: a tarefa concluída ganha a classe `concluida`; a pendente, não. Para juntar duas classes, monte o texto com a **template string** do E05: crases e `${ }` para encaixar valores.
 
 ```jsx
 <div className={`${estilos.cartao} ${concluida ? estilos.concluida : ''}`}>
 ```
 
-Com mais de uma condição, variáveis com nome deixam a tag legível, como as condições com nome do E13b:
+Em português: "sempre a classe `cartao`; e, se a tarefa está concluída, também a `concluida`". Quando a condição é falsa, entra um texto vazio, e nada é aplicado.
+
+---
+
+## :icon[zap] Classes dinâmicas na prática
+
+Com mais de uma condição, variáveis com nome deixam a tag legível, como as condições com nome do E13:
 
 ```jsx
 const classeAlta = prioridade === 'alta' ? estilos.alta : ''
@@ -354,19 +471,30 @@ const classeConcluida = concluida ? estilos.concluida : ''
 |---|---|
 | alta, pendente | `cartao alta` |
 | media, concluída | `cartao concluida` |
+| baixa, pendente | `cartao` |
 
-Quando a condição é falsa, entra uma string vazia e nada é aplicado.
+Na tela: a alta ganha a borda vermelha; a concluída fica clara e riscada.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Each child in a list should have a unique "key" prop` | faltou a `key`, ou ela está na `<div>` de dentro do componente | `key={t.id}` na tag que o `map` devolve |
+| `Cannot read properties of undefined (reading 'map')` | a prop `tarefas` não chegou | `<ListaTarefas tarefas={tarefas} />` |
+| `tarefas.map is not a function` | `tarefas="tarefas"`, entre aspas: chegou um texto | chaves, não aspas |
+| um `0` solto acima da lista vazia | `{tarefas.length && ...}` | comparar: `tarefas.length === 0` |
+| nada estiliza | arquivo sem `.module` no nome: `estilos.cartao` é `undefined` | renomear para `Nome.module.css` |
 
 ---
 
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
-- Esquecer a `key`, ou colocá-la dentro do componente: o console avisa e a tela pode bagunçar quando a lista mudar
-- `key={i}` com o índice: funciona até alguém remover ou reordenar um item
-- `{tarefas.length && <p>...</p>}`: com a lista vazia aparece um `0` na tela; compare com `=== 0`
+- `key={i}` com o índice: funciona até alguém remover ou reordenar um item, e não dá aviso nenhum
 - `tarefas.sort()` ou `tarefas.push()` dentro do componente: muda a prop do pai; copie com spread antes
-- Nomear o arquivo `CartaoTarefa.css` e importar como objeto: sem `.module`, `estilos.cartao` é `undefined` e nada estiliza
+- `key` dentro do `CartaoTarefa`, na `<div>`: o console continua avisando
 :::
 
 ---
@@ -375,7 +503,7 @@ Quando a condição é falsa, entra uma string vazia e nada é aplicado.
 
 :::summary
 - O array guarda as tarefas; o `map` transforma cada uma em um `CartaoTarefa` com `key={t.id}`
-- A key identifica o dado, não a posição, e vai na tag que o `map` devolve
+- A key é o crachá: identifica o dado, não a posição, e vai na tag que o `map` devolve
 - `filter` e spread preparam os dados antes do `return`, sem alterar a prop
 - `&&` mostra ou esconde, o ternário escolhe entre dois, o return antecipado troca o componente inteiro
 - CSS Modules (`Nome.module.css` e `import estilos from ...`) dá classes exclusivas; a template string junta as condicionais

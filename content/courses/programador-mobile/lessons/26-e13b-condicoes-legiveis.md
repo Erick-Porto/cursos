@@ -27,6 +27,19 @@ Programador Mobile · Encontro E13 · Aula 26 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **ternário** | um `if` de uma linha que escolhe entre dois valores: `condição ? sim : não` |
+| **expressão** | um trecho de código que produz um valor e cabe dentro de outro: `qtd === 1`, `2 + 2` |
+| **`??`** | "se não veio nada, use este": troca só `null` e `undefined` |
+| **`?.`** | "se existir, leia": para sem erro quando o valor falta |
+| **guard clause** | um teste no começo da função que sai cedo, com `return`, quando a regra não se aplica |
+| **número mágico** | um número solto no código, sem um nome que diga o que ele é |
+
+---
+
 ## Uma regra difícil de ler
 
 A regra de frete escrita às pressas, com um `if` dentro do outro:
@@ -57,14 +70,62 @@ Em que situações essa função devolve `null`? Quanto tempo você levou para t
 
 ---
 
+## Ternário
+
+Na frase "1 item" ou "3 itens", quem escolhe a palavra certa?
+
+---
+
 ## :icon[arrow-left-right] Ternário: um valor, não passos
 
-No E05b, o **ternário** escolheu entre dois valores: `qtd === 1 ? 'item' : 'itens'`. Ele é uma **expressão**: produz um valor e cabe num `const`, num `return` e dentro do `${ }`. O `if` é uma **instrução**: decide que passos rodam.
+O **ternário** é um `if` de uma linha que escolhe entre **dois valores**: `condição ? valorSeSim : valorSeNão`. Leia o `?` como "então" e o `:` como "senão". É a bifurcação do `if` em miniatura: em vez de escolher um caminho, escolhe um valor.
+
+No E05b, ele escolheu `qtd === 1 ? 'item' : 'itens'`. O ternário é uma **expressão**: produz um valor e cabe num `const`, num `return` e dentro do `${ }`. O `if` é uma **instrução**: decide que passos rodam.
 
 ```javascript
 // bom: escolhe um valor
 console.log(`Frete: ${frete === 0 ? 'Grátis' : formatarPreco(frete)}`);
+```
 
+Em português: "escreva Frete e, então, Grátis se o frete for zero; senão, o valor formatado".
+
+---
+
+## :icon[list-checks] Ternário na prática
+
+**Caso 1: singular ou plural.**
+
+```javascript
+for (const qtd of [1, 3]) {
+  console.log(`${qtd} ${qtd === 1 ? 'item' : 'itens'}`);
+}
+// 1 item
+// 3 itens
+```
+
+**Caso 2: frete grátis ou o valor.**
+
+```javascript
+const frete = 0;
+console.log(`Frete: ${frete === 0 ? 'Grátis' : formatarPreco(frete)}`); // Frete: Grátis
+```
+
+Com `frete = 14.9`, sai `Frete: R$ 14,90`.
+
+**Caso 3: o aviso da vitrine.**
+
+```javascript
+const estoque = 0;
+console.log(estoque > 0 ? 'Disponível' : 'Esgotado'); // Esgotado
+```
+
+---
+
+## :icon[scale] Ternário ou if?
+
+O ternário escolhe um valor. Quando cada caminho executa passos diferentes, use `if`:
+
+```javascript
 // ruim: ternário só para executar passos
 cupom.valido ? aplicados.push(chave) : recusados.push(chave);
 
@@ -100,28 +161,64 @@ A linha se lê como frase, e a decisão ganha um lugar onde pode ser testada.
 
 ---
 
+## O operador ??
+
+Num formulário, quem responde "0 filhos" deixou o campo em branco?
+
+---
+
 ## :icon[shield-check] ??: padrão só para o que falta
 
-No E05b, o `||` deu valor padrão: `process.argv[3] || 'Visitante'`. Ele troca **qualquer** falsy, inclusive `0` e `''`. Já `a ?? b` devolve `b` só quando `a` é `null` ou `undefined`.
+O `a ?? b` devolve `b` só quando `a` é `null` ou `undefined`: quando o valor **não veio**. Pense num formulário: quem responde "0 filhos" respondeu; só o campo em branco vira "não informado". O nome do `??` é **coalescência nula**.
+
+No E05b, o `||` deu valor padrão: `process.argv[3] || 'Visitante'`. Ele troca **qualquer** falsy, inclusive `0` e `''`: trata o "0 filhos" como campo em branco.
 
 ```javascript
 const frete = calcularFrete(180, '01310-100'); // 0: frete grátis
 
 frete || 'Informe o CEP'; // 'Informe o CEP': o 0 foi trocado
 frete ?? 'Informe o CEP'; // 0: o frete grátis continua lá
+```
 
+---
+
+## :icon[list-checks] ?? na prática
+
+**Caso 1: somar um frete que pode faltar.** Sem CEP, o `calcularFrete` devolve `null`:
+
+```javascript
 const centavosDoFrete = paraCentavos(frete ?? 0); // sem CEP, soma 0
+```
+
+**Caso 2: a nota zero.**
+
+```javascript
+const avaliacao = 0;
+console.log(avaliacao ?? 'Sem nota'); // 0: a nota zero é uma nota
+console.log(avaliacao || 'Sem nota'); // Sem nota: o || apagou o zero
+```
+
+**Caso 3: o desconto que não veio.**
+
+```javascript
+let desconto;
+console.log(desconto ?? 0); // 0
 ```
 
 - Use **`??`** quando `0`, `''` ou `false` são valores válidos: frete, desconto, quantidade, nota
 - Use `||` só quando qualquer falsy deve mesmo virar o padrão
-- O `??` se chama **coalescência nula**
+
+---
+
+## O operador ?.
+
+Se o pedido é para retirar na loja, qual é o CEP da entrega?
 
 ---
 
 ## :icon[link] ?.: ler sem quebrar
 
-Um pedido de retirada na loja não tem `entrega`. Ler um campo de `undefined` para o script:
+O **encadeamento opcional** `?.` lê um campo só se o objeto existir. É como olhar antes de entrar: se não há casa no endereço, você volta sem tropeçar. Um pedido de retirada na loja não tem `entrega`, e ler um campo de `undefined` para o script:
 
 ```javascript
 const pedido = { id: 1042, status: 'pago' }; // sem entrega
@@ -131,9 +228,36 @@ pedido.entrega?.cep; // undefined, sem erro
 pedido.entrega?.cep ?? 'Retirada na loja'; // 'Retirada na loja'
 ```
 
-- O **encadeamento opcional** `?.` para no primeiro `null` ou `undefined` e devolve `undefined`
+- O `?.` para no primeiro `null` ou `undefined` e devolve `undefined`
 - Ele corta a cadeia inteira: em `codigo?.trim().toUpperCase()`, com `codigo` nulo, nenhum dos dois métodos roda
 - Use só onde o valor pode mesmo faltar: espalhado por todo lado, ele esconde bugs
+
+---
+
+## :icon[list-checks] ?. na prática
+
+**Caso 1: o cliente sem endereço.**
+
+```javascript
+const cliente = { nome: 'Ana' };
+console.log(cliente.endereco?.cidade ?? 'Sem endereço'); // Sem endereço
+```
+
+**Caso 2: um método num valor que faltou.**
+
+```javascript
+let codigo; // o cupom não foi digitado
+console.log(codigo?.trim()); // undefined, sem TypeError
+```
+
+Sem o `?.`, `codigo.trim()` pararia com `Cannot read properties of undefined (reading 'trim')`.
+
+**Caso 3: a lista que pode não vir.**
+
+```javascript
+const pedidoSemItens = { id: 1042 };
+console.log(pedidoSemItens.itens?.length ?? 0); // 0
+```
 
 ---
 
@@ -163,9 +287,15 @@ const pedido = { id: 1042, status: 'pago', cupom: null, entrega: { cep: '' } };
 
 ---
 
+## Condições com nome
+
+O que se entende mais rápido: "frete grátis" ou "subtotal >= 150"?
+
+---
+
 ## :icon[tag] Condições com nome
 
-Uma condição longa obriga quem lê a decifrar a regra. Dê um nome a ela:
+Uma condição longa obriga quem lê a decifrar a regra. Guarde o sim ou não numa constante com nome, como uma caixa com etiqueta: quem lê entende pela etiqueta, sem abrir a caixa.
 
 ```javascript
 // antes: o que isso quer dizer?
@@ -180,7 +310,34 @@ if (cepValido && temFreteGratis) { /* ... */ }
 
 - Booleanos com nome de pergunta de sim ou não: `cepValido`, `temFreteGratis`, `podeAplicar`
 - Uma função com nome é uma condição reaproveitável: o `ehCepValido` do E06 esconde a regex
-- Número mágico vira **constante** em maiúsculas, como a `FRETE_GRATIS_A_PARTIR_DE` do E10: o `150` tem nome, e a regra muda num lugar só
+- **Número mágico** vira **constante** em maiúsculas, como a `FRETE_GRATIS_A_PARTIR_DE` do E10: o `150` ganha nome, e a regra muda num lugar só
+
+---
+
+## :icon[list-checks] Condições com nome na prática
+
+A página do produto decide dois avisos:
+
+```javascript
+const produto = { nome: 'Tênis de Corrida', preco: 349.9, estoque: 1 };
+
+const podeParcelar = maximoDeParcelas(produto.preco) > 1;
+const ultimaUnidade = produto.estoque === 1;
+
+console.log(podeParcelar, ultimaUnidade); // true true
+if (ultimaUnidade) console.log(`Corra: última unidade de ${produto.nome}`);
+// Corra: última unidade de Tênis de Corrida
+```
+
+- **`podeParcelar`**: "dá para parcelar?". O `maximoDeParcelas` da aula 25 responde 6, e 6 é mais que 1
+- **`ultimaUnidade`**: "é a última?". Com estoque 1, sim
+- O `if` se lê como frase: "se é a última unidade, avise"
+
+---
+
+## Frete por região
+
+Por que o frete para Rio Branco custa mais que para São Paulo?
 
 ---
 
@@ -204,7 +361,7 @@ O **primeiro dígito do CEP** indica a região:
 
 ## :icon[map-pin] Da tabela ao código: FRETE_POR_DIGITO
 
-Traduzir um dígito num valor, sem outra lógica, é trabalho de **dicionário**, como o `rotulosDeOrdem` do E08:
+Traduzir um dígito num valor, sem outra lógica, é trabalho de **dicionário**, como o `rotulosDeOrdem` do E08: você procura a chave e acha o valor.
 
 ```javascript
 // primeiro dígito do CEP: valor do frete em reais
@@ -223,14 +380,35 @@ const FRETE_POR_DIGITO = {
 ```
 
 - Cada faixa da tabela de frete vira linhas de código: conferir é ler lado a lado
-- As chaves de um objeto são sempre texto: `FRETE_POR_DIGITO['6']` encontra a chave `6`
 - Um `switch` com dez `case` faria o mesmo em mais que o dobro de linhas
+
+---
+
+## :icon[list-checks] Dicionário na prática
+
+```javascript
+FRETE_POR_DIGITO['6']; // 24.9: a chave 6
+FRETE_POR_DIGITO[6];   // 24.9: o número vira texto e acha a mesma chave
+
+const digitos = '69900-000'.replace(/\D/g, ''); // '69900000': só os dígitos
+FRETE_POR_DIGITO[digitos[0]];                   // 24.9: o primeiro dígito, '6'
+```
+
+- As chaves de um objeto são sempre texto: `FRETE_POR_DIGITO['6']` e `FRETE_POR_DIGITO[6]` acham a mesma chave
+- O `replace(/\D/g, '')` do E06 tira tudo o que não é dígito, como o hífen
+- `digitos[0]` é o primeiro caractere do texto: a região. Rio Branco (`69900-000`) paga R$ 24,90
+
+---
+
+## Guard clauses
+
+Num show, o segurança barra quem não tem ingresso na porta ou lá dentro?
 
 ---
 
 ## :icon[corner-down-right] Guard clauses: saia cedo
 
-Uma **guard clause** (cláusula de guarda) trata logo no início o caso que impede a regra e sai com `return`. O caminho principal fica sem `else` e sem degraus:
+Uma **guard clause** (em inglês, cláusula de guarda) trata logo no início o caso que impede a regra e sai com `return`. É o segurança na porta do show: quem não pode entrar é barrado ali, e lá dentro só fica quem passou. O caminho principal fica sem `else` e sem degraus:
 
 ```javascript
 // src/regras/frete.js: FRETE_GRATIS_A_PARTIR_DE já vem do E10
@@ -244,10 +422,22 @@ export function calcularFrete(subtotal, cep) {
 }
 ```
 
-- Leia de cima para baixo: CEP ruim sai, compra grande sai, o resto paga a região
+Leia de cima para baixo: CEP ruim sai, compra grande sai, o resto paga a região. Mesmo resultado da pirâmide, sem degraus.
+
+---
+
+## :icon[list-ordered] As guardas em português
+
+| Linha | O que ela diz |
+|---|---|
+| `ehCepValido(cep ?? '')` | "o CEP é válido?". Sem CEP, testa um texto vazio |
+| `if (!cepValido) return null;` | "não é válido? Saia com `null`". O `!` quer dizer "não" |
+| `if (subtotal >= FRETE_GRATIS_A_PARTIR_DE) return 0;` | "compra a partir de R$ 150? Saia com frete grátis" |
+| `cep.replace(/\D/g, '')` | "só os dígitos do CEP" |
+| `return FRETE_POR_DIGITO[digitos[0]];` | "o frete da região, pelo primeiro dígito" |
+
 - A ordem das guardas é regra de negócio: o CEP vem antes, porque não há entrega em CEP inválido, nem de graça
 - `cep ?? ''` protege do `undefined`: o `ehCepValido` chama `trim`, e `undefined.trim()` é `TypeError`
-- Mesmo resultado da pirâmide, sem degraus
 
 ---
 
@@ -260,6 +450,23 @@ export function calcularFrete(subtotal, cep) {
 Cada guarda é uma saída pela direita. O CEP inválido sai primeiro, com `null`, mesmo numa compra acima de R$ 150; a compra a partir de R$ 150 sai com `0`; só o que passou pelas duas desce até o valor da região.
 
 Esta versão substitui o `calcularFrete` simples do E10. O `calcularFreteComCache` continua no fim do `frete.js` e passa a lembrar a regra completa.
+
+---
+
+## :icon[list-checks] Guard clauses na prática
+
+Quatro chamadas, quatro caminhos pelo fluxograma:
+
+```javascript
+calcularFrete(200, '1234');         // null: sai na primeira guarda, CEP inválido
+calcularFrete(180, '01310-100');    // 0: passa o CEP, sai na segunda guarda
+calcularFrete(129.8, '69900-000');  // 24.9: passa pelas duas e paga a região
+calcularFrete(59.9, ' 20040-020 '); // 14.9: os espaços das pontas não atrapalham
+```
+
+- O CEP `'1234'` é barrado na porta, mesmo com R$ 200 de compra
+- A compra de R$ 180 nem chega ao dicionário: sai grátis
+- Só quem passa pelas duas guardas consulta a tabela da região
 
 ---
 
@@ -289,7 +496,15 @@ Um teste por guarda e um valor de cada faixa da tabela: se alguém trocar a orde
 
 ---
 
+## O cupom
+
+Quantos motivos uma loja tem para recusar um cupom?
+
+---
+
 ## :icon[ticket] As regras do cupom
+
+Um **cupom** é um código que dá desconto. A Lojinha tem três, e cada recusa vira uma guarda:
 
 | Cupom | Desconto | Condição |
 |---|---|---|
@@ -309,7 +524,39 @@ export function validarCupom(codigo, subtotal) {
 }
 ```
 
-`recusar(mensagem)` devolve `{ valido: false, desconto: 0, mensagem }`: toda resposta tem o mesmo formato. O percentual usa o `calcularDesconto` do E05, em centavos: 10% de R$ 199,90 dá R$ 19,99.
+O percentual usa o `calcularDesconto` do E05, em centavos: 10% de R$ 199,90 dá R$ 19,99.
+
+---
+
+## :icon[list-ordered] O cupom em português
+
+| Linha | O que ela diz |
+|---|---|
+| `codigo?.trim().toUpperCase() ?? ''` | "se veio um código, tire os espaços das pontas e passe para maiúsculas; se não veio, use texto vazio" |
+| `if (chave === '') return recusar(...)` | "código vazio? Recuse e saia" |
+| `const cupom = CUPONS[chave];` | "procure o cupom no dicionário `CUPONS`" |
+| `if (!cupom) return recusar(...)` | "não achou? Recuse e saia" |
+
+`recusar(mensagem)` devolve `{ valido: false, desconto: 0, mensagem }`: toda resposta tem o mesmo formato, aceita ou recusada. As duas guardas que faltam, expirado e abaixo do mínimo, seguem o mesmo molde.
+
+---
+
+## :icon[list-checks] Cupom na prática
+
+```javascript
+validarCupom('bemvindo10', 199.9);
+// { valido: true, desconto: 19.99, mensagem: 'Cupom BEMVINDO10 aplicado' }
+
+validarCupom('LOJINHA20', 59.9);
+// { valido: false, desconto: 0, mensagem: 'Válido em compras a partir de R$ 100' }
+
+validarCupom(undefined, 100);
+// { valido: false, desconto: 0, mensagem: 'Digite o código do cupom' }
+```
+
+- **Minúsculas passam**: a primeira linha da função já põe o código em maiúsculas
+- **Abaixo do mínimo**, a guarda do `LOJINHA20` recusa, com a mensagem do motivo
+- **Sem código**, o `?.` e o `??` evitam o `TypeError`, e a primeira guarda recusa
 
 ---
 
@@ -360,6 +607,17 @@ Total: R$ 135,72
 ```
 
 Sem CEP, o `formatarPreco(resumo.frete)` do E10 pararia com `TypeError`: `null` não tem `toLocaleString`. Quem decide o texto é o `textoDoFrete`. O script só chama e imprime; no E30, estas linhas vão para a tela do Carrinho.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `(reading 'cep')` | o objeto do meio não existe: pedido sem `entrega` | `?.` onde o valor pode faltar |
+| `(reading 'trim')` | `undefined` chegou onde se esperava texto: CEP ou cupom que faltou | `?? ''` antes, como no `calcularFrete` |
+| `of null (reading 'toLocaleString')` | `formatarPreco(null)`: o frete sem CEP | deixar o `textoDoFrete` decidir o texto |
+| `ERR_MODULE_NOT_FOUND` | import relativo sem `.js`: passa no Jest, quebra no `node` | `'../regras/pedido.js'` |
 
 ---
 

@@ -28,6 +28,18 @@ Programador Mobile · Encontro E03 · Aula 6 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **linter** | um programa que lê o seu código sem rodar e aponta erros, como um corretor ortográfico |
+| **formatador** | um programa que arruma a aparência do código (espaços, aspas, quebras de linha) sem mudar o que ele faz |
+| **depurador** | uma ferramenta que pausa o programa numa linha para você olhar tudo por dentro |
+| **breakpoint** | ponto de parada: a linha onde o depurador pausa o programa |
+| **`devDependencies`** | os pacotes que só quem programa usa; o projeto funciona sem eles |
+
+---
+
 ## A semana antes da entrega
 
 O `lojinha-regras` vai para a revisão da equipe na segunda. Na sexta, três coisas acontecem:
@@ -44,9 +56,25 @@ Qual dos três problemas daria para achar sem nem rodar o script?
 
 ---
 
+## O linter
+
+Como o corretor do celular acha a palavra errada antes de você enviar?
+
+---
+
 ## :icon[shield-check] Linter: o revisor que não cansa
 
-Um **linter** lê o código sem executá-lo e aponta erros e riscos conhecidos. No JavaScript, o mais usado é o **ESLint**. Ele é ferramenta de quem programa, então entra em `devDependencies` (E02):
+Um **linter** é o corretor ortográfico do código. Ele lê os arquivos **sem executá-los** e sublinha erros e riscos conhecidos: um nome digitado errado, um `import` que ninguém usa. No JavaScript, o mais usado é o **ESLint**.
+
+O `categria` da sexta é um exemplo: o relatório só quebrava quando alguém passava uma categoria, mas o linter o acha sem rodar nada.
+
+O linter não substitui o teste nem o depurador: ele pega **forma e regras**, não a lógica do negócio. Lint sem nenhum aviso não quer dizer programa sem bug.
+
+---
+
+## :icon[download] Instalando o ESLint
+
+O ESLint é ferramenta de quem programa: o relatório funciona sem ele. Por isso, ele entra numa lista separada do `package.json`, a **`devDependencies`** (dependências de desenvolvimento). Quem instala assim é o `-D`:
 
 ```bash
 npm install -D eslint @eslint/js globals
@@ -58,13 +86,13 @@ npm install -D eslint @eslint/js globals
 | `@eslint/js` | as regras recomendadas pela equipe do ESLint |
 | `globals` | a lista do que já existe no Node, como `console` e `process` |
 
-O linter não substitui o teste nem o depurador: ele pega **forma e regras**, não a lógica do negócio.
+Abra o `package.json`: os três aparecem em `"devDependencies"`, e o `picocolors` do E02 continua em `"dependencies"`.
 
 ---
 
 ## :icon[settings] O eslint.config.js
 
-Na raiz do projeto, o arquivo que diz ao ESLint o que conferir:
+Na raiz do projeto, crie o arquivo que diz ao ESLint o que conferir:
 
 ```javascript
 import js from '@eslint/js';
@@ -81,16 +109,28 @@ export default defineConfig([
 ]);
 ```
 
-- É uma lista de blocos de configuração; cada bloco novo entra no fim da lista
-- `js.configs.recommended` liga as regras recomendadas
-- `globals.node` avisa que o código roda no Node. Sem esse bloco, o ESLint acusa `'console' is not defined` e `'process' is not defined` em todo script
+Ele é uma lista `[ ]` com dois blocos: as regras recomendadas e um objeto `{ }`, a ficha do E02, que diz onde o código roda.
+
+---
+
+## :icon[list-ordered] O eslint.config.js em português
+
+| Linha | O que ela diz |
+|---|---|
+| os três `import` | "traga as regras recomendadas, a lista do Node e a ajuda para montar a configuração" |
+| `export default defineConfig([ ... ])` | "esta é a configuração". O `export` a põe na vitrine para o ESLint |
+| `js.configs.recommended` | "ligue as regras recomendadas" |
+| `globals: globals.node` | "o código roda no Node: `console` e `process` existem" |
+
+- Sem o bloco do `globals.node`, o ESLint acusa `'console' is not defined` e `'process' is not defined`
+- Cada bloco novo entra no fim da lista
 - O arquivo usa `import` e `export`: o `"type": "module"` do E02 vale para ele também
 
 ---
 
 ## :icon[square-terminal] Rodando o lint
 
-No `package.json`, crie o script `"lint": "eslint ."` e rode `npm run lint`. O `.` quer dizer o projeto inteiro; o `node_modules/` fica de fora sozinho.
+No `package.json`, crie o script `"lint": "eslint ."`, o apelido do comando, e rode `npm run lint`. O `.` quer dizer o projeto inteiro; o `node_modules/` fica de fora sozinho.
 
 ```plaintext
 C:\Users\ana\lojinha-regras\src\scripts\relatorio-catalogo.js
@@ -101,10 +141,32 @@ C:\Users\ana\lojinha-regras\src\scripts\relatorio-catalogo.js
 ```
 
 - Cada linha traz a posição (linha:coluna), a gravidade, a mensagem e o nome da regra
-- O `categria` quebraria o relatório só quando alguém passasse uma categoria; o lint acha sem rodar nada
+- *is defined but never used*: "foi criado e nunca usado". *is not defined*: "não existe"
 - Sem problemas, o comando não imprime nada além do nome do script
 
-Com a extensão ESLint do E01, o editor sublinha o mesmo erro enquanto você digita, e o Error Lens escreve a mensagem na linha.
+---
+
+## :icon[square-terminal] O lint na prática
+
+**Caso 1: a mesma chave duas vezes.** Alguém repetiu o `preco` no fim da Garrafa Térmica, no `produtos.js`:
+
+```plaintext
+C:\Users\ana\lojinha-regras\src\data\produtos.js
+  18:108  error  Duplicate key 'preco'  no-dupe-keys
+
+1 problem (1 error, 0 warnings)
+```
+
+*Duplicate key* quer dizer "chave repetida": só o último preço vale.
+
+**Caso 2: tudo certo.** Com o código limpo, o `npm run lint` só mostra o nome do script:
+
+```plaintext
+> lojinha-regras@1.0.0 lint
+> eslint .
+```
+
+**Caso 3: no editor, enquanto você digita.** Com as extensões ESLint e Error Lens do E01, o nome errado ganha um sublinhado vermelho, e a mensagem aparece escrita no fim da própria linha, antes mesmo de salvar.
 
 ---
 
@@ -115,10 +177,10 @@ São 64 regras, e cada uma aponta código que quase certamente está errado. Tr�
 | Regra | O que aponta | Exemplo no `lojinha-regras` |
 |---|---|---|
 | `no-undef` | um nome que não existe | `categria`, com erro de digitação |
-| `no-unused-vars` | variável ou import que ninguém usa | `import path from 'node:path'` esquecido no topo |
+| `no-unused-vars` | variável ou import que ninguém usa | `import path from 'node:path'` esquecido |
 | `no-dupe-keys` | a mesma chave duas vezes num objeto | `preco` repetido num produto: vale o último |
 
-Toda saída tem a gravidade: **error** é quase certamente um bug; **warning** é um risco. A entrega do `lojinha-regras` pede zero dos dois.
+A gravidade **error** é quase certamente um bug; **warning** (aviso) é um risco. A entrega pede zero dos dois.
 
 Corrija a causa. Desligar a regra só esconde o problema, e ele volta na mão de quem usa o script.
 
@@ -126,8 +188,8 @@ Corrija a causa. Desligar a regra só esconde o problema, e ele volta na mão de
 
 ## Pense
 
-:::question
-Rode o lint de cabeça. Quais problemas deste `src/scripts/livros.js` o `npm run lint` aponta, e qual passa sem aviso?
+:::example Desafio
+Rode o lint de cabeça. Quais problemas deste `src/scripts/livros.js` o `npm run lint` aponta, e qual passa sem aviso? O `filter` e o `reduce` são os do relatório do E02.
 
 ```javascript
 import { produtos } from '../data/produtos.js';
@@ -149,9 +211,17 @@ console.log('Preço médio: R$', (soma / produtos.length).toFixed(2));
 
 ---
 
+## O formatador
+
+Por que a escola pede o trabalho com a mesma fonte e a mesma margem?
+
+---
+
 ## :icon[wand] Prettier: formatação sem discussão
 
-Um **formatador** reescreve o código num estilo fixo: aspas, ponto e vírgula, quebras de linha e recuo. O PR volta a discutir o que importa. O padrão do Prettier é aspas duplas; no projeto, ele entra com o estilo do curso:
+Um **formatador** é como as normas de formatação de um trabalho escolar: mesma fonte e mesma margem para todo mundo. Ele reescreve a aparência do código (aspas, ponto e vírgula, quebras de linha e **recuo**, os espaços no começo da linha) e não muda o que o código faz. O PR volta a discutir o que importa.
+
+O mais usado é o **Prettier**. O padrão dele é aspas duplas; no projeto, ele entra com o estilo do curso:
 
 ```bash
 npm install -D prettier
@@ -169,7 +239,6 @@ O `.prettierrc`, na raiz:
 
 - `singleQuote`: aspas simples; `printWidth`: linhas de até 100 caracteres
 - `endOfLine`: no Windows, o Git troca o fim das linhas ao baixar os arquivos; com `auto`, o Prettier não reclama disso
-- Ponto e vírgula e recuo de 2 espaços já são o padrão
 
 ---
 
@@ -181,12 +250,44 @@ npx prettier --check .   # só confere, sem mudar nada
 ```
 
 - O **`npx`** roda uma ferramenta instalada no projeto, sem precisar criar um script para ela no `package.json`
+- Ponto e vírgula e recuo de 2 espaços já são o padrão
 - O primeiro `--write` reescreve o `produtos.js`: cada produto passava de 100 caracteres e ganha uma propriedade por linha
-- Faça disso um commit só dele: misturada a uma correção, a formatação esconde a correção no diff
+- Faça disso um commit só dele: misturada a uma correção, a formatação esconde a correção no **diff**, a lista do que mudou
 - Quem escreve o `catalogo.json` é o `npm run catalogo`. Deixe-o fora: crie o `.prettierignore` com a linha `src/data/catalogo.json`
 - No `package.json`, um script para não decorar: `"formatar": "prettier --write ."`
 
 Lint e Prettier se completam: o lint pega **erros**, o Prettier cuida da **aparência**.
+
+---
+
+## :icon[file-check] O Prettier na prática
+
+**Caso 1: conferir antes de formatar.** O `--check` aponta o arquivo fora do estilo e não muda nada:
+
+```plaintext
+Checking formatting...
+[warn] src/data/produtos.js
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.
+```
+
+*Code style issues*: "problemas de estilo; rode com `--write` para corrigir".
+
+**Caso 2: formatar.** O `--write` lista cada arquivo. Um trecho da lista:
+
+```plaintext
+eslint.config.js 13ms (unchanged)
+src/data/produtos.js 18ms
+src/scripts/relatorio-catalogo.js 15ms (unchanged)
+```
+
+*unchanged* quer dizer "sem mudança": só o `produtos.js` foi reescrito.
+
+**Caso 3: conferir depois.** É o que a entrega do laboratório pede:
+
+```plaintext
+Checking formatting...
+All matched files use Prettier code style!
+```
 
 ---
 
@@ -204,7 +305,7 @@ charset = utf-8
 insert_final_newline = true
 ```
 
-E o `.vscode/settings.json`, que vale para quem abrir o projeto:
+E o `.vscode/settings.json`, as configurações do VS Code que valem para quem abrir o projeto:
 
 ```json
 {
@@ -217,7 +318,15 @@ Com os arquivos no repositório, cada <kbd>Ctrl</kbd> + <kbd>S</kbd> formata o a
 
 ---
 
+## O depurador
+
+Num replay de futebol, para que serve a câmera lenta com pausa?
+
+---
+
 ## :icon[bug] O depurador do VS Code
+
+O **depurador** é uma câmera lenta com pausa: para o programa numa linha e mostra cada detalhe daquele instante, como o valor de cada variável.
 
 O relatório mostra `R$ NaN`. Para ver a soma produto a produto, separe a conta numa função, em `src/scripts/preco-medio.js`:
 
@@ -236,55 +345,158 @@ const media = soma / produtos.length;
 console.log('Preço médio: R$', media.toFixed(2));
 ```
 
-`somar` é uma **função**: o `reduce` a chama uma vez por produto, com o total até ali (funções a fundo no E07).
+---
 
-No painel do terminal, abra a seta ao lado do `+`, escolha **JavaScript Debug Terminal** (Terminal de Depuração JavaScript, no VS Code em português) e rode nele `node src/scripts/preco-medio.js`: o depurador se liga sozinho. Outro caminho é um `.vscode/launch.json` com `"program": "${file}"`, que faz o <kbd>F5</kbd> depurar o arquivo aberto.
+## :icon[list-ordered] O preco-medio.js em português
+
+| Linha | O que ela diz |
+|---|---|
+| 3 e 4 | "leia o `catalogo.json` e fique com a lista de produtos" |
+| 6, `function somar(total, produto)` | "esta é a receita `somar`: recebe o total até ali e um produto" |
+| 7, `return total + produto.preco` | "entregue o total mais o preço deste produto" |
+| 10, `produtos.reduce(somar, 0)` | "comece do 0 e use a `somar` com cada produto, um por vez" |
+| 11 e 12 | "divida pela quantidade e mostre com 2 casas" |
+
+`somar` é uma **função**: uma receita com nome, guardada para usar quando quiser. Hoje é só para ler; escrever funções vem no E07, e o `reduce` a fundo, no E09.
+
+---
+
+## :icon[square-terminal] Ligando o depurador
+
+No painel do terminal, abra a seta ao lado do `+` e escolha **JavaScript Debug Terminal** (Terminal de Depuração JavaScript, no VS Code em português). Rode nele:
+
+```bash
+node src/scripts/preco-medio.js
+```
+
+O depurador se liga sozinho.
+
+:::warning
+Num terminal comum, o script roda sem parar em lugar nenhum: só o JavaScript Debug Terminal liga o depurador.
+:::
+
+Outro caminho é um `.vscode/launch.json` com `"program": "${file}"`, que faz o <kbd>F5</kbd> depurar o arquivo aberto.
+
+---
+
+## :icon[bug] O depurador na prática
+
+**Caso 1: num terminal comum.** O script roda até o fim, sem pausa:
+
+```bash
+node src/scripts/preco-medio.js
+# Preço médio: R$ 181.98
+```
+
+**Caso 2: no JavaScript Debug Terminal.** O mesmo comando, com o depurador ligado. Sem nenhum breakpoint, ele também vai até o fim:
+
+```plaintext
+Debugger attached.
+Preço médio: R$ 181.98
+Waiting for the debugger to disconnect...
+```
+
+As duas linhas novas dizem "depurador ligado" e "esperando o depurador se desligar".
+
+**Caso 3: o mistério.** No `catalogo.json`, o preço da Garrafa Térmica foi escrito entre aspas: `"79.90"`. O script não quebra, mas a conta sai errada:
+
+```plaintext
+Preço médio: R$ NaN
+```
+
+`NaN` (*Not a Number*) quer dizer "não é um número". Para achar o culpado, o filme precisa pausar.
+
+---
+
+## Breakpoints
+
+Onde você aperta o pause para ver o lance que importa?
 
 ---
 
 ## :icon[pause] Breakpoints: pausar e andar passo a passo
 
-Clique à esquerda do número 7, a linha do `return`: o ponto vermelho é o **breakpoint**. Rode o script de novo: ali, o programa **para**, e você comanda pela barra do topo:
+O **breakpoint** (ponto de parada) é onde o filme pausa. Clique à esquerda do número 7, a linha do `return`, e rode de novo: o programa **para** no ponto vermelho. Comande pela barra do topo:
 
 | Tecla | Botão | O que faz |
 |---|---|---|
-| <kbd>F5</kbd> | Continue | segue até o próximo breakpoint |
-| <kbd>F10</kbd> | Step Over | roda a linha e para na próxima |
-| <kbd>F11</kbd> | Step Into | entra na função chamada na linha |
-| <kbd>Shift</kbd> + <kbd>F11</kbd> | Step Out | sai da função e volta a quem chamou |
-| <kbd>Shift</kbd> + <kbd>F5</kbd> | Stop | encerra o script |
+| <kbd>F5</kbd> | Continue (continuar) | segue até a próxima pausa |
+| <kbd>F10</kbd> | Step Over (passar por cima) | roda a linha e para na próxima |
+| <kbd>F11</kbd> | Step Into (entrar) | entra na função da linha |
+| <kbd>Shift</kbd> + <kbd>F11</kbd> | Step Out (sair) | volta a quem chamou a função |
+| <kbd>Shift</kbd> + <kbd>F5</kbd> | Stop (parar) | encerra |
 
 No DevTools do navegador, o Continue é <kbd>F8</kbd>.
 
 ---
 
+## :icon[pause] Breakpoints na prática
+
+**Caso 1: pausar a cada produto.** Breakpoint na linha 7, a do `return`. Cada <kbd>F5</kbd> segue até a próxima pausa, um produto por vez. Em Variables:
+
+| Pausa | `produto.nome` | `total` |
+|---|---|---|
+| 1ª | Fone Bluetooth | 0 |
+| 2ª | Caixa de Som Portátil | 199.9 |
+| 3ª | Microfone USB | 449.8 |
+
+**Caso 2: entrar na função.** Breakpoint na linha 10, a do `reduce`. O <kbd>F11</kbd> (Step Into) entra em `somar`, com `total: 0` e o Fone Bluetooth.
+
+**Caso 3: passar por cima.** Com o catálogo certo, na mesma pausa da linha 10, o <kbd>F10</kbd> (Step Over) roda o `reduce` inteiro e para na linha 11, com `soma: 2183.8000000000006`. Esse monte de casas é assunto do E05.
+
+---
+
 ## :icon[pause] Breakpoint condicional
 
-O `somar` roda 12 vezes. Para não apertar <kbd>F5</kbd> a cada produto, clique com o botão direito no ponto vermelho, **Edit Breakpoint**, e escreva a condição `typeof produto.preco !== 'number'`:
+O `somar` roda 12 vezes. Um **breakpoint condicional** pausa só na cena que interessa. Clique com o botão direito no ponto vermelho, **Edit Breakpoint**, e escreva a condição `typeof produto.preco !== 'number'`, que quer dizer "o preço não é um número":
 
 :::center
 ![Animação: com o breakpoint condicional typeof produto.preco !== 'number' na linha do return de somar, o Fone Bluetooth (199.9) e a Luminária de Mesa (89.9) seguem direto e o script pausa na Garrafa Térmica, com o preço "79.90" em texto](images/e03-breakpoint-condicional.svg)
 :::
 
-O script só para quando a condição é verdadeira: os preços em número passam direto, e a pausa acontece na Garrafa Térmica.
+O script só para quando a condição é verdadeira: os preços em número passam direto, e a pausa acontece na Garrafa Térmica. O `typeof` pergunta o tipo de um valor (E05).
+
+---
+
+## Os painéis
+
+Com o vídeo pausado, o que você olha primeiro?
 
 ---
 
 ## :icon[eye] Variables, Watch e Call Stack
 
-Pausado na Garrafa, três painéis da aba **Run and Debug** contam a história:
+Com o filme pausado na Garrafa, três painéis da aba **Run and Debug** mostram a cena por dentro:
 
 | Painel | O que mostra | Na pausa em `somar` |
 |---|---|---|
-| **Variables** (Scope, no navegador) | as variáveis naquele instante | `total: 869.6` e, em `produto`, `preco: '79.90'`, entre aspas: é texto |
-| **Watch** | expressões que você escolhe acompanhar | `typeof produto.preco` mostra `'string'` |
-| **Call Stack** | quem chamou quem, do mais recente ao mais antigo | `somar` e, abaixo, a linha 10, a do `reduce` |
+| **Variables** (variáveis; Scope, no navegador) | as variáveis naquele instante | `total: 869.6` e, em `produto`, `preco: '79.90'`: texto |
+| **Watch** (vigiar) | o que você escolhe acompanhar | `typeof produto.preco` mostra `'string'` |
+| **Call Stack** (pilha de chamadas) | quem chamou quem, do mais novo ao mais antigo | `somar` e, abaixo, a linha 10, do `reduce` |
 
-O erro veio do dado: o preço chegou entre aspas no `catalogo.json`, e o `npm run catalogo` o grava de novo.
+O erro veio do dado: o preço chegou como texto no `catalogo.json`. O `npm run catalogo` o grava de novo.
 
 :::tip
-Pausado, o **Debug Console** avalia expressões do momento, como `Number(produto.preco)`.
+No **Debug Console**, teste expressões na pausa: `Number(produto.preco)`.
 :::
+
+---
+
+## :icon[eye] Os painéis na prática
+
+**Caso 1: o Watch acompanha.** Escreva `produto.nome` e `total` no Watch: a cada pausa, os dois se atualizam sozinhos.
+
+**Caso 2: o Debug Console testa uma ideia.** Pausado na Garrafa Térmica:
+
+| Você digita | O Debug Console responde |
+|---|---|
+| `typeof produto.preco` | `'string'` |
+| `Number(produto.preco)` | `79.9` |
+| `total + Number(produto.preco)` | `949.5` |
+
+Com o preço convertido em número, a conta daria certo: o problema é o dado.
+
+**Caso 3: a Call Stack mostra quem chamou.** Clique na linha de baixo da Call Stack: o editor pula para a linha 10, a do `reduce`, que chamou o `somar`.
 
 ---
 
@@ -292,6 +504,21 @@ Pausado, o **Debug Console** avalia expressões do momento, como `Number(produto
 
 :::example Desafio
 Com o catálogo corrigido, você quer saber qual produto faz a soma passar de R$ 1.000. Um colega pôs o breakpoint na linha 10, a do `reduce`, e o depurador parou uma vez só, antes de qualquer soma. Onde vai o breakpoint, e com qual condição?
+
+```javascript
+import fs from 'node:fs';
+
+const texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');
+const produtos = JSON.parse(texto).produtos;
+
+function somar(total, produto) {
+  return total + produto.preco;
+}
+
+const soma = produtos.reduce(somar, 0);
+const media = soma / produtos.length;
+console.log('Preço médio: R$', media.toFixed(2));
+```
 :::
 
 :::tip Resposta
@@ -300,30 +527,72 @@ Na linha 7, dentro de `somar`: ela roda uma vez por produto, enquanto a linha do
 
 ---
 
+## O console.log
+
+Quantas vezes você rodaria o script para ver doze preços, um de cada vez?
+
+---
+
 ## :icon[terminal] console.log: o último recurso
 
-O `console.log` funciona: a saída aparece no terminal. Mas ele custa caro:
+O `console.log` do E02 também serve para investigar: você escreve um valor na tela e roda o script de novo. Funciona, mas custa caro:
 
 - A cada nova suspeita, você edita, salva e roda de novo
 - Mostra um valor por vez; o breakpoint mostra **todas** as variáveis e a pilha
 - Esquecido no código, enche o terminal de quem usa o script
 
-Um meio-termo é o **logpoint**: botão direito à esquerda da linha, **Add Logpoint**, e a mensagem `{produto.nome}: {produto.preco}`. A cada passagem, ele escreve no Debug Console, sem mudar o arquivo.
+Um meio-termo é o **logpoint**, um ponto que escreve sem pausar: botão direito à esquerda da linha, **Add Logpoint**, e a mensagem `{produto.nome}: {produto.preco}`. A cada passagem, ele escreve no Debug Console, sem mudar o arquivo.
 
 Se usar `console.log` para investigar, apague antes do commit: o `git diff` mostra se sobrou algum.
 
 ---
 
-## :icon[triangle-alert] Erros comuns
+## :icon[terminal] O console.log na prática
 
-:::warning
-- Escrever o `eslint.config.js` com `require` e `module.exports`: com `"type": "module"`, o Node recusa com `require is not defined in ES module scope`
-- Esquecer o bloco do `globals.node`: `'console' is not defined` em todo script
-- Desligar uma regra para sumir com o erro, em vez de corrigir a causa
-- Misturar a formatação do projeto com uma correção no mesmo commit
-- Rodar o script num terminal comum e esperar que o breakpoint pare: só o JavaScript Debug Terminal liga o depurador
-- Achar que lint zerado é programa sem bug: ele não entende a regra de negócio
-:::
+**Caso 1: um console.log dentro de `somar`.** Uma linha antes do `return`, e o script de novo:
+
+```javascript
+function somar(total, produto) {
+  console.log(produto.nome, produto.preco);
+  return total + produto.preco;
+}
+```
+
+```plaintext
+Fone Bluetooth 199.9
+Caixa de Som Portátil 249.9
+Microfone USB 329.9
+```
+
+E mais 9 linhas, uma por produto, antes da média.
+
+**Caso 2: o logpoint, sem mexer no arquivo.** Na linha 7, com a mensagem `{produto.nome}: {produto.preco}`, ele escreve no Debug Console `Fone Bluetooth: 199.9`, e assim por diante.
+
+**Caso 3: o console.log esquecido.** Antes do commit, o `git diff` mostra a linha que sobrou, com `+` na frente:
+
+```plaintext
++  console.log(produto.nome, produto.preco);
+```
+
+---
+
+## Mensagens de erro
+
+O ESLint também acende luzes no painel. Você sabe ler cada uma?
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+A mensagem de erro é a luz do painel do carro: diz o que aconteceu e onde.
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `'console' is not defined` | o ESLint não sabe que é Node | o bloco do `globals.node` |
+| `require is not defined in ES module scope` | configuração com `require` e `module.exports` | `import` e `export default` |
+| `couldn't find an eslint.config` | arquivo com outro nome ou fora da raiz | `eslint.config.js` na raiz |
+| `is defined but never used` | algo criado e nunca usado | apagar o que sobrou |
+| `is not defined` num nome seu | nome digitado errado | conferir a grafia |
 
 ---
 

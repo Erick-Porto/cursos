@@ -27,6 +27,19 @@ Programador Mobile · Encontro E36 · Aula 71 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **layout raiz** | o `app/_layout.js`: a moldura que envolve todas as telas do app |
+| **cabeçalho** (*header*) | a barra no topo da tela, com o título e a seta de voltar |
+| **rota fina** | um arquivo de `app/` com uma linha só, que aponta para a tela de verdade |
+| **parâmetro de rota** | o pedaço do endereço que muda, como o `7` em `/produto/7` |
+| **contexto** | um lugar acima das telas onde ficam dados que todas leem, como o carrinho |
+| **provedor** (*provider*) | o componente que guarda um contexto e o entrega a tudo o que está dentro dele |
+
+---
+
 ## Do toque à sacola
 
 Em um app de loja, você toca em um fone na vitrine: o detalhe abre por cima, com o nome do produto no cabeçalho. Você toca em **Adicionar ao carrinho** e o carrinho já mostra o fone e o total. Volta duas vezes e está de novo na vitrine, no mesmo ponto da rolagem.
@@ -39,7 +52,15 @@ Como o carrinho fica sabendo o que foi adicionado no detalhe, se uma tela não r
 
 ---
 
+## O layout raiz
+
+Onde colocar aquilo que todas as telas do app precisam enxergar, como o tema?
+
+---
+
 ## :icon[layers] O layout raiz: app/_layout.js
+
+O **layout raiz** é o `app/_layout.js`: a moldura que envolve todas as telas do app. É nele que você escolhe a pilha e coloca os **provedores**, os componentes que entregam o tema e o carrinho a todas as telas.
 
 ```jsx
 import { Stack } from 'expo-router';
@@ -57,7 +78,7 @@ export default function Layout() {
 }
 ```
 
-- **`Stack`** é a pilha: cada rota de `app/` vira uma tela dela
+- **`Stack`** é a pilha de cartas: cada rota de `app/` vira uma carta dela
 - Os provedores ficam **por fora** da pilha, e assim todas as telas enxergam o tema e o carrinho
 - O que o `App.js` fazia, como carregar as fontes e esconder a splash, muda para este arquivo
 
@@ -65,7 +86,7 @@ export default function Layout() {
 
 ## :icon[sliders-horizontal] Cabeçalho com as cores do tema
 
-`useTema()` só funciona **dentro** do `TemaProvider`. Por isso as opções da pilha ficam num componente filho, a `Pilha`:
+O **cabeçalho** é a barra no topo, com o título e a seta de voltar. `useTema()` só funciona **dentro** do `TemaProvider`. Por isso as opções da pilha ficam num componente filho, a `Pilha`:
 
 ```jsx
 function Pilha() {
@@ -85,13 +106,37 @@ function Pilha() {
 }
 ```
 
-No `Layout`, troque `<Stack />` por `<Pilha />`. **`screenOptions`** vale para todas as telas; `headerTintColor` pinta o título e a seta. Cada `Stack.Screen` com `name` ajusta uma rota: o Início esconde o cabeçalho da pilha porque já tem o seu.
+- No `Layout`, troque `<Stack />` por `<Pilha />`
+- **`screenOptions`** (opções das telas) vale para todas as telas; `headerTintColor` pinta o título e a seta
+- Cada `Stack.Screen` com `name` ajusta uma rota: o Início esconde o cabeçalho da pilha (`headerShown: false`) porque já tem o seu
+
+---
+
+## :icon[layers] O layout raiz na prática
+
+O que o `app/_layout.js` muda em cada tela, sem você abrir o arquivo da tela:
+
+| Tela | No layout | Na tela |
+|---|---|---|
+| Início | `headerShown: false` | só o cabeçalho que a própria tela desenha |
+| Carrinho | `title: 'Carrinho'` | "Carrinho" no topo e a seta de voltar |
+| Detalhe | nada, por enquanto | o nome da rota, `produto/[id]`, até a tela definir o título |
+| todas, no tema escuro | `cores` no `screenOptions` | cabeçalho e fundo escuros |
+| todas | os provedores por fora da pilha | `useTema()` e `useCarrinho()` funcionam em qualquer uma |
+
+Mudou a cor do cabeçalho? Uma linha no layout, e todas as telas acompanham.
+
+---
+
+## Rotas finas
+
+Para que serve o atalho de um programa na área de trabalho do computador?
 
 ---
 
 ## :icon[route] Rotas finas
 
-Cada arquivo de `app/` só aponta para uma tela que mora em `src/telas/`:
+Uma **rota fina** é um arquivo de `app/` com uma linha só, que aponta para a tela de verdade, em `src/telas/`. Funciona como um atalho na área de trabalho do computador: o ícone só aponta para o programa, que mora em outra pasta.
 
 ```javascript
 // app/index.js
@@ -108,14 +153,22 @@ export { default } from '../src/telas/Carrinho';
 export { default } from '../../src/telas/Detalhe';
 ```
 
-- A linha importa o `export default` da tela e o exporta de novo, que é o que o Expo Router procura
+- A linha diz: "pegue o `export default` da tela e ponha na vitrine deste arquivo", a reexportação do E11. É o que o Expo Router procura
 - `app/` descreve **os endereços**; `src/telas/` guarda **o código das telas**
 - No E37, as rotas mudam de pasta para criar as abas e as telas não mudam
 - `[id].js` está uma pasta abaixo: por isso o `../../`
 
 ---
 
+## Link e router
+
+O que acontece quando você toca num link dentro de um site?
+
+---
+
 ## :icon[link] Link: navegar com um toque
+
+Um **`Link`** é como um link de site: tocou, abriu outra rota. O endereço vai na prop `href`.
 
 ```jsx
 import { Link } from 'expo-router';
@@ -123,7 +176,7 @@ import { Link } from 'expo-router';
 <Link href="/carrinho">Ver carrinho</Link>
 ```
 
-Sozinho, o `Link` desenha um `Text` que navega. Para transformar um botão seu em link, use **`asChild`**: o `Link` repassa o toque e o endereço ao filho, que precisa aceitar `onPress`, como o `Pressable`.
+Sozinho, o `Link` desenha um `Text` que navega. Para transformar um botão seu em link, use **`asChild`** ("como filho"): o `Link` repassa o toque e o endereço ao filho, que precisa aceitar `onPress`, como o `Pressable`.
 
 ```jsx
 <Link href="/carrinho" asChild>
@@ -140,7 +193,7 @@ Na tela: o toque empilha a tela do carrinho. O `Botao` do E33 também aceita `as
 
 ## :icon[navigation] router: navegar pelo código
 
-Quando a navegação acontece no meio de uma função, como depois de guardar algo, use o objeto **`router`**:
+Quando a navegação acontece no meio de uma função, como depois de guardar algo, use o objeto **`router`**. Ele mexe na pilha de cartas pelo código:
 
 ```jsx
 import { router } from 'expo-router';
@@ -151,11 +204,33 @@ router.back();                      // fecha a tela de cima
 
 | Chamada | O que faz na pilha |
 |---|---|
-| `router.push('/carrinho')` | coloca o carrinho por cima |
+| `router.push('/carrinho')` | põe o carrinho por cima |
 | `router.back()` | tira a tela de cima, como o voltar do sistema |
-| `router.replace('/')` | troca a tela de cima, sem deixar caminho de volta |
+| `router.replace('/')` | troca a tela de cima por outra, sem deixar caminho de volta |
 
 Regra prática: `Link` quando o toque só leva a outra tela; `router` quando a função faz mais alguma coisa antes de navegar.
+
+---
+
+## :icon[navigation] Link e router na prática
+
+Três toques da Lojinha e o código de cada um:
+
+```jsx
+<Link href="/carrinho">Ver carrinho</Link>
+
+<Link href="/carrinho" asChild>
+  <Botao titulo="Ver carrinho" icone="cart-outline" />
+</Link>
+
+<Botao titulo="Continuar comprando" onPress={() => router.back()} />
+```
+
+| Toque em | Na tela |
+|---|---|
+| o texto "Ver carrinho" | o Carrinho entra por cima, com animação |
+| o botão "Ver carrinho", no rodapé do Início | o mesmo, com o visual do `Botao` |
+| "Continuar comprando", no Carrinho | o Carrinho sai, e o Início aparece onde estava |
 
 ---
 
@@ -181,9 +256,15 @@ A arrow function é obrigatória: `onPress={router.push(...)}` navegaria durante
 
 ---
 
+## Rota dinâmica
+
+Doze produtos na loja: são precisos doze arquivos de tela?
+
+---
+
 ## :icon[hash] Rota dinâmica: lendo o id
 
-Em `app/produto/[id].js`, o trecho entre colchetes vira um **parâmetro**. A tela lê esse valor com o hook **`useLocalSearchParams()`**:
+Em `app/produto/[id].js`, o `[id]` é um espaço em branco no endereço, como o espaço do ingrediente numa receita (E07). O valor que chega nele, como o `7` de `/produto/7`, é o **parâmetro**. A tela lê o parâmetro com o hook **`useLocalSearchParams()`** ("use os parâmetros desta rota"):
 
 ```jsx
 import { useLocalSearchParams } from 'expo-router';
@@ -202,7 +283,7 @@ export default function Detalhe() {
 | `/produto/7` | `{ id: '7' }` |
 | `/produto/12` | `{ id: '12' }` |
 
-O nome da chave é o nome entre colchetes: `[id]` vira `id`.
+O nome da chave é o nome entre colchetes: `[id]` vira `id`. O `find` do E08 procura o produto com esse `id`.
 
 ---
 
@@ -249,9 +330,47 @@ O `Stack.Screen` não desenha nada: só ajusta o cabeçalho. Na tela, o cabeçal
 
 ---
 
+## :icon[hash] A rota dinâmica na prática
+
+O mesmo arquivo, `app/produto/[id].js`, aberto por três endereços:
+
+```jsx
+router.push('/produto/' + 1); // o Fone Bluetooth
+router.push('/produto/' + 7); // o Tênis de Corrida
+router.push('/produto/99');   // nenhum produto tem o id 99
+```
+
+| Endereço | O `id` que chega | Na tela |
+|---|---|---|
+| `/produto/1` | `'1'` | Fone Bluetooth, R$ 199,90, com o nome no cabeçalho |
+| `/produto/7` | `'7'` | Tênis de Corrida, R$ 349,90 |
+| `/produto/99` | `'99'` | "Produto não encontrado": o `find` devolveu `undefined`, e o `if (!produto)` cuidou do resto |
+
+Um arquivo, doze produtos e nenhum caso esquecido.
+
+---
+
+## Contexto
+
+Onde a família deixa um recado para que todos da casa leiam?
+
+---
+
+## :icon[shopping-cart] Um carrinho acima da pilha
+
+Um **contexto** é o quadro de avisos da casa: fica num lugar que todos os cômodos enxergam, e todos leem o mesmo aviso. No app, ele fica acima da pilha, e todas as telas leem o mesmo carrinho.
+
+:::center
+![Animação: o Detalhe chama adicionar no CarrinhoProvider, que fica acima da pilha; depois itens e total descem até o Carrinho, que mostra R$ 199,90; entre as telas irmãs, props não passam](images/e36-carrinho-no-contexto.svg)
+:::
+
+Início, Detalhe e Carrinho são telas irmãs na pilha: props não passam de uma para a outra. A saída é **levantar o estado** (E23) até um contexto, com a receita do tema (E31). O Detalhe chama `adicionar`, e o Carrinho lê `itens` e `total` do mesmo `CarrinhoProvider`.
+
+---
+
 ## :icon[shopping-cart] O carrinho já existe, no lugar errado
 
-Desde o E32, o Início guarda o carrinho num `useState` e faz as contas com as regras de `src/regras/carrinho.js` (E07 e E09):
+O **carrinho** é uma lista de itens num estado (o placar do E23). Desde o E32, ele mora num `useState` do Início, e as contas são as regras de `src/regras/carrinho.js` (E07 e E09):
 
 | Regra | O que devolve |
 |---|---|
@@ -260,17 +379,9 @@ Desde o E32, o Início guarda o carrinho num `useState` e faz as contas com as r
 | `alterarQuantidade(itens, id, qtd)` | lista nova; `qtd` 0 ou menos remove |
 | `contarItens(itens)` e `subtotal(itens)` | as unidades e o valor em reais, somado em centavos |
 
-Desde o E17, cada item guarda o `estoque`, e `adicionarItem` e `alterarQuantidade` **lançam** `EstoqueInsuficienteError` quando a quantidade passa dele. O problema é onde o estado mora: Detalhe e Carrinho não enxergam o `useState` do Início.
+Desde o E17, `adicionarItem` e `alterarQuantidade` **lançam** `EstoqueInsuficienteError` se a quantidade passar do `estoque` do item.
 
----
-
-## :icon[shopping-cart] Um carrinho acima da pilha
-
-:::center
-![Animação: o Detalhe chama adicionar no CarrinhoProvider, que fica acima da pilha; depois itens e total descem até o Carrinho, que mostra R$ 199,90; entre as telas irmãs, props não passam](images/e36-carrinho-no-contexto.svg)
-:::
-
-Início, Detalhe e Carrinho são telas irmãs na pilha: props não passam de uma para a outra. A saída é **levantar o estado** (E23) até um **contexto** acima da pilha, com a receita do tema (E31). O Detalhe chama `adicionar`, e o Carrinho lê `itens` e `total` do mesmo `CarrinhoProvider`.
+É esse estado que sobe para o contexto. As regras não mudam.
 
 ---
 
@@ -333,6 +444,19 @@ export function useCarrinho() {
 
 ---
 
+## :icon[list-ordered] O CarrinhoContext em português
+
+| Linha | O que ela diz |
+|---|---|
+| `createContext(null)` | "crie um quadro de avisos, ainda vazio" |
+| `CarrinhoProvider({ children })` | "pendure o quadro em volta das telas": `children` são as telas que ficam dentro dele |
+| `adicionar`, `alterar`, `remover`, `esvaziar` | "cada ação chama uma regra e troca a lista do estado pela lista nova" |
+| `tentar(regra)` | "rode a regra dentro do `try`; falta de estoque vira aviso, e bug é relançado" |
+| `valor = { itens, ... }` | "o que fica no quadro: os itens, as ações e as contas" |
+| `useCarrinho()` | "leia o quadro"; fora do provedor, avisa com um erro |
+
+---
+
 ## :icon[mouse-pointer-click] Adicionar e ir para o carrinho
 
 No `Detalhe`, guarde primeiro e navegue depois:
@@ -362,15 +486,21 @@ Na tela: o carrinho abre por cima do detalhe, já com o fone e "Total: R$ 199,90
 
 ---
 
-## :icon[triangle-alert] Erros comuns
+## Erros comuns
 
-:::warning
-- Comparar `p.id === id` sem `Number(id)`: o produto não é encontrado e o app quebra em `produto.nome`
-- Chamar `useTema()` no mesmo componente que renderiza o `TemaProvider`: o hook ainda não enxerga o provedor. Use um componente filho, como a `Pilha`
-- `Link` em volta de um `Pressable` sem `asChild`: o toque fica com o `Pressable` e nada navega
-- `onPress={router.push('/carrinho')}` ou `tentar(adicionarItem(...))` sem arrow function: a chamada roda na hora, e não no toque nem dentro do `try`
-- Esquecer o `useState` do E32 no Início: são dois carrinhos, e o que o Detalhe adiciona não aparece no rodapé
-:::
+Tocou no produto e a tela ficou vermelha. O que a mensagem diz?
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| O que aparece | Quer dizer | O que fazer |
+|---|---|---|
+| `Cannot read property 'nome' of undefined` | `p.id === id`, sem `Number(id)`, não acha o produto | `p.id === Number(id)` |
+| erro com `cores` ao abrir | `useTema()` no mesmo componente do `TemaProvider` | usar um filho, como a `Pilha` |
+| o toque não navega | `Link` em volta de um `Pressable`, sem `asChild` | `<Link href="..." asChild>` |
+| navega sozinho, ou tela vermelha de estoque | faltou a arrow function: a chamada roda na hora | `() => router.push(...)`; `tentar(() => ...)` |
+| o Início e o Carrinho mostram números diferentes | sobrou o `useState` do E32: dois carrinhos | ler de `useCarrinho()` |
 
 ---
 

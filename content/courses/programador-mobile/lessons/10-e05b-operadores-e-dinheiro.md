@@ -27,6 +27,19 @@ Programador Mobile · Encontro E05 · Aula 10 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **operador** | o sinal que faz uma conta ou uma pergunta: `+`, `*`, `===` |
+| **`boolean`** | o tipo do sim ou não: `true` ou `false` |
+| **valor padrão** | o "de sempre": o valor usado quando o outro falta |
+| **ternário** | o operador que faz uma pergunta e escolhe entre dois valores |
+| **ponto flutuante** | o jeito como o computador guarda números com vírgula, às vezes com uma sobra minúscula |
+| **centavos inteiros** | o preço sem vírgula: R$ 199,90 vira 19990 |
+
+---
+
 ## Onde foi parar o centavo?
 
 O anúncio da Lojinha diz **ou 3x de R$ 66,63** para o Fone Bluetooth de R$ 199,90. Faça a conta: 3 × 66,63 = 199,89. Falta um centavo.
@@ -41,7 +54,15 @@ Como dividir R$ 199,90 em 3 parcelas sem sumir nem sobrar centavo?
 
 ---
 
+## Operadores
+
+Que teclas da calculadora você usa para dividir a conta do restaurante?
+
+---
+
 ## :icon[calculator] Operadores aritméticos
+
+Um **operador** é o sinal que faz uma conta, como as teclas da calculadora. Os **aritméticos** fazem as contas da escola:
 
 | Operador | Na Lojinha | O que faz |
 |---|---|---|
@@ -52,15 +73,56 @@ Como dividir R$ 199,90 em 3 parcelas sem sumir nem sobrar centavo?
 | `%` | `centavos % parcelas` | resto da divisão: `19990 % 3` é `1` |
 | `**` | `2 ** 3` | potência: `8` |
 
-`*`, `/` e `%` vêm antes de `+` e `-`: `preco * qtd + frete` multiplica primeiro. Quando a ordem não for óbvia, use parênteses.
+O **resto** é o que sobra na conta armada: 7 dividido por 2 dá 3, e sobra 1.
 
-Para acumular num `let`, `total += preco` é o mesmo que `total = total + preco`, e `qtd++` soma 1.
+---
+
+## :icon[calculator] Operadores na prática
+
+Contas de verdade da Lojinha:
+
+```javascript
+const preco = 199.9;
+const frete = 15;
+console.log(preco * 2 + frete); // 414.8: dois fones e o frete
+console.log(19990 % 3);         // 1: o centavo que sobra em 3 parcelas
+console.log(12 / 5);            // 2.4: 12 produtos, 5 por página
+
+let qtd = 1;
+qtd++;
+console.log(qtd);               // 2: mais um no carrinho
+```
+
+- Como na escola, `*`, `/` e `%` vêm antes de `+` e `-`: a primeira conta multiplica e só depois soma o frete. Na dúvida, use parênteses: `2 + 3 * 4` é `14`, e `(2 + 3) * 4` é `20`
+- Para acumular num `let`, `total += preco` é o mesmo que `total = total + preco`
+- `qtd++` soma 1 ao valor de `qtd`
+
+---
+
+## Comparação
+
+Que pergunta de sim ou não a loja faz antes de dar frete grátis?
+
+---
+
+## :icon[scale] Comparar: perguntas de sim ou não
+
+Uma **comparação** é uma pergunta de sim ou não sobre dois valores: "o subtotal chegou a 150?". A resposta é um **`boolean`**: `true` (sim) ou `false` (não).
+
+| Operador | Pergunta | Exemplo | Resposta |
+|---|---|---|---|
+| `===` | é igual a? | `3 === 3` | `true` |
+| `!==` | é diferente de? | `'audio' !== 'livros'` | `true` |
+| `>` e `<` | é maior? é menor? | `199.9 > 200` | `false` |
+| `>=` e `<=` | é maior ou igual? é menor ou igual? | `150 >= 150` | `true` |
+
+Uma comparação também é um valor: dá para guardar a resposta numa `const`, como `const freteGratis = subtotal >= 150`.
 
 ---
 
 ## :icon[equal] Comparação: sempre ===
 
-Comparações devolvem `true` ou `false`. Use **`===`** e **`!==`**: elas comparam valor **e** tipo, sem coerção.
+Para "é igual?", use **`===`** e, para "é diferente?", **`!==`**: eles comparam valor **e** tipo, sem coerção.
 
 ```javascript
 '7' === 7;                   // false: texto e número
@@ -70,15 +132,23 @@ subtotal >= 150;             // frete grátis?
 fone.categoria !== 'livros'; // true para o fone
 ```
 
-Também existem `>`, `<`, `>=` e `<=`.
+O `==`, com dois sinais de igual, converte os tipos antes de comparar e cria igualdades estranhas. Com `===`, `process.argv[2] === 2` dá `false` e denuncia o texto que veio do terminal. A correção não é trocar por `==`, e sim converter: `Number(process.argv[2]) === 2`.
 
-O `==` converte os tipos e cria igualdades estranhas. Com `===`, `process.argv[2] === 2` dá `false` e denuncia o texto que veio do terminal. A correção não é trocar por `==`, e sim converter: `Number(process.argv[2]) === 2`.
+---
+
+## Operadores lógicos
+
+Para entrar no show, só o ingresso resolve, ou precisa do documento também?
 
 ---
 
 ## :icon[split] Operadores lógicos
 
-Eles combinam condições: **`&&`** (e: precisa das duas), **`||`** (ou: basta uma) e **`!`** (não: inverte).
+Eles juntam duas condições numa só, como se diz em português. Uma **condição** é uma pergunta que dá `true` ou `false`.
+
+- **`&&`** é o "e": precisa das duas. Entra no show quem tem ingresso **e** documento
+- **`||`** é o "ou": uma das duas já serve. Paga meia quem é estudante **ou** professor
+- **`!`** é o "não": inverte o sim e o não
 
 ```javascript
 const quantidadeValida = qtd >= 1 && qtd <= 10;
@@ -92,13 +162,35 @@ const precisaDeAviso = !quantidadeValida;
 | `false && true` | `false` |
 | `!quantidadeValida` com `quantidadeValida = true` | `false` |
 
-Dê nome às condições, como `quantidadeValida` e `freteGratis`: o código passa a ser lido como uma frase.
+Dê nome às condições: a primeira linha se lê "a quantidade é válida se for pelo menos 1 **e** no máximo 10".
+
+---
+
+## :icon[split] Operadores lógicos na prática
+
+As mesmas regras, com valores de verdade e a resposta de cada uma:
+
+```javascript
+const subtotal = 120;
+const cupom = 'FRETEGRATIS';
+let qtd = 5;
+console.log(qtd >= 1 && qtd <= 10); // true: 5 está entre 1 e 10
+qtd = 50;
+console.log(qtd >= 1 && qtd <= 10); // false: 50 passou de 10
+
+console.log(subtotal >= 150 || cupom === 'FRETEGRATIS'); // true
+console.log(!(subtotal >= 150));                         // true
+```
+
+- Com `&&`, se uma parte falha, tudo falha: `50 <= 10` é `false`, e a quantidade deixa de ser válida
+- Com `||`, uma parte que vale já resolve: o subtotal não chegou a 150, mas o cupom salva o frete grátis
+- O `!` inverte: "o subtotal **não** chegou a 150" é `true`
 
 ---
 
 ## :icon[zap] Curto-circuito: || e o valor padrão
 
-`&&` e `||` param assim que sabem a resposta e devolvem **um dos valores**, não necessariamente `true` ou `false`:
+`&&` e `||` param assim que sabem a resposta: é o **curto-circuito**. E devolvem **um dos valores**, não necessariamente `true` ou `false`:
 
 ```javascript
 'Ana' || 'Visitante'; // 'Ana'
@@ -108,21 +200,38 @@ true && 'ok';         // 'ok'
 ```
 
 - Contam como falso: `false`, `0`, `''`, `null`, `undefined` e `NaN`. Todo o resto conta como verdadeiro
-- `||` devolve o primeiro valor verdadeiro e serve de **valor padrão**: `process.argv[3] || 'Visitante'`
+- `||` devolve o primeiro valor verdadeiro e serve de **valor padrão**, o "de sempre": `process.argv[3] || 'Visitante'` se lê "o nome do comando ou, se ele faltar, `'Visitante'`"
 - Cuidado: `qtd || 1` troca o `0` por `1`. No E13 você conhece o `??`, que só troca `null` e `undefined`
+
+---
+
+## Ternário
+
+Como o app sabe se escreve "1 item" ou "2 itens"?
 
 ---
 
 ## :icon[arrow-left-right] Ternário: um valor ou outro
 
-O **operador ternário** escolhe entre dois valores: `condição ? seVerdadeiro : seFalso`. É o único operador com três partes.
+O **operador ternário** faz uma pergunta e escolhe entre duas respostas prontas: `condição ? seVerdadeiro : seFalso`. É o único operador com três partes, e daí vem o nome.
 
 ```javascript
 const rotulo = qtd === 1 ? 'item' : 'itens';
 const frete = subtotal >= 150 ? 0 : 15;
 ```
 
-Com ele, o `resumoDaCompra` da aula 9 troca o "R$ NaN" por um aviso:
+| Linha | O que ela diz |
+|---|---|
+| `qtd === 1 ? 'item' : 'itens'` | "a quantidade é 1? Então `'item'`; senão, `'itens'`" |
+| `subtotal >= 150 ? 0 : 15` | "o subtotal chegou a 150? Então frete 0; senão, 15" |
+
+O ternário **produz um valor**: cabe num `const`, num `return` e numa template string. Serve para dois resultados e uma condição curta. Para executar passos diferentes, o `if`, no E07.
+
+---
+
+## :icon[arrow-left-right] O ternário no resumoDaCompra
+
+Com o ternário, o `resumoDaCompra` da aula 9 troca o "R$ NaN" por um aviso:
 
 ```javascript
 export function resumoDaCompra(textoQtd, preco) {
@@ -133,7 +242,10 @@ export function resumoDaCompra(textoQtd, preco) {
 }
 ```
 
-O ternário **produz um valor**: cabe num `const`, num `return` e numa template string. Serve para dois resultados e uma condição curta. Para executar passos diferentes, o `if`, no E07.
+- A pergunta é `Number.isNaN(qtd)`: "a conversão falhou?"
+- Depois do `?`, a resposta para o sim: o aviso `'Digite a quantidade em números'`
+- Depois do `:`, a resposta para o não: a conta, como `'2 x R$ 199,90 = R$ 399,80'`
+- O `return` entrega o valor que o ternário escolheu. As três linhas são um ternário só, quebrado para ficar fácil de ler
 
 ---
 
@@ -159,7 +271,15 @@ const rotuloDoFrete = subtotal >= 150 ? 'Frete grátis' : 'Frete: R$ 15,00';
 
 ---
 
+## Math
+
+Quantas páginas são precisas para mostrar 12 produtos, 5 por página?
+
+---
+
 ## :icon[sigma] Math: arredondar e limitar
+
+**`Math`** é a caixa de ferramentas de matemática que já vem no JavaScript. Cada ferramenta se chama com um ponto: `Math.round(...)`.
 
 | Chamada | Resultado | Uso na Lojinha |
 |---|---|---|
@@ -169,15 +289,46 @@ const rotuloDoFrete = subtotal >= 150 ? 'Frete grátis' : 'Frete: R$ 15,00';
 | `Math.min(qtd, 10)` | o menor | no máximo 10 por pedido |
 | `Math.max(0, valor)` | o maior | nunca negativo |
 
-`Math.floor` arredonda sempre para baixo, `Math.ceil` sempre para cima e `Math.round` para o mais próximo, com o meio (`.5`) subindo. Para prender um valor entre dois limites, combine os dois últimos:
+`Math.floor` (em inglês, "chão") arredonda sempre para baixo, `Math.ceil` ("teto") sempre para cima e `Math.round` ("arredondar") para o mais próximo, com o meio (`.5`) subindo.
+
+---
+
+## :icon[sliders-horizontal] Prender um valor entre dois limites
+
+Um desconto de 150% deixaria o preço negativo. Para prender um valor entre dois limites, combine `Math.min` e `Math.max`:
 
 ```javascript
 const percentual = Math.min(Math.max(entrada, 0), 100); // entre 0 e 100
 ```
 
+Leia de dentro para fora:
+
+| Parte | O que ela diz | Com `entrada` 150 | Com `entrada` -10 |
+|---|---|---|---|
+| `Math.max(entrada, 0)` | "o maior entre a entrada e 0": nunca abaixo de 0 | `150` | `0` |
+| `Math.min(..., 100)` | "o menor entre isso e 100": nunca acima de 100 | `100` | `0` |
+
+O `calcularDesconto` do laboratório começa com esta linha.
+
+---
+
+## Ponto flutuante
+
+Dá para escrever 1 dividido por 3 com todas as casas decimais?
+
 ---
 
 ## :icon[coins] Dinheiro em ponto flutuante
+
+**Ponto flutuante** é o jeito como o `number` guarda números com vírgula. Ele guarda os decimais em binário, a linguagem de zeros e uns do computador.
+
+Frações como 0,1 não têm representação exata em binário, assim como 1/3 não tem em decimal: 0,333..., e nunca acaba. O computador guarda um valor muito perto, com uma sobra minúscula.
+
+Por isso `0.1 + 0.2` não dá `0.3`: dá `0.30000000000000004`. O erro é minúsculo, mas aparece em comparações, em testes e no arredondamento. Com dinheiro, vira centavo a mais ou a menos.
+
+---
+
+## :icon[coins] Ponto flutuante na prática
 
 Abra o REPL do Node e some produtos da Lojinha:
 
@@ -188,15 +339,21 @@ Abra o REPL do Node e some produtos da Lojinha:
 0.1 + 0.2 === 0.3;  // false
 ```
 
-O `number` guarda decimais em binário, e frações como 0,1 não têm representação exata, assim como 1/3 não tem em decimal: 0,333... O erro é minúsculo, mas aparece em comparações, em testes e no arredondamento.
+Três garrafas térmicas não deveriam custar 239,70000000000002, e a sobra aparece em qualquer soma de preços.
 
 Na conta exata, `199.9 * 0.95` e `59.9 * 0.95` terminam em ,905. Com o `formatarPreco`, um vira R$ 189,91 e o outro R$ 56,90: quem decidiu foi o binário, não a regra da loja.
 
 ---
 
+## Centavos inteiros
+
+Como o caixa da padaria conta o troco sem errar nenhum centavo?
+
+---
+
 ## :icon[banknote] A solução: centavos inteiros
 
-Inteiros são exatos no `number`. Converta o preço em **centavos**, faça a conta com inteiros e volte para reais só no fim:
+Inteiros são exatos no `number`: 19990 é 19990, sem sobra. É como o caixa da padaria, que conta o troco em moedas: moeda não se parte. Converta o preço em **centavos**, faça a conta com inteiros e volte para reais só no fim:
 
 ```javascript
 export function paraCentavos(reais) {
@@ -207,6 +364,9 @@ export function paraReais(centavos) {
   return centavos / 100; // 18990 vira 189.9
 }
 ```
+
+- `paraCentavos` diz: "multiplique por 100 e arredonde"
+- `paraReais` diz: "divida por 100"
 
 O `Math.round` na entrada é obrigatório: `(0.1 + 0.2) * 100` dá `30.000000000000004`, e ele devolve o inteiro `30`.
 
@@ -247,7 +407,28 @@ A regra é da loja, e não do acaso: o desconto é arredondado uma vez, ao centa
 
 ---
 
+## :icon[list-ordered] O desconto em português
+
+| Linha | O que ela diz |
+|---|---|
+| `PERCENTUAL_PIX = 5` | "o Pix dá 5%". Nome todo em maiúsculas: um valor fixo da loja |
+| `Math.min(Math.max(percentual, 0), 100)` | "prenda o percentual entre 0 e 100" |
+| `paraCentavos(preco) * limitado / 100` | "a porcentagem do preço, em centavos" |
+| `Math.round(...)` | "arredonde o desconto ao centavo, uma vez só" |
+| `paraReais(desconto)` | "devolva o desconto em reais" |
+| `paraCentavos(preco) - paraCentavos(desconto)` | "o preço menos o desconto, em centavos" |
+
+---
+
+## Parcelas
+
+Como dividir 10 balas entre 3 crianças sem jogar nenhuma fora?
+
+---
+
 ## :icon[credit-card] Parcelar sem sumir centavo
+
+Pense em 10 balas para 3 crianças: cada uma ganha 3, e sobra 1, que vai para a primeira. Com centavos, a conta é a mesma:
 
 ```javascript
 export const PARCELAS_NA_VITRINE = 3; // o "3x" do anúncio
@@ -264,7 +445,7 @@ export function parcelar(total, parcelas) {
 }
 ```
 
-`Math.floor` acha a parcela que cabe em todas; o `%` acha o que sobrou; a **primeira parcela** leva a sobra. A função devolve um objeto com três campos, e o anúncio mostra o valor das demais: **ou 3x de R$ 66,63**.
+`Math.floor` acha a parcela que cabe em todas; o `%` acha o que sobrou; a **primeira parcela** leva a sobra. A função devolve um objeto, uma ficha com três campos, e o anúncio mostra o valor das demais: **ou 3x de R$ 66,63**.
 
 | Total | `valor` | `primeira` | Soma |
 |---|---|---|---|
@@ -301,7 +482,20 @@ test('a soma das parcelas fecha o total', () => {
 });
 ```
 
-A soma está em centavos de propósito: em reais, `66.64 + 66.63 * 2` dá `199.89999999999998`. Para comparar decimais que você mesmo calculou com `number`, use `toBeCloseTo`.
+A soma está em centavos de propósito: em reais, `66.64 + 66.63 * 2` dá `199.89999999999998`. Para comparar decimais que você mesmo calculou com `number`, use `toBeCloseTo` (em inglês, "perto de"), que aceita a diferença minúscula.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+Nas regras de dinheiro, o erro quase sempre aparece no teste. Leia o **Expected** (o que você pediu) e o **Received** (o que veio):
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Received: 199.89999999999998` | a conta foi feita em reais, com decimais | some em centavos, ou compare com `toBeCloseTo` |
+| `Received: 66.63333333333334` | a divisão foi feita em reais | converta para centavos e use `Math.floor` |
+| `Expected: 189.9`, `Received: 189.91` | arredondou o preço final, não o desconto | arredonde o desconto em centavos e subtraia |
+| `R$ NaN` | um valor da conta não é número | `typeof` no valor; confira o nome do campo |
 
 ---
 

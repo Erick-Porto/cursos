@@ -28,6 +28,19 @@ Programador Mobile · Encontro E06 · Aula 12 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **formatar** | escrever um valor do jeito que as pessoas leem: `1299.9` vira `R$ 1.299,90` |
+| **`Intl`** | a parte do JavaScript que formata números e datas no padrão de cada país |
+| **`Date`** | o tipo que guarda um instante: dia e hora |
+| **UTC** | o horário de referência do mundo; Brasília fica 3 horas atrás dele |
+| **dia útil** | de segunda a sexta: os dias em que a transportadora entrega |
+| **mutável** | que pode mudar depois de criado; o contrário da string, que é imutável |
+
+---
+
 ## Preço, prazo e data em todo pedido
 
 Abra o detalhe de um produto em qualquer app de compras: "R$ 189,90 no Pix", "Chega até qui., 16 de out.", "Pedido feito há 2 dias". Parece simples, mas cada linha esconde uma armadilha:
@@ -44,7 +57,15 @@ Por que um teste que usa a data de hoje pode passar na segunda-feira e falhar no
 
 ---
 
+## Formatar números
+
+Como se escreve 1299.9 na etiqueta de preço de uma loja brasileira?
+
+---
+
 ## :icon[banknote] Intl.NumberFormat: dinheiro em pt-BR
+
+**Formatar** é escrever um número do jeito que as pessoas leem. O **`Intl`** faz isso no padrão de cada país. Você cria um **formatador**, que funciona como um carimbo: regula uma vez, com o idioma e as opções, e carimba cada número com `format`:
 
 ```javascript
 const moeda = new Intl.NumberFormat('pt-BR', {
@@ -56,10 +77,24 @@ moeda.format(1299.9); // 'R$ 1.299,90'
 moeda.format(0.5);    // 'R$ 0,50'
 ```
 
-- O **Intl** é a API de internacionalização do JavaScript. Um **formatador** guarda o idioma e as opções, e o `format` aplica a cada número
-- **`new`** cria um objeto a partir de um modelo pronto, como `Intl.NumberFormat` e `Date`. No E15, você cria os seus modelos: as classes
-- Crie o formatador uma vez, fora da função, e reaproveite: no relatório dos 12 produtos, um formatador por linha é desperdício
-- O `toLocaleString('pt-BR', { ... })` dá o mesmo resultado, porque usa o Intl por dentro
+- `'pt-BR'` é o português do Brasil; `style: 'currency'` pede moeda, e `currency: 'BRL'`, o real
+- **`new`** cria um objeto a partir de um modelo pronto, como uma forma de bolo faz bolos. `Intl.NumberFormat` e `Date` são modelos assim. No E15, você cria os seus: as classes
+
+---
+
+## :icon[banknote] Formatar números na prática
+
+**Caso 1: um carimbo, a vitrine inteira.** O mesmo `moeda` formata todos os preços:
+
+```javascript
+console.log(moeda.format(199.9));  // R$ 199,90
+console.log(moeda.format(79.9));   // R$ 79,90
+console.log(moeda.format(1299.5)); // R$ 1.299,50
+```
+
+Crie o formatador uma vez, fora da função, e reaproveite: no relatório dos 12 produtos, um formatador por linha é desperdício.
+
+**Caso 2: o mesmo resultado do E05.** O `toLocaleString('pt-BR', { ... })` do `formatarPreco` também dá `'R$ 199,90'`, porque usa o Intl por dentro. No laboratório, o `formatarPreco` passa a usar um formatador só.
 
 ---
 
@@ -79,13 +114,21 @@ pct.format(PERCENTUAL_PIX / 100); // '5%'
 (4.5).toFixed(1); // '4.5': ponto, padrão americano
 ```
 
-- `minimumFractionDigits` e `maximumFractionDigits` fixam as casas decimais: a nota do produto sempre com uma
+- `minimumFractionDigits` e `maximumFractionDigits` (o mínimo e o máximo de casas decimais) fixam as casas: a nota do produto sempre com uma
 - `percent` multiplica por 100: o `PERCENTUAL_PIX` do E05 vale `5`, então divida por 100 antes
 - `toFixed` devolve texto com ponto decimal: no padrão brasileiro, use o `Intl`
 
 ---
 
+## Datas
+
+O que o cupom fiscal anota sobre o momento da compra?
+
+---
+
 ## :icon[calendar] Date: criar e ler uma data
+
+Um **`Date`** guarda um instante, dia e hora, como a data e a hora impressas num cupom fiscal. Ele também se cria com `new`:
 
 ```javascript
 const agora = new Date();              // agora, pelo relógio do computador
@@ -97,9 +140,33 @@ entrega.getFullYear(); // 2025
 entrega.getDay();      // 4: quinta-feira (0 é domingo, 6 é sábado)
 ```
 
-- Um **`Date`** guarda um instante: dia e hora
-- No construtor com números, o mês vai de 0 (janeiro) a 11 (dezembro): `new Date(2025, 10, 16)` é 16 de **novembro**
+- Ao criar a data com números, o mês vai de 0 (janeiro) a 11 (dezembro), como as gavetas numeradas a partir do 0: `new Date(2025, 10, 16)` é 16 de **novembro**
+- Os métodos `get...` (*get*, "pegar") leem uma parte da data
 - `getDate` é o dia do mês; `getDay` é o dia da semana. Os nomes enganam, então confira duas vezes
+
+---
+
+## :icon[calendar] Datas na prática
+
+Um pedido feito na quinta, 9 de outubro de 2025, às 14h30:
+
+```javascript
+const pedido = new Date(2025, 9, 9, 14, 30);
+```
+
+**Caso 1: o dia, o mês e o ano, para gente ler.** O mês ganha 1, porque o `Date` conta a partir do 0:
+
+```javascript
+console.log(pedido.getDate(), pedido.getMonth() + 1, pedido.getFullYear()); // 9 10 2025
+```
+
+**Caso 2: a hora do pedido.** Os dois últimos números da criação são a hora e os minutos:
+
+```javascript
+console.log(pedido.getHours(), pedido.getMinutes()); // 14 30
+```
+
+**Caso 3: o dia da semana.** `pedido.getDay()` dá `4`: quinta-feira.
 
 ---
 
@@ -123,7 +190,15 @@ certa.getDate(); // 16, no fuso do computador
 
 ---
 
+## Contas com datas
+
+Que dia cai 5 dias depois de 30 de outubro?
+
+---
+
 ## :icon[calendar-clock] Somar dias sem estragar a original
+
+Para somar dias, o `Date` tem o `setDate` ("definir o dia"). Só que ele **muda** a data: um `Date` é **mutável**, ao contrário da string. Por isso a função tira uma cópia e mexe só na cópia:
 
 ```javascript
 export function somarDias(data, dias) {
@@ -136,13 +211,15 @@ somarDias(new Date(2025, 9, 31), 1);  // 1 de novembro de 2025
 somarDias(new Date(2025, 11, 31), 1); // 1 de janeiro de 2026
 ```
 
-- `setDate` **muda** o objeto: um `Date` é mutável, ao contrário da string
-- Por isso a função cria uma cópia antes; montar a cópia com ano, mês e dia também zera a hora
+- A primeira linha monta a cópia, `nova`, com o ano, o mês e o dia da data recebida; assim, ela também zera a hora
+- O `setDate` muda só a cópia: a `data` de quem chamou fica como estava
 - Passou do fim do mês? O `Date` ajusta sozinho: o dia 32 de outubro vira 1 de novembro
 
 ---
 
 ## :icon[hourglass] Diferença entre datas
+
+Para saber quantos dias faltam, subtraia uma data da outra:
 
 ```javascript
 const UM_DIA = 24 * 60 * 60 * 1000; // um dia em milissegundos
@@ -156,7 +233,7 @@ const vencimento = new Date(2025, 9, 16);
 diasEntre(hoje, vencimento); // 3: "Seu boleto vence em 3 dias"
 ```
 
-- Subtrair dois `Date` dá a diferença em **milissegundos**: o `-` converte as datas em número, como converte texto em número (E05)
+- Subtrair dois `Date` dá a diferença em **milissegundos**, milésimos de segundo: o `-` converte as datas em número, como converte texto em número (E05)
 - Dividir por `UM_DIA` converte em dias; o `Math.round` absorve as horas quebradas
 - A mesma função escreve "Pedido feito há 2 dias": `diasEntre(dataDoPedido, hoje)`
 
@@ -179,7 +256,7 @@ console.log(new Date(2025, 9, 32).getMonth());
 :::
 
 :::tip Resposta
-- `11`: `entrega` e `pedido` são o **mesmo objeto**, então o `setDate` mudou a data do pedido também
+- `11`: `entrega = pedido` não copia a data. Os dois nomes são como dois papéis com o mesmo endereço: levam ao **mesmo objeto**, então o `setDate` mudou a data do pedido também
 - `6`: 11 de outubro de 2025 é um sábado, e a entrega cairia no fim de semana
 - `10`: o dia 32 de outubro vira 1 de novembro, o mês 10
 
@@ -188,7 +265,15 @@ Para não alterar o pedido, copie a data primeiro, como no `somarDias`.
 
 ---
 
+## Dias úteis
+
+Comprou na sexta à noite: quando a transportadora começa a contar o prazo?
+
+---
+
 ## :icon[truck] Dias úteis: o próximo dia de entrega
+
+Um **dia útil** vai de segunda a sexta: é quando a transportadora entrega. A Lojinha precisa de duas respostas: hoje é dia útil? E qual é o próximo?
 
 ```javascript
 export function ehDiaUtil(data) {
@@ -210,7 +295,8 @@ export function proximoDiaUtil(data) {
 | sexta | 5 | 3 | segunda |
 | sábado | 6 | 2 | segunda |
 
-O array funciona como uma tabela: a posição é o dia da semana, e o valor é quantos dias pular.
+- `ehDiaUtil` responde "o dia não é domingo **e** não é sábado"
+- O array funciona como uma tabela: a posição é o dia da semana, e o valor é quantos dias pular. `DIAS_ATE_O_PROXIMO_UTIL[data.getDay()]` abre a gaveta do dia de hoje
 
 ---
 
@@ -245,7 +331,15 @@ Pedido na quinta, 9 de outubro de 2025, com 5 dias úteis: a volta 1 chega na se
 
 ---
 
+## Formatar datas
+
+Como caber "quinta-feira, 16 de outubro" num cantinho da tela do celular?
+
+---
+
 ## :icon[calendar-check] Intl.DateTimeFormat: a data no padrão brasileiro
+
+O carimbo também serve para datas: o **`Intl.DateTimeFormat`** regula como a data aparece. `weekday` é o dia da semana, `day` é o dia e `month` é o mês; `'short'` pede a forma abreviada:
 
 ```javascript
 const formatoCurto = new Intl.DateTimeFormat('pt-BR', {
@@ -273,9 +367,57 @@ No terminal e nos testes, quem formata é o `Intl` do Node. No app (E30), é o d
 
 ---
 
+## :icon[calendar-check] Formatar datas na prática
+
+**Caso 1: a previsão de entrega.** O `formatarData` recebe a data que o `preverEntrega` devolve:
+
+```javascript
+console.log(`Chega até ${formatarData(preverEntrega(5, new Date(2025, 9, 9)))}`);
+// Chega até qui., 16 de out.
+```
+
+**Caso 2: a data por extenso, no histórico de pedidos.** Outro carimbo, com `dateStyle: 'long'`:
+
+```javascript
+const longo = new Intl.DateTimeFormat('pt-BR', { dateStyle: 'long' });
+console.log(`Pedido feito em ${longo.format(new Date(2025, 9, 9))}`);
+// Pedido feito em 9 de outubro de 2025
+```
+
+**Caso 3: só o dia da semana.**
+
+```javascript
+const diaDaSemana = new Intl.DateTimeFormat('pt-BR', { weekday: 'long' });
+console.log(`Entrega na ${diaDaSemana.format(new Date(2025, 9, 16))}`);
+// Entrega na quinta-feira
+```
+
+---
+
+## Testes com datas
+
+Se a pergunta da prova mudasse todo dia, o gabarito ainda serviria?
+
+---
+
 ## :icon[test-tube] Testar datas: nunca a data de hoje
 
-Um teste que usa `new Date()` muda de resultado conforme o dia. Por isso `preverEntrega` recebe `hoje` como **parâmetro**: o script não passa nada, e o teste passa uma data fixa.
+Um teste é uma prova com gabarito que o computador corrige sozinho. Com `new Date()`, a pergunta muda a cada dia, e o gabarito deixa de servir. Por isso `preverEntrega` recebe `hoje` como **parâmetro**: o script não passa nada, e o teste passa uma data fixa.
+
+```javascript
+preverEntrega(5);                       // muda a cada dia: conta a partir de hoje
+preverEntrega(5, new Date(2025, 9, 9)); // sempre quinta, 16 de outubro de 2025
+```
+
+- No script, a primeira forma: o cliente quer a previsão a partir de hoje
+- No teste, a segunda: a mesma entrada dá sempre a mesma saída, e o gabarito vale em qualquer dia
+- Escolha datas que mostrem o que importa: uma quinta, uma sexta, um sábado, uma virada de mês
+
+---
+
+## :icon[test-tube] Testes de datas na prática
+
+Três testes com datas fixas, que passam em qualquer dia:
 
 ```javascript
 import { ehDiaUtil, formatarData, preverEntrega } from './datas.js';
@@ -299,9 +441,15 @@ O `toEqual` compara dois `Date` pelo instante. O `toBe` falharia: são dois obje
 
 ---
 
+## JSON e datas
+
+O que acontece com uma data quando ela vira texto num arquivo?
+
+---
+
 ## :icon[braces] JSON e datas: ida e volta
 
-Você usou `JSON.stringify` e `JSON.parse` no E02, com o catálogo. Com uma data dentro, a volta muda:
+O **JSON**, do E02, escreve dados como texto: `JSON.stringify` transforma o objeto em texto, e `JSON.parse` traz de volta. Você usou os dois com o catálogo. Com uma data dentro, a volta muda:
 
 ```javascript
 const pedido = { id: 42, criadoEm: new Date(2025, 9, 9, 14, 30) };
@@ -315,7 +463,7 @@ new Date(volta.criadoEm).getHours(); // 14 de novo, no fuso do computador
 ```
 
 - **JSON** é texto: arquivos, a API (E19) e o armazenamento do celular (E43) só guardam e trocam texto
-- O `stringify` transforma o `Date` num texto em UTC: 14h30 em Brasília vira `17:30:00.000Z`
+- O `stringify` transforma o `Date` num texto em UTC: 14h30 em Brasília vira `17:30:00.000Z`, e o `Z` no fim quer dizer UTC
 - O `parse` não sabe que aquilo era uma data. Recrie com `new Date(texto)`: com hora e `Z`, o instante é exato e o dia não muda
 
 ---
@@ -337,6 +485,17 @@ const entregaLida = new Date(lido.entrega); // Date de novo
 - O `stringify` descarta `undefined` e funções, e `NaN` vira `null`: só dados simples sobrevivem
 - Arquivo vazio ou corrompido faz o `parse` lançar `SyntaxError` e parar o script. No E17, você aprende a capturar esse erro
 - O arquivo é gerado pelo script: ponha `pedido.json` no `.gitignore`
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Unexpected end of JSON input` | o `JSON.parse` recebeu um texto vazio | confira o arquivo; no E17, você captura esse erro |
+| `getHours is not a function` | a data voltou do JSON como texto | recrie com `new Date(texto)` |
+| `serializes to the same string` (Jest) | `toBe` com duas datas iguais | use `toEqual` |
+| `Invalid Date` | o texto não é uma data que o `Date` entende, como `'16/10/2025'` | monte com números: `new Date(ano, mes - 1, dia)` |
 
 ---
 
@@ -364,7 +523,7 @@ const entregaLida = new Date(lido.entrega); // Date de novo
 - Testes de data recebem `hoje` como parâmetro fixo; no JSON, a data vira texto e volta com `new Date(texto)`
 :::
 
-No E07, você escreve as suas primeiras decisões e repetições, e o `for` do `preverEntrega` deixa de ser receita.
+No E07, você escreve as suas primeiras decisões e repetições, e o `for` do `preverEntrega` deixa de ser código pronto.
 
 ---
 

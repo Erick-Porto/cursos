@@ -26,6 +26,21 @@ Programador Mobile · Encontro E29 · Aula 57 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+São palavras que a Prova 3 usa. Você já viu todas; aqui elas vêm explicadas de novo.
+
+| Palavra | O que é |
+|---|---|
+| **nativo** | feito com as peças do próprio sistema, Android ou iOS |
+| **híbrido** | um site rodando dentro de um app |
+| **WebView** | o navegador escondido dentro do app híbrido, que mostra o site |
+| **virtualizada** | uma lista que só desenha os itens que cabem na tela |
+| **cache** | uma cópia guardada para abrir mais rápido; às vezes guarda o que você já mudou |
+| **lacuna** | a questão em que você escreve a palavra que falta |
+
+---
+
 ## :icon[map] Mapa da unidade
 
 Em quatro encontros você foi do `npx create-expo-app` ao app aberto no celular de um colega. A Prova 3 tem 20 questões, todas de E26 a E29. O React (E21 a E25) já caiu na Prova 2: aqui ele aparece só como ponte.
@@ -51,23 +66,53 @@ Em quatro encontros você foi do `npx create-expo-app` ao app aberto no celular 
 
 ---
 
+## Mobile e React Native
+
+Dá para perceber quando um app é só um site disfarçado?
+
+---
+
 ## :icon[smartphone] Mobile e React Native
 
-- Um **site** roda no navegador; um **app** é instalado, pode notificar e acessar câmera e sensores
-- **Nativo**: Kotlin ou Swift, uma base de código por sistema. **Híbrido**: um site dentro de uma **WebView**. **React Native**: JavaScript que vira componentes nativos de verdade
-- O código JavaScript roda em um motor dentro do app e pede ao sistema para desenhar a tela
-- **Expo** é o kit sobre o React Native: cria o projeto, roda no celular pelo **Expo Go** e dá acesso ao aparelho com pacotes prontos
-- O que fica igual ao web: JSX, componentes, props, `useState`, `useEffect` e `fetch`
+Um **site** roda no navegador. Um **app** é instalado, pode notificar e usar câmera e sensores. Há três jeitos de fazer um app:
+
+| Jeito | Como é feito | Quem desenha a tela |
+|---|---|---|
+| **Nativo** | Kotlin (Android) e Swift (iOS): o app é escrito duas vezes | o sistema |
+| **Híbrido** | um site dentro de uma **WebView**: a TV na vitrine mostrando a loja | o navegador escondido |
+| **React Native** | escrito uma vez, em JavaScript e React | o sistema, com componentes nativos |
+
+- O JavaScript roda num motor dentro do app e pede ao sistema para desenhar a tela
+- Igual ao web: JSX, componentes, props, `useState`, `useEffect` e `fetch`
+
+---
+
+## :icon[layers] Os três jeitos na prática
+
+Três apps, um de cada jeito:
+
+| App | Como foi feito | Na tela |
+|---|---|---|
+| banco com uma equipe Android e outra iPhone | nativo: Kotlin e Swift, tudo duas vezes | botões e listas do sistema |
+| cardápio que abre o site do restaurante dentro do app | híbrido: o site numa WebView | botões de site; a rolagem às vezes trava |
+| o seu `minhas-tarefas-mobile` | React Native: uma base em JavaScript | botões e listas do sistema |
+
+```jsx
+<Text>Minhas Tarefas</Text>
+// no Android, vira o texto do Android; no iPhone, o do iPhone
+```
+
+---
+
+## O Expo
+
+Precisa instalar o Android Studio para ver o seu app no celular?
 
 ---
 
 ## :icon[terminal] Ambiente Expo
 
-- `npx create-expo-app@latest` cria o projeto; `npx expo start` sobe o servidor e mostra o QR code
-- O **Expo Go** lê o QR code; celular e computador no mesmo Wi-Fi (ou use `--tunnel`)
-- Tecla `r` recarrega; `m` abre o menu do desenvolvedor; `j` abre o React Native DevTools; `a` abre o emulador Android, se a máquina tiver um
-- Estrutura: `App.js` (componente raiz), `app.json` (nome, ícone, splash), `assets/` (imagens), `package.json`
-- Salvou o arquivo, o celular atualiza: **Fast Refresh**
+O **Expo** é o kit sobre o React Native, como o Vite do E21 no mundo mobile. Ele cria o projeto com um comando, roda o app no celular sem Android Studio nem Xcode e traz pacotes prontos para câmera, localização e outros recursos do aparelho.
 
 ```bash
 npx create-expo-app@latest minhas-tarefas-mobile --template blank
@@ -75,14 +120,43 @@ cd minhas-tarefas-mobile
 npx expo start
 ```
 
+- `npx create-expo-app@latest` cria o projeto; `npx expo start` sobe o servidor e mostra o QR code
+- O **Expo Go** lê o QR code; celular e computador no mesmo Wi-Fi (ou use `--tunnel`)
+- Salvou o arquivo, o celular atualiza: **Fast Refresh** (*atualização rápida*)
+
+---
+
+## :icon[keyboard] O Expo na prática
+
+Com o `npx expo start` rodando, o terminal responde a teclas. Três situações do dia a dia:
+
+| Situação | O que fazer | O que acontece |
+|---|---|---|
+| salvou o `App.js` | nada | o celular atualiza sozinho: Fast Refresh |
+| o app travou | tecla `r` | recarrega o app |
+| quer ver props e estado | tecla `j` | abre o React Native DevTools |
+
+Outras teclas: `m` abre o menu do desenvolvedor; `a` abre o emulador Android, se a máquina tiver um.
+
+Estrutura do projeto: `App.js` (componente raiz, o primeiro que aparece), `app.json` (nome, ícone, splash), `assets/` (imagens), `package.json`.
+
+---
+
+## Componentes essenciais
+
+Quais peças de Lego você usou em todas as telas até agora?
+
 ---
 
 ## :icon[component] Componentes essenciais
 
-- Tudo vem de `react-native`: `View` agrupa, `Text` mostra texto, `Image` precisa de `source` e de tamanho
+Componentes são as peças de Lego da tela. As peças básicas vêm prontas: tudo vem de `react-native`.
+
+- `View` agrupa, como uma caixa; `Text` mostra texto; `Image` precisa de `source` e de tamanho (`width` e `height`)
 - **Todo texto fica dentro de `Text`**; texto solto em `View` é erro
-- `ScrollView` rola o que não cabe; `TextInput` recebe digitação; `Button` é simples; `Pressable` aceita qualquer filho e estilo
-- `SafeAreaView` (de `react-native-safe-area-context`) afasta o conteúdo do entalhe e da barra de status; `StatusBar` vem de `expo-status-bar`
+- `ScrollView` rola o que não cabe; `TextInput` recebe digitação
+- `Button` é simples, com a aparência fixa do sistema; `Pressable` aceita qualquer filho e estilo
+- `SafeAreaView` (de `react-native-safe-area-context`) afasta o conteúdo do entalhe da câmera e da barra de status; `StatusBar` vem de `expo-status-bar`
 
 ```jsx
 import { View, Text, Pressable } from 'react-native';
@@ -95,12 +169,41 @@ import { View, Text, Pressable } from 'react-native';
 
 ---
 
+## :icon[image] Componentes essenciais na prática
+
+```jsx
+// 1. imagem da internet, com tamanho
+<Image source={{ uri: 'https://exemplo.com/fone.png' }} style={{ width: 80, height: 80 }} />
+
+// 2. botão simples, com a cara do sistema
+<Button title="Adicionar" onPress={adicionar} />
+
+// 3. botão livre, com o seu estilo
+<Pressable style={estilos.botao} onPress={adicionar}>
+  <Text style={estilos.textoBotao}>Adicionar</Text>
+</Pressable>
+```
+
+- Caso 1: sem `width` e `height`, a imagem da internet não aparece
+- Caso 2: `Button` recebe só o `title`; a cor e a forma são do sistema
+- Caso 3: `Pressable` aceita qualquer filho e estilo próprio
+
+---
+
+## StyleSheet e Flexbox
+
+Por que 16px não funciona no estilo de um app?
+
+---
+
 ## :icon[braces] StyleSheet e Flexbox
+
+O estilo é um objeto JavaScript. O **Flexbox** é a prateleira: você escolhe a direção, o alinhamento e o espaço entre as caixas.
 
 - Estilos são objetos em `StyleSheet.create`, aplicados com `style`; nomes em **camelCase** (`backgroundColor`)
 - Medidas são **números sem unidade** (`padding: 16`); strings só para cores e porcentagens
 - Toda `View` já é **flex**, em **coluna** por padrão; `flexDirection: 'row'` coloca lado a lado
-- `justifyContent` distribui no eixo principal; `alignItems`, no eixo cruzado; `flex: 1` ocupa o espaço livre
+- `justifyContent` distribui no **eixo principal**, o da direção; `alignItems`, no **eixo cruzado**, o outro; `flex: 1` ocupa o espaço livre
 - Estilo condicional com array: `style={[estilos.cartao, concluida && estilos.concluida]}`
 
 ```jsx
@@ -113,47 +216,212 @@ const estilos = StyleSheet.create({
 
 ---
 
-## :icon[list] Estado, FlatList e Alert
-
-- `useState` é o mesmo do web; mudam os eventos: `onPress` no lugar de `onClick`, `onChangeText` no lugar de `onChange`
-- `TextInput` controlado: `value={texto}` e `onChangeText={setTexto}`; o texto chega pronto, sem `e.target.value`
-- `FlatList` desenha só o visível: `data` (array), `renderItem` (`({ item }) => ...`) e `keyExtractor` (devolve **string**)
-- `Alert.alert(titulo, mensagem, botoes)` confirma ações destrutivas; cada botão é `{ text, onPress }`
-- O estado mora no `App` e desce por props (`onAdicionar`, `onAlternar`, `onRemover`)
+## :icon[layout-grid] Flexbox na prática
 
 ```jsx
+// 1. sem flexDirection: coluna
+<View>
+  <Text>Lojinha</Text>
+  <Text>12 produtos</Text>
+</View>
+
+// 2. linha, nas pontas, no meio da altura
+<View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', height: 56 }}>
+  <Text>Lojinha</Text>
+  <Text>12 produtos</Text>
+</View>
+```
+
+```jsx
+// 3. o campo ocupa o que sobra ao lado do botão
+<View style={{ flexDirection: 'row', gap: 8 }}>
+  <TextInput style={{ flex: 1 }} placeholder="Nova tarefa" />
+  <Button title="Adicionar" onPress={adicionar} />
+</View>
+```
+
+- Caso 1: "Lojinha" em cima, "12 produtos" embaixo, os dois à esquerda
+- Caso 2: "Lojinha" à esquerda e "12 produtos" à direita, no meio da altura
+- Caso 3: o campo estica até encostar no botão
+
+---
+
+## Estado e FlatList
+
+O placar mudou: quem avisa a tela para se redesenhar?
+
+---
+
+## :icon[list] Estado, FlatList e Alert
+
+O **estado** é o placar do jogo: quando muda, a tela se redesenha. O `useState` é o mesmo do web; mudam os eventos.
+
+- `onPress` no lugar de `onClick`; `onChangeText` no lugar de `onChange`
+- `TextInput` controlado: `value={texto}` e `onChangeText={setTexto}`; o texto chega pronto, sem `e.target.value`
+- O array muda com `setTarefas` e uma cópia nova; `push` sem `setTarefas` não redesenha a tela
+- `Alert.alert(titulo, mensagem, botoes)` confirma ações destrutivas, as que apagam algo; cada botão é `{ text, onPress }`
+- O estado mora no `App` e desce por props (`onAdicionar`, `onAlternar`, `onRemover`)
+
+---
+
+## :icon[rows-3] FlatList: a esteira
+
+A **`FlatList`** é uma esteira: desenha só os itens que cabem na tela e reaproveita os componentes conforme você rola. Ela recebe três props:
+
+- `data`: o array
+- `renderItem`: `({ item }) => ...`, desenha um item
+- `keyExtractor`: devolve o crachá de cada item, como **string**
+
+E uma opcional: `ListEmptyComponent`, o que aparece quando a lista está vazia.
+
+---
+
+## :icon[file-code] Estado e FlatList na prática
+
+```jsx
+// 1. adicionar: um array novo no estado, e a tela se redesenha
+setTarefas([...tarefas, nova]);
+```
+
+```jsx
+// 2. a lista, com aviso de lista vazia
 <FlatList
   data={tarefas}
   keyExtractor={(item) => String(item.id)}
   renderItem={({ item }) => <CartaoTarefa titulo={item.titulo} concluida={item.concluida} />}
   ListEmptyComponent={<Text>Nenhuma tarefa</Text>}
 />
+
+// 3. confirmar antes de remover
+Alert.alert('Remover?', 'Esta ação não pode ser desfeita', [
+  { text: 'Cancelar' },
+  { text: 'Remover', onPress: () => removerTarefa(id) },
+]);
 ```
+
+- Caso 1: a tarefa nova aparece na lista. Com `tarefas.push(nova)`, nada aparece
+- Caso 2: com o array vazio, "Nenhuma tarefa"
+- Caso 3: a caixa do sistema com Cancelar e Remover; só o Remover apaga
+
+---
+
+## Depuração
+
+Tela vermelha ou aviso amarelo: qual dos dois para o app?
 
 ---
 
 ## :icon[bug] Depuração
 
+**Depurar** é achar e corrigir um erro. A mensagem de erro é a luz do painel do carro: diz o que aconteceu e onde.
+
 - **Menu do desenvolvedor**: agite o celular ou tecle `m` no terminal; tem Reload, inspetor e monitor de performance
 - `console.log` aparece no **terminal do Expo** (`LOG`, `WARN`, `ERROR`), não no celular
 - **Tela vermelha**: o app parou; leia a primeira linha, o arquivo e a linha indicada
 - **Aviso amarelo**: o app continua, mas é um bug esperando a vez (chave faltando, por exemplo)
-- Tecla `j`: o **React Native DevTools** mostra props e estado (Components) e pausa o app em breakpoints (Sources), como no E03; o **Expo Snack** (snack.expo.dev) roda e compartilha código no navegador
-- Método: reproduzir, isolar, formular hipótese, testar **uma mudança por vez**; travou, `r`; mudou o `app.json`, `npx expo start -c`
+
+---
+
+## :icon[search] Depuração: ferramentas e método
+
+- Tecla `j`: o **React Native DevTools** mostra props e estado (Components) e pausa o app em breakpoints, os pontos de parada (Sources), como no E03
+- O **Expo Snack** (snack.expo.dev) roda e compartilha código no navegador
+- Método: reproduzir, isolar, formular hipótese, testar **uma mudança por vez**
+- Travou? Tecle `r`. Mudou o `app.json`? `npx expo start -c`, que limpa o cache
+
+---
+
+## :icon[siren] Depuração na prática
+
+| O que você fez | Onde aparece | O que você vê |
+|---|---|---|
+| `console.log('Tarefas:', tarefas.length)` | no terminal do Expo | `LOG  Tarefas: 3` |
+| texto solto dentro de uma `View` | tela vermelha; o app parou | `Text strings must be rendered within a <Text> component` |
+| `map` sem `key` | aviso amarelo; o app continua | `Each child in a list should have a unique "key" prop` |
+
+Nos três casos, leia a mensagem inteira antes de mexer no código: ela diz o que aconteceu e, quase sempre, onde.
+
+---
+
+## Do React ao React Native
+
+Do minhas-tarefas web para o celular, o que você copiou sem mudar nada?
 
 ---
 
 ## :icon[arrow-left-right] Do React ao React Native
 
+Levar o app da web para o celular é como traduzir um livro: a história é a mesma, só o idioma muda.
+
 - A **lógica** é copiada: componentes como funções, props, `useState`, `useEffect`, hooks próprios, `map`, `filter` e `fetch` são React e JavaScript, não navegador
 - A **tela** é traduzida: `div` vira `View`, `p` vira `Text`, `button` vira `Pressable`, `input` vira `TextInput` e `className` vira `style`
-- Eventos: `onClick` vira `onPress`; `onChange` com `e.target.value` vira `onChangeText`, que entrega a string
+- Eventos: `onClick` vira `onPress`; `onChange` com `e.target.value` vira `onChangeText`, que entrega a string, o texto pronto
 - Listas longas: o `map` com `key` vira `FlatList` com `renderItem` e `keyExtractor`
 - `--tunnel` abre o app em qualquer rede, enquanto o seu servidor estiver ligado; o `app.json` define `name`, `slug`, `version`, `icon` e `splash`
 
 ```bash
 npx expo start -c --tunnel
 ```
+
+---
+
+## :icon[columns-3] Do React ao React Native na prática
+
+O mesmo cartão, nas duas plataformas:
+
+::::columns
+:::col
+Web
+
+```jsx
+<div className="cartao">
+  <p>{titulo}</p>
+  <input value={nota} onChange={(e) => setNota(e.target.value)} />
+  <button onClick={remover}>Remover</button>
+</div>
+```
+:::
+:::col
+React Native
+
+```jsx
+<View style={estilos.cartao}>
+  <Text>{titulo}</Text>
+  <TextInput value={nota} onChangeText={setNota} />
+  <Pressable onPress={remover}><Text>Remover</Text></Pressable>
+</View>
+```
+:::
+::::
+
+O `useState` de `nota` e a função `remover` não mudam: são lógica. Mudam as peças, o estilo e os eventos: são tela.
+
+---
+
+## A prova
+
+Hoje é o ensaio geral: que tipos de questão vão cair?
+
+---
+
+## :icon[clipboard-check] Como será a prova
+
+Antes de treinar com as questões, conheça o formato da Prova 3.
+
+| Item | Como é |
+|---|---|
+| Questões | 20 objetivas, todas de React Native (E26 a E29) |
+| Tempo | 60 minutos, 1 tentativa |
+| Nota mínima | 70 |
+| Onde | No sistema, na última hora do encontro |
+
+Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **verdadeiro ou falso** e **lacuna** (escreva o nome exato, como `FlatList` ou `onChangeText`).
+
+:::tip Leia o enunciado
+- Em questões com código, leia linha por linha antes das alternativas
+- Palavras como **não**, **sempre**, **só** e **web** mudam a resposta
+- Quando a questão compara web e celular, pergunte-se: isso é React ou é navegador?
+:::
 
 ---
 
@@ -204,7 +472,7 @@ Um colega renomeou o campo `id` das tarefas para `codigo`, e a lista passou a mo
 :::
 
 :::tip Resposta
-**b.** A `FlatList` identifica cada item pelo `keyExtractor`, que deve devolver uma **string** única. Sem ele, ela procura `key` ou `id` no objeto; como o campo virou `codigo`, não encontra e avisa. A opção **a** imita a `key` do `map`, mas a `FlatList` não lê a `key` do que o `renderItem` devolve. Sem chave estável, remover um item faz os cartões trocarem de lugar.
+**b.** A `FlatList` identifica cada item pelo `keyExtractor`, que deve devolver uma **string** única. Sem ele, ela procura `key` ou `id` no objeto; como o campo virou `codigo`, não encontra e avisa. A opção **a** imita a `key` do `map`, mas a `FlatList` não lê a `key` do que o `renderItem` devolve. Sem um crachá que não muda, remover um item faz os cartões trocarem de lugar.
 :::
 
 ---
@@ -229,7 +497,7 @@ const estilos = StyleSheet.create({
 :::
 
 :::tip Resposta
-**c.** No React Native, medidas são **números sem unidade**: `padding: 16` são 16 pontos independentes de densidade, e o sistema ajusta para cada tela. A opção **a** é a tentação de quem vem do CSS, mas `'16px'` não é um valor válido e o estilo não é aplicado (em algumas versões, o app mostra erro). A **b** nem é JavaScript válido. Strings só para cores (`'#fff'`) e porcentagens (`'50%'`).
+**c.** No React Native, medidas são **números sem unidade**: `padding: 16` são 16 pontos, e o sistema ajusta o tamanho para cada tela (o E30 mostra como). A opção **a** é a tentação de quem vem do CSS, mas `'16px'` não é um valor válido e o estilo não é aplicado (em algumas versões, o app mostra erro). A **b** nem é JavaScript válido. Strings só para cores (`'#fff'`) e porcentagens (`'50%'`).
 :::
 
 ---
@@ -289,25 +557,6 @@ Se um enunciado parece fácil demais, procure um desses cinco antes de responder
 
 ---
 
-## :icon[clipboard-check] Como será a prova
-
-| Item | Como é |
-|---|---|
-| Questões | 20 objetivas, todas de React Native (E26 a E29) |
-| Tempo | 60 minutos, 1 tentativa |
-| Nota mínima | 70 |
-| Onde | No sistema, na última hora do encontro |
-
-Tipos: **escolha única**, **múltipla escolha** (marque todas as corretas), **verdadeiro ou falso** e **lacuna** (escreva o nome exato, como `FlatList` ou `onChangeText`).
-
-:::tip Leia o enunciado
-- Em questões com código, leia linha por linha antes das alternativas
-- Palavras como **não**, **sempre**, **só** e **web** mudam a resposta
-- Quando a questão compara web e celular, pergunte-se: isso é React ou é navegador?
-:::
-
----
-
 ## :icon[flask-conical] No laboratório
 
 **40 minutos.** Fechar a versão 1 do **Minhas Tarefas mobile**.
@@ -329,7 +578,7 @@ Entrega: link do repositório no sistema. Depois, a **Prova 3** (60 minutos, no 
 
 Etapa curta, para casa. No `gota`, a tela não muda; muda onde a lógica mora:
 
-- `src/regras/agua.js`: `totalDoDia`, `percentualDaMeta`, `quantoFalta`, `mensagemDaFaixa`, `validarMeta` e `formatarHora`, puras
+- `src/regras/agua.js`: `totalDoDia`, `percentualDaMeta`, `quantoFalta`, `mensagemDaFaixa`, `validarMeta` e `formatarHora`, puras: recebem valores e devolvem valores
 - `src/hooks/useConsumo.js` com o estado e as funções; o `App` só monta a tela e confirma a remoção
 - `CartaoProgresso` mostra quanto falta e a mensagem da faixa
 - `app.json` com `"name": "Gota"`; README com dois prints do celular e como rodar

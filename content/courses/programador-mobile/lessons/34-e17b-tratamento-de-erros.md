@@ -27,6 +27,19 @@ Programador Mobile · Encontro E17 · Aula 34 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **exceção** | um aviso de erro que para a função na hora e sobe até alguém tratar |
+| **lançar** (`throw`) | criar a exceção: "parei aqui, deu problema" |
+| **capturar** (`catch`) | pegar a exceção e tratar, sem deixar o programa cair |
+| **erro esperado** | uma situação prevista, como um CEP errado, que a pessoa resolve com uma boa mensagem |
+| **bug** | um defeito no código; quem resolve é você, corrigindo |
+| **pilha** (*stack*) | a lista das chamadas, de função em função, até onde o erro aconteceu |
+
+---
+
 ## O CEP que virou frete grátis
 
 A cliente digita o CEP com um número a menos. Rode o script do E16 com ele:
@@ -41,7 +54,7 @@ Frete: R$ 0,00
 Pix com 5% de desconto: R$ 128,06
 ```
 
-O `calcularFrete` do E13 devolve `null` para CEP inválido, o script monta a entrega como `null` e o `Pedido` conta frete zero. A loja paga a entrega e nenhuma mensagem aparece. Um valor especial escondido entre os números é fácil de esquecer: basta um script que não confira.
+O `calcularFrete` do E13 devolve `null` para CEP inválido, o script monta a entrega como `null` e o `Pedido` conta frete zero. A loja paga a entrega e nenhuma mensagem aparece. Um valor especial escondido entre os números é fácil de esquecer: um único script que não confira já dá o prejuízo.
 
 :::question
 Como a regra pode avisar quem a chamou de um jeito que não dê para ignorar?
@@ -49,9 +62,15 @@ Como a regra pode avisar quem a chamou de um jeito que não dê para ignorar?
 
 ---
 
+## Lançar um erro
+
+O que acontece com o número do trapezista quando ele erra o salto?
+
+---
+
 ## :icon[octagon-alert] throw: parar e avisar
 
-**`throw`** lança uma **exceção**: a função para na hora, nenhuma linha abaixo roda e o erro sobe para quem a chamou, e para quem chamou essa, até alguém capturar.
+Pense no trapezista do circo. Se ele cai, o número para na hora, e ele cai até a rede de proteção. **`throw`** (lançar) é essa queda: lança uma **exceção**. A função para na hora, nenhuma linha abaixo roda e o erro sobe para quem a chamou, e para quem chamou essa, até alguém capturar.
 
 ```javascript
 // src/regras/checkout.js
@@ -66,11 +85,61 @@ export function freteDoCep(subtotal, cep) {
 }
 ```
 
-Se ninguém capturar, o Node para o script e mostra `Error: CEP inválido: 0131000` com o caminho das chamadas, a **pilha** (*stack*), a partir de `at freteDoCep`. É o mesmo `throw` do `deJSON` do E15 e do cartão em 0x do E16. E é isso que você quer: o problema não passa despercebido.
+É o mesmo `throw` do `deJSON` do E15 e do cartão em 0x do E16.
+
+---
+
+## :icon[list-ordered] O throw em português
+
+| Linha | O que ela diz |
+|---|---|
+| `calcularFrete(subtotal, cep)` | a regra do E13: devolve o frete, ou `null` para CEP inválido |
+| `if (frete === null)` | "o CEP veio errado?" |
+| `throw new Error(...)` | "pare aqui e avise": cria um erro com este texto e o lança |
+| `` `CEP inválido: ${cep}` `` | o texto do erro, a **mensagem** (*message*) |
+| `return frete` | só chega aqui quem passou pela conferência |
+
+Se ninguém capturar, o Node para o script e mostra `Error: CEP inválido: 0131000` e o caminho das chamadas, a **pilha** (*stack*), a partir de `at freteDoCep`. É isso que você quer: o problema não passa despercebido.
+
+---
+
+## :icon[octagon-alert] throw na prática
+
+**Caso 1: com CEP válido, nada é lançado.**
+
+```javascript
+freteDoCep(89.9, '01310000'); // 9.9: o frete de São Paulo
+```
+
+**Caso 2: com CEP errado, o script para ali.**
+
+```javascript
+console.log('antes');
+freteDoCep(89.9, '0131000');
+console.log('depois'); // nunca roda
+```
+
+```plaintext
+antes
+Error: CEP inválido: 0131000
+    at freteDoCep (.../src/regras/checkout.js:6:11)
+```
+
+No terminal, o Node também mostra a linha do código, com um `^` embaixo do `throw`.
+
+**Caso 3: o `throw` do E15.** `Produto.deJSON({ nome: 'Fone' })` para com `Error: Produto inválido no JSON`: sem preço, nenhum produto nasce.
+
+---
+
+## try e catch
+
+Por que o espetáculo continua quando o trapezista cai?
 
 ---
 
 ## :icon[shield-alert] try e catch: capturar o erro
+
+Embaixo do trapezista fica a rede de proteção: se ele cair, a rede segura e o espetáculo continua. O **`try`** (tentar) é o número feito em cima da rede. O **`catch`** (pegar) é a rede: recebe o erro e trata.
 
 ```javascript
 try {
@@ -83,15 +152,58 @@ try {
 console.log('o script continua');
 ```
 
-- O **`try`** roda até a primeira exceção e pula direto para o **`catch`**
+- O `try` roda até a primeira exceção e pula direto para o `catch`
 - `erro` é o objeto lançado: `message` tem o texto, `name` o tipo e `stack` o caminho das chamadas
 - Depois do `catch`, o código segue normalmente: o erro foi **tratado**
 
 ---
 
+## :icon[shield-alert] try e catch na prática
+
+**Caso 1: uma lista de CEPs.** Um CEP errado não impede os outros:
+
+```javascript
+for (const cep of ['01310000', '123', '20040002']) {
+  try {
+    console.log(`${cep}: ${freteDoCep(89.9, cep)}`);
+  } catch (erro) {
+    console.log(`${cep}: ${erro.message}`);
+  }
+}
+```
+
+```plaintext
+01310000: 9.9
+123: CEP inválido: 123
+20040002: 14.9
+```
+
+**Caso 2: um catálogo com um produto quebrado.** O preço `'249,90'` é texto, e o `deJSON` do E15 lança:
+
+```javascript
+const dados = [{ nome: 'Fone', preco: 199.9 }, { nome: 'Caixa', preco: '249,90' }];
+for (const d of dados) {
+  try {
+    console.log(Produto.deJSON(d).precoFormatado);
+  } catch (erro) {
+    console.log(`${d.nome}: ${erro.message}`);
+  }
+}
+// R$ 199,90
+// Caixa: Produto inválido no JSON
+```
+
+---
+
+## finally
+
+Com queda ou sem queda, o que acontece no picadeiro no fim do número?
+
+---
+
 ## :icon[check-check] finally: o que roda sempre
 
-O **`finally`** roda no fim, com erro ou sem erro, mesmo que o `try` tenha um `return`. Ele fecha o que você abriu, como um cronômetro (`console.time` liga, `console.timeEnd` mostra o tempo):
+No fim do número, com queda ou sem queda, alguém arruma o picadeiro. O **`finally`** (por fim) roda no fim, com erro ou sem erro, mesmo que o `try` tenha um `return`. Ele fecha o que você abriu, como um cronômetro (`console.time` liga, `console.timeEnd` mostra o tempo):
 
 ```javascript
 function simularEntrega(itens, cep) {
@@ -127,6 +239,37 @@ No E18, as Promises ganham um `finally` próprio, para quando a espera termina.
 
 ---
 
+## :icon[check-check] finally na prática
+
+O `finally` roda até quando o `try` ou o `catch` têm `return`: ele vem antes de a função devolver o valor.
+
+```javascript
+function freteDoResumo(cep) {
+  try {
+    return freteDoCep(89.9, cep);
+  } catch (erro) {
+    return 0;
+  } finally {
+    console.log('consulta encerrada');
+  }
+}
+
+console.log(freteDoResumo('01310000'));
+console.log(freteDoResumo('123'));
+```
+
+```plaintext
+consulta encerrada
+9.9
+consulta encerrada
+0
+```
+
+- CEP válido: o `try` devolve 9.9, mas antes o `finally` escreve a linha dele
+- CEP errado: o `catch` devolve 0, e o `finally` roda do mesmo jeito
+
+---
+
 ## Pense
 
 :::question
@@ -154,7 +297,15 @@ Com `'123'`: A, C, D, E. O `throw` dentro de `freteDoCep` pula o `B` e vai diret
 
 ---
 
+## Esperado ou bug
+
+Tanque vazio e defeito de fábrica: quem resolve cada um?
+
+---
+
 ## :icon[bug] Erro esperado ou bug?
+
+Pense num carro. Tanque vazio é previsto: o painel avisa e o motorista resolve, abastecendo. Defeito de fábrica é outra coisa: quem resolve é a oficina. No código, o tanque vazio é o **erro esperado**; o defeito de fábrica é o **bug**.
 
 | | Erro esperado | Bug |
 |---|---|---|
@@ -163,13 +314,37 @@ Com `'123'`: A, C, D, E. O `throw` dentro de `freteDoCep` pula o `B` e vai diret
 | Quem resolve | a pessoa, com uma boa mensagem | você, corrigindo o código |
 | O que fazer | lançar um erro próprio e mostrar a mensagem | deixar estourar e corrigir |
 
-Erros do próprio JavaScript, como um **`TypeError`** ao ler `produto.nome` com `produto` indefinido, quase sempre são bugs. E o cartão em 0x que o `PagamentoCartao` do E16 recusa? Com parcelas escolhidas numa lista de 1x a 12x, um 0x só nasce de bug; se a pessoa digitasse as parcelas, seria esperado.
+---
+
+## :icon[scale] Esperado ou bug na prática
+
+```javascript
+freteDoCep(89.9, '0131000');
+// Error: CEP inválido: 0131000            esperado: a pessoa corrige o CEP
+
+const produto = produtos.find((p) => p.id === 99); // não existe: undefined
+produto.nome;
+// TypeError: Cannot read properties of undefined (reading 'nome')   bug
+
+'199,90' * 2;
+// NaN                                     bug: o preço chegou como texto
+```
+
+Erros do próprio JavaScript, como esse **`TypeError`**, quase sempre são bugs: a pessoa não tem o que fazer com "Cannot read properties of undefined".
+
+E o cartão em 0x que o `PagamentoCartao` do E16 recusa? Escolhido numa lista de 1x a 12x, um 0x só nasce de bug. Digitado pela pessoa, é esperado. A pergunta que decide: a pessoa consegue resolver com uma boa mensagem? Se sim, é esperado.
+
+---
+
+## Erros próprios
+
+Por que cada luz do painel tem um símbolo fixo, se o manual já explica tudo?
 
 ---
 
 ## :icon[file-code] Erros próprios: a base e o CEP
 
-Com `extends Error`, a herança do E16, cada situação esperada ganha uma classe em `src/modelos/erros.js`. A base **`ErroDeNegocio`** marca os erros que o programa sabe tratar e guarda o **`codigo`**: fixo, para o programa decidir. O `message` é o texto para a pessoa.
+Cada luz do painel do carro tem um símbolo fixo, e o manual explica o que fazer. Os erros da Lojinha seguem a mesma ideia. Com `extends Error`, a herança do E16, cada situação esperada ganha uma classe em `src/modelos/erros.js`. A base **`ErroDeNegocio`** marca os erros que o programa sabe tratar e guarda o **`codigo`**: fixo, para o programa decidir, como o símbolo da luz. O `message` é o texto para a pessoa.
 
 ```javascript
 export class ErroDeNegocio extends Error {
@@ -188,6 +363,19 @@ export class CepInvalidoError extends ErroDeNegocio {
   }
 }
 ```
+
+---
+
+## :icon[list-ordered] O erro próprio em português
+
+| Linha | O que ela diz |
+|---|---|
+| `class ErroDeNegocio extends Error` | "é um tipo de `Error`": herda a `message` e a `stack` |
+| `super(mensagem)` | "monte a parte de `Error` com este texto": guarda a `message` |
+| `this.name = 'ErroDeNegocio'` | o nome do tipo, que aparece na pilha |
+| `this.codigo = codigo` | o código fixo, para o programa decidir |
+| `` super(`Confira o CEP ...`, 'CEP_INVALIDO') `` | o filho passa à base a mensagem e o código |
+| `this.cep = cep` | o dado extra: o CEP que veio errado |
 
 Escreva o `name` à mão: sem ele, `erro.name` sobe a cadeia da aula 33 e acha o `'Error'` de `Error.prototype`.
 
@@ -225,7 +413,7 @@ export class EstoqueInsuficienteError extends ErroDeNegocio {
 
 ## :icon[shopping-cart] Lance na regra, trate em quem chama
 
-No `alterarQuantidade` do E07, entra uma guarda no começo:
+No `alterarQuantidade` do E07, entra uma **guarda**: um `if` no começo que barra o que não pode seguir.
 
 ```javascript
 // src/regras/carrinho.js
@@ -247,9 +435,43 @@ export function alterarQuantidade(itens, id, qtd) {
 
 ---
 
+## :icon[file-code] Erros próprios na prática
+
+**Caso 1: o que um erro próprio carrega.**
+
+```javascript
+const erro = new EstoqueInsuficienteError('Luminária de Mesa', 2);
+erro.message;                  // 'Luminária de Mesa: só 2 em estoque.'
+erro.codigo;                   // 'ESTOQUE_INSUFICIENTE'
+erro instanceof ErroDeNegocio; // true: é da família
+```
+
+**Caso 2: o cupom, com e sem motivo.**
+
+```javascript
+new CupomInvalidoError('NATAL25', 'Este cupom expirou').message; // 'Este cupom expirou'
+new CupomInvalidoError('XYZ').message; // 'Este cupom não vale para este pedido'
+```
+
+**Caso 3: a guarda do estoque.** A lista recebida não muda:
+
+```javascript
+const itens = [{ id: 4, nome: 'Luminária de Mesa', preco: 89.9, estoque: 2, qtd: 2 }];
+alterarQuantidade(itens, 4, 3); // lança EstoqueInsuficienteError
+itens[0].qtd;                   // 2
+```
+
+---
+
+## Testar o erro
+
+Como provar, sem rodar o script à mão, que a regra recusa um CEP errado?
+
+---
+
 ## :icon[test-tube] Testando quem lança
 
-Os testes esperam `CepInvalidoError`: troque o `new Error` de `freteDoCep` por `new CepInvalidoError(cep)`.
+Um teste é uma prova com gabarito que o computador corrige (E04). Para um erro, o gabarito diz: "esta chamada precisa lançar `CepInvalidoError`". Antes, troque o `new Error` de `freteDoCep` por `new CepInvalidoError(cep)`: é ele que os testes esperam.
 
 ```javascript
 import { freteDoCep } from './checkout.js';
@@ -266,9 +488,36 @@ test('o erro traz o código CEP_INVALIDO', () => {
 });
 ```
 
-- **`toThrow`** recebe uma **função**: a arrow adia a chamada para dentro do `expect`
+- **`toThrow`** (lança) recebe uma **função**: a arrow adia a chamada para dentro do `expect`. Você entrega a receita, e o Jest cozinha
 - Sem a arrow, a exceção estoura antes do `expect` e o teste quebra
 - Se nada for lançado, `erro` fica `undefined` e o segundo teste também falha, como deve
+
+---
+
+## :icon[test-tube] Testar o erro na prática
+
+Três jeitos de conferir um erro no Jest, e o resultado de cada um:
+
+```javascript
+// 1. pela classe do erro: verde
+expect(() => freteDoCep(100, '0131000')).toThrow(CepInvalidoError);
+
+// 2. pelo texto da mensagem (itens: a Luminária, estoque 2, já com 2): verde
+expect(() => alterarQuantidade(itens, 4, 3)).toThrow('Luminária de Mesa: só 2 em estoque.');
+
+// 3. sem a arrow: vermelho, o erro estoura antes do expect
+expect(freteDoCep(100, '0131000')).toThrow(CepInvalidoError);
+```
+
+- Com um texto, o `toThrow` confere se a mensagem **contém** esse texto
+- Use a classe quando importa o tipo do erro; o texto, quando importa o que a pessoa vai ler
+- O terceiro é o erro mais comum do laboratório: sem a arrow, não há receita para o Jest cozinhar
+
+---
+
+## A mensagem certa
+
+Acende uma luz no painel e aparece só "Erro 0x3F". Isso ajuda alguém?
 
 ---
 
@@ -316,6 +565,8 @@ node src/scripts/simular-entrega.js 0131000
 - **Relançar** com `throw erro` deixa o bug aparecer com a pilha, em vez de virar "Confira o CEP"
 - O `finally` roda mesmo quando o `catch` relança
 
+Um exemplo de bug: `subtotl(itens)`, com uma letra a menos, lança `ReferenceError` antes mesmo de `freteDoCep` rodar. Sem a linha do `instanceof`, ele viraria "Aviso: subtotl is not defined".
+
 ---
 
 ## Pratique
@@ -340,6 +591,18 @@ function aumentar(itens, id) {
 
 Com a Luminária de Mesa (estoque 2) em 2 unidades, `aumentar` imprime "Carrinho: Luminária de Mesa: só 2 em estoque." e a lista continua com 2, porque a regra lançou antes de criar a lista nova.
 :::
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Error: ...` seguido de linhas `at` | um erro que ninguém capturou | a primeira linha `at` diz onde ele nasceu; capture em quem chama |
+| `Must call super constructor` | `this` antes do `super(...)` | `super` primeiro |
+| `does not provide an export named` | o nome no `import` está diferente | conferir a grafia, com chaves |
+| `erro.message` sai `undefined` | lançaram um texto, não um `Error` | `throw new CepInvalidoError(cep)` |
+| `ReferenceError: ... is not defined` | um nome escrito errado: é bug | corrigir o nome; nunca esconder no `catch` |
 
 ---
 

@@ -28,6 +28,19 @@ Programador Mobile · Encontro E19 · Aula 38 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **servidor** | um computador sempre ligado, que guarda dados e responde pedidos |
+| **API** | o cardápio de pedidos que um servidor aceita |
+| **HTTP** | a língua dos pedidos e das respostas na internet |
+| **status** | o número da resposta: 200 deu certo, 404 não existe |
+| **cancelar** (*abort*) | desistir de um pedido que ainda está no caminho |
+| **`fetch` simulado** | um dublê do `fetch` nos testes: responde na hora, sem internet |
+
+---
+
 ## Um catálogo que muda sem publicar de novo
 
 Hoje, os 12 produtos da Lojinha moram em `src/data/produtos.js`. Para mudar um preço, só mudando o código. Lojas de verdade buscam o catálogo num **servidor**: preço, estoque e novidades chegam sem publicar uma versão nova.
@@ -40,9 +53,17 @@ O que o script deve fazer quando a internet cai no meio da busca? E quando duas 
 
 ---
 
+## HTTP
+
+No restaurante, como o seu pedido chega à cozinha e o prato volta para a mesa?
+
+---
+
 ## :icon[globe] HTTP: pedido e resposta
 
-O programa e o servidor conversam por **HTTP**: o programa manda um **pedido** e recebe uma **resposta**.
+Pense no garçom: você pede pelo cardápio, a cozinha prepara e ele traz o prato. Na internet, o programa é a mesa, o **servidor** é a cozinha e a **API** (*interface de programação*) é o cardápio: a lista de pedidos que o servidor aceita.
+
+A conversa segue o **HTTP**: o programa manda um **pedido** e recebe uma **resposta**.
 
 ```plaintext
 GET /products/1                         pedido: método e caminho
@@ -53,6 +74,14 @@ Content-Type: application/json          cabeçalho
 { "id": 1, "title": "Essence Mascara Lash Princess", "price": 9.99 }
 ```
 
+Os **cabeçalhos** (*headers*) dizem como ler o corpo; o **corpo** (*body*) vem em JSON, o formato do `catalogo.json` do E02.
+
+---
+
+## :icon[list] Os métodos: o que você quer fazer
+
+O **método** é o tipo do pedido: olhar o cardápio não é o mesmo que fazer um pedido novo.
+
 | Método | Para quê | Na Lojinha |
 |---|---|---|
 | GET | ler | listar produtos, abrir o detalhe |
@@ -60,7 +89,7 @@ Content-Type: application/json          cabeçalho
 | PUT ou PATCH | alterar | mudar um item já salvo |
 | DELETE | apagar | tirar um favorito do servidor |
 
-Os **cabeçalhos** dizem como ler o corpo; o **corpo** vem em JSON, o formato do `catalogo.json` do E02.
+Hoje você usa os dois primeiros: GET para o catálogo e POST para o carrinho.
 
 ---
 
@@ -79,9 +108,36 @@ Leia pela família: **2xx** deu certo, **4xx** o pedido tem problema, **5xx** o 
 
 ---
 
+## :icon[globe] HTTP na prática
+
+Três conversas de verdade com a DummyJSON:
+
+```plaintext
+GET /products/1                ->  200 OK
+{ "id": 1, "title": "Essence Mascara Lash Princess", "price": 9.99, ... }
+
+GET /products/9999             ->  404 Not Found
+{ "message": "Product with id '9999' not found" }
+
+POST /carts/add                ->  201 Created
+{ "total": 19.98, "totalQuantity": 2, ... }
+```
+
+- Abrir o produto é **ler**: GET, e a resposta é 200
+- Um produto que não existe também tem resposta: 404, com a explicação no corpo
+- Enviar o carrinho é **criar**: POST, e a resposta é 201
+
+---
+
+## fetch
+
+Quem leva o seu pedido até o servidor e traz a resposta de volta?
+
+---
+
 ## :icon[cloud-download] GET com fetch
 
-O **`fetch`** já vem no Node (versão 18 em diante): nada para instalar.
+O **`fetch`** (buscar) é o garçom do JavaScript: leva o pedido ao servidor e traz a resposta. Ele já vem no Node (versão 18 em diante): nada para instalar.
 
 ```javascript
 async function mostrarVitrine() {
@@ -127,14 +183,45 @@ console.log(carrinho.total, carrinho.totalQuantity);
 ```
 
 - `body` só aceita **texto**: o `JSON.stringify` do E06 converte o objeto
-- Sem o `Content-Type`, a DummyJSON não entende o corpo e responde **400**: `"User id is required"`
+- O `map` troca cada item da Lojinha pelo formato da DummyJSON: `{ id, quantity }`
+- Sem o `Content-Type` (*tipo do conteúdo*), a DummyJSON não entende o corpo e responde **400**: `"User id is required"`
 - A DummyJSON finge que salvou: devolve o carrinho calculado, mas não guarda nada
+
+---
+
+## :icon[cloud-download] fetch na prática
+
+**Caso 1: um produto.**
+
+```javascript
+const resposta = await fetch('https://dummyjson.com/products/1');
+const produto = await resposta.json();
+console.log(resposta.status, produto.title, produto.price);
+// 200 Essence Mascara Lash Princess 9.99
+```
+
+**Caso 2: uma busca.** O termo vai no endereço, depois de `?q=`:
+
+```javascript
+const busca = await fetch('https://dummyjson.com/products/search?q=phone');
+const achados = await busca.json();
+console.log(achados.total, achados.products[0].title);
+// 23 Apple AirPods Max Silver
+```
+
+**Caso 3: o carrinho.** Enviando `[{ id: 1, qtd: 2 }]` no POST para `/carts/add`, a resposta vem com status 201, `total` igual a `19.98` e `totalQuantity` igual a `2`: duas máscaras de 9,99.
+
+---
+
+## Rede ou resposta
+
+O garçom nem chegou à cozinha, ou chegou e ouviu "acabou"? Faz diferença?
 
 ---
 
 ## :icon[wifi] Erro de rede ou erro de resposta
 
-O `fetch` só **rejeita** quando o pedido nem chega ao servidor. Um 404 ou um 500 é uma resposta como outra qualquer: a Promise é **cumprida**.
+Se o garçom nem chega à cozinha, o pedido falhou: o `fetch` **rejeita**. Se ele chega e ouve "esse prato não existe", isso é uma resposta: a Promise é **cumprida**.
 
 | Situação | O que o `fetch` faz | Como perceber |
 |---|---|---|
@@ -148,6 +235,26 @@ O `fetch` só **rejeita** quando o pedido nem chega ao servidor. Um 404 ou um 50
 ```javascript
 if (!resposta.ok) throw new Error('A API respondeu ' + resposta.status);
 ```
+
+---
+
+## :icon[wifi] Rede ou resposta na prática
+
+**Caso 1: o produto que não existe.** Chega uma resposta, e ela diz "não existe":
+
+```javascript
+const resposta = await fetch('https://dummyjson.com/products/9999');
+console.log(resposta.ok, resposta.status); // false 404
+console.log(await resposta.json());        // { message: "Product with id '9999' not found" }
+```
+
+**Caso 2: um endereço que não existe.** O pedido nem sai:
+
+```javascript
+await fetch('https://nao-existe.invalid'); // TypeError: fetch failed
+```
+
+**Caso 3: uma rota errada.** `/produtos` responde 404 com uma página HTML, não JSON. O `.json()` nela dá `SyntaxError: Unexpected token '<'`: o `<` é o começo do HTML. Por isso o `ok` é conferido antes do `.json()`.
 
 ---
 
@@ -175,9 +282,15 @@ Com o 9999, nenhum erro: o `fetch` cumpre com status 404 e o corpo é `{ message
 
 ---
 
-## :icon[plug] src/api/cliente.js: um lugar só para o fetch
+## A pasta src/api
 
-O endereço e o erro de resposta, com o `ErroDeNegocio` do E17 como base:
+Se a loja trocar de cozinha amanhã, quantos arquivos do código precisam mudar?
+
+---
+
+## :icon[plug] src/api/cliente.js: o endereço e o ApiError
+
+Na Lojinha, um garçom só fala com a cozinha: todo pedido à API passa por um arquivo, o `src/api/cliente.js`. Ele guarda o endereço e o erro de resposta, com o `ErroDeNegocio` do E17 como base:
 
 ```javascript
 import { ErroDeNegocio } from '../modelos/erros.js';
@@ -192,6 +305,13 @@ export class ApiError extends ErroDeNegocio {
   }
 }
 ```
+
+- O `? :` do E07 escolhe a mensagem: 404 tem uma; qualquer outro status, outra
+- O `codigo` vira `API_404`, `API_500`: o programa decide pelo código, a pessoa lê a mensagem
+
+---
+
+## :icon[plug] pedir: todo pedido passa por aqui
 
 Toda chamada à API passa por **`pedir`**, que trata os dois tipos de erro uma vez só:
 
@@ -216,9 +336,23 @@ Quem chama recebe sempre um erro com mensagem em português; o `status` fica gua
 
 ---
 
+## :icon[list-ordered] O pedir em português
+
+| Linha | O que ela diz |
+|---|---|
+| `let resposta;` | a caixa nasce fora do `try`, para ser usada depois dele |
+| `fetch(URL_BASE + caminho, ...)` | o endereço inteiro: a base mais o caminho, como `/products/1` |
+| `...opcoes, headers: {...}` | repassa o que veio (o método, o corpo) e sempre põe o cabeçalho de JSON |
+| `catch (erro) { ... }` | o pedido nem chegou: sem internet vira `SEM_CONEXAO` |
+| `erro.name === 'AbortError'` | cancelado de propósito: passa adiante, sem virar "Sem conexão" |
+| `if (!resposta.ok) throw ...` | chegou, mas com erro: vira `ApiError` |
+| `return resposta.json()` | deu certo: devolve o corpo como objeto |
+
+---
+
 ## :icon[arrow-left-right] src/api/produtos.js: traduzir os campos
 
-A DummyJSON fala inglês (`title`, `price`); a Lojinha fala `nome` e `preco`. Traduza **na entrada**, num lugar só, e `formatarPreco`, `aplicarFiltros` e `Produto.deJSON` continuam iguais:
+A DummyJSON fala inglês (`title`, `price`); a Lojinha fala `nome` e `preco`. Traduza **na entrada**, como um tradutor na porta da loja: tudo o que entra já passa para o português. Assim `formatarPreco`, `aplicarFiltros` e `Produto.deJSON` continuam iguais:
 
 ```javascript
 export function traduzirProduto(p) {
@@ -268,20 +402,42 @@ try {
 }
 ```
 
+- `process.argv.slice(2).join(' ')` junta todas as palavras depois do nome do arquivo: `smart watch` vira um termo só
+- Com termo, `pesquisar`; sem termo, a vitrine com 5 produtos
+
+---
+
+## :icon[terminal] src/api na prática
+
 ```plaintext
 $ node src/scripts/buscar-api.js fone
 Nada para "fone". A API é em inglês: tente phone.
+
 $ node src/scripts/buscar-api.js phone
 101. Apple AirPods Max Silver: R$ 549,99
+104. Apple iPhone Charger: R$ 19,99
+...
+
+$ node src/scripts/produto-api.js 9999
+Não encontramos esse produto.
+
+$ node src/scripts/produto-api.js 1          # com o Wi-Fi desligado
+Sem conexão. Confira a internet e tente de novo.
 ```
 
 Compare com `node src/scripts/buscar.js fone`, do E14: o catálogo local é em português. O `formatarPreco` mostra "R$" num preço em dólar: aceite como treino, a API é de testes.
 
 ---
 
+## Cancelar uma busca
+
+Você pediu um lanche e mudou de ideia. Dá para cancelar o primeiro pedido?
+
+---
+
 ## :icon[ban] AbortController: cancelar o pedido velho
 
-A pessoa digita "s" e, um instante depois, "shoes". Os dois pedidos saem e nada garante a ordem de chegada. No E18, o `Promise.race` não cancelava a perdedora; o **`AbortController`** cancela de verdade:
+A pessoa digita "s" e, um instante depois, "shoes". Os dois pedidos saem, e nada garante a ordem de chegada. É como dizer ao garçom: "esquece o primeiro pedido". No E18, o `Promise.race` não cancelava a perdedora; o **`AbortController`** (controle de cancelamento) cancela de verdade:
 
 ```javascript
 export async function pesquisar(termo, sinal) {
@@ -298,7 +454,7 @@ controle.abort(); // corta o pedido no meio do caminho
 await promessa;   // rejeita com um erro de nome 'AbortError'
 ```
 
-- O **`signal`** viaja junto do pedido; o `pedir` o repassa ao `fetch` porque espalha `...opcoes`
+- O **`signal`** (sinal) viaja junto do pedido; o `pedir` o repassa ao `fetch` porque espalha `...opcoes`
 - **`encodeURIComponent`** protege espaços e acentos no endereço
 - Cancelar não é falha: ignore o `AbortError` em vez de mostrar uma mensagem de erro
 
@@ -340,19 +496,39 @@ buscarAoDigitar('s');
 setTimeout(() => buscarAoDigitar('shoes'), 100); // saída: "s": cancelada, depois "shoes": 4 produtos
 ```
 
-O `debounce` do E10 completa a dupla: `debounce(buscarAoDigitar, 300)` manda um pedido por pausa, não por letra; o `abort` cuida dos que ainda se cruzam.
+- O `?.` do E13 só chama o `abort()` se já existir um controle: na primeira busca, ele é `null`
+- O `debounce` do E10 completa a dupla: `debounce(buscarAoDigitar, 300)` manda um pedido por pausa, não por letra; o `abort` cuida dos que ainda se cruzam
+
+---
+
+## fetch simulado
+
+No cinema, quem faz a cena perigosa no lugar do ator?
 
 ---
 
 ## :icon[test-tube] Testes com fetch simulado
 
-Teste que depende da internet falha sem motivo e deixa a suíte lenta. Troque o `fetch` por uma função que responde na hora:
+Teste que depende da internet falha sem motivo e deixa a suíte lenta. No cinema, o dublê faz a cena perigosa no lugar do ator. No teste, um dublê do `fetch` responde na hora, sempre igual, sem rede:
 
 ```javascript
 function responder(status, corpo) {
   globalThis.fetch = async () => ({ ok: status >= 200 && status < 300, status, json: async () => corpo });
 }
 ```
+
+| Parte | O que ela faz |
+|---|---|
+| `globalThis.fetch = ...` | troca o `fetch` de verdade pelo dublê |
+| `async () => ({ ... })` | o dublê devolve uma Promise de uma resposta falsa |
+| `ok: status >= 200 && status < 300` | o `ok` calculado como o de verdade |
+| `json: async () => corpo` | o corpo que o teste escolheu |
+
+**`globalThis`** guarda as variáveis globais: trocar `globalThis.fetch` troca o `fetch` que o `pedir` usa.
+
+---
+
+## :icon[test-tube] fetch simulado na prática
 
 ```javascript
 test('404 vira ApiError com o status', async () => {
@@ -366,8 +542,22 @@ test('sem rede, rejeita com SEM_CONEXAO', async () => {
 });
 ```
 
-- **`globalThis`** guarda as variáveis globais: trocar `globalThis.fetch` troca o `fetch` que o `pedir` usa
-- Cada arquivo de teste tem o próprio `globalThis`: a troca não vaza para os outros arquivos
+- O primeiro dublê responde 404: o `pedir` vê `ok` falso e lança `ApiError`
+- O segundo lança `TypeError`, como a falta de internet: o `pedir` troca por `SEM_CONEXAO`
+- Os dois ficam verdes com o Wi-Fi desligado. Cada arquivo de teste tem o próprio `globalThis`: a troca não vaza para os outros arquivos
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `TypeError: fetch failed` | o pedido não chegou ao servidor | conferir a rede e o `URL_BASE` |
+| `Unexpected token '<'` | `.json()` numa página HTML de erro | conferir `resposta.ok` antes |
+| `reading 'map'` | `dados.products` não existe: faltou `await` no `.json()`, ou a rota é de um produto só | conferir os dois `await` e abrir a URL |
+| `User id is required`, status 400 | POST sem `Content-Type` ou sem `JSON.stringify` | os dois no `fetch` |
+| status 429 | muitos pedidos seguidos | esperar e tentar de novo |
+| `AbortError` | o pedido foi cancelado de propósito | ignorar |
 
 ---
 

@@ -27,13 +27,26 @@ Programador Mobile · Encontro E31 · Aula 60 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **token de design** | um nome para uma decisão visual: `textoSuave` em vez de `'#475569'` |
+| **valor literal** | a cor ou a medida escrita direto no código, como `'#475569'` ou `16` |
+| **escala** | uma lista curta de valores permitidos, como os tamanhos de roupa P, M e G |
+| **tipografia** | os tamanhos e os pesos das letras do app |
+| **raio** | o quanto um canto é arredondado |
+| **refatorar** | mudar como o código está escrito sem mudar o que a tela mostra (E04) |
+
+---
+
 ## 40 tons de cinza
 
 Uma loja online cresce de 3 para 40 telas em um ano. Cada pessoa escolheu "um cinza bonito" na hora de escrever o estilo: `'#666'` aqui, `'#6b6b6b'` ali, `'#777'` e `'gray'` mais adiante. Os espaçamentos seguiram o mesmo caminho: 10, 12, 15, 16.
 
 Então chegam dois pedidos:
 
-- O designer: "o texto secundário está fraco, escureçam um pouco"
+- O designer, quem desenha as telas: "o texto secundário está fraco, escureçam um pouco"
 - Os clientes: "cadê o tema escuro?"
 
 Cada pedido vira uma caça a valores em dezenas de arquivos, e sempre sobra uma tela com o cinza antigo.
@@ -44,11 +57,17 @@ Na `Inicio` que você montou no E30, quantas linhas você mudaria para escurecer
 
 ---
 
+## Tokens
+
+Numa loja de tintas, você pede a cor pela mistura ou pelo nome?
+
+---
+
 ## :icon[tag] Tokens: nomes, não valores
 
 Um **token de design** é um nome para uma decisão visual: `cores.claro.textoSuave` em vez de `'#475569'`, `espaco.md` em vez de `16`. O valor mora em um único arquivo; os componentes só conhecem o nome.
 
-Pense nos contatos do celular: você liga para "Mãe", não decora o número. Se ela troca de chip, você atualiza um contato e todas as ligações continuam funcionando.
+Pense numa paleta de tintas com nome: cada pote tem uma etiqueta, como "textoSuave", e a cor fica dentro do pote. As telas pegam a tinta pelo nome. Quer outro cinza? Troque a tinta do pote, e tudo o que usa aquele nome muda junto.
 
 | Valor solto | Token |
 |---|---|
@@ -59,19 +78,27 @@ Pense nos contatos do celular: você liga para "Mãe", não decora o número. Se
 
 ---
 
-## :icon[tag] Um valor, um lugar
+## :icon[tag] Tokens na prática
 
 :::center
 ![Antes e depois: os cinzas '#666', '#6b6b6b', '#777' e 'gray', um em cada arquivo, viram o mesmo nome textoSuave, e o valor '#475569' fica só em tokens.js](images/e31-tokens-um-lugar.svg)
 :::
 
-Os cinzas da loja de 40 telas viram um papel só, `textoSuave`, e o valor `'#475569'` passa a morar em `tokens.js`. Mudou a decisão? Você muda um valor em `tokens.js` e o app inteiro acompanha.
+**Caso 1: os cinzas da loja de 40 telas** viram um papel só, `textoSuave`, e o valor `'#475569'` passa a morar em `tokens.js`.
+
+**Caso 2: o designer pede o texto secundário mais escuro.** Você muda um valor em `tokens.js`, numa linha só. Na tela: categorias, legendas e rótulos de todas as telas escurecem juntos.
+
+---
+
+## Cores pelo papel
+
+O pote se chama cinza claro e o app ficou escuro: o nome continua certo?
 
 ---
 
 ## :icon[sliders-horizontal] Cores pelo papel, não pela aparência
 
-Um token de cor diz **para que** a cor serve. `cinzaClaro` vira mentira quando o tema escurece; `borda` continua verdade. A Lojinha usa 8 papéis:
+Um token de cor diz **para que** a cor serve, o papel dela. `cinzaClaro` vira mentira quando o tema escurece; `borda` continua verdade. A Lojinha usa 8 papéis:
 
 | Grupo | Tokens | Onde aparece |
 |---|---|---|
@@ -82,6 +109,24 @@ Um token de cor diz **para que** a cor serve. `cinzaClaro` vira mentira quando o
 | Estados | `perigo`, `sucesso` | erro; "Adicionado ao carrinho" |
 
 Os valores ficam em `cores.claro`. A paleta `cores.escuro` usa os mesmos 8 nomes e entra em cena na próxima aula.
+
+---
+
+## :icon[sliders-horizontal] Cores pelo papel na prática
+
+Três textos do cartão de produto, cada um com o seu papel:
+
+```jsx
+<Text style={{ color: cores.claro.textoSuave }}>Áudio</Text>
+<Text style={{ color: cores.claro.primaria }}>R$ 199,90</Text>
+<Text style={{ color: cores.claro.sucesso }}>Adicionado ao carrinho</Text>
+```
+
+- **Caso 1:** a categoria é texto secundário: `textoSuave`, um cinza
+- **Caso 2:** o preço é ação, o que leva a comprar: `primaria`, um roxo
+- **Caso 3:** a confirmação é estado de sucesso: `sucesso`, um verde
+
+Se amanhã o roxo virar azul, o nome `primaria` continua certo. Um token chamado `roxo` viraria mentira.
 
 ---
 
@@ -105,13 +150,29 @@ São 10 valores, mas só 7 papéis: `fundo`, `superficie`, `texto`, `textoSuave`
 
 ---
 
+## Escalas
+
+Por que a loja vende roupa em P, M e G, e não em todas as medidas?
+
+---
+
 ## :icon[layout-grid] Espaçamento de 4 em 4
 
-Medidas soltas como 10, 13 e 15 deixam a tela torta: um cartão respira mais que o vizinho e ninguém sabe dizer por quê. Uma **escala de espaçamento** limita as escolhas a poucos valores, todos múltiplos de 4:
+Medidas soltas como 10, 13 e 15 deixam a tela torta: um cartão respira mais que o vizinho e ninguém sabe dizer por quê. Uma **escala de espaçamento** limita as escolhas a poucos valores, todos múltiplos de 4, como os tamanhos de roupa: PP, P, M, G e GG servem em quase todo mundo.
 
 ```javascript
 export const espaco = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
 ```
+
+Os nomes vêm das etiquetas de roupa em inglês:
+
+- `xs` (*extra small*, PP) e `sm` (*small*, P)
+- `md` (*medium*, M)
+- `lg` (*large*, G) e `xl` (*extra large*, GG)
+
+---
+
+## :icon[table] Onde usar cada espaço
 
 | Token | Valor | Uso típico |
 |---|---|---|
@@ -127,7 +188,7 @@ Ficou na dúvida entre 14 e 18? Escolha `md`. Com poucas opções, as telas se a
 
 ## :icon[text] Tipografia em poucos tamanhos
 
-Com nove tamanhos de fonte, nada parece título e nada parece legenda. Quatro bastam para uma loja inteira:
+A **tipografia** são os tamanhos e os pesos das letras. É outra escala de tamanhos de roupa. Com nove tamanhos de fonte, nada parece título e nada parece legenda. Quatro dão conta de uma loja inteira:
 
 ```javascript
 export const fonte = { pequena: 12, corpo: 16, titulo: 20, destaque: 28 };
@@ -146,7 +207,7 @@ Para criar hierarquia, combine tamanho e peso: `fontWeight: 'bold'` no nome e no
 
 ## :icon[square] Raios e bordas
 
-Cantos arredondados também seguem uma escala, do menor elemento ao maior:
+O **raio** diz o quanto um canto é arredondado. Cantos arredondados também seguem uma escala, do menor elemento ao maior:
 
 ```javascript
 export const raio = { sm: 6, md: 12, lg: 20 };
@@ -164,9 +225,15 @@ Medidas que só um componente usa, como a imagem de 80 por 80 do cartão, ficam 
 
 ---
 
+## O arquivo tokens.js
+
+Onde fica guardada cada tinta numa loja?
+
+---
+
 ## :icon[file-code] src/theme/tokens.js: as cores
 
-Crie a pasta `src/theme/` e, nela, o arquivo que guarda as decisões visuais do app. Primeiro, as duas paletas:
+O `tokens.js` é o armário das tintas: o único lugar com os valores. Crie a pasta `src/theme/` (*theme*, tema) e, nela, o arquivo. Primeiro, as duas paletas:
 
 ```javascript
 export const cores = {
@@ -182,6 +249,9 @@ export const cores = {
   },
 };
 ```
+
+- `cores` é uma ficha com duas fichas dentro, `claro` e `escuro`
+- `cores.claro.textoSuave` abre uma de cada vez: `cores`, depois `claro`, depois `textoSuave`
 
 As duas paletas têm exatamente as mesmas chaves. É isso que vai permitir trocar uma pela outra sem tocar nos componentes.
 
@@ -199,19 +269,47 @@ export const fonte = { pequena: 12, corpo: 16, titulo: 20, destaque: 28 };
 export const raio = { sm: 6, md: 12, lg: 20 };
 ```
 
-São quatro exportações nomeadas. Em cada tela, importe só o que usar:
+São quatro exportações nomeadas: cada `export` põe um objeto na vitrine do arquivo. Em cada tela, importe só o que usar:
 
 ```jsx
 import { cores, espaco, fonte, raio } from '../theme/tokens';
 ```
 
-O caminho `../theme/tokens` vale para arquivos em `src/telas/`. Este é o **único arquivo** do app com códigos de cor.
+O caminho `../theme/tokens` vale para arquivos em `src/telas/`: o `..` sobe de `telas` para `src`. Este é o **único arquivo** do app com códigos de cor.
+
+---
+
+## :icon[file-code] tokens.js na prática
+
+Na `Inicio`, três estilos usam as três escalas:
+
+```jsx
+import { espaco, fonte, raio } from '../theme/tokens';
+
+const estilos = StyleSheet.create({
+  cartao: { padding: espaco.md, marginBottom: espaco.sm, borderRadius: raio.md },
+  nome: { fontSize: fonte.corpo, fontWeight: 'bold' },
+  botao: { paddingVertical: espaco.sm, paddingHorizontal: espaco.md, borderRadius: raio.lg },
+});
+```
+
+- **Caso 1, o cartão:** recheio de 16, 8 até o próximo cartão e cantos de 12
+- **Caso 2, o nome do produto:** tamanho 16, em negrito
+- **Caso 3, o botão:** a pílula, com cantos de 20
+
+Na tela, os mesmos números de antes. A diferença: cada um tem nome e mora num lugar só.
+
+---
+
+## Sombra
+
+Por que um papel sobre a mesa parece levantado?
 
 ---
 
 ## :icon[layers] Sombra no iOS e no Android
 
-Cada plataforma desenha sombra do seu jeito: o iOS usa quatro propriedades `shadow`; o Android usa só **`elevation`**, a altura simulada do elemento. **`Platform.select`** entrega o objeto da plataforma em que o app está rodando:
+A **sombra** faz o cartão parecer levantado do fundo, como um papel sobre a mesa. Cada plataforma desenha sombra do seu jeito: o iOS usa quatro propriedades `shadow`; o Android usa só **`elevation`** (elevação), a altura simulada do elemento. **`Platform.select`**, do E30, entrega o objeto da plataforma em que o app está rodando:
 
 ```jsx
 import { Platform } from 'react-native';
@@ -228,14 +326,59 @@ const sombra = Platform.select({
 });
 ```
 
-Aplique com spread dentro do estilo: `cartao: { ...sombra, borderRadius: raio.md }`.
+Aplique com spread dentro do estilo: `cartao: { ...sombra, borderRadius: raio.md }`. Os `...` copiam os campos da `sombra` para dentro do `cartao`.
+
+---
+
+## :icon[layers] Sombra na prática
+
+**Caso 1: o cartão levantado.** A sombra junto com um fundo:
+
+```jsx
+cartao: {
+  ...sombra,
+  backgroundColor: cores.claro.superficie,
+  borderRadius: raio.md,
+  padding: espaco.md,
+},
+```
+
+Na tela: o cartão parece um papel sobre a mesa, no iPhone e no Android.
+
+**Caso 2: o mesmo cartão, sem fundo.**
+
+```jsx
+cartao: { ...sombra, borderRadius: raio.md, padding: espaco.md },
+```
+
+Na tela: no Android, nenhuma sombra. A `elevation` só aparece com `backgroundColor`.
+
+---
+
+## Nenhuma cor literal
+
+Uma parede pintada com tinta fora da paleta: o que acontece quando a loja muda a cor?
+
+---
+
+## :icon[ban] Nunca cor literal no componente
+
+A regra da Lojinha daqui em diante: **nenhuma cor escrita à mão** em telas e componentes. Toda cor vem de `cores`; só `tokens.js` tem códigos de cor. Cor literal é tinta misturada fora da paleta: ninguém lembra de trocá-la.
+
+Para fiscalizar, abra a busca em todos os arquivos do VS Code (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>):
+
+- procure `#` em `src/telas` e `src/components`
+- procure nomes de cor em inglês, como `'white'` (branco), `'black'` (preto) e `'gray'` (cinza)
+- cada resultado é uma cor sem papel: dê um token a ela
+
+O mesmo vale para medidas repetidas: `padding: 15` em três telas é um `espaco.md` esperando para nascer.
 
 ---
 
 ## Pratique
 
 :::example Desafio: o cartão da Inicio
-Este é o estilo do cartão de produto do jeito que muita gente deixou no E30. Troque cada valor que se repete pelo token mais próximo (3 minutos):
+Este é o estilo do cartão de produto do jeito que muita gente deixou no E30. Refatore: troque cada valor que se repete pelo token mais próximo (3 minutos):
 
 ```jsx
 cartao: {
@@ -248,6 +391,8 @@ nome: { fontSize: 17, color: '#222' },
 categoria: { fontSize: 13, color: 'gray' },
 preco: { fontSize: 19, fontWeight: 'bold', color: '#6d28d9' },
 ```
+
+Os tokens: `espaco` xs 4, sm 8, md 16, lg 24, xl 32; `fonte` pequena 12, corpo 16, titulo 20, destaque 28; `raio` sm 6, md 12, lg 20; e as 8 cores de `cores.claro`.
 :::
 
 ---
@@ -275,22 +420,8 @@ Os valores quebrados viraram o token mais próximo: 15 virou `md`, 10 virou `sm`
 
 Na tela, quase nada muda. A diferença aparece no dia em que alguém pedir outra cor.
 
----
-
-## :icon[ban] Nunca cor literal no componente
-
-A regra da Lojinha daqui em diante: **nenhuma cor escrita à mão** em telas e componentes. Toda cor vem de `cores`; só `tokens.js` tem códigos de cor.
-
-Para fiscalizar, abra a busca em todos os arquivos do VS Code (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>F</kbd>):
-
-- procure `#` em `src/telas` e `src/components`
-- procure nomes de cor em inglês, como `'white'`, `'black'` e `'gray'`
-- cada resultado é uma cor sem papel: dê um token a ela
-
-O mesmo vale para medidas repetidas: `padding: 15` em três telas é um `espaco.md` esperando para nascer.
-
 :::warning
-Uma única cor literal basta para estragar o tema escuro: aquele cartão continua branco quando todo o resto escurece.
+Uma única cor literal já estraga o tema escuro: aquele cartão continua branco quando todo o resto escurece.
 :::
 
 ---
@@ -301,7 +432,7 @@ Uma única cor literal basta para estragar o tema escuro: aquele cartão continu
 - Nomear o token pela aparência (`cinzaClaro`, `roxo`): no tema escuro o nome vira mentira; use o papel (`textoSuave`, `primaria`)
 - Criar um token para cada valor quebrado (`espaco.quinze`): a escala existe para limitar as escolhas
 - `elevation` sem `backgroundColor`: no Android, a sombra não aparece
-- `overflow: 'hidden'` no cartão para arredondar a imagem: no iOS, ele corta a sombra junto; arredonde a própria imagem com `borderRadius`
+- `overflow: 'hidden'` (esconder o que passa da borda) no cartão para arredondar a imagem: no iOS, ele corta a sombra junto; arredonde a própria imagem com `borderRadius`
 - Esquecer o `export` de um token: o import chega `undefined` e a tela vermelha avisa que não consegue ler `claro` de `undefined`
 :::
 
@@ -311,7 +442,7 @@ Uma única cor literal basta para estragar o tema escuro: aquele cartão continu
 
 :::summary
 - Valores soltos se multiplicam: cada mudança de cor ou de espaço vira uma caça em dezenas de arquivos
-- Um token é um nome para uma decisão visual; o valor mora só em `src/theme/tokens.js`
+- Um token é um nome para uma decisão visual, como o pote com etiqueta numa paleta de tintas; o valor mora só em `src/theme/tokens.js`
 - Cores têm nome de papel; espaços seguem a escala de 4; a fonte tem quatro tamanhos e o raio, três
 - A sombra usa `shadow` no iOS e `elevation` no Android, escolhidos com `Platform.select`
 - Regra da Lojinha: nenhuma cor literal em telas e componentes

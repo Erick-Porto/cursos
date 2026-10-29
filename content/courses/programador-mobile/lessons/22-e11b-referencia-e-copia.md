@@ -28,9 +28,22 @@ Programador Mobile · Encontro E11 · Aula 22 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **primitivo** | um valor simples, que cabe inteiro na variável: número, texto, `true` ou `false` |
+| **referência** | o endereço de um objeto ou array; a variável guarda o endereço, não o objeto |
+| **efeito colateral** | quando uma função muda algo de fora dela, além de devolver o resultado |
+| **cópia rasa** | uma cópia só do primeiro nível; o que está dentro continua compartilhado |
+| **cópia profunda** | uma cópia de todos os níveis, que não divide nada com o original |
+| **congelar** | travar um objeto com `Object.freeze`: ninguém muda o que está nele |
+
+---
+
 ## A simulação que mudou o catálogo
 
-Para testar uma vitrine de promoção, um colega escreveu um script que destaca os produtos de áudio:
+Para testar uma vitrine de promoção, um colega escreveu um script que destaca os produtos de áudio. A função passa por cada produto e liga o `destaque` dos que são de áudio:
 
 ```javascript
 import { produtos } from '../data/produtos.js';
@@ -57,9 +70,15 @@ Se a função devolveu uma lista, por que o catálogo original mudou?
 
 ---
 
+## Valor e referência
+
+Dois amigos têm o seu endereço. Um pinta a sua porta. O que o outro encontra?
+
+---
+
 ## :icon[link] Valor e referência
 
-Números, textos e booleanos são **primitivos**: a atribuição copia o **valor**. Objetos e arrays ficam guardados à parte, e a variável guarda uma **referência**, o endereço deles. Atribuir copia o endereço, não o objeto.
+A variável é uma caixa com etiqueta (E05). Números, textos e booleanos são **primitivos**: cabem inteiros na caixa, e a atribuição copia o **valor**. Objetos e arrays moram fora da caixa, como numa casa: a caixa guarda só o endereço, a **referência**. Atribuir copia o papel com o endereço, não a casa.
 
 ```javascript
 let frete = 15;
@@ -73,21 +92,25 @@ noPedido.qtd = 3;
 console.log(item.qtd); // 3: as duas variáveis apontam o mesmo objeto
 ```
 
+Dois papéis com o mesmo endereço levam à mesma casa: o que muda por um aparece pelo outro.
+
 ---
 
-## :icon[link] Duas etiquetas, uma caixa
+## :icon[link] Dois nomes, o mesmo objeto
 
 :::center
 ![Animação: freteComCupom recebe uma cópia do 15 e vira 0 sem mudar frete; a etiqueta noPedido é colada na mesma caixa de item, e noPedido.qtd = 3 muda a qtd que item também enxerga](images/e11-duas-etiquetas.svg)
 :::
 
-Pense em etiquetas: `item` e `noPedido` são duas etiquetas coladas na mesma caixa. O `const` trava a etiqueta, não a caixa: ele impede trocar a referência, mas deixa mudar o que está dentro.
+Na animação, o número é copiado: `freteComCupom` vira `0`, e `frete` continua `15`. O objeto não: a etiqueta `noPedido` vai para a mesma caixa do `item`, porque as duas variáveis guardam o mesmo endereço.
+
+O `const` não deixa trocar o endereço guardado na variável. Ele não tranca a casa: mudar o que está dentro continua permitido.
 
 ---
 
-## :icon[equal-not] `===` compara endereços
+## :icon[equal-not] Referência na prática: o `===`
 
-Com objetos, `===` não olha o conteúdo: ele pergunta se é **o mesmo** objeto.
+Com objetos, `===` não olha o conteúdo: ele pergunta se é **o mesmo** objeto, no mesmo endereço. Três casos:
 
 ```javascript
 const a = { id: 7 };
@@ -105,16 +128,30 @@ Por isso o `adicionarItem` procura o item pelo `id`, nunca pelo objeto inteiro. 
 
 ---
 
+## Efeito colateral
+
+Você pede uma cópia de um documento e recebe o original rasurado. O que deu errado?
+
+---
+
 ## :icon[square-function] A função recebe o mesmo objeto
 
-Passar um objeto ou array para uma função passa a referência. É a resposta da simulação: `lista` e `produtos` são o mesmo array, e cada `produto` é o mesmo objeto do catálogo.
+Passar um objeto ou array para uma função passa o endereço dele. Se a função muda o que recebeu, muda o dado de quem chamou: é um **efeito colateral**. É como pedir uma cópia de um documento e receber o original rasurado.
+
+É a resposta da simulação: `lista` e `produtos` são o mesmo array, e cada `produto` é o mesmo objeto do catálogo.
 
 ```javascript
 const simulacao = destacarCategoria(produtos, 'audio');
 simulacao === produtos; // true: nem é outro array
 ```
 
-Esse **efeito colateral** fica escondido: quem lê `destacarCategoria(produtos, 'audio')` não imagina que o catálogo mudou. E, como o módulo roda uma vez, todo arquivo que importa `produtos` vê a mudança. As regras de `src/regras/` fazem o contrário e devolvem dados novos:
+O efeito fica escondido: quem lê `destacarCategoria(produtos, 'audio')` não imagina que o catálogo mudou. E, como o módulo roda uma vez, todo arquivo que importa `produtos` vê a mudança.
+
+---
+
+## :icon[shield-check] Efeito colateral na prática
+
+As regras de `src/regras/` fazem o contrário: devolvem dados novos e deixam o recebido como estava. A simulação, sem efeito colateral:
 
 ```javascript
 function destacarCategoria(lista, categoria) {
@@ -122,11 +159,31 @@ function destacarCategoria(lista, categoria) {
 }
 ```
 
+```javascript
+const simulacao = destacarCategoria(produtos, 'audio');
+console.log(simulacao.filter((p) => p.destaque).length); // 6
+console.log(produtos.filter((p) => p.destaque).length);  // 4: o catálogo não mudou
+```
+
+| Parte | O que ela diz |
+|---|---|
+| `lista.map(...)` | "monte uma lista nova, item por item" (E09) |
+| `p.categoria === categoria ? ... : p` | "é da categoria? Então a cópia; senão, o próprio produto" |
+| `{ ...p, destaque: true }` | "uma cópia do produto, com o destaque ligado" |
+
+Com o `for` que escrevia `produto.destaque = true`, as duas linhas davam `6`.
+
+---
+
+## Cópia rasa
+
+A fotocópia de uma ficha com um endereço anotado leva a outra casa?
+
 ---
 
 ## :icon[copy] Cópia rasa: o que fica compartilhado
 
-No E09, você viu que spread, `slice` e `Object.assign` criam um objeto ou array **novo**, mas copiam só o primeiro nível. Tudo o que está dentro continua sendo a mesma caixa:
+No E09, você viu que spread, `slice` e `Object.assign` criam um objeto ou array **novo**. É uma **cópia rasa**: copia só o primeiro nível. Pense numa fotocópia de uma ficha: a folha é nova, mas o endereço anotado nela leva à mesma casa.
 
 ```javascript
 const pedido = {
@@ -146,7 +203,33 @@ copia.itens === pedido.itens;     // true: os itens também
 | Array | `[...lista]`, `lista.slice()` |
 | Objeto | `{ ...objeto }`, `Object.assign({}, objeto)` |
 
-Mudar `copia.id` não afeta o pedido. Mudar `copia.entrega.prazo` afeta os dois.
+---
+
+## :icon[list-checks] Cópia rasa na prática
+
+O que muda no original depende do nível em que você mexe:
+
+```javascript
+const pedido = { id: 101, entrega: { cep: '01310-100', prazo: 5 } };
+const copia = { ...pedido };
+
+copia.id = 102;
+console.log(pedido.id);            // 101: o primeiro nível é só da cópia
+
+copia.entrega.prazo = 2;
+console.log(pedido.entrega.prazo); // 2: a entrega é a mesma nos dois
+```
+
+```javascript
+const ids = [1, 5];
+const outros = [...ids];
+outros.push(7);
+console.log(ids); // [1, 5]: só números dentro, nada compartilhado
+```
+
+- Mudar um campo de fora, como o `id`, só afeta a cópia
+- Mudar algo **aninhado**, um objeto dentro de outro, afeta os dois
+- Com números ou textos dentro, a cópia rasa resolve: não há endereço para dividir
 
 ---
 
@@ -174,9 +257,15 @@ console.log(gratis === pedido, gratis.entrega === pedido.entrega, pedido.entrega
 
 ---
 
+## Cópia profunda
+
+Como mudar a entrega na cópia sem mexer na entrega do original?
+
+---
+
 ## :icon[layers] Cópia profunda: três caminhos
 
-Para mudar algo aninhado sem tocar no original, há três caminhos. Os dois últimos fazem uma **cópia profunda**, que não compartilha nada com o original:
+Uma **cópia profunda** copia todos os níveis: a ficha e tudo o que ela aponta. Nada fica compartilhado com o original. Para mudar algo aninhado sem tocar no original, há três caminhos:
 
 | Caminho | O que copia | Cuidado |
 |---|---|---|
@@ -184,16 +273,30 @@ Para mudar algo aninhado sem tocar no original, há três caminhos. Os dois últ
 | `structuredClone(objeto)` | todos os níveis | existe no Node e nos navegadores; no app, confira antes |
 | `JSON.parse(JSON.stringify(objeto))` | todos os níveis | datas viram texto; funções e `undefined` somem |
 
+Os dois últimos fazem a cópia profunda. O primeiro copia só o necessário.
+
+---
+
+## :icon[route] Nível por nível com spread
+
+As regras copiam só o que está no caminho até o que muda:
+
 ```javascript
 const atualizado = { ...pedido, entrega: { ...pedido.entrega, prazo: 2 } };
 atualizado.itens === pedido.itens; // true: os itens não mudaram e foram reaproveitados
 ```
 
+- `{ ...pedido, entrega: ... }`: um pedido novo, com uma `entrega` nova no lugar da antiga
+- `{ ...pedido.entrega, prazo: 2 }`: a entrega nova, com o prazo trocado
+- `itens` não está no caminho: vai para o pedido novo sem cópia
+
 Reaproveitar o que não mudou não é preguiça: economiza memória e, no React (E23), deixa a tela redesenhar só o que mudou.
 
 ---
 
-## :icon[layers] structuredClone e JSON de perto
+## :icon[layers] Cópia profunda na prática
+
+O `structuredClone` e o JSON de ida e volta, no mesmo pedido:
 
 ```javascript
 const pedido = {
@@ -210,15 +313,22 @@ const viaJson = JSON.parse(JSON.stringify(pedido));
 typeof viaJson.criadoEm;          // 'string': virou texto, em UTC
 ```
 
+- `instanceof Date` pergunta "isto é uma data?"; o `typeof`, do E05, diz o tipo
 - `structuredClone` copia objetos, arrays, datas e também o `Map` e o `Set`, que você conhece no E12
-- Funções ele não copia: um objeto com método, como a `promocao` da aula anterior, lança `DataCloneError`
+- Funções ele não copia: um objeto com método, como a `promocao` da aula 21, lança `DataCloneError`
 - O JSON de ida e volta também perde funções e `undefined`, só que em silêncio
+
+---
+
+## Object.freeze
+
+Por que se plastifica um documento importante?
 
 ---
 
 ## :icon[snowflake] Object.freeze: proibido mexer
 
-`Object.freeze` trava um objeto: nada entra, sai ou muda. Num módulo, como os arquivos do `lojinha-regras` e os testes, a tentativa lança `TypeError`. No REPL do Node, que não é módulo, a atribuição falha em silêncio. Nos dois casos, o objeto não muda.
+`Object.freeze` (em inglês, congelar) trava um objeto: nada entra, sai ou muda. É como plastificar uma ficha: dá para ler, não dá para escrever.
 
 ```javascript
 const promocao = Object.freeze({ nome: 'Semana do Áudio', percentual: 10 });
@@ -230,13 +340,17 @@ FORMAS_DE_PAGAMENTO.push('cheque');
 // TypeError: Cannot add property 3, object is not extensible
 ```
 
-O `const` trava a etiqueta; o `Object.freeze` trava a caixa.
+- Em português: "não dá para mudar `percentual`, ele é só de leitura" e "não dá para acrescentar, o objeto não aceita mais nada"
+- Num módulo, como os arquivos do `lojinha-regras` e os testes, a tentativa lança `TypeError`
+- No REPL do Node, que não é módulo, a atribuição falha em silêncio. Nos dois casos, o objeto não muda
+
+O `const` não deixa trocar o endereço; o `Object.freeze` plastifica o que está nele.
 
 ---
 
-## :icon[test-tube] Congele a entrada nos testes
+## :icon[test-tube] Object.freeze na prática
 
-Uma regra pura não mexe no que recebe. Congele a entrada no teste: se a regra tentar alterá-la, o teste fica vermelho na hora.
+Uma regra **pura** não mexe no que recebe: só devolve um resultado. Congele a entrada no teste: se a regra tentar alterá-la, o teste fica vermelho na hora.
 
 ```javascript
 // src/regras/carrinho.test.js
@@ -247,13 +361,20 @@ test('adicionarItem não altera a lista recebida', () => {
 });
 ```
 
-Se alguém trocar o fim do `adicionarItem` por `itens.push(...)`, o teste acusa: `TypeError: Cannot add property 1, object is not extensible`. O congelamento transforma um bug silencioso num teste vermelho.
+Se alguém trocar o fim do `adicionarItem` por `itens.push(...)`, o teste acusa: `TypeError: Cannot add property 1, object is not extensible`. O congelamento pega também o `sort`, que ordena a lista no lugar:
+
+```javascript
+const lista = Object.freeze([{ nome: 'Tênis' }, { nome: 'Bola' }]);
+lista.sort((a, b) => a.nome.localeCompare(b.nome));
+// TypeError: Cannot assign to read only property '0' of object '[object Array]'
+[...lista].sort((a, b) => a.nome.localeCompare(b.nome)); // certo: copia antes
+```
 
 ---
 
 ## :icon[snowflake] O congelamento é raso
 
-`Object.freeze(itens)` trava o array, não os itens: `itens[0].qtd = 3` continua funcionando. Para travar todos os níveis, use a recursão do E10:
+Plastificar a ficha não tranca a casa do endereço anotado nela. `Object.freeze(itens)` trava o array, não os itens: `itens[0].qtd = 3` continua funcionando. Para travar todos os níveis, use a recursão do E10:
 
 ```javascript
 // src/utils/congelar.js
@@ -272,9 +393,29 @@ export function congelarTudo(valor) {
 
 ---
 
+## :icon[list-ordered] O congelarTudo em português
+
+| Linha | O que ela diz |
+|---|---|
+| `if (typeof valor !== 'object' \|\| valor === null)` | "não é objeto nem array? Então não há o que congelar" |
+| `return valor;` | o **caso base** (E10): devolve o valor como veio e para |
+| `for (const dentro of Object.values(valor))` | "para cada valor guardado aqui dentro..." |
+| `congelarTudo(dentro);` | "...congele esse valor e tudo o que estiver dentro dele" |
+| `return Object.freeze(valor);` | "por fim, congele este nível e devolva" |
+
+O `valor === null` está ali porque `typeof null` também responde `'object'`, uma esquisitice antiga do JavaScript.
+
+---
+
+## Por que copiar
+
+Como a torcida percebe, de longe, que o placar mudou?
+
+---
+
 ## :icon[refresh-cw] Prévia do E23: o React compara referências
 
-No E23, a tela do React guarda dados num **estado**. Quando você entrega um valor novo, o React pergunta se é **o mesmo** objeto com `Object.is`, que para objetos funciona como o `===`:
+No E23, a tela do React guarda dados num **estado**, como o placar de um jogo: quando muda, a tela se redesenha. Para saber se mudou, o React pergunta se é **o mesmo** objeto com `Object.is`, que para objetos funciona como o `===`:
 
 ```javascript
 Object.is(itens, itens);      // true: para o React, nada mudou
@@ -284,6 +425,17 @@ Object.is(itens, [...itens]); // false: array novo, a tela redesenha
 - Comparar endereços é instantâneo; comparar o conteúdo de cada item a cada mudança custaria caro
 - Alterar por dentro e entregar o mesmo array é invisível para o React: a tela não muda
 - Por isso as regras do `lojinha-regras` devolvem arrays e objetos novos: no E30, elas vão direto para o estado do app
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Cannot assign to read only property` | alguém tentou mudar um objeto congelado | se foi no teste, a regra mexe na entrada: devolva um objeto novo |
+| `object is not extensible` | `push` ou campo novo num objeto ou array congelado | devolva um array novo: `[...itens, novo]` |
+| `DataCloneError` | `structuredClone` num objeto com função | copie com spread, nível por nível |
+| `Maximum call stack size exceeded` | `congelarTudo` sem o caso base | o `if` do `typeof` antes do `for` |
 
 ---
 

@@ -26,6 +26,19 @@ Programador Mobile · Encontro E38 · Aula 75 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **acessibilidade** | fazer o app funcionar para todo mundo, inclusive para quem tem alguma deficiência |
+| **leitor de tela** | o programa do celular que fala em voz alta o que está na tela |
+| **foco** | o elemento que o leitor de tela está lendo agora, marcado com um contorno |
+| **rótulo** (*label*) | o nome que o leitor fala para um elemento |
+| **área de toque** | o pedaço da tela que responde ao dedo |
+| **contraste** | a diferença de claridade entre o texto e o fundo |
+
+---
+
 ## Por que isso importa
 
 Marta é cega e usa o celular todo dia com o leitor de tela. No app do banco, ela abre a tela do Pix e ouve: "botão", "botão", "imagem", "botão". Qual deles confirma o pagamento?
@@ -40,22 +53,61 @@ Se a Marta abrir a Lojinha hoje, o que ela vai ouvir no botão de filtros do In�
 
 ---
 
+## Acessibilidade
+
+Para quem foi feita a rampa ao lado da escada? Quem mais usa?
+
+---
+
 ## :icon[users] Quem usa o seu app
+
+**Acessibilidade** é fazer o app funcionar para todo mundo. Pense na rampa ao lado da escada: foi feita para a cadeira de rodas e ajuda também quem empurra carrinho de bebê ou puxa uma mala.
 
 - **Cegueira**: usa o **leitor de tela**, que fala o que está sob o dedo
 - **Baixa visão**: letra grande, zoom e cores com bom contraste
 - **Daltonismo**: cerca de 8 em cada 100 homens confundem cores, quase sempre vermelho e verde
 - **Deficiência motora**: tremor ou pouca força nos dedos; alvo pequeno vira toque errado
-- **Pessoas idosas**: costumam somar letra grande, toque menos preciso e pouca intimidade com gestos
-- **Situações temporárias**: braço engessado, sol forte na tela, uma mão segurando a barra do ônibus
-
-Acessibilidade é projetar para essas pessoas. De quebra, o app fica melhor para todo mundo.
+- **Pessoas idosas**: letra grande, toque menos preciso e pouca intimidade com gestos
+- **Situações temporárias**: braço engessado, sol forte na tela, uma mão na barra do ônibus
 
 ---
 
-## :icon[eye-off] TalkBack e VoiceOver
+## :icon[users] Acessibilidade na prática
 
-O **leitor de tela** fala o elemento em foco; você navega por gestos. Os dois ficam em Acessibilidade.
+Quatro pessoas, a mesma Lojinha. Uma linha de código muda o dia de cada uma.
+
+| Quem | No código | O que muda |
+|---|---|---|
+| Marta, cega | `accessibilityLabel="Abrir filtros"` | o leitor fala "Abrir filtros, botão", não só "botão" |
+| Seu João, com tremor nas mãos | `hitSlop={12}` na lixeira | o ícone de 20 vira um alvo de 44 por 44 |
+| Rafael, daltônico | `<Badge texto="Esgotado" />` | a palavra diz o que o vermelho sozinho não diria |
+| Dona Lúcia, com a letra no máximo | `minHeight` no cartão | o preço aparece, em vez de sumir |
+
+Como a rampa, cada linha ajuda também quem não precisa dela: todo mundo acerta melhor um alvo maior.
+
+---
+
+## Leitor de tela
+
+Como alguém acompanha um jogo de futebol pelo rádio, sem ver nada?
+
+---
+
+## :icon[eye-off] Leitor de tela: um narrador
+
+O **leitor de tela** é um programa do celular que fala em voz alta o que está na tela. Funciona como o narrador de futebol no rádio: descreve o jogo para quem não está vendo.
+
+- No Android, ele se chama **TalkBack**; no iPhone, **VoiceOver**. Os dois ficam nas configurações, em Acessibilidade
+- Com ele ligado, um contorno marca o elemento **em foco**: o que está sendo lido agora
+- Você navega por gestos: um toque ouve o item; deslizar o dedo vai ao próximo
+
+Exemplo: no cartão do fone, o leitor fala "Fone Bluetooth, R$ 199,90, botão". O que ele fala, você escreve no código.
+
+---
+
+## :icon[hand] Os gestos do leitor de tela
+
+Com o leitor ligado, os gestos mudam: um toque só ouve; para ativar, são dois.
 
 | Ação | TalkBack (Android) | VoiceOver (iOS) |
 |---|---|---|
@@ -71,37 +123,75 @@ Configure o atalho **antes** de ligar: ele é a sua saída de emergência. No iP
 
 ---
 
-## :icon[eye-off] O foco anda pela tela
+## :icon[eye-off] Leitor de tela na prática
 
 :::center
 ![Animação: o foco do leitor de tela passa pelo título Destaques, pelo botão Abrir filtros e pelo cartão do Fone Bluetooth, e o leitor fala o rótulo e o papel de cada um](images/e38-foco-do-leitor.svg)
 :::
 
-Com o leitor ligado, um contorno marca o elemento **em foco**. Cada deslizar de um dedo para o lado leva o foco ao próximo, na ordem da tela, e o leitor fala o que encontrou. O cartão inteiro é um foco só.
+Cada deslizar de um dedo para o lado leva o foco ao próximo elemento, na ordem da tela:
 
-É assim que o Início da Lojinha vai soar ao fim desta aula.
+| Foco em | O leitor fala |
+|---|---|
+| o título da seção | "Destaques, título" |
+| o botão do topo | "Abrir filtros, botão" |
+| o primeiro cartão | "Fone Bluetooth, R$ 199,90, avaliação 4,6 de 5, botão" |
+
+O cartão inteiro é um foco só: nome, preço e nota chegam numa frase. É assim que o Início vai soar ao fim desta aula.
+
+---
+
+## O que o leitor fala
+
+Como você descreveria um botão, por telefone, a quem não vê a tela?
 
 ---
 
 ## :icon[message-square] O que o leitor de tela fala
 
-Para cada elemento, o leitor monta uma frase com até quatro partes. Cada parte vem de uma prop:
+O leitor só fala o que você escreve para ele: as props `accessibility...` são o roteiro do narrador. Para cada elemento, ele monta uma frase com até quatro partes:
 
 | Prop | Responde | Exemplo falado |
 |---|---|---|
-| `accessibilityLabel` | o que é? | "Finalizar compra" |
-| `accessibilityRole` | que tipo de coisa? | "botão" |
-| `accessibilityState` | como está agora? | "desativado" |
-| `accessibilityHint` | o que acontece? | "Conclui o pedido" |
+| `accessibilityLabel` (**rótulo**) | o que é? | "Finalizar compra" |
+| `accessibilityRole` (**papel**) | que tipo de coisa? | "botão" |
+| `accessibilityState` (**estado**) | como está agora? | "desativado" |
+| `accessibilityHint` (**dica**) | o que acontece? | "Conclui o pedido" |
 
-Papéis mais usados em `accessibilityRole`:
+Juntas, elas viram: "Finalizar compra, botão, desativado. Conclui o pedido."
+
+O leitor fala na língua do aparelho: você escreve `button`, e ele diz "botão".
+
+---
+
+## :icon[message-square] O que o leitor fala na prática
+
+Três elementos da Lojinha, as props de cada um e a frase que sai:
+
+| Elemento | Props | O leitor fala |
+|---|---|---|
+| Botão de filtros, só com ícone | `accessibilityRole="button"` e `accessibilityLabel="Abrir filtros"` | "Abrir filtros, botão" |
+| Título da seção | `accessibilityRole="header"` | "Destaques, título" |
+| Finalizar, com o carrinho vazio | `accessibilityState={{ disabled: true }}` e `accessibilityHint="Conclui o pedido"` | "Finalizar compra, botão, desativado. Conclui o pedido" |
+
+O texto visível, como "Destaques" e "Finalizar compra", já serve de rótulo. O botão de filtros não tem texto, então precisa do `accessibilityLabel`.
+
+---
+
+## :icon[tag] Papel: que tipo de coisa é
+
+O **papel** (`accessibilityRole`) diz que tipo de elemento é aquele. O leitor o anuncia depois do rótulo. Os mais usados:
 
 - `button`: algo tocável que executa uma ação
-- `header`: título de seção; o usuário pula de título em título
+- `header`: título de seção; quem usa leitor de tela pula de título em título
 - `image`: imagem que informa
 - `link`: abre um endereço, como um site ou um e-mail
 
-O leitor fala na língua do aparelho: `button` vira "botão".
+```jsx
+<Text accessibilityRole="header" style={secao}>Destaques</Text>
+```
+
+O leitor fala "Destaques, título". No Projeto 6, o nome de cada cidade ganha o mesmo papel.
 
 ---
 
@@ -122,7 +212,7 @@ O botão de filtros do Início é só um ícone. Sem rótulo, o leitor não tem 
 ```
 
 - Curto e no idioma do app: "Abrir filtros"
-- Sem o papel: "Botão filtros" vira "Botão filtros, botão"
+- Não ponha o papel no rótulo: "Botão filtros" vira "Botão filtros, botão"
 - Específico fora de contexto: "Remover Fone Bluetooth", não só "Remover"
 - Se o texto visível já explica, ele é o rótulo: não repita
 
@@ -134,7 +224,7 @@ Você também vai encontrar `aria-label` e `role`: são nomes novos para as mesm
 
 ## :icon[square-check] Estado e dica
 
-**`accessibilityState`** diz como o elemento está: `selected` (filtro ou aba escolhidos), `disabled` (ainda não funciona), `checked` (caixa marcada). **`accessibilityHint`** diz o resultado, quando ele não é óbvio.
+O **estado** (`accessibilityState`) diz como o elemento está agora: `selected` (filtro ou aba escolhidos), `disabled` (ainda não funciona), `checked` (caixa marcada). A **dica** (`accessibilityHint`) diz o resultado, quando ele não é óbvio.
 
 ```jsx
 const vazio = itens.length === 0;
@@ -150,9 +240,11 @@ const vazio = itens.length === 0;
 </Pressable>
 ```
 
-Com o carrinho vazio, o leitor anuncia algo como "Finalizar compra, botão, desativado".
+- `vazio` é `true` quando o carrinho não tem itens
+- `disabled={vazio}` desliga o toque; `accessibilityState={{ disabled: vazio }}` conta isso ao leitor
+- O rótulo é o próprio texto do botão, "Finalizar compra"
 
-A dica começa com verbo, não repete o rótulo e pode ser desligada pelo usuário: nada essencial mora só nela.
+Com o carrinho vazio, o leitor anuncia algo como "Finalizar compra, botão, desativado". A dica começa com verbo, não repete o rótulo e pode ser desligada pelo usuário: nada essencial mora só nela.
 
 ---
 
@@ -178,15 +270,31 @@ O `Botao` repassa o `...rest` ao `Pressable`, então a prop chega lá. Na tela, 
 
 ---
 
+## Imagens e grupos
+
+O narrador de rádio conta a cor da grama?
+
+---
+
 ## :icon[image] Imagens decorativas e informativas
+
+O narrador de rádio conta o placar, não a cor da grama. O leitor de tela faz o mesmo com as imagens:
+
+- **Informativa**: traz uma informação que não está escrita em outro lugar, como as estrelas da avaliação
+- **Decorativa**: só enfeita, ou repete o que o texto já diz, como a foto no cartão, cujo nome já está no rótulo
 
 | | Decorativa | Informativa |
 |---|---|---|
-| Exemplo | foto no cartão, cujo nome já está no rótulo | estrelas da avaliação |
 | Leitor de tela | ignora | lê um rótulo com a informação |
 | Como fazer | nada: `Image` nasce com `accessible` desligado | `accessible` e `accessibilityLabel` |
 
-Se o Detalhe mostrar a avaliação em estrelas, os cinco ícones viram uma imagem só:
+Na dúvida, pergunte: se a imagem sumir, a pessoa perde alguma informação? Se sim, ela é informativa.
+
+---
+
+## :icon[combine] accessible: vários em um foco só
+
+**`accessible`** junta uma `View` e todos os filhos dela em um foco só, lido numa frase. Se o Detalhe mostrar a avaliação em estrelas, os cinco ícones viram uma imagem só:
 
 ```jsx
 <View
@@ -201,7 +309,9 @@ Se o Detalhe mostrar a avaliação em estrelas, os cinco ícones viram uma image
 </View>
 ```
 
-**`accessible`** junta a `View` e os filhos em um só foco. Com `nota = produto.avaliacao.toLocaleString('pt-BR')`, o leitor diz "quatro vírgula seis", não "quatro ponto seis".
+- Sem o `accessible`, o leitor passaria por cinco ícones mudos
+- O `map` desenha 5 estrelas: cheia até a nota arredondada, vazia depois
+- Com `nota = produto.avaliacao.toLocaleString('pt-BR')`, o leitor diz "quatro vírgula seis", não "quatro ponto seis"
 
 ---
 
@@ -225,7 +335,7 @@ export default function CartaoProduto({ produto, onPress }) {
 }
 ```
 
-`Pressable` já nasce com `accessible`: o leitor foca o cartão inteiro e fala o rótulo no lugar dos filhos, então tudo o que importa entra nele. A foto, decorativa, fica em silêncio.
+`Pressable` já nasce com `accessible`: o leitor foca o cartão inteiro e fala o rótulo no lugar dos filhos, então tudo o que importa entra nele. O rótulo é uma template string, a do E05: os `${}` trocam cada nome pelo valor. A foto, decorativa, fica em silêncio.
 
 - Antes: "Fone Bluetooth, R$ 199,90", sem dizer que dá para tocar
 - Depois: "Fone Bluetooth, R$ 199,90, avaliação 4,6 de 5, botão"
@@ -257,12 +367,18 @@ O `CartaoProduto` ganha as props `favorito` e `onFavoritar`. O coração fica **
 
 ---
 
+## Área de toque
+
+Por que o interruptor de tecla larga é mais fácil de acertar no escuro?
+
+---
+
 ## :icon[hand] Área de toque: 44 por 44
 
-Dedo não é cursor: alvo pequeno vira toque errado, principalmente para quem tem tremor. O mínimo é **44 por 44** (o Android recomenda 48).
+A **área de toque** é o pedaço da tela que responde ao dedo. Dedo não é cursor: alvo pequeno vira toque errado, principalmente para quem tem tremor. O mínimo é **44 por 44** (o Android recomenda 48).
 
 - `minWidth` e `minHeight` no estilo: o alvo cresce e aparece maior
-- **`hitSlop`**: a área de toque cresce para fora, sem mudar o desenho
+- **`hitSlop`** (*folga do toque*): a área cresce para fora, sem mudar o desenho. É o interruptor de tecla larga: acende mesmo com toque torto
 
 ```jsx
 // lixeira de cada item do carrinho
@@ -276,7 +392,26 @@ Dedo não é cursor: alvo pequeno vira toque errado, principalmente para quem te
 </Pressable>
 ```
 
-O `hitSlop` não passa da borda do pai e não deve invadir o alvo vizinho: deixe pelo menos 8 de espaço entre eles.
+O `hitSlop` não passa da borda do pai e não deve invadir o vizinho: deixe 8 de espaço entre eles.
+
+---
+
+## :icon[hand] Área de toque na prática
+
+Quanto de folga cada alvo precisa? O que falta para 44, dividido pelos dois lados:
+
+```javascript
+function folga(tamanho) {
+  return Math.max(0, (44 - tamanho) / 2);
+}
+console.log(folga(20)); // 12: a lixeira do carrinho
+console.log(folga(24)); // 10: um ícone de 24
+console.log(folga(36)); // 4: o Botao tamanho sm
+console.log(folga(56)); // 0: o Botao lg já passa de 44
+```
+
+- `(44 - 20) / 2`: faltam 24 para 44; metade vai para cada lado
+- `Math.max(0, ...)` devolve o maior dos dois números: se a conta der negativa, como no `lg` (-6), fica 0
 
 ---
 
@@ -302,14 +437,36 @@ export default function Botao({ titulo, onPress, variante = 'primaria', tamanho 
 }
 ```
 
+- `folga`: a mesma conta, com a altura do tamanho escolhido
 - `accessibilityState` sai do `...rest` para ser combinado: o `selected` dos filtros e o `disabled` valem juntos
 - Botão só com ícone recebe o rótulo por fora: `<Botao icone="trash-outline" accessibilityLabel="Remover Fone Bluetooth" />`
 
 ---
 
-## :icon[sun] Cor: contraste e um sinal a mais
+## Contraste
 
-A WCAG, referência internacional de acessibilidade digital, pede no nível AA **4,5 para 1** entre texto e fundo, e 3 para 1 em texto grande, ícones e bordas de controles. Os tokens da Lojinha sobre `superficie`:
+Por que a placa de trânsito é branca no azul, e não cinza no branco?
+
+---
+
+## :icon[sun] Contraste: a placa de trânsito
+
+**Contraste** é a diferença de claridade entre o texto e o fundo. Pense numa placa de trânsito: letra branca no fundo azul, para ler de longe, com sol ou com chuva. Cinza-claro no branco seria uma placa que ninguém lê.
+
+O contraste se mede como uma razão: 1 para 1 é invisível; 21 para 1 é preto no branco. A WCAG, referência internacional de acessibilidade digital, pede no nível AA:
+
+| O quê | Mínimo |
+|---|---|
+| Texto normal | 4,5 para 1 |
+| Texto grande, ícones e bordas de controles | 3 para 1 |
+
+Para medir, cole as duas cores num verificador de contraste, como o WebAIM Contrast Checker.
+
+---
+
+## :icon[sun] Contraste na prática
+
+Os tokens da Lojinha sobre `superficie`, medidos no verificador:
 
 | Par | Claro | Escuro |
 |---|---|---|
@@ -318,15 +475,22 @@ A WCAG, referência internacional de acessibilidade digital, pede no nível AA *
 | `alerta`, se for `#f59e0b` | 2,15 | 6,81 |
 | `borda` do `Campo` | 1,23 | 1,41 |
 
-No claro, escureça o `alerta` para `#b45309` (5,02). A borda do cartão é enfeite; a do `Campo` mostra onde digitar: use `textoSuave` nela.
+- No claro, escureça o `alerta` para `#b45309` (5,02)
+- A borda do cartão é enfeite; a do `Campo` mostra onde digitar: use `textoSuave` nela
 
 Cor nunca é o único sinal: o erro do `Campo` vem escrito e o `Badge` tem `texto`, não só `tom`.
 
 ---
 
+## Auditoria
+
+O que o mecânico faz numa vistoria?
+
+---
+
 ## :icon[list-checks] Checklist de auditoria
 
-Ligue o leitor de tela, abra uma tela e confira item por item:
+**Auditar** é conferir a tela item por item, com a lista na mão, como na vistoria de um carro. Ligue o leitor de tela, abra uma tela e confira:
 
 1. **Nome**: todo elemento tocável tem rótulo que faz sentido sozinho
 2. **Papel e estado**: botões dizem "botão", títulos dizem "título", filtros dizem "selecionado"
@@ -340,6 +504,21 @@ Para cada falha, anote **tela, problema e correção**.
 
 ---
 
+## :icon[list-checks] Auditoria na prática
+
+Uma dupla auditou a Lojinha com o TalkBack. Parte do que foi para o `README.md`:
+
+| Tela | Problema | Correção |
+|---|---|---|
+| Início | botão de filtros sem papel: não diz que é botão | `accessibilityRole="button"` |
+| Carrinho | "Remover" igual em todos os itens; alvo menor que 44 | rótulo "Remover Fone Bluetooth do carrinho" e `hitSlop={12}` |
+| Filtros | categoria escolhida anunciada igual às outras | `accessibilityState={{ selected }}` em cada `Botao` |
+| Todas | `alerta` com contraste de 2,15 no tema claro | token trocado por `#b45309` (5,02) |
+
+Cada linha nasce de um item do checklist: nome, toque, estado e cor.
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
@@ -347,6 +526,7 @@ Para cada falha, anote **tela, problema e correção**.
 - Botão dentro de um cartão agrupado, como um coração dentro do `Pressable` do cartão: no iPhone, o VoiceOver não chega até ele
 - Rótulo genérico: "Remover" em todos os itens do carrinho, sem dizer qual
 - `hitSlop` maior que o espaço até o vizinho: o toque cai no botão errado
+- `favoritos.has is not a function`: o `favoritos.js` é o do E08, com array; use o do E12, com `Set`
 - Testar só com os olhos: a maioria dos problemas só aparece com o leitor de tela ligado
 :::
 

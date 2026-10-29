@@ -28,6 +28,19 @@ Programador Mobile · Encontro E07 · Aula 14 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **parâmetro** | o espaço do ingrediente na receita: o nome que a função usa por dentro |
+| **argumento** | o ingrediente que você põe nesse espaço, na hora de chamar a função |
+| **retorno** | o prato pronto que a função entrega a quem a chamou |
+| **arrow function** | um jeito curto de escrever uma função, com uma seta `=>` |
+| **escopo** | o cômodo da casa onde um nome existe |
+| **função pura** | a que dá sempre o mesmo resultado para as mesmas entradas e não mexe em nada fora dela |
+
+---
+
 ## Uma regra, vários lugares
 
 O preço no Pix aparece no resumo da compra e, a partir do E30, em três telas do app: a vitrine, o Detalhe e o Carrinho. Se cada lugar faz a conta por conta própria, a loja muda o desconto e alguém esquece um deles: o cliente vê dois preços para o mesmo fone.
@@ -40,7 +53,15 @@ Num script que simula uma compra e imprime o carrinho, que parte só calcula e q
 
 ---
 
+## Funções
+
+Se o desconto do Pix mudar, em quantos lugares do código você quer mexer?
+
+---
+
 ## :icon[square-function] Anatomia de uma função
+
+Uma **função** é uma receita com nome, guardada para usar quando quiser:
 
 ```javascript
 function totalDoItem(preco, qtd) {
@@ -50,15 +71,41 @@ function totalDoItem(preco, qtd) {
 const valor = totalDoItem(50, 3); // 150
 ```
 
-| Parte | No exemplo |
-|---|---|
-| Nome | `totalDoItem`: diz o que a função entrega |
-| **Parâmetros** | `preco` e `qtd`: os nomes que a função usa por dentro |
-| Corpo | o que fica entre `{ }` |
-| **Retorno** | `return` devolve o resultado a quem chamou |
-| **Argumentos** | `50` e `3`: os valores enviados na chamada |
+| Parte | No exemplo | Na receita |
+|---|---|---|
+| Nome | `totalDoItem`: diz o que a função entrega | o nome da receita |
+| **Parâmetros** | `preco` e `qtd`: os nomes que a função usa por dentro | os espaços dos ingredientes |
+| Corpo | o que fica entre `{ }` | o modo de preparo |
+| **Retorno** | `return` devolve o resultado a quem chamou | o prato pronto |
+| **Argumentos** | `50` e `3`: os valores enviados na chamada | os ingredientes que você põe |
 
-Parâmetro é o nome na definição; argumento é o valor na chamada. Escrever a função não executa nada: ela só roda quando alguém a chama com `( )`.
+Escrever a função não executa nada: ela só roda quando alguém a chama com `( )`.
+
+---
+
+## :icon[square-function] Funções na prática
+
+**Caso 1: a mesma receita, com outros ingredientes.** Cada chamada recebe argumentos novos:
+
+```javascript
+console.log(totalDoItem(50, 3));    // 150
+console.log(totalDoItem(199.9, 2)); // 399.8: dois fones
+console.log(totalDoItem(79.9, 1));  // 79.9: uma garrafa
+```
+
+**Caso 2: uma função dentro da outra.** As regras do E05 se encaixam: o prato de uma vira o ingrediente da outra.
+
+```javascript
+console.log(formatarPreco(precoComPix(199.9))); // R$ 189,90
+```
+
+O JavaScript resolve de dentro para fora: primeiro `precoComPix(199.9)` devolve `189.9`, depois `formatarPreco(189.9)` devolve o texto.
+
+---
+
+## Jeitos de escrever
+
+Dá para contar a mesma receita de três jeitos diferentes?
 
 ---
 
@@ -79,14 +126,14 @@ const totalDoItem = function (preco, qtd) {
 const totalDoItem = (preco, qtd) => preco * qtd;
 ```
 
-São três versões da mesma função: num arquivo real, só uma existe.
+São três versões da mesma função: num arquivo real, só uma existe. A **arrow function** (em inglês, "função seta") usa a seta `=>`.
 
 | Forma | Pode ser chamada antes da linha que a cria? |
 |---|---|
 | Declaração | sim: o JavaScript a **iça** (hoisting) para o topo |
 | Expressão e arrow | não: `Cannot access 'totalDoItem' before initialization` |
 
-Na Lojinha: declaração para as regras exportadas de `src/regras/`; arrow para funções curtas e para as que vão como argumento de outra.
+**Içar** é levantar, como uma bandeira no mastro: antes de rodar, o JavaScript leva as declarações para o topo do arquivo. Na Lojinha: declaração para as regras exportadas de `src/regras/`; arrow para funções curtas e para as que vão como argumento de outra.
 
 ---
 
@@ -108,11 +155,25 @@ const itemNovo = (produto) => ({ id: produto.id, qtd: 1 }); // objeto entre par�
 - Para devolver um objeto direto, envolva-o em `( )`; senão, as chaves viram corpo da função
 - O `() => { ... }` que você passa ao `test` do Jest, desde o E04, é uma arrow sem parâmetros
 
+Chamando as três:
+
+```javascript
+console.log(dobro(21));                                     // 42
+console.log(comFrete(100, 15));                             // 115
+console.log(itemNovo({ id: 7, nome: 'Tênis de Corrida' })); // { id: 7, qtd: 1 }
+```
+
+---
+
+## Valor padrão
+
+Na padaria, o que vem quando você pede "o de sempre"?
+
 ---
 
 ## :icon[sliders-horizontal] Parâmetros padrão
 
-A vitrine anuncia 3 parcelas (`PARCELAS_NA_VITRINE`, do E05), mas o resumo da compra pode pedir 6. Um **valor padrão** cobre o caso comum:
+Um **valor padrão** é o "de sempre": o valor que o parâmetro recebe quando quem chama não diz nada. A vitrine anuncia 3 parcelas (`PARCELAS_NA_VITRINE`, do E05), mas o resumo da compra pode pedir 6:
 
 ```javascript
 function textoDasParcelas(preco, parcelas = PARCELAS_NA_VITRINE) {
@@ -121,6 +182,16 @@ function textoDasParcelas(preco, parcelas = PARCELAS_NA_VITRINE) {
 }
 ```
 
+- `parcelas = PARCELAS_NA_VITRINE` se lê: "se ninguém disser quantas parcelas, use 3"
+- O padrão só entra quando o argumento falta ou chega como `undefined`
+- Deixe os parâmetros com padrão no fim da lista
+
+---
+
+## :icon[sliders-horizontal] Valor padrão na prática
+
+**Caso 1: as parcelas.** O que `textoDasParcelas` recebe e devolve em cada chamada:
+
 | Chamada | `parcelas` | Devolve |
 |---|---|---|
 | `textoDasParcelas(199.9)` | 3 | `'3x de R$ 66,63'` |
@@ -128,13 +199,21 @@ function textoDasParcelas(preco, parcelas = PARCELAS_NA_VITRINE) {
 | `textoDasParcelas(199.9, undefined)` | 3 | `'3x de R$ 66,63'` |
 | `textoDasParcelas(199.9, null)` | `null` | `'nullx de R$ ∞'` |
 
-O padrão só entra quando o argumento falta ou chega como `undefined`. `null` e `0` são valores: a função os recebe como vieram, e a divisão quebra. Deixe os parâmetros com padrão no fim da lista.
+`null` e `0` são valores: a função os recebe como vieram, e a divisão quebra.
+
+**Caso 2: a data de hoje, no E06.** O `preverEntrega(diasUteis, hoje = new Date())` usa o mesmo recurso: o script não passa a data e recebe a de hoje; o teste passa uma data fixa.
+
+---
+
+## Rest
+
+Como aceitar um cupom, dois cupons ou nenhum, com a mesma função?
 
 ---
 
 ## :icon[combine] Parâmetros rest
 
-O cliente pode somar um cupom de 10% e o desconto do Pix. Com **rest**, a função aceita quantos percentuais vierem:
+O cliente pode somar um cupom de 10% e o desconto do Pix. Com **rest** (em inglês, "o resto"), a função aceita quantos percentuais vierem: é como uma sacola que recebe tudo o que sobrou.
 
 ```javascript
 function aplicarDescontos(preco, ...percentuais) {
@@ -153,6 +232,30 @@ aplicarDescontos(200);        // 200: percentuais chega como []
 - `...percentuais` junta numa **lista** todos os argumentos que sobram, e o `for...of` da aula 13 a percorre
 - Só pode haver um rest, e ele é sempre o último parâmetro
 - Os mesmos três pontos numa chamada fazem o contrário, espalham uma lista: é o spread, que você vê no E09
+
+---
+
+## :icon[combine] Rest na prática
+
+**Caso 1: o que cai na sacola.** Uma função que só mostra o que recebeu:
+
+```javascript
+function mostrarPercentuais(preco, ...percentuais) {
+  console.log(percentuais);
+}
+
+mostrarPercentuais(200, 10, 5); // [ 10, 5 ]
+mostrarPercentuais(200, 10);    // [ 10 ]
+mostrarPercentuais(200);        // []
+```
+
+O primeiro argumento vai para `preco`; todo o resto, para a lista. Sem desconto nenhum, a lista chega vazia, e o `for...of` não dá nenhuma volta.
+
+**Caso 2: cupom e Pix no Fone.**
+
+```javascript
+console.log(formatarPreco(aplicarDescontos(199.9, 10, 5))); // R$ 170,91
+```
 
 ---
 
@@ -186,11 +289,37 @@ Com chaves, a arrow precisa de `return`. A função devolve número, não texto:
 
 ---
 
+## Retorno
+
+Qual a diferença entre receber o prato pronto e receber a foto do prato?
+
+---
+
 ## :icon[corner-down-right] O retorno
+
+O **`return`** é o prato pronto que a função entrega a quem chamou. O `console.log` só mostra a foto do prato na tela: quem chamou fica sem nada nas mãos.
+
+```javascript
+function totalComReturn(preco, qtd) {
+  return preco * qtd; // entrega o prato
+}
+function totalComLog(preco, qtd) {
+  console.log(preco * qtd); // só mostra a foto
+}
+
+const a = totalComReturn(50, 3); // a vale 150
+const b = totalComLog(50, 3);    // aparece 150 na tela, mas b vale undefined
+```
 
 - `return` devolve um valor e **encerra** a função: nada depois dele roda
 - Sem `return`, a função devolve `undefined`
 - Para devolver vários valores, devolva um objeto
+
+---
+
+## :icon[corner-down-right] O retorno na prática
+
+Um resumo do carrinho, com dois valores num objeto e um caso especial:
 
 ```javascript
 function resumirCarrinho(itens) {
@@ -206,13 +335,22 @@ function resumirCarrinho(itens) {
 const resumo = resumirCarrinho(itens);
 ```
 
-Com o carrinho do Pratique da aula 13 (fones, luminária e garrafas), `resumo` é `{ linhas: 3, total: 969.1 }`, e o script lê `resumo.linhas` e `resumo.total`. Quem chama sabe o que esperar: `null` para o carrinho vazio, um objeto com dois números nos outros casos.
+- **Caso 1, carrinho cheio.** Com o carrinho do Pratique da aula 13 (fones, luminária e garrafas), `resumo` é `{ linhas: 3, total: 969.1 }`, e o script lê `resumo.linhas` e `resumo.total`
+- **Caso 2, carrinho vazio.** `resumirCarrinho([])` devolve `null` no primeiro `return`, e a função para ali
+
+Quem chama sabe o que esperar: `null` para o carrinho vazio, um objeto com dois números nos outros casos.
+
+---
+
+## Escopo
+
+Do seu quarto, você lê o quadro de avisos da sala. Da sala, dá para ver dentro do quarto?
 
 ---
 
 ## :icon[braces] Escopo de bloco
 
-**Escopo** é a região do código onde um nome existe. `let` e `const` vivem só no **bloco** `{ }` em que nasceram: o de um `if`, de um `for` ou de uma função.
+**Escopo** é a região do código onde um nome existe, como um cômodo da casa: o que nasce no quarto fica no quarto. `let` e `const` vivem só no **bloco** `{ }` em que nasceram: o de um `if`, de um `for` ou de uma função.
 
 ```javascript
 function avisoDoFrete(subtotal) {
@@ -246,7 +384,7 @@ O `i` de um `for (let i = 0; ...)` também só existe dentro do laço. O `var` i
 
 ## :icon[eye-off] Escopo de função
 
-Parâmetros e variáveis criados dentro de uma função só existem durante aquela chamada, e cada chamada tem os seus. A função enxerga o que está fora dela; quem está fora não enxerga o que está dentro.
+Parâmetros e variáveis criados dentro de uma função só existem durante aquela chamada, e cada chamada tem os seus. A função enxerga o que está fora dela, como o quadro de avisos da sala; quem está fora não enxerga o que está dentro.
 
 ```javascript
 const NOTA_MINIMA = 4.5; // escopo do módulo: o arquivo inteiro vê
@@ -274,9 +412,15 @@ Ler `NOTA_MINIMA` de fora é seguro. Se o `let total` ficasse no topo do arquivo
 
 ---
 
+## Funções puras
+
+Uma calculadora que desse resultados diferentes para a mesma conta serviria para quê?
+
+---
+
 ## :icon[equal] Funções puras
 
-Uma **função pura** cumpre duas regras: com as mesmas entradas, devolve sempre a mesma saída; e não muda nada fora dela.
+Uma **função pura** é uma receita confiável: com os mesmos ingredientes, sai sempre o mesmo prato, e ela não mexe em nada fora da própria panela. São duas regras: com as mesmas entradas, devolve sempre a mesma saída; e não muda nada fora dela.
 
 ```javascript
 // pura: depende só dos parâmetros e devolve um valor novo
@@ -325,9 +469,15 @@ O `push` vai na lista **nova**, nunca na recebida, e quem chama guarda o resulta
 
 ---
 
+## Efeitos
+
+Além de calcular, o que um programa precisa fazer para alguém ver o resultado?
+
+---
+
 ## :icon[zap] Funções com efeito
 
-Um programa precisa de efeitos: é por eles que algo acontece. **Efeito colateral** é tudo o que a função faz além de devolver um valor.
+Um programa precisa de efeitos: é por eles que algo acontece. **Efeito colateral** é tudo o que a função faz além de entregar o prato.
 
 | Efeito | Exemplo no `lojinha-regras` |
 |---|---|
@@ -342,6 +492,34 @@ Regra da Lojinha: o cálculo mora numa função pura em `src/regras/`; o efeito 
 let itens = [];
 itens = adicionarItem(itens, produtos[0]); // regra pura: só calcula
 console.log(`Subtotal: ${formatarPreco(subtotal(itens))}`); // efeito: imprime
+```
+
+---
+
+## :icon[zap] Efeitos na prática
+
+**Caso 1: uma função que só faz efeito.** Ela imprime o carrinho e não devolve nada:
+
+```javascript
+function imprimirCarrinho(itens) {
+  for (const item of itens) {
+    console.log(`${item.qtd} x ${item.nome}`);
+  }
+}
+
+imprimirCarrinho(itens);
+// 2 x Fone Bluetooth
+// 1 x Luminária de Mesa
+```
+
+O trabalho dela é o efeito: mora no script, em `src/scripts/`, e não em `src/regras/`.
+
+**Caso 2: a mesma chamada, duas vezes.** A regra pura repete o resultado; o sorteio, não:
+
+```javascript
+console.log(subtotal(itens), subtotal(itens)); // 489.7 489.7
+const sortearCupom = () => Math.random() < 0.1;
+console.log(sortearCupom(), sortearCupom());   // pode sair false e true: cada chamada sorteia
 ```
 
 ---
@@ -361,6 +539,17 @@ Quais destas funções do `lojinha-regras` são puras?
 :::tip Resposta
 Puras: 1 e 3. Devolvem o mesmo resultado para as mesmas entradas e não mexem em nada fora delas. A 2 imprime: é efeito e mora no script. A 4 e a 5 leem o mundo (o sorteio e o relógio): cada chamada pode dar um resultado diferente. Para testar uma regra que precisa da data, receba a data por parâmetro, como nos testes de datas do E06, em vez de ler o relógio lá dentro.
 :::
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Cannot access 'totalDoItem' before initialization` | uma arrow ou expressão foi chamada antes da linha que a cria | mova a chamada para baixo, ou use declaração |
+| `aviso is not defined` | o nome foi usado fora do bloco em que nasceu | declare antes do `if`, com `let` |
+| `undefined` no lugar do resultado | faltou o `return`, ou a arrow tem chaves sem `return` | ponha o `return`, ou tire as chaves |
+| `does not provide an export named` | o arquivo não exporta esse nome | confira o `export` e a grafia nos dois arquivos |
 
 ---
 

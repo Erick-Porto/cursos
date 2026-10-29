@@ -27,11 +27,24 @@ Programador Mobile · Encontro E41 · Aula 81 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **issue** | um cartão de tarefa no GitHub, com número, como `#9` |
+| **quadro kanban** | um quadro com colunas, em que cada tarefa anda da esquerda para a direita até ficar pronta |
+| **Pull Request (PR)** | o pedido para juntar a sua branch à `main`, com a revisão de um colega |
+| **regra de proteção** | uma regra do GitHub que recusa o que a equipe combinou não fazer |
+| **daily** | a conversa de 5 minutos, em pé, no começo de cada encontro |
+| **README** | o texto de apresentação do projeto, na página do repositório |
+
+---
+
 ## Por que isso importa
 
 Véspera da apresentação. Bruno corrige um detalhe e faz `git push` direto na `main`, com a mensagem "teste". O app para de abrir. Ana passou a tarde na tela de Horários, a mesma que Carla refez sem saber. Ninguém lembra quem mexeu no quê, e o último commit que funcionava está perdido entre "ajustes" e "agora vai".
 
-Nada disso é falta de talento: é falta de **combinados**, e o próprio GitHub pode fazê-los valer.
+Nada disso é falta de talento: é falta de **combinados**, as regras que a equipe decide seguir. E o próprio GitHub pode fazê-las valer.
 
 :::question
 Que regras evitam esse caos sem depender da memória nem da boa vontade de ninguém?
@@ -41,7 +54,7 @@ Que regras evitam esse caos sem depender da memória nem da boa vontade de ningu
 
 ## :icon[workflow] O caminho de uma história
 
-Branch, PR revisado e conflito você já fez no E03. O que muda com uma equipe: toda história faz o mesmo caminho, do quadro à `main`:
+No E03, uma mudança chegou à `main` por uma **branch**, o rascunho paralelo, e um **Pull Request**, o pedido de revisão antes de juntar. Em equipe, toda história faz esse caminho:
 
 :::steps
 1. A história vira uma **issue** no quadro, com critérios de aceite
@@ -56,18 +69,37 @@ Ninguém faz commit direto na `main`. Hoje vocês montam o que faz isso valer.
 
 ---
 
-## :icon[kanban] O quadro no GitHub Projects
+## O quadro
 
-Um **quadro kanban** mostra cada história como um cartão que anda da esquerda para a direita.
+Na lanchonete cheia, como você sabe se o seu lanche já está pronto?
+
+---
+
+## :icon[kanban] O quadro kanban
+
+Um **quadro kanban** (palavra japonesa para "placa") mostra cada história como um cartão que anda da esquerda para a direita. É como o painel de pedidos de uma lanchonete: cada pedido aparece em "preparando" e passa para "pronto".
 
 :::center
 ![Animação: o cartão #9 anda de Todo até Done, passando por In Progress e In review](images/e41-kanban-cartao.svg)
 :::
 
+| Coluna | Quer dizer |
+|---|---|
+| **Todo** | a fazer |
+| **In Progress** | em andamento: alguém está fazendo |
+| **In review** | em revisão: o PR espera um colega |
+| **Done** | feito: entrou na `main` |
+
+---
+
+## :icon[settings] O quadro no GitHub Projects
+
+O **GitHub Projects** é o quadro kanban que vem no GitHub. Uma pessoa da equipe monta:
+
 :::steps
-1. Na aba **Projects** do repositório, **New project**, modelo **Board**
+1. Na aba **Projects** do repositório, **New project** (novo projeto), modelo **Board** (quadro)
 2. Colunas **Todo**, **In Progress**, **In review** e **Done**; crie a que faltar no **+** à direita
-3. Nas configurações do projeto, **Manage access**: a equipe entra com permissão **Write**
+3. Nas configurações do projeto, **Manage access** (acesso): a equipe entra com permissão **Write**, a de escrever
 4. **Add item**, **Create new issue**: a issue nasce no repositório e já no quadro
 :::
 
@@ -89,20 +121,41 @@ Cada issue traz a história, os critérios como lista de tarefas e um rótulo de
 - [ ] Dado que cancelei, então o status vira Cancelado e o horário volta a ficar livre
 ```
 
+- `- [ ]` vira uma caixinha de marcar: quem testa marca cada critério atendido
 - Título curto, com verbo: "Cancelar agendamento"
-- Rótulos `must`, `should`, `could` e `wont`, criados em **Issues**, **Labels**
-- Em **Assignees**, quem pegou a história: uma pessoa por issue
+- Rótulos (*labels*) `must`, `should`, `could` e `wont`, criados em **Issues**, **Labels**
+- Em **Assignees** (responsáveis), quem pegou a história: uma pessoa por issue
 - O GitHub dá um número à issue, como `#9`, que aparece na branch e no PR
 
 ---
 
+## Branches e commits
+
+Duas pessoas no mesmo código: como uma não apaga o trabalho da outra?
+
+---
+
 ## :icon[git-branch] Uma história, uma branch
+
+Cada história ganha a sua **branch**: o rascunho paralelo, em que dá para mexer sem estragar a versão boa da `main`. Antes de criar, traga a `main` atualizada:
 
 ```bash
 git switch main
 git pull                                    # parte da main atualizada
 git switch -c feature/9-cancelar-agendamento
 ```
+
+| Linha | O que ela diz |
+|---|---|
+| `git switch main` | "vá para a `main`" |
+| `git pull` | "traga da nuvem o que os colegas já juntaram" |
+| `git switch -c ...` | "crie esta branch e entre nela" (`-c` de *create*, criar) |
+
+São os comandos do E03. O que muda em equipe é o nome da branch e o tamanho dela.
+
+---
+
+## :icon[split] Como nomear e dividir as branches
 
 - O nome leva o tipo, o número da issue e poucas palavras: `feature/9-cancelar-agendamento`, `fix/14-domingo-nos-horarios`
 - Branch curta: um ou dois dias de trabalho, nunca um sprint inteiro
@@ -113,18 +166,29 @@ git switch -c feature/9-cancelar-agendamento
 
 ## :icon[git-commit-horizontal] Commits com tipo
 
-A mensagem continua começando por verbo, como no E03, e ganha um **tipo** na frente, no padrão **Conventional Commits**:
+Um **commit** é a foto do projeto naquele momento, com legenda. Em equipe, a legenda ganha um **tipo** na frente, como o nome do álbum em que a foto fica. É o padrão **Conventional Commits** (commits combinados). A mensagem continua começando por verbo, como no E03.
 
 | Tipo | Quando | Exemplo |
 |---|---|---|
 | `feat:` | funcionalidade nova | `feat: mostra os horários livres do dia` |
 | `fix:` | correção de bug | `fix: esconde o domingo da lista de dias` |
 | `test:` | só testes | `test: cobre o cancelamento em cima da hora` |
+
+`feat` vem de *feature* (funcionalidade); `fix` quer dizer consertar.
+
+---
+
+## :icon[tags] Mais três tipos de commit
+
+| Tipo | Quando | Exemplo |
+|---|---|---|
 | `refactor:` | reorganiza sem mudar o comportamento | `refactor: leva horariosLivres para src/regras` |
 | `docs:` | README e documentação | `docs: adiciona o protótipo ao README` |
 | `chore:` | configuração e dependências | `chore: instala o expo-router` |
 
-Com o tipo, o `git log --oneline` vira um relatório da equipe.
+*Refactor* é reorganizar; *docs*, documentos; *chore*, tarefa de rotina.
+
+Com o tipo, o `git log --oneline`, que lista um commit por linha, vira um relatório da equipe.
 
 ---
 
@@ -147,9 +211,24 @@ Na descrição do PR: `Closes #7`. Os testes podem vir num commit `test:` à par
 
 ---
 
+## Pull Request
+
+Antes de entregar um trabalho em grupo, por que pedir para um colega ler?
+
+---
+
 ## :icon[send] Pull Request com modelo
 
-O arquivo `.github/pull_request_template.md`, na `main`, preenche a descrição de todo PR novo:
+O **Pull Request** (PR) é o pedido para um colega revisar a sua branch antes de juntar à `main`. Para todo PR trazer as mesmas informações, a equipe usa um **modelo**: um formulário com os campos já escritos.
+
+- O modelo é o arquivo `.github/pull_request_template.md`, na `main`
+- Ele preenche sozinho a descrição de todo PR novo
+- Quem abre o PR preenche tudo e escolhe o revisor da vez: em trio, A revisa B, B revisa C e C revisa A
+- O revisor faz o que aprendeu no E03: roda o código, confere os critérios e comenta o código, não a pessoa
+
+---
+
+## :icon[file-text] O modelo de PR
 
 ```markdown
 ### O que muda
@@ -168,13 +247,61 @@ Uma ou duas frases.
 Closes #
 ```
 
-Quem abre o PR preenche tudo e escolhe o revisor da vez: em trio, A revisa B, B revisa C e C revisa A. O revisor faz o que aprendeu no E03: roda o código, confere os critérios e comenta o código, não a pessoa.
+- `###` abre o título de cada parte
+- `- [ ]` vira uma caixinha, marcada com um clique
+- **Checklist** é a lista de conferência: o que o autor confere antes de pedir a revisão
+- `Closes #` mais o número da issue fecha a issue no merge, como no E03
+
+---
+
+## :icon[send] Um PR na prática
+
+Bruno terminou a issue #9 e abriu o PR. O modelo veio pronto; ele só preencheu:
+
+```markdown
+### O que muda
+Botão Cancelar em Meus agendamentos, até 2 horas antes.
+
+### Como testar
+1. Agende um corte para daqui a 3 horas e toque em Cancelar
+2. Confira o status Cancelado e o horário livre de novo em Horários
+
+### Critérios de aceite
+- [x] Dado um corte às 14h30, quando são 12h, então o botão Cancelar aparece
+- [x] Dado o mesmo corte, quando são 13h, então o botão não aparece
+
+Closes #9
+```
+
+- `[x]` é a caixinha marcada: o critério foi conferido no celular
+- Revisora da vez: Carla. Ela segue o "Como testar" e aprova ou comenta
+- No merge, a issue #9 fecha e o cartão vai sozinho para Done
+
+---
+
+## Proteger a main
+
+Num prédio com porteiro, quem consegue entrar?
 
 ---
 
 ## :icon[shield-check] Protegendo a main
 
-Uma **regra de proteção** faz o GitHub recusar o que a equipe combinou não fazer. Em **Settings**, **Rules**, **Rulesets**, **New ruleset**, **New branch ruleset**:
+Uma **regra de proteção** faz o GitHub recusar o que a equipe combinou não fazer. Pense no porteiro de um prédio: só entra quem foi anunciado. Na `main` protegida, só entra o que chega por um PR aprovado.
+
+:::center
+![Diagrama: push direto na main recusado; o caminho aceito é branch, Pull Request, aprovação e merge](images/e41-main-protegida.svg)
+:::
+
+- Ninguém faz push direto na `main`, nem quem criou o repositório
+- O autor do PR não pode aprovar o próprio código
+- No plano gratuito, a regra só vale em **repositório público**
+
+---
+
+## :icon[settings] Criando a regra
+
+Em **Settings** (configurações), **Rules** (regras), **Rulesets**, **New ruleset**, **New branch ruleset**:
 
 :::steps
 1. Nome "main protegida" e **Enforcement status** em **Active**
@@ -184,11 +311,28 @@ Uma **regra de proteção** faz o GitHub recusar o que a equipe combinou não fa
 5. Clique em **Create**
 :::
 
-:::center
-![Diagrama: push direto na main recusado; o caminho aceito é branch, Pull Request, aprovação e merge](images/e41-main-protegida.svg)
-:::
+| Opção | O que ela faz |
+|---|---|
+| **Active** | liga a regra |
+| **Include default branch** | vale para a `main` |
+| **Restrict deletions** e **Block force pushes** | ninguém apaga a `main` nem passa por cima dela com `--force` |
+| **Require a pull request** | só entra por PR, com 1 aprovação |
 
-Agora ninguém faz push direto na `main`, nem quem criou o repositório, e o autor do PR não pode aprovar o próprio código. No plano gratuito, a regra só vale em **repositório público**.
+---
+
+## :icon[shield-check] A regra na prática
+
+Com a regra ativa, o porteiro responde assim:
+
+| Tentativa | O que o GitHub faz |
+|---|---|
+| `git push` direto na `main` | recusa, com `GH013: Repository rule violations` |
+| `git push --force` na `main` | recusa: a regra bloqueia force push |
+| merge de um PR sem aprovação | bloqueia o botão de merge: `Review required` |
+| o autor aprova o próprio PR | não deixa: a aprovação vem de outra pessoa |
+| merge de um PR aprovado por um colega | libera o merge |
+
+Repare: nenhum caminho apaga trabalho. O que foi recusado continua no computador de quem tentou.
 
 ---
 
@@ -207,7 +351,7 @@ O que aconteceu, e como ele entrega os dois commits sem perder nada?
 :::
 
 :::tip Resposta
-A regra barrou o push direto na `main`, e os commits continuam no computador dele. Ele cria uma branch ali mesmo, envia e abre o PR:
+A mensagem diz: "as mudanças precisam passar por um pull request". A regra barrou o push direto na `main`, e os commits continuam no computador dele. Ele cria uma branch ali mesmo, envia e abre o PR:
 
 ```bash
 git switch -c feature/9-cancelar-agendamento
@@ -219,9 +363,15 @@ Depois do merge, `git switch main` e `git pull` deixam a `main` local igual à d
 
 ---
 
+## A daily
+
+O que o time combina no vestiário, em poucos minutos, antes do jogo?
+
+---
+
 ## :icon[messages-square] A daily de 5 minutos
 
-No começo de cada encontro de projeto, a equipe para **em pé, diante do quadro**, e cada pessoa responde em até um minuto:
+A **daily** (do inglês, "diária") é a conversa rápida da equipe, como a do time no vestiário antes do jogo. No começo de cada encontro de projeto, a equipe para **em pé, diante do quadro**, e cada pessoa responde em até um minuto:
 
 :::steps
 1. O que terminei desde a última daily?
@@ -236,9 +386,27 @@ No começo de cada encontro de projeto, a equipe para **em pé, diante do quadro
 
 ---
 
+## :icon[timer] A daily na prática
+
+Começo do E43, equipe da Agenda, cronômetro ligado:
+
+- **Ana**: "Terminei a regra dos horários livres, com testes. Antes de pegar outra, reviso o PR do Bruno. Nada me trava."
+- **Bruno**: "Meu PR da tela Serviços está em In review desde ontem. Agora faço a Confirmação."
+- **Carla**: "Hoje termino Meus agendamentos. Estou travada no IP do `.env`."
+
+Três minutos, todos em pé. Depois da daily, longe do quadro, Bruno ajuda Carla com o `.env`. O problema apareceu na daily, mas foi resolvido fora dela.
+
+---
+
+## O repositório da equipe
+
+Três pessoas, um app: onde mora o código que todos usam?
+
+---
+
 ## :icon[smartphone] O app nasce com Expo Router
 
-Uma pessoa cria o app e o repositório; as outras clonam depois. Os passos do Expo Router são os do E36:
+O **repositório da equipe** guarda o app no GitHub, e todos trabalham nele. Uma pessoa cria o app e o repositório; as outras clonam depois. Os passos do Expo Router são os do E36, e os do Git, os do E03:
 
 ```bash
 npx create-expo-app@latest agenda-facil --template blank
@@ -253,15 +421,21 @@ git remote add origin https://github.com/equipe-agenda/agenda-facil.git
 git push -u origin main
 ```
 
+O commit do app é `chore:`: é configuração, ainda sem funcionalidade.
+
+---
+
+## :icon[users] O repositório e a equipe
+
 - Antes do `git remote`, crie no GitHub um repositório **público** e vazio, sem README, na conta de alguém da equipe ou numa organização gratuita, como `equipe-agenda`
-- Em **Settings**, **Collaborators**, convide a equipe; cada pessoa aceita o convite e roda `git clone`
-- O modelo de PR entra na `main` antes da regra de proteção
+- Em **Settings**, **Collaborators** (colaboradores), convide a equipe; cada pessoa aceita o convite e roda `git clone`
+- O modelo de PR entra na `main` antes da regra de proteção: depois dela, até o modelo precisaria de PR
 
 ---
 
 ## :icon[book-open] README inicial
 
-O README é a porta de entrada do projeto. Desde o primeiro dia, ele responde o que é o app, quem faz e como rodar:
+O **README** é a porta de entrada do projeto, como o manual que vem na caixa de um aparelho. Desde o primeiro dia, ele responde o que é o app, quem faz e como rodar:
 
 ```markdown
 # Agenda Fácil
@@ -282,6 +456,17 @@ dois clientes chegam para o mesmo horário.
 ```
 
 As fotos do protótipo ficam em `docs/prototipo/`. No E44, o README ganha telas reais, decisões e vídeo.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `GH013: Repository rule violations` | push direto na `main` protegida | criar uma branch, enviar e abrir o PR |
+| `src refspec main does not match any` | a branch local tem outro nome, como `master` | `git branch -M main` e push de novo |
+| `Permission to ... denied` | a pessoa ainda não é colaboradora | aceitar o convite que chegou por e-mail |
+| `Review required` no PR | falta a aprovação de um colega | pedir a revisão a outra pessoa da equipe |
 
 ---
 

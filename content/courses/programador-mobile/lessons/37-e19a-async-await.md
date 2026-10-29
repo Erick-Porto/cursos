@@ -28,6 +28,19 @@ Programador Mobile · Encontro E19 · Aula 37 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **`async`** | marca uma função assíncrona: ela sempre devolve uma Promise |
+| **`await`** | "aguarde": pausa a função até a Promise encerrar e entrega o valor |
+| **em sequência** | um depois do outro: o próximo só começa quando o anterior termina |
+| **em paralelo** | todos ao mesmo tempo: o total leva o tempo do mais lento |
+| **refatorar** | reescrever o código sem mudar o que ele faz |
+| **nível de cima** | fora de qualquer função, direto no arquivo (*top level*) |
+
+---
+
 ## A variável de fora do checkout
 
 O `finalizarCompra` do E18 funciona e já não é pirâmide. Mas a confirmação precisa da reserva, que nasce dois degraus antes, e cada `then` só recebe o valor do anterior. Por isso a reserva mora numa variável de fora, alterada no meio da corrente:
@@ -52,9 +65,15 @@ Como escrever esse mesmo fluxo na ordem em que você o explica em voz alta: vali
 
 ---
 
+## async
+
+Uma função pode entregar uma senha em vez do lanche?
+
+---
+
 ## :icon[zap] async: a função que devolve uma Promise
 
-A palavra **`async`** antes de `function` muda o que a função devolve: sempre uma **Promise**.
+Lembre a senha da lanchonete do E18: a Promise. A palavra **`async`** (de *asynchronous*, assíncrono) antes de `function` faz a função sempre entregar uma senha: ela sempre devolve uma **Promise**.
 
 ```javascript
 async function aplicarCupom(subtotal, codigo) {
@@ -71,13 +90,45 @@ aplicarCupom(200, 'XYZ');      // Promise rejeitada com o erro
 | `return valor` | Promise cumprida com o valor |
 | `throw erro` | Promise rejeitada com o erro |
 
-Vale para arrow também: `const finalizar = async () => { ... }`. Por enquanto a função não espera nada; o `await` vem agora.
+Vale para arrow também: `const finalizar = async () => { ... }`. Esta função ainda não espera nada: quem espera é o `await`.
+
+---
+
+## :icon[zap] async na prática
+
+**Caso 1: quem chama recebe a senha, não o valor.**
+
+```javascript
+console.log(aplicarCupom(200, 'BEMVINDO')); // Promise { 180 }
+```
+
+**Caso 2: o valor e o erro chegam pelo `then` e pelo `catch` do E18.**
+
+```javascript
+aplicarCupom(200, 'BEMVINDO').then((valor) => console.log(valor)); // 180
+aplicarCupom(200, 'XYZ').catch((erro) => console.log(erro.message)); // Cupom inválido
+```
+
+O `throw` dentro da função `async` não derrubou o script: virou uma Promise rejeitada, tratada no `catch`.
+
+**Caso 3: uma arrow `async`.**
+
+```javascript
+const dobrar = async (n) => n * 2;
+dobrar(21).then((valor) => console.log(valor)); // 42
+```
+
+---
+
+## await
+
+Dá para esperar a senha ser chamada sem travar a fila inteira?
 
 ---
 
 ## :icon[hourglass] await: espera a Promise sem travar o programa
 
-**`await`** pausa a função até a Promise encerrar e entrega o valor cumprido.
+**`await`** (aguarde) é esperar a senha ser chamada sem travar a fila. A função fica parada naquela linha até a Promise encerrar e recebe o valor cumprido. O resto do programa segue.
 
 ```javascript
 async function mostrarTotal(cep, subtotal) {
@@ -126,9 +177,43 @@ async function totalComFrete(cep, subtotal) {
 
 ---
 
+## :icon[hourglass] await na prática
+
+**Caso 1: o total com frete.** O `mostrarTotal`, chamado com o CEP de São Paulo e R$ 100 em produtos:
+
+```javascript
+await mostrarTotal('01310-100', 100);
+```
+
+```plaintext
+19.9
+Total: R$ 119,90
+```
+
+**Caso 2: o `await` esquecido.** A conta junta um número com a senha:
+
+```javascript
+async function totalSemAwait(cep, subtotal) {
+  const frete = consultarFrete(cep); // faltou o await
+  console.log(subtotal + frete);
+}
+
+await totalSemAwait('01310-100', 100); // 100[object Promise]
+```
+
+Nenhum erro aparece: o código roda e erra em silêncio. Se o total parecer estranho, procure o `await` que faltou.
+
+---
+
+## try e catch com await
+
+Se o pedido for cancelado enquanto você espera, quem segura a queda?
+
+---
+
 ## :icon[shield-alert] try e catch com await
 
-Quando a Promise é rejeitada, o `await` **lança** o erro, como um `throw`. Por isso o `try/catch` do E17 volta a servir. Os pontinhos fazem o papel do "carregando" no terminal:
+Quando a Promise é rejeitada, o `await` **lança** o erro, como um `throw`. Por isso a rede de proteção do E17, o `try/catch`, volta a servir. Os pontinhos fazem o papel do "carregando" no terminal:
 
 ```javascript
 async function mostrarFrete(cep) {
@@ -144,8 +229,42 @@ async function mostrarFrete(cep) {
 }
 ```
 
+- O `'\n'` pula uma linha: a mensagem não sai grudada nos pontinhos
 - O `catch` pega a rejeição de **qualquer** `await` dentro do `try`
 - O **`finally`** para os pontinhos nos dois caminhos: sem ele, uma falha deixa o timer do E18 ligado, e o programa não termina nunca
+
+---
+
+## :icon[shield-alert] try e catch com await na prática
+
+**Caso 1: o `mostrarFrete`, com um CEP certo e um errado.**
+
+```plaintext
+$ node pontinhos.js 01310-100
+...
+Frete: R$ 19,90
+
+$ node pontinhos.js 123
+...
+CEP inválido
+```
+
+**Caso 2: um `catch` só para dois `await`.**
+
+```javascript
+async function resumo(cep) {
+  try {
+    const frete = await consultarFrete(cep);
+    const prazo = await consultarPrazo(cep);
+    console.log(`Frete ${frete}, prazo de ${prazo} dias`);
+  } catch (erro) {
+    console.log('Não deu: ' + erro.message);
+  }
+}
+
+await resumo('01310-100'); // Frete 19.9, prazo de 3 dias
+await resumo('123');       // Não deu: CEP inválido
+```
 
 ---
 
@@ -172,9 +291,15 @@ Aparecem a etapa 1 e, na hora, "Pedido confirmado!", antes de qualquer etapa ter
 
 ---
 
+## Sequência e paralelo
+
+Três pedidos: um caixa só, um de cada vez, ou três caixas ao mesmo tempo?
+
+---
+
 ## :icon[list-ordered] Em sequência: quando uma etapa depende da outra
 
-No checkout, a ordem é regra de negócio: não se cobra sem reserva, não se confirma sem cobrança. Cada `await` espera o anterior terminar:
+Numa lanchonete com um caixa só, os pedidos andam **em sequência**: o próximo só começa quando o anterior sai. Com três caixas, eles andam **em paralelo**, todos ao mesmo tempo. No checkout, a ordem é regra de negócio: não se cobra sem reserva, não se confirma sem cobrança. Cada `await` espera o anterior terminar:
 
 ```javascript
 await validarEstoque(pedido.itens, config);                // 800 ms
@@ -225,9 +350,15 @@ Em sequência, cada `await` espera o anterior: o total é a soma, 1800 ms. Com `
 
 ---
 
+## await em laços
+
+Três jeitos de consultar cada item do carrinho. Qual deles sai sem esperar ninguém?
+
+---
+
 ## :icon[repeat] await dentro de laços
 
-Para consultar o estoque de cada item do carrinho, há três jeitos, e um deles está errado:
+O laço do E07 confere o carrinho item por item. Com `await`, dá para consultar o estoque de cada item de três jeitos, e um deles está errado:
 
 ```javascript
 // 1. em fila, na ordem do carrinho; para no primeiro erro
@@ -244,7 +375,44 @@ itens.forEach(async (item) => {
 });
 ```
 
-O `for...of` do E07 com `await` vai em fila: use quando a ordem importa ou o servidor limita pedidos. `map` com `Promise.all` vai em paralelo. O **`forEach`** ignora a Promise que a callback devolve: a função segue antes de consultar qualquer item.
+O **`forEach`** ignora a Promise que a callback devolve: a função segue antes de consultar qualquer item.
+
+---
+
+## :icon[list-ordered] Os três laços em português
+
+| Jeito | Como os pedidos saem | Use quando |
+|---|---|---|
+| `for...of` com `await` | em fila: um termina, o próximo começa | a ordem importa ou o servidor limita pedidos |
+| `Promise.all` com `map` | todos juntos; espera o último | os itens não dependem um do outro |
+| `forEach(async ...)` | todos juntos, e ninguém espera | nunca, quando você precisa do resultado |
+
+O `for...of` com `await` pausa a cada volta e para no primeiro erro. O `map` é a linha de produção do E09: cada item entra e sai como uma Promise, e o `Promise.all` espera todas.
+
+---
+
+## :icon[repeat] await em laços na prática
+
+Três itens no carrinho. Cada consulta leva 300 ms e escreve uma linha:
+
+```javascript
+async function consultarEstoque(id, qtd) {
+  await esperar(300);
+  console.log(`  item ${id} (${qtd}): em estoque`);
+}
+```
+
+Os três laços, cronometrados com o `console.time` do E17 (as três linhas de cada consulta foram resumidas):
+
+```plaintext
+for...of: 938ms
+Promise.all: 312ms
+forEach: 0.149ms
+```
+
+- `for...of`: um depois do outro, 3 vezes 300 ms
+- `Promise.all`: os três juntos, o tempo de um só
+- `forEach`: "terminou" antes de consultar; as três linhas do estoque aparecem depois do tempo
 
 ---
 
@@ -280,9 +448,15 @@ O `forEach` dispara as callbacks e não espera nenhuma: o `return` acontece com 
 
 ---
 
+## O checkout reescrito
+
+Dá para reescrever uma função inteira e provar que nada mudou?
+
+---
+
 ## :icon[workflow] O checkout reescrito
 
-Em `src/servicos/checkout.js`, o mesmo `finalizarCompra` do E18, sem a variável de fora:
+**Refatorar** é reescrever o código sem mudar o que ele faz. Em `src/servicos/checkout.js`, o mesmo `finalizarCompra` do E18, sem a variável de fora:
 
 ```javascript
 export async function finalizarCompra(pedido, aoMudarEtapa = () => {}, opcoes = {}) {
@@ -326,14 +500,47 @@ try {
 }
 ```
 
-- **`await` no nível de cima**: num módulo ES, como os arquivos do `lojinha-regras` (`"type": "module"`), o `await` vale também fora de função. É o jeito curto de escrever scripts; dentro de qualquer função, a regra continua: só em `async`
+- **`await` no nível de cima**, fora de qualquer função: num módulo ES, como os arquivos do `lojinha-regras` (`"type": "module"`), ele vale. É o jeito curto de escrever scripts; dentro de qualquer função, a regra continua: só em `async`
 - No E30, o mesmo `finalizarCompra` vai para o botão **Finalizar compra** do app
+
+---
+
+## :icon[workflow] O checkout reescrito na prática
+
+**Caso 1: a prova de que nada mudou.** Os testes do E18 rodam antes e depois da troca:
+
+```plaintext
+$ npm test           # antes, com then
+Tests:       6 passed, 6 total
+$ npm test           # depois, com await
+Tests:       6 passed, 6 total
+```
+
+**Caso 2: o script, com o `try` e o `await` no nível de cima.** A saída é a mesma do E18:
+
+```plaintext
+$ node src/scripts/finalizar.js
+Total: R$ 449,80
+Etapa 1 de 4: Conferindo o estoque...
+Etapa 2 de 4: Reservando seus produtos...
+Etapa 3 de 4: Processando o pagamento...
+Etapa 4 de 4: Confirmando o pedido...
+Pedido nº 418613 confirmado.
+```
+
+Com `CHANCE_DE_FALHA = 1`, a última linha vira "Não deu certo: Um produto do carrinho acabou de esgotar."
+
+---
+
+## Testes com await
+
+Se o teste não espera a resposta, ele corrige o quê?
 
 ---
 
 ## :icon[test-tube] Testes assíncronos com async e await
 
-No Jest, a callback do `test` também pode ser `async`: o Jest espera a Promise dela. Os testes do E18, reescritos:
+O teste continua sendo a prova com gabarito do E04. No Jest, a callback do `test` também pode ser `async`: o Jest espera a Promise dela. Os testes do E18, reescritos:
 
 ```javascript
 test('confirma o pedido quando nenhuma etapa falha', async () => {
@@ -348,6 +555,39 @@ test('rejeita informando a etapa que falhou', async () => {
 
 - Sem o `await` antes do `expect` com `rejects`, o teste termina antes da conferência: aparece como aprovado, e a falha, se vier, vem solta depois do resumo
 - Rode os testes do E18 **antes** de mexer no `finalizarCompra` e de novo depois: verdes nas duas vezes provam que a refatoração não mudou o comportamento
+
+---
+
+## :icon[test-tube] Testes com await na prática
+
+**Caso 1: parar no pagamento.** Cada `await` espera, e a conferência das etapas vem depois do erro:
+
+```javascript
+test('para no pagamento quando o terceiro sorteio falha', async () => {
+  const sorteios = [1, 1, 0]; // estoque passa, reserva passa, pagamento falha
+  const etapas = [];
+  const opcoes = { atraso: 0, sortear: () => sorteios.shift() };
+  await expect(finalizarCompra(pedido, (etapa) => etapas.push(etapa), opcoes))
+    .rejects.toMatchObject({ etapa: 'pagamento', codigo: 'FALHA_PAGAMENTO' });
+  expect(etapas).toEqual(['estoque', 'reserva', 'pagamento']);
+});
+```
+
+`sorteios.shift()` tira o primeiro número da lista a cada etapa: 1, depois 1, depois 0. Verde.
+
+**Caso 2: a armadilha.** Sem o `await` antes do `expect`, um teste `async` com o esperado errado também sai verde: o Jest não esperou a conferência.
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| Você vê | Quer dizer | O que fazer |
+|---|---|---|
+| `Unexpected reserved word` ou `await is only valid in async functions` | `await` numa função sem `async` | pôr `async` na função |
+| `[object Promise]` no meio de um texto | faltou `await`: você usou a senha, não o valor | `await` antes da chamada |
+| `undefined` ao ler um campo, como `produto.nome` | faltou `await`: a Promise não tem esse campo | `await` antes da chamada |
+| o Node para com o erro, mesmo com `try` | faltou `await`: o erro chegou depois do `try` | `await` na chamada |
+| os pontinhos não param | `clearInterval` fora do `finally` | mover para o `finally` |
 
 ---
 

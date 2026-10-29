@@ -27,6 +27,19 @@ Programador Mobile · Encontro E13 · Aula 25 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **faixa** | um intervalo de valores com a mesma resposta: de R$ 50 a R$ 299,99, 3 parcelas |
+| **borda** | o valor exato em que uma faixa termina e a próxima começa |
+| **`switch`** | a decisão que compara um valor com uma lista de opções fixas |
+| **cascata** | quando a execução desce de um `case` para o de baixo, sem parar |
+| **falsy** | um valor que o `if` lê como "não": `0`, `''`, `null`... |
+| **truthy** | todo valor que o `if` lê como "sim" |
+
+---
+
 ## Um pedido, muitas decisões
 
 A API de pedidos não manda texto nem cor: manda só `status: 'enviado'`. Quem decide que o relatório escreve "A caminho" é o código. No E30, o mesmo dado vira um selo colorido no app, e a regra que decide é a mesma de hoje.
@@ -39,9 +52,37 @@ Pense na última compra que você fez num app. Quantas decisões ele tomou antes
 
 ---
 
+## Faixas e bordas
+
+No dia exato em que faz 18 anos, a pessoa já pode tirar a carteira?
+
+---
+
+## :icon[split] Faixas: o else if
+
+O `if` é uma bifurcação na estrada: a condição escolhe o caminho. Com `else if`, a estrada tem várias saídas, e o JavaScript pega a **primeira** cuja condição é verdadeira; as outras ficam para trás. Cada saída cobre uma **faixa** de valores. No E07a, `maximoDeParcelas` escolheu as parcelas pelo preço; hoje ela vai para `src/regras/precos.js`, com `export`:
+
+```javascript
+export function maximoDeParcelas(preco) {
+  if (preco < 50) {
+    return 1;
+  } else if (preco < 300) {
+    return 3;
+  } else if (preco < 1000) {
+    return 6;
+  } else {
+    return 10;
+  }
+}
+```
+
+O Fone, de R$ 199,90, não é `< 50`, mas é `< 300`: pega a segunda saída, 3 parcelas.
+
+---
+
 ## :icon[test-tube] As faixas do E07a, com teste
 
-No E07a, `maximoDeParcelas` escolheu 1, 3, 6 ou 10 parcelas com `else if`, e a faixa fora de ordem virou **código morto** sem erro nenhum. Hoje ela vai para `src/regras/precos.js`, com `export`, e ganha testes no fim de `precos.test.js` (com `maximoDeParcelas` no `import` do topo):
+No E07a, a faixa fora de ordem virou **código morto**, um trecho que nunca roda, sem erro nenhum. Hoje os testes vigiam a ordem, no fim de `precos.test.js` (com `maximoDeParcelas` no `import` do topo):
 
 ```javascript
 describe('maximoDeParcelas', () => {
@@ -58,7 +99,41 @@ describe('maximoDeParcelas', () => {
 });
 ```
 
-Bug de faixa mora na **borda**, o valor exato em que uma faixa termina e a outra começa. Com as faixas invertidas, os dois testes ficam vermelhos.
+Bug de faixa mora na **borda**, o valor exato em que uma faixa termina e a outra começa: como os 18 anos, no dia do aniversário. Com as faixas invertidas, os dois testes ficam vermelhos.
+
+---
+
+## :icon[list-checks] Faixas na prática
+
+**Caso 1: produtos da vitrine.**
+
+```javascript
+console.log(maximoDeParcelas(59.9));  // 3: Livro de Receitas
+console.log(maximoDeParcelas(459.9)); // 6: Jogo de Panelas
+console.log(maximoDeParcelas(1299));  // 10: acima de R$ 1.000
+```
+
+**Caso 2: um centavo de diferença na borda.**
+
+```javascript
+console.log(maximoDeParcelas(49.99)); // 1: ainda é menos de 50
+console.log(maximoDeParcelas(50));    // 3: a borda já abre a faixa seguinte
+```
+
+**Caso 3: as faixas fora de ordem.** Se o `preco < 1000` vem primeiro, ele pega tudo abaixo de mil:
+
+```javascript
+function parcelasInvertidas(preco) {
+  if (preco < 1000) {
+    return 6;
+  } else if (preco < 300) {
+    return 3;
+  } else {
+    return 1;
+  }
+}
+console.log(parcelasInvertidas(199.9), parcelasInvertidas(49.9)); // 6 6: errado, sem erro
+```
 
 ---
 
@@ -97,27 +172,15 @@ Em qualquer comparação, cada condição só pode deixar passar a faixa dela.
 
 ---
 
-## :icon[package] Os cinco status de um pedido
+## switch
 
-Um pedido da Lojinha passa por estes **status**. Cada um vira um texto e um **tom**, o tipo de aviso:
-
-| `status` | Texto | `tom` |
-|---|---|---|
-| `'pendente'` | Aguardando pagamento | `alerta` |
-| `'pago'` | Pagamento aprovado | `sucesso` |
-| `'enviado'` | A caminho | `neutro` |
-| `'entregue'` | Entregue | `sucesso` |
-| `'cancelado'` | Cancelado | `perigo` |
-
-Hoje o tom aparece entre colchetes no relatório do terminal; no E30, ele escolhe a cor do selo no app. Um status fora da tabela, como um novo que a API passe a mandar, vira "Status desconhecido", tom `neutro`: a regra não pode quebrar por causa dele.
-
-`textoDoStatus(status)` e `tomDoStatus(status)` moram em `src/regras/pedido.js`.
+Na central de atendimento, o que acontece quando você digita 2?
 
 ---
 
 ## :icon[list-checks] switch: um valor, vários casos
 
-Quando a decisão compara **o mesmo valor** com várias opções fixas, o **`switch`** lê melhor que cinco `else if`. Este é o corpo de `textoDoStatus(status)`:
+O **`switch`** (em inglês, chave) compara **um valor** com várias opções fixas. É como o menu da central de atendimento: cada número leva a um setor, e "outros assuntos" pega o resto. Quando a decisão é assim, o `switch` lê melhor que cinco `else if`. Este é o corpo de `textoDoStatus(status)`:
 
 ```javascript
 switch (status) {
@@ -142,9 +205,49 @@ switch (status) {
 
 ---
 
+## :icon[square-terminal] switch na prática
+
+Com o `switch` dentro de `function textoDoStatus(status) { ... }`:
+
+```javascript
+console.log(textoDoStatus('enviado'));  // A caminho
+console.log(textoDoStatus('Pago'));     // Status desconhecido
+console.log(textoDoStatus(undefined));  // Status desconhecido
+```
+
+- **`'enviado'`** casa com o terceiro `case` e sai no `return`
+- **`'Pago'`**, com maiúscula, não é `===` a nenhum `case`: cai no `default`
+- **`undefined`**, um status que nem veio, também cai no `default`, e o relatório não quebra
+
+---
+
+## :icon[package] Os cinco status de um pedido
+
+Um pedido da Lojinha passa por estes **status**, a situação dele agora. Cada um vira um texto e um **tom**, o tipo de aviso:
+
+| `status` | Texto | `tom` |
+|---|---|---|
+| `'pendente'` | Aguardando pagamento | `alerta` |
+| `'pago'` | Pagamento aprovado | `sucesso` |
+| `'enviado'` | A caminho | `neutro` |
+| `'entregue'` | Entregue | `sucesso` |
+| `'cancelado'` | Cancelado | `perigo` |
+
+Hoje o tom aparece entre colchetes no relatório do terminal; no E30, ele escolhe a cor do selo no app. Um status fora da tabela, como um novo que a API passe a mandar, vira "Status desconhecido", tom `neutro`.
+
+`textoDoStatus(status)` e `tomDoStatus(status)` moram em `src/regras/pedido.js`.
+
+---
+
+## Cascata
+
+A água que cai numa cascata para no primeiro degrau?
+
+---
+
 ## :icon[arrow-down] Sem return nem break, a execução desce
 
-Quando o `case` não sai da função com `return`, ele precisa terminar com **`break`**. Sem ele, a execução continua no `case` de baixo:
+Quando o `case` não sai da função com `return`, ele precisa terminar com **`break`** (em inglês, quebrar): sair do `switch`. Sem ele, a execução desce como água em cascata e continua no `case` de baixo:
 
 ```javascript
 let tom;
@@ -197,11 +300,13 @@ export function tomDoStatus(status) {
 }
 ```
 
-`'pago'` entra no seu `case`, que está vazio, e desce até o primeiro comando: o `return 'sucesso'` que ele divide com `'entregue'`.
+`'pago'` entra no seu `case`, que está vazio, e desce até o primeiro comando: o `return 'sucesso'` que ele divide com `'entregue'`. Assim, `tomDoStatus('pago')` devolve `'sucesso'`, e `tomDoStatus('enviado')`, `'neutro'`.
 
 ---
 
 ## :icon[square-terminal] O relatório de pedidos
+
+As duas funções, na prática, num script que imprime uma linha por pedido:
 
 ```javascript
 // src/scripts/pedidos.js
@@ -232,7 +337,15 @@ O `'devolvido'` não está na tabela e cai no `default` das duas funções: o re
 
 ---
 
+## if, switch ou dicionário
+
+Martelo, chave de fenda ou alicate: o que decide qual ferramenta pegar?
+
+---
+
 ## :icon[scale] if, switch ou dicionário?
+
+O **dicionário** é um objeto usado como um dicionário de verdade: procura a chave, acha o valor.
 
 | A decisão é... | Use | Na Lojinha |
 |---|---|---|
@@ -241,13 +354,41 @@ O `'devolvido'` não está na tabela e cai no `default` das duas funções: o re
 | traduzir um valor em outro | objeto como dicionário | `rotulosDeOrdem`, do E08 |
 | dois valores, uma linha | ternário, do E05b | "item" ou "itens" |
 
-O `textoDoStatus` também caberia num dicionário, como o `rotulosDeOrdem` do E08. O `switch` ganha quando há **grupos** de valores e um `default` que precisa ficar à vista. Com `<` e `>=`, só o `if` serve: o `case` compara apenas com `===`.
+O `textoDoStatus` também caberia num dicionário. O `switch` ganha quando há **grupos** de valores e um `default` que precisa ficar à vista. Com `<` e `>=`, só o `if` serve: o `case` compara apenas com `===`.
+
+---
+
+## :icon[list-checks] Cada decisão na prática
+
+**Faixa, com `if`:** `maximoDeParcelas(199.9)` dá `3`.
+
+**Grupo de valores, com `switch`:** `tomDoStatus('pago')` e `tomDoStatus('entregue')` dão `'sucesso'`.
+
+**Tradução, com dicionário:**
+
+```javascript
+const rotulosDeOrdem = { nome: 'Nome', preco: 'Menor preço', avaliacao: 'Melhor avaliação' };
+console.log(rotulosDeOrdem['preco']); // Menor preço
+```
+
+**Dois valores, com ternário:**
+
+```javascript
+const qtd = 1;
+console.log(`${qtd} ${qtd === 1 ? 'item' : 'itens'}`); // 1 item
+```
+
+---
+
+## Truthy e falsy
+
+Uma caixa vazia ainda é uma caixa?
 
 ---
 
 ## :icon[circle-help] Truthy e falsy
 
-No E05b, você viu que só seis valores contam como falso: são os **falsy**. Dentro do `if`, eles decidem o caminho, e os que enganam estão do outro lado:
+Dentro do `if`, todo valor vira "sim" ou "não". É como se o `if` perguntasse "tem alguma coisa aqui?". No E05b, você viu que só seis valores respondem "não": são os **falsy**. Todo o resto é **truthy**, inclusive os que parecem vazios:
 
 | Falsy | Truthy que engana |
 |---|---|
@@ -257,13 +398,32 @@ No E05b, você viu que só seis valores contam como falso: são os **falsy**. De
 | `null` e `undefined` | `[]` (array vazio) |
 | `NaN` | `{}` (objeto vazio) |
 
-Todo o resto é **truthy**.
+Um papel com "0" escrito tem alguma coisa. Uma caixa vazia, `[]`, ainda é uma caixa: conta como "sim".
+
+---
+
+## :icon[list-checks] Truthy e falsy na prática
+
+**Caso 1: o REPL responde.** O `Boolean(...)` mostra como o `if` lê cada valor:
+
+```javascript
+Boolean('0'); // true
+Boolean([]);  // true
+Boolean(' '); // true
+Boolean(0);   // false
+```
+
+**Caso 2: no `if` das regras.**
 
 ```javascript
 if (cep) { /* ... */ }          // '' não entra; '   ' entra
 if (itens.length) { /* ... */ } // carrinho com 0 itens não entra
 if (itens) { /* ... */ }        // entra sempre, até com []
 ```
+
+- `''` é falsy; um texto só de espaços, não. Por isso o `ehCepValido` do E06 usa `trim`
+- `itens.length` é `0` no carrinho vazio: falsy
+- `itens` é um array, mesmo vazio: truthy
 
 ---
 

@@ -27,6 +27,19 @@ Programador Mobile · Encontro E14 · Aula 27 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **laço** | um trecho de código que se repete; cada repetição é uma **volta** |
+| **`while`** | o laço que repete **enquanto** uma condição for verdadeira (*while* quer dizer "enquanto") |
+| **acumulador** | uma variável que guarda o resultado parcial e muda a cada volta |
+| **`break`** | a palavra que encerra o laço na hora (*break*, quebrar) |
+| **`continue`** | a palavra que pula o resto da volta e vai para a próxima (*continue*, continuar) |
+| **laço infinito** | um laço que nunca para, porque a condição nunca fica falsa |
+
+---
+
 ## Repetir sem uma lista na mão
 
 Desde o E07 você percorre listas com `for` e `for...of`; no E09, com `map`, `filter` e `reduce`. Em todos eles, o número de voltas é o tamanho da lista.
@@ -43,9 +56,35 @@ Como repetir um trecho quando ninguém sabe, antes de começar, quantas voltas s
 
 ---
 
+## O while
+
+Para ganhar o frete grátis, quando você para de pôr coisas no carrinho?
+
+---
+
 ## :icon[refresh-cw] while: repete enquanto a condição vale
 
-O `while` só tem a condição. O início fica antes do laço, e o passo, dentro dele. Em `src/regras/frete.js`, junto do `FRETE_GRATIS_A_PARTIR_DE` do E10:
+Um **laço** é como conferir o carrinho item por item, até acabar. O **`while`** é o laço que não precisa de lista: ele repete o bloco **enquanto** a condição for verdadeira.
+
+```javascript
+let centavos = 8990;        // R$ 89,90 no carrinho
+while (centavos < 15000) {  // enquanto não chega a R$ 150
+  centavos += 5990;         // põe mais um livro de R$ 59,90
+}
+console.log(centavos);      // 20970
+```
+
+- Antes de cada volta, o `while` faz a pergunta da condição: "ainda falta?"
+- Se a resposta é sim, ele roda o bloco entre `{ }` e pergunta de novo
+- Se é não, ele pula o bloco e segue para a linha depois do `}`
+
+Aqui, foram duas voltas. Ninguém precisou contar antes.
+
+---
+
+## :icon[truck] while na prática: o frete grátis
+
+A mesma ideia vira uma regra em `src/regras/frete.js`, junto do `FRETE_GRATIS_A_PARTIR_DE` do E10. Ela responde: quantas unidades deste produto faltam para o frete grátis?
 
 ```javascript
 export function unidadesParaFreteGratis(subtotal, preco) {
@@ -60,15 +99,32 @@ export function unidadesParaFreteGratis(subtotal, preco) {
 }
 
 unidadesParaFreteGratis(89.9, 59.9); // 2: "leve mais 2 e o frete sai grátis"
+unidadesParaFreteGratis(200, 59.9);  // 0: o carrinho já passou de R$ 150
 ```
 
-Ninguém sabe de antemão quantas voltas serão: depende do carrinho e do preço. Com R$ 200 no carrinho, a condição nasce falsa e o laço roda **zero** vezes. A conta vai em centavos, como manda a regra do E05.
+Ninguém sabe de antemão quantas voltas serão: depende do carrinho e do preço.
+
+---
+
+## :icon[list-ordered] unidadesParaFreteGratis em português
+
+| Linha | O que ela diz |
+|---|---|
+| `const meta = ...` | "a meta é R$ 150, em centavos: 15000" |
+| `let centavos = ...` | "comece com o que já está no carrinho" |
+| `let unidades = 0` | "ainda não pus nenhuma unidade" |
+| `while (centavos < meta) {` | "enquanto não chegou à meta, faça:" |
+| `centavos += paraCentavos(preco)` | "ponha mais uma unidade no carrinho" |
+| `unidades++` | "conte mais uma" |
+| `return unidades` | "devolva quantas foram" |
+
+Com R$ 200 no carrinho, a condição nasce falsa e o laço roda **zero** vezes. A conta vai em centavos, como manda a regra do E05.
 
 ---
 
 ## :icon[table] Teste de mesa do while
 
-Siga as variáveis volta a volta, no papel: é o **teste de mesa**. Em `unidadesParaFreteGratis(89.9, 59.9)`, a meta é 15000 e cada unidade soma 5990:
+Siga as variáveis volta a volta, no papel: é o **teste de mesa** do E07. Em `unidadesParaFreteGratis(89.9, 59.9)`, a meta é 15000 e cada unidade soma 5990:
 
 | Volta | `centavos` antes | `centavos < 15000`? | Depois da volta |
 |---|---|---|---|
@@ -109,9 +165,36 @@ Os dois imprimem os 3 primeiros nomes. O `for` junta início, condição e passo
 
 ---
 
+## O do...while
+
+Quantas vezes, no mínimo, você toca a campainha de alguém?
+
+---
+
 ## :icon[calendar-check] do...while: o corpo roda pelo menos uma vez
 
-Regra da Lojinha: o pedido nunca é despachado no mesmo dia. A data anda **pelo menos** um dia e continua andando enquanto não cair num dia útil (`ehDiaUtil`, do E06):
+O **`do...while`** (*faça... enquanto*) primeiro **faz** a volta e só depois pergunta se repete. É como tocar a campainha: você toca pelo menos uma vez e toca de novo enquanto ninguém atende.
+
+```javascript
+let toques = 0;
+do {
+  toques++;                // toca a campainha
+} while (toques < 1);      // a pergunta vem depois da volta
+console.log(toques);       // 1: mesmo com a condição falsa, rodou uma vez
+```
+
+| `while` | `do...while` |
+|---|---|
+| pergunta **antes** de cada volta | pergunta **depois** de cada volta |
+| pode rodar zero vezes | roda pelo menos uma vez |
+
+Repare no `;` depois do `while (...)` final: ele fecha o `do...while`.
+
+---
+
+## :icon[calendar-clock] do...while na prática: o dia de despacho
+
+Na Lojinha, o pedido nunca é despachado no mesmo dia. A data anda **pelo menos** um dia e continua andando enquanto não cair num dia útil (`ehDiaUtil`, do E06):
 
 ```javascript
 export function proximoDiaUtil(hoje) {
@@ -123,9 +206,23 @@ export function proximoDiaUtil(hoje) {
 }
 
 proximoDiaUtil(new Date(2025, 9, 10)); // sexta, 10/10: devolve segunda, 13/10
+proximoDiaUtil(new Date(2025, 9, 11)); // sábado, 11/10: devolve segunda, 13/10
+proximoDiaUtil(new Date(2025, 9, 13)); // segunda, 13/10: devolve terça, 14/10
 ```
 
-O `do...while` roda o corpo **primeiro** e testa depois. Com `while`, você teria de avançar um dia antes do laço e repetir a mesma linha dentro dele.
+---
+
+## :icon[list-ordered] proximoDiaUtil em português
+
+| Linha | O que ela diz |
+|---|---|
+| `const data = new Date(...)` | "copie a data de hoje, só com dia, mês e ano" |
+| `do {` | "faça isto:" |
+| `data.setDate(data.getDate() + 1)` | "ande um dia no calendário" |
+| `} while (!ehDiaUtil(data));` | "repita enquanto a data **não** for dia útil". O `!` quer dizer "não" |
+| `return data` | "devolva a data encontrada" |
+
+O mês começa em 0: em `new Date(2025, 9, 10)`, o 9 é outubro. Com `while`, você teria de avançar um dia antes do laço e repetir a mesma linha dentro dele.
 
 ---
 
@@ -149,9 +246,15 @@ A própria sexta, 10/10. Sexta é dia útil, então `!ehDiaUtil(data)` nasce fal
 
 ---
 
+## Acumuladores
+
+No caixa do mercado, onde fica o total enquanto os produtos passam?
+
+---
+
 ## :icon[calculator] Acumuladores de vários tipos
 
-No E07, o acumulador somou o carrinho. Ele pode guardar qualquer resultado parcial, desde que nasça **antes** do laço:
+Um **acumulador** guarda o resultado parcial do laço, como a calculadora que vai acumulando do `reduce` (E09). Ele guarda qualquer resultado, desde que nasça **antes** do laço:
 
 | Acumulador | Começa em | A cada volta |
 |---|---|---|
@@ -161,13 +264,13 @@ No E07, o acumulador somou o carrinho. Ele pode guardar qualquer resultado parci
 | Lista | `[]` | `push` do que passa no teste |
 | O melhor até agora | `null` | troca quando aparece um melhor |
 
-O "melhor até agora" começa em `null` porque, antes da primeira volta, ainda não existe candidato. A primeira volta sempre vence o `null`, e a lista vazia devolve `null` sem nenhum `if` extra.
+O `null` quer dizer "nenhum ainda": antes da primeira volta, não há candidato. A primeira volta sempre vence o `null`, e a lista vazia devolve `null`.
 
 ---
 
 ## :icon[chart-bar] Uma passada, três respostas
 
-O relatório do catálogo ganha um resumo. Um laço só leva três acumuladores:
+Acumuladores na prática: o relatório do catálogo ganha um resumo, e um laço só leva três acumuladores.
 
 ```javascript
 export function resumirCatalogo(produtos) {
@@ -186,11 +289,55 @@ export function resumirCatalogo(produtos) {
 // com os 12 produtos: 4 em destaque, total 2183.8 e o Livro de Receitas
 ```
 
-Com métodos, seriam três passadas: um `filter` para os destaques e dois `reduce`. Com 12 produtos, a velocidade é a mesma; o ganho é ler as três regras juntas. Somando em reais, o total viria `2183.8000000000006`.
+Com métodos, seriam três passadas: um `filter` para os destaques e dois `reduce`. Com 12 produtos, a velocidade é a mesma; o ganho é ler as três regras juntas.
 
 ---
 
-## :icon[octagon-alert] break: parar no meio
+## :icon[list-ordered] O resumo em português
+
+| Linha | O que ela diz |
+|---|---|
+| `let emDestaque = 0` | "ainda não contei nenhum destaque" |
+| `let maisBarato = null` | "ainda não tenho o mais barato" |
+| `if (produto.destaque) emDestaque++` | "se está em destaque, conte mais um". Com uma instrução só, o `if` dispensa as chaves |
+| `maisBarato === null \|\| ...` | "se ainda não tenho nenhum, ou se este é mais barato..." |
+| `maisBarato = produto` | "...este passa a ser o mais barato" |
+| `return { ... }` | "devolva as três respostas num objeto" |
+
+A soma vai em centavos. Somando em reais, o total viria `2183.8000000000006`.
+
+---
+
+## break e continue
+
+Conferindo o carrinho, quando você para antes do fim? E quando pula um item?
+
+---
+
+## :icon[octagon-alert] break e continue: parar ou pular
+
+Na conferência do carrinho item por item, duas palavras mudam o caminho das voltas:
+
+- **`break`** encerra o laço na hora: "parei aqui; o resto eu nem olho"
+- **`continue`** pula o resto daquela volta e vai para a próxima: "este eu pulo; sigo para o próximo"
+
+```javascript
+const precos = [199.9, 79.9, 349.9, 59.9];
+
+for (const preco of precos) {
+  if (preco > 300) break;     // achou um caro: para tudo
+  console.log(preco);         // 199.9 e 79.9
+}
+
+for (const preco of precos) {
+  if (preco > 300) continue;  // pula o caro e segue
+  console.log(preco);         // 199.9, 79.9 e 59.9
+}
+```
+
+---
+
+## :icon[ticket] break na prática: o vale-presente
 
 A cliente tem um vale-presente e uma lista de desejos em ordem de preferência. Os presentes entram na ordem até o próximo não caber:
 
@@ -209,21 +356,33 @@ export function escolherPeloVale(desejos, valor) {
 }
 ```
 
-`break` encerra o laço na hora, e o código segue depois do `}`. A parada depende do que **já foi somado**: o `filter` julga cada item sozinho, e o `reduce` passa por todos os itens. Dentro de uma função, `return` também sai do laço, e da função junto.
+A parada depende do que **já foi somado**: o `filter` julga cada item sozinho, e o `reduce` passa por todos os itens.
 
 ---
 
-## :icon[skip-forward] continue: pular e seguir
+## :icon[list-ordered] O vale-presente em português
 
-Troque uma palavra: com `continue`, o presente que não cabe é pulado e o laço tenta os próximos.
+| Linha | O que ela diz |
+|---|---|
+| `const escolhidos = []` | "a sacola de presentes começa vazia" |
+| `let centavos = 0` | "ainda não gastei nada do vale" |
+| `if (centavos + preco > maximo) break` | "se este presente passa do vale, pare o laço aqui" |
+| `centavos += preco` | "some o preço ao que já gastei" |
+| `escolhidos.push(produto)` | "ponha o presente na sacola" |
+
+Depois do `break`, o código segue na linha depois do `}`: o `return escolhidos`. Dentro de uma função, `return` também sai do laço, e da função junto.
+
+---
+
+## :icon[skip-forward] continue na prática: pular e seguir
+
+Em `escolherPeloVale`, troque `break` por `continue`: o presente que não cabe é pulado, e o laço tenta os próximos.
 
 ```javascript
 if (centavos + preco > maximo) continue; // não cabe: pula e tenta o próximo
 ```
 
-Vale de R$ 350 e esta lista de desejos:
-
-| Desejo | Com `break` | Com `continue` |
+| Vale de R$ 350 | Com `break` | Com `continue` |
 |---|---|---|
 | Fone Bluetooth (199,90) | entra | entra |
 | Garrafa Térmica (79,90) | entra: 279,80 | entra: 279,80 |
@@ -234,7 +393,32 @@ As duas versões funcionam; qual delas vale é **regra de negócio**. Antes de e
 
 ---
 
+## Laço ou método
+
+Que métodos de array já dão as voltas sozinhos, sem você escrever o laço?
+
+---
+
 ## :icon[scale] Laço ou método de array?
+
+Um **método de array** (`map`, `filter`, `reduce`, `find`, `some`) é um laço pronto, com nome: ele dá as voltas por você. O laço escrito à mão dá mais controle sobre as voltas.
+
+```javascript
+// "algum item tem qtd acima de 10?": o nome do método já diz a pergunta
+const temMuito = itens.some((item) => item.qtd > 10);
+```
+
+Regra prática: se o nome do método diz o que você quer, use o método. Se você precisa controlar as voltas, como parar pelo que já somou ou repetir sem lista, use o laço.
+
+---
+
+## :icon[table] Laço ou método na prática
+
+```javascript
+produtos.filter((p) => p.destaque).map((p) => p.nome); // método: os 4 nomes em destaque
+escolherPeloVale(desejos, 350);       // laço com break: Fone e Garrafa
+unidadesParaFreteGratis(89.9, 59.9);  // while, sem lista: 2
+```
 
 | Situação | Prefira | Na Lojinha |
 |---|---|---|
@@ -244,8 +428,6 @@ As duas versões funcionam; qual delas vale é **regra de negócio**. Antes de e
 | Repetir sem lista | `while`, `do...while` | frete grátis, dia útil |
 | Usar a posição ou outro passo | `for` clássico | de trás para a frente |
 | Várias respostas numa passada | um `for...of` | resumo do catálogo |
-
-Regra prática: se o nome do método diz o que você quer, use o método; se precisa controlar as voltas, use o laço.
 
 ---
 
@@ -271,25 +453,64 @@ Escolha `for`, `for...of`, `while`, `do...while` ou um método de array para cad
 
 ---
 
+## Laço infinito
+
+O que acontece com um carro numa rotatória sem saída?
+
+---
+
 ## :icon[siren] Laço infinito: o terminal para
 
-Se a condição nunca fica falsa, o laço não termina:
+Um **laço infinito** nunca termina, porque a condição nunca fica falsa. É como um carro numa rotatória sem saída: dá voltas para sempre.
 
 ```javascript
 unidadesParaFreteGratis(89.9, 0); // preço 0: os centavos nunca chegam a 15000
 ```
 
-O script não imprime mais nada e não volta para o terminal; o Jest trava do mesmo jeito. Encerre com <kbd>Ctrl</kbd> + <kbd>C</kbd>. A partir do E30, num app, o mesmo laço congela a tela inteira.
+Cada volta soma 0 centavos, e `centavos < meta` continua verdadeiro.
 
-Antes de rodar, confira:
+- O script não imprime mais nada e não volta para o terminal; o Jest trava do mesmo jeito
+- Encerre com <kbd>Ctrl</kbd> + <kbd>C</kbd>
+- A partir do E30, num app, o mesmo laço congela a tela inteira
+
+---
+
+## :icon[repeat] Laço infinito na prática: três armadilhas
+
+```javascript
+// 1. o passo não chega à saída: cada volta soma 0
+unidadesParaFreteGratis(89.9, 0);
+
+// 2. o passo anda para o lado errado: i fica negativo e continua menor
+for (let i = 0; i < itens.length; i--) { voltas++; }
+
+// 3. continue antes do passo: o i++ não roda e a mesma volta se repete
+let i = 0;
+while (i < itens.length) {
+  if (itens[i].qtd === 0) continue;
+  total += itens[i].qtd;
+  i++;
+}
+```
+
+Os três travam o terminal. O terceiro trava quando algum item tem `qtd` igual a 0. No `for`, o mesmo `continue` não trava: ele pula para o `i++` do cabeçalho.
+
+---
+
+## :icon[shield-check] Antes de rodar: o laço tem saída?
+
+Confira:
 
 - A condição usa uma variável que muda dentro do laço?
 - O passo anda na direção da saída (`i++`, e não `i--`)?
-- Existe uma entrada sem saída? Trate-a antes, com uma guard clause do E13:
+- Há um `continue` antes do passo? No `while`, ele pula o `i++` e a mesma volta se repete
+- Existe uma entrada sem saída? Trate-a antes, com uma **guard clause** do E13, o `if` no começo da função que devolve logo:
 
 ```javascript
 if (paraCentavos(preco) <= 0) return null; // sem preço, não há como chegar à meta
 ```
+
+Com essa linha no começo de `unidadesParaFreteGratis`, o preço 0 devolve `null` em vez de travar.
 
 ---
 

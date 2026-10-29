@@ -28,9 +28,24 @@ Programador Mobile · Encontro E10 · Aula 19 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **função de alta ordem** | uma função que recebe ou devolve outra função |
+| **closure** | a função junto com as variáveis do lugar onde nasceu, como uma mochila que ela leva |
+| **cache** | um lugar onde se guarda uma resposta para não calcular de novo |
+| **memoize** | guardar o resultado de uma chamada e devolvê-lo quando os argumentos se repetem |
+| **debounce** | esperar o usuário parar por um tempo antes de chamar a função |
+| **função espiã** | uma função de teste que anota cada vez que foi chamada |
+
+---
+
 ## A busca que dispara a cada letra
 
-No app da Lojinha, que nasce no E30, o cliente digita "fone bluetooth" no campo de busca: são 14 letras e 14 buscas. Com 12 produtos, ninguém percebe. Quando a busca for um pedido à API, como no E19, são 14 viagens pela rede em 3 segundos, quase todas por palavras que o cliente nem terminou de digitar.
+No app da Lojinha, que nasce no E30, o cliente digita "fone bluetooth" no campo de busca: são 14 letras e 14 buscas. Com 12 produtos, ninguém percebe.
+
+Quando a busca for um pedido à API, o servidor da loja na internet (E19), são 14 viagens pela rede em 3 segundos. Quase todas por palavras que o cliente nem terminou de digitar.
 
 O frete tem outro desperdício: o resumo do carrinho calcula de novo, com o mesmo subtotal e o mesmo CEP.
 
@@ -42,9 +57,15 @@ Como uma função pode lembrar algo entre uma chamada e outra sem usar uma vari�
 
 ---
 
+## Função como valor
+
+Entregar a receita a alguém é o mesmo que entregar o prato pronto?
+
+---
+
 ## :icon[variable] Função é um valor
 
-Em JavaScript, uma função é um valor como um número ou um texto: você guarda numa constante, passa como argumento e devolve de outra função.
+Uma função é uma receita com nome. Em JavaScript, essa receita é um valor, como um número ou um texto: você guarda numa constante, entrega para outra função e recebe de volta.
 
 ```javascript
 const porPreco = (a, b) => a.preco - b.preco;     // guardada numa constante
@@ -58,13 +79,13 @@ A diferença entre entregar a função e chamá-la é um par de parênteses:
 [...produtos].sort(porPreco()); // chama agora, sem a e b: TypeError
 ```
 
-`porPreco` é a função; `porPreco()` é o que ela devolve. O `sort` precisa da função. É por isso que o objeto `comparadores` do E08 funciona: uma função cabe numa propriedade como qualquer valor.
+`porPreco` é a receita; `porPreco()` é cozinhar agora, sem os ingredientes `a` e `b`. O `sort` precisa da receita. É por isso que o objeto `comparadores` do E08 funciona: uma função cabe numa propriedade como qualquer valor.
 
 ---
 
 ## :icon[mouse-pointer-click] Callbacks: você entrega, outro código chama
 
-Um **callback** é uma função que você entrega para outro código chamar depois: você diz o que fazer, e quem chama decide quando.
+Um **callback** é uma função que você entrega para outro código chamar. É o pedido deixado com o garçom: você diz o que fazer, e quem decide quando é a cozinha.
 
 | Callback | Quem chama | Quando |
 |---|---|---|
@@ -77,13 +98,24 @@ Um **callback** é uma função que você entrega para outro código chamar depo
 const nomes = produtos.map((produto) => produto.nome);
 ```
 
-O callback é a arrow: o `map` a chama uma vez por produto, com o produto da vez. No E23, os botões do React também recebem callbacks, como o `onClick`.
+```javascript
+console.log(nomes.slice(0, 2)); // [ 'Fone Bluetooth', 'Caixa de Som Portátil' ]
+setTimeout(() => console.log('300 ms depois'), 300); // o Node chama depois
+```
+
+O callback é a arrow: o `map` a chama uma vez por produto. No E23, o `onClick` dos botões do React também é um callback.
+
+---
+
+## Alta ordem
+
+E se uma fábrica fizesse a peneira certa para cada coisa que você peneira?
 
 ---
 
 ## :icon[layers] Funções de alta ordem
 
-Uma **função de alta ordem** recebe uma função, devolve uma função, ou as duas coisas. `map`, `filter`, `sort` e `find` recebem; agora você escreve uma que devolve:
+Uma **função de alta ordem** recebe uma função, devolve uma função, ou as duas coisas. `map`, `filter`, `sort` e `find` recebem. Agora você escreve uma que devolve, como uma fábrica de peneiras: você diz a categoria, e ela entrega a peneira pronta para o `filter`.
 
 ```javascript
 function daCategoria(categoria) {
@@ -94,17 +126,46 @@ const deAudio = produtos.filter(daCategoria('audio'));
 const deLivros = produtos.filter(daCategoria('livros'));
 ```
 
-- `daCategoria('audio')` não filtra nada: ela **fabrica** o teste que o `filter` usa
+- `daCategoria('audio')` não filtra nada: ela **fabrica** o teste que o `filter` usa, `(produto) => produto.categoria === 'audio'`
 - O código se lê como uma frase: "produtos filtrados da categoria áudio"
 - Um único molde serve para as 4 categorias da Lojinha
 
-Repare: a função devolvida usa `categoria`, que pertence a `daCategoria`, mesmo depois que `daCategoria` terminou. Isso tem nome.
+---
+
+## :icon[layers] Alta ordem na prática
+
+Uma função que **recebe** outra, `contarSe`, e a fábrica que **devolve** testes, `daCategoria`, trabalhando juntas:
+
+```javascript
+function contarSe(lista, teste) {
+  return lista.filter(teste).length;
+}
+
+contarSe(produtos, daCategoria('audio'));    // 3
+contarSe(produtos, (p) => p.preco > 200);    // 4: qualquer teste serve
+
+produtos.filter(daCategoria('livros')).map((p) => p.nome);
+// ['Lógica de Programação', 'Livro de Receitas', 'Guia de Viagem']
+
+produtos.some(daCategoria('jardim'));        // false: nenhum produto
+```
+
+- `contarSe` não sabe o que está contando: quem decide é o teste que você entrega
+- O mesmo teste fabricado serve para `filter`, `some`, `every` e `find`
+
+Repare: a função devolvida por `daCategoria` usa `categoria`, que pertence a `daCategoria`, mesmo depois que `daCategoria` terminou. Isso tem nome: closure.
+
+---
+
+## Closure
+
+Como uma função pode lembrar algo entre uma chamada e outra?
 
 ---
 
 ## :icon[lock] Closure: a função que lembra
 
-Uma **closure** é a função junto com as variáveis do lugar onde ela foi criada. Ela continua enxergando essas variáveis mesmo depois que a função de fora terminou.
+Uma **closure** é a função junto com as variáveis do lugar onde ela foi criada. Pense numa mochila: a função leva junto as variáveis de onde nasceu e continua enxergando o que está nelas, mesmo depois que a função de fora terminou.
 
 ```javascript
 function criarContador() {
@@ -120,7 +181,21 @@ tentativasDeCupom(); // 1
 tentativasDeCupom(); // 2
 ```
 
-`criarContador` já devolveu a arrow e acabou, mas `total` não sumiu: a arrow ainda o enxerga e o altera. Na Lojinha, isso pode contar as tentativas de cupom inválido para bloquear depois da terceira.
+`criarContador` já devolveu a arrow e acabou, mas `total` não sumiu: está na mochila da arrow, que ainda o enxerga e o altera. Na Lojinha, isso pode contar as tentativas de cupom inválido para bloquear depois da terceira.
+
+---
+
+## :icon[list-ordered] O contador em português
+
+| Linha | O que ela diz |
+|---|---|
+| `let total = 0` | "crie um placar zerado" |
+| `return () => { ... }` | "devolva uma função nova, que leva o placar na mochila" |
+| `total = total + 1; return total;` | "a cada chamada, some 1 e diga quanto deu" |
+| `const tentativasDeCupom = criarContador()` | "guarde a função devolvida" |
+| `tentativasDeCupom()` | "chame a função: 1, depois 2" |
+
+Quem guarda o `total` não é `criarContador`, que já terminou: é a arrow devolvida.
 
 ---
 
@@ -144,13 +219,15 @@ console.log(total);  // ReferenceError: total is not defined
 
 ---
 
-## :icon[lock] Uma caixa por chamada
+## :icon[lock] Uma mochila por chamada
 
 :::center
 ![Diagrama: tentativasDeCupom guarda uma closure com total = 2 e tentativasDeLogin outra com total = 1; de fora, console.log(total) não alcança nenhuma das duas e dá ReferenceError](images/e10-closures.svg)
 :::
 
-Cada chamada de `criarContador` cria uma caixa com o seu `total`, e só a arrow devolvida enxerga o que está dentro. Essa é a resposta da abertura: a função lembra porque carrega a closure com ela.
+Cada chamada de `criarContador` cria uma mochila com o seu `total`, e só a arrow devolvida enxerga o que está dentro.
+
+É assim que uma função lembra algo entre uma chamada e outra sem variável global: ela carrega a closure com ela.
 
 ---
 
@@ -178,14 +255,20 @@ console.log(a.quantos(), b.quantos());
 :::
 
 :::tip Resposta
-`2 1`. Cada chamada de `criarCarrinhoDeTeste` cria o seu `itens`. As duas funções de `a` foram criadas na mesma chamada, então dividem o mesmo `itens`; as de `b` têm outro.
+`2 1`. Cada chamada de `criarCarrinhoDeTeste` cria o seu `itens`. As duas funções de `a` foram criadas na mesma chamada, então dividem o mesmo `itens`, a mesma mochila; as de `b` têm outro.
 :::
+
+---
+
+## memoize
+
+Alguém pergunta a mesma conta duas vezes. Você calcula de novo ou olha a anotação?
 
 ---
 
 ## :icon[database-zap] memoize: lembrar resultados
 
-**Memoizar** é guardar o resultado de uma chamada para devolvê-lo de novo quando os argumentos se repetirem. O `memoize` recebe uma função e devolve outra, com um cache na closure:
+**Memoizar** é guardar o resultado de uma chamada para devolvê-lo de novo quando os argumentos se repetirem. Pense num caderno de contas: antes de calcular, você olha se a resposta já está anotada. O caderno é o **cache**. O `memoize` recebe uma função e devolve outra, com o cache na closure:
 
 ```javascript
 // src/utils/funcoes.js
@@ -201,9 +284,20 @@ export function memoize(fn) {
 }
 ```
 
-- `...args` é o rest do E07: junta os argumentos, e `fn(...args)` os espalha de volta
-- A chave é o texto dos argumentos: mesmos argumentos, mesma chave
-- `chave in cache` pergunta se o objeto já tem essa chave; acha também um `0` guardado, o frete grátis
+---
+
+## :icon[list-ordered] O memoize em português
+
+| Linha | O que ela diz |
+|---|---|
+| `memoize(fn)` | "receba a função original" |
+| `const cache = {}` | "um caderno em branco, que fica na closure" |
+| `return (...args) => {` | "devolva uma função nova; o rest do E07 junta os argumentos que vierem" |
+| `JSON.stringify(args)` | "escreva os argumentos como texto: é a chave do caderno" |
+| `if (chave in cache) return cache[chave]` | "a conta já está anotada? devolva a resposta anotada" |
+| `fn(...args)` e `cache[chave] = resultado` | "senão, calcule com a original, espalhando os argumentos de volta, e anote" |
+
+O `in` pergunta se o caderno já tem essa chave. Ele acha também um `0` guardado, o frete grátis.
 
 ---
 
@@ -228,6 +322,9 @@ export function calcularFrete(subtotal, cep) {
   return 19.9; // resto do país
 }
 ```
+
+- A partir de R$ 150, o frete é grátis
+- `cep[0]` é o primeiro caractere do CEP: começando com 0 ou 1, é de São Paulo
 
 O `FRETE_GRATIS_A_PARTIR_DE` da aula 13 (E07) passa a morar aqui, exportado. Os valores ficam em reais, como o `preco` do catálogo.
 
@@ -259,7 +356,7 @@ Hoje o ganho é pequeno. Quando o frete vier de um serviço externo, ele evita v
 
 ## :icon[test-tube] Testando o cache com uma função espiã
 
-Como provar que a segunda chamada não calculou? Com uma **função espiã**:
+Como provar que a segunda chamada não calculou? Com uma **função espiã**: um porteiro que anota cada pessoa que entra. Ela faz o mesmo que a função original e anota cada chamada.
 
 ```javascript
 // src/utils/funcoes.test.js
@@ -281,9 +378,15 @@ test('memoize roda a original uma vez por argumentos', () => {
 
 ---
 
+## debounce
+
+Por que a porta do elevador espera um pouco antes de fechar?
+
+---
+
 ## :icon[timer] debounce: esperar o usuário parar
 
-O **debounce** adia a chamada até o usuário parar de chamar por um tempo. Cada nova chamada cancela a anterior e agenda de novo:
+O **debounce** adia a chamada até o usuário parar de chamar por um tempo. Pense na porta do elevador: cada pessoa que entra reinicia a espera, e a porta só fecha quando ninguém entra por alguns segundos. Cada nova chamada cancela a anterior e agenda de novo:
 
 ```javascript
 // src/utils/funcoes.js, logo abaixo do memoize
@@ -316,7 +419,7 @@ O cliente digita "fone", e cada letra chama `buscarComAtraso`:
 ![Animação: as letras f, o, n e e chegam em 0, 120, 250 e 380 ms; cada uma agenda a busca para 300 ms depois e cancela o agendamento anterior; só o último sobrevive e busca "fone" em 680 ms](images/e10-debounce.svg)
 :::
 
-Quatro letras, uma busca. Se o cliente para no meio, em "fo", por mais de 300 ms, a busca de "fo" acontece: o debounce espera pausas, não a palavra inteira.
+Quatro letras, uma busca. Se o cliente para no meio, em "fo", por mais de 300 ms, a busca de "fo" acontece: o debounce espera pausas, não a palavra inteira. Com o elevador é igual: se ninguém entra por um tempo, a porta fecha, mesmo que mais gente chegue depois.
 
 ---
 
@@ -342,13 +445,17 @@ for (let i = 0; i < termos.length; i++) {
 }
 ```
 
+- `Date.now()` dá a hora atual em milissegundos; `Date.now() - inicio` mostra quanto tempo passou
+- O `for` agenda as quatro letras: em 0, 120, 240 e 360 ms
+
 `node src/scripts/demo-debounce.js` imprime uma linha só, perto de 660 ms: `"fone" acha 2`, o fone e o microfone. Com `INTERVALO = 400`, um cliente lento, saem quatro buscas.
 
 ---
 
-## :icon[split] Currying (visão)
+## :icon[split] Para saber mais: currying
 
-**Currying** transforma uma função de vários argumentos numa sequência de funções de um argumento cada. Com uma closure, você fixa o CEP do cliente uma vez:
+:::info Para saber mais
+**Currying** transforma uma função de vários argumentos numa sequência de funções de um argumento cada. É como deixar o endereço salvo no app de entrega: você informa o CEP uma vez, e depois só escolhe o pedido.
 
 ```javascript
 const freteParaCep = (cep) => (subtotal) => calcularFrete(subtotal, cep);
@@ -359,6 +466,18 @@ freteDaAna(200); // 0: grátis a partir de R$ 150
 ```
 
 `daCategoria(categoria)` segue o mesmo molde. Você vai encontrar currying em bibliotecas e em código funcional; use quando um argumento se repete em muitas chamadas. Não é obrigatório, e uma função comum de dois argumentos costuma ser mais fácil de ler.
+:::
+
+---
+
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Cannot read properties of undefined (reading 'preco')`, no `sort` | `sort(porPreco())`: a função rodou na hora, sem `a` e `b` | entregar a função, sem parênteses: `sort(porPreco)` |
+| `undefined is not a function`, no `filter` | o `filter` recebeu `undefined`: faltou o `return` em `daCategoria` | devolver a arrow com `return` |
+| `ReferenceError: total is not defined` | você leu de fora uma variável que mora na closure | só a função devolvida mexe nela |
+| `Expected number of calls` e `Received number of calls` | a espiã contou chamadas diferentes do esperado | criar o `memoize` uma vez só; usar o `in` |
 
 ---
 
@@ -368,7 +487,7 @@ freteDaAna(200); // 0: grátis a partir de R$ 150
 - `sort(porPreco())`: chama na hora, sem argumentos; entregue a função, `sort(porPreco)`
 - Criar `memoize(...)` ou `debounce(...)` **dentro** de uma função que roda muitas vezes: cada chamada cria uma closure nova, com o cache e o temporizador vazios. Crie uma vez, no topo do arquivo
 - Memoizar função com efeito ou que lê a data de hoje: a resposta guardada fica velha
-- Esquecer o `return` em `daCategoria`: ela devolve `undefined` e o `filter` quebra com `undefined is not a function`
+- `if (cache[chave])` no lugar do `in`: o `0` do frete grátis conta como falso e é calculado de novo
 - Esperar que dois contadores dividam o total: cada chamada de `criarContador` cria o seu
 :::
 

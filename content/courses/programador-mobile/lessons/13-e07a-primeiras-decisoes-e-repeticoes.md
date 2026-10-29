@@ -27,6 +27,19 @@ Programador Mobile · Encontro E07 · Aula 13 de 89
 
 ---
 
+## :icon[book-open] Palavras novas de hoje
+
+| Palavra | O que é |
+|---|---|
+| **condição** | uma pergunta de sim ou não: `total >= 150` dá `true` ou `false` |
+| **bloco** | o trecho entre chaves `{ }`: roda inteiro, ou não roda |
+| **lista** (array) | uma fileira de gavetas numeradas a partir do 0, um item em cada |
+| **laço** | um trecho que se repete; cada repetição é uma **volta** |
+| **acumulador** | a variável que vai somando a cada volta, como o total do carrinho |
+| **contador** | a variável que soma 1 cada vez que algo acontece |
+
+---
+
 ## O código que só anda para frente
 
 Até aqui, seus scripts rodaram de cima para baixo, cada linha uma vez. Uma loja precisa de mais duas coisas:
@@ -42,9 +55,15 @@ Pense na última compra que você fez num app. Quantas decisões ele tomou antes
 
 ---
 
+## Decisões
+
+Numa bifurcação da estrada, o que decide para que lado você vai?
+
+---
+
 ## :icon[split] if: só quando a condição vale
 
-O **`if`** executa um bloco só quando a **condição** entre parênteses dá `true`.
+O **`if`** (em inglês, "se") é uma bifurcação na estrada: a **condição**, entre parênteses, escolhe o caminho. O bloco entre chaves só roda quando a condição dá `true`.
 
 ```javascript
 const FRETE_GRATIS_A_PARTIR_DE = 150;
@@ -57,15 +76,17 @@ if (totalDoCarrinho >= FRETE_GRATIS_A_PARTIR_DE) {
 console.log(aviso);
 ```
 
-- A condição usa as comparações do E05: `>=`, `<`, `===`, `!==`
+- Leia assim: "**se** o total for maior ou igual a 150, troque o aviso"
 - Com 199,90, o aviso muda; com 129,80, o bloco não roda e fica o texto inicial
+- A condição usa as comparações do E05: `>=`, `<`, `===`, `!==`
 - As chaves `{ }` marcam o **bloco**: tudo o que está dentro delas roda junto, ou nada roda
+- `FRETE_GRATIS_A_PARTIR_DE`, todo em maiúsculas, é um valor fixo da regra da loja, como o `PERCENTUAL_PIX` do E05
 
 ---
 
 ## :icon[git-fork] else: o outro caminho
 
-Com o **`else`**, exatamente um dos dois blocos roda:
+O **`else`** (em inglês, "senão") é o outro lado da bifurcação: quando a condição dá `false`, roda o bloco do `else`. Com os dois, exatamente um dos blocos roda:
 
 ```javascript
 let aviso;
@@ -83,7 +104,7 @@ if (totalDoCarrinho >= FRETE_GRATIS_A_PARTIR_DE) {
 | 150 | Você ganhou frete grátis |
 | 129.8 | Faltam R$ 20,20 para o frete grátis |
 
-A linha do 150 confere a **borda**: com `>=`, o valor exato já ganha o frete. Com `>`, ele ficaria de fora.
+`let aviso;` cria a caixa vazia, e cada caminho põe nela o seu texto. A linha do 150 confere a **borda**: com `>=`, o valor exato já ganha o frete. Com `>`, ele ficaria de fora.
 
 ---
 
@@ -108,9 +129,44 @@ if (produto.preco < 50 || produto.categoria === 'livros') {
 
 ---
 
+## :icon[split] Decisões na prática
+
+**Caso 1: o CEP que não tem o formato.** No E06, o `ehCepValido` do laboratório só respondia `true` ou `false`. Agora o `if` decide o que fazer:
+
+```javascript
+const cep = '0131-0100';
+if (ehCepValido(cep)) {
+  console.log(`Frete calculado para o CEP ${cep}`);
+} else {
+  console.log('Confira o CEP: são 8 dígitos');
+}
+// Confira o CEP: são 8 dígitos
+```
+
+**Caso 2: a quantidade que não é número.** No E05, a conversão falhava e o `NaN` seguia para a conta:
+
+```javascript
+const qtd = Number(process.argv[2]);
+if (Number.isNaN(qtd)) {
+  console.log('Digite a quantidade em números');
+} else {
+  console.log(`${qtd} no carrinho`);
+}
+```
+
+Com `2` no comando, sai `2 no carrinho`; com `dois`, sai o aviso.
+
+---
+
+## Faixas
+
+Em quantas vezes a loja deixa parcelar um livro de R$ 59,90? E um jogo de panelas?
+
+---
+
 ## :icon[list-ordered] else if: faixas em ordem
 
-Quantas parcelas sem juros a Lojinha oferece, pelo preço do produto:
+O **`else if`** ("senão, se") testa outra condição quando a anterior deu `false`, como uma estrada com várias saídas. Quantas parcelas sem juros a Lojinha oferece, pelo preço:
 
 ```javascript
 function maximoDeParcelas(preco) {
@@ -134,9 +190,27 @@ function maximoDeParcelas(preco) {
 - O JavaScript testa de cima para baixo e para no **primeiro** `true`
 - Por isso `preco < 300` já quer dizer "de 50 a 299,99": a faixa de baixo saiu antes
 - O `else` final pega todo o resto: R$ 1.000 ou mais
-- O Fone Bluetooth, de R$ 199,90, cai na segunda faixa: 3 parcelas
 :::
 ::::
+
+---
+
+## :icon[list-ordered] Faixas na prática
+
+A mesma função, com preços de cada faixa:
+
+```javascript
+console.log(maximoDeParcelas(49.9));  // 1: um cabo, abaixo de R$ 50
+console.log(maximoDeParcelas(59.9));  // 3: o Livro de Receitas
+console.log(maximoDeParcelas(199.9)); // 3: o Fone Bluetooth
+console.log(maximoDeParcelas(300));   // 6: R$ 300 em ponto já é da faixa de cima
+console.log(maximoDeParcelas(459.9)); // 6: o Jogo de Panelas
+console.log(maximoDeParcelas(1200));  // 10: o else pega o resto
+```
+
+- O Fone Bluetooth, de R$ 199,90, cai na segunda faixa: 3 parcelas
+- Com 300, a pergunta `300 < 300` dá `false`: a função segue para a faixa seguinte
+- O `return` entrega o número e encerra a função: as faixas de baixo nem são testadas
 
 ---
 
@@ -166,9 +240,36 @@ Quantas parcelas aparecem para o Livro de Receitas, de R$ 59,90? E para o Fone B
 
 ---
 
+## Listas
+
+Como o carrinho guarda 2, 7 ou 20 produtos num nome só?
+
+---
+
+## :icon[list] O que é uma lista
+
+Uma **lista**, em inglês *array*, guarda vários valores em ordem, num nome só. Pense numa fileira de gavetas numeradas a partir do 0: cada item mora numa gaveta. As quatro categorias da Lojinha, só pelo nome:
+
+```javascript
+const categorias = ['audio', 'casa', 'esporte', 'livros'];
+console.log(categorias[0]);     // audio
+console.log(categorias[3]);     // livros
+console.log(categorias.length); // 4
+```
+
+| Parte | O que ela diz |
+|---|---|
+| `[ ... ]` | "uma lista com estes itens, separados por vírgula" |
+| `categorias[0]` | "abra a gaveta 0": o primeiro item |
+| `.length` | "quantos itens a lista tem" |
+
+A última gaveta é a de número `length - 1`: com 4 itens, a 3. A gaveta 4 não existe, e ler `categorias[4]` dá `undefined`.
+
+---
+
 ## :icon[shopping-cart] Repetir sem copiar
 
-O carrinho é uma **lista** (um array): itens entre colchetes, cada um numa **posição** que começa em 0. `itens.length` diz quantos são.
+O carrinho é uma lista de fichas: cada item tem `id`, `nome`, `preco` e `qtd`.
 
 ```javascript
 const itens = [
@@ -181,7 +282,7 @@ itens.length;  // 2
 const total = itens[0].preco * itens[0].qtd + itens[1].preco * itens[1].qtd;
 ```
 
-A conta de baixo só serve para 2 itens: com 7, cinco ficam de fora; com o carrinho vazio, `itens[0]` nem existe. O E08 aprofunda os arrays; hoje basta ler por posição e percorrer.
+`itens[0].nome` abre a gaveta 0 e lê o campo `nome` da ficha. A conta de baixo só serve para 2 itens: com 7, cinco ficam de fora; com o carrinho vazio, `itens[0]` nem existe. O E08 aprofunda os arrays; hoje, o que importa é ler por posição e percorrer.
 
 :::question
 Como escrever a conta de **um** item e fazer o JavaScript repeti-la para cada item, sejam 0, 2 ou 20?
@@ -189,9 +290,15 @@ Como escrever a conta de **um** item e fazer o JavaScript repeti-la para cada it
 
 ---
 
+## Laços
+
+Como conferir um carrinho de 20 itens sem escrever 20 linhas?
+
+---
+
 ## :icon[repeat] for: início, condição e passo
 
-Um **laço** repete um bloco enquanto a condição vale; cada repetição é uma **volta**. As estrelas da avaliação, no terminal:
+Um **laço** repete um bloco enquanto a condição vale, como conferir o carrinho item por item, até acabar. Cada repetição é uma **volta**. O **`for`** é o laço mais usado. Aqui, ele desenha as estrelas da avaliação no terminal:
 
 ```javascript
 function estrelasDaNota(nota) {
@@ -215,6 +322,8 @@ console.log(estrelasDaNota(4.4)); // ****-
 | Condição | `i <= 5` | continuo? |
 | Passo | `i++` | como avanço? |
 
+`estrelas += '*'` junta mais uma estrela ao texto, a cada volta em que `i` não passou da nota.
+
 ---
 
 ## :icon[table] Teste de mesa: volta a volta
@@ -233,29 +342,9 @@ A condição é testada **antes** de cada volta. Quando ela fica falsa, o JavaSc
 
 ---
 
-## :icon[calculator] Acumulador: somando o carrinho
-
-Um **acumulador** nasce antes do laço e cresce a cada volta. Com o `for` e as posições:
-
-```javascript
-let total = 0; // começa no neutro da soma
-for (let i = 0; i < itens.length; i++) {
-  total += itens[i].preco * itens[i].qtd;
-}
-console.log(total); // 489.70000000000005
-```
-
-- As posições vão de `0` a `itens.length - 1`: por isso `<`, e não `<=`
-- Carrinho vazio: `0 < 0` é falso, nenhuma volta acontece e o total fica `0`
-- `total += x` é o mesmo que `total = total + x`, como no E05
-
-E o `489.70000000000005`? É o ponto flutuante do E05: somar reais deixa sobra.
-
----
-
 ## :icon[list] for...of: um item por volta
 
-Quando você precisa de cada item, e não da posição, o **`for...of`** entrega o item da volta direto:
+Quando você precisa de cada item, e não da posição, o **`for...of`** ("para cada... de") entrega o item da volta direto: "para cada item do carrinho, faça isto".
 
 ```javascript
 // for clássico: índice, condição e passo por sua conta
@@ -269,9 +358,37 @@ for (const item of itens) {
 }
 ```
 
+- Os dois imprimem `Fone Bluetooth` e `Luminária de Mesa`, um por linha
 - `item` é uma constante nova a cada volta: `const` é o certo aqui
 - Sem índice, não existe `<=` para errar
 - Precisa da posição, como em "item 1 de 3"? Use o `for` clássico
+
+---
+
+## Acumulador
+
+Como o caixa do mercado chega ao total, passando item por item?
+
+---
+
+## :icon[calculator] Acumulador: somando o carrinho
+
+Um **acumulador** é uma variável que nasce antes do laço e cresce a cada volta, como o visor do caixa do mercado, que vai somando item por item. Com o `for` e as posições:
+
+```javascript
+let total = 0; // começa no neutro da soma
+for (let i = 0; i < itens.length; i++) {
+  total += itens[i].preco * itens[i].qtd;
+}
+console.log(total); // 489.70000000000005
+```
+
+- A cada volta: "some ao total o preço vezes a quantidade do item da posição `i`"
+- As posições vão de `0` a `itens.length - 1`: por isso `<`, e não `<=`
+- Carrinho vazio: `0 < 0` é falso, nenhuma volta acontece e o total fica `0`
+- `total += x` é o mesmo que `total = total + x`, como no E05
+
+E o `489.70000000000005`? É o ponto flutuante do E05: somar reais deixa sobra.
 
 ---
 
@@ -305,9 +422,29 @@ export function subtotal(itens) {
 
 ---
 
+## Contador
+
+Como a catraca do ônibus sabe quantas pessoas já passaram?
+
+---
+
 ## :icon[hash] Contador: quantos atendem à condição
 
-Um **contador** soma sempre 1, e só quando algo acontece. Quantos produtos da vitrine estão em destaque?
+Um **contador** soma sempre 1, e só quando algo acontece, como a catraca do ônibus: cada pessoa que passa conta uma. Ele nasce em 0, antes do laço, e um `if` dentro do laço decide se aquela volta conta: `if (condição) { contador++; }`.
+
+| | Acumulador | Contador |
+|---|---|---|
+| Começa em | `0` | `0` |
+| Cada volta soma | um valor, como `preco * qtd` | `1`, se a condição vale |
+| Na Lojinha | o subtotal do carrinho | 4 produtos em destaque |
+
+O acumulador responde "quanto?"; o contador responde "quantos?".
+
+---
+
+## :icon[hash] Contador na prática
+
+**Caso 1: quantos produtos da vitrine estão em destaque?**
 
 ```javascript
 let emDestaque = 0;
@@ -319,11 +456,17 @@ for (const produto of produtos) {
 console.log(`${emDestaque} produtos em destaque`); // 4
 ```
 
-| | Acumulador | Contador |
-|---|---|---|
-| Começa em | `0` | `0` |
-| Cada volta soma | um valor, como `preco * qtd` | `1`, se a condição vale |
-| Na Lojinha | o subtotal do carrinho | 4 produtos em destaque |
+**Caso 2: quantos custam mais de R$ 200?** A mesma forma, com outra condição:
+
+```javascript
+let caros = 0;
+for (const produto of produtos) {
+  if (produto.preco > 200) {
+    caros++;
+  }
+}
+console.log(`${caros} produtos acima de R$ 200`); // 4 produtos acima de R$ 200
+```
 
 O `if` dentro do `for` decide, volta a volta, se aquele produto conta.
 
@@ -356,6 +499,17 @@ Um acumulador e um contador no mesmo laço. Os dois nascem **antes** do `for`: d
 
 ---
 
+## :icon[siren] Quando aparece um erro
+
+| A mensagem tem | Quer dizer | O que fazer |
+|---|---|---|
+| `Cannot read properties of undefined (reading 'preco')` | o laço passou do fim da lista | use `i < itens.length`, nunca `<=` |
+| `NaN` no total | `for...in` no lugar de `for...of`, ou um campo com o nome errado | troque `in` por `of`; confira o nome do campo |
+| `489.70000000000005` | a soma foi feita em reais | some centavos, com `paraCentavos` |
+| o terminal não volta | laço sem fim: a condição nunca fica falsa | <kbd>Ctrl</kbd> + <kbd>C</kbd>; confira a condição e o passo |
+
+---
+
 ## :icon[triangle-alert] Erros comuns
 
 :::warning
@@ -374,6 +528,7 @@ Um acumulador e um contador no mesmo laço. Os dois nascem **antes** do `for`: d
 :::summary
 - `if` executa um bloco quando a condição dá `true`; `else` é o outro caminho
 - `else if` testa faixas de cima para baixo e para no primeiro acerto: ordene da menor para a maior
+- Uma lista guarda itens em gavetas numeradas a partir do 0; `length` diz quantos são
 - O `for` tem início, condição e passo; a condição é testada antes de cada volta
 - `for...of` entrega cada item da lista, sem índice
 - Acumulador soma valores, contador soma 1, e os dois nascem antes do laço; dinheiro, sempre em centavos
