@@ -6,7 +6,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { fetchLessonsIndex, fetchRecentActivity } from '@/lib/api'
-import { formatNumber, relativeTime } from '@/lib/format'
+import { formatNumber, plural, relativeTime } from '@/lib/format'
 import type { ActivityEntry, LessonSummary } from '@/types/db'
 import LevelBar from '@/components/ui/LevelBar.vue'
 import StatTile from '@/components/ui/StatTile.vue'
@@ -68,6 +68,10 @@ function activityText(a: ActivityEntry): string {
       return `Projeto aprovado${pct !== undefined ? ` com ${pct}%` : ''}`
     case 'project_failed':
       return `Projeto corrigido${pct !== undefined ? ` (${pct}%)` : ''}`
+    case 'attempts_granted': {
+      const extra = (a.meta as { extra?: number } | null)?.extra
+      return `O instrutor liberou mais ${extra ? plural(extra, 'tentativa', 'tentativas') : 'tentativas'} em uma avaliação`
+    }
     default:
       return a.kind
   }
@@ -275,7 +279,8 @@ onMounted(async () => {
   background: var(--primary);
 }
 
-.activity__dot--project_submitted {
+.activity__dot--project_submitted,
+.activity__dot--attempts_granted {
   background: var(--info);
 }
 

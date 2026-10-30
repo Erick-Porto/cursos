@@ -1,11 +1,34 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { BookOpen, ClipboardList, Clock, Download, GraduationCap, Target, Users, TrendingUp } from 'lucide-vue-next'
-import { fetchClassScripts, fetchCoursesForStaff, fetchLessonsIndex, fetchProjectsForStaff, fetchStudentProgress, fetchSubmissionsForStaff } from '@/lib/api'
+import { BookOpen, ClipboardList, Clock, Download, GraduationCap, ListChecks, Plus, Target, Users, TrendingUp } from 'lucide-vue-next'
+import {
+  fetchAssessmentsForStaff,
+  fetchAttemptGrantsForStaff,
+  fetchAttemptSummariesForStaff,
+  fetchClassScripts,
+  fetchCoursesForStaff,
+  fetchLessonsIndex,
+  fetchProjectsForStaff,
+  fetchStudentProgress,
+  fetchSubmissionsForStaff,
+  grantExtraAttempts,
+} from '@/lib/api'
 import { formatDate, formatMinutes, formatPct, formatSeconds, plural, relativeTime } from '@/lib/format'
 import { PROJECT_STATE_BADGE, PROJECT_STATE_LABEL, projectState, type ProjectState } from '@/lib/projects'
-import type { ClassScript, Course, LessonSummary, Project, ProjectSubmission, StudentProgressRow } from '@/types/db'
+import { friendlyError } from '@/lib/supabase'
+import { useToastStore } from '@/stores/toast'
+import type {
+  Assessment,
+  AttemptGrant,
+  AttemptSummary,
+  ClassScript,
+  Course,
+  LessonSummary,
+  Project,
+  ProjectSubmission,
+  StudentProgressRow,
+} from '@/types/db'
 import StatTile from '@/components/ui/StatTile.vue'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
@@ -13,8 +36,9 @@ import LoadingBlock from '@/components/ui/LoadingBlock.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
 
 const route = useRoute()
+const toast = useToastStore()
 
-type Tab = 'alunos' | 'roteiros' | 'projetos'
+type Tab = 'alunos' | 'avaliacoes' | 'roteiros' | 'projetos'
 const tab = ref<Tab>('alunos')
 
 // ---- alunos ----
@@ -60,6 +84,145 @@ function exportCsv() {
   a.download = `progresso-alunos-${new Date().toISOString().slice(0, 10)}.csv`
   a.click()
   URL.revokeObjectURL(a.href)
+}
+
+// ---- avaliações: tentativas de cada aluno ----
+/** Quantas tentativas o botão libera de cada vez. */
+const EXTRA_ATTEMPTS = 3
+
+const evCourses = ref<Course[]>([])
+const evCourseId = ref('')
+const evAssessments = ref<Assessment[]>([])
+const evAttempts = ref<AttemptSummary[]>([])
+const evGrants = ref<AttemptGrant[]>([])
+const evAssessmentId = ref('')
+const evQuery = ref('')
+const evLoading = ref(false)
+const evReady = ref(false)
+/** Aluno cuja liberação está em andamento. */
+const granting = ref('')
+
+type EvState = 'blocked' | 'failed' | 'none' | 'passed'
+const EV_LABEL: Record<EvState, string> = { blocked: 'Sem tentativas', failed: 'Abaixo da mínima', none: 'Não fez', passed: 'Aprovado' }
+const EV_BADGE: Record<EvState, string> = { blocked: 'badge--danger', failed: 'badge--warning', none: '', passed: 'badge--primary' }
+// quem esgotou as tentativas aparece primeiro: é para eles que o botão existe
+const EV_ORDER: Record<EvState, number> = { blocked: 0, failed: 1, none: 2, passed: 3 }
+
+interface EvStats {
+  used: number
+  best: number | null
+  passed: boolean
+  extra: number
+}
+
+const evStudents = computed(() => rows.value.filter((r) => r.course_id === evCourseId.value))
+const evKey = (assessmentId: string, userId: string) => `${assessmentId}:${userId}`
+
+/** Tentativas usadas, melhor nota e tentativas extras de cada aluno em cada avaliação. */
+const evStats = computed(() => {
+  const map = new Map<string, EvStats>()
+  const get = (k: string) => {
+    let st = map.get(k)
+    if (!st) map.set(k, (st = { used: 0, best: null, passed: false, extra: 0 }))
+    return st
+  }
+  for (const t of evAttempts.value) {
+    const st = get(evKey(t.assessment_id, t.user_id))
+    st.used++
+    st.best = Math.max(st.best ?? 0, Number(t.pct))
+    if (t.passed) st.passed = true
+  }
+  for (const g of evGrants.value) get(evKey(g.assessment_id, g.user_id)).extra += g.extra
+  return map
+})
+
+function evRow(a: Assessment, student: StudentProgressRow) {
+  const st = evStats.value.get(evKey(a.id, student.user_id)) ?? { used: 0, best: null, passed: false, extra: 0 }
+  const limit = a.max_attempts == null ? null : a.max_attempts + st.extra
+  const state: EvState = st.passed ? 'passed' : limit !== null && st.used >= limit ? 'blocked' : st.used ? 'failed' : 'none'
+  return { student, ...st, limit, state }
+}
+type EvRow = ReturnType<typeof evRow>
+
+/** Alunos sem tentativas restantes, por avaliação (aparece na lista de avaliações). */
+const evBlocked = computed(() => {
+  const map = new Map<string, number>()
+  for (const a of evAssessments.value) {
+    const n = evStudents.value.filter((st) => evRow(a, st).state === 'blocked').length
+    if (n) map.set(a.id, n)
+  }
+  return map
+})
+
+const evAssessment = computed(() => evAssessments.value.find((a) => a.id === evAssessmentId.value) ?? null)
+const evRows = computed(() => {
+  const a = evAssessment.value
+  if (!a) return []
+  const q = evQuery.value.trim().toLowerCase()
+  return evStudents.value
+    .filter((st) => !q || `${st.full_name} ${st.username ?? ''}`.toLowerCase().includes(q))
+    .map((st) => evRow(a, st))
+    .sort((x, y) => EV_ORDER[x.state] - EV_ORDER[y.state] || x.student.full_name.localeCompare(y.student.full_name))
+})
+
+async function loadEvaluations() {
+  evAssessments.value = []
+  evAttempts.value = []
+  evGrants.value = []
+  evAssessmentId.value = ''
+  if (!evCourseId.value) return
+  evLoading.value = true
+  try {
+    const [list, attempts, grants] = await Promise.all([
+      fetchAssessmentsForStaff(evCourseId.value),
+      fetchAttemptSummariesForStaff(evCourseId.value),
+      fetchAttemptGrantsForStaff(evCourseId.value),
+    ])
+    evAssessments.value = list
+    evAttempts.value = attempts
+    evGrants.value = grants
+    // começa pela primeira avaliação com aluno sem tentativas; senão, pela última que alguém fez
+    const blocked = list.find((a) => evBlocked.value.has(a.id))
+    const lastDone = [...list].reverse().find((a) => attempts.some((t) => t.assessment_id === a.id))
+    evAssessmentId.value = (blocked ?? lastDone ?? list[0])?.id ?? ''
+  } catch (e) {
+    toast.error('Não foi possível carregar as avaliações', friendlyError(e))
+  } finally {
+    evLoading.value = false
+  }
+}
+
+async function openAvaliacoes() {
+  tab.value = 'avaliacoes'
+  if (evReady.value) return
+  evLoading.value = true
+  try {
+    const list = await fetchCoursesForStaff()
+    evCourses.value = list
+    evReady.value = true
+    if (!evCourseId.value && list.length) evCourseId.value = (list.find((c) => c.is_published) ?? list[0]).id
+  } catch (e) {
+    toast.error('Não foi possível carregar os cursos', friendlyError(e))
+  } finally {
+    evLoading.value = false
+  }
+}
+
+watch(evCourseId, () => void loadEvaluations())
+
+async function grantAttempts(r: EvRow) {
+  const a = evAssessment.value
+  if (!a || granting.value) return
+  granting.value = r.student.user_id
+  try {
+    const res = await grantExtraAttempts(a.id, r.student.user_id, EXTRA_ATTEMPTS)
+    evGrants.value = [...evGrants.value, res.grant]
+    toast.success(`Mais ${EXTRA_ATTEMPTS} tentativas para ${r.student.full_name}`, `${a.title}: ${res.used} de ${res.limit} usadas.`)
+  } catch (e) {
+    toast.error('Não foi possível liberar as tentativas', friendlyError(e))
+  } finally {
+    granting.value = ''
+  }
 }
 
 // ---- roteiros de aula ----
@@ -214,6 +377,8 @@ onMounted(async () => {
   if (route.query.aba === 'projetos') {
     wantedProjectId = String(route.query.projeto ?? '')
     void openProjetos(String(route.query.curso ?? ''))
+  } else if (route.query.aba === 'avaliacoes') {
+    void openAvaliacoes()
   }
   try {
     rows.value = await fetchStudentProgress()
@@ -237,6 +402,9 @@ onMounted(async () => {
     <div class="tabs" role="tablist" aria-label="Seções do painel">
       <button class="tabs__tab" :class="{ 'is-active': tab === 'alunos' }" type="button" role="tab" :aria-selected="tab === 'alunos'" @click="tab = 'alunos'">
         <Users /> Alunos
+      </button>
+      <button class="tabs__tab" :class="{ 'is-active': tab === 'avaliacoes' }" type="button" role="tab" :aria-selected="tab === 'avaliacoes'" @click="openAvaliacoes">
+        <ListChecks /> Avaliações
       </button>
       <button class="tabs__tab" :class="{ 'is-active': tab === 'roteiros' }" type="button" role="tab" :aria-selected="tab === 'roteiros'" @click="openRoteiros">
         <ClipboardList /> Roteiros de aula
@@ -308,6 +476,106 @@ onMounted(async () => {
         </div>
         <div v-else class="card">
           <EmptyState :icon="Users" title="Nenhuma matrícula" text="Quando alunos se matricularem, o progresso deles aparece aqui." />
+        </div>
+      </template>
+    </template>
+
+    <!-- ===================== Avaliações ===================== -->
+    <template v-else-if="tab === 'avaliacoes'">
+      <p class="hint" style="margin: 0 0 14px; max-width: 72ch">
+        Tentativas de cada aluno nos quizzes e provas. Quem já tentou pode ganhar mais {{ EXTRA_ATTEMPTS }}: a liberação vale na hora,
+        e o aluno vê o novo limite ao abrir a avaliação.
+      </p>
+
+      <div class="ev-filters">
+        <select v-model="evCourseId" class="input" aria-label="Curso">
+          <option v-if="!evCourses.length" value="">Nenhum curso</option>
+          <option v-for="c in evCourses" :key="c.id" :value="c.id">{{ c.title }}{{ c.is_published ? '' : ' (não publicado)' }}</option>
+        </select>
+        <select v-model="evAssessmentId" class="input" aria-label="Avaliação" :disabled="!evAssessments.length">
+          <option v-if="!evAssessments.length" value="">Nenhuma avaliação</option>
+          <option v-for="a in evAssessments" :key="a.id" :value="a.id">
+            {{ a.title }}{{ evBlocked.get(a.id) ? ` (${plural(evBlocked.get(a.id)!, 'aluno', 'alunos')} sem tentativas)` : '' }}
+          </option>
+        </select>
+        <input v-model="evQuery" class="input" type="search" placeholder="Buscar aluno" aria-label="Buscar aluno" />
+      </div>
+
+      <LoadingBlock v-if="evLoading" text="Carregando avaliações" />
+
+      <div v-else-if="!evAssessments.length" class="card">
+        <EmptyState :icon="ListChecks" title="Nenhuma avaliação neste curso" text="Crie arquivos em content/courses/<curso>/assessments/ e rode npm run content:sync." />
+      </div>
+
+      <template v-else-if="evAssessment">
+        <div class="ev-meta">
+          <span class="badge">{{ evAssessment.kind === 'exam' ? 'Prova' : 'Quiz' }}</span>
+          <span class="badge badge--info">mínimo {{ formatPct(evAssessment.passing_score) }}</span>
+          <span class="badge badge--info">
+            {{ evAssessment.max_attempts ? `até ${plural(evAssessment.max_attempts, 'tentativa', 'tentativas')}` : 'sem limite de tentativas' }}
+          </span>
+          <span v-if="evBlocked.get(evAssessment.id)" class="badge badge--danger">
+            {{ plural(evBlocked.get(evAssessment.id)!, 'aluno', 'alunos') }} sem tentativas
+          </span>
+        </div>
+
+        <div class="card" style="padding: 0">
+          <!-- no desktop as linhas viram colunas; no celular, cartões em que o botão desce quando falta espaço -->
+          <ul v-if="evRows.length" class="ev-list" aria-label="Tentativas por aluno">
+            <li class="ev-row ev-row--head" aria-hidden="true">
+              <span>Aluno</span>
+              <span>Situação</span>
+              <span>Tentativas</span>
+              <span>Melhor nota</span>
+              <span></span>
+            </li>
+            <li v-for="r in evRows" :key="r.student.user_id" class="ev-row">
+              <div class="ev-row__top">
+                <div class="ev-row__student row">
+                  <UserAvatar :name="r.student.full_name" :src="r.student.avatar_url" :size="30" />
+                  <div style="min-width: 0">
+                    <div class="ev-row__name">{{ r.student.full_name }}</div>
+                    <div v-if="r.student.username" class="hint">@{{ r.student.username }}</div>
+                  </div>
+                </div>
+                <div class="ev-row__state">
+                  <span class="badge" :class="EV_BADGE[r.state]">{{ EV_LABEL[r.state] }}</span>
+                </div>
+              </div>
+              <div class="ev-row__bottom">
+                <div class="ev-row__facts">
+                  <div class="ev-row__fact">
+                    <span class="ev-row__label">Tentativas</span>
+                    <span>{{ r.used }}{{ r.limit !== null ? ` de ${r.limit}` : '' }}</span>
+                    <span v-if="r.extra" class="hint">{{ plural(r.extra, 'liberada', 'liberadas') }}</span>
+                  </div>
+                  <div class="ev-row__fact">
+                    <span class="ev-row__label">Melhor nota</span>
+                    <span>{{ r.best !== null ? formatPct(r.best, 1) : 'sem nota' }}</span>
+                  </div>
+                </div>
+                <div class="ev-row__action">
+                  <button
+                    v-if="evAssessment.max_attempts && r.used"
+                    class="btn btn--sm"
+                    :class="r.state === 'blocked' ? 'btn--primary' : 'btn--outline'"
+                    type="button"
+                    :disabled="!!granting"
+                    :aria-label="`Liberar mais ${EXTRA_ATTEMPTS} tentativas para ${r.student.full_name}`"
+                    @click="grantAttempts(r)"
+                  >
+                    <Plus /> {{ granting === r.student.user_id ? 'Liberando…' : `Liberar mais ${EXTRA_ATTEMPTS}` }}
+                  </button>
+                </div>
+              </div>
+            </li>
+          </ul>
+          <EmptyState
+            v-else
+            :icon="Users"
+            :title="evQuery ? 'Nenhum aluno encontrado' : 'Nenhum aluno matriculado'"
+            :text="evQuery ? 'Confira o nome digitado na busca.' : 'Quando alunos se matricularem, as tentativas aparecem aqui.'"
+          />
         </div>
       </template>
     </template>
@@ -456,6 +724,8 @@ onMounted(async () => {
 .tabs {
   display: flex;
   gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
   padding: 4px;
   margin: 0 0 18px;
   border: 1px solid var(--border);
@@ -465,6 +735,8 @@ onMounted(async () => {
   max-width: 100%;
 }
 .tabs__tab {
+  flex: none;
+  white-space: nowrap;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -487,6 +759,127 @@ onMounted(async () => {
 .tabs__tab.is-active {
   background: var(--primary-soft);
   color: var(--primary);
+}
+
+.ev-filters {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+@media (min-width: 720px) {
+  .ev-filters {
+    grid-template-columns: minmax(0, 300px) minmax(0, 420px) minmax(0, 240px);
+  }
+}
+.ev-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.ev-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+/* celular: cartão com nome e situação em cima; tentativas, nota e botão embaixo */
+.ev-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+}
+.ev-row:last-child {
+  border-bottom: 0;
+}
+.ev-row--head {
+  display: none;
+}
+.ev-row__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ev-row__student {
+  min-width: 0;
+}
+.ev-row__name {
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ev-row__state {
+  flex: none;
+}
+.ev-row__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+.ev-row__facts {
+  display: flex;
+  gap: 20px;
+}
+.ev-row__fact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ev-row__label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ev-row__action {
+  margin-left: auto;
+}
+.ev-row__action:empty {
+  display: none;
+}
+
+/* desktop: as mesmas peças viram as colunas de uma tabela */
+@media (min-width: 720px) {
+  .ev-row,
+  .ev-row--head {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) 160px;
+    align-items: center;
+    gap: 12px;
+  }
+  .ev-row__top,
+  .ev-row__bottom,
+  .ev-row__facts {
+    display: contents;
+  }
+  .ev-row--head {
+    padding-block: 10px;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .ev-row__action {
+    justify-self: end;
+  }
+  .ev-row__action:empty {
+    display: block;
+  }
+  /* o cabeçalho já diz o nome da coluna; o rótulo fica só para leitores de tela */
+  .ev-row__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
 }
 
 .proj-cards {

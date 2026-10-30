@@ -8,11 +8,11 @@ import { useAuthStore } from '@/stores/auth'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
-import { fetchAssessment, fetchAttempts, fetchCourseStructure, submitAttempt } from '@/lib/api'
+import { fetchAssessment, fetchAttempts, fetchCourseStructure, fetchMyExtraAttempts, submitAttempt } from '@/lib/api'
 import { renderMarkdown } from '@/lib/markdown'
 import { friendlyError } from '@/lib/supabase'
 import { downloadAttemptPdf } from '@/lib/pdf'
-import { formatDateTime, formatPct, shuffle } from '@/lib/format'
+import { formatDateTime, formatPct, plural, shuffle } from '@/lib/format'
 import type { AnswerValue, Assessment, Attempt, AttemptDetail, Course, LessonSummary, Question, QuestionOption } from '@/types/db'
 import QuestionCard from '@/components/assessment/QuestionCard.vue'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
@@ -33,6 +33,8 @@ const course = ref<Course | null>(null)
 const assessment = ref<Assessment | null>(null)
 const questions = ref<Question[]>([])
 const attempts = ref<Attempt[]>([])
+/** Tentativas a mais que o instrutor liberou para mim. */
+const extraAttempts = ref(0)
 const lesson = ref<LessonSummary | null>(null)
 const nextLesson = ref<LessonSummary | null>(null)
 const loading = ref(true)
@@ -57,9 +59,11 @@ const currentQuestion = computed(() => order.value[current.value])
 const bestAttempt = computed(() =>
   attempts.value.reduce<Attempt | null>((best, a) => (!best || Number(a.pct) > Number(best.pct) ? a : best), null),
 )
-const attemptsLeft = computed(() =>
-  assessment.value?.max_attempts == null ? null : Math.max(0, assessment.value.max_attempts - attempts.value.length),
+/** Limite de tentativas da avaliação mais as liberadas pelo instrutor (null = sem limite). */
+const attemptLimit = computed(() =>
+  assessment.value?.max_attempts == null ? null : assessment.value.max_attempts + extraAttempts.value,
 )
+const attemptsLeft = computed(() => (attemptLimit.value === null ? null : Math.max(0, attemptLimit.value - attempts.value.length)))
 const canStart = computed(() => attemptsLeft.value === null || attemptsLeft.value > 0)
 const passedBefore = computed(() => attempts.value.some((a) => a.passed))
 
@@ -194,8 +198,13 @@ async function load() {
     assessment.value = data.assessment
     questions.value = data.questions
     document.title = `${data.assessment.title} · ${c.title}`
-    const [list, structure] = await Promise.all([fetchAttempts(data.assessment.id), fetchCourseStructure(c.id)])
+    const [list, extra, structure] = await Promise.all([
+      fetchAttempts(data.assessment.id),
+      fetchMyExtraAttempts(data.assessment.id),
+      fetchCourseStructure(c.id),
+    ])
     attempts.value = list
+    extraAttempts.value = extra
     lesson.value = structure.lessons.find((l) => l.id === data.assessment.lesson_id) ?? null
     const idx = structure.lessons.findIndex((l) => l.id === data.assessment.lesson_id)
     nextLesson.value = idx >= 0 ? (structure.lessons[idx + 1] ?? null) : null
@@ -279,10 +288,11 @@ watch([courseSlug, assessmentSlug], load)
           <dl class="facts">
             <div><dt>Questões</dt><dd>{{ questions.length }}</dd></div>
             <div><dt>Nota mínima</dt><dd>{{ formatPct(assessment.passing_score) }}</dd></div>
-            <div><dt>Tentativas</dt><dd>{{ attempts.length }}{{ assessment.max_attempts ? ` de ${assessment.max_attempts}` : '' }}</dd></div>
+            <div><dt>Tentativas</dt><dd>{{ attempts.length }}{{ attemptLimit !== null ? ` de ${attemptLimit}` : '' }}</dd></div>
             <div v-if="assessment.time_limit_minutes"><dt>Tempo</dt><dd>{{ assessment.time_limit_minutes }} min</dd></div>
             <div v-if="bestAttempt"><dt>Melhor nota</dt><dd>{{ formatPct(bestAttempt.pct, 1) }}</dd></div>
           </dl>
+          <p v-if="extraAttempts" class="hint intro__note">O instrutor liberou mais {{ plural(extraAttempts, 'tentativa', 'tentativas') }} para você.</p>
 
           <div class="alert alert--info" v-if="!assessment.show_answers"><Lock /> Esta avaliação não revela o gabarito após o envio.</div>
 
@@ -295,6 +305,7 @@ watch([courseSlug, assessmentSlug], load)
               Próxima aula <ArrowRight />
             </RouterLink>
           </div>
+          <p v-if="!canStart && !passedBefore" class="hint intro__note">Se precisar de outra chance, fale com o instrutor: ele pode liberar mais tentativas.</p>
         </section>
 
         <section v-if="attempts.length" class="card">
@@ -464,6 +475,10 @@ watch([courseSlug, assessmentSlug], load)
   display: flex;
   flex-direction: column;
   gap: 14px;
+}
+
+.intro__note {
+  margin: 0;
 }
 
 .intro__icon {

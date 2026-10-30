@@ -331,3 +331,23 @@ export interface SubmitResult {
   xp_gained: number
   new_achievements: Achievement[]
 }
+
+/** Tentativas extras que o instrutor liberou para um aluno numa avaliação (migration 0005). */
+export interface AttemptGrant {
+  id: string
+  user_id: string
+  assessment_id: string
+  course_id: string
+  extra: number
+  granted_by: string | null
+  created_at: string
+}
+
+/** Resumo de uma tentativa, sem respostas nem correção (painel do instrutor). */
+export type AttemptSummary = Pick<Attempt, 'id' | 'user_id' | 'assessment_id' | 'attempt_number' | 'pct' | 'passed' | 'submitted_at'>
+
+export interface GrantAttemptsResult {
+  grant: AttemptGrant
+  used: number
+  limit: number
+}

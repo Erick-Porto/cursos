@@ -7,8 +7,11 @@ import type {
   AnswerValue,
   Assessment,
   Attempt,
+  AttemptGrant,
+  AttemptSummary,
   ClassScript,
   Course,
+  GrantAttemptsResult,
   Lesson,
   LessonProgress,
   LessonSummary,
@@ -233,6 +236,59 @@ export async function fetchStudentProgress(): Promise<StudentProgressRow[]> {
       await supabase.from('v_student_progress').select('*').order('last_activity_at', { ascending: false }),
     ) ?? []
   )
+}
+
+// ---- Tentativas extras (migration 0005) ----
+
+/** Soma das tentativas que o instrutor liberou para mim nesta avaliação (0 sem a migration). */
+export async function fetchMyExtraAttempts(assessmentId: string): Promise<number> {
+  const uid = await myId()
+  const rows = listOrEmpty<Pick<AttemptGrant, 'extra'>>(
+    await supabase.from('attempt_grants').select('extra').eq('user_id', uid).eq('assessment_id', assessmentId),
+  )
+  return rows.reduce((s, g) => s + g.extra, 0)
+}
+
+/** Lê todas as linhas de uma consulta em páginas (o PostgREST corta em 1000 por resposta). */
+async function fetchAllPages<T>(page: (from: number, to: number) => PromiseLike<{ data: unknown; error: DbError }>): Promise<T[]> {
+  const size = 1000
+  const out: T[] = []
+  for (let from = 0; ; from += size) {
+    const rows = listOrEmpty<T>(await page(from, from + size - 1))
+    out.push(...rows)
+    if (rows.length < size) return out
+  }
+}
+
+/** Avaliações de um curso, em ordem (staff vê também as de cursos não publicados). */
+export async function fetchAssessmentsForStaff(courseId: string): Promise<Assessment[]> {
+  return unwrap(await supabase.from('assessments').select('*').eq('course_id', courseId).order('position')) ?? []
+}
+
+/** Tentativas de todos os alunos de um curso, só com nota e situação. */
+export async function fetchAttemptSummariesForStaff(courseId: string): Promise<AttemptSummary[]> {
+  return fetchAllPages<AttemptSummary>((from, to) =>
+    supabase
+      .from('attempts')
+      .select('id, user_id, assessment_id, attempt_number, pct, passed, submitted_at')
+      .eq('course_id', courseId)
+      .order('id')
+      .range(from, to),
+  )
+}
+
+/** Tentativas extras já liberadas num curso (vazio sem a migration). */
+export async function fetchAttemptGrantsForStaff(courseId: string): Promise<AttemptGrant[]> {
+  return fetchAllPages<AttemptGrant>((from, to) =>
+    supabase.from('attempt_grants').select('*').eq('course_id', courseId).order('id').range(from, to),
+  )
+}
+
+/** Libera mais tentativas de uma avaliação para um aluno (só staff). */
+export async function grantExtraAttempts(assessmentId: string, userId: string, extra = 3): Promise<GrantAttemptsResult> {
+  return unwrap(
+    await supabase.rpc('grant_extra_attempts', { p_assessment_id: assessmentId, p_user_id: userId, p_extra: extra }),
+  ) as GrantAttemptsResult
 }
 
 export async function fetchAllAttemptsForStaff(courseId: string): Promise<Attempt[]> {

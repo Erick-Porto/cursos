@@ -325,6 +325,60 @@ ok(Number(e2[0].progress_pct) === 50, `progresso conta o projeto aprovado (1 de 
 await asUser(userId)
 ;({ rows: gr } = await db.query(`select public.grade_project($1, '{"regras":60,"git":35}'::jsonb, 'Revisto.', true) as r`, [sub.id]))
 ok(gr[0].r.xp_gained === 0 && Number(gr[0].r.submission.pct) === 95, 'corrigir de novo atualiza a nota sem repetir o XP')
+
+// ---------------------------------------------------------------------
+// tentativas extras (migration 0005): o instrutor libera mais 3
+// ---------------------------------------------------------------------
+console.log('> tentativas extras')
+await db.exec('reset role')
+const { rows: extraQuizzes } = await db.query(
+  `insert into public.assessments (course_id, slug, title, kind, passing_score, max_attempts) values
+   ($1, 'quiz-livre', 'Quiz sem limite', 'quiz', 70, null),
+   ($1, 'quiz-p', 'Quiz P', 'quiz', 70, 1)
+   returning id, slug`,
+  [course2],
+)
+const quizLivre = extraQuizzes.find((q) => q.slug === 'quiz-livre').id
+const quizP = extraQuizzes.find((q) => q.slug === 'quiz-p').id
+const submit = (id) => db.query('select public.submit_attempt($1, $2::jsonb) as r', [id, JSON.stringify(bad)])
+
+await asUser(student)
+await db.query('select * from public.enroll($1)', [courseId])
+await submit(assessmentId)
+await submit(assessmentId)
+ok(await fails('select public.submit_attempt($1, $2::jsonb)', [assessmentId, JSON.stringify(bad)], /limite de tentativas/), 'aluna esgota as 2 tentativas do quiz')
+ok(await fails('select public.grant_extra_attempts($1, $2)', [assessmentId, student], /apenas instrutores/), 'aluno não libera tentativas')
+ok(
+  await fails(
+    'insert into public.attempt_grants (user_id, assessment_id, course_id, extra) values ($1, $2, $3, 3)',
+    [student, assessmentId, courseId],
+    /./,
+  ),
+  'RLS: aluno não grava attempt_grants diretamente',
+)
+
+await asUser(userId)
+const { rows: gx } = await db.query('select public.grant_extra_attempts($1, $2) as r', [assessmentId, student])
+ok(gx[0].r.used === 2 && gx[0].r.limit === 5 && gx[0].r.grant.extra === 3, `instrutor libera mais 3 (limite 2 -> ${gx[0].r.limit})`)
+ok(await fails('select public.grant_extra_attempts($1, $2, 50)', [assessmentId, student], /de 1 a 10/), 'quantidade fora de 1 a 10 é recusada')
+ok(await fails('select public.grant_extra_attempts($1, $2)', [quizLivre, student], /não tem limite/), 'avaliação sem limite não recebe liberação')
+ok(await fails('select public.grant_extra_attempts($1, $2)', [quizP, userId], /matriculado/), 'só libera para aluno matriculado no curso')
+const { rows: staffGrants } = await db.query('select * from public.attempt_grants')
+ok(staffGrants.length === 1 && staffGrants[0].granted_by === userId, 'instrutor lê as liberações e fica registrado quem liberou')
+
+await asUser(student)
+const { rows: myGrants } = await db.query('select extra from public.attempt_grants')
+ok(myGrants.length === 1 && myGrants[0].extra === 3, 'aluna lê a própria liberação')
+const { rows: s3 } = await submit(assessmentId)
+ok(s3[0].r.attempt.attempt_number === 3, 'depois da liberação, a aluna faz a tentativa 3')
+await submit(assessmentId)
+await submit(assessmentId)
+ok(await fails('select public.submit_attempt($1, $2::jsonb)', [assessmentId, JSON.stringify(bad)], /limite de tentativas/), 'a sexta tentativa é recusada (limite 5)')
+const { rows: grantLog } = await db.query(`select meta from public.activity_log where kind = 'attempts_granted'`)
+ok(grantLog.length === 1 && grantLog[0].meta.extra === 3, 'a liberação aparece na atividade da aluna')
+await submit(quizP)
+ok(await fails('select public.submit_attempt($1, $2::jsonb)', [quizP, JSON.stringify(bad)], /limite de tentativas/), 'liberação vale só para a avaliação escolhida')
+
 await db.exec('reset role')
 await db.close()
 
