@@ -380,6 +380,8 @@ console.log(categorias[0]);      // audio
 - `categorias[0]` pega o item da posição 0: a lista começa a contar do zero
 - É assim que o relatório vai contar os produtos: `produtos.length`
 
+Para treinar: a [lista de exercícios de listas e objetos](materiais/e02/aluno/exercicios-listas-e-objetos.html), com respostas.
+
 ---
 
 ## Ler e gravar arquivos

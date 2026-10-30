@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exercícios: listas e objetos · E02</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --ok-suave: #dcfce7;
+      --erro: #b91c1c;
+      --erro-suave: #fee2e2;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --ok-suave: rgba(74, 222, 128, 0.14);
+        --erro: #f87171;
+        --erro-suave: rgba(248, 113, 113, 0.14);
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, kbd, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, td code, h3 code, label code, summary code, dd code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); overflow-wrap: anywhere; }
+    kbd {
+      padding: 1px 6px;
+      border: 1px solid var(--borda);
+      border-bottom-width: 2px;
+      border-radius: 6px;
+      background: var(--cartao);
+      font-size: 0.85em;
+    }
+    a { color: var(--destaque); }
+
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; scroll-margin-top: 16px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0 0 6px; font-size: 1.05rem; }
+    .intro-parte { margin: -4px 0 14px; color: var(--texto-2); }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vertical-align: -0.2em;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    .cartao p { margin: 10px 0 0; }
+    button { font: inherit; cursor: pointer; }
+
+    /* progresso */
+    .progresso-topo { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .progresso-topo strong { font-size: 1.05rem; }
+    .barra { height: 10px; margin-top: 10px; overflow: hidden; border-radius: 999px; background: var(--destaque-suave); }
+    .barra span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--destaque); transition: width 0.25s ease; }
+    .indice { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
+    .indice a {
+      display: inline-block;
+      padding: 4px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 999px;
+      color: var(--texto);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .indice a:hover { border-color: var(--destaque); color: var(--destaque); }
+    .contagem { margin: 0 !important; color: var(--texto-2); font-size: 0.9rem; }
+
+    /* passos da preparação */
+    ol.passos { margin: 0; padding: 0; list-style: none; counter-reset: passo; }
+    ol.passos > li { position: relative; margin-top: 20px; padding-left: 48px; }
+    ol.passos > li:first-child { margin-top: 0; }
+    ol.passos > li::before {
+      counter-increment: passo;
+      content: counter(passo);
+      position: absolute;
+      left: 0;
+      top: -2px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+      display: grid;
+      place-items: center;
+    }
+    ol.passos p { margin: 0; }
+    @media (max-width: 480px) {
+      ol.passos > li { padding-left: 0; padding-top: 40px; }
+    }
+
+    /* as duas ideias */
+    .ideias { display: grid; gap: 16px; }
+    @media (min-width: 620px) { .ideias { grid-template-columns: 1fr 1fr; } }
+    .ideia h3 { display: flex; align-items: center; gap: 8px; }
+    .ideia p { margin: 0; }
+    .ficha {
+      margin: 14px 0 0;
+      overflow: hidden;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+    }
+    .ficha-titulo {
+      padding: 6px 12px;
+      background: var(--destaque-suave);
+      color: var(--destaque);
+      font: 700 0.85rem ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
+    }
+    .ficha div { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 12px; border-top: 1px solid var(--borda); }
+    .ficha dt { color: var(--texto-2); font: 0.9rem ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    .ficha dd { margin: 0; }
+    .gavetas { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
+    .gavetas li {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 2px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      text-align: center;
+    }
+    .gavetas .pos {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .gavetas code { padding: 0; background: none; font-size: 0.78rem; white-space: nowrap; overflow-wrap: normal; }
+    .gavetas-legenda { margin: 8px 0 0 !important; color: var(--texto-2); font-size: 0.88rem; }
+
+    /* exercícios */
+    .exercicio + .exercicio { margin-top: 16px; }
+    .exercicio { scroll-margin-top: 16px; }
+    .ex-topo { display: flex; align-items: flex-start; gap: 12px; }
+    .ex-num {
+      display: grid;
+      place-items: center;
+      flex: none;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--destaque);
+      color: var(--sobre-destaque);
+      font-weight: 700;
+    }
+    .ex-titulo { flex: 1; min-width: 0; }
+    .ex-titulo h3 { margin: 0; }
+    .tipo {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 1px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .tipo-leia { background: var(--destaque-suave); color: var(--destaque); }
+    .tipo-escreva { background: var(--ok-suave); color: var(--ok); }
+    .tipo-erro { background: var(--erro-suave); color: var(--erro); }
+    .tipo-desafio { background: var(--alerta-suave); color: var(--alerta); }
+    .feito-linha {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid var(--borda);
+      color: var(--texto-2);
+      font-size: 0.92rem;
+      cursor: pointer;
+    }
+    .feito-linha input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--destaque); }
+    .exercicio.feito { border-color: var(--destaque); }
+    .exercicio.feito .ex-num { background: var(--ok); }
+    .exercicio.feito .feito-linha { color: var(--ok); font-weight: 600; }
+    ol.itens { margin: 8px 0 0; padding-left: 1.4em; }
+    ol.itens li + li { margin-top: 6px; }
+
+    /* código */
+    .codigo { margin-top: 10px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      min-height: 34px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .codigo.saida .codigo-topo { color: #86efac; }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+
+    /* resposta escondida */
+    details { margin-top: 12px; padding: 10px 14px; border: 1px dashed var(--borda); border-radius: 12px; }
+    details summary { cursor: pointer; font-weight: 600; }
+    details[open] summary { margin-bottom: 6px; }
+    details p { margin: 8px 0 0; }
+
+    /* avisos e tabelas */
+    .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .dica p { margin: 0; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    tbody tr:last-child td { border-bottom: 0; }
+    /* no celular, as tabelas largas viram uma pilha: uma linha por bloco */
+    @media (max-width: 560px) {
+      table.empilha thead { display: none; }
+      table.empilha tr { display: block; padding: 10px 0; border-bottom: 1px solid var(--borda); }
+      table.empilha tbody tr:first-child { padding-top: 0; }
+      table.empilha tbody tr:last-child { padding-bottom: 0; border-bottom: 0; }
+      table.empilha td { display: block; padding: 2px 0; border: 0; }
+      table.empilha td[data-rotulo]::before {
+        content: attr(data-rotulo);
+        display: block;
+        color: var(--texto-2);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+      table.empilha td:first-child { font-weight: 600; }
+    }
+
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      .codigo.saida .codigo-topo { color: #000; }
+      .ex-num, .gavetas .pos, ol.passos > li::before { background: #000; color: #fff; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-list-ordered" viewBox="0 0 24 24"><path d="M10 12h11"/><path d="M10 18h11"/><path d="M10 6h11"/><path d="M4 10h2"/><path d="M4 6h1v4"/><path d="M6 18H4c0-1 2-2 2-3s-1-1.5-2-1"/></symbol>
+    <symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+    <symbol id="i-file-text" viewBox="0 0 24 24"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></symbol>
+    <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></symbol>
+    <symbol id="i-terminal" viewBox="0 0 24 24"><path d="M12 19h8"/><path d="m4 17 6-6-6-6"/></symbol>
+    <symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · E02 · Exercícios</p>
+      <h1>Exercícios: listas e objetos</h1>
+      <p class="lead">
+        Treino de fichas (objetos) e fileiras de gavetas (listas), da Lojinha e do dia a dia. São 15
+        exercícios, do mais fácil ao desafio, e todos se resolvem com o que a aula 3 mostrou:
+        <code>console.log</code>, <code>const</code>, argumentos, ponto, colchetes e <code>.length</code>.
+        Tempo: cerca de 1 hora.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-progresso">
+      <div class="cartao">
+        <div class="progresso-topo">
+          <strong id="t-progresso">Seu progresso</strong>
+          <p class="contagem" id="contagem" aria-live="polite">0 de 15 exercícios feitos</p>
+        </div>
+        <div class="barra" aria-hidden="true"><span id="barra"></span></div>
+        <ul class="indice nao-imprime">
+          <li><a href="#comecar">Antes de começar</a></li>
+          <li><a href="#objetos">1. Objetos</a></li>
+          <li><a href="#listas">2. Listas</a></li>
+          <li><a href="#juntos">3. Os dois juntos</a></li>
+          <li><a href="#argumentos">4. Argumentos</a></li>
+          <li><a href="#erros">Erros comuns</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="comecar" aria-labelledby="t-comecar">
+      <h2 id="t-comecar"><svg class="ico"><use href="#i-list-ordered"/></svg>Antes de começar</h2>
+      <div class="cartao">
+        <ol class="passos">
+          <li>
+            <h3>Crie a pasta de treino</h3>
+            <p>No terminal, na sua pasta de projetos, <strong>ao lado</strong> do <code>lojinha-regras</code>, não dentro dele: <code>mkdir treino-e02</code>, <code>cd treino-e02</code> e <code>code .</code>. Assim o treino não se mistura com o projeto da Lojinha.</p>
+          </li>
+          <li>
+            <h3>Um arquivo por exercício</h3>
+            <p>Crie <code>ex01.js</code>, <code>ex02.js</code> e assim por diante. Salve com <kbd>Ctrl</kbd> + <kbd>S</kbd> e rode com <code>node ex01.js</code>. Os exercícios de leitura também dão certo no REPL: <code>node</code>, cole as linhas e <code>.exit</code> para sair.</p>
+          </li>
+          <li>
+            <h3>Antes de rodar, confira</h3>
+            <p>O caminho no terminal termina em <code>treino-e02</code>, e a aba do arquivo no VS Code não tem a bolinha de "não salvo".</p>
+          </li>
+        </ol>
+        <div class="dica">
+          <p><strong>Como treinar.</strong> Nos exercícios <strong>Leia</strong>, escreva no caderno o que você acha que vai aparecer e só depois rode. Errar a previsão e descobrir o porquê também é treino. As respostas ficam fechadas: abra depois de tentar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-ideias">
+      <h2 id="t-ideias"><svg class="ico"><use href="#i-book-open"/></svg>As duas ideias de hoje</h2>
+      <div class="ideias">
+        <div class="cartao ideia">
+          <h3><svg class="ico"><use href="#i-file-text"/></svg>Objeto: a ficha de cadastro</h3>
+          <p>Cada <strong>campo</strong> tem um nome e um valor, separados por dois-pontos. A ficha fica entre chaves <code>{ }</code>, e você lê um campo com um ponto: <code>cliente.nome</code>.</p>
+          <dl class="ficha">
+            <div class="ficha-titulo">cliente</div>
+            <div><dt>nome</dt><dd><code>'Ana'</code></dd></div>
+            <div><dt>cidade</dt><dd><code>'Recife'</code></dd></div>
+            <div><dt>idade</dt><dd><code>28</code></dd></div>
+            <div><dt>vip</dt><dd><code>true</code></dd></div>
+          </dl>
+        </div>
+        <div class="cartao ideia">
+          <h3><svg class="ico"><use href="#i-list"/></svg>Lista: a fileira de gavetas</h3>
+          <p>A lista fica entre colchetes <code>[ ]</code>. As gavetas são numeradas a partir do <strong>0</strong>, e você abre uma com colchetes: <code>cores[0]</code>. O <code>.length</code> conta quantas gavetas a fileira tem.</p>
+          <ol class="gavetas" aria-label="Lista cores com quatro gavetas">
+            <li><span class="pos">0</span><code>'preto'</code></li>
+            <li><span class="pos">1</span><code>'branco'</code></li>
+            <li><span class="pos">2</span><code>'azul'</code></li>
+            <li><span class="pos">3</span><code>'verde'</code></li>
+          </ol>
+          <p class="gavetas-legenda"><code>cores.length</code> é 4, e a última gaveta é a 3.</p>
+        </div>
+      </div>
+
+      <div class="cartao tabela" style="margin-top: 16px">
+        <table class="empilha">
+          <thead>
+            <tr><th>Para</th><th>Escreva</th><th>Exemplo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>criar uma ficha</td><td><code>{ campo: valor }</code></td><td><code>{ nome: 'Ana', idade: 28 }</code></td></tr>
+            <tr><td>ler um campo</td><td><code>ficha.campo</code></td><td><code>cliente.nome</code></td></tr>
+            <tr><td>criar uma lista</td><td><code>[item, item]</code></td><td><code>['preto', 'azul']</code></td></tr>
+            <tr><td>abrir uma gaveta</td><td><code>lista[posição]</code></td><td><code>cores[0]</code></td></tr>
+            <tr><td>contar as gavetas</td><td><code>lista.length</code></td><td><code>cores.length</code></td></tr>
+            <tr><td>campo de uma ficha da lista</td><td><code>lista[posição].campo</code></td><td><code>produtos[1].nome</code></td></tr>
+            <tr><td>gaveta de uma lista da ficha</td><td><code>ficha.campo[posição]</code></td><td><code>pedido.itens[0]</code></td></tr>
+            <tr><td>o primeiro argumento do comando</td><td><code>process.argv[2]</code></td><td><code>node ola.js Ana</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="objetos" aria-labelledby="t-objetos">
+      <h2 id="t-objetos"><svg class="ico"><use href="#i-file-text"/></svg>Parte 1 · Objetos</h2>
+      <p class="intro-parte">Fichas com campos: criar, ler e fazer conta com o que está dentro.</p>
+
+      <article class="cartao exercicio" id="ex1">
+        <div class="ex-topo">
+          <span class="ex-num">1</span>
+          <div class="ex-titulo"><h3>A ficha da cliente</h3><span class="tipo tipo-leia">Leia</span></div>
+        </div>
+        <p>Sem rodar: o que aparece em cada uma das quatro linhas?</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex01.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex1">Copiar</button></div>
+<pre><code id="c-ex1">const cliente = { nome: 'Ana', cidade: 'Recife', idade: 28, vip: true };
+
+console.log(cliente.nome);
+console.log(cliente.idade + 1);
+console.log(cliente.vip);
+console.log(cliente.email);</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="codigo saida"><div class="codigo-topo"><span>Saída</span></div>
+<pre><code>Ana
+29
+true
+undefined</code></pre>
+          </div>
+          <p>O <code>cliente.idade + 1</code> faz a conta com o valor do campo, mas a ficha continua com 28. A ficha não tem campo <code>email</code>: quando o campo não existe, o resultado é <code>undefined</code>, "nada aqui". Não aparece erro, e por isso esse tropeço passa despercebido.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="1"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex2">
+        <div class="ex-topo">
+          <span class="ex-num">2</span>
+          <div class="ex-titulo"><h3>Um produto novo na Lojinha</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Em <code>ex02.js</code>, crie a constante <code>produto</code> com estes cinco campos:</p>
+        <div class="tabela">
+          <table>
+            <thead><tr><th>Campo</th><th>Valor</th></tr></thead>
+            <tbody>
+              <tr><td><code>id</code></td><td>13</td></tr>
+              <tr><td><code>nome</code></td><td>Mochila Esportiva</td></tr>
+              <tr><td><code>preco</code></td><td>149.9</td></tr>
+              <tr><td><code>categoria</code></td><td>esporte</td></tr>
+              <tr><td><code>destaque</code></td><td>não (<code>false</code>)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Depois, com três <code>console.log</code>, mostre:</p>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>Produto: Mochila Esportiva
+Categoria: esporte
+Preço: R$ 149.9</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>ex02.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex2">Copiar</button></div>
+<pre><code id="c-ex2">const produto = {
+  id: 13,
+  nome: 'Mochila Esportiva',
+  preco: 149.9,
+  categoria: 'esporte',
+  destaque: false,
+};
+
+console.log('Produto:', produto.nome);
+console.log('Categoria:', produto.categoria);
+console.log('Preço: R$', produto.preco);</code></pre>
+          </div>
+          <p>Texto vai entre aspas; número e <code>true</code>/<code>false</code>, sem aspas. Uma ficha com muitos campos fica mais fácil de ler com um campo por linha. A vírgula depois do último campo é permitida.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="2"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex3">
+        <div class="ex-topo">
+          <span class="ex-num">3</span>
+          <div class="ex-titulo"><h3>Conta com os campos</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Um item do carrinho tem preço e quantidade. Copie as duas constantes para <code>ex03.js</code> e, abaixo delas, mostre a saída esperada. Use os campos da ficha nas contas, não os números.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex03.js (começo)</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex3">Copiar</button></div>
+<pre><code id="c-ex3">const item = { nome: 'Cabo USB-C', preco: 49.9, quantidade: 3 };
+const frete = 15;</code></pre>
+        </div>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>3 x Cabo USB-C
+Total do item: R$ 149.7
+Com frete: R$ 164.7</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>o resto de ex03.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex3r">Copiar</button></div>
+<pre><code id="c-ex3r">const total = item.preco * item.quantidade;
+
+console.log(item.quantidade, 'x', item.nome);
+console.log('Total do item: R$', total);
+console.log('Com frete: R$', total + frete);</code></pre>
+          </div>
+          <p>Por que usar os campos? Troque a quantidade para 2 na ficha e rode de novo: as três linhas acompanham, sem mexer em mais nada. É a mesma ideia do frete na aula 3.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="3"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex4">
+        <div class="ex-topo">
+          <span class="ex-num">4</span>
+          <div class="ex-titulo"><h3>Três fichas com defeito</h3><span class="tipo tipo-erro">Ache o erro</span></div>
+        </div>
+        <p>Cada trecho tem um problema. Leia a mensagem, diga o que está errado e como corrigir.</p>
+        <p><strong>a)</strong></p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>trecho a</span></div>
+<pre><code>const produto = { nome: 'Fone' preco: 199.9 };
+//                             ^^^^^
+// SyntaxError: Unexpected identifier 'preco'</code></pre>
+        </div>
+        <p><strong>b)</strong></p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>trecho b</span></div>
+<pre><code>const produto = { nome: Fone, preco: 199.9 };
+//                      ^
+// ReferenceError: Fone is not defined</code></pre>
+        </div>
+        <p><strong>c)</strong> Este roda sem mensagem de erro, mas mostra <code>undefined</code> em vez do preço.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>trecho c</span></div>
+<pre><code>const produto = { nome: 'Fone', preco: 199.9 };
+console.log(produto.Preco);   // undefined</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <ol class="itens" type="a">
+            <li><strong>Falta a vírgula</strong> entre os campos. O <code>^^^^^</code> aponta para <code>preco</code>: o Node esperava uma vírgula antes dele. Correção: <code>{ nome: 'Fone', preco: 199.9 }</code>.</li>
+            <li><strong>Texto sem aspas.</strong> Sem aspas, o Node acha que <code>Fone</code> é o nome de uma constante, procura e não encontra. Correção: <code>nome: 'Fone'</code>.</li>
+            <li><strong>Maiúscula conta.</strong> O campo se chama <code>preco</code>, com <code>p</code> minúsculo; <code>Preco</code> é outro nome, que não existe na ficha. Correção: <code>produto.preco</code>.</li>
+          </ol>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="4"><span>Fiz este exercício</span></label>
+      </article>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="listas" aria-labelledby="t-listas">
+      <h2 id="t-listas"><svg class="ico"><use href="#i-list"/></svg>Parte 2 · Listas</h2>
+      <p class="intro-parte">Fileiras de gavetas numeradas a partir do 0: abrir uma gaveta, contar e somar.</p>
+
+      <article class="cartao exercicio" id="ex5">
+        <div class="ex-topo">
+          <span class="ex-num">5</span>
+          <div class="ex-titulo"><h3>As cores do tênis</h3><span class="tipo tipo-leia">Leia</span></div>
+        </div>
+        <p>Sem rodar: o que aparece em cada linha?</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex05.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex5">Copiar</button></div>
+<pre><code id="c-ex5">const cores = ['preto', 'branco', 'azul', 'verde'];
+
+console.log(cores.length);
+console.log(cores[0]);
+console.log(cores[2]);
+console.log(cores[4]);</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="codigo saida"><div class="codigo-topo"><span>Saída</span></div>
+<pre><code>4
+preto
+azul
+undefined</code></pre>
+          </div>
+          <p>São 4 gavetas, numeradas de 0 a 3. A gaveta 2 é a terceira: <code>azul</code>. A gaveta 4 não existe, e o resultado é <code>undefined</code>, como o campo que não existe no exercício 1.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="5"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex6">
+        <div class="ex-topo">
+          <span class="ex-num">6</span>
+          <div class="ex-titulo"><h3>O carrinho</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Copie o carrinho para <code>ex06.js</code> e mostre quantos itens ele tem, o primeiro e o último.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex06.js (começo)</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex6">Copiar</button></div>
+<pre><code id="c-ex6">const carrinho = ['Fone Bluetooth', 'Cabo USB-C', 'Garrafa Térmica'];</code></pre>
+        </div>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>Itens no carrinho: 3
+Primeiro: Fone Bluetooth
+Último: Garrafa Térmica</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>o resto de ex06.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex6r">Copiar</button></div>
+<pre><code id="c-ex6r">console.log('Itens no carrinho:', carrinho.length);
+console.log('Primeiro:', carrinho[0]);
+console.log('Último:', carrinho[2]);</code></pre>
+          </div>
+          <p>Três itens ocupam as gavetas 0, 1 e 2. Quem escreve <code>carrinho[3]</code> para o último recebe <code>undefined</code>. O exercício 8 resolve o último item para qualquer tamanho de carrinho.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="6"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex7">
+        <div class="ex-topo">
+          <span class="ex-num">7</span>
+          <div class="ex-titulo"><h3>Soma e média dos preços</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Some os quatro preços, gaveta por gaveta, na ordem da lista. Depois, calcule a média: a soma dividida pela quantidade de preços, que o <code>.length</code> informa.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex07.js (começo)</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex7">Copiar</button></div>
+<pre><code id="c-ex7">const precos = [199.9, 49.9, 89.9, 59.9];</code></pre>
+        </div>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>Soma: R$ 399.6
+Média: R$ 99.9</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>o resto de ex07.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex7r">Copiar</button></div>
+<pre><code id="c-ex7r">const soma = precos[0] + precos[1] + precos[2] + precos[3];
+const media = soma / precos.length;
+
+console.log('Soma: R$', soma);
+console.log('Média: R$', media);</code></pre>
+          </div>
+          <p>Saiu algo como <code>399.59999999999997</code>? Você somou em outra ordem. O computador às vezes erra lá no fim das contas com casas decimais; no E05 você vê por quê e como a Lojinha evita isso.</p>
+          <p>Somar gaveta por gaveta funciona com 4 preços. Com 300, não dá: no E09 você aprende a somar uma lista inteira de uma vez.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="7"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex8">
+        <div class="ex-topo">
+          <span class="ex-num">8</span>
+          <div class="ex-titulo"><h3>A última gaveta, sem contar</h3><span class="tipo tipo-desafio">Desafio</span></div>
+        </div>
+        <p>No exercício 6, o último item está na gaveta 2. Se o carrinho ganhar mais um item, <code>carrinho[2]</code> deixa de ser o último.</p>
+        <p>Mostre o último item de um jeito que funcione para <strong>qualquer</strong> tamanho de carrinho. Teste com 3 itens e depois acrescente um quarto, <code>'Tapete de Yoga'</code>, sem mudar o <code>console.log</code>.</p>
+        <p><strong>Pista:</strong> com 3 itens, o <code>.length</code> é 3 e a última gaveta é a 2. Com 4 itens, 4 e 3. Que conta leva de um número ao outro?</p>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>ex08.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex8">Copiar</button></div>
+<pre><code id="c-ex8">const carrinho = ['Fone Bluetooth', 'Cabo USB-C', 'Garrafa Térmica', 'Tapete de Yoga'];
+
+console.log('Último:', carrinho[carrinho.length - 1]);   // Último: Tapete de Yoga</code></pre>
+          </div>
+          <p>A última gaveta é sempre o tamanho menos 1, porque a contagem começa do 0. O Node faz a conta de dentro dos colchetes primeiro (4 - 1 = 3) e depois abre a gaveta 3.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="8"><span>Fiz este exercício</span></label>
+      </article>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="juntos" aria-labelledby="t-juntos">
+      <h2 id="t-juntos"><svg class="ico"><use href="#i-database"/></svg>Parte 3 · Os dois juntos</h2>
+      <p class="intro-parte">Uma lista de fichas e uma ficha com lista dentro, como os dados da Lojinha. Leia o caminho da esquerda para a direita: cada colchete abre uma gaveta, cada ponto lê um campo.</p>
+
+      <article class="cartao exercicio" id="ex9">
+        <div class="ex-topo">
+          <span class="ex-num">9</span>
+          <div class="ex-titulo"><h3>Uma lista de fichas</h3><span class="tipo tipo-leia">Leia</span></div>
+        </div>
+        <p>Sem rodar: o que aparece em cada linha?</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex09.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex9">Copiar</button></div>
+<pre><code id="c-ex9">const produtos = [
+  { nome: 'Fone Bluetooth', preco: 199.9 },
+  { nome: 'Luminária de Mesa', preco: 89.9 },
+  { nome: 'Tênis de Corrida', preco: 349.9 },
+];
+
+console.log(produtos.length);
+console.log(produtos[1].nome);
+console.log(produtos[0].preco);
+console.log(produtos[2]);</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="codigo saida"><div class="codigo-topo"><span>Saída</span></div>
+<pre><code>3
+Luminária de Mesa
+199.9
+{ nome: 'Tênis de Corrida', preco: 349.9 }</code></pre>
+          </div>
+          <p><code>produtos[1].nome</code> se lê em dois passos: <code>produtos[1]</code> abre a gaveta 1 e pega a ficha da Luminária; <code>.nome</code> lê o campo dessa ficha. Sem o ponto, como em <code>produtos[2]</code>, o Node mostra a ficha inteira.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="9"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex10">
+        <div class="ex-topo">
+          <span class="ex-num">10</span>
+          <div class="ex-titulo"><h3>O pedido com a lista de itens</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Agora a lista mora dentro de uma ficha: o campo <code>itens</code> é uma lista. Copie o pedido e mostre a saída esperada.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex10.js (começo)</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex10">Copiar</button></div>
+<pre><code id="c-ex10">const pedido = {
+  numero: 1023,
+  cliente: 'Ana',
+  itens: ['Fone Bluetooth', 'Cabo USB-C'],
+};</code></pre>
+        </div>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>Pedido 1023
+Cliente: Ana
+Itens: 2
+Primeiro item: Fone Bluetooth</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>o resto de ex10.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex10r">Copiar</button></div>
+<pre><code id="c-ex10r">console.log('Pedido', pedido.numero);
+console.log('Cliente:', pedido.cliente);
+console.log('Itens:', pedido.itens.length);
+console.log('Primeiro item:', pedido.itens[0]);</code></pre>
+          </div>
+          <p><code>pedido.itens</code> é a lista inteira. Daí em diante, vale tudo o que vale para uma lista: <code>.length</code> conta, <code>[0]</code> abre a primeira gaveta.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="10"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex11">
+        <div class="ex-topo">
+          <span class="ex-num">11</span>
+          <div class="ex-titulo"><h3>O recibo, lido da ficha</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Na aula 3, o <code>recibo.js</code> tinha os nomes e os preços escritos à mão no <code>console.log</code>. Agora eles moram no pedido. Mostre o mesmo recibo lendo tudo da ficha, inclusive o total.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex11.js (começo)</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex11">Copiar</button></div>
+<pre><code id="c-ex11">const pedido = {
+  numero: 1023,
+  itens: [
+    { nome: 'Fone Bluetooth', preco: 199.9 },
+    { nome: 'Cabo USB-C', preco: 49.9 },
+  ],
+};</code></pre>
+        </div>
+        <div class="codigo saida"><div class="codigo-topo"><span>Saída esperada</span></div>
+<pre><code>Pedido 1023
+Fone Bluetooth: 199.9
+Cabo USB-C: 49.9
+Total: 249.8</code></pre>
+        </div>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>o resto de ex11.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex11r">Copiar</button></div>
+<pre><code id="c-ex11r">console.log('Pedido', pedido.numero);
+console.log(pedido.itens[0].nome + ':', pedido.itens[0].preco);
+console.log(pedido.itens[1].nome + ':', pedido.itens[1].preco);
+console.log('Total:', pedido.itens[0].preco + pedido.itens[1].preco);</code></pre>
+          </div>
+          <p>O caminho <code>pedido.itens[0].preco</code> tem três passos: o campo <code>itens</code> do pedido, a gaveta 0 dessa lista e o campo <code>preco</code> dessa ficha. O <code>+ ':'</code> junta o nome e os dois-pontos, como os textos no REPL.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="11"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex12">
+        <div class="ex-topo">
+          <span class="ex-num">12</span>
+          <div class="ex-titulo"><h3>O caminho até o dado</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Com o catálogo abaixo, escreva o caminho que chega em cada valor da tabela. Confira cada um com <code>console.log</code>.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>ex12.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex12">Copiar</button></div>
+<pre><code id="c-ex12">const catalogo = {
+  loja: 'Lojinha',
+  categorias: ['audio', 'casa', 'esporte', 'livros'],
+  produtos: [
+    { nome: 'Fone Bluetooth', categoria: 'audio' },
+    { nome: 'Garrafa Térmica', categoria: 'casa' },
+  ],
+};</code></pre>
+        </div>
+        <div class="tabela" style="margin-top: 10px">
+          <table>
+            <thead><tr><th></th><th>Chegar em</th></tr></thead>
+            <tbody>
+              <tr><td>a</td><td><code>'Lojinha'</code></td></tr>
+              <tr><td>b</td><td><code>'esporte'</code></td></tr>
+              <tr><td>c</td><td>quantas categorias existem: <code>4</code></td></tr>
+              <tr><td>d</td><td><code>'Garrafa Térmica'</code></td></tr>
+              <tr><td>e</td><td>a categoria do primeiro produto: <code>'audio'</code></td></tr>
+              <tr><td>f</td><td>quantos produtos existem: <code>2</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="tabela">
+            <table>
+              <thead><tr><th></th><th>Caminho</th></tr></thead>
+              <tbody>
+                <tr><td>a</td><td><code>catalogo.loja</code></td></tr>
+                <tr><td>b</td><td><code>catalogo.categorias[2]</code></td></tr>
+                <tr><td>c</td><td><code>catalogo.categorias.length</code></td></tr>
+                <tr><td>d</td><td><code>catalogo.produtos[1].nome</code></td></tr>
+                <tr><td>e</td><td><code>catalogo.produtos[0].categoria</code></td></tr>
+                <tr><td>f</td><td><code>catalogo.produtos.length</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Todo caminho começa pelo nome da constante, <code>catalogo</code>. Depois, um passo de cada vez: ponto para campo, colchete para gaveta.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="12"><span>Fiz este exercício</span></label>
+      </article>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="argumentos" aria-labelledby="t-argumentos">
+      <h2 id="t-argumentos"><svg class="ico"><use href="#i-terminal"/></svg>Parte 4 · Listas e argumentos</h2>
+      <p class="intro-parte">O <code>process.argv</code> da aula 3 também é uma lista. Agora dá para entender por que o primeiro argumento está na gaveta 2.</p>
+
+      <article class="cartao exercicio" id="ex13">
+        <div class="ex-topo">
+          <span class="ex-num">13</span>
+          <div class="ex-titulo"><h3>O comando é uma lista</h3><span class="tipo tipo-leia">Leia</span></div>
+        </div>
+        <p>Sem rodar: o que aparece em cada um dos dois comandos?</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>argumentos.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex13">Copiar</button></div>
+<pre><code id="c-ex13">console.log(process.argv.length);
+console.log(process.argv[2]);
+console.log(process.argv[3]);
+console.log(process.argv[4]);</code></pre>
+        </div>
+        <div class="codigo">
+          <div class="codigo-topo"><span>terminal</span></div>
+<pre><code>node argumentos.js Maria Souza
+node argumentos.js "Maria Souza"</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="tabela">
+            <table>
+              <thead><tr><th>Linha</th><th><code>Maria Souza</code></th><th><code>"Maria Souza"</code></th></tr></thead>
+              <tbody>
+                <tr><td><code>length</code></td><td>4</td><td>3</td></tr>
+                <tr><td><code>[2]</code></td><td>Maria</td><td>Maria Souza</td></tr>
+                <tr><td><code>[3]</code></td><td>Souza</td><td>undefined</td></tr>
+                <tr><td><code>[4]</code></td><td>undefined</td><td>undefined</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>O Node guarda o comando inteiro numa lista, o <code>process.argv</code>. A gaveta 0 tem o caminho do <code>node</code>, a 1 tem o caminho do arquivo, e os argumentos começam na 2. Por isso o primeiro argumento é o <code>process.argv[2]</code>.</p>
+          <p>O espaço separa os argumentos: <code>Maria Souza</code> ocupa duas gavetas. Com aspas, o nome inteiro cabe numa gaveta só, e a lista fica com 3. Quer ver a lista toda? <code>console.log(process.argv)</code>: as duas primeiras gavetas mostram caminhos do seu computador.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="13"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex14">
+        <div class="ex-topo">
+          <span class="ex-num">14</span>
+          <div class="ex-titulo"><h3>A ficha montada pelo comando</h3><span class="tipo tipo-escreva">Escreva</span></div>
+        </div>
+        <p>Em <code>cartao.js</code>, crie a constante <code>pessoa</code>, uma ficha com dois campos: <code>nome</code>, com o primeiro argumento, e <code>cidade</code>, com o segundo. Mostre cada campo e, por último, a ficha inteira.</p>
+        <div class="codigo saida"><div class="codigo-topo"><span>node cartao.js Ana Recife</span></div>
+<pre><code>Nome: Ana
+Cidade: Recife
+{ nome: 'Ana', cidade: 'Recife' }</code></pre>
+        </div>
+        <p>Depois, rode sem a cidade, <code>node cartao.js Ana</code>, e veja o que muda.</p>
+        <details>
+          <summary>Ver uma resposta</summary>
+          <div class="codigo">
+            <div class="codigo-topo"><span>cartao.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex14">Copiar</button></div>
+<pre><code id="c-ex14">const pessoa = { nome: process.argv[2], cidade: process.argv[3] };
+
+console.log('Nome:', pessoa.nome);
+console.log('Cidade:', pessoa.cidade);
+console.log(pessoa);</code></pre>
+          </div>
+          <p>O valor de um campo pode vir de qualquer lugar, inclusive de uma gaveta de outra lista. Sem a cidade, a gaveta 3 do <code>process.argv</code> está vazia, e o campo fica <code>undefined</code>: <code>Cidade: undefined</code> e <code>{ nome: 'Ana', cidade: undefined }</code>.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="14"><span>Fiz este exercício</span></label>
+      </article>
+
+      <article class="cartao exercicio" id="ex15">
+        <div class="ex-topo">
+          <span class="ex-num">15</span>
+          <div class="ex-titulo"><h3>A gaveta escolhida no comando</h3><span class="tipo tipo-desafio">Desafio</span></div>
+        </div>
+        <p>Copie o <code>gaveta.js</code>, rode os quatro comandos e explique o que acontece nos dois últimos.</p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>gaveta.js</span><button class="copiar nao-imprime" type="button" data-alvo="#c-ex15">Copiar</button></div>
+<pre><code id="c-ex15">const produtos = [
+  { nome: 'Fone Bluetooth', preco: 199.9 },
+  { nome: 'Luminária de Mesa', preco: 89.9 },
+  { nome: 'Tênis de Corrida', preco: 349.9 },
+];
+
+const posicao = process.argv[2];
+const produto = produtos[posicao];
+
+console.log('Gaveta', posicao + ':', produto.nome, 'por R$', produto.preco);</code></pre>
+        </div>
+        <div class="codigo">
+          <div class="codigo-topo"><span>terminal</span></div>
+<pre><code>node gaveta.js 0
+node gaveta.js 2
+node gaveta.js 5
+node gaveta.js</code></pre>
+        </div>
+        <details>
+          <summary>Ver a resposta</summary>
+          <div class="codigo saida"><div class="codigo-topo"><span>Saída</span></div>
+<pre><code>Gaveta 0: Fone Bluetooth por R$ 199.9
+Gaveta 2: Tênis de Corrida por R$ 349.9
+TypeError: Cannot read properties of undefined (reading 'nome')
+TypeError: Cannot read properties of undefined (reading 'nome')</code></pre>
+          </div>
+          <p>O argumento escolhe a gaveta. Com <code>5</code>, a gaveta não existe e <code>produtos[5]</code> é <code>undefined</code>. Sem argumento, a posição é <code>undefined</code>, e a gaveta também. Nos dois casos, a linha seguinte tenta ler o campo <code>nome</code> de algo que não existe: é o que a mensagem diz, "não dá para ler propriedades de undefined (lendo 'nome')".</p>
+          <p>Essa é uma das mensagens mais comuns de quem programa. Quando ela aparecer, pergunte: qual gaveta ou campo veio vazio antes do <code>.nome</code>? Avisar o usuário em vez de quebrar pede um <code>if</code>, que vem no E07.</p>
+        </details>
+        <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="15"><span>Fiz este exercício</span></label>
+      </article>
+    </section>
+
+    <!-- ============================================================ -->
+    <section id="erros" aria-labelledby="t-erros">
+      <h2 id="t-erros"><svg class="ico"><use href="#i-triangle-alert"/></svg>Erros comuns</h2>
+      <div class="cartao tabela">
+        <table class="empilha">
+          <thead>
+            <tr><th>A mensagem tem</th><th>Quer dizer</th><th>O que fazer</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>undefined</code> no lugar do valor</td><td>o campo não existe com esse nome, ou a gaveta não existe</td><td>compare o nome letra por letra (maiúscula conta); a última gaveta é a <code>length - 1</code></td></tr>
+            <tr><td><code>Cannot read properties of undefined (reading 'nome')</code></td><td>tentou ler um campo de algo vazio, como <code>produtos[5].nome</code> numa lista de 3</td><td>confira a posição e o caminho antes do <code>.nome</code></td></tr>
+            <tr><td><code>SyntaxError: Unexpected identifier</code></td><td>faltou uma vírgula entre dois campos ou dois itens</td><td>a vírgula falta logo antes da palavra apontada pelo <code>^</code></td></tr>
+            <tr><td><code>ReferenceError: ... is not defined</code></td><td>texto sem aspas: o Node procurou uma constante com esse nome</td><td>ponha o texto entre aspas: <code>'Fone'</code></td></tr>
+            <tr><td><code>Cannot find module</code> com o nome do seu arquivo</td><td>o Node não achou o arquivo nesta pasta</td><td>conferir se o terminal está na <code>treino-e02</code> e se o nome do arquivo está igual</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>Material do encontro E02 do curso Programador Mobile. As marcações ficam só neste navegador.</footer>
+  </main>
+
+  <script>
+    // ---------------------------------------------------------------
+    // Progresso: as marcações ficam no localStorage deste navegador;
+    // sem ele, a página funciona igual, só não lembra.
+    // ---------------------------------------------------------------
+    const CHAVE = 'pm-e02-exercicios-listas-e-objetos'
+    const caixas = [...document.querySelectorAll('.feito-linha input[type="checkbox"]')]
+    const contagem = document.querySelector('#contagem')
+    const barra = document.querySelector('#barra')
+
+    function lerMarcacoes() {
+      try {
+        const lista = JSON.parse(localStorage.getItem(CHAVE) || '[]')
+        return Array.isArray(lista) ? lista : []
+      } catch {
+        return []
+      }
+    }
+
+    function gravarMarcacoes(numeros) {
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(numeros))
+      } catch {
+        // sem armazenamento disponível: segue sem lembrar
+      }
+    }
+
+    function atualizar() {
+      const feitos = caixas.filter((c) => c.checked)
+      for (const c of caixas) c.closest('.exercicio').classList.toggle('feito', c.checked)
+      const total = caixas.length
+      contagem.textContent = `${feitos.length} de ${total} exercícios feitos`
+      barra.style.width = `${(feitos.length / total) * 100}%`
+      gravarMarcacoes(feitos.map((c) => c.dataset.ex))
+    }
+
+    const salvas = lerMarcacoes()
+    for (const c of caixas) {
+      c.checked = salvas.includes(c.dataset.ex)
+      c.addEventListener('change', atualizar)
+    }
+    atualizar()
+
+    // tabelas empilhadas no celular: cada célula leva o nome da coluna
+    for (const tabela of document.querySelectorAll('table.empilha')) {
+      const rotulos = [...tabela.querySelectorAll('thead th')].map((th) => th.textContent)
+      for (const linha of tabela.querySelectorAll('tbody tr')) {
+        ;[...linha.children].forEach((celula, i) => { celula.dataset.rotulo = rotulos[i] })
+      }
+    }
+
+    // botões "Copiar" dos blocos de código
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>
