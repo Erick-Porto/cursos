@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E07 · Funções",
+  "description": "Dez questões sobre funções, parâmetros, return, valor padrão, função seta, export e import e as primeiras regras do Racha-conta.",
+  "lesson": "e07-funcoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Veja a função e a chamada:\n\n```javascript\nfunction saudar(nome) {\n  console.log(`Boa noite, ${nome}!`);\n}\n\nsaudar('Ana');\n```\n\nO que é o parâmetro e o que é o argumento?",
+      "options": {
+        "a": "O parâmetro é `nome`; o argumento é `'Ana'`",
+        "b": "O parâmetro é `'Ana'`; o argumento é `nome`",
+        "c": "O parâmetro é `saudar`; o argumento é `nome`",
+        "d": "Os dois são `nome`: parâmetro e argumento são a mesma coisa"
+      },
+      "answer": "a",
+      "explanation": "O parâmetro é o espaço do ingrediente, o nome que a função usa por dentro: `nome`, nos parênteses da `function`. O argumento é o ingrediente que você põe nesse espaço na hora de chamar: `'Ana'`, nos parênteses da chamada. `saudar` é o nome da função.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Uma colega escreveu a `formatarReais` com `console.log` no lugar do `return`:\n\n```javascript\nfunction formatarReais(centavos) {\n  const reais = (centavos / 100).toFixed(2);\n  console.log(`R$ ${reais}`);\n}\n\nconsole.log(`Total: ${formatarReais(20625)}`);\n```\n\nO que aparece no terminal?",
+      "options": {
+        "a": "`R$ 206.25` numa linha e `Total: undefined` na de baixo",
+        "b": "`Total: R$ 206.25`",
+        "c": "`R$ 206.25` numa linha e `Total: R$ 206.25` na de baixo",
+        "d": "Só `Total: undefined`"
+      },
+      "answer": "a",
+      "explanation": "O `console.log` de dentro da função mostra a foto do prato, `R$ 206.25`, assim que ela é chamada. Mas a função não tem `return`, então a chamada vale `undefined`, e é isso que entra no `${}`: `Total: undefined`. Com `return`, a chamada valeria o texto, e sairia só `Total: R$ 206.25`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfunction calcularGorjeta(subtotal, percentual = 10) {\n  return Math.round(subtotal * percentual / 100);\n}\n\nconsole.log(calcularGorjeta(5000));\nconsole.log(calcularGorjeta(5000, 0));\n```",
+      "options": {
+        "a": "`500` e depois `0`",
+        "b": "`500` e depois `500`",
+        "c": "`0` e depois `0`",
+        "d": "`NaN` e depois `0`"
+      },
+      "answer": "a",
+      "explanation": "Na primeira chamada, o percentual não veio, e vale o de sempre, 10: `5000 * 10 / 100` dá 500. Na segunda, veio o `0`: ele é um valor, então vale, e a gorjeta é 0. O valor padrão só entra quando o argumento não vem.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No Racha-conta, a regra é:\n\n```javascript\nexport function paraCentavos(reais) {\n  return Math.round(reais * 100);\n}\n```\n\nO que `paraCentavos(72.9)` devolve?",
+      "options": {
+        "a": "`7290`",
+        "b": "`7290.000000000001`",
+        "c": "`72.9`",
+        "d": "`'R$ 72.90'`"
+      },
+      "answer": "a",
+      "explanation": "O argumento `72.9` entra no parâmetro `reais`. A conta `72.9 * 100` dá `7290.000000000001`, por causa dos decimais do E06, e o `Math.round` arredonda para o inteiro mais perto: `7290`. O `return` entrega esse número. O texto com `R$` é trabalho da `formatarReais`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A `formatarReais` do Racha-conta, no fim do E07:\n\n```javascript\nexport function formatarReais(centavos) {\n  const reais = (centavos / 100).toFixed(2);\n  return `R$ ${reais}`;\n}\n```\n\nO que `formatarReais(5)` devolve?",
+      "options": {
+        "a": "`'R$ 0.05'`",
+        "b": "`'R$ 5.00'`",
+        "c": "`'R$ 0.5'`",
+        "d": "`0.05`, um número"
+      },
+      "answer": "a",
+      "explanation": "5 centavos divididos por 100 dão `0.05` reais, e o `toFixed(2)` mostra com duas casas: `'0.05'`. A template string encaixa esse texto depois do `R$`. O resultado é um texto, não um número. A vírgula do real chega no E09.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `racha.js` está em `src/scripts/` e o `conta.js` está em `src/regras/`. Qual linha, no `racha.js`, importa a `paraCentavos`?",
+      "options": {
+        "a": "`import { paraCentavos } from '../regras/conta.js';`",
+        "b": "`import { paraCentavos } from './regras/conta.js';`",
+        "c": "`import { paraCentavos } from '../regras/conta';`",
+        "d": "`import { paraCentavos } from 'src/regras/conta.js';`"
+      },
+      "answer": "a",
+      "explanation": "O caminho parte da pasta do arquivo que importa, `scripts/`. O `..` sobe para `src/`, e `regras/conta.js` entra na pasta e chega no arquivo. Sem o `..`, o Node procura `src/scripts/regras/conta.js`; sem o `.js`, não acha o arquivo; e um caminho sem `./` nem `../` é tratado como nome de pacote, procurado no `node_modules`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Ao rodar `npm run racha`, aparece:\n\n```plaintext\nSyntaxError: The requested module '../regras/conta.js' does not provide an export named 'formatarReais'\n```\n\nO que aconteceu?",
+      "options": {
+        "a": "No `conta.js`, a `formatarReais` está sem `export` ou com o nome escrito diferente",
+        "b": "Faltou o `.js` no fim do caminho do `import`",
+        "c": "A `formatarReais` não tem `return`",
+        "d": "O terminal está fora da pasta raiz do projeto"
+      },
+      "answer": "a",
+      "explanation": "A mensagem diz que o arquivo foi encontrado, mas não tem na vitrine um `export` com esse nome. O conserto é `export function formatarReais`, com o nome igual, letra por letra, no `conta.js` e no `import`. Caminho errado daria `Cannot find module`; sem `return`, o script rodaria e mostraria `undefined`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "O `src/regras/conta.js` guarda regras puras. Quais destas linhas podem estar nele? Marque todas as certas.",
+      "options": {
+        "a": "`return Math.round(reais * 100);`",
+        "b": "`export function formatarReais(centavos) {`",
+        "c": "`console.log('Subtotal:', subtotal);`",
+        "d": "`import fs from 'node:fs';`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Regra pura só cozinha: recebe valores pelos parâmetros e devolve com `return`, e o `export` põe a regra na vitrine. Mostrar na tela (`console.log`) e ler arquivo (`fs`) são trabalho do script, o `racha.js`. No E12, a página web usa o `conta.js` no navegador, onde o `fs` não existe.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Qual seta faz o mesmo que esta função?\n\n```javascript\nfunction caro(item) {\n  return item.preco > 50;\n}\n```",
+      "options": {
+        "a": "`const caro = (item) => item.preco > 50;`",
+        "b": "`const caro = (item) => { item.preco > 50 };`",
+        "c": "`const caro = (item) => return item.preco > 50;`",
+        "d": "`const caro = item.preco > 50;`"
+      },
+      "answer": "a",
+      "explanation": "Sem chaves, a seta devolve sozinha o que vem depois do `=>`. Com chaves e sem `return`, ela devolve `undefined`, e um `filter` com ela fica vazio. O `return` sem chaves é `SyntaxError`. A última nem é função: tenta fazer a comparação na hora, sem nenhum item.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Você aperta <kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>F</kbd>, o Formatar Documento, com o formatador do VS Code escolhido. O que ele faz no `conta.js`?",
+      "options": {
+        "a": "Arruma os espaços e o recuo, sem mudar o que o código faz",
+        "b": "Corrige os erros de conta das funções",
+        "c": "Troca as aspas simples por duplas e acrescenta os `;` que faltam",
+        "d": "Salva o arquivo e faz o commit"
+      },
+      "answer": "a",
+      "explanation": "O Formatar Documento passa o código a limpo: um espaço depois da vírgula e em volta dos sinais, e o recuo mostrando o que está dentro das chaves. O formatador do VS Code (TypeScript and JavaScript Language Features) deixa as aspas e os `;` como você escreveu, e não conserta erro de conta: isso é trabalho dos testes do E08.",
+      "points": 1
+    }
+  ]
+}

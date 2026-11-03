@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E39 · Estados e acessibilidade",
+  "description": "Dez questões sobre carregando, erro e vazio, a regra dos hooks, o leitor de tela, a área de toque e as duas colunas do Casas de adoção.",
+  "lesson": "e39-estados-e-acessibilidade",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A Início começa assim, depois dos hooks:\n\n```jsx\nif (carregando) return <Carregando texto=\"Buscando as casas...\" />;\nif (erro) return <EstadoErro mensagem={erro} onTentarDeNovo={recarregar} />;\n```\n\nO servidor falhou e a pessoa acabou de tocar em Tentar de novo. Agora `carregando` é `true` e `erro` ainda tem a mensagem do servidor. O que aparece na tela?",
+      "options": {
+        "a": "A rodinha e \"Buscando as casas...\"",
+        "b": "O `EstadoErro`, com \"Algo deu errado\"",
+        "c": "Os dois, um embaixo do outro",
+        "d": "A lista de casas, vazia"
+      },
+      "answer": "a",
+      "explanation": "Os `if` são lidos de cima para baixo, e o `return` sai da função na hora: é o retorno antecipado. O primeiro `if` já dá `true`, então o `Carregando` é desenhado e o `if (erro)` nem chega a ser lido. Por isso o carregando vem primeiro.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No `src/data/servidor.js` do kit, que troca na `simulacao` faz a Início mostrar o erro ao abrir e, depois do toque em Tentar de novo, a lista de casas?",
+      "options": {
+        "a": "`falhas: 1`",
+        "b": "`vazio: true`",
+        "c": "`atraso: 3000`",
+        "d": "`atraso: 0`"
+      },
+      "answer": "a",
+      "explanation": "`falhas` diz quantas buscas seguidas dão erro: com 1, a primeira falha e a segunda, a do Tentar de novo, funciona. `vazio: true` responde com a lista vazia, e o `atraso` só muda quanto tempo o carregando fica na tela.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Um colega escreveu a Início assim:\n\n```jsx\nconst { casas, carregando, atualizando, erro, recarregar } = useCasas();\n\nif (carregando) return <Carregando texto=\"Buscando as casas...\" />;\n\nconst [termo, setTermo] = useState('');\n```\n\nO app abre, mostra o carregando e, quando as casas chegam, aparece uma tela vermelha. O que ela diz?",
+      "options": {
+        "a": "`Rendered more hooks than during the previous render`",
+        "b": "`Changing numColumns on the fly is not supported`",
+        "c": "`Property 'useState' doesn't exist`",
+        "d": "Nada: a tela vermelha não aparece, o app funciona igual"
+      },
+      "answer": "a",
+      "explanation": "O React reconhece os hooks pela ordem em que são chamados. No primeiro desenho, o `return` sai antes do `useState`; no segundo, com a lista, o `useState` é chamado. Vêm mais hooks do que no desenho anterior, e a tela vermelha avisa. A regra: todos os hooks antes de qualquer `return`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No `CartaoCasa`, o `Pressable` tem este rótulo:\n\n```jsx\naccessibilityLabel={`${casa.nome}, ${casa.bairro}, ${casa.cidade}. ${casa.aceita}. ${selo}`}\n```\n\nPara a Casa do Bigode, `casa` tem `nome: 'Casa do Bigode'`, `bairro: 'Liberdade'`, `cidade: 'São Paulo'`, `aceita: 'Gatos'`, e `selo` vale `'Últimas 3 vagas'`. Que rótulo o leitor de tela lê?",
+      "options": {
+        "a": "`Casa do Bigode, Liberdade, São Paulo. Gatos. Últimas 3 vagas`",
+        "b": "`${casa.nome}, ${casa.bairro}, ${casa.cidade}. ${casa.aceita}. ${selo}`",
+        "c": "`Casa do Bigode Liberdade São Paulo Gatos`",
+        "d": "`Botão. Abre os detalhes da casa`"
+      },
+      "answer": "a",
+      "explanation": "É uma template string, a mensagem pronta com lacunas do E06: cada `${...}` vira o valor do campo, e o texto fixo (as vírgulas e os pontos) fica como está. As vírgulas e os pontos viram pausas na fala. \"Botão\" e a dica vêm de outras props, o papel e a dica.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Qual prop diz ao leitor de tela **o que acontece** quando a pessoa toca no cartão, como \"Abre os detalhes da casa\"?",
+      "options": {
+        "a": "`accessibilityHint`",
+        "b": "`accessibilityLabel`",
+        "c": "`accessibilityRole`",
+        "d": "`accessible`"
+      },
+      "answer": "a",
+      "explanation": "A dica (`accessibilityHint`) diz o que o toque faz. O rótulo (`accessibilityLabel`) diz o que o elemento é, o papel (`accessibilityRole`) diz que tipo de coisa ele é, como `\"button\"`, e o `accessible` junta um bloco num foco só.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na faixa de números da Início, cada número é um `Cartao` com dois `Text`, o valor e o nome:\n\n```jsx\n<Cartao style={estilos.numero}>\n  <Text style={estilos.valor}>{resumo.casas}</Text>\n  <Text style={estilos.rotulo}>casas</Text>\n</Cartao>\n```\n\nCom o leitor de tela, um toque lê \"12\" e outro lê \"casas\". O que faz ele ler \"12 casas\" num toque só?",
+      "options": {
+        "a": "`accessible` e ``accessibilityLabel={`${resumo.casas} casas`}`` no `Cartao`",
+        "b": "`accessibilityRole=\"button\"` no `Cartao`",
+        "c": "`accessibilityHint=\"12 casas\"` no primeiro `Text`",
+        "d": "Trocar os dois `Text` por um `Text` só, em negrito"
+      },
+      "answer": "a",
+      "explanation": "O `Cartao` é uma `View`, e a `View` não junta os filhos num foco só: o leitor para em cada texto. Com `accessible`, o cartão inteiro vira um foco; com o `accessibilityLabel`, ele lê a frase que você escreveu. Ele não é um botão, então o papel `button` estaria errado.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No Detalhe, cada link de \"Outras casas\" tinha menos de 30 de altura. Por que o estilo novo usa `minHeight: 44`, e não `height: 44`?",
+      "options": {
+        "a": "`minHeight` começa em 44 e cresce se o texto pedir; uma altura fixa cortaria o texto com a letra do celular aumentada",
+        "b": "`height` não funciona em links, só em `View`",
+        "c": "`minHeight` deixa o link mais claro enquanto o dedo aperta",
+        "d": "Tanto faz: os dois dão sempre o mesmo resultado"
+      },
+      "answer": "a",
+      "explanation": "A área de toque precisa de pelo menos 44 por 44. O `minHeight` garante o mínimo e deixa o link crescer, por exemplo quando a pessoa aumenta a letra do celular ou um nome quebra a linha. Com `height: 44`, o que passasse de 44 ficaria cortado.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "A Início escolhe as colunas assim:\n\n```jsx\nconst { width } = useWindowDimensions();\nconst colunas = width >= 700 ? 2 : 1;\n```\n\nEm quais larguras a lista mostra **duas** colunas? Marque todas as certas.",
+      "options": {
+        "a": "`393`, um celular comum em pé",
+        "b": "`667`, um celular pequeno deitado",
+        "c": "`700`",
+        "d": "`852`, um celular comum deitado"
+      },
+      "answer": ["c", "d"],
+      "explanation": "O ternário pergunta \"700 ou mais?\". O `>=` aceita o próprio 700, e o 852 passa de 700: os dois dão 2. O 393 e o 667 ficam abaixo e dão 1. Quem decide é a largura, não o aparelho: mesmo deitado, o celular pequeno continua com uma coluna.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "A `FlatList` da Início tem `numColumns={colunas}`. Ao deitar o celular, aparece a tela vermelha `Changing numColumns on the fly is not supported`. Como corrigir?",
+      "options": {
+        "a": "Pôr `key={colunas}` na própria `FlatList`",
+        "b": "Trocar o `keyExtractor` por `(casa) => casa.nome`",
+        "c": "Tirar o `columnWrapperStyle`",
+        "d": "Travar o app em pé no `app.json`"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` não troca o número de colunas com a lista já montada. A `key` na própria lista é o crachá dela: quando `colunas` muda, o crachá muda, e o React desmonta a lista e monta outra. O `keyExtractor` é o crachá de cada cartão, outra coisa. Travar a tela só esconde o problema de quem precisa do celular deitado.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No fim da etapa 7, a lista vazia da Início vem desta `const`:\n\n```jsx\nconst vazio = termo ? (\n  <EstadoVazio titulo=\"Nenhuma casa encontrada\" textoAcao=\"Limpar busca\" onAcao={() => setTermo('')} />\n) : (\n  <EstadoVazio titulo=\"Nenhuma casa cadastrada\" />\n);\n```\n\nCom `vazio: true` no `servidor.js` e o campo de busca sem nada (`termo` é `''`), que título aparece embaixo dos números?",
+      "options": {
+        "a": "Nenhuma casa cadastrada",
+        "b": "Nenhuma casa encontrada",
+        "c": "Algo deu errado",
+        "d": "Buscando as casas..."
+      },
+      "answer": "a",
+      "explanation": "No ternário, o texto vazio `''` conta como \"não\", então vale o caminho depois dos dois-pontos: \"Nenhuma casa cadastrada\", sem o botão. Com algo digitado, como \"geladeira\", o `termo` conta como \"sim\" e aparece \"Nenhuma casa encontrada\", com Limpar busca.",
+      "points": 1
+    }
+  ]
+}

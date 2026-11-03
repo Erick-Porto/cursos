@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E22 · APIs com fetch",
+  "description": "Dez questões sobre o JSON da resposta, o fetch com os dois await, o status e o ok, a senha cancelada sem internet, a busca de mentira e o buscarExemplos do Projeto 3.",
+  "lesson": "e22-apis-com-fetch",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O endereço abaixo não existe: o pedido não chega a servidor nenhum, como sem internet. O que aparece no terminal?\n\n```javascript\nasync function importar() {\n  try {\n    await fetch('https://nao-existe.invalid');\n    console.log('Exemplos importados');\n  } catch (erro) {\n    console.log('Sem conexão');\n  }\n  console.log('Pronto');\n}\n\nimportar();\n```",
+      "options": {
+        "a": "`Sem conexão` e, depois, `Pronto`",
+        "b": "`Exemplos importados` e, depois, `Pronto`",
+        "c": "Só `Sem conexão`",
+        "d": "`TypeError: fetch failed`, e o programa para"
+      },
+      "answer": "a",
+      "explanation": "A senha do `fetch` é cancelada: a Promise fica rejeitada. O `await` que espera essa senha lança o erro na linha dele, como um `throw`, e o `try` pula direto para o `catch`, sem mostrar \"Exemplos importados\". A rede segura a queda, e o código depois do `catch` continua: aparece `Pronto`. Sem o `try`, o Node pararia com `TypeError: fetch failed`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A tarefa 9999 não existe na DummyJSON. O que este código mostra no terminal?\n\n```javascript\nconst resposta = await fetch('https://dummyjson.com/todos/9999');\nconsole.log(resposta.ok, resposta.status);\n```",
+      "options": {
+        "a": "`false 404`",
+        "b": "Nada: o `fetch` lança um erro e o código para",
+        "c": "`true 404`",
+        "d": "`false 200`"
+      },
+      "answer": "a",
+      "explanation": "O pedido chegou ao servidor, e ele respondeu \"não existe\": isso é uma resposta, com status 404. O `fetch` não lança erro com 404 nem com 500; o `ok` é que vem `false`, porque o status não está entre 200 e 299. Por isso o código confere o `ok` antes de ler o corpo.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Depois do `await resposta.json()`, a caixa `dados` guarda este objeto. O que mostra o `console.log`?\n\n```javascript\nconst dados = {\n  todos: [\n    { id: 1, todo: 'Do something nice for someone you care about', completed: false },\n    { id: 2, todo: 'Memorize a poem', completed: true },\n    { id: 3, todo: 'Watch a classic movie', completed: true },\n  ],\n  total: 254,\n};\nconsole.log(dados.todos.length, dados.todos[1].todo);\n```",
+      "options": {
+        "a": "`3 Memorize a poem`",
+        "b": "`254 Memorize a poem`",
+        "c": "`3 Do something nice for someone you care about`",
+        "d": "`2 Memorize a poem`"
+      },
+      "answer": "a",
+      "explanation": "A lista está dentro do campo `todos` e tem 3 tarefas: `dados.todos.length` é 3. O `total` (254) é quantas a API tem, não quantas vieram. A fileira começa no 0, então `todos[1]` é a segunda tarefa, \"Memorize a poem\".",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que este código mostra no terminal?\n\n```javascript\nconst resposta = await fetch('https://dummyjson.com/todos?limit=10');\nconst dados = resposta.json();\nconsole.log(dados.todos);\n```",
+      "options": {
+        "a": "`undefined`, porque `dados` guarda a Promise, não o objeto",
+        "b": "A lista com as 10 tarefas",
+        "c": "O erro `fetch failed`",
+        "d": "`10`"
+      },
+      "answer": "a",
+      "explanation": "O `json()` também devolve uma Promise, a senha da lanchonete. Sem o `await` antes dele, `dados` guarda a senha, não o prato, e a senha não tem o campo `todos`: aparece `undefined`. Com `await resposta.json()`, `dados.todos` é a lista. São dois `await`: um para a resposta, outro para o corpo.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "Em quais situações o `await fetch(...)` **lança um erro**, que cai no `catch`? Marque todas as certas.",
+      "options": {
+        "a": "O computador está sem internet",
+        "b": "O servidor responde com status 500",
+        "c": "A tarefa pedida não existe, e o servidor responde 404",
+        "d": "O endereço tem um domínio que não existe, como `https://nao-existe.invalid`"
+      },
+      "answer": ["a", "d"],
+      "explanation": "A senha do `fetch` só é cancelada (com um `TypeError`: `Failed to fetch` no navegador, `fetch failed` no Node) quando o pedido nem chega a um servidor: sem internet ou com um domínio que não existe. Aí o `await` lança o erro, e ele cai no `catch`. Com 404 ou 500, o garçom chegou à cozinha e voltou com um aviso: é uma resposta, com `ok` falso, e quem cuida dela é o `if (!resposta.ok)`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No `buscarExemplos` do Projeto 3, o `try`/`catch` fica só em volta do `resposta = await buscar(URL_DOS_EXEMPLOS)`, e logo depois vem o `if (!resposta.ok)`. A busca devolve uma resposta com `ok` falso e `status` 500. O que acontece?",
+      "options": {
+        "a": "Lança um `ErroDeTarefa` com \"O servidor de exemplos respondeu 500. Tente mais tarde.\"",
+        "b": "Lança um `ErroDeTarefa` com \"Sem conexão com a internet. Confira e tente de novo.\"",
+        "c": "Devolve uma lista vazia",
+        "d": "Devolve `undefined`"
+      },
+      "answer": "a",
+      "explanation": "A resposta 500 chegou, então o `await buscar(...)` não lança nada e o `catch` não entra. O `if (!resposta.ok)` vê o `ok` falso e lança o erro com o status na template string. A rede é pequena de propósito: ela fica só embaixo da linha do pedido, porque o erro esperado ali é um só, o pedido que não chegou. Se o `if` for parar dentro do `try`, o `catch` pega o erro do 500 e troca pelo \"Sem conexão\".",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que `converterTodo({ id: 4, todo: 'Watch a documentary', completed: false, userId: 84 })` devolve no Projeto 3?",
+      "options": {
+        "a": "`{ titulo: 'Watch a documentary', prioridade: 'media', prazo: null }`",
+        "b": "`{ todo: 'Watch a documentary', prioridade: 'media', prazo: null }`",
+        "c": "`{ titulo: 'Watch a documentary', completed: false }`",
+        "d": "`'Watch a documentary'`"
+      },
+      "answer": "a",
+      "explanation": "A API fala inglês e a lista fala português: o `converterTodo` põe o `todo` da API no campo `titulo` e acrescenta `prioridade: 'media'` e `prazo: null`, os campos da tarefa. Sem o `titulo`, a lista recusa a tarefa: é por isso que, antes dele, a tela dizia \"Chegaram 10 exemplos, mas nenhum entrou\".",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No teste abaixo, por que o `await` no começo da última linha é obrigatório?\n\n```javascript\ntest('buscarExemplos avisa quando o servidor responde com erro', async () => {\n  async function buscarComErro(url) {\n    return new RespostaFalsa(500, null);\n  }\n  await expect(buscarExemplos(buscarComErro)).rejects.toThrow('respondeu 500');\n});\n```",
+      "options": {
+        "a": "Sem ele, o teste acaba antes da conferência: com o código certo, passa sem conferir nada; com algo errado, o Jest para no meio",
+        "b": "Sem ele, o `buscarComErro` nunca é chamado",
+        "c": "Sem ele, dá erro de sintaxe, porque toda linha de um teste `async` precisa de `await`",
+        "d": "Sem ele, o teste chama o `fetch` de verdade, pela internet"
+      },
+      "answer": "a",
+      "explanation": "O `buscarExemplos` devolve uma Promise, e o `rejects` só confere quando ela termina. Com o `await`, o teste espera a conferência e, se algo estiver errado, mostra um vermelho comum. Sem ele, o teste acaba antes: passa sem ter conferido, e um erro, se houver, chega depois, solto, e derruba o Jest com um texto enorme.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Por que o `buscarExemplos` recebe a função de busca no parâmetro `buscar`, em vez de chamar o `fetch` direto?",
+      "options": {
+        "a": "Para o teste passar uma busca de mentira, que responde na hora e sem internet, enquanto a tela passa o `fetch`",
+        "b": "Porque o `fetch` não funciona dentro de uma função `async`",
+        "c": "Porque o navegador não tem `fetch`, só o Node",
+        "d": "Para a tela buscar os exemplos mais rápido"
+      },
+      "answer": "a",
+      "explanation": "Quem chama diz com quem buscar, como o armazenamento do `salvarTarefas` no E21. A tela chama `buscarExemplos(fetch)`, e o teste chama `buscarExemplos(buscarQueDaCerto)`, um garçom de treino que devolve uma resposta de mentira. Assim os testes passam também com o Wi-Fi desligado e não mudam quando a API muda.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "fill",
+      "prompt": "Complete para o código lançar o erro quando a resposta não deu certo e, quando deu, transformar o corpo em objeto:\n\n```javascript\nif (!resposta.___) {\n  throw new ErroDeTarefa(`O servidor de exemplos respondeu ${resposta.status}. Tente mais tarde.`);\n}\nconst dados = await resposta.___();\n```",
+      "answer": [["ok"], ["json"]],
+      "explanation": "O `resposta.ok` é `true` para os status de 200 a 299; o `!` troca o sim pelo não, e o `if` entra quando a resposta não deu certo. Depois, `await resposta.json()` espera o corpo chegar e o transforma em objeto, como o `JSON.parse` da aula 3.",
+      "points": 1
+    }
+  ]
+}

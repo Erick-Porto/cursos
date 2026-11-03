@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 340" font-family="Inter, system-ui, sans-serif">
+  <title>filter em ação: cada produto de áudio responde ao teste produto.preco maior que 200; o Fone responde false e sai; a Caixa de Som e o Microfone respondem true e ficam na lista caros</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .code { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .mono { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .sim  { fill: #34d399; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .nao  { fill: #f87171; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .vsim { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .vnao { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .res  { fill: #e8edf7; font-size: 22px; }
+    .cell { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .keep { fill: none; stroke: #34d399; stroke-width: 3; }
+    .drop { fill: none; stroke: #f87171; stroke-width: 2; stroke-dasharray: 8 6; }
+
+    .r1   { animation: r1 8s infinite; }
+    .r2   { animation: r2 8s infinite; }
+    .r3   { animation: r3 8s infinite; }
+    .out  { opacity: 0.35; animation: some 8s infinite; }
+    .keep, .drop { animation: destaca 8s infinite; }
+    .fim  { animation: fim 8s infinite; }
+    @keyframes r1      { 0%, 10% { opacity: 0; } 16%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes r2      { 0%, 24% { opacity: 0; } 30%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes r3      { 0%, 38% { opacity: 0; } 44%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes some    { 0%, 52% { opacity: 1; } 60%, 92% { opacity: 0.35; } 100% { opacity: 1; } }
+    @keyframes destaca { 0%, 52% { opacity: 0; } 60%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes fim     { 0%, 64% { opacity: 0; } 70%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .r1, .r2, .r3, .out, .keep, .drop, .fim { animation: none; }
+    }
+  </style>
+  <rect width="720" height="340" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="40" y="46">teste</text>
+  <text class="code" x="116" y="46">(produto) =&gt; produto.preco &gt; 200</text>
+
+  <!-- Fone: responde false e sai -->
+  <g class="out">
+    <rect class="cell" x="40" y="72" width="640" height="60" rx="10"/>
+    <text class="t" x="60" y="110">Fone Bluetooth</text>
+    <text class="mono" x="320" y="110">199.9 &gt; 200</text>
+  </g>
+  <rect class="drop" x="41.5" y="73.5" width="637" height="57" rx="9"/>
+  <g class="r1">
+    <text class="nao" x="510" y="110">false</text>
+    <text class="vnao" x="610" y="110">sai</text>
+  </g>
+
+  <!-- Caixa de Som: responde true e fica -->
+  <rect class="cell" x="40" y="144" width="640" height="60" rx="10"/>
+  <text class="t" x="60" y="182">Caixa de Som</text>
+  <text class="mono" x="320" y="182">249.9 &gt; 200</text>
+  <rect class="keep" x="41.5" y="145.5" width="637" height="57" rx="9"/>
+  <g class="r2">
+    <text class="sim" x="510" y="182">true</text>
+    <text class="vsim" x="610" y="182">fica</text>
+  </g>
+
+  <!-- Microfone: responde true e fica -->
+  <rect class="cell" x="40" y="216" width="640" height="60" rx="10"/>
+  <text class="t" x="60" y="254">Microfone USB</text>
+  <text class="mono" x="320" y="254">329.9 &gt; 200</text>
+  <rect class="keep" x="41.5" y="217.5" width="637" height="57" rx="9"/>
+  <g class="r3">
+    <text class="sim" x="510" y="254">true</text>
+    <text class="vsim" x="610" y="254">fica</text>
+  </g>
+
+  <!-- resultado -->
+  <g class="fim">
+    <text class="sim" x="40" y="318">caros</text>
+    <text class="res" x="118" y="318">lista nova com 2: Caixa de Som e Microfone</text>
+  </g>
+</svg>

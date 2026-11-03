@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>O TemaProvider envolve o app: a Tela, o Cartao, o BotaoIcone e a sua Inicio leem o mesmo quadro com useTema(); fora do TemaProvider, o useTema() dá erro</title>
+  <style>
+    .prov   { fill: none; stroke: #34d399; stroke-width: 2.5; }
+    .quadro { fill: #34d399; }
+    .box    { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .fora   { fill: #131c33; stroke: #f87171; stroke-width: 2; stroke-dasharray: 7 5; }
+    .h      { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .note   { fill: #b4bfd3; font-size: 22px; }
+    .q      { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .qc     { fill: #06281c; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .code   { fill: #e8edf7; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl    { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ruim   { fill: #f87171; font-size: 22px; font-weight: 700; }
+    .seta   { stroke: #a78bfa; stroke-width: 2.5; fill: none; marker-end: url(#ponta); }
+  </style>
+  <defs>
+    <marker id="ponta" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <!-- o provedor, em volta de tudo -->
+  <text x="20" y="38"><tspan class="h">TemaProvider</tspan><tspan class="note">, em app/_layout.js, em volta de tudo</tspan></text>
+  <rect class="prov" x="20" y="56" width="680" height="272" rx="14"/>
+
+  <!-- o quadro de avisos -->
+  <rect class="quadro" x="44" y="100" width="236" height="208" rx="10"/>
+  <text class="q" x="64" y="138">o quadro</text>
+  <text class="qc" x="64" y="186">cores</text>
+  <text class="qc" x="64" y="230">escuro</text>
+  <text class="qc" x="64" y="274">alternarTema</text>
+
+  <!-- quem lê o quadro -->
+  <text class="lbl" x="362" y="90" text-anchor="middle">useTema()</text>
+  <rect class="box" x="444" y="104" width="232" height="44" rx="8"/>
+  <rect class="box" x="444" y="158" width="232" height="44" rx="8"/>
+  <rect class="box" x="444" y="212" width="232" height="44" rx="8"/>
+  <rect class="box" x="444" y="266" width="232" height="44" rx="8"/>
+  <text class="code" x="462" y="134">Tela</text>
+  <text class="code" x="462" y="188">Cartao</text>
+  <text class="code" x="462" y="242">BotaoIcone</text>
+  <text x="462" y="296"><tspan class="code">Inicio</tspan><tspan class="note"> (a sua)</tspan></text>
+  <path class="seta" d="M 440 126 L 288 126"/>
+  <path class="seta" d="M 440 180 L 288 180"/>
+  <path class="seta" d="M 440 234 L 288 234"/>
+  <path class="seta" d="M 440 288 L 288 288"/>
+
+  <!-- fora do provedor -->
+  <rect class="fora" x="20" y="344" width="680" height="44" rx="8"/>
+  <text x="40" y="374"><tspan class="ruim">Fora do TemaProvider:</tspan><tspan class="note"> o </tspan><tspan class="code">useTema()</tspan><tspan class="note"> dá erro</tspan></text>
+</svg>

@@ -1,0 +1,157 @@
+{
+  "title": "Quiz: E44 · Publicação e portfólio",
+  "description": "Dez questões sobre o checklist de qualidade, o app no Expo Go e o APK instalado, o build com o EAS, a versão no GitHub e o README de portfólio do Projeto 7.",
+  "lesson": "e44-publicacao-e-portfolio",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O computador da equipe está desligado. A tia instalou o Gasto Certo pelo APK; a Carla abre o app pelo Expo Go. O que acontece?",
+      "options": {
+        "a": "O app da tia abre; o da Carla não, porque no Expo Go o código vem do computador",
+        "b": "Os dois abrem, porque os lançamentos ficam guardados na gaveta do celular",
+        "c": "Nenhum abre, porque os dois dependem do `npx expo start`",
+        "d": "O da Carla abre e o da tia não, porque o APK busca o código na nuvem"
+      },
+      "answer": "a",
+      "explanation": "O APK é o instalador: depois de instalado, o app mora no celular, com o código dentro dele, e abre sem o computador. No Expo Go, o código chega do `npx expo start` a cada vez que o app abre. A gaveta do celular guarda os dados, não o código do app.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No `eas.json` da equipe, o perfil `preview` ficou assim:\n\n```json\n\"preview\": {\n  \"distribution\": \"internal\"\n}\n```\n\nO que sai do build no Android?",
+      "options": {
+        "a": "Um AAB, o formato que a loja recebe e que o celular não instala direto",
+        "b": "Um APK, porque o perfil se chama `preview`",
+        "c": "Nada: o build falha por falta do `android`",
+        "d": "Um link que abre o app no Expo Go"
+      },
+      "answer": "a",
+      "explanation": "Sem `\"android\": { \"buildType\": \"apk\" }`, o EAS gera o AAB, que só a loja instala. O nome do perfil não muda o formato: quem pede o APK é o `buildType`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A equipe do Cardápio vai preencher o `android.package` no `app.json`. Qual destes valores o EAS aceita?",
+      "options": {
+        "a": "`com.carladias.cardapio`",
+        "b": "`com.carla-dias.cardapio`",
+        "c": "`Cardápio da Carla`",
+        "d": "`com.carladias.2cardapio`"
+      },
+      "answer": "a",
+      "explanation": "O `android.package` são partes separadas por ponto, cada uma começando com letra, só com letras e números. O hífen derruba a segunda opção; espaço, maiúscula e acento, a terceira (esse é o `name`); e o `2` logo depois do ponto, a quarta.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Depois do checklist, o `CartaoSaldo` ficou assim:\n\n```jsx\nexport default function CartaoSaldo({ rotulo, valor, cor = 'texto' }) {\n  const { cores } = useTema();\n  return (\n    <Cartao\n      style={estilos.cartao}\n      accessible\n      accessibilityLabel={`${rotulo}: ${formatarReais(valor)}`}\n    >\n      <Text style={[estilos.rotulo, { color: cores.textoSuave }]}>{rotulo}</Text>\n      <Text style={[estilos.valor, { color: cores[cor] }]}>{formatarReais(valor)}</Text>\n    </Cartao>\n  );\n}\n```\n\nA Início usa `<CartaoSaldo rotulo=\"Entradas\" valor={195000} cor=\"sucesso\" />`. O que o leitor de tela lê num toque no cartão?",
+      "options": {
+        "a": "`Entradas: R$ 1950,00`",
+        "b": "`Entradas` e, só num segundo toque, `R$ 1950,00`",
+        "c": "`Entradas: 195000`",
+        "d": "`rotulo: formatarReais(valor)`"
+      },
+      "answer": "a",
+      "explanation": "O `accessible` junta o cartão num foco só, e o leitor lê o `accessibilityLabel`. A template string troca `${rotulo}` por `Entradas` e `${formatarReais(valor)}` por `R$ 1950,00`. Sem o `accessible`, cada `Text` seria lido num toque separado: era isso que o item 6 do checklist pegou.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No `ItemLancamento`, o bloco dos textos ganhou:\n\n```jsx\naccessibilityLabel={`${lancamento.descricao}, ${lancamento.categoria}, ${lancamento.data}. ${lancamento.tipo} de ${formatarReais(lancamento.valor)}`}\n```\n\nO lançamento é `{ tipo: 'Saída', valor: 3500, categoria: 'Lazer', descricao: 'Cinema', data: '09/10/2026' }`. Qual frase o leitor de tela lê?",
+      "options": {
+        "a": "`Cinema, Lazer, 09/10/2026. Saída de R$ 35,00`",
+        "b": "`Saída de R$ 35,00. Cinema, Lazer, 09/10/2026`",
+        "c": "`Cinema, Lazer, 09/10/2026. Saída de R$ 3500`",
+        "d": "`Cinema, Lazer, 09/10/2026. Saída de 3500`"
+      },
+      "answer": "a",
+      "explanation": "A frase segue a ordem da template string: descrição, categoria, data, depois o tipo e o valor. O valor está em centavos, 3500, e o `formatarReais` mostra `R$ 35,00`. As opções com 3500 esquecem o `formatarReais`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na busca do item 3 do checklist, o terminal mostrou:\n\n```plaintext\napp/novo.js:85:  aviso: { color: '#b91c1c', fontSize: 13 },\n```\n\nO que essa linha diz, e o que fazer?",
+      "options": {
+        "a": "Na linha 85 do `app/novo.js`, uma cor escrita à mão, que não troca com o tema: ela deve vir de `cores`, do `useTema()`",
+        "b": "O `app/novo.js` tem 85 cores erradas: é preciso apagar o arquivo e começar de novo",
+        "c": "Está tudo certo: o `git grep` só mostra as cores que já vêm do tema",
+        "d": "A linha 85 foi corrigida sozinha pelo `git grep`, que trocou a cor pelo token"
+      },
+      "answer": "a",
+      "explanation": "O `git grep -n` mostra o arquivo, o número da linha e a linha inteira. O `#b91c1c` é uma cor solta: no tema escuro, ela não muda. A segunda busca do item 3 pega a mesma linha pelo `fontSize: 13`, que deve virar `fonte.pequena`. O `git grep` só procura: quem corrige é você.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O terminal mostra `Waiting in Free tier queue` há 40 minutos, e a aula acaba em uma hora. O que quem cuida da publicação faz?",
+      "options": {
+        "a": "Deixa o build na fila, porque fechar o terminal não cancela, e segue com o README; a página do build fica no expo.dev",
+        "b": "Aperta Ctrl + C e roda o build de novo, para ganhar um lugar melhor na fila",
+        "c": "Pede a um colega para rodar o mesmo build na conta dele, ao mesmo tempo",
+        "d": "Troca o perfil para `production`, que tem uma fila menor"
+      },
+      "answer": "a",
+      "explanation": "A fila da conta gratuita pode passar de uma hora no pico, e o build continua no servidor mesmo com o terminal fechado. O Ctrl + C não cancela: rodar de novo só cria um segundo build, que espera o primeiro (`Build concurrency limit reached`) e gasta mais um dos 15 do mês. Na conta do colega, o EAS recusa: o projeto é de quem fez o primeiro build. E o `eas.json` da equipe só tem o perfil `preview`: um perfil de loja geraria o AAB, que o celular não instala.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A Ana fez o primeiro build do Gasto Certo, e o `app.json` ganhou o `projectId`. Depois da banca, a equipe quer um APK novo. Quem roda o build?",
+      "options": {
+        "a": "A Ana: o projeto do EAS nasceu na conta dela, e o `projectId` aponta para ele",
+        "b": "Qualquer pessoa da equipe, cada uma com a própria conta do Expo",
+        "c": "Quem fez o último pull request na `main`",
+        "d": "Ninguém: cada app só pode ter um build"
+      },
+      "answer": "a",
+      "explanation": "Como na gráfica, o pedido fica no nome de quem encomendou: o projeto `@ana-souza/gasto-certo` é da conta da Ana. Na conta de outra pessoa, o EAS recusa. Um build novo pode sair quantas vezes for preciso, dentro do limite do mês.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "O que vai no README de portfólio da equipe? Marque todas as certas.",
+      "options": {
+        "a": "O problema que o app resolve, em poucas frases",
+        "b": "Os prints das telas, guardados na pasta `docs/`",
+        "c": "O link da versão `v1.0.0`, com o APK",
+        "d": "A tabela da equipe, com o que cada pessoa fez",
+        "e": "O e-mail e a senha da conta do Expo, para a banca refazer o build",
+        "f": "A pasta `node_modules`, para quem baixar não precisar instalar nada"
+      },
+      "answer": ["a", "b", "c", "d"],
+      "explanation": "O README de portfólio responde às perguntas de quem nunca viu o app: o que é, para quem, se funciona, como testar e quem fez o quê. Senha nunca vai para o repositório, que é público. E o `node_modules` fica fora pelo `.gitignore`: quem baixa roda `npm install`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Por que o link do APK no README é o da Release `v1.0.0`, e não o da página do build no expo.dev?",
+      "options": {
+        "a": "A Release fica no repositório da equipe, ao lado do código; a página do build é da conta de uma pessoa, e o arquivo não fica lá para sempre",
+        "b": "A página do expo.dev só abre no computador, nunca no celular",
+        "c": "A Release faz um build novo a cada vez que alguém baixa o APK",
+        "d": "O link do expo.dev só instala o app no iPhone"
+      },
+      "answer": "a",
+      "explanation": "A tag `v1.0.0` é uma etiqueta numa foto do projeto, e a Release é a página dessa versão, com o `.apk` anexado. O endereço não muda, mesmo que o build saia do expo.dev. A Release não faz build: ela só guarda o arquivo que a equipe anexou.",
+      "points": 1
+    }
+  ]
+}

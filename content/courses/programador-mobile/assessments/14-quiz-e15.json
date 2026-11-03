@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E15 · Sem rasurar o original",
+  "description": "Dez questões sobre referência, spread em listas e fichas, mudanças sem rasurar a lista recebida e o reduce que agrupa, com as funções da etapa 3 da agenda.",
+  "lesson": "e15-sem-rasurar-o-original",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst amigos = ['Ana'];\nconst convidados = amigos;\nconvidados.push('Bruno');\nconsole.log(amigos.length);\n```",
+      "options": {
+        "a": "`2`",
+        "b": "`1`",
+        "c": "`undefined`",
+        "d": "Um erro, porque `amigos` é `const`"
+      },
+      "answer": "a",
+      "explanation": "`const convidados = amigos` não cria outra lista: copia o endereço, a referência. Os dois nomes levam à mesma casa, então o `push` feito por `convidados` aparece em `amigos`. A `const` lacra a caixa, não a casa: pôr um item dentro da lista é permitido.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst antes = ['Ana', 'Bruno'];\nconst depois = [...antes, 'Carla'];\nconsole.log(antes.length, depois.length);\n```",
+      "options": {
+        "a": "`2 3`",
+        "b": "`3 3`",
+        "c": "`2 2`",
+        "d": "`3 2`"
+      },
+      "answer": "a",
+      "explanation": "Os colchetes criam uma lista nova, e o spread `...antes` espalha nela os dois nomes de `antes`; a Carla entra no fim, só na lista nova. É tirar uma cópia e mexer na cópia: `antes` continua com 2. O `3 3` seria o resultado de um `push` em `antes`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Quais valores aparecem?\n\n```javascript\nconst carla = { nome: 'Carla Dias', grupo: 'amigos' };\nconst a = { ...carla, grupo: 'trabalho' };\nconst b = { grupo: 'trabalho', ...carla };\nconsole.log(a.grupo, b.grupo);\n```",
+      "options": {
+        "a": "`trabalho amigos`",
+        "b": "`trabalho trabalho`",
+        "c": "`amigos amigos`",
+        "d": "`amigos trabalho`"
+      },
+      "answer": "a",
+      "explanation": "No spread de fichas, o que vem depois ganha. Em `a`, o `grupo: 'trabalho'` vem depois do `...carla` e cobre o `'amigos'`. Em `b`, o `...carla` vem por último e traz de volta o `grupo: 'amigos'`. Por isso o `editarContato` escreve `{ ...contato, ...mudancas }`, com as mudanças no fim.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Uma função recebe a lista `contatos`. Quais destas linhas **rasuram** essa lista, isto é, mudam a própria lista recebida? Marque todas as certas.",
+      "options": {
+        "a": "`contatos.push(novo)`",
+        "b": "`contatos.sort((a, b) => a.nome.localeCompare(b.nome))`",
+        "c": "`contatos.filter((contato) => contato.id !== id)`",
+        "d": "`[...contatos, novo]`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "O `push` põe o item na própria lista, e o `sort` ordena a própria lista. O `filter` devolve uma lista nova, só com quem passou na peneira, e o `[...contatos, novo]` também monta uma lista nova. Por isso o `ordenarPorNome` faz a cópia com `[...contatos]` antes do `sort`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Na página da agenda, depois de um Remover, aparece o aviso: \"removerContato mudou a lista que recebeu\". Por que isso atrapalha o Desfazer?",
+      "options": {
+        "a": "A página guarda a lista de antes para o Desfazer; se a função rasurou essa lista, ela já está sem o contato, e o Desfazer não tem para onde voltar",
+        "b": "O Desfazer só funciona depois de recarregar a página",
+        "c": "A função ficou mais lenta, e o Desfazer não espera",
+        "d": "O Desfazer precisa que a função devolva `undefined`"
+      },
+      "answer": "a",
+      "explanation": "O Desfazer volta para a lista guardada antes da mudança. Com o `filter`, essa lista continua com os 15 contatos. Com um `splice` na lista recebida, a lista guardada e a nova são a mesma casa: as duas ficam sem o contato, e o Desfazer mostra a lista já mudada.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Quanto devolve `proximoId([{ id: 3 }, { id: 9 }, { id: 5 }])`, a função do Projeto 2?",
+      "options": {
+        "a": "`10`",
+        "b": "`4`",
+        "c": "`6`",
+        "d": "`9`"
+      },
+      "answer": "a",
+      "explanation": "O `proximoId` devolve o maior `id` da lista mais 1. Volta por volta, a caixa `maior` vai de 0 a 3, de 3 a 9 e fica no 9 com o 5. No fim, `9 + 1` dá 10. O `4` é o `contatos.length + 1`, que repetiria um `id` depois de uma remoção.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Com os 15 contatos do kit, depois de `const nova = removerContato(contatos, 2);`, quanto valem `nova.length` e `contatos.length`?",
+      "options": {
+        "a": "`14` e `15`",
+        "b": "`14` e `14`",
+        "c": "`1` e `15`",
+        "d": "`15` e `15`"
+      },
+      "answer": "a",
+      "explanation": "O `removerContato` usa o `filter` com `contato.id !== id`: a peneira fica com todos, menos o Bruno, numa lista nova de 14. A lista recebida não muda e continua com 15. O `1` seria o resultado com `===`, que deixa passar só o Bruno.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Depois de `const nova = editarContato(contatos, 2, { grupo: 'trabalho' });`, qual destes testes passa?",
+      "options": {
+        "a": "`expect(nova[0]).toBe(contatos[0]);`",
+        "b": "`expect(nova[1]).toBe(contatos[1]);`",
+        "c": "`expect(contatos[1].grupo).toBe('trabalho');`",
+        "d": "`expect(nova.length).toBe(14);`"
+      },
+      "answer": "a",
+      "explanation": "O `map` devolve a mesma ficha para quem não tem o `id` 2: a Mariana da lista nova é a mesma casa da Mariana de antes, e o `toBe` com ficha pergunta justamente isso. O Bruno ganhou uma ficha nova, com `{ ...contato, ...mudancas }`, então `nova[1]` não é `contatos[1]`, e o original continua com `'amigos'`. O `map` não muda o tamanho: são 15.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst grupos = ['amigos', 'familia', 'amigos'];\nconst contagem = grupos.reduce((visor, grupo) => {\n  if (visor[grupo] === undefined) {\n    visor[grupo] = 0;\n  }\n  visor[grupo] = visor[grupo] + 1;\n  return visor;\n}, {});\nconsole.log(contagem);\n```",
+      "options": {
+        "a": "`{ amigos: 2, familia: 1 }`",
+        "b": "`{ amigos: 1, familia: 1 }`",
+        "c": "`3`",
+        "d": "`{ grupo: 3 }`"
+      },
+      "answer": "a",
+      "explanation": "O visor começa como a ficha vazia `{}`. Volta 1: `amigos` ainda não existe, nasce com 0 e vai a 1. Volta 2: `familia` nasce e vai a 1. Volta 3: `amigos` já existe e vai a 2. Os colchetes usam o valor de `grupo` como nome do campo; com `visor.grupo`, o ponto criaria um campo chamado `grupo`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Com este `agruparPorLetra`, os testes ficam vermelhos com `TypeError: Cannot read properties of undefined (reading 'A')`. O que falta?\n\n```javascript\nexport function agruparPorLetra(contatos) {\n  return contatos.reduce((grupos, contato) => {\n    const letra = inicial(contato.nome);\n    if (grupos[letra] === undefined) {\n      grupos[letra] = [];\n    }\n    grupos[letra].push(contato);\n  }, {});\n}\n```",
+      "options": {
+        "a": "O `return grupos;` no fim da seta: sem ele, a segunda volta recebe `undefined` no lugar do visor",
+        "b": "O `import` da `inicial`, que deixaria a letra `undefined`",
+        "c": "Trocar o `{}` do fim por `[]`",
+        "d": "Trocar o `push` por `[...grupos[letra], contato]`, porque o `push` rasura a lista de contatos"
+      },
+      "answer": "a",
+      "explanation": "No `reduce`, o que a seta devolve vira o visor da volta seguinte. Sem o `return grupos`, a seta devolve `undefined`, e na segunda volta `grupos[letra]` tenta ler um campo de `undefined`. Sem o `import`, o erro seria `inicial is not defined`. O `push` ali não rasura nada: as listas nasceram dentro do `reduce`.",
+      "points": 2
+    }
+  ]
+}

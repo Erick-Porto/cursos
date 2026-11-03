@@ -645,7 +645,12 @@ function validateSlides(lesson, course, ctx, report) {
   slides.forEach((slide, i) => {
     const sw = `${lw} (slide ${i + 1})`
     const slideLines = slide.split('\n')
-    const headings = slideLines.filter((l) => /^#{1,3}\s/.test(l))
+    // "## " dentro de um bloco de código (um README de exemplo, por exemplo) não é título de slide
+    let inFence = false
+    const headings = slideLines.filter((l) => {
+      if (/^\s*(```|~~~)/.test(l)) inFence = !inFence
+      return !inFence && /^#{1,3}\s/.test(l)
+    })
     const first = slideLines[0] ?? ''
 
     if (i === 0) {

@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lista de tarefas</title>
+    <script>
+      // Endereço sem a barra no fim (/web em vez de /web/): o navegador procuraria o
+      // estilo.css e o tela.js uma pasta acima. A barra resolve.
+      const ultimaParte = location.pathname.split('/').pop();
+      if (ultimaParte !== '' && ultimaParte !== 'index' && !ultimaParte.includes('.')) {
+        location.replace(location.pathname + '/' + location.search);
+      }
+    </script>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="estilo.css" />
+    <script type="module" src="tela.js"></script>
+  </head>
+  <body>
+    <header class="topo">
+      <div class="topo-conteudo">
+        <div>
+          <p class="sobre">Programador Mobile · Projeto 3</p>
+          <h1>Lista de tarefas</h1>
+        </div>
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+      </div>
+    </header>
+
+    <main class="conteudo">
+      <section id="aviso" class="aviso" role="alert">
+        <h2 id="aviso-titulo">A página não encontrou o seu código</h2>
+        <div id="aviso-texto">
+          <p>
+            Abra a página pelo servidor. Na raiz do repositório (a pasta do
+            <code>package.json</code>), rode <code>npx serve .</code> e acesse
+            <code>http://localhost:3000/web/</code> no navegador. Aberta com dois cliques, a página
+            não consegue importar os arquivos de <code>src/</code>.
+          </p>
+        </div>
+      </section>
+
+      <section class="cartao cartao-nova" aria-labelledby="t-nova">
+        <h2 id="t-nova">Nova tarefa</h2>
+        <p id="nota-formulario" class="nota"></p>
+        <form id="formulario" novalidate>
+          <fieldset id="campos" class="campos" disabled>
+            <legend class="invisivel">Dados da tarefa</legend>
+            <p id="erro-formulario" class="erro" hidden></p>
+
+            <div class="campo">
+              <label for="titulo">Título</label>
+              <input
+                id="titulo"
+                type="text"
+                autocomplete="off"
+                placeholder="Pagar a conta de luz"
+                aria-describedby="erro-titulo"
+              />
+              <p id="erro-titulo" class="erro" hidden></p>
+            </div>
+
+            <div class="campos-lado-a-lado">
+              <div class="campo">
+                <label for="prioridade">Prioridade</label>
+                <select id="prioridade" aria-describedby="erro-prioridade">
+                  <option value="alta">Alta</option>
+                  <option value="media" selected>Média</option>
+                  <option value="baixa">Baixa</option>
+                </select>
+                <p id="erro-prioridade" class="erro" hidden></p>
+              </div>
+
+              <div class="campo">
+                <label for="prazo">Prazo <span class="opcional">(opcional)</span></label>
+                <input id="prazo" type="date" aria-describedby="erro-prazo" />
+                <p id="erro-prazo" class="erro" hidden></p>
+              </div>
+            </div>
+
+            <div class="campo">
+              <label for="frequencia">Repetir</label>
+              <select id="frequencia">
+                <option value="" selected>Não repete</option>
+                <option value="diaria">Todo dia</option>
+                <option value="semanal">Toda semana</option>
+              </select>
+            </div>
+
+            <button type="submit" class="botao">Adicionar tarefa</button>
+          </fieldset>
+        </form>
+      </section>
+
+      <section class="cartao cartao-lista" aria-labelledby="t-lista">
+        <div class="cabecalho-lista">
+          <h2 id="t-lista">Tarefas</h2>
+          <p id="resumo" class="resumo"></p>
+        </div>
+        <p id="nota-lista" class="nota" hidden></p>
+        <div class="ferramentas">
+          <label for="filtro">Mostrar</label>
+          <select id="filtro">
+            <option value="todas">Todas</option>
+            <option value="pendentes">Pendentes</option>
+            <option value="atrasadas">Atrasadas</option>
+            <option value="concluidas">Concluídas</option>
+          </select>
+        </div>
+        <ul id="lista" class="lista"></ul>
+        <p id="vazio" class="vazio" hidden></p>
+      </section>
+
+      <section class="cartao cartao-exemplos" aria-labelledby="t-exemplos">
+        <h2 id="t-exemplos">Tarefas de exemplo</h2>
+        <p class="nota">
+          Traz 5 tarefas de exemplo da internet, da API DummyJSON. Elas vêm em inglês: é uma API de
+          testes.
+        </p>
+        <button id="importar" type="button" class="secundario" disabled>Importar exemplos</button>
+        <p id="status-importacao" class="status-importacao" role="status" aria-live="polite"></p>
+      </section>
+
+      <section class="cartao cartao-funcoes" aria-labelledby="t-funcoes">
+        <h2 id="t-funcoes">O que a página usa</h2>
+        <p class="nota">
+          Cada item vem do seu código em <code>src/</code>, com os nomes do enunciado. A página
+          confere com os exemplos do enunciado (hoje = 10/11/2026). Salvou um arquivo? Recarregue a
+          página.
+        </p>
+        <div id="etapas"></div>
+      </section>
+    </main>
+
+    <footer class="rodape">
+      Tela pronta do curso: você não precisa mudar estes arquivos. Se algo sair errado, o problema
+      está no seu código, e o teste dele é o melhor lugar para achar.
+    </footer>
+  </body>
+</html>

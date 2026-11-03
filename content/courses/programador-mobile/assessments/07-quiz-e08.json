@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E08 · Testes com Jest",
+  "description": "Dez questões sobre testes automatizados, a instalação do Jest e do Babel, test, expect, toBe e toEqual, o vermelho do Jest e a tabela de casos do Racha-conta.",
+  "lesson": "e08-testes-com-jest",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Um teste automatizado é uma prova com gabarito que o computador corrige sozinho. No teste abaixo, qual parte é o **gabarito**?\n\n```javascript\ntest('gorjeta de 10% sobre R$ 187,50 é R$ 18,75', () => {\n  expect(calcularGorjeta(18750, 10)).toBe(1875);\n});\n```",
+      "options": {
+        "a": "O `1875`, dentro do `toBe`",
+        "b": "O `calcularGorjeta(18750, 10)`, dentro do `expect`",
+        "c": "O nome `'gorjeta de 10% sobre R$ 187,50 é R$ 18,75'`",
+        "d": "O `18750`, o primeiro argumento da função"
+      },
+      "answer": "a",
+      "explanation": "O gabarito é o resultado esperado, calculado uma vez, à mão: vai no `toBe`. O `calcularGorjeta(18750, 10)` é a questão, e o que ele devolve é a resposta que o Jest compara com o gabarito. O nome só descreve o teste; é ele que aparece na tela.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Por que o Jest foi instalado com `npm i -D jest babel-jest @babel/preset-env@7`, com o `-D`?",
+      "options": {
+        "a": "Para os três pacotes irem para `devDependencies`: são ferramentas de quem programa, que o programa não usa para rodar",
+        "b": "Para o npm baixar os pacotes mais depressa, sem conferir as versões",
+        "c": "Para os pacotes ficarem fora do `node_modules`",
+        "d": "Para o npm não anotar os pacotes no `package.json`"
+      },
+      "answer": "a",
+      "explanation": "O `-D` anota os pacotes em `devDependencies`, a lista das ferramentas de desenvolvimento: o Jest é utensílio, confere a receita, mas não vai no bolo. Eles são baixados para o `node_modules` e anotados no `package.json` como qualquer pacote. O picocolors, que o `racha.js` usa para rodar, continua em `dependencies`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Um colega instalou o Jest, trocou o script para `\"test\": \"jest\"` e escreveu o primeiro teste. O `npm test` para com `Must use import to load ES Module`. O que falta?",
+      "options": {
+        "a": "O `babel.config.json` na pasta raiz, ao lado do `package.json`",
+        "b": "Trocar o `import` do teste por uma cópia da função dentro do `conta.test.js`",
+        "c": "Rodar `npm audit fix --force`",
+        "d": "Renomear o arquivo para `conta.teste.js`"
+      },
+      "answer": "a",
+      "explanation": "O Jest ainda carrega os arquivos do jeito antigo, que não entende `import`. O Babel traduz o código para ele, e as instruções da tradução ficam no `babel.config.json`, na raiz. Sem esse arquivo, o Jest para no primeiro `import`. Com o nome `conta.teste.js`, o Jest nem acharia o teste.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Uma colega trocou o `Math.round` por `Math.floor` na `calcularGorjeta`:\n\n```javascript\nexport function calcularGorjeta(subtotal, percentual = 10) {\n  return Math.floor(subtotal * percentual / 100);\n}\n```\n\nO teste da linha `[18755, 10, 1876]` da tabela da gorjeta fica vermelho. O que o Jest mostra?",
+      "options": {
+        "a": "`Expected: 1876` e `Received: 1875`",
+        "b": "`Expected: 1875` e `Received: 1876`",
+        "c": "`Expected: 1876` e `Received: 1875.5`",
+        "d": "`Expected: 1876` e `Received: 1876`"
+      },
+      "answer": "a",
+      "explanation": "`18755 * 10 / 100` dá `1875.5`. O `Math.floor` corta as casas e devolve `1875`; o `Math.round` subiria para `1876`. O `Expected` é o gabarito do teste, `1876`, e o `Received` é o que a função devolveu, `1875`. A ordem nunca se inverte: primeiro o esperado, depois o recebido.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Com a `calcularGorjeta` certa, um aluno roda `npm test` com este arquivo de teste. Qual é a linha do resumo?\n\n```javascript\nimport { calcularGorjeta } from './conta.js';\n\ntest.each([\n  [18750, 10, 1875],\n  [8000, 0, 0],\n  [10000, 10, 100],\n])('calcularGorjeta(%i, %i) dá %i', (subtotal, percentual, esperado) => {\n  expect(calcularGorjeta(subtotal, percentual)).toBe(esperado);\n});\n```",
+      "options": {
+        "a": "`Tests:       1 failed, 2 passed, 3 total`",
+        "b": "`Tests:       1 failed, 1 total`",
+        "c": "`Tests:       3 failed, 3 total`",
+        "d": "`Tests:       3 passed, 3 total`"
+      },
+      "answer": "a",
+      "explanation": "O `test.each` faz um teste para cada linha da tabela: são 3 testes. As duas primeiras linhas estão certas. Na terceira, 10% de 10000 centavos são 1000, não 100: só essa linha fica vermelha, com `Expected: 100` e `Received: 1000`. Uma linha errada não derruba as outras.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que aparece na lista de testes do `npm test` com este teste?\n\n```javascript\ntest.each([\n  [187.5, 18750],\n])('paraCentavos(%i) dá %i', (reais, esperado) => {\n  expect(paraCentavos(reais)).toBe(esperado);\n});\n```",
+      "options": {
+        "a": "`√ paraCentavos(187) dá 18750`",
+        "b": "`√ paraCentavos(187.5) dá 18750`",
+        "c": "`× paraCentavos(187) dá 18750`",
+        "d": "`√ paraCentavos(%i) dá %i`"
+      },
+      "answer": "a",
+      "explanation": "O `%i` mostra o número inteiro, sem as casas: `187.5` aparece como `187`. O marcador muda só o nome; a conferência usa o `187.5` da linha, e `paraCentavos(187.5)` dá `18750`, então o teste passa. Para o nome mostrar as casas, use `%d`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No Racha-conta, quanto `calcularGorjeta(3330, 15)` devolve? É a gorjeta de 15% sobre R$ 33,30, em centavos.",
+      "options": {
+        "a": "`500`",
+        "b": "`499`",
+        "c": "`499.5`",
+        "d": "`4.995`"
+      },
+      "answer": "a",
+      "explanation": "`3330 * 15 / 100` dá `499.5`, e o `Math.round` sobe o meio centavo: `500`, ou R$ 5,00. Em reais, a mesma conta dá `4.994999999999999`, que arredondaria para R$ 4,99: é o problema do `0.1 + 0.2`, do E06. Por isso a linha `[3330, 15, 500]` está na tabela da gorjeta.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Este teste fica vermelho com `Received: serializes to the same string`. Como corrigir?\n\n```javascript\nconst precos = [72.9, 68.9, 14.5, 16.7];\n\ntest('fica só com os preços acima de 50', () => {\n  expect(precos.filter((preco) => preco > 50)).toBe([72.9, 68.9]);\n});\n```",
+      "options": {
+        "a": "Trocar o `toBe` por `toEqual`, que compara as listas item por item",
+        "b": "Trocar o gabarito por `[68.9, 72.9]`",
+        "c": "Trocar o gabarito por `2`, o tamanho da lista",
+        "d": "Trocar o `> 50` por `>= 50`"
+      },
+      "answer": "a",
+      "explanation": "O conteúdo bate, mas o `toBe` pergunta se é a mesma lista, a mesma fileira de gavetas. A lista escrita no teste é outra fileira. O `toEqual` abre gaveta por gaveta e compara na ordem. Com `[68.9, 72.9]`, até o `toEqual` falharia: o `filter` mantém a ordem da lista.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "truefalse",
+      "prompt": "Um teste novo que passou de primeira está garantido: não precisa vê-lo vermelho nenhuma vez.",
+      "answer": false,
+      "explanation": "Um teste que nunca ficou vermelho pode não estar conferindo nada: o gabarito pode estar errado do mesmo jeito que a função, ou a questão pode nem chamar a função. Quebre a função de propósito, como o `/ 100` trocado por `/ 10`, veja o vermelho e conserte.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "A instalação do Jest terminou com `19 vulnerabilities (1 low, 18 moderate)` e a sugestão de rodar `npm audit fix`. O que fazer no Racha-conta?",
+      "options": {
+        "a": "Seguir em frente: são avisos de pacotes que o Jest usa por dentro, e o `npm audit fix --force` trocaria o Jest 30 por uma versão antiga",
+        "b": "Rodar `npm audit fix --force` para zerar os avisos",
+        "c": "Apagar o `node_modules` e instalar sem o `-D`",
+        "d": "Desinstalar o Jest: com avisos, os testes não rodam"
+      },
+      "answer": "a",
+      "explanation": "Os avisos falam de pacotes que só rodam no seu computador, durante os testes, e não afetam o Racha-conta. O `npm audit fix --force` troca o Jest 30 pela versão 25, antiga, e os avisos sobem de 19 para 34. Se alguém já rodou, `npm i -D jest@30 babel-jest@30` desfaz.",
+      "points": 1
+    }
+  ]
+}

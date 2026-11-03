@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E33 · Flexbox e áreas seguras",
+  "description": "Dez questões sobre a área segura, o atalho @, a direção, o alinhamento, o flex: 1 e os espaços da tela Início do Casas de adoção.",
+  "lesson": "e33-flexbox-e-areas-seguras",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Uma `View` sem `flexDirection` no estilo tem três `Text` dentro. Como eles aparecem na tela?",
+      "options": {
+        "a": "Um embaixo do outro, cada um na largura toda",
+        "b": "Lado a lado, na mesma linha",
+        "c": "Lado a lado, com o espaço dividido entre eles",
+        "d": "Um por cima do outro, no mesmo lugar"
+      },
+      "answer": "a",
+      "explanation": "Sem `flexDirection`, vale o padrão, `'column'`: as caixas se empilham, e o `alignItems` padrão, `'stretch'`, estica cada uma até a largura toda, como as linhas do caderno do E30. Lado a lado só com `flexDirection: 'row'`; o espaço dividido é o `space-between` da `Linha` do Gota.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O topo da Início tem este código. Onde fica o círculo?\n\n```jsx\n<View style={estilos.topo}>\n  <View>\n    <Text style={estilos.titulo}>Casas de adoção</Text>\n    <Text>Adote perto de você</Text>\n  </View>\n  <View style={estilos.reserva} />\n</View>\n\n// topo: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },\n// reserva: { width: 48, height: 48, borderRadius: 24, borderWidth: 1 },\n```",
+      "options": {
+        "a": "Na ponta direita, na altura do meio dos dois textos",
+        "b": "Na ponta direita, alinhado com o alto do título",
+        "c": "Embaixo da frase, no meio da largura",
+        "d": "Logo depois do título, colado nele"
+      },
+      "answer": "a",
+      "explanation": "Em `'row'`, o `space-between` manda o primeiro filho (os textos) para uma ponta e o último (o círculo) para a outra. O `alignItems: 'center'` age no eixo cruzado, que em linha é a altura: o círculo fica no meio da altura dos dois textos. Sem o `alignItems`, ele ficaria no alto; sem o `'row'`, iria para baixo da frase.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Numa `View` com `flexDirection: 'row'`, qual propriedade arruma as caixas **na vertical**, para cima, para o meio ou para baixo?",
+      "options": {
+        "a": "`alignItems`",
+        "b": "`justifyContent`",
+        "c": "`flexDirection`",
+        "d": "`gap`"
+      },
+      "answer": "a",
+      "explanation": "Em `'row'`, o eixo principal vai para o lado, e o cruzado é a altura. O `alignItems` age no eixo cruzado, então mexe na vertical. O `justifyContent` age no principal: em linha, na horizontal. Trocou a direção, trocaram os eixos.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Três botões numa `View` em `'row'`, mais larga que eles. Qual valor de `justifyContent` deixa **todos os vãos iguais**, inclusive entre a borda e o primeiro botão e entre o último e a outra borda?",
+      "options": {
+        "a": "`'space-evenly'`",
+        "b": "`'space-around'`",
+        "c": "`'space-between'`",
+        "d": "`'center'`"
+      },
+      "answer": "a",
+      "explanation": "No `'space-evenly'`, os quatro vãos são iguais. No `'space-around'`, cada botão ganha o mesmo espaço dos dois lados, então as pontas ficam com a metade do vão do meio. No `'space-between'`, as pontas não têm vão. No `'center'`, os botões ficam juntos no meio.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Na faixa de números, três `Cartao` com `flex: 1` ficam numa `View` com `flexDirection: 'row'` e `gap: 8`. Dentro da `Tela`, sobram 328 de largura para a faixa. Qual é a largura de cada cartão?",
+      "options": {
+        "a": "104",
+        "b": "109",
+        "c": "112",
+        "d": "120"
+      },
+      "answer": "a",
+      "explanation": "Entre três cartões há dois vãos de 8: 328 menos 16 dá 312. Com `flex: 1` em todos, cada um fica com uma parte igual do que sobra: 312 dividido por 3 dá 104. O 109 esquece os vãos (328 dividido por 3).",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um colega escreveu o cartão assim. No celular dele, o nome \"Associação Patinhas do Bem\" não quebra a linha e passa da borda do cartão. O que resolve?\n\n```javascript\ncartao: { flexDirection: 'row', alignItems: 'center', gap: 16 },\nfoto: { width: 72, height: 72, borderRadius: 8, backgroundColor: '#e2dbd1' },\ntextos: { gap: 4 },\n```",
+      "options": {
+        "a": "`textos: { flex: 1, gap: 4 }`",
+        "b": "`textos: { flexDirection: 'row', gap: 4 }`",
+        "c": "`cartao: { flexDirection: 'row', justifyContent: 'center', gap: 16 }`",
+        "d": "`foto: { width: 72, height: 72, borderRadius: 8, margin: 16 }`"
+      },
+      "answer": "a",
+      "explanation": "Sem `flex: 1`, a coluna de textos tem o tamanho do conteúdo, e o nome comprido não cabe ao lado da foto. Com `flex: 1`, ela fica só com o espaço que sobra depois da foto e do vão, e o texto quebra a linha dentro do cartão. Pôr os textos em `'row'` deixaria a linha ainda mais comprida.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais frases sobre os espaços estão certas? Marque todas.",
+      "options": {
+        "a": "O `padding` é o espaço por dentro da caixa, entre a borda e o conteúdo",
+        "b": "O `gap` vai na `View` de fora e põe espaço entre os filhos",
+        "c": "O `margin` é o espaço por fora da caixa, entre ela e os vizinhos",
+        "d": "O `gap` também põe espaço antes do primeiro filho e depois do último"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `padding` fica por dentro (o plástico-bolha do E30), o `margin` por fora e o `gap` entre os filhos, posto no pai. O `gap` nunca põe espaço nas pontas: é por isso que os 12 cartões da Início saem separados por 16 sem sobrar espaço depois do último.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No kit puro, o título \"Casas de adoção\" aparece colado no relógio, atrás da barra de status. O que resolve em qualquer celular?",
+      "options": {
+        "a": "Trocar a `View` de fora pela `Tela` do kit, que usa a `SafeAreaView` por dentro",
+        "b": "Pôr `paddingTop: 44` no estilo do título",
+        "c": "Pôr `alignItems: 'center'` na `View` de fora",
+        "d": "Atualizar o Expo Go na loja"
+      },
+      "answer": "a",
+      "explanation": "A `SafeAreaView`, dentro da `Tela`, mede o entalhe e as barras de cada aparelho e põe o espaço certo. Um número fixo, como 44, acerta num celular e erra em outro, porque cada um tem o entalhe e as barras de um tamanho. O `alignItems` só alinha, e o Expo Go não muda a área segura.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "No kit, `import { Tela } from '@/components/ui';` funciona em qualquer arquivo, de qualquer pasta, porque o `jsconfig.json` diz que o `@` quer dizer a pasta ___ do projeto.",
+      "answer": [["src", "src/", "./src", "./src/", "/src"]],
+      "explanation": "A linha `\"@/*\": [\"./src/*\"]` do `jsconfig.json` diz: onde o `import` começar com `@/`, leia `./src/`. Assim, `@/components/ui` é sempre `src/components/ui`, seja em `app/index.js`, seja em `app/casa/[id].js`, no E37.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Na Sua vez, a Início guarda os números do app antes do `return`:\n\n```jsx\nconst resumo = resumoDasCasas(casas);\n```\n\nCom as 12 casas do kit, o que mostra `<Text>{resumo.cidades}</Text>`?",
+      "options": {
+        "a": "`5`",
+        "b": "`12`",
+        "c": "`76`",
+        "d": "`cidades`"
+      },
+      "answer": "a",
+      "explanation": "`resumoDasCasas(casas)` devolve a ficha `{ casas: 12, cidades: 5, vagas: 76 }`. O `resumo.cidades` lê o campo `cidades`: 5. O 12 é o campo `casas`, e o 76, o `vagas`. A palavra \"cidades\" é o rótulo, escrito à parte no outro `Text`.",
+      "points": 1
+    }
+  ]
+}

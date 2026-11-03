@@ -1,379 +1,289 @@
 ---
 title: "Projeto 3 · Lista de tarefas"
-summary: App web de tarefas com regras testadas, classes, erros próprios, Promises e a API, e a tela feita por você no DOM.
+summary: "Lista de tarefas com classes, herança, erros próprios, salvamento e uma API, testada no Jest. A tela vem pronta no kit."
 section: Módulo Básico
 module: classes-e-controle
-opens: e13a-if-else-e-switch
-due: e21a-por-que-react
-due_label: início do E21
+opens: e17-condicoes-legiveis
+due: e24-react-e-o-primeiro-componente
+due_label: início do E24
 passing_score: 70
 required: true
 rubric:
   - key: regras-e-classes
     title: Regras e classes
-    points: 25
-    description: "As regras de prazo, prioridade, busca, filtro, urgência e resumo dão os resultados das tabelas do enunciado; `Tarefa`, `TarefaRecorrente` e `ListaDeTarefas` têm os nomes do enunciado, `#tarefas` é privado, `concluir` devolve uma instância nova e a recorrente gera a próxima ao ser concluída."
-  - key: tela
-    title: A tela no navegador
-    points: 25
-    description: "Com `npx serve .`, a lista aparece em ordem de urgência, com prioridade, prazo e resumo; Concluir e Remover funcionam; o formulário cria tarefas; a busca e o filtro redesenham a lista; nenhuma regra mora em `src/tela/`."
-  - key: erros-e-assincrono
-    title: Erros, salvamento e API
-    points: 20
-    description: "Erros próprios com `codigo`, e só os esperados capturados; a mensagem aparece embaixo do campo certo; as tarefas voltam depois de recarregar, com o aviso Salvando...; Importar exemplos traz as tarefas da DummyJSON, desliga o botão enquanto espera e mostra a mensagem quando falta internet."
+    points: 35
+    description: "As funções de src/regras/prazos.js e as classes Tarefa, TarefaRecorrente e ListaDeTarefas têm os nomes do enunciado e dão os resultados das tabelas, com o hoje de 10/11/2026. Concluir a tarefa que se repete cria a próxima sem nenhum if que pergunte o tipo da tarefa."
+  - key: erros
+    title: Erros próprios
+    points: 15
+    description: "ErroDeTarefa com o campo; a tarefa recusa título vazio ou curto, prioridade e prazo errados; a que se repete recusa ficar sem prazo; a lista recusa título repetido; importar pula só os ErroDeTarefa. Na tela, a mensagem aparece embaixo do campo certo."
+  - key: salvar-e-api
+    title: Salvar e importar
+    points: 15
+    description: "As tarefas voltam depois de recarregar a página; texto salvo quebrado vira lista vazia; Importar exemplos traz as 5 pendentes da DummyJSON, não repete na segunda vez e, sem internet, mostra a mensagem em português."
   - key: testes
-    title: Testes e lint
+    title: Testes
     points: 20
-    description: "`npm run verificar` verde; testes para cada regra e cada borda das tabelas, para as três classes, para os erros, para o salvamento com armazenamento falso e para a API com `fetch` simulado; nenhum teste usa a internet nem o `localStorage`."
+    description: "`npm test` verde com a internet desligada, com testes de cada função e método das tabelas e das bordas (ontem, hoje, amanhã, 23h59, 2 e 3 letras), com o armazenamento falso e a resposta falsa. Nenhum teste usa a data de hoje, o localStorage ou a internet."
   - key: entrega
-    title: Repositório e README
-    points: 10
-    description: "Repositório público `lista-de-tarefas` sem `node_modules/`, um commit por etapa com as mensagens do enunciado e README com o que o app faz, dois prints, como rodar e como testar."
+    title: Repositório, commits e README
+    points: 15
+    description: "Repositório público lista-de-tarefas no GitHub, sem node_modules, com o commit do kit e os das etapas 1 a 6, cada um com o nome da etapa, e um README com o que o app faz, dois prints, como rodar e como testar."
 steps:
-  - lesson: e13b-condicoes-legiveis
-    when: E13
-    title: Prazo e prioridade
-    summary: "Repositório criado a partir do ponto de partida; `situacaoDoPrazo`, `textoDoPrazo` e `pesoDaPrioridade` com testes nas bordas."
-  - lesson: e14b-lacos-sobre-colecoes
-    when: E14
-    title: Busca, filtro e urgência
-    summary: "`buscarTarefas`, `filtrarTarefas`, `ordenarPorUrgencia` e `resumirTarefas`, com laços e testes."
-  - lesson: e15b-metodos-estaticos-getters-e-setters
-    when: E15
-    title: Classe Tarefa e a lista na tela
-    summary: "Classe `Tarefa` com getters, `deJSON` e `concluir`; a lista e o resumo desenhados no DOM."
-  - lesson: e16b-encapsulamento-e-composicao
-    when: E16
-    title: Lista, recorrente e botões
-    summary: "`ListaDeTarefas` com `#tarefas`, `TarefaRecorrente` que gera a próxima e os botões Concluir e Remover na tela."
-  - lesson: e17b-tratamento-de-erros
+  - lesson: e17-condicoes-legiveis
     when: E17
-    title: Erros próprios e formulário
-    summary: "`ErroDeTarefa` e filhos, validação que lança e o formulário de nova tarefa com a mensagem embaixo do campo."
-  - lesson: e18b-promises
+    title: Prazo e prioridade
+    summary: "O kit no GitHub; `pesoDaPrioridade`, `situacaoDoPrazo`, `proximoPrazo` e `textoDoPrazo`, com testes. A tela mostra as tarefas de demonstração."
+  - lesson: e18-classes
     when: E18
-    title: Salvar com Promises
-    summary: "`salvarTarefas` e `carregarTarefas` com Promise sobre o localStorage, armazenamento falso nos testes, aviso Salvando..., busca e filtro na tela."
-  - lesson: e19b-consumindo-a-api
+    title: Classe Tarefa
+    summary: "`Tarefa` com `constructor`, `concluir`, os gets `rotuloDaPrioridade` e `peso` e os métodos `situacao` e `prazoEmTexto`. O Concluir da tela funciona."
+  - lesson: e19-heranca-e-composicao
     when: E19
-    title: Importar exemplos da API
-    summary: "`buscarExemplos` com async, await e fetch na DummyJSON, carregando, erro sem rede e testes sem rede."
-  - lesson: e20b-revisao-javascript
+    title: Recorrente e lista
+    summary: "`TarefaRecorrente` com `extends` e `super`, `ListaDeTarefas`, `criarTarefa` e `resumo`. A tela inteira funciona."
+  - lesson: e20-erros
     when: E20
-    title: Revisão e entrega
-    summary: "`npm run verificar` verde, README com prints e o link do repositório na página do projeto."
+    title: Erros próprios
+    summary: "`ErroDeTarefa`, as conferências da tarefa e da lista e o `importar` com `try`/`catch`. A mensagem aparece embaixo do campo."
+  - lesson: e21-codigo-que-espera
+    when: E21
+    title: Salvar e carregar
+    summary: "`esperar`, `salvarTarefas` e `carregarTarefas`, com um armazenamento falso nos testes. As tarefas voltam ao recarregar."
+  - lesson: e22-apis-com-fetch
+    when: E22
+    title: Exemplos da API e entrega
+    summary: "`buscarExemplos` com `fetch` e uma resposta falsa nos testes, `converterTodo`, README com prints e o link entregue."
 ---
 
 ## O que você vai construir
 
-Uma **lista de tarefas** que roda no navegador: você escreve "Pagar a conta de luz", escolhe a
-prioridade e o prazo, e a lista mostra primeiro o que está atrasado, depois o que vence hoje, e assim
-por diante. Dá para concluir, remover, buscar e filtrar; a tarefa que se repete toda semana ganha a
-próxima sozinha quando você a conclui; tudo fica salvo no navegador; e um botão traz tarefas de
-exemplo da internet.
+Uma **lista de tarefas** que roda no navegador. Você escreve "Pagar a conta de luz", escolhe a prioridade e o prazo, e a lista mostra primeiro o que está atrasado, depois o que vence hoje, e assim por diante. Cada tarefa diz o prazo em palavras: "Atrasada há 2 dias", "Vence hoje", "Vence em 5 dias". A tarefa que se repete toda semana ganha a próxima sozinha quando você a conclui. Tudo fica salvo no navegador, e um botão traz tarefas de exemplo da internet.
 
-É o projeto mais difícil do Módulo Básico, e o único em que **a tela é sua**: o JavaScript que mexe
-na página (o **DOM**) é você quem escreve. As regras e as classes ficam separadas da tela e são
-testadas no Jest, como no `lojinha-regras`.
+Você constrói o projeto do E17 ao E22, em 6 etapas, uma por encontro. A etapa **é a prática da aula**: você faz a maior parte junto com o instrutor e termina sozinho a parte "Sua vez". Cada etapa usa só o que a aula dela ensinou. O E23 é de revisão e da Prova 1, e tem tempo para terminar o que faltar.
 
-No celular, a página é uma coluna: o formulário em cima, a lista embaixo. No computador, o formulário
-e o botão de exemplos ficam à esquerda, e a lista, com busca, filtro e resumo, à direita. Cada tarefa
-é uma linha com o título, um selo da prioridade (Alta, Média, Baixa), o prazo em texto ("Atrasada há
-2 dias", "Vence hoje", "Vence em 5 dias") e os botões Concluir e Remover. A atrasada tem a borda
-vermelha; a concluída fica riscada.
+**A tela vem pronta.** Você não escreve HTML, CSS nem o código que mexe na página. O seu trabalho são as **regras** e as **classes**, em `src/`, com testes no Jest. A tela importa o que você escreveu e cresce com o projeto: a cada etapa pronta, uma parte nova passa a funcionar. No fim da página, a lista **O que a página usa** confere cada função e cada classe com os exemplos deste enunciado e diz o que ainda falta.
 
-### Material do curso
+No celular, a página é uma coluna: o formulário em cima e as tarefas embaixo. No computador, o formulário, as tarefas de exemplo e a lista "O que a página usa" ficam à esquerda, e as tarefas à direita. A tarefa atrasada tem a borda vermelha; a concluída fica riscada.
 
-- [ponto-de-partida.zip](materiais/projeto-3/ponto-de-partida.zip): o `index.html` e o `estilo.css`
-  prontos, com tema claro e escuro, mais `package.json`, Jest e ESLint configurados. Você não precisa
-  escrever HTML nem CSS: o seu trabalho é o JavaScript
-- [Guia do DOM](materiais/projeto-3/guia-dom.html): o essencial para mexer na página (encontrar,
-  criar e apagar elementos, classes, eventos, formulário, `dataset`, `localStorage`), com exemplos que
-  funcionam na própria página. Cada etapa diz quais partes do guia usar
+### O kit
 
-O `index.html` traz três tarefas escritas à mão dentro da lista. Elas são o **molde**: mostram o
-HTML e as classes que o seu JavaScript vai criar para cada tarefa. Quando a sua renderização
-funcionar, ela apaga o molde.
+Baixe o [kit-tarefas.zip](materiais/projeto-3/kit-tarefas.zip). Ele traz:
 
-### A tarefa
+| Arquivo | O que é |
+|---|---|
+| `package.json` e `package-lock.json` | a ficha do projeto, com o script `test` e o Jest; o lock trava as versões |
+| `babel.config.json` | deixa o Jest entender `import` e `export` |
+| `serve.json` | avisa ao navegador que busque sempre a versão nova dos seus arquivos |
+| `web/` | a tela pronta: `index.html`, `estilo.css` e `tela.js`. Não mude nada nela |
+| `src/utils/datas.js` | as datas do kit, prontas: `diasAte`, `somarDias`, `paraPrazo` e `ehDataValida` |
+| `src/utils/datas.test.js` | os testes das datas do kit, que já passam |
+| os outros arquivos de `src/` | vazios, com um comentário dizendo a etapa e o que entra em cada um |
 
-| Campo | Tipo | Exemplo |
+Versões do kit: Jest 30.5.2, babel-jest 30.5.2 e @babel/preset-env 7.29.7. A tela abre com o `serve` 14 (`npx serve .`), o mesmo do E12.
+
+### As datas do kit
+
+Um **prazo** é sempre um texto `'AAAA-MM-DD'`, como `'2026-11-12'`, ou `null` quando a tarefa não tem prazo. As contas com datas vêm prontas em `src/utils/datas.js`: você só usa.
+
+| Função | O que devolve | Exemplo |
 |---|---|---|
-| `id` | número inteiro | `1` |
-| `titulo` | texto, de 3 a 80 caracteres | `'Pagar a conta de luz'` |
-| `prioridade` | `'alta'`, `'media'` ou `'baixa'` | `'alta'` |
-| `prazo` | texto `'AAAA-MM-DD'` ou `null` | `'2026-10-30'` |
-| `concluida` | `true` ou `false` | `false` |
-| `frequencia` | só na tarefa que se repete: `'diaria'` ou `'semanal'` | `'semanal'` |
+| `diasAte(prazo, hoje)` | quantos dias faltam de hoje até o prazo; negativo quando já passou. A hora de hoje não conta | `diasAte('2026-11-15', hoje)` devolve `5` |
+| `somarDias(prazo, dias)` | o prazo mais alguns dias, de novo em texto | `somarDias('2026-11-28', 7)` devolve `'2026-12-05'` |
+| `paraPrazo(data)` | um `Date` em texto `'AAAA-MM-DD'` | `paraPrazo(new Date(2026, 10, 10))` devolve `'2026-11-10'` |
+| `ehDataValida(texto)` | `true` se o texto é uma data de verdade no formato `'AAAA-MM-DD'` | `ehDataValida('10/11/2026')` devolve `false` |
 
 ### Estrutura final
 
 ```plaintext
 lista-de-tarefas/
-├── index.html, estilo.css       do ponto de partida
-├── package.json, babel.config.json, eslint.config.js
-├── README.md
-├── docs/                        os prints do README
+├── package.json, package-lock.json, babel.config.json, serve.json
+├── .gitignore                  node_modules/
+├── README.md                   o seu, na etapa 6
+├── docs/                       os prints do README
+├── web/                        a tela pronta do kit
 └── src/
-    ├── utils/datas.js           lerData, inicioDoDia, diasEntre, somarDias, paraTextoDeData
-    ├── regras/tarefas.js        prazo, prioridade, busca, filtro, urgência e resumo
-    ├── data/tarefas.js          tarefas de exemplo escritas por você
-    ├── modelos/                 Tarefa.js, TarefaRecorrente.js, ListaDeTarefas.js, erros.js
-    ├── servicos/armazenamento.js  salvar e carregar, com Promises
-    ├── api/exemplos.js          as tarefas de exemplo da DummyJSON
-    └── tela/                    app.js e render.js: o código que mexe no DOM
+    ├── utils/datas.js          do kit, pronto
+    ├── regras/prazos.js        etapa 1
+    ├── modelos/Tarefa.js       etapa 2
+    ├── modelos/TarefaRecorrente.js e ListaDeTarefas.js   etapa 3
+    ├── modelos/ErroDeTarefa.js etapa 4
+    ├── servicos/armazenamento.js   etapa 5
+    └── servicos/exemplos.js    etapa 6
 ```
 
-Cada arquivo de `src/` (menos os de `tela/`) tem o seu `.test.js` ao lado.
+Cada arquivo seu tem o `.test.js` ao lado, na mesma pasta.
 
-:::warning A regra das pastas
-`regras/`, `modelos/`, `servicos/` e `api/` **nunca** usam `document`: por isso rodam no Jest.
-`tela/` não decide nada: lê o que a pessoa fez, chama as classes e desenha. Se você escreveu um `if`
-sobre prazo ou prioridade dentro de `tela/`, ele está no lugar errado.
-:::
+## As funções e as classes combinadas
 
-## Regras
+Os nomes abaixo são fixos: a tela usa estes nomes, e o instrutor corrige por eles.
 
-Os nomes das funções, classes, métodos e códigos de erro abaixo são fixos: o instrutor corrige por
-eles. Os exemplos usam **hoje = quarta, 28 de outubro de 2026**, que nos testes é
-`new Date(2026, 9, 28)` (o mês começa em 0).
+| Etapa | Arquivo | Nome | Recebe | Devolve |
+|---|---|---|---|---|
+| 1 | `regras/prazos.js` | `pesoDaPrioridade` | `prioridade` | `3`, `2`, `1` ou `0` |
+| 1 | `regras/prazos.js` | `situacaoDoPrazo` | `prazo`, `hoje` | `'atrasada'`, `'vence-hoje'`, `'em-dia'` ou `'sem-prazo'` |
+| 1 | `regras/prazos.js` | `proximoPrazo` | `prazo`, `frequencia`, `hoje` | o prazo da próxima vez, sempre depois de hoje |
+| 1 | `regras/prazos.js` | `textoDoPrazo` | `prazo`, `hoje` | o prazo em palavras |
+| 2 | `modelos/Tarefa.js` | `Tarefa` (`export default`) | `dados` | uma tarefa |
+| 3 | `modelos/TarefaRecorrente.js` | `TarefaRecorrente` (`export default`) | `dados` | uma tarefa que se repete |
+| 3 | `modelos/ListaDeTarefas.js` | `ListaDeTarefas` (`export default`) | nada | uma lista vazia |
+| 3 | `modelos/ListaDeTarefas.js` | `criarTarefa` | `dados` | uma `TarefaRecorrente` ou uma `Tarefa` |
+| 4 | `modelos/ErroDeTarefa.js` | `ErroDeTarefa` (`export default`) | `mensagem`, `campo` | um erro |
+| 5 | `servicos/armazenamento.js` | `CHAVE`, `esperar`, `salvarTarefas`, `carregarTarefas` | veja a etapa 5 | |
+| 6 | `servicos/exemplos.js` | `URL_DOS_EXEMPLOS`, `converterTodo`, `buscarExemplos` | veja a etapa 6 | |
 
-### Prazo e prioridade
+O que as classes têm:
 
-| `prazo` | `situacaoDoPrazo(prazo, hoje)` | `textoDoPrazo(prazo, hoje)` |
+| Classe | Campos | Métodos e gets |
 |---|---|---|
-| `null`, `undefined` ou `''` | `'sem-prazo'` | `'Sem prazo'` |
-| `'2026-10-25'` | `'atrasada'` | `'Atrasada há 3 dias'` |
-| `'2026-10-27'` | `'atrasada'` | `'Atrasada há 1 dia'` |
-| `'2026-10-28'` | `'vence-hoje'` | `'Vence hoje'` |
-| `'2026-10-29'` | `'em-dia'` | `'Vence amanhã'` |
-| `'2026-11-02'` | `'em-dia'` | `'Vence em 5 dias'` |
+| `Tarefa` | `titulo`, `prioridade` (`'media'` quando não vem), `prazo` (`null` quando não vem), `concluida` (`false` quando não vem) | `concluir()`, `get rotuloDaPrioridade`, `get peso`, `situacao(hoje)`, `prazoEmTexto(hoje)`, `validar()` |
+| `TarefaRecorrente extends Tarefa` | os da `Tarefa`, mais `frequencia` (`'semanal'` quando não vem, ou `'diaria'`) | `concluir(hoje)` sobrescrito |
+| `ListaDeTarefas` | `tarefas` (uma lista), `proximoId` (começa em 1) | `adicionar(tarefa)`, `buscar(id)`, `concluir(id, hoje)`, `remover(id)`, `resumo(hoje)`, `importar(listaDeDados)` |
+| `ErroDeTarefa extends Error` | `message`, `name` (`'ErroDeTarefa'`), `campo` (`'titulo'`, `'prioridade'`, `'prazo'` ou `null`) | os do `Error` |
 
-- A hora de `hoje` não muda a resposta: às 23h59 do dia 28, o prazo `'2026-10-28'` ainda "vence hoje"
-- `pesoDaPrioridade(prioridade)`: `'alta'` 3, `'media'` 2, `'baixa'` 1, qualquer outra coisa 0
-- Os valores de `situacaoDoPrazo` são os nomes das classes do CSS: `atrasada`, `vence-hoje`,
-  `em-dia` e `sem-prazo`
+### Exemplos que viram testes
 
-### Busca, filtro, urgência e resumo
+Nos testes, **hoje é 10 de novembro de 2026**: `const HOJE = new Date(2026, 10, 10);` (o mês começa em 0). Cada linha das tabelas é um teste.
 
-| Função | O que devolve |
+| `prazo` | `situacaoDoPrazo(prazo, HOJE)` | `textoDoPrazo(prazo, HOJE)` |
+|---|---|---|
+| `null` | `'sem-prazo'` | `'Sem prazo'` |
+| `'2026-11-07'` | `'atrasada'` | `'Atrasada há 3 dias'` |
+| `'2026-11-09'` | `'atrasada'` | `'Atrasada há 1 dia'` |
+| `'2026-11-10'` | `'vence-hoje'` | `'Vence hoje'` |
+| `'2026-11-11'` | `'em-dia'` | `'Vence amanhã'` |
+| `'2026-11-15'` | `'em-dia'` | `'Vence em 5 dias'` |
+
+- A hora de hoje não muda a resposta: às 23h59 do dia 10, o prazo `'2026-11-10'` ainda "vence hoje"
+- `pesoDaPrioridade`: `'alta'` dá `3`, `'media'` dá `2`, `'baixa'` dá `1`, qualquer outra coisa dá `0`
+
+| `proximoPrazo(prazo, frequencia, HOJE)` | Devolve | Por quê |
+|---|---|---|
+| `'2026-11-10'`, `'semanal'` | `'2026-11-17'` | 7 dias depois |
+| `'2026-11-10'`, `'diaria'` | `'2026-11-11'` | 1 dia depois |
+| `'2026-11-12'`, `'semanal'` | `'2026-11-19'` | concluída antes do prazo: 7 dias depois do prazo |
+| `'2026-10-27'`, `'semanal'` | `'2026-11-17'` | o dia 3 já passou e o 10 é hoje: pula até ficar depois de hoje |
+| `'2026-11-28'`, `'semanal'` | `'2026-12-05'` | a virada do mês |
+
+| Código | Resultado |
 |---|---|
-| `buscarTarefas(tarefas, termo)` | as tarefas cujo título tem **todas** as palavras do termo, em qualquer ordem, sem diferenciar maiúsculas nem acentos; termo vazio, só com espaços ou ausente devolve todas |
-| `filtrarTarefas(tarefas, filtro, hoje)` | `'todas'`, `'pendentes'`, `'concluidas'` ou `'atrasadas'` (pendente e com o prazo vencido); filtro desconhecido devolve todas |
-| `ordenarPorUrgencia(tarefas)` | uma **cópia** ordenada: pendentes antes das concluídas; prazo mais cedo primeiro e sem prazo no fim; mesmo prazo, a prioridade maior primeiro; empate, título em ordem alfabética |
-| `resumirTarefas(tarefas, hoje)` | `{ total, pendentes, concluidas, atrasadas }`; atrasada conta só se estiver pendente |
-
-Nenhuma delas muda a lista recebida. Exemplos: `buscarTarefas(tarefas, 'TECNICO')` acha "Ligar para o
-técnico"; `'luz conta'` acha "Pagar a conta de luz"; `'conta gato'` não acha nada.
-
-### Classes
-
-| Classe | O que precisa ter |
-|---|---|
-| `Tarefa` (`export default`) | `constructor` que recebe um objeto, com `prioridade = 'media'`, `prazo = null` e `concluida = false`; estáticos `deJSON(obj)` e `listaDeJSON(lista)`; getters `peso` e `rotuloDaPrioridade` (`'Alta'`, `'Média'`, `'Baixa'`); métodos `situacao(hoje)`, `textoDoPrazo(hoje)`, `concluir()`, `proxima()` e `paraJSON()` |
-| `TarefaRecorrente extends Tarefa` (`export default`) | campo privado `#frequencia` (`'diaria'` ou `'semanal'`, padrão `'semanal'`) com getter só de leitura; getter `rotuloDaFrequencia` (`'Todo dia'`, `'Toda semana'`); sobrescreve `concluir()`, `proxima(id)` e `paraJSON()` |
-| `ListaDeTarefas` (`export default`) | campo privado `#tarefas`; `constructor(tarefas = [])`; estático `deJSON(lista)`; getters `todas` (uma cópia) e `tamanho`; métodos `adicionar(dados)`, `concluir(id)`, `remover(id)`, `importar(lista)` e `paraJSON()`; mais a função exportada `criarTarefa(dados)` |
-
-- `concluir()` devolve **outra** instância, concluída; a original não muda (E15)
-- `proxima()` devolve `null` numa `Tarefa`. Numa `TarefaRecorrente`, `proxima(id)` devolve uma
-  recorrente nova, pendente, com o `id` recebido e o prazo 1 dia (diária) ou 7 dias (semanal) depois
-  do prazo atual: de `'2026-10-30'`, a semanal vai para `'2026-11-06'`
-- `lista.concluir(id)` troca a tarefa pela versão concluída e, se `tarefa.proxima(novoId)` não for
-  `null`, acrescenta a próxima. É polimorfismo: nenhum `if` pergunta o tipo da tarefa. Concluir uma
-  tarefa já concluída não faz nada
-- `lista.adicionar(dados)` dá o id (o maior id da lista mais 1) e devolve a tarefa criada;
-  `criarTarefa(dados)` cria uma `TarefaRecorrente` quando `dados.frequencia` está preenchida e uma
-  `Tarefa` nos outros casos
+| `new Tarefa({ titulo: 'Comprar ração do gato' })` | `prioridade` `'media'`, `prazo` `null`, `concluida` `false` |
+| `rotuloDaPrioridade` de uma tarefa `'media'` | `'Média'` (e `'Alta'`, `'Baixa'`) |
+| `peso` de uma tarefa `'alta'` | `3` |
+| `situacao(HOJE)` com prazo `'2026-11-09'` / concluída | `'atrasada'` / `'concluida'` |
+| `prazoEmTexto(HOJE)` com prazo `'2026-11-10'` / concluída | `'Vence hoje'` / `'Concluída'` |
+| `concluir()` de uma `Tarefa` | marca `concluida` e devolve `null` |
+| `concluir(HOJE)` de uma semanal com prazo `'2026-11-10'` | marca esta e devolve uma `TarefaRecorrente` nova, pendente, com prazo `'2026-11-17'` |
+| `adicionar` duas tarefas numa lista nova | ids `1` e `2`; `adicionar` devolve a tarefa |
+| `lista.concluir(1, HOJE)` com a semanal acima | a lista fica com 2 tarefas: a 1 concluída e a 2 com prazo `'2026-11-17'` |
+| `resumo(HOJE)` com uma atrasada, uma em dia e uma concluída | `{ pendentes: 2, atrasadas: 1, concluidas: 1 }` |
 
 ### Erros
 
-| Situação | Classe | `codigo` | Mensagem sugerida |
-|---|---|---|---|
-| título vazio ou só com espaços | `TituloInvalidoError` | `TITULO_INVALIDO` | Escreva o título da tarefa. |
-| título com menos de 3 caracteres (sem os espaços das pontas) | `TituloInvalidoError` | `TITULO_INVALIDO` | O título precisa de pelo menos 3 letras. |
-| título com mais de 80 caracteres | `TituloInvalidoError` | `TITULO_INVALIDO` | O título pode ter até 80 caracteres. |
-| título igual ao de uma tarefa pendente, sem diferenciar maiúsculas | `TituloInvalidoError` | `TITULO_INVALIDO` | Já existe uma tarefa pendente com esse título. |
-| prazo fora do formato `AAAA-MM-DD` | `PrazoInvalidoError` | `PRAZO_INVALIDO` | Use uma data no formato AAAA-MM-DD. |
-| tarefa que se repete sem prazo | `PrazoInvalidoError` | `PRAZO_INVALIDO` | Tarefa que se repete precisa de prazo. |
-| `concluir` ou `remover` com um id que não está na lista | `TarefaNaoEncontradaError` | `TAREFA_NAO_ENCONTRADA` | Essa tarefa não está mais na lista. |
+| Situação | `campo` | Mensagem |
+|---|---|---|
+| título vazio ou só com espaços | `'titulo'` | Escreva o título da tarefa. |
+| título com menos de 3 letras (sem os espaços das pontas) | `'titulo'` | O título precisa de pelo menos 3 letras. |
+| prioridade que não é `'alta'`, `'media'` nem `'baixa'` | `'prioridade'` | Escolha a prioridade: alta, média ou baixa. |
+| prazo que não é uma data `'AAAA-MM-DD'` | `'prazo'` | Use uma data no formato AAAA-MM-DD. |
+| tarefa que se repete sem prazo | `'prazo'` | Tarefa que se repete precisa de prazo. |
+| título igual ao de uma tarefa **pendente** da lista, sem ligar para maiúsculas | `'titulo'` | Já existe uma tarefa pendente com esse título. |
+| a API respondeu com erro | `null` | O servidor de exemplos respondeu 500. Tente mais tarde. (com o status que veio) |
+| sem internet | `null` | Sem conexão com a internet. Confira e tente de novo. |
 
-Todas estendem `ErroDeTarefa(mensagem, codigo)`, que estende `Error`. Prioridade ou frequência
-desconhecida também lança um `ErroDeTarefa`, com o código que você escolher. O título é guardado sem
-os espaços das pontas. As mensagens podem ter outras palavras; os códigos, não.
+Todos são `ErroDeTarefa`. A tela usa o `campo` para escolher onde mostrar a mensagem: embaixo do título, da prioridade, do prazo ou no topo do formulário. O título é guardado sem os espaços das pontas. As mensagens podem ter outras palavras; o `campo`, não.
+
+## Regras
+
+- **Não mude a tela.** Os arquivos de `web/` e o `src/utils/datas.js` são do kit. Se a tela mostra algo errado, o problema está no seu código
+- **Nada de `document` em `src/`.** As regras e as classes não sabem que existe uma página: é por isso que rodam no Jest
+- **Hoje entra por parâmetro.** Toda função ou método que depende do dia recebe `hoje`. A tela passa `new Date()`; os testes passam `HOJE`, sempre fixo. Teste nenhum usa a data de verdade
+- **Quem chama diz onde guardar e onde buscar.** `salvarTarefas` e `carregarTarefas` recebem o armazenamento; `buscarExemplos` recebe a função que busca. A tela passa o `localStorage` e o `fetch`; os testes passam um armazenamento falso e uma busca falsa. Teste nenhum usa o `localStorage` nem a internet
+- **Use só o que o curso ensinou até o encontro da etapa.** Expressões regulares, campos com `#`, métodos `static`, setters e o DOM não fazem parte do projeto
+- **Nenhum `if` pergunta o tipo da tarefa.** Concluir na lista chama o `concluir` da própria tarefa, e cada classe faz do seu jeito
 
 ## Etapas
 
-Cada etapa termina com um commit com a mensagem indicada e o `git push`. Pode haver commits extras no
-meio; o da etapa é o que o instrutor confere no encontro seguinte. Em cada encontro, 15 minutos da
-aula são do projeto: você começa ali e termina em casa.
+Cada etapa começa onde a anterior terminou e termina com um **commit** cujo nome é `Projeto 3: etapa N, nome da etapa`, seguido do `git push`. Pode haver outros commits no meio; o da etapa marca o ponto em que ela ficou pronta.
 
-### Etapa 1 · E13: prazo e prioridade
+Os passos "Juntos em aula" têm o código completo nos slides da aula do encontro. Quem faltou faz a etapa pelos slides e por este enunciado. Os "Sua vez" você faz sozinho; os slides trazem o enunciado e as dicas, sem a resposta.
 
-**O repositório**
+Para ver a tela: na raiz do repositório, `npx serve .` e `http://localhost:3000/web/`. Salvou um arquivo? Recarregue a página. Para parar o servidor, Ctrl + C no terminal.
 
-- Baixe o [ponto-de-partida.zip](materiais/projeto-3/ponto-de-partida.zip), descompacte, renomeie a
-  pasta para `lista-de-tarefas` e rode `npm install`
-- Crie o `.gitignore` com a linha `node_modules/`, faça o primeiro commit
-  (`Projeto 3: ponto de partida`) e envie para o repositório **público** `lista-de-tarefas` no GitHub,
-  com o fluxo do E03
-- Rode `npx serve .` e abra o endereço que aparece: a página mostra as três tarefas do molde. Os botões
-  ainda não fazem nada
+### Etapa 1 · E17: prazo e prioridade
 
-**As regras**
+**Juntos em aula:**
 
-- `src/utils/datas.js`: `lerData('2026-10-28')` monta o `Date` pelos números, como no E06b (nunca
-  `new Date('2026-10-28')`, que no Brasil vira o dia 27); `inicioDoDia(data)`, o mesmo dia sem a hora;
-  `diasEntre(inicio, fim)`, do E06b
-- `src/regras/tarefas.js`: `situacaoDoPrazo`, `textoDoPrazo` e `pesoDaPrioridade`, com a tabela de
-  "Prazo e prioridade". O "sem prazo" sai numa guard clause; o peso usa `switch` com `default`; "dia"
-  ou "dias" é trabalho de um ternário
-- `src/regras/tarefas.test.js` com `hoje` fixo: ontem, hoje e amanhã (as bordas), os três jeitos de
-  não ter prazo, hoje às 23h59, a virada do mês, o plural e a prioridade desconhecida
-- `npm run verificar` verde
+1. **O kit no GitHub.** Descompacte o kit, renomeie a pasta para `lista-de-tarefas` e abra no VS Code. `npm install` e `npm test`: os 9 testes das datas do kit passam. Crie o `.gitignore` com `node_modules/`, faça o primeiro commit, `Projeto 3: kit da lista de tarefas`, e envie para o repositório **público** `lista-de-tarefas` no GitHub, como no E05. Abra a tela: ela diz que falta o `pesoDaPrioridade`
+2. **O peso da prioridade.** Em `src/regras/prazos.js`, `pesoDaPrioridade` com `switch` e `default`. Em `src/regras/prazos.test.js`, um `test.each` com as quatro prioridades da tabela
+3. **A situação do prazo.** `situacaoDoPrazo`: o "sem prazo" sai logo, num retorno antecipado; o resto é uma cadeia de `else if` sobre `diasAte(prazo, hoje)`. Os testes da tabela, mais o das 23h59. A tela passa a mostrar as tarefas de demonstração, com as cores da situação
+4. **O próximo prazo.** `proximoPrazo`: os dias da frequência (1 ou 7) com um ternário, e um `while` que soma mais um período enquanto a data nova não ficar depois de hoje. Os testes da tabela
 
-:::tip Por que zerar a hora
-Às 15h do dia 28, até a meia-noite do dia 29 faltam 9 horas: 0,375 dia, que o `Math.round` do
-`diasEntre` arredonda para 0. Sem o `inicioDoDia`, a tarefa de amanhã "vence hoje". O teste das 23h59
-pega esse bug.
-:::
+**Sua vez:** `textoDoPrazo(prazo, hoje)`, com a tabela de exemplos. Um retorno antecipado para o sem prazo e uma cadeia de `else if` para atrasada, hoje, amanhã e os outros dias, com template string. "1 dia" ou "3 dias" é trabalho de um ternário. Os testes primeiro: os seis casos num `test.each`.
 
-Commit: `Projeto 3: etapa 1, prazo e prioridade`.
+**Pronto quando:** `npm test` verde e, na tela, as tarefas de demonstração aparecem com o prazo em palavras ("Atrasada há 2 dias", "Vence hoje"). Na lista "O que a página usa", a Etapa 1 mostra 4 de 4.
 
-### Etapa 2 · E14: busca, filtro e urgência
+**Commit:** `Projeto 3: etapa 1, prazo e prioridade`, e `git push`.
 
-As quatro funções da tabela "Busca, filtro, urgência e resumo", em `src/regras/tarefas.js`. Elas
-recebem uma lista de objetos no formato da tarefa e funcionam igual quando, na etapa 3, a lista for
-de instâncias.
+### Etapa 2 · E18: classe Tarefa
 
-- `buscarTarefas` com laço: uma função auxiliar, sem `export`, que para na primeira palavra que falta
-  (E14b), e os dois lados sem acento e em minúsculas (E06a)
-- `filtrarTarefas` com `switch` e `default`
-- `ordenarPorUrgencia` copia antes de ordenar (E08a) e usa um comparador com desempates; texto
-  `'AAAA-MM-DD'` em ordem alfabética já está em ordem de data
-- `resumirTarefas` numa passada só, com `for...of` e três acumuladores (E14a)
-- No teste, uma lista de 6 tarefas que cubra os casos; 2 testes ou mais por função, um deles com a
-  lista ou o termo vazio, e um que prove que a lista recebida não mudou
+**Juntos em aula:**
 
-Commit: `Projeto 3: etapa 2, busca, filtro e urgência`.
+1. **A forma da tarefa.** Em `src/modelos/Tarefa.js`, a classe `Tarefa` com `export default` e um `constructor(dados)` que guarda `titulo`, `prioridade`, `prazo` e `concluida`, com o `??` do E17 para os valores de quando não vêm. Em `Tarefa.test.js`, dois testes com `new Tarefa(...)`: a que recebe tudo e a que recebe só o título
+2. **Concluir.** O método `concluir()`, que muda `this.concluida` para `true`, e o teste dele
+3. **O rótulo da prioridade.** O `get rotuloDaPrioridade`, com `switch`: `'Alta'`, `'Média'` e `'Baixa'`. O teste, com `test.each`
 
-### Etapa 3 · E15: classe Tarefa e a lista na tela
+**Sua vez:** o `get peso`, que devolve `pesoDaPrioridade(this.prioridade)`, e os métodos `situacao(hoje)` e `prazoEmTexto(hoje)`. Os dois respondem pela tarefa concluída (`'concluida'` e `'Concluída'`) e, senão, chamam as funções da etapa 1 com o prazo da tarefa: a regra continua num lugar só. Importe as três funções de `../regras/prazos.js`. Os testes da tabela, com `HOJE`.
 
-**A classe** (`src/modelos/Tarefa.js`), com a linha `Tarefa` da tabela "Classes", menos o
-`proxima()`, que chega na etapa 4:
+**Pronto quando:** `npm test` verde e, na tela, as tarefas de demonstração são da sua classe: o botão Concluir risca a tarefa. A Etapa 2 mostra 6 de 6.
 
-- `deJSON(obj)` lança `new Error('Tarefa inválida no JSON')` quando `obj` não tem um `titulo` em
-  texto; a etapa 5 troca esse erro por um próprio
-- `situacao(hoje)` e `textoDoPrazo(hoje)` são métodos, não getters, porque recebem `hoje`; os dois
-  chamam as funções da etapa 1, e a regra continua num lugar só
-- `concluir()` devolve `new Tarefa({ ...this.paraJSON(), concluida: true })`, o jeito do `comStatus`
-  do E15
-- `Tarefa.test.js` com 6 testes ou mais, entre eles a original intacta depois de `concluir()` e a ida
-  e volta pelo JSON
+**Commit:** `Projeto 3: etapa 2, classe Tarefa`, e `git push`.
 
-**Os dados**: `src/data/tarefas.js` exporta `tarefas`, 5 ou 6 objetos escritos por você, com prazos
-perto da data de hoje: pelo menos uma atrasada, uma que vence hoje, uma concluída e uma sem prazo.
+### Etapa 3 · E19: recorrente e lista
 
-**A tela** ([Guia do DOM](materiais/projeto-3/guia-dom.html), partes 1 a 6):
+**Juntos em aula:**
 
-- `src/tela/render.js`: uma função que cria o `<li>` de uma tarefa igual ao molde (classes `tarefa`,
-  `prioridade-...`, a situação e, se for o caso, `concluida`; título, selo da prioridade e o texto do
-  prazo, ou "Concluída"), ainda sem botões, e uma que desenha a lista inteira
-- `src/tela/app.js`: cria as instâncias com `Tarefa.listaDeJSON(tarefas)` e tem uma função
-  `renderizar()` que ordena por urgência, desenha a lista, escreve o resumo no `#resumo` (por exemplo,
-  "3 pendentes · 1 atrasada · 2 concluídas") e mostra o `#vazio` só quando não há tarefas
-- Abra com `npx serve .`: o molde some e aparecem as suas tarefas, na ordem certa
+1. **A tarefa que se repete.** Em `src/modelos/TarefaRecorrente.js`, `class TarefaRecorrente extends Tarefa`. O `constructor` chama `super(dados)` e guarda a `frequencia`. Os testes: ela tem tudo o que a tarefa tem, mais a frequência, e é semanal quando a frequência não vem
+2. **Concluir, cada uma do seu jeito.** O `concluir()` da `Tarefa` passa a devolver `null`: a tarefa comum não gera outra. A `TarefaRecorrente` sobrescreve o `concluir(hoje)`: chama `super.concluir()` e devolve uma `TarefaRecorrente` nova, com o `proximoPrazo` da etapa 1. Os testes das duas
+3. **A lista que guarda tarefas.** Em `src/modelos/ListaDeTarefas.js`, a classe `ListaDeTarefas`, com `this.tarefas` e `this.proximoId`, o `adicionar(tarefa)`, que dá o id e devolve a tarefa, e o `buscar(id)`, com `find`. Os testes
+4. **Concluir e remover pela lista.** `concluir(id, hoje)` busca a tarefa, chama o `concluir` dela e, se veio uma próxima, adiciona. `remover(id)` com `filter`. A função `criarTarefa(dados)`, com `export`: `TarefaRecorrente` quando `dados.frequencia` vem preenchida, `Tarefa` nos outros casos. A tela inteira passa a funcionar: formulário, Concluir, Remover e a tarefa que se repete
 
-Commit: `Projeto 3: etapa 3, classe Tarefa e a lista na tela`.
+**Sua vez:** o método `resumo(hoje)` da lista, que devolve `{ pendentes, atrasadas, concluidas }`, contados com `filter` e `length`. A atrasada conta só se estiver pendente. Teste com uma atrasada, uma em dia e uma concluída, e com a lista vazia.
 
-### Etapa 4 · E16: lista, recorrente e botões
+**Pronto quando:** `npm test` verde e, na tela, concluir "Regar as plantas" (a semanal) faz aparecer outra, vencendo em 7 dias; o resumo no topo da lista acompanha. A Etapa 3 mostra 6 de 6.
 
-**As classes**
+**Commit:** `Projeto 3: etapa 3, recorrente e lista`, e `git push`.
 
-- `Tarefa` ganha `proxima()`, que devolve `null`
-- `src/utils/datas.js` ganha `somarDias(data, dias)` (E06b) e `paraTextoDeData(data)`, que devolve
-  `'AAAA-MM-DD'` com `padStart` (E06a)
-- `src/modelos/TarefaRecorrente.js`, com a linha da tabela "Classes": `super(...)` no `constructor`,
-  `super.paraJSON()` no `paraJSON()` e o `concluir()` sobrescrito para continuar recorrente. Frequência
-  desconhecida ou falta de prazo: `throw new Error(...)` por enquanto
-- `src/modelos/ListaDeTarefas.js`, com `criarTarefa`, `adicionar`, `concluir`, `remover`, `todas`,
-  `tamanho`, `deJSON` e `paraJSON` (o `importar` fica para a etapa 7)
-- Testes: a próxima semanal e a diária (com virada de mês), `frequencia` só de leitura, `todas`
-  devolvendo uma cópia, concluir a recorrente cria a próxima, concluir duas vezes não cria duas,
-  remover e a ida e volta pelo JSON mantendo a `TarefaRecorrente`
+### Etapa 4 · E20: erros próprios
 
-**A tela** (guia, partes 7 e 9):
+**Juntos em aula:**
 
-- O dado do `app.js` passa a ser uma `ListaDeTarefas`, criada com `ListaDeTarefas.deJSON(tarefas)`;
-  ponha uma tarefa semanal nos seus dados de exemplo
-- Cada item ganha os botões Concluir (só nas pendentes) e Remover, com `data-acao` e `data-id`, como
-  no molde, e o selo "Toda semana" nas recorrentes. Aqui o `instanceof` é bem-vindo: mostrar algo que
-  só a filha tem, como no E16a
-- **Um** ouvinte de `click`, na `<ul>`, lê o `dataset`, chama `concluir` ou `remover` com `Number(id)`
-  e redesenha. Concluir a semanal faz a próxima aparecer na lista
+1. **O erro da tarefa.** Em `src/modelos/ErroDeTarefa.js`, `class ErroDeTarefa extends Error`, com `constructor(mensagem, campo = null)`, o `super(mensagem)`, o `name` e o `campo`. Os testes, com `toThrow`
+2. **A tarefa recusa o título vazio.** O `constructor` da `Tarefa` guarda o título sem os espaços das pontas e chama `this.validar()`; o `validar()` lança um `ErroDeTarefa` com campo `'titulo'` quando o título fica vazio. O teste, com `toThrow` e a seta. Na tela, enviar o título vazio mostra a mensagem embaixo do campo
+3. **A lista recusa o título repetido.** No `adicionar`, antes de dar o id: se já existe uma tarefa pendente com o mesmo título, sem ligar para maiúsculas (as pendentes com `filter`, a repetida com `some` e `toLowerCase`), lança o erro. Os testes
+4. **Importar pulando o que tem problema.** O método `importar(listaDeDados)`: para cada dado, `try` com `adicionar(criarTarefa(dados))` e conta mais uma; no `catch`, pula o `ErroDeTarefa` e deixa passar qualquer outro erro. Devolve quantas entraram. O teste
 
-Commit: `Projeto 3: etapa 4, lista, recorrente e botões`.
+**Sua vez:** as outras conferências da tabela "Erros". No `validar()`: título com menos de 3 letras, prioridade com peso `0` (o `pesoDaPrioridade` já sabe quais valem) e prazo que não é `null` nem uma data (o `ehDataValida` do kit). No `constructor` da `TarefaRecorrente`, depois do `super`: tarefa que se repete sem prazo. Um teste para cada, e o do título com 3 letras, que vale.
 
-### Etapa 5 · E17: erros próprios e formulário
+**Pronto quando:** `npm test` verde e, na tela, o título vazio, o título "ab", a semanal sem prazo e um título repetido mostram a mensagem embaixo do campo certo, sem entrar na lista. A Etapa 4 mostra 7 de 7.
 
-**Os erros**
+**Commit:** `Projeto 3: etapa 4, erros próprios`, e `git push`.
 
-- `src/modelos/erros.js`: `ErroDeTarefa` e os três filhos da tabela "Erros", cada um com `name`,
-  `codigo` e o dado extra (`titulo`, `prazo` ou `id`)
-- O `constructor` da `Tarefa` valida título, prioridade e prazo; a `TarefaRecorrente` troca os
-  `throw new Error` por erros próprios; o `deJSON` também
-- `ListaDeTarefas`: título repetido em `adicionar`, id que não existe em `concluir` e `remover`. A
-  guarda vem antes de mudar a lista: se lançar, a lista fica como estava
-- Testes com `toThrow(Classe)` (com a arrow!) e o `codigo`, nas bordas de 2, 3, 80 e 81 caracteres
+### Etapa 5 · E21: salvar e carregar
 
-**A tela** (guia, partes 8 e 10):
+**Juntos em aula:**
 
-- O formulário cria a tarefa: `submit` com `preventDefault`, lê os quatro campos (o prazo vazio vira
-  `null`) e chama `lista.adicionar(...)`; deu certo, limpa o formulário, devolve o foco ao título e
-  redesenha
-- `try...catch` em volta do `adicionar`: o que não for `ErroDeTarefa` sobe (é bug); o resto vai para a
-  mensagem certa, escolhida pelo `codigo` com um `switch` (E13 e E17b): `TITULO_INVALIDO` embaixo do
-  título, `PRAZO_INVALIDO` embaixo do prazo, os outros no `#aviso` do topo
-- O campo com erro ganha `aria-invalid="true"`; no envio seguinte, as mensagens antigas somem
-- Os botões da etapa 4 também ganham `try...catch`: `TarefaNaoEncontradaError` vira aviso no `#aviso`
+1. **Esperar.** Em `src/servicos/armazenamento.js`, `esperar(ms)`: uma Promise que termina depois de `ms` milissegundos, com `setTimeout`. Ela imita a demora de um servidor. O teste, com `async` e `await`
+2. **Salvar.** `export const CHAVE = 'lista-de-tarefas'` e `salvarTarefas(lista, armazenamento)`, com `async`: espera 300 ms e grava `JSON.stringify(lista.tarefas)` com `armazenamento.setItem(CHAVE, texto)`. No teste, um **armazenamento falso**: uma classe com o mesmo `getItem` e `setItem` do `localStorage`, que guarda os textos num objeto. Na tela, cada mudança mostra "Salvando..." no topo
+3. **Carregar.** `carregarTarefas(armazenamento)`, com `async`: espera, lê o texto da `CHAVE` (`'[]'` quando não há nada, com `??`), transforma com `JSON.parse` e devolve uma `ListaDeTarefas` nova com tudo importado. O teste salva e carrega de volta. Na tela, recarregar a página traz as tarefas de volta
 
-Commit: `Projeto 3: etapa 5, erros próprios e formulário`.
+**Sua vez:** o texto salvo pode estar quebrado. Com o `try`/`catch` do E20 em volta do `JSON.parse`, o texto quebrado vira uma lista vazia, sem erro. Três testes: a primeira visita (nada salvo) devolve a lista vazia; o texto `'{quebrado'` devolve a lista vazia; a tarefa que se repete volta com a `frequencia`.
 
-### Etapa 6 · E18: salvar com Promises
+**Pronto quando:** `npm test` verde, sem nenhum teste tocar no `localStorage` de verdade. Na tela, as tarefas continuam lá depois de recarregar, e o DevTools (aba Application, Local storage) mostra o texto salvo. A Etapa 5 mostra 4 de 4.
 
-**O serviço** (`src/servicos/armazenamento.js`), sem `async` nem `await`, que chegam no E19:
+**Commit:** `Projeto 3: etapa 5, salvar e carregar`, e `git push`.
 
-- `export const CHAVE = 'lista-de-tarefas'` e `esperar(ms)`, a Promise com `setTimeout` do E18b
-- `salvarTarefas(lista, opcoes = {})`: devolve uma Promise que, depois de `atraso` ms (padrão 400),
-  grava o JSON de `lista.paraJSON()` na `CHAVE`
-- `carregarTarefas(opcoes = {})`: devolve uma Promise da `ListaDeTarefas`; nada salvo, lista vazia;
-  texto quebrado ou tarefa inválida, rejeita com `ErroDeTarefa` de código `DADOS_CORROMPIDOS`
-- `opcoes` traz `armazenamento` (padrão `localStorage`) e `atraso`: o mesmo jeito de injetar do
-  `simularEtapa` do E18b
-
-O `localStorage` responde na hora; o atraso imita um servidor de verdade, que demora, e deixa o aviso
-"Salvando..." aparecer. Quando o app for para o celular, o lugar de guardar muda e a tela continua
-igual, porque ela já espera uma Promise.
-
-**Os testes** (`armazenamento.test.js`) recebem um **armazenamento falso**: um objeto com o mesmo
-`getItem` e `setItem`, que guarda os textos num objeto comum. Teste salvar e carregar de volta (com a
-classe certa), a primeira visita, o texto quebrado e a tarefa inválida, com `atraso: 0` e
-`return expect(...).resolves` ou `.rejects` (E18b). Nenhum teste toca no `localStorage` de verdade.
-
-**A tela** (guia, partes 7 e 11):
-
-- Ao abrir a página: "Carregando..." no `#aviso`, `carregarTarefas()` e, no `then`, a lista salva
-  vira o dado; no `catch`, a mensagem do erro; no `finally`, `renderizar()`
-- Depois de cada mudança: "Salvando...", `salvarTarefas(lista)` e "Tudo salvo." (ou a mensagem de
-  falha)
-- A busca (`input`) e o filtro (`change`) passam a redesenhar a lista, com as funções da etapa 2
-- O `src/data/tarefas.js` sai do `app.js`: na primeira visita, a lista começa vazia
-
-Recarregue a página: as tarefas continuam lá. No DevTools, aba Application, o texto salvo aparece em
-Local storage.
-
-Commit: `Projeto 3: etapa 6, salvar com Promises`.
-
-### Etapa 7 · E19: importar exemplos da API
+### Etapa 6 · E22: exemplos da API e entrega
 
 A DummyJSON tem tarefas de exemplo, em inglês, em `https://dummyjson.com/todos?limit=10`:
 
@@ -383,127 +293,85 @@ A DummyJSON tem tarefas de exemplo, em inglês, em `https://dummyjson.com/todos?
     { "id": 1, "todo": "Do something nice for someone you care about", "completed": false, "userId": 152 },
     { "id": 2, "todo": "Memorize a poem", "completed": true, "userId": 13 }
   ],
-  "total": 254, "skip": 0, "limit": 10
+  "total": 254,
+  "skip": 0,
+  "limit": 10
 }
 ```
 
-- `src/api/exemplos.js`: `URL_DOS_EXEMPLOS`; `traduzirTodo(todo)`, em que `todo` vira `titulo`,
-  `completed` vira `concluida`, a prioridade é `'media'` e o prazo é `null`; e
-  `async function buscarExemplos()`, que devolve as tarefas traduzidas
-- Sem internet, `buscarExemplos` rejeita com `ErroDeTarefa` de código `SEM_CONEXAO` e uma mensagem em
-  português; resposta com `ok` falso, com o código `API_` mais o status (`API_500`, `API_429`)
-- `lista.importar(dados)` acrescenta cada tarefa com `adicionar`, pula as que têm um título igual ao
-  de qualquer tarefa da lista e devolve quantas entraram: importar duas vezes não duplica
-- Testes com `fetch` simulado (`globalThis.fetch`, E19b): tradução, resposta 500 e falta de rede;
-  mais os do `importar`. Desligue o Wi-Fi e rode `npm test`: tudo verde
+**Juntos em aula:**
 
-**A tela** (guia, parte 12): o botão Importar exemplos, num ouvinte `async`, fica desligado enquanto
-espera, mostra "Carregando exemplos..." no `#status-importacao`, importa, redesenha, salva e mostra
-quantas entraram; no erro, a mensagem; no `finally`, o botão volta. Teste no navegador com a aba
-Network do DevTools em **Offline**.
+1. **A API no navegador.** Abra o endereço no navegador e leia o JSON: a lista vem no campo `todos`. Em `src/servicos/exemplos.js`, `export const URL_DOS_EXEMPLOS` com o endereço
+2. **Buscar.** `buscarExemplos(buscar)`, com `async`: `await buscar(URL_DOS_EXEMPLOS)`; se `resposta.ok` for falso, lança um `ErroDeTarefa` com o `status`; senão, `await resposta.json()` e devolve `dados.todos`. No teste, uma **resposta falsa** (uma classe com `ok`, `status` e `json()`) e uma função `buscar` falsa que a devolve: a resposta 200 e a 500, com `rejects.toThrow`
+3. **Sem internet.** O `fetch` lança um erro quando o pedido nem chega ao servidor. Um `try`/`catch` em volta do `await buscar(...)` troca esse erro por um `ErroDeTarefa` em português. O teste, com uma busca falsa que lança. Na tela, Importar exemplos ainda não traz nada: os exemplos chegam em inglês, sem o campo `titulo`
 
-Se quiser, reescreva com `await` o carregamento da etapa 6: a tela continua igual.
+**Sua vez:** `converterTodo(todo)` devolve `{ titulo, prioridade: 'media', prazo: null }`, com o `todo` da API no `titulo`. O `buscarExemplos` passa a devolver só as pendentes (`completed` falso), com `filter`, já convertidas, com `map`. Os testes: o `converterTodo` com um item da API e o `buscarExemplos` com uma resposta que tem uma concluída e uma pendente.
 
-Commit: `Projeto 3: etapa 7, importar exemplos da API`.
+**README e entrega:** tire dois prints da tela (um em tamanho de celular, com o DevTools; outro no computador) e salve em `docs/`. Troque o README do kit pelo seu: o que o app faz, os dois prints, como rodar (`npm install` e `npx serve .`), como testar (`npm test`) e o que tem em cada arquivo de `src/`.
 
-### Etapa 8 · E20: revisão e entrega
+**Pronto quando:** `npm test` verde **com a internet desligada**. Na tela, Importar exemplos traz 5 tarefas novas; importar de novo diz que não há nenhuma nova; com o DevTools em Offline (aba Network), aparece a mensagem em português e o botão volta a funcionar. A lista "O que a página usa" mostra todas as etapas completas.
 
-O E20 tem a Prova 1: esta etapa é curta, e o prazo vai até o início do E21.
-
-- Passe pela lista "Antes de entregar", abaixo
-- Tire dois prints da página (um no tamanho de celular, com o DevTools; outro no computador) e salve
-  em `docs/`
-- Troque o README do ponto de partida pelo seu: o que o app faz, os prints, como rodar
-  (`npm install` e `npx serve .`), como testar (`npm run verificar`) e a estrutura de pastas
-- Cole o link do repositório na página deste projeto
-
-Commit: `Projeto 3: etapa 8, revisão e entrega`.
-
-:::steps
-1. `npm run verificar` verde, com o Wi-Fi desligado
-2. Nenhum `console.log` esquecido e nenhum `document` fora de `src/tela/`
-3. Nenhum `fetch` fora de `src/api/` e nenhum `localStorage` fora de `src/servicos/`
-4. Numa janela anônima, com `npx serve .`: adicionar, concluir a semanal, remover, buscar, filtrar,
-   recarregar, importar e importar de novo, enviar o título vazio
-5. Os oito commits de etapa no GitHub
-:::
+**Commit:** `Projeto 3: etapa 6, exemplos da API e entrega`, e `git push`.
 
 ## Como entregar
 
-1. Repositório **público** `lista-de-tarefas` no seu GitHub, sem `node_modules/`
-2. Um commit por etapa, com as mensagens acima, e o último `git push` feito
-3. README com o que o app faz, dois prints, como rodar e como testar
-4. Na página deste projeto, cole o link do repositório. O link de demonstração é opcional: o app não
-   tem build, então o GitHub Pages serve a pasta como está (no repositório, Settings, Pages, Branch
-   `main`, pasta `/ (root)`, Save; o endereço fica `https://seu-usuario.github.io/lista-de-tarefas/`)
+1. Repositório **público** `lista-de-tarefas` no seu GitHub, com tudo enviado (`git push`) e sem `node_modules/`
+2. Os commits, na ordem: `Projeto 3: kit da lista de tarefas` e os das etapas 1 a 6
+3. README com o que o app faz, os dois prints (as imagens ficam no repositório, em `docs/`), como rodar e como testar
+4. Na página deste projeto, cole o link do repositório (`https://github.com/seu-usuario/lista-de-tarefas`) e envie
+5. Prazo: **início do E24**
 
-**Prazo: início do E21.** O instrutor corrige pela rubrica, critério por critério, e pode devolver o
-projeto para ajustes antes da nota final. Aprovação com 70.
+Antes de enviar, rode `npm test` com a internet desligada e abra a tela numa janela anônima (o `localStorage` começa limpo): adicione, conclua a semanal, remova, recarregue, importe duas vezes e envie o título vazio. O instrutor corrige pela rubrica, critério por critério, e pode devolver o projeto para ajustes antes da nota final. A aprovação é com 70 pontos.
 
 ## Como será avaliado
 
-O instrutor clona o repositório, roda `npm install` e `npm run verificar`, abre a página com
-`npx serve .` numa janela anônima e segue um roteiro de uso: o da lista "Antes de entregar", mais o
-Wi-Fi desligado na hora de importar. Depois lê o código e o README.
-
-| Critério | Pontos | Nota cheia | Perde pontos se |
+| Critério | Pontos | Nota cheia | Nota parcial |
 |---|---|---|---|
-| Regras e classes | 25 | as tabelas de "Regras" batem, nomes do enunciado, `#tarefas` privado, recorrente gerando a próxima sem `if` de tipo | a tarefa de amanhã "vence hoje", a ordem ignora a prioridade, `concluir` muda a própria instância, `instanceof` decide a próxima |
-| A tela no navegador | 25 | lista, resumo, botões, formulário, busca e filtro funcionando, regra nenhuma em `src/tela/` | a lista duplica a cada ação, o resumo não muda, o texto do prazo é calculado na tela |
-| Erros, salvamento e API | 20 | mensagem no campo certo, tarefas de volta depois de recarregar, Salvando..., importar com carregando e erro sem rede | `catch` que esconde bug, erro só no Console, botão que fica desligado depois de uma falha |
-| Testes e lint | 20 | `npm run verificar` verde sem internet, bordas testadas, armazenamento falso e `fetch` simulado | teste que depende do dia de hoje ou da internet, regra sem teste, lint vermelho |
-| Repositório e README | 10 | oito commits de etapa, README completo, `npm install` e `npx serve .` funcionando do zero | commit único no fim, prints faltando, `node_modules/` no repositório |
+| Regras e classes | 35 | as tabelas das funções e das classes dão o resultado certo, e a lista "O que a página usa" fica completa nas etapas 1 a 3 | a tarefa de amanhã "vence hoje", a próxima semanal nasce atrasada, ou um `if` pergunta se a tarefa é recorrente |
+| Erros próprios | 15 | a tabela "Erros" inteira, com o `campo` certo, e o `importar` pulando só o `ErroDeTarefa` | a mensagem sempre no topo, nunca embaixo do campo, ou um `catch` que esconde qualquer erro |
+| Salvar e importar | 15 | as tarefas voltam ao recarregar e o Importar funciona com e sem internet | as tarefas somem ao recarregar, ou importar duas vezes repete as tarefas |
+| Testes | 20 | um teste por linha das tabelas, com `HOJE` fixo, armazenamento falso e resposta falsa | só o caminho feliz, ou um teste que usa a data de hoje ou a internet |
+| Repositório, commits e README | 15 | o commit do kit e os 6 de etapa, e o README com os dois prints | todos os commits num dia só, ou README sem como rodar |
 
-Exemplos de nota parcial: tudo funciona, mas a busca não acha "tecnico" sem acento (Regras e classes:
-21 de 25). A mensagem aparece, mas sempre no `#aviso`, nunca embaixo do campo (Erros, salvamento e
-API: 16 de 20). Testes ótimos, mas um deles chama a DummyJSON de verdade (Testes e lint: 15 de 20).
-
-## Para ir além
-
-Opcional e sem ponto extra:
-
-- Editar o título com um duplo clique no item
-- Desfazer a última remoção, com um aviso "Tarefa removida. Desfazer" por alguns segundos
-- A próxima recorrente nunca nasce atrasada: se o prazo novo ainda for antes de hoje, conte a partir
-  de hoje
-- Um contador de caracteres embaixo do título ("12 de 80")
-- Cancelar a importação com o `AbortController` do E19b, num botão Cancelar
+Um critério sem nada entregue vale zero. Código que você não sabe explicar também: o instrutor pode pedir, em aula, que você mostre um método e diga o que cada linha faz.
 
 ## Dúvidas frequentes
 
-**O `npm test` diz "No tests found" logo depois do `npm install`.** É normal: o ponto de partida não
-tem testes. Ele some com o primeiro `tarefas.test.js`.
+**O `npm test` falha logo depois de criar um arquivo de teste vazio.** O Jest reclama de arquivo `.test.js` sem nenhum `test`. Escreva o primeiro teste, ou apague o arquivo até a hora de usá-lo.
 
-**Abri o `index.html` com dois cliques e a página não funciona.** Pelo `file://`, o navegador
-bloqueia módulos. Rode `npx serve .` e use o endereço que ele mostra.
+**Na instalação, o npm fala em vulnerabilidades.** São avisos sobre pacotes que o Jest usa por dentro e não afetam o projeto. Não rode `npm audit fix --force`: ele troca o Jest por uma versão antiga.
 
-**Posso mudar o HTML ou o CSS?** Pode, desde que os ids e as classes que o seu JavaScript usa
-continuem lá e a página continue acessível (rótulos nos campos, botões de verdade). Visual não vale
-ponto: capriche no JavaScript.
+**Abri o `index.html` com dois cliques e a página não funciona.** O navegador só importa os arquivos de `src/` por um servidor. Rode `npx serve .` na raiz do repositório e abra `http://localhost:3000/web/`.
 
-**Posso usar `innerHTML`?** Para o título da tarefa, não: o texto vem da pessoa, e o `innerHTML` o
-trataria como HTML. Use `textContent` (guia, parte 3).
+**A tela diz que não conseguiu importar um arquivo.** Rode `npm test`: um erro de sintaxe aparece lá com a linha. Confira também os imports, letra por letra, com o `.js` no fim (`'./Tarefa.js'`, e não `'./Tarefa'`).
 
-**O ESLint reclama de `document is not defined` num teste.** O teste importou algo de `src/tela/`.
-Teste as regras, as classes e os serviços; a tela você confere no navegador.
+**A tela diz que falta algo que eu escrevi.** Confira o nome letra por letra, o `export` (ou o `export default`, nas classes) e, nos gets, a palavra `get`.
 
-**O ESLint reclama do `erro` que não uso no `catch`.** Escreva só `catch {`, sem os parênteses: o
-JavaScript aceita quando você não precisa do erro.
+**O teste da data passou hoje e falhou amanhã.** Ele usou o dia de verdade. Passe `HOJE` como parâmetro, sempre fixo.
 
-**O teste da data passou hoje e falhou amanhã.** Ele usou o dia de verdade. Passe `hoje` como
-parâmetro, sempre fixo nos testes, como no E06b.
+**`toThrow` não pegou o erro.** O `expect` precisa receber uma função, com a seta: `expect(() => new Tarefa({ titulo: '' })).toThrow(...)`. Sem a seta, o erro estoura antes do `expect`.
 
-**As tarefas salvas sumiram.** O `npx serve` abriu em outra porta, e cada endereço tem o seu
-`localStorage` (guia, parte 11).
+**O Jest parou com `Received promise resolved instead of rejected` e um texto enorme.** Faltou o `await` antes do `expect(...).rejects`. Sem ele, o teste termina antes da Promise: quando o código está certo, passa sem conferir nada; quando está errado, o Jest para no meio.
 
-**"O servidor de exemplos respondeu 429."** A DummyJSON limita os pedidos por endereço, e a sala
-inteira sai pelo mesmo. Espere alguns segundos e tente de novo; os seus testes não dependem dela.
+**A tela diz `Failed to fetch dynamically imported module`, mas o `npm test` passa.** Um import sem o `.js` no fim: o Jest aceita `'./Tarefa'`, o navegador só aceita `'./Tarefa.js'`.
 
-**Os exemplos vêm em inglês.** É uma API de testes: a tradução muda os nomes dos campos, não o texto.
+**As tarefas salvas sumiram.** O `npx serve` abriu em outra porta (3001, por exemplo), e cada endereço tem o seu `localStorage`. Feche o servidor antigo ou use o endereço novo.
 
-**Posso usar React?** Não: o projeto é JavaScript puro no DOM. O React chega no E21, e você vai
-entender na hora o que ele resolve.
+**Quero começar a lista do zero.** No DevTools, aba Application, Local storage, apague a chave `lista-de-tarefas` e recarregue.
 
-**Posso pedir ajuda a um colega ou a uma IA?** Pode pedir explicação, não código pronto. No check-in
-de cada encontro, o instrutor pode pedir que você explique uma parte do seu código, e o que você não
-souber explicar não conta como seu.
+**"O servidor de exemplos respondeu 429."** A DummyJSON limita os pedidos por endereço, e a sala inteira sai pela mesma internet. Espere alguns segundos e tente de novo; os seus testes não dependem dela.
+
+**Os exemplos vêm em inglês.** É uma API de testes: o `converterTodo` troca os nomes dos campos, não o texto.
+
+**Faltei a um encontro.** Faça a etapa pelos slides da aula e por este enunciado antes do encontro seguinte: ele começa onde ela termina.
+
+**Não terminei a tempo.** O E23 tem tempo para terminar. Entregue o que tiver até o início do E24: o instrutor corrige o que existe e pode devolver para ajustes.
+
+## Para ir além
+
+Nada aqui vale ponto extra. É para quem terminou e quer praticar mais.
+
+- O título com no máximo 80 letras, com mais uma conferência no `validar()` e um teste com 81
+- `lista.concluir(1, HOJE)` duas vezes na mesma semanal tenta criar a próxima de novo e, depois da etapa 4, lança o erro do título repetido. Um retorno antecipado no `concluir` da lista resolve: tarefa já concluída não faz nada. Escreva o teste primeiro
+- Um método `pendentes()` na lista, que devolve só as tarefas pendentes, com teste
+- No `carregarTarefas`, quantas tarefas salvas não puderam voltar, guardado num campo da lista

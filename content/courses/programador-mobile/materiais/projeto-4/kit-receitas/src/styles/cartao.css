@@ -1,0 +1,118 @@
+/*
+  cartao.css: as classes do SEU cartão e do SEU botão de favorito.
+  O visual já está pronto: no JSX, você só escreve o nome da classe no className.
+
+  Cartão (CartaoReceita):
+    cartao          o cartão inteiro                 <article className="cartao">
+    cartao__foto    a foto da receita                <img className="cartao__foto" />
+    cartao__corpo   a parte de baixo, com os textos  <div className="cartao__corpo">
+    cartao__nome    o nome da receita                <h2 className="cartao__nome">
+    cartao__info    uma linha de informação          <p className="cartao__info">
+    cartao__rodape  a linha do fim, com a etiqueta e o botão
+                                                     <div className="cartao__rodape">
+
+  Botão de favorito (BotaoFavorito):
+    favorito         o botão, com o coração vazio    <button className="favorito">
+    favorito--ativo  junto com favorito, quando a receita é favorita:
+                     o botão fica cheio, com o coração cheio
+                                                     className="favorito favorito--ativo"
+
+  O nome cartao__foto quer dizer "a foto do cartão": antes dos dois
+  sublinhados vem a peça; depois, a parte dela.
+*/
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  box-shadow: var(--sombra);
+}
+
+.cartao__foto {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #f1e6d8;
+}
+
+.cartao__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px 16px 16px;
+}
+
+.cartao__nome {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.cartao__info {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.cartao__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.favorito {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 1px solid var(--cor-destaque);
+  border-radius: 999px;
+  background: var(--cor-superficie);
+  color: var(--cor-destaque-forte);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* o coração: um desenho em SVG usado como máscara, pintado com a cor do texto */
+.favorito::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.favorito:hover {
+  background: var(--cor-destaque-fundo);
+}
+
+.favorito:focus-visible {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+.favorito--ativo {
+  background: var(--cor-destaque);
+  color: #ffffff;
+}
+
+.favorito--ativo:hover {
+  background: var(--cor-destaque-forte);
+}
+
+.favorito--ativo::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='black' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z'/%3E%3C/svg%3E");
+}

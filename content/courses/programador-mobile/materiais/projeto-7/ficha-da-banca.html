@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ficha da banca · Projeto 7</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; font-size: 0.92em; padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 32px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0; font-size: 1.05rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    .cartao + .cartao { margin-top: 16px; }
+    .cartao > p { margin: 0; }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 4px; }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .campos { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 560px) { .campos { grid-template-columns: 1fr 1fr 1fr; } }
+    label.rotulo { display: block; font-size: 0.85rem; font-weight: 700; color: var(--texto-2); }
+    input[type="text"], textarea {
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      background: var(--fundo);
+      color: var(--texto);
+      font: inherit;
+    }
+    textarea { min-height: 64px; resize: vertical; }
+    .criterio-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .pontos {
+      padding: 2px 12px;
+      border-radius: 999px;
+      background: var(--destaque-suave);
+      color: var(--destaque);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    fieldset { margin: 12px 0 0; padding: 0; border: 0; }
+    legend { padding: 0; font-size: 0.85rem; font-weight: 700; color: var(--texto-2); }
+    .niveis { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .niveis label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 6px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .niveis input { width: 18px; height: 18px; margin: 0; accent-color: var(--destaque); }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td input[type="text"] { min-width: 110px; margin-top: 0; }
+    .resumo { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
+    .resumo strong { font-size: 1.4rem; }
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+    @media print {
+      body { background: #fff; color: #000; font-size: 13px; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; padding: 12px; }
+      input[type="text"], textarea { border: 0; border-bottom: 1px solid #999; border-radius: 0; background: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-clipboard" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · Projeto 7 · E45</p>
+      <h1>Ficha da banca</h1>
+      <p class="lead">
+        Uma ficha por equipe e por avaliador. Cada equipe tem até 6 minutos de apresentação e 4 de perguntas.
+        A banca avalia três critérios do projeto, que somam 55 pontos; os outros 45 (o GitHub, o APK e o
+        README, e a participação de cada pessoa) o instrutor confere no repositório.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-equipe">
+      <h2 id="t-equipe"><svg class="ico"><use href="#i-clipboard"/></svg>A equipe</h2>
+      <div class="cartao">
+        <div class="campos">
+          <div><label class="rotulo" for="equipe">Nome do app</label><input type="text" id="equipe"></div>
+          <div><label class="rotulo" for="briefing">Briefing</label><input type="text" id="briefing"></div>
+          <div><label class="rotulo" for="avaliador">Avaliador</label><input type="text" id="avaliador"></div>
+        </div>
+        <ul class="lista">
+          <li>Cada critério recebe um nível: <strong>4</strong> completo, sem falhas visíveis; <strong>3</strong> completo, com falhas pequenas; <strong>2</strong> metade do esperado; <strong>1</strong> começou, mas não funciona ou não foi mostrado; <strong>0</strong> não existe</li>
+          <li>Pontos do critério = peso × nível ÷ 4. Com mais de um avaliador, vale a média</li>
+          <li>Demonstração que travou por mais de 30 segundos passa para o vídeo da equipe: isso não tira ponto</li>
+        </ul>
+        <div class="acoes nao-imprime">
+          <button class="botao" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+          <button class="botao" type="button" id="limpar"><svg class="ico"><use href="#i-rotate-ccw"/></svg>Nova ficha</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-criterios">
+      <h2 id="t-criterios"><svg class="ico"><use href="#i-scale"/></svg>Os critérios da banca</h2>
+
+      <article class="cartao criterio" data-peso="30">
+        <div class="criterio-topo"><h3>1 · O app funcionando (peso 30)</h3><span class="pontos" aria-live="polite">0 de 30</span></div>
+        <ul class="lista">
+          <li>As telas do briefing abrem: 3 na equipe de 3, 4 na equipe de 4</li>
+          <li>As regras do briefing, na tabela abaixo, com os números certos</li>
+          <li>Um item criado continua lá depois de fechar o app e abrir de novo</li>
+        </ul>
+        <fieldset><legend>Nível</legend><div class="niveis" data-nome="n1"></div></fieldset>
+      </article>
+
+      <article class="cartao criterio" data-peso="15">
+        <div class="criterio-topo"><h3>2 · Interface e qualidade (peso 15)</h3><span class="pontos" aria-live="polite">0 de 15</span></div>
+        <ul class="lista">
+          <li>As peças do kit em todas as telas, legíveis no tema claro e no escuro</li>
+          <li>A lista vazia explica o que fazer; o formulário mostra o erro embaixo de cada campo</li>
+          <li>Botões e cartões com rótulo para o leitor de tela; retorno ao toque</li>
+        </ul>
+        <fieldset><legend>Nível</legend><div class="niveis" data-nome="n2"></div></fieldset>
+      </article>
+
+      <article class="cartao criterio" data-peso="10">
+        <div class="criterio-topo"><h3>5 · Apresentação (peso 10)</h3><span class="pontos" aria-live="polite">0 de 10</span></div>
+        <ul class="lista">
+          <li>Até 6 minutos, com o problema no primeiro minuto</li>
+          <li>O caminho principal no celular, do começo ao fim, com um erro tratado</li>
+          <li>Todas as pessoas falam; as respostas às perguntas são diretas</li>
+        </ul>
+        <fieldset><legend>Nível</legend><div class="niveis" data-nome="n5"></div></fieldset>
+      </article>
+
+      <div class="cartao">
+        <div class="resumo"><span>Pontos da banca</span><strong id="total">0 de 55</strong></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-regras">
+      <h2 id="t-regras"><svg class="ico"><use href="#i-clipboard"/></svg>As regras para conferir na demonstração</h2>
+      <div class="cartao tabela">
+        <table>
+          <thead><tr><th>Briefing</th><th>O que pedir à equipe</th></tr></thead>
+          <tbody>
+            <tr><td>Agenda de serviços</td><td>Agendar na segunda: 10:00 e 14:00 não aparecem. Depois de agendar, o horário some da lista. Sem nome, o erro aparece embaixo do campo.</td></tr>
+            <tr><td>Cardápio e pedidos</td><td>Um produto esgotado não entra no carrinho. A quantidade para em 1 e em 10. Um pedido abaixo de R$ 15,00 é recusado. Previsão: 10 minutos mais 2 por unidade, até 45.</td></tr>
+            <tr><td>Controle de gastos</td><td>Valor 0 ou "abc" é recusado. A categoria muda com o tipo. Um gasto novo muda o saldo na Início. Na equipe de 4, as porcentagens das categorias.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-pessoas">
+      <h2 id="t-pessoas"><svg class="ico"><use href="#i-users"/></svg>Uma pergunta para cada pessoa</h2>
+      <div class="cartao tabela">
+        <p>Sobre a parte dela: "De onde vem a lista desta tela?", "O que a prop do seu componente faz?", "O que mudou na revisão do seu pull request?". A resposta vai para o instrutor, no critério individual.</p>
+        <table style="margin-top: 12px">
+          <thead><tr><th>Pessoa</th><th>A tela e o componente</th><th>Explicou a própria parte?</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" aria-label="Pessoa 1"></td><td><input type="text" aria-label="Tela da pessoa 1"></td><td><input type="text" aria-label="Resposta da pessoa 1" placeholder="sim, em parte ou não"></td></tr>
+            <tr><td><input type="text" aria-label="Pessoa 2"></td><td><input type="text" aria-label="Tela da pessoa 2"></td><td><input type="text" aria-label="Resposta da pessoa 2" placeholder="sim, em parte ou não"></td></tr>
+            <tr><td><input type="text" aria-label="Pessoa 3"></td><td><input type="text" aria-label="Tela da pessoa 3"></td><td><input type="text" aria-label="Resposta da pessoa 3" placeholder="sim, em parte ou não"></td></tr>
+            <tr><td><input type="text" aria-label="Pessoa 4"></td><td><input type="text" aria-label="Tela da pessoa 4"></td><td><input type="text" aria-label="Resposta da pessoa 4" placeholder="sim, em parte ou não"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-recado">
+      <h2 id="t-recado"><svg class="ico"><use href="#i-message"/></svg>O recado para a equipe</h2>
+      <div class="cartao">
+        <div style="display: grid; gap: 12px">
+          <div><label class="rotulo" for="forte">Um ponto forte</label><textarea id="forte"></textarea></div>
+          <div><label class="rotulo" for="melhoria">Uma melhoria que a equipe consiga aplicar</label><textarea id="melhoria"></textarea></div>
+          <div><label class="rotulo" for="obs">Observações (vídeo usado, falha da sala, participação)</label><textarea id="obs"></textarea></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>Material do Projeto 7 do curso Programador Mobile. Esta página não guarda o que você digita: imprima ou salve em PDF.</footer>
+  </main>
+
+  <script>
+    // os níveis de 0 a 4 de cada critério
+    for (const lugar of document.querySelectorAll('.niveis')) {
+      for (let nivel = 4; nivel >= 0; nivel--) {
+        const rotulo = document.createElement('label')
+        rotulo.innerHTML = `<input type="radio" name="${lugar.dataset.nome}" value="${nivel}">${nivel}`
+        lugar.append(rotulo)
+      }
+    }
+
+    function somar() {
+      let total = 0
+      for (const criterio of document.querySelectorAll('.criterio')) {
+        const peso = Number(criterio.dataset.peso)
+        const marcado = criterio.querySelector('input[type="radio"]:checked')
+        const pontos = marcado ? (peso * Number(marcado.value)) / 4 : 0
+        total += pontos
+        criterio.querySelector('.pontos').textContent = `${String(pontos).replace('.', ',')} de ${peso}`
+      }
+      document.querySelector('#total').textContent = `${String(total).replace('.', ',')} de 55`
+    }
+
+    document.addEventListener('change', somar)
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+    document.querySelector('#limpar').addEventListener('click', () => {
+      for (const campo of document.querySelectorAll('input[type="text"], textarea')) campo.value = ''
+      for (const marcado of document.querySelectorAll('input[type="radio"]')) marcado.checked = false
+      somar()
+    })
+  </script>
+</body>
+</html>

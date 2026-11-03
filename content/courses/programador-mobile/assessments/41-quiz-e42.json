@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E42 · Git em equipe",
+  "description": "Dez questões sobre branch, a main protegida, push e pull, pull request, revisão, conflito e a primeira versão das telas do Projeto 7.",
+  "lesson": "e42-git-em-equipe",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Bruno vai começar a tela Lançamentos sem mexer na versão boa da `main`. Qual comando cria a branch `esqueleto-lancamentos` e já entra nela?",
+      "options": {
+        "a": "`git switch -c esqueleto-lancamentos`",
+        "b": "`git switch esqueleto-lancamentos`",
+        "c": "`git branch`",
+        "d": "`git commit -m \"esqueleto-lancamentos\"`"
+      },
+      "answer": "a",
+      "explanation": "O `-c` (de *create*, criar) cria a branch antes de trocar para ela. Sem o `-c`, o `git switch` só troca para uma branch que já existe: com um nome novo, ele responde `fatal: invalid reference`. O `git branch` sozinho só lista as branches, e o commit tira uma foto, não cria rascunho.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Carla rodou, nesta ordem:\n\n```bash\ngit switch main\ngit pull\ngit switch -c esqueleto-novo\ngit branch\n```\n\nO que mostra o último comando?",
+      "options": {
+        "a": "Duas linhas: `* esqueleto-novo` e `main`",
+        "b": "Duas linhas: `esqueleto-novo` e `* main`",
+        "c": "Uma linha só: `* main`",
+        "d": "`fatal: a branch named 'esqueleto-novo' already exists`"
+      },
+      "answer": "a",
+      "explanation": "O `git switch -c` criou a branch nova e entrou nela. O `git branch` lista as duas, e o `*` marca onde você está: a `esqueleto-novo`. O próximo commit entra nela, e a `main` fica como estava.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Bruno fez o commit do esqueleto na branch nova e rodou `git push`. O terminal respondeu:\n\n```plaintext\nfatal: The current branch esqueleto-lancamentos has no upstream branch.\n```\n\nQual comando manda a branch para o GitHub?",
+      "options": {
+        "a": "`git push -u origin esqueleto-lancamentos`",
+        "b": "`git pull`",
+        "c": "`git switch main` e depois `git push`",
+        "d": "`git commit -m \"Esqueleto da tela Lançamentos\"` de novo"
+      },
+      "answer": "a",
+      "explanation": "A branch nova ainda não tem destino (*upstream*) na nuvem. O `-u origin esqueleto-lancamentos` manda a branch para o GitHub e grava o destino, como o `-u origin main` do E05: dali em diante, o comando é só `git push`. Na `main`, o push não leva o esqueleto, que está na branch.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Com a regra `main protegida` ligada, Ana fez um commit na `main` sem perceber e rodou `git push`:\n\n```plaintext\nremote: error: GH013: Repository rule violations found for refs/heads/main.\nremote: - Changes must be made through a pull request.\n```\n\nO que aconteceu com o commit, e qual é o caminho?",
+      "options": {
+        "a": "O commit continua no computador dela; ela cria uma branch ali mesmo com `git switch -c`, faz o push com `-u` e abre um pull request",
+        "b": "O commit foi apagado pelo GitHub; ela precisa refazer a mudança",
+        "c": "O GitHub guardou o commit na `main` e espera a aprovação de um colega",
+        "d": "Ela pede para outra pessoa da equipe fazer o push, porque a regra só vale para ela"
+      },
+      "answer": "a",
+      "explanation": "A regra recusa o push direto na `main`, mas nada se perde: o commit continua no computador. Com `git switch -c` e um nome, ele vai junto para a branch nova, que segue o caminho de sempre: push com `-u` e pull request. A regra vale para todos, até para quem criou o repositório.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Ana abriu o pull request do esqueleto da Início e tentou aprovar o próprio pedido. O GitHub não deixou. Por quê?",
+      "options": {
+        "a": "A revisão é a segunda leitura, feita por quem não escreveu: a regra pede a aprovação de outra pessoa",
+        "b": "Ana não é colaboradora do repositório",
+        "c": "O pull request tem conflito com a `main`",
+        "d": "Falta o `Closes #` na descrição"
+      },
+      "answer": "a",
+      "explanation": "Quem escreveu o código não enxerga o que deixou passar: por isso a aprovação vem de outra pessoa da equipe. A regra pede 1 aprovação, e o GitHub não aceita a do autor. Enquanto isso, o merge fica travado em *Review required*. O `Closes #` só fecha a issue no merge; não tem a ver com a aprovação.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O pull request do Bruno acabou de entrar na `main`. A Carla roda `git switch main`, e o terminal diz `Your branch is up to date with 'origin/main'`. Mesmo assim, o `lancamentos.js` não está na pasta dela. O que falta?",
+      "options": {
+        "a": "`git pull`: o *up to date* compara com o que o computador já sabia da nuvem, e só o `pull` pergunta de novo",
+        "b": "Nada: se a mensagem diz *up to date*, a pasta já tem tudo",
+        "c": "`git push`, para mandar a `main` dela",
+        "d": "`git switch -c lancamentos`, para criar o arquivo"
+      },
+      "answer": "a",
+      "explanation": "O `git switch main` não pergunta nada à nuvem: compara com a última notícia que o computador tinha dela. O `git pull` traz o merge do Bruno, e o terminal mostra `Fast-forward` com o `lancamentos.js` entre os arquivos. Por isso, depois de cada merge, todos rodam `git switch main` e `git pull`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "A equipe junta as branches à `main`, uma de cada vez. Em quais situações o Git para com conflito? Marque todas as certas.",
+      "options": {
+        "a": "Ana e Bruno mudaram a mesma linha, a `frase` do `src/data/equipe.js`, cada um de um jeito",
+        "b": "Na equipe de 4, duas pessoas acrescentaram uma aba no mesmo lugar do `app/(abas)/_layout.js`",
+        "c": "Bruno mexeu só no `lancamentos.js`, e Carla só no `novo.js`",
+        "d": "Carla criou o `src/components/ResumoLancamento.js`, um arquivo que ninguém mais tocou"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Conflito é a mesma linha, ou linhas vizinhas, mudada nas duas branches: o Git não sabe qual vale e espera alguém escolher. As duas abas novas também caem no mesmo lugar. Arquivos diferentes juntam sozinhos: por isso cada pessoa mexe na sua tela e no seu componente.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Bruno trouxe a `main` para a branch `frase-bruno`, e o arquivo ficou assim:\n\n```javascript\n<<<<<<< HEAD\nexport const frase = 'Seu dinheiro na palma da mão';\n=======\nexport const frase = 'Saiba para onde vai o seu dinheiro';\n>>>>>>> main\n```\n\nA equipe escolheu a frase que veio da `main` e clicou em **Accept Incoming Change**. O que fica no arquivo?",
+      "options": {
+        "a": "Só `export const frase = 'Saiba para onde vai o seu dinheiro';`",
+        "b": "Só `export const frase = 'Seu dinheiro na palma da mão';`",
+        "c": "As duas linhas `export const frase`, uma embaixo da outra",
+        "d": "As cinco linhas, com as marcas, até o commit"
+      },
+      "answer": "a",
+      "explanation": "Entre `<<<<<<< HEAD` e `=======` está a versão da branch em que você está, a *Current*; entre `=======` e `>>>>>>> main`, a que chegou da `main`, a *Incoming*. O Accept Incoming deixa só a da `main` e apaga as marcas. As duas linhas juntas, do Accept Both, dariam `Identifier 'frase' has already been declared`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "Bruno escolheu a frase no VS Code, e o arquivo não tem mais marcas. Quais comandos terminam a resolução e atualizam o pull request? Marque todas as certas.",
+      "options": {
+        "a": "`git add .`",
+        "b": "`git commit -m \"Junta a main e escolhe a frase\"`",
+        "c": "`git push`",
+        "d": "`git merge main --no-edit`, de novo"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `git add .` marca o conflito como resolvido: sem ele, o commit é recusado com `Committing is not possible because you have unmerged files`. O commit conclui o merge, e o push leva para a branch no GitHub: o pull request fica sem conflito e pode ser revisado. Outro `git merge` é recusado com `You have not concluded your merge`: o primeiro ainda espera o commit.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Na primeira versão da Início do Gasto Certo, com estes dados de exemplo:\n\n```javascript\nconst lancamentos = [\n  { tipo: 'Entrada', valor: 180000 },\n  { tipo: 'Saída', valor: 4590 },\n  { tipo: 'Saída', valor: 2200 },\n];\nconst listaDeEntradas = lancamentos.filter((item) => item.tipo === 'Entrada');\nconst listaDeSaidas = lancamentos.filter((item) => item.tipo === 'Saída');\nconst entradas = listaDeEntradas.reduce((soma, item) => soma + item.valor, 0);\nconst saidas = listaDeSaidas.reduce((soma, item) => soma + item.valor, 0);\nconst saldo = entradas - saidas;\n```\n\nO que mostra `<CartaoSaldo rotulo=\"Saldo\" valor={saldo} />`, que passa o valor pela `formatarReais`?",
+      "options": {
+        "a": "`R$ 1732,10`",
+        "b": "`R$ 1867,90`",
+        "c": "`R$ 1800,00`",
+        "d": "`R$ 67,90`"
+      },
+      "answer": "a",
+      "explanation": "As entradas somam 180000 centavos; as saídas, 4590 + 2200 = 6790. O saldo é 180000 - 6790 = 173210 centavos, e a `formatarReais` mostra `R$ 1732,10`. O `R$ 1867,90` soma tudo junto; o `R$ 1800,00` são só as entradas, e o `R$ 67,90`, só as saídas.",
+      "points": 2
+    }
+  ]
+}

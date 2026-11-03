@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 320" font-family="Inter, system-ui, sans-serif">
+  <title>Duas branches saem da main ao mesmo tempo, cada uma ganha um commit e volta para a main por um merge</title>
+  <style>
+    .main { stroke: #34d399; stroke-width: 4; fill: none; marker-end: url(#seta); }
+    .ramo { stroke: #a78bfa; stroke-width: 4; fill: none; }
+    .ok   { fill: #34d399; font-size: 22px; font-weight: 700; }
+    .br   { fill: #a78bfa; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .p    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .m    { fill: #b4bfd3; font-size: 22px; }
+  </style>
+  <defs>
+    <marker id="seta" viewBox="0 0 10 10" markerWidth="4" markerHeight="4" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="320" rx="16" fill="#0b1020"/>
+
+  <!-- a main, a versão boa -->
+  <text x="28" y="140" class="ok">main</text>
+  <path d="M 28 160 L 684 160" class="main"/>
+
+  <!-- a branch do Bruno, por cima -->
+  <path d="M 110 160 C 120 100, 150 80, 210 80 L 350 80 C 410 80, 432 112, 440 148" class="ramo"/>
+  <circle cx="280" cy="80" r="11" fill="#a78bfa"/>
+  <text x="150" y="48"><tspan class="p">Bruno </tspan><tspan class="br">esqueleto-lancamentos</tspan></text>
+
+  <!-- a branch da Carla, por baixo -->
+  <path d="M 110 160 C 120 220, 150 240, 210 240 L 500 240 C 560 240, 582 208, 590 172" class="ramo"/>
+  <circle cx="330" cy="240" r="11" fill="#a78bfa"/>
+  <text x="150" y="292"><tspan class="p">Carla </tspan><tspan class="br">esqueleto-novo</tspan></text>
+
+  <!-- a primeira foto, de onde as duas saem -->
+  <circle cx="110" cy="160" r="13" fill="#34d399" stroke="#0b1020" stroke-width="3"/>
+
+  <!-- os merges, pelos pull requests -->
+  <circle cx="440" cy="160" r="14" fill="#34d399" stroke="#0b1020" stroke-width="3"/>
+  <text x="440" y="204" text-anchor="middle" class="m">merge #1</text>
+  <circle cx="590" cy="160" r="14" fill="#34d399" stroke="#0b1020" stroke-width="3"/>
+  <text x="590" y="130" text-anchor="middle" class="m">merge #2</text>
+</svg>

@@ -1,0 +1,16 @@
+{
+  "name": "agenda-de-contatos",
+  "version": "1.0.0",
+  "description": "Agenda de contatos: regras em JavaScript, testes no Jest e uma página web pronta",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "agenda": "node src/scripts/agenda.js"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
+    "babel-jest": "^30.5.2",
+    "jest": "^30.5.2"
+  }
+}

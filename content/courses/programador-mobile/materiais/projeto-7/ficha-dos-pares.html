@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ficha dos pares · Projeto 7</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 32px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0; font-size: 1.05rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    .cartao + .cartao { margin-top: 16px; }
+    .cartao > p { margin: 0; }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .campos { display: grid; gap: 12px; grid-template-columns: 1fr; }
+    @media (min-width: 560px) { .campos { grid-template-columns: 1fr 1fr; } }
+    label.rotulo { display: block; font-size: 0.85rem; font-weight: 700; color: var(--texto-2); }
+    input[type="text"], textarea {
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      background: var(--fundo);
+      color: var(--texto);
+      font: inherit;
+    }
+    textarea { min-height: 64px; resize: vertical; }
+    .colega-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+    .total {
+      padding: 2px 12px;
+      border-radius: 999px;
+      background: var(--destaque-suave);
+      color: var(--destaque);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    fieldset { margin: 12px 0 0; padding: 0; border: 0; }
+    legend { padding: 0; font-weight: 700; }
+    .escolhas { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .escolhas label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 40px;
+      padding: 6px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 999px;
+      cursor: pointer;
+    }
+    .escolhas input { width: 18px; height: 18px; margin: 0; accent-color: var(--destaque); }
+    .texto-livre { margin-top: 16px; display: grid; gap: 12px; }
+    .aviso {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--alerta);
+      border-radius: 0 12px 12px 0;
+      background: var(--alerta-suave);
+    }
+    .aviso p { margin: 0; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td input[type="text"] { min-width: 120px; margin-top: 0; }
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+    @media print {
+      body { background: #fff; color: #000; font-size: 13px; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; padding: 12px; }
+      input[type="text"], textarea { border: 0; border-bottom: 1px solid #999; border-radius: 0; background: none; }
+      textarea { min-height: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · Projeto 7 · E45</p>
+      <h1>Ficha dos pares</h1>
+      <p class="lead">
+        Você avalia cada colega da sua equipe, sobre o trabalho dos encontros E41 a E45. Cada colega recebe
+        de 0 a 10. A ficha vai só para o instrutor: ninguém da equipe vê o que você escreveu, e o instrutor
+        conta para cada pessoa apenas a média e os comentários, sem nomes.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-voce">
+      <h2 id="t-voce"><svg class="ico"><use href="#i-user"/></svg>Você</h2>
+      <div class="cartao">
+        <div class="campos">
+          <div><label class="rotulo" for="meu-nome">Seu nome</label><input type="text" id="meu-nome"></div>
+          <div><label class="rotulo" for="minha-equipe">Nome do app da equipe</label><input type="text" id="minha-equipe"></div>
+        </div>
+        <ul class="lista">
+          <li>Responda pensando no que a pessoa fez, não em quanto você gosta dela</li>
+          <li><strong>Sim</strong> vale 2, <strong>Em parte</strong> vale 1, <strong>Não</strong> vale 0</li>
+          <li>Um 0 em qualquer item precisa de um motivo no campo "O que pode melhorar"</li>
+        </ul>
+        <div class="acoes nao-imprime">
+          <button class="botao" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+          <button class="botao" type="button" id="limpar"><svg class="ico"><use href="#i-rotate-ccw"/></svg>Limpar a ficha</button>
+        </div>
+        <div class="aviso nao-imprime">
+          <p>Esta página não guarda nada. Preencha à mão, numa folha impressa, ou preencha aqui e imprima (ou salve em PDF) para entregar ao instrutor.</p>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-colegas">
+      <h2 id="t-colegas"><svg class="ico"><use href="#i-users"/></svg>Os colegas da sua equipe</h2>
+      <div id="colegas"></div>
+    </section>
+
+    <section aria-labelledby="t-plateia">
+      <h2 id="t-plateia"><svg class="ico"><use href="#i-message"/></svg>As outras equipes (sem nota)</h2>
+      <div class="cartao tabela">
+        <p>Para cada apresentação de outra equipe, um ponto forte e uma sugestão que ela consiga aplicar. Não vale nota: vai como recado para a equipe, sem o seu nome.</p>
+        <table style="margin-top: 12px">
+          <thead><tr><th>Equipe</th><th>Um ponto forte</th><th>Uma sugestão</th></tr></thead>
+          <tbody>
+            <tr><td><input type="text" aria-label="Equipe 1"></td><td><input type="text" aria-label="Ponto forte da equipe 1"></td><td><input type="text" aria-label="Sugestão para a equipe 1"></td></tr>
+            <tr><td><input type="text" aria-label="Equipe 2"></td><td><input type="text" aria-label="Ponto forte da equipe 2"></td><td><input type="text" aria-label="Sugestão para a equipe 2"></td></tr>
+            <tr><td><input type="text" aria-label="Equipe 3"></td><td><input type="text" aria-label="Ponto forte da equipe 3"></td><td><input type="text" aria-label="Sugestão para a equipe 3"></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>Material do Projeto 7 do curso Programador Mobile. Esta página não guarda o que você digita.</footer>
+  </main>
+
+  <script>
+    const ITENS = [
+      'Fez a parte combinada: a tela e o componente dela',
+      'Veio aos encontros e trabalhou em aula, ou avisou e recuperou o que perdeu',
+      'Revisou pull requests e ajudou quando alguém travou',
+      'Avisou a equipe quando travou ou ia atrasar',
+      'Seguiu os combinados: branch, pull request e nada de mexer na tela do outro sem falar',
+    ]
+    const ESCOLHAS = [['Sim', 2], ['Em parte', 1], ['Não', 0]]
+
+    // monta os três blocos de colega (na equipe de 3, o terceiro fica em branco)
+    const lugar = document.querySelector('#colegas')
+    for (let n = 1; n <= 3; n++) {
+      const bloco = document.createElement('article')
+      bloco.className = 'cartao colega'
+      let html = `
+        <div class="colega-topo">
+          <h3>Colega ${n}${n === 3 ? ' (equipe de 4)' : ''}</h3>
+          <span class="total" aria-live="polite">0 de 10</span>
+        </div>
+        <label class="rotulo" for="nome-${n}">Nome do colega</label>
+        <input type="text" id="nome-${n}">`
+      ITENS.forEach((item, i) => {
+        html += `<fieldset><legend>${i + 1}. ${item}</legend><div class="escolhas">`
+        for (const [texto, valor] of ESCOLHAS) {
+          html += `<label><input type="radio" name="c${n}-i${i}" value="${valor}">${texto}</label>`
+        }
+        html += '</div></fieldset>'
+      })
+      html += `
+        <div class="texto-livre">
+          <div><label class="rotulo" for="forte-${n}">Um ponto forte</label><textarea id="forte-${n}"></textarea></div>
+          <div><label class="rotulo" for="melhorar-${n}">O que pode melhorar</label><textarea id="melhorar-${n}"></textarea></div>
+        </div>`
+      bloco.innerHTML = html
+      lugar.append(bloco)
+    }
+
+    function somar() {
+      for (const bloco of document.querySelectorAll('.colega')) {
+        let total = 0
+        for (const marcado of bloco.querySelectorAll('input[type="radio"]:checked')) total += Number(marcado.value)
+        bloco.querySelector('.total').textContent = `${total} de 10`
+      }
+    }
+
+    document.addEventListener('change', somar)
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+    document.querySelector('#limpar').addEventListener('click', () => {
+      for (const campo of document.querySelectorAll('input[type="text"], textarea')) campo.value = ''
+      for (const marcado of document.querySelectorAll('input[type="radio"]')) marcado.checked = false
+      somar()
+    })
+  </script>
+</body>
+</html>

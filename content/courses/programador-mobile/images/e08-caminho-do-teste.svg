@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" font-family="Inter, system-ui, sans-serif">
+  <title>O racha.js, na pasta scripts, chega ao conta.js por '../regras/conta.js', subindo uma pasta; o conta.test.js mora na pasta regras, ao lado do conta.js, e chega a ele por './conta.js'</title>
+  <style>
+    .fora  { fill: none; stroke: #2a3a5c; stroke-width: 2; }
+    .pasta { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .rot   { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .arq   { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .velho { fill: #0b1020; stroke: #b4bfd3; stroke-width: 2; stroke-dasharray: 6 5; }
+    .imp   { fill: #0b1020; stroke: #fbbf24; stroke-width: 2.5; }
+    .exp   { fill: #0b1020; stroke: #34d399; stroke-width: 2.5; }
+    .s1    { stroke: #b4bfd3; stroke-width: 2.5; fill: none; stroke-dasharray: 8 6; stroke-linejoin: round; }
+    .s2    { stroke: #fbbf24; stroke-width: 3; fill: none; }
+    .c1    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .c2    { fill: #fbbf24; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .t2    { fill: #fbbf24; font-size: 22px; }
+  </style>
+  <rect width="720" height="400" rx="16" fill="#0b1020"/>
+
+  <rect class="fora" x="20" y="20" width="680" height="360" rx="12"/>
+  <text class="rot" x="40" y="56">src/</text>
+
+  <rect class="pasta" x="40" y="150" width="210" height="130" rx="10"/>
+  <text class="rot" x="58" y="182">scripts/</text>
+  <rect class="velho" x="58" y="200" width="174" height="62" rx="8"/>
+  <text class="arq" x="80" y="240">racha.js</text>
+
+  <rect class="pasta" x="310" y="90" width="370" height="270" rx="10"/>
+  <text class="rot" x="330" y="122">regras/</text>
+  <rect class="imp" x="330" y="138" width="200" height="62" rx="8"/>
+  <text class="arq" x="344" y="178">conta.test.js</text>
+  <rect class="exp" x="330" y="282" width="200" height="62" rx="8"/>
+  <text class="arq" x="344" y="322">conta.js</text>
+
+  <text class="c1" x="214" y="56">'../regras/conta.js'</text>
+  <path class="s1" d="M 200 200 L 200 70 L 650 70 L 650 313 L 548 313"/>
+  <path d="M 548 302 L 532 313 L 548 324 Z" fill="#b4bfd3"/>
+
+  <path class="s2" d="M 430 200 L 430 266"/>
+  <path d="M 419 262 L 430 280 L 441 262 Z" fill="#fbbf24"/>
+  <text class="c2" x="452" y="236">'./conta.js'</text>
+  <text class="t2" x="452" y="264">mesma pasta</text>
+</svg>

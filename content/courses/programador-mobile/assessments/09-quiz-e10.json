@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E10 · Decisões",
+  "description": "Dez questões sobre if e else, else if, os operadores &&, || e !, o null, o retorno antecipado, o ternário e as funções da etapa 7 do Racha-conta.",
+  "lesson": "e10-decisoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst bateria = 20;\n\nif (bateria < 20) {\n  console.log('Bateria fraca');\n} else {\n  console.log('Bateria ok');\n}\n```",
+      "options": {
+        "a": "`Bateria ok`",
+        "b": "`Bateria fraca`",
+        "c": "As duas linhas, uma embaixo da outra",
+        "d": "Nada, porque 20 é a borda"
+      },
+      "answer": "a",
+      "explanation": "A pergunta vira `20 < 20`, que é `false`: 20 não é menor que 20. Com `false`, roda o caminho do `else`. Com `if` e `else`, sempre roda um dos dois caminhos, nunca os dois e nunca nenhum.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que mostra `console.log(ingresso(6))`?\n\n```javascript\nfunction ingresso(idade) {\n  if (idade < 6) {\n    return 'grátis';\n  } else if (idade < 12) {\n    return 'meia';\n  } else {\n    return 'inteira';\n  }\n}\n```",
+      "options": {
+        "a": "`meia`",
+        "b": "`grátis`",
+        "c": "`inteira`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "As perguntas são feitas de cima para baixo. `6 < 6` é `false`, então o `grátis` fica de fora; `6 < 12` é `true`, e a função devolve `meia`. O `else` do fim nem é olhado: o `else if` pega a primeira saída que dá `true`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "multiple",
+      "prompt": "Para quais valores de `pessoas` a pergunta abaixo dá `true`? Marque todos.\n\n```javascript\nNumber.isInteger(pessoas) && pessoas >= 1 && pessoas <= 50\n```",
+      "options": {
+        "a": "`1`",
+        "b": "`50`",
+        "c": "`0`",
+        "d": "`2.5`",
+        "e": "`51`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Com `&&`, as três partes precisam dar `true`. O 1 e o 50 são as bordas e passam, porque `>=` e `<=` aceitam o valor exato. O 0 falha em `pessoas >= 1`, o 51 em `pessoas <= 50`, e o 2.5 já falha no `Number.isInteger`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No cinema, a meia-entrada vale para `estudante || idade >= 60`. Quem **não** paga meia?",
+      "options": {
+        "a": "Quem não é estudante e tem 30 anos",
+        "b": "Quem é estudante e tem 17 anos",
+        "c": "Quem não é estudante e tem 65 anos",
+        "d": "Quem é estudante e tem 70 anos"
+      },
+      "answer": "a",
+      "explanation": "Com `||` (ou), uma parte `true` já faz tudo dar `true`. Quem é estudante já passa na primeira; quem tem 65 ou 70 passa na segunda. Só quem não é estudante e tem 30 anos responde `false` às duas.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "`!Number.isInteger(2.5)` dá `true`.",
+      "answer": true,
+      "explanation": "`Number.isInteger(2.5)` dá `false`, porque 2.5 não é inteiro. O `!` (não) inverte a resposta: `!false` dá `true`. Em voz alta: \"2.5 não é inteiro? Sim.\"",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No Racha-conta, `lerPessoas` é esta função:\n\n```javascript\nexport function lerPessoas(texto) {\n  const pessoas = Number(texto.trim());\n  if (Number.isInteger(pessoas) && pessoas >= 1 && pessoas <= 50) {\n    return pessoas;\n  }\n  return null;\n}\n```\n\nO que devolvem `lerPessoas(' 4 ')`, `lerPessoas('2,5')` e `lerPessoas('')`, nessa ordem?",
+      "options": {
+        "a": "`4`, `null` e `null`",
+        "b": "`null`, `null` e `null`",
+        "c": "`4`, `2.5` e `0`",
+        "d": "`4`, `NaN` e `0`"
+      },
+      "answer": "a",
+      "explanation": "O `trim` tira os espaços, e `' 4 '` vira o número 4, que passa. `'2,5'` vira `NaN`, porque o `Number` não entende vírgula, e `Number.isInteger(NaN)` é `false`. O texto vazio vira `0`, e `0 >= 1` é `false`. Quando o `if` dá `false`, a função segue para o `return null`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Por que o `lerValor` devolve `null`, e não `NaN`, quando o texto não vale?",
+      "options": {
+        "a": "Porque `null === null` dá `true`, e o script consegue perguntar `subtotalCentavos === null`; com `NaN`, `NaN === NaN` dá `false`",
+        "b": "Porque o `null` aparece no terminal como um aviso para a pessoa",
+        "c": "Porque o `null` vira `0` nas contas, e o recibo fecha certinho",
+        "d": "Porque o Jest não consegue testar uma função que devolve `NaN`"
+      },
+      "answer": "a",
+      "explanation": "O `null` é o \"não deu\" combinado: quem chamou pergunta `=== null` e escolhe o caminho do aviso. O `NaN` não é igual nem a ele mesmo, e ainda se espalha pelas contas, como o `R$ NaN` do E09. O aviso quem mostra é o script, com `console.log`, não o `null`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfunction podeEntrar(pessoa) {\n  if (!pessoa.ingresso) {\n    return 'Sem ingresso';\n  }\n  if (pessoa.idade < 18) {\n    return 'Menor de idade';\n  }\n  return 'Pode entrar';\n}\n\nconsole.log(podeEntrar({ ingresso: false, idade: 16 }));\n```",
+      "options": {
+        "a": "`Sem ingresso`",
+        "b": "`Menor de idade`",
+        "c": "`Sem ingresso` e, na linha de baixo, `Menor de idade`",
+        "d": "`Pode entrar`"
+      },
+      "answer": "a",
+      "explanation": "É o retorno antecipado: `!pessoa.ingresso` dá `true`, e o primeiro `return` entrega `'Sem ingresso'` e sai da função na hora. O segundo `if` nem é feito, mesmo a pessoa tendo 16 anos.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Qual é o valor de `palavra`?\n\n```javascript\nconst pessoas = 3;\nconst palavra = pessoas === 1 ? 'pessoa' : 'pessoas';\n```",
+      "options": {
+        "a": "`'pessoas'`",
+        "b": "`'pessoa'`",
+        "c": "`false`",
+        "d": "`3`"
+      },
+      "answer": "a",
+      "explanation": "No ternário, a pergunta vem antes do `?`: `3 === 1` é `false`. Com `false`, vale o que está depois do `:`, o valor do não: `'pessoas'`. O ternário não devolve o `true` ou `false` da pergunta: ele escolhe um dos dois valores.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Com a etapa 7 pronta, o `racha.js` decide assim:\n\n```javascript\nif (subtotalCentavos === null) {\n  console.log(`Valor inválido: \"${process.argv[2]}\". Digite como 187,50 ou \"R$ 187,50\".`);\n} else if (pessoas === null) {\n  console.log(`Número de pessoas inválido: \"${process.argv[3]}\". Digite um número inteiro de 1 a 50.`);\n} else {\n  // as contas e o recibo\n}\n```\n\nO que aparece com `npm run racha abc 0`?",
+      "options": {
+        "a": "Só `Valor inválido: \"abc\". Digite como 187,50 ou \"R$ 187,50\".`",
+        "b": "Só `Número de pessoas inválido: \"0\". Digite um número inteiro de 1 a 50.`",
+        "c": "Os dois avisos, um embaixo do outro",
+        "d": "O recibo, com `R$ NaN` nas contas"
+      },
+      "answer": "a",
+      "explanation": "O valor e as pessoas estão errados, e as duas perguntas dariam `true`. Mas o `else if` pega a primeira saída que dá `true`, de cima para baixo: o aviso do valor. Os outros caminhos nem são olhados, e o recibo não roda.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E34 · Tokens e tema",
+  "description": "Dez questões sobre os tokens do kit, as cores com nome de papel, o useTema(), o array de estilos e o botão de tema da Início.",
+  "lesson": "e34-tokens-e-tema",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `tokens.js` do kit está `espaco = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 }`. Qual linha do `StyleSheet` usa um token no lugar de um número solto?",
+      "options": {
+        "a": "`gap: espaco.md`",
+        "b": "`gap: 16`",
+        "c": "`gap: 'md'`",
+        "d": "`gap: '16px'`"
+      },
+      "answer": "a",
+      "explanation": "`espaco.md` pede o valor pelo nome, e o valor (16) mora só no `tokens.js`. `gap: 16` funciona, mas é o número solto que a etapa troca. `'md'` é só um texto, e o React Native não usa `px`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst espaco = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };\nconsole.log(espaco.md + espaco.xs);\n```",
+      "options": {
+        "a": "`20`",
+        "b": "`164`",
+        "c": "`undefined`",
+        "d": "`24`"
+      },
+      "answer": "a",
+      "explanation": "`espaco` é uma ficha: `espaco.md` lê o campo `md` e vale 16, e `espaco.xs` vale 4. Os dois são números, então o `+` soma: 20. O `164` seria a junção de dois textos.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Você troca `md: 16` por `md: 20` no `src/theme/tokens.js` e salva. O que acontece no app?",
+      "options": {
+        "a": "Todo espaço que usa `espaco.md` passa a ser 20, inclusive nas peças do kit",
+        "b": "Só a Início muda; as peças do kit continuam com 16",
+        "c": "Nada muda, porque cada tela guardou o 16",
+        "d": "O app para com um erro, porque 20 não é múltiplo de 8"
+      },
+      "answer": "a",
+      "explanation": "É a vantagem do token: o valor mora num lugar só. A `Tela`, o `Cartao` e a sua Início pedem `espaco.md` pelo nome, então todos mudam juntos. O 20 não está na escala do kit (4, 8, 16, 24, 32), mas não dá erro: o número só fica diferente do combinado.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Por que a cor do texto de apoio do kit se chama `textoSuave`, e não `cinza`?",
+      "options": {
+        "a": "O nome diz o papel da cor; no tema escuro ela muda de valor, e o nome continua certo",
+        "b": "O React Native não aceita nomes de cor em português",
+        "c": "`cinza` é uma palavra reservada do JavaScript",
+        "d": "Para o texto ficar menor que o texto principal"
+      },
+      "answer": "a",
+      "explanation": "Um token de cor diz para que a cor serve. `textoSuave` é `#5c5348` no claro e `#b8ad9f` no escuro: o nome vale nos dois temas. Um nome de aparência, como `cinza` ou `cinzaClaro`, vira mentira quando a paleta muda. O tamanho da letra é com `fonte`, não com a cor.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O celular está no tema claro, e a função `Inicio` começa assim:\n\n```jsx\nconst { cores, escuro } = useTema();\nconsole.log(escuro, cores.primaria);\n```\n\nO que aparece no terminal do Expo?",
+      "options": {
+        "a": "`LOG  false #0f766e`",
+        "b": "`LOG  true #5eead4`",
+        "c": "`LOG  false undefined`",
+        "d": "`LOG  light #0f766e`"
+      },
+      "answer": "a",
+      "explanation": "O `useTema()` lê o quadro de avisos do tema: no claro, `escuro` é `false`, e `cores` já é a paleta clara, com `primaria` igual a `#0f766e`. O `cores` do quadro não tem `claro` nem `escuro` dentro: ele é a paleta da vez. O `escuro` é `true` ou `false`, nunca um texto.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Por que a cor do tema vai no array de `style`, e não dentro do `StyleSheet.create`?",
+      "options": {
+        "a": "O `StyleSheet.create` roda uma vez, quando o arquivo carrega, e nunca fica sabendo do tema; e o `useTema()` só funciona dentro da função da tela",
+        "b": "O `StyleSheet.create` não aceita a propriedade `color`",
+        "c": "Cores dentro do `StyleSheet` deixam o app mais lento",
+        "d": "O `StyleSheet.create` só aceita números"
+      },
+      "answer": "a",
+      "explanation": "É a parede e a tinta: a estrutura (espaço, letra, canto) se constrói uma vez, no `StyleSheet`; a cor vem da paleta da vez, no array. O `StyleSheet` aceita `color`, mas uma cor escrita lá não muda com o tema, e um `useTema()` lá dentro dá `Invalid hook call`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Como aparece o nome da casa?\n\n```jsx\nconst estilos = StyleSheet.create({\n  nome: { fontSize: 16, fontWeight: 'bold' },\n});\n\n<Text style={[estilos.nome, { fontSize: 18 }]}>Lar da Mel</Text>\n```",
+      "options": {
+        "a": "Com letra 18, em negrito",
+        "b": "Com letra 16, em negrito",
+        "c": "Com letra 18, sem negrito",
+        "d": "Dá erro, porque há dois `fontSize`"
+      },
+      "answer": "a",
+      "explanation": "O React Native junta o array da esquerda para a direita. O item 1 traz a letra 16 e o negrito; o item 2 traz a letra 18. Quando dois itens têm a mesma propriedade, vale a do último. O negrito só vem do item 1, então fica.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O app está no tema escuro. O botão de tema da Início é:\n\n```jsx\n<BotaoIcone\n  icone={escuro ? 'sunny-outline' : 'moon-outline'}\n  rotulo={escuro ? 'Usar tema claro' : 'Usar tema escuro'}\n  onPress={alternarTema}\n/>\n```\n\nO que o botão mostra e o que o leitor de tela fala?",
+      "options": {
+        "a": "O sol, e \"Usar tema claro\"",
+        "b": "A lua, e \"Usar tema escuro\"",
+        "c": "O sol, e \"Usar tema escuro\"",
+        "d": "A lua, e \"Usar tema claro\""
+      },
+      "answer": "a",
+      "explanation": "No escuro, `escuro` é `true`, e o ternário fica com o que vem antes dos dois-pontos: `'sunny-outline'` e `'Usar tema claro'`. O botão mostra para onde o toque leva: do escuro para o claro. O `rotulo` é o texto que o leitor de tela fala.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Um colega escreveu `onPress={alternarTema()}` no `BotaoIcone`. O que acontece?",
+      "options": {
+        "a": "A função roda na hora de desenhar a tela, e o toque não troca o tema",
+        "b": "Funciona igual: os parênteses são opcionais",
+        "c": "O tema troca duas vezes a cada toque",
+        "d": "Aparece `Property 'alternarTema' doesn't exist`"
+      },
+      "answer": "a",
+      "explanation": "Com parênteses, `alternarTema()` é chamada enquanto a tela é desenhada, e o botão recebe o que ela devolve: nada. O toque não faz nada, e aparece o aviso `Cannot update a component`. Sem parênteses, você entrega a própria função, e o botão a chama no toque.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "A sua Início ainda não usa o `useTema()`, e o celular vai para o tema escuro. O que acompanha o tema sozinho? Marque todas as certas.",
+      "options": {
+        "a": "O fundo da `Tela`",
+        "b": "Os `Cartao`",
+        "c": "Os `Text` que você escreveu sem cor",
+        "d": "As letras da barra de status, que ficam claras"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "A `Tela`, o `Cartao` e o `app/_layout.js`, que cuida da barra de status, leem o quadro de avisos com `useTema()`: quando o tema muda, eles desenham de novo. Os seus `Text` sem cor não leem nada e continuam pretos, por isso somem no escuro.",
+      "points": 2
+    }
+  ]
+}

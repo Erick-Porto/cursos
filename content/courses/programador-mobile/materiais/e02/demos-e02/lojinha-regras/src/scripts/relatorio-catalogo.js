@@ -1,5 +1,4 @@
 import fs from 'node:fs';
-import pc from 'picocolors';
 
 const texto = fs.readFileSync('src/data/catalogo.json', 'utf-8');
 const catalogo = JSON.parse(texto);
@@ -18,9 +17,9 @@ const semImagem = lista.filter((produto) => produto.imagem === '');
 const soma = lista.reduce((total, produto) => total + produto.preco, 0);
 const media = soma / lista.length;
 
-console.log(pc.bold('Relatório do catálogo:'), titulo);
+console.log('Relatório do catálogo:', titulo);
 console.log('Produtos:', lista.length);
 console.log('Em destaque:', destaques.length);
 console.log('Acima de R$ 200:', caros.length);
 console.log('Preço médio: R$', media.toFixed(2));
-console.log(pc.yellow('Sem imagem:'), semImagem.length);
+console.log('Sem imagem:', semImagem.length);

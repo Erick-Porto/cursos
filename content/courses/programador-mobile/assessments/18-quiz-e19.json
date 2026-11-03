@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E19 · Herança e composição",
+  "description": "Dez questões sobre extends e super, o concluir sobrescrito, o polimorfismo, a ListaDeTarefas e o criarTarefa do Projeto 3.",
+  "lesson": "e19-heranca-e-composicao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Projeto 3, a classe nova começa assim:\n\n```javascript\nexport default class TarefaRecorrente extends Tarefa {\n```\n\nO que o `extends Tarefa` diz?",
+      "options": {
+        "a": "A `TarefaRecorrente` é um tipo de `Tarefa`: ganha tudo o que a `Tarefa` tem e pode acrescentar o seu",
+        "b": "A `TarefaRecorrente` copia o texto do arquivo `Tarefa.js` para dentro do arquivo dela",
+        "c": "A `Tarefa` passa a ter a frequência que a `TarefaRecorrente` guarda",
+        "d": "Toda tarefa criada com `new Tarefa(...)` passa a se repetir"
+      },
+      "answer": "a",
+      "explanation": "O `extends` diz quem é a mãe. A filha herda os campos, os métodos e os `get` da mãe e acrescenta o seu, como o cartão, que é um tipo de pagamento e acrescenta as parcelas. A mãe não muda: a `Tarefa` continua sem frequência, e o `new Tarefa(...)` continua fazendo tarefas comuns.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A `Tarefa` é a do projeto, com o `get rotuloDaPrioridade` que devolve `'Alta'`, `'Média'` ou `'Baixa'`. O que aparece no terminal?\n\n```javascript\nclass TarefaRecorrente extends Tarefa {\n  constructor(dados) {\n    super(dados);\n    this.frequencia = dados.frequencia ?? 'semanal';\n  }\n}\n\nconst regar = new TarefaRecorrente({ titulo: 'Regar as plantas', prioridade: 'alta' });\nconsole.log(regar.rotuloDaPrioridade, regar.frequencia);\n```",
+      "options": {
+        "a": "`Alta semanal`",
+        "b": "`undefined semanal`",
+        "c": "`Alta undefined`",
+        "d": "Um erro: `rotuloDaPrioridade is not defined`"
+      },
+      "answer": "a",
+      "explanation": "A `TarefaRecorrente` não escreveu o `rotuloDaPrioridade`, mas herdou o da mãe: com a prioridade `'alta'`, ele devolve `Alta`. A frequência não veio na ficha, então o `??` guarda `'semanal'`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Uma colega escreveu o `constructor` da recorrente com as linhas nesta ordem:\n\n```javascript\nconstructor(dados) {\n  this.frequencia = dados.frequencia ?? 'semanal';\n  super(dados);\n}\n```\n\nO que acontece ao criar uma `TarefaRecorrente`?",
+      "options": {
+        "a": "O Node para com `ReferenceError: Must call super constructor in derived class before accessing 'this'...`",
+        "b": "Funciona igual: dentro do `constructor`, a ordem das linhas não importa",
+        "c": "A frequência fica guardada, mas o título e o prazo ficam `undefined`",
+        "d": "O `super(dados)` apaga a frequência que já estava guardada"
+      },
+      "answer": "a",
+      "explanation": "Na classe filha (*derived class*), a parte da mãe vem primeiro: o `super(dados)` precisa rodar antes de qualquer `this`. Com o `this` antes, o Node nem cria a tarefa e mostra o `ReferenceError`. A correção é trocar as duas linhas de lugar.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No Projeto 3, `HOJE` é `new Date(2026, 10, 10)`, o dia 10 de novembro de 2026. O que aparece no terminal?\n\n```javascript\nconst regar = new TarefaRecorrente({\n  titulo: 'Regar as plantas',\n  prazo: '2026-11-10',\n  frequencia: 'semanal',\n});\nconsole.log(regar.concluir(HOJE).prazo);\n```",
+      "options": {
+        "a": "`2026-11-17`",
+        "b": "`2026-11-10`",
+        "c": "`2026-11-11`",
+        "d": "Um erro, porque o `concluir` devolve `null`"
+      },
+      "answer": "a",
+      "explanation": "O `concluir(hoje)` da recorrente risca esta tarefa e devolve uma recorrente nova, com o prazo do `proximoPrazo`: semanal, 7 dias depois, o dia 17. O `2026-11-11` seria o de uma diária. Quem devolve `null` é o `concluir()` da tarefa comum.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "No `concluir(hoje)` da `TarefaRecorrente`, a linha `super.concluir();` roda o `concluir()` da `Tarefa`, que marca esta tarefa como concluída. Sem ela, a próxima nasce, mas a de hoje continua pendente.",
+      "answer": true,
+      "explanation": "O `super` com ponto chama um método da mãe. O `super.concluir()` faz o que toda tarefa faz ao concluir, `this.concluida = true`; depois vem o que só a recorrente faz, criar a próxima. Sem essa linha, nenhuma mensagem de erro aparece: só o teste, que confere `regar.concluida`, percebe.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Com o `HOJE` de 10/11/2026 e as duas classes do projeto, o que aparece no terminal?\n\n```javascript\nconst tarefas = [\n  new Tarefa({ titulo: 'Pagar a conta de luz' }),\n  new TarefaRecorrente({ titulo: 'Tomar o remédio', prazo: '2026-11-10', frequencia: 'diaria' }),\n];\n\nfor (const tarefa of tarefas) {\n  const proxima = tarefa.concluir(HOJE);\n  console.log(proxima === null ? 'nada' : proxima.prazo);\n}\n```",
+      "options": {
+        "a": "`nada` e, na linha de baixo, `2026-11-11`",
+        "b": "`nada` e, na linha de baixo, `nada`",
+        "c": "`2026-11-11` e, na linha de baixo, `2026-11-11`",
+        "d": "`undefined` e, na linha de baixo, `2026-11-11`"
+      },
+      "answer": "a",
+      "explanation": "É o polimorfismo: a mesma linha, `tarefa.concluir(HOJE)`, roda o `concluir` de cada uma. A comum só risca e devolve `null`, então sai `nada`. A diária risca e devolve a próxima, com o prazo do dia seguinte. A comum recebe o `HOJE` e não usa: o argumento que sobra é ignorado. Nenhum `if` perguntou o tipo.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Uma `ListaDeTarefas` nova recebe, com `adicionar`, uma `TarefaRecorrente` semanal com prazo `'2026-11-10'`. Ela ganha o número 1. Depois de `lista.concluir(1, HOJE)`, com o `HOJE` de 10/11/2026, como fica `lista.tarefas`?",
+      "options": {
+        "a": "Duas tarefas: a 1, concluída, com prazo `'2026-11-10'`, e a 2, pendente, com prazo `'2026-11-17'`",
+        "b": "Uma tarefa só, a 1, com o prazo trocado para `'2026-11-17'`",
+        "c": "Duas tarefas, as duas concluídas",
+        "d": "Uma tarefa só, concluída: a próxima só nasce quando a tela pede"
+      },
+      "answer": "a",
+      "explanation": "O `concluir` da lista acha a tarefa com o `buscar`, chama o `concluir(hoje)` dela e, como a recorrente devolveu a próxima (não `null`), adiciona essa próxima, que ganha o número 2. A de hoje não muda de prazo: fica concluída, e a nova nasce pendente.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst lista = new ListaDeTarefas();\nconst luz = lista.adicionar(new Tarefa({ titulo: 'Pagar a conta de luz' }));\nconst racao = lista.adicionar(new Tarefa({ titulo: 'Comprar ração do gato' }));\nlista.remover(1);\nconsole.log(racao.id, lista.tarefas.length, lista.proximoId);\n```",
+      "options": {
+        "a": "`2 1 3`",
+        "b": "`1 1 2`",
+        "c": "`2 2 3`",
+        "d": "`2 1 2`"
+      },
+      "answer": "a",
+      "explanation": "O `adicionar` dá o número e sobe o `proximoId`: a luz fica com 1, a ração com 2, e o `proximoId` vai a 3. O `remover(1)` peneira a lista e deixa só a ração, sem mudar os números: o id dela continua 2, e o `proximoId` não volta.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O `criarTarefa` do projeto é:\n\n```javascript\nexport function criarTarefa(dados) {\n  if (dados.frequencia) {\n    return new TarefaRecorrente(dados);\n  }\n  return new Tarefa(dados);\n}\n```\n\nO que devolve `criarTarefa({ titulo: 'Estudar para a prova', frequencia: '' })`?",
+      "options": {
+        "a": "Uma `Tarefa` comum: no `if`, o texto vazio conta como não",
+        "b": "Uma `TarefaRecorrente` semanal, porque o campo `frequencia` veio na ficha",
+        "c": "Uma `TarefaRecorrente` com a frequência vazia",
+        "d": "`null`, porque a frequência não é válida"
+      },
+      "answer": "a",
+      "explanation": "O `if (dados.frequencia)` pergunta se veio uma frequência com letras. Um texto com letras conta como sim; o texto vazio `''` e o `undefined` contam como não. Então o `if` pula, e o segundo `return` cria uma `Tarefa` comum.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No teste, você precisa da classe `ListaDeTarefas`, que sai com `export default`, e da função `criarTarefa`, que sai com `export function`. As duas estão em `./ListaDeTarefas.js`. Qual linha traz as duas?",
+      "options": {
+        "a": "`import ListaDeTarefas, { criarTarefa } from './ListaDeTarefas.js';`",
+        "b": "`import { ListaDeTarefas, criarTarefa } from './ListaDeTarefas.js';`",
+        "c": "`import ListaDeTarefas, criarTarefa from './ListaDeTarefas.js';`",
+        "d": "`import criarTarefa from './ListaDeTarefas.js';`"
+      },
+      "answer": "a",
+      "explanation": "O `export default` vem sem chaves, e o `export` com nome, entre chaves, na mesma linha. Com as duas entre chaves, o Node procura um `export` chamado `ListaDeTarefas` e não acha. Sem chave nenhuma, a linha nem roda. E o `import criarTarefa` sem chaves traz o default, a classe, com o nome errado.",
+      "points": 1
+    }
+  ]
+}

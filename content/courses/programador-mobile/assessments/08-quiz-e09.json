@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E09 · Trabalhando com textos",
+  "description": "Dez questões sobre os métodos de texto, o Number e o NaN, as aspas no terminal e o lerValor do Racha-conta.",
+  "lesson": "e09-trabalhando-com-textos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nlet texto = ' Pix ';\ntexto.trim();\ntexto = texto.toLowerCase();\nconsole.log(texto === 'pix');\n```",
+      "options": {
+        "a": "`false`",
+        "b": "`true`",
+        "c": "`pix`",
+        "d": "`TypeError`, porque `texto` é `let`"
+      },
+      "answer": "a",
+      "explanation": "O método devolve um texto novo e não muda o original. A linha `texto.trim();` fez a cópia sem os espaços, mas ninguém guardou a cópia. O `toLowerCase` foi guardado, então `texto` vale `' pix '`, com os espaços, e a comparação dá `false`. Com `texto = texto.trim();`, daria `true`.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o resultado de `'123.456.789-01'.replace('.', '')`?",
+      "options": {
+        "a": "`'123456.789-01'`",
+        "b": "`'123456789-01'`",
+        "c": "`'12345678901'`",
+        "d": "`'123.456.789-01'`, porque o texto não muda"
+      },
+      "answer": "a",
+      "explanation": "O `replace` troca só a primeira vez que o trecho aparece: some o primeiro ponto, e o segundo fica. Para trocar todos os pontos, o método é o `replaceAll`. O hífen não é ponto, então fica nos dois casos.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Qual destas linhas mostra `187.5` no terminal?",
+      "options": {
+        "a": "`console.log(Number('187.50'));`",
+        "b": "`console.log(Number('187,50'));`",
+        "c": "`console.log(Number('R$ 187.50'));`",
+        "d": "`console.log('187.50' + 0);`"
+      },
+      "answer": "a",
+      "explanation": "O `Number` converte o texto em número, mas só entende o jeito do JavaScript, com ponto antes dos centavos: `'187.50'` vira `187.5`. Com a vírgula ou com o `R$`, ele não entende e devolve `NaN`. Na última, o `+` com texto junta: sai `187.500`, um texto.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Para saber se uma conta deu `NaN`, a comparação `resultado === NaN` funciona: ela dá `true` quando o resultado é `NaN`.",
+      "answer": false,
+      "explanation": "O `NaN` não é igual a nada, nem a ele mesmo: `NaN === NaN` dá `false`. A pergunta certa é `Number.isNaN(resultado)`, que responde `true` quando o valor é `NaN`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Esta é a primeira versão do `lerValor`, a do E09. O que `lerValor('R$ 72,90')` devolve?\n\n```javascript\nexport function lerValor(texto) {\n  let limpo = texto.trim();\n  limpo = limpo.replace('R$', '');\n  limpo = limpo.trim();\n  limpo = limpo.replace(',', '.');\n  return paraCentavos(Number(limpo));\n}\n```",
+      "options": {
+        "a": "`7290`",
+        "b": "`72.9`",
+        "c": "`'72.90'`",
+        "d": "`NaN`"
+      },
+      "answer": "a",
+      "explanation": "Linha por linha, `limpo` vale `'R$ 72,90'`, `' 72,90'`, `'72,90'` e `'72.90'`. O `Number` dá `72.9`, e o `paraCentavos` devolve os centavos inteiros, `7290`. O `'72.90'` é o texto antes do `Number`, e o `72.9` é o número antes do `paraCentavos`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Depois da Sua vez do E09, o `formatarReais` está assim. O que `formatarReais(125000)` devolve?\n\n```javascript\nexport function formatarReais(centavos) {\n  const reais = (centavos / 100).toFixed(2);\n  const comVirgula = reais.replace('.', ',');\n  return `R$ ${comVirgula}`;\n}\n```",
+      "options": {
+        "a": "`'R$ 1250,00'`",
+        "b": "`'R$ 1.250,00'`",
+        "c": "`'R$ 1250.00'`",
+        "d": "`'R$ 12,50'`"
+      },
+      "answer": "a",
+      "explanation": "125000 centavos são 1250 reais, e o `toFixed(2)` devolve o texto `'1250.00'`. O `replace` troca o único ponto pela vírgula: `'1250,00'`. Nenhuma linha põe o ponto do milhar, então `'R$ 1.250,00'` não aparece nesta versão.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No terminal do VS Code no Windows, o PowerShell, qual comando faz o `racha.js` receber o valor inteiro, `R$ 187,50`, no `process.argv[2]`?",
+      "options": {
+        "a": "`npm run racha \"R$ 187,50\"`",
+        "b": "`npm run racha R$ 187,50`",
+        "c": "`npm run racha \"R$187,50\"`",
+        "d": "`npm run racha R$187,50`"
+      },
+      "answer": "a",
+      "explanation": "As aspas juntam o valor num argumento só, e o espaço depois do `R$` protege o `$`. Sem aspas, o espaço separa `R$` do resto, e a vírgula vira espaço. Com o `$` colado ao número, o PowerShell lê `$187` como uma caixa dele, vazia: com aspas duplas chega `R,50`, e sem aspas, `R 50`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst itens = ['Pizza grande', 'Suco de laranja', 'pizza doce'];\nconst achados = itens.filter((item) => item.includes('pizza'));\nconsole.log(achados.length);\n```",
+      "options": {
+        "a": "`1`",
+        "b": "`2`",
+        "c": "`0`",
+        "d": "`3`"
+      },
+      "answer": "a",
+      "explanation": "O `includes` diferencia maiúsculas: `'Pizza grande'` tem `'Pizza'`, com P maiúsculo, e não passa no teste. Só `'pizza doce'` fica na lista nova. Para achar as duas, os dois lados vão para minúsculas: `item.toLowerCase().includes('pizza')`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que mostra `console.log('Ana, Bruno, Carla'.split(', ')[1]);`?",
+      "options": {
+        "a": "`Bruno`",
+        "b": "` Bruno`, com um espaço na frente",
+        "c": "`Ana`",
+        "d": "`[ 'Ana', 'Bruno', 'Carla' ]`"
+      },
+      "answer": "a",
+      "explanation": "O separador é a vírgula com o espaço, e ele some: os pedaços são `'Ana'`, `'Bruno'` e `'Carla'`. A gaveta `[1]` é a segunda, porque a lista começa no 0. O espaço na frente apareceria com `split(',')`, que deixa o espaço no pedaço.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Com a primeira versão do `lerValor`, a do E09, quais destes textos viram `18750`? Marque todas as certas.",
+      "options": {
+        "a": "`'187,50'`",
+        "b": "`' R$ 187,50 '`",
+        "c": "`'187.5'`",
+        "d": "`'187,50 reais'`",
+        "e": "`'18750'`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Nos três primeiros, a limpeza deixa `'187.50'` ou `'187.5'`, que o `Number` lê como `187.5`. Em `'187,50 reais'`, a palavra continua lá, e o `Number` devolve `NaN`. O `'18750'` já é lido em reais: vira `1875000` centavos.",
+      "points": 2
+    }
+  ]
+}

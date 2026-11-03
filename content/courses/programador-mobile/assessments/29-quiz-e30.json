@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E30 · Componentes nativos e estilo",
+  "description": "Dez questões sobre o StyleSheet, as cores do tema, a Image, o toque com Pressable, a coluna e o BotaoCopo do Gota.",
+  "lesson": "e30-componentes-nativos-e-estilo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No fim do `App.js` está:\n\n```jsx\nconst estilos = StyleSheet.create({\n  titulo: {\n    fontSize: 32,\n    fontWeight: 'bold',\n  },\n});\n```\n\nE na tela:\n\n```jsx\n<Text style={estilos.titulo}>Gota</Text>\n<Text>Meta do dia</Text>\n```\n\nComo os dois textos aparecem no celular?",
+      "options": {
+        "a": "\"Gota\" grande e em negrito; \"Meta do dia\" preto, no tamanho padrão",
+        "b": "Os dois grandes e em negrito, porque o estilo vale para o arquivo inteiro",
+        "c": "Os dois no tamanho padrão, porque no celular o estilo precisa de `className`",
+        "d": "Aparece a tela de erro, porque o `estilos` foi criado depois do `return`"
+      },
+      "answer": "a",
+      "explanation": "O estilo só vale para a peça que tem `style={estilos.titulo}`: o \"Gota\". O `Text` sem `style` fica preto e no tamanho padrão. O `estilos` no fim do arquivo funciona, porque a tela só é desenhada depois que o arquivo inteiro foi lido. O `className` é da web; no celular não existe CSS.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No CSS do E01, o tamanho da letra era `font-size: 18px;`. Como fica no `StyleSheet` do React Native?",
+      "options": {
+        "a": "`fontSize: 18,`",
+        "b": "`fontSize: '18px',`",
+        "c": "`font-size: 18,`",
+        "d": "`fontsize: 18,`"
+      },
+      "answer": "a",
+      "explanation": "O nome vai em camelCase (sem hífen, a palavra seguinte com maiúscula) e o número vai sem `px`. Com hífen, aparece a tela de erro com `Unexpected token`. Com `'18px'` ou com `fontsize` minúsculo, não aparece erro, mas o tamanho não muda.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No Gota, as cores ficam em `src/tema.js`, e o `App.js`, na pasta raiz, usa `import { cores } from './src/tema';`. O `BotaoCopo.js` mora em `src/components/`. Qual `import` traz as cores para ele?",
+      "options": {
+        "a": "`import { cores } from '../tema';`",
+        "b": "`import { cores } from './src/tema';`",
+        "c": "`import { cores } from './tema';`",
+        "d": "`import cores from '../tema';`"
+      },
+      "answer": "a",
+      "explanation": "O caminho parte da pasta do arquivo: de `src/components/`, o `..` sobe para `src/`, onde está o `tema.js`, como o `cd ..` da aula 3. O `'./src/tema'` só vale no `App.js`, e o `'./tema'` procura dentro de `src/components/` e dá `Unable to resolve`. Sem as chaves, o `import` procura um `export default`, e o `tema.js` exporta `cores` com nome.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O arquivo `gota.png` tem 192 por 192. No `App.js`, a imagem foi escrita sem estilo:\n\n```jsx\n<Image source={require('./assets/gota.png')} />\n```\n\nO que aparece no celular?",
+      "options": {
+        "a": "A gota no tamanho do arquivo, 192 por 192, quase metade da largura da tela",
+        "b": "Nada: sem `width` e `height`, a imagem local some",
+        "c": "A gota em 48 por 48, o tamanho padrão das imagens",
+        "d": "A tela de erro, pedindo o `style`"
+      },
+      "answer": "a",
+      "explanation": "Sem `width` e `height`, a imagem local vem no tamanho do próprio arquivo. Por isso o estilo `gota` do projeto tem `width: 48` e `height: 48`: a gota fica do tamanho de um ícone. Não há erro nenhum, só uma gota grande demais.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O `BotaoCopo` tem `onPress={() => console.log('Copo de 200 ml')}`. Você toca no botão. Onde aparece `Copo de 200 ml`?",
+      "options": {
+        "a": "No terminal do computador onde o `npx expo start` está ligado, com `LOG` na frente",
+        "b": "Na tela do celular, embaixo do botão",
+        "c": "No Console do navegador, aberto com F12",
+        "d": "Em lugar nenhum: o `console.log` não funciona no celular"
+      },
+      "answer": "a",
+      "explanation": "O `console.log` do app vai para o terminal do `npx expo start`, numa linha como ` LOG  Copo de 200 ml`. Ele não aparece no celular, e não há navegador nem F12: o app não roda numa página.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Um colega escreveu o botão assim, sem a seta:\n\n```jsx\n<Pressable onPress={console.log('Oi!')}>\n  <Text>Diga oi</Text>\n</Pressable>\n```\n\nO que acontece?",
+      "options": {
+        "a": "O `Oi!` aparece no terminal sozinho, ao salvar, e o toque não escreve nada",
+        "b": "Cada toque escreve `Oi!` no terminal, como com a seta",
+        "c": "Aparece a tela de erro, porque falta a seta",
+        "d": "Nada aparece no terminal, nem ao salvar nem ao tocar"
+      },
+      "answer": "a",
+      "explanation": "Com parênteses e sem a seta, o `console.log` roda na hora de desenhar a tela, e o `onPress` recebe o que ele devolve, que não é uma função. Por isso o `Oi!` aparece ao salvar e o toque não faz nada. É o `avisar()` com parênteses do E26. A seta, `() => console.log('Oi!')`, guarda o `console.log` para a hora do toque.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O `BotaoCopo` do Gota, no fim da etapa 2, é assim:\n\n```jsx\nexport default function BotaoCopo({ ml }) {\n  return (\n    <Pressable\n      style={estilos.botao}\n      onPress={() => console.log(`Copo de ${ml} ml`)}\n    >\n      <Text style={estilos.texto}>+{ml} ml</Text>\n    </Pressable>\n  );\n}\n```\n\nNo `App`, está `<BotaoCopo ml={500} />`. O que o botão mostra e o que o toque escreve no terminal?",
+      "options": {
+        "a": "Mostra `+500 ml`; o toque escreve `Copo de 500 ml`",
+        "b": "Mostra `+{ml} ml`; o toque escreve `Copo de ${ml} ml`",
+        "c": "Mostra `+500 ml`; o toque escreve `Copo de ml ml`",
+        "d": "Mostra `+ ml`; o toque escreve `Copo de undefined ml`"
+      },
+      "answer": "a",
+      "explanation": "A prop `ml` chega com 500 e é desestruturada no parâmetro. No JSX, o `{ml}` vira 500, e a template string, entre crases, troca o `${ml}` por 500. O `+ ml` com `undefined` aparece quando a tag não manda o `ml`, como um `<BotaoCopo />` sem prop.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No passo 4, o `BotaoCopo` ganhou fundo azul e apareceu sozinho dentro da `Tela`, como uma faixa da largura da tela inteira. Por quê?",
+      "options": {
+        "a": "Porque as peças ficam em coluna por padrão, e cada uma ocupa a largura toda",
+        "b": "Porque o `padding: 12` estica o botão até as bordas",
+        "c": "Porque o `borderRadius` aumenta a largura da caixa",
+        "d": "Porque o `Pressable` sempre tem a largura da tela, até dentro da `Linha`"
+      },
+      "answer": "a",
+      "explanation": "Na `Tela` e em toda `View`, as peças ficam uma embaixo da outra, e cada uma ganha a linha inteira, mesmo sem nada escrito nela. Sem fundo, isso não aparece; com fundo azul, vira uma faixa. Dentro da `Linha` do kit, os botões ficam lado a lado, cada um do tamanho do seu texto. O `padding` é só o espaço por dentro.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No estilo `botao` do `BotaoCopo`, o que faz o `padding: 12`?",
+      "options": {
+        "a": "Deixa 12 pontos de espaço entre a borda do botão e o texto, nos quatro lados",
+        "b": "Afasta o botão 12 pontos das outras peças da tela",
+        "c": "Arredonda os cantos do botão em 12",
+        "d": "Deixa a letra do botão com tamanho 12"
+      },
+      "answer": "a",
+      "explanation": "O `padding` é o espaço por dentro da caixa, o plástico-bolha entre a parede e o que vai dentro. Os cantos são do `borderRadius`, e o tamanho da letra é do `fontSize`, no `Text`. O espaço entre uma peça e outra, no Gota, vem da `Tela` do kit.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Para o `<BotaoCopo />` aparecer na tela do Gota, o que precisa estar certo? Marque todas as certas.",
+      "options": {
+        "a": "O `BotaoCopo.js` tem `export default function BotaoCopo`",
+        "b": "O `App.js` tem `import BotaoCopo from './src/components/BotaoCopo';`",
+        "c": "O arquivo se chama `BotaoCopo.js`, com B e C maiúsculos, em `src/components/`",
+        "d": "Um arquivo `BotaoCopo.css` ao lado, com o visual do botão"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `export default` põe a peça na vitrine, e o `import` pega de lá; sem o `export default`, a tela mostra `Element type is invalid`. O caminho e as maiúsculas precisam bater com o arquivo, senão aparece `Unable to resolve`, até no Windows. No celular não existe CSS: o visual vem do `StyleSheet.create`, no próprio arquivo.",
+      "points": 2
+    }
+  ]
+}

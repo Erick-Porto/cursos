@@ -1,0 +1,499 @@
+/* Agenda de contatos · Projeto 2. Mesmas cores das páginas do curso, com tema claro e escuro. */
+:root {
+  color-scheme: light dark;
+  --fundo: #f1f5f9;
+  --cartao: #ffffff;
+  --borda: #dbe2ea;
+  --texto: #0f172a;
+  --texto-2: #475569;
+  --destaque: #0e7490;
+  --sobre-destaque: #ffffff;
+  --destaque-suave: #e0f7fb;
+  --perigo: #b91c1c;
+  --perigo-suave: #fef2f2;
+  --sucesso: #047857;
+  --sucesso-suave: #dcfce7;
+  --favorito: #b45309;
+  --familia: #7c3aed;
+  --familia-suave: #f3e8ff;
+  --amigos: #047857;
+  --amigos-suave: #dcfce7;
+  --trabalho: #1d4ed8;
+  --trabalho-suave: #dbeafe;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0b1020;
+    --cartao: #131c33;
+    --borda: rgba(148, 163, 184, 0.22);
+    --texto: #e8edf7;
+    --texto-2: #b4bfd3;
+    --destaque: #22d3ee;
+    --sobre-destaque: #04252c;
+    --destaque-suave: rgba(34, 211, 238, 0.12);
+    --perigo: #f87171;
+    --perigo-suave: rgba(248, 113, 113, 0.12);
+    --sucesso: #6ee7b7;
+    --sucesso-suave: rgba(52, 211, 153, 0.14);
+    --favorito: #fbbf24;
+    --familia: #c4b5fd;
+    --familia-suave: rgba(167, 139, 250, 0.16);
+    --amigos: #6ee7b7;
+    --amigos-suave: rgba(52, 211, 153, 0.14);
+    --trabalho: #93c5fd;
+    --trabalho-suave: rgba(96, 165, 250, 0.16);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font:
+    16px/1.6 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 32px 16px 56px;
+}
+:focus-visible {
+  outline: 3px solid var(--destaque);
+  outline-offset: 2px;
+}
+code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+}
+[hidden] {
+  display: none !important;
+}
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.ico {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: none;
+}
+
+/* topo */
+.sobre {
+  margin: 0 0 4px;
+  color: var(--destaque);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 6vw, 2.2rem);
+  line-height: 1.2;
+}
+.lead {
+  margin: 0;
+  color: var(--texto-2);
+}
+section,
+.cartao,
+.mensagem,
+.aviso {
+  margin-top: 20px;
+}
+h2 {
+  margin: 28px 0 10px;
+  font-size: 1.15rem;
+}
+.cartao h2 {
+  margin-top: 0;
+}
+.dica {
+  margin: 6px 0 0;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+.cartao {
+  padding: 16px;
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+}
+
+/* aviso: servidor, arquivo que não carregou, função que não fez o combinado */
+.aviso {
+  padding: 12px 16px;
+  border-left: 4px solid var(--perigo);
+  border-radius: 0 12px 12px 0;
+  background: var(--perigo-suave);
+}
+.aviso h2 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+.aviso p {
+  margin: 0 0 6px;
+}
+.aviso ul {
+  margin: 0 0 6px;
+  padding-left: 1.2em;
+}
+
+/* painel das funções */
+details > summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+.etapa-titulo {
+  margin: 16px 0 6px;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.funcoes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.funcoes li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.funcoes li .ico {
+  margin-top: 3px;
+}
+.funcoes li.ok .ico {
+  color: var(--sucesso);
+}
+.funcoes li.falta .ico {
+  color: var(--texto-2);
+}
+.funcoes li.erro .ico {
+  color: var(--perigo);
+}
+.funcoes small {
+  display: block;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+.funcoes li.erro small {
+  color: var(--perigo);
+  font-weight: 600;
+}
+
+/* campos */
+label,
+legend {
+  display: block;
+  font-weight: 600;
+}
+fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+input,
+select {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+}
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.campo-busca {
+  position: relative;
+}
+.campo-busca input {
+  padding-left: 40px;
+}
+.campo-busca .ico {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 2px;
+  color: var(--texto-2);
+}
+#form-contato {
+  margin-top: 12px;
+}
+.campo + .campo {
+  margin-top: 12px;
+}
+.lado-a-lado {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 4px;
+}
+.lado-a-lado label {
+  font-weight: 400;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+.opcional {
+  color: var(--texto-2);
+  font-weight: 400;
+}
+.erros {
+  margin-top: 16px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--perigo-suave);
+  color: var(--perigo);
+  font-weight: 600;
+}
+.erros p {
+  margin: 0;
+}
+.erros ul {
+  margin: 4px 0 0;
+  padding-left: 1.2em;
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+.botao {
+  min-height: 44px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-weight: 700;
+}
+.botao.secundario {
+  border: 1px solid var(--borda);
+  background: transparent;
+  color: var(--texto);
+}
+
+/* mensagem com desfazer */
+.mensagem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: var(--texto);
+  color: var(--fundo);
+}
+.botao-texto {
+  min-height: 44px;
+  padding: 6px 4px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+/* listas de contatos */
+.vazio,
+.pendente {
+  margin: 0;
+  color: var(--texto-2);
+}
+.pendente {
+  font-size: 0.9rem;
+}
+.pendente + .pendente {
+  margin-top: 4px;
+}
+.pendente code {
+  color: var(--texto);
+}
+.problema {
+  margin: 0;
+  color: var(--perigo);
+  font-weight: 600;
+}
+#notas-lista:empty {
+  display: none;
+}
+#notas-lista {
+  margin-bottom: 12px;
+}
+.letra {
+  margin: 18px 0 6px;
+  color: var(--destaque);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+.contatos {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 8px;
+}
+.contato {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--cartao);
+  border: 1px solid var(--borda);
+  border-radius: 14px;
+}
+.avatar {
+  align-self: start;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--destaque-suave);
+  color: var(--destaque);
+  font-weight: 800;
+}
+.dados {
+  min-width: 0;
+}
+.nome {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+.nome .ico {
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+  vertical-align: -2px;
+  color: var(--favorito);
+  fill: currentColor;
+}
+.detalhe {
+  margin: 0;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+  overflow-wrap: anywhere;
+}
+.grupo {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 0 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+.grupo.familia {
+  background: var(--familia-suave);
+  color: var(--familia);
+}
+.grupo.amigos {
+  background: var(--amigos-suave);
+  color: var(--amigos);
+}
+.grupo.trabalho {
+  background: var(--trabalho-suave);
+  color: var(--trabalho);
+}
+.botoes {
+  display: flex;
+  gap: 2px;
+}
+.botao-icone {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--texto-2);
+}
+.botao-icone:hover {
+  background: var(--destaque-suave);
+  color: var(--texto);
+}
+.botao-icone[aria-pressed='true'] {
+  color: var(--favorito);
+}
+.botao-icone[aria-pressed='true'] .ico {
+  fill: currentColor;
+}
+.botao-icone.remover:hover {
+  background: var(--perigo-suave);
+  color: var(--perigo);
+}
+
+/* aniversariantes */
+.aniversarios {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+.aniversarios li {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+}
+.dia {
+  min-width: 52px;
+  color: var(--destaque);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+footer {
+  margin-top: 40px;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+/* celular estreito: botões embaixo dos dados */
+@media (max-width: 480px) {
+  .contato {
+    grid-template-columns: auto 1fr;
+    row-gap: 4px;
+  }
+  .botoes {
+    grid-column: 2 / -1;
+    margin-left: -12px;
+  }
+}

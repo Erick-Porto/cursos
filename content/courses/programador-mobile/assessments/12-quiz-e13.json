@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E13 · Objetos",
+  "description": "Dez questões sobre a ficha de cada contato: campos, ficha dentro da ficha, colchetes, Object.entries, desestruturação e as regras da etapa 1 da agenda.",
+  "lesson": "e13-objetos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "multiple",
+      "prompt": "A ficha foi guardada numa `const`:\n\n```javascript\nconst contato = { nome: 'Rafaela Lopes', grupo: 'amigos' };\n```\n\nQuais linhas, escritas logo abaixo, rodam sem erro? Marque todas as certas.",
+      "options": {
+        "a": "`contato.grupo = 'trabalho';`",
+        "b": "`contato.apelido = 'Rafa';`",
+        "c": "`contato['grupo'] = 'familia';`",
+        "d": "`contato = { nome: 'Outra pessoa' };`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A `const` lacra a caixa, não a ficha guardada nela: dá para trocar o valor de um campo, com ponto ou com colchetes, e criar um campo novo. Trocar a ficha inteira por outra é guardar outro valor na caixa lacrada, e o Node para com `TypeError: Assignment to constant variable.`",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst mariana = { nome: 'Mariana Souza', aniversario: { dia: 30, mes: 10 } };\nconsole.log(mariana.aniversario.mes);\n```",
+      "options": {
+        "a": "`10`",
+        "b": "`{ dia: 30, mes: 10 }`",
+        "c": "`undefined`",
+        "d": "`mes`"
+      },
+      "answer": "a",
+      "explanation": "Lendo da esquerda para a direita: na `mariana`, abra o `aniversario`, que é uma ficha dentro da ficha; nele, leia o `mes`. A ficha inteira apareceria com `mariana.aniversario`, sem o último ponto.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O Daniel não informou o aniversário. O que acontece nesta linha?\n\n```javascript\nconst daniel = { nome: 'Daniel Rocha', aniversario: null };\nconsole.log(daniel.aniversario.dia);\n```",
+      "options": {
+        "a": "O programa para com `TypeError: Cannot read properties of null (reading 'dia')`",
+        "b": "Aparece `undefined`, porque o campo `dia` não existe",
+        "c": "Aparece `null`",
+        "d": "Aparece `0`"
+      },
+      "answer": "a",
+      "explanation": "`daniel.aniversario` é `null`, a caixa vazia de propósito. Dentro de `null` não há campo nenhum para ler, e o Node para com o `TypeError`. Por isso a `formatarAniversario` pergunta `if (contato.aniversario === null)` antes de ler o dia.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que aparece nas duas linhas?\n\n```javascript\nconst NOMES_DOS_GRUPOS = { familia: 'Família', amigos: 'Amigos', trabalho: 'Trabalho' };\nconst grupo = 'trabalho';\n\nconsole.log(NOMES_DOS_GRUPOS[grupo]);\nconsole.log(NOMES_DOS_GRUPOS.grupo);\n```",
+      "options": {
+        "a": "`Trabalho` e `undefined`",
+        "b": "`Trabalho` e `Trabalho`",
+        "c": "`undefined` e `Trabalho`",
+        "d": "`grupo` e `undefined`"
+      },
+      "answer": "a",
+      "explanation": "Os colchetes abrem a caixa `grupo`, leem `'trabalho'` e procuram o campo com esse nome: `'Trabalho'`. O ponto usa o nome escrito no código, ao pé da letra: procura um campo chamado `grupo`, que a ficha não tem, e dá `undefined`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Na agenda, `contatos[2]` é a Helena Martins, com o telefone `'(11) 3456-7890'` e `grupo: 'familia'`. O que `descreverContato(contatos[2])` devolve?",
+      "options": {
+        "a": "`'Helena Martins, (11) 3456-7890, Família'`",
+        "b": "`'Helena Martins, (11) 3456-7890, familia'`",
+        "c": "`'Helena Martins (11) 3456-7890 Família'`",
+        "d": "`'Helena Martins, (11) 3456-7890, undefined'`"
+      },
+      "answer": "a",
+      "explanation": "A função lê o grupo com colchetes, `NOMES_DOS_GRUPOS[contato.grupo]`, e troca `'familia'` por `'Família'`, como aparece na tela. A template string junta as três partes com vírgula e espaço. O `undefined` no fim aparece quando se escreve `NOMES_DOS_GRUPOS.grupo`, com ponto.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "A ficha do formulário chega com espaços sobrando no nome:\n\n```javascript\nconst dados = {\n  nome: '  Rafaela Lopes ',\n  telefone: '(11) 91234-5678',\n  email: '',\n  grupo: 'amigos',\n  aniversario: { dia: 2, mes: 9 },\n};\nconst contato = criarContato(16, dados);\n```\n\nQuanto valem `contato.nome` e `contato.favorito`?",
+      "options": {
+        "a": "`'Rafaela Lopes'` e `false`",
+        "b": "`'  Rafaela Lopes '` e `false`",
+        "c": "`'Rafaela Lopes'` e `undefined`",
+        "d": "`'Rafaela Lopes'` e `true`"
+      },
+      "answer": "a",
+      "explanation": "A `criarContato` monta uma ficha nova: o nome passa pelo `trim()`, que tira os espaços das pontas, e o campo `favorito` nasce com `false`, porque todo contato novo começa fora dos favoritos. O formulário não tem `favorito`: quem cria o campo é a função.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "Este teste passa, porque as duas fichas têm os mesmos campos e os mesmos valores:\n\n```javascript\ntest('o aniversário', () => {\n  expect({ dia: 2, mes: 9 }).toBe({ dia: 2, mes: 9 });\n});\n```",
+      "answer": false,
+      "explanation": "O `toBe` pergunta se é a **mesma** ficha, e cada `{ }` cria uma ficha nova. O teste falha com `Received: serializes to the same string`. Para comparar o conteúdo, campo por campo, o teste usa o `toEqual`, como com as listas.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst aniversario = { dia: 2, mes: 9 };\nconsole.log(Object.values(aniversario));\n```",
+      "options": {
+        "a": "`[ 2, 9 ]`",
+        "b": "`[ 'dia', 'mes' ]`",
+        "c": "`[ [ 'dia', 2 ], [ 'mes', 9 ] ]`",
+        "d": "`{ dia: 2, mes: 9 }`"
+      },
+      "answer": "a",
+      "explanation": "O `Object.values` devolve a lista dos valores. A lista dos nomes dos campos, `[ 'dia', 'mes' ]`, vem do `Object.keys`, e a dos pares `[nome, valor]` vem do `Object.entries`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst placar = { casa: 2, visitante: 1 };\n\nfor (const [time, gols] of Object.entries(placar)) {\n  console.log(`${time}: ${gols}`);\n}\n```",
+      "options": {
+        "a": "Duas linhas: `casa: 2` e `visitante: 1`",
+        "b": "Duas linhas: `0: casa` e `1: visitante`",
+        "c": "Uma linha: `casa,2: visitante,1`",
+        "d": "O erro `TypeError: placar is not iterable`"
+      },
+      "answer": "a",
+      "explanation": "O `Object.entries` transforma a ficha na lista de pares `[ [ 'casa', 2 ], [ 'visitante', 1 ] ]`, e o `for...of` dá uma volta por par. Os colchetes antes do `of` dão nome às gavetas do par: a 0 vira `time`, a 1 vira `gols`. O `is not iterable` aparece com `for...of` direto na ficha, sem o `Object.entries`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst contato = { nome: 'Helena Martins', telefone: '(11) 3456-7890' };\nconst { nome, fone } = contato;\nconsole.log(nome, fone);\n```",
+      "options": {
+        "a": "`Helena Martins undefined`",
+        "b": "`Helena Martins (11) 3456-7890`",
+        "c": "`nome fone`",
+        "d": "O erro `TypeError: Cannot destructure property 'fone'`"
+      },
+      "answer": "a",
+      "explanation": "A desestruturação com chaves tira os campos pelo **nome**, não pela posição: a caixa `nome` recebe o campo `nome`, e a caixa `fone` procura um campo `fone`, que a ficha não tem. Por isso `fone` vale `undefined`. Para o telefone, a caixa precisa se chamar `telefone`.",
+      "points": 2
+    }
+  ]
+}

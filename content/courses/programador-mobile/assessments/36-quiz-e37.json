@@ -1,0 +1,158 @@
+{
+  "title": "Quiz: E37 · Navegação",
+  "description": "Dez questões sobre a pasta app/ do Expo Router, a pilha de telas, a rota casa/[id] com Number(id), o router.push, o Stack.Title, as abas e o Link do Casas de adoção.",
+  "lesson": "e37-navegacao",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Expo Router, qual arquivo abre a tela do endereço `/cadastro`?",
+      "options": {
+        "a": "`app/cadastro.js`",
+        "b": "`src/components/cadastro.js`",
+        "c": "`app/_layout.js`",
+        "d": "`app/cadastro/[id].js`"
+      },
+      "answer": "a",
+      "explanation": "Cada arquivo de `app/` é uma tela, e o nome dele é o endereço: `cadastro.js` responde por `/cadastro`. Em `src/` ficam as peças, que não ganham endereço. O `_layout.js` é a moldura, não uma tela. O `cadastro/[id].js` atenderia endereços com um número depois, como `/cadastro/5`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O app abre na lista de casas. A pessoa toca no Lar da Mel, depois no link Casa do Bigode, dentro do Detalhe, e então volta **uma** vez. Qual tela aparece?",
+      "options": {
+        "a": "O Detalhe do Lar da Mel",
+        "b": "O Detalhe da Casa do Bigode",
+        "c": "A lista de casas",
+        "d": "O app fecha"
+      },
+      "answer": "a",
+      "explanation": "A pilha é uma pilha de cartas: Casas, por cima o Lar da Mel, por cima a Casa do Bigode. Voltar tira só a carta de cima, a Casa do Bigode, e aparece a de baixo, o Lar da Mel. A lista volta depois de mais um voltar.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O Detalhe abriu no endereço `/casa/7`. O que este trecho mostra no terminal?\n\n```jsx\nconst { id } = useLocalSearchParams();\nconsole.log(typeof id, id === 7);\n```",
+      "options": {
+        "a": "`string false`",
+        "b": "`number true`",
+        "c": "`string true`",
+        "d": "`number false`"
+      },
+      "answer": "a",
+      "explanation": "Endereço é texto: o `useLocalSearchParams()` entrega `{ id: '7' }`, com aspas, e o `typeof` diz `string`. O `===` dá `false` quando os tipos são diferentes, então `'7' === 7` é `false`. Por isso o Detalhe compara com `Number(id)`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No `app/casa/[id].js`, que tem o `if (!casa)` com o `EstadoVazio`, o `find` foi escrito assim:\n\n```jsx\nconst casa = casas.find((item) => item.id === id);\n```\n\nA pessoa toca no cartão do Lar da Mel, que tem `id: 1`. O que aparece?",
+      "options": {
+        "a": "\"Casa não encontrada\", porque `1 === '1'` é `false` e o `find` devolve `undefined`",
+        "b": "O Detalhe do Lar da Mel, porque o `id` do endereço é 1",
+        "c": "O Detalhe da primeira casa da lista, qualquer que seja o cartão",
+        "d": "A tela `Unmatched Route`, porque o endereço não existe"
+      },
+      "answer": "a",
+      "explanation": "O `id` dos dados é o número `1`, e o do endereço é o texto `'1'`. Nenhuma casa passa no teste, o `find` devolve `undefined`, e o retorno antecipado mostra \"Casa não encontrada\". O endereço `/casa/1` existe, então não é `Unmatched Route`. A correção é `item.id === Number(id)`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No `renderItem` da Início, qual `onPress` abre o Detalhe **só quando** a pessoa toca no cartão?",
+      "options": {
+        "a": "`onPress={() => router.push('/casa/' + item.id)}`",
+        "b": "`onPress={router.push('/casa/' + item.id)}`",
+        "c": "`onPress={router.push}`",
+        "d": "`href={'/casa/' + item.id}`"
+      },
+      "answer": "a",
+      "explanation": "A seta guarda o pedido, com o `id` daquele cartão, e ele só roda no toque. Sem a seta, o `router.push` roda ao desenhar a lista: o app abre um Detalhe sozinho e o terminal mostra `Cannot update a component`, como o `onClick={avisar()}` do E26. Com `onPress={router.push}`, o push não recebe o endereço da casa. E o `href` é prop do `Link`, não do `CartaoCasa`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "No fim do Passo 4, a pasta `app/` tem `_layout.js`, `(abas)/_layout.js`, `(abas)/index.js`, `(abas)/sobre.js`, `casa/[id].js` e `cadastro.js`. Quais endereços abrem uma tela? Marque todas as certas.",
+      "options": {
+        "a": "`/`",
+        "b": "`/sobre`",
+        "c": "`/casa/3`",
+        "d": "`/casas/3`",
+        "e": "`/abas`"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "A pasta entre parênteses é um grupo: organiza os arquivos, mas não entra no endereço. Por isso `(abas)/index.js` é `/` e `(abas)/sobre.js` é `/sobre`. O `casa/[id].js` atende `/casa/3` e qualquer outro número. Nenhum arquivo responde por `/casas/3`, com s, nem por `/abas`: eles abrem a tela `Unmatched Route`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que faz o `<Stack.Title>{casa.nome}</Stack.Title>` escrito dentro da tela do Detalhe?",
+      "options": {
+        "a": "Troca o título do cabeçalho desta tela pelo nome da casa, sem desenhar nada no conteúdo",
+        "b": "Desenha o nome da casa em letras grandes, no começo do conteúdo",
+        "c": "Troca o título do cabeçalho de todas as telas da pilha",
+        "d": "Cria uma aba nova com o nome da casa"
+      },
+      "answer": "a",
+      "explanation": "O `Stack.Title` não aparece no conteúdo: ele só ajusta o cabeçalho da tela em que está, com um título que vem dos dados. O nome grande do conteúdo é o `Text` com `estilos.nome`. O que vale para todas as telas fica no `screenOptions` do `Stack`, no `app/_layout.js`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Por que o Detalhe fica em `app/casa/[id].js`, e não dentro da pasta `app/(abas)/`?",
+      "options": {
+        "a": "Para entrar na pilha por cima do grupo de abas inteiro, cobrindo a barra de abas",
+        "b": "Porque um arquivo com colchetes não pode ficar numa pasta com parênteses",
+        "c": "Para a palavra `abas` não aparecer no endereço do Detalhe",
+        "d": "Porque o Expo Router só lê arquivos com colchetes fora de grupos"
+      },
+      "answer": "a",
+      "explanation": "O grupo `(abas)` inteiro é uma carta da pilha do `app/_layout.js`. O Detalhe, fora dele, entra nessa pilha e vai por cima do fichário todo, com a barra de abas embaixo. Os parênteses nunca entram no endereço, então a palavra `abas` não apareceria de qualquer jeito.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "As casas de Campinas são o Recanto São Francisco (`id` 2), o Gatil Sete Vidas (`id` 7) e o Abrigo Focinho Feliz (`id` 11). No Detalhe do Recanto São Francisco, quais casas ficam em `outras`?\n\n```javascript\nconst outras = casas.filter((item) => item.cidade === casa.cidade && item.id !== casa.id);\n```",
+      "options": {
+        "a": "Gatil Sete Vidas e Abrigo Focinho Feliz",
+        "b": "As três casas de Campinas",
+        "c": "Só o Recanto São Francisco",
+        "d": "Todas as casas que não são de Campinas"
+      },
+      "answer": "a",
+      "explanation": "O `&&` só deixa passar quem responde sim às duas perguntas: a mesma cidade **e** um `id` diferente. O Recanto é de Campinas, mas tem o mesmo `id`, 2, e fica fora. O Gatil e o Abrigo passam nas duas. As casas de outras cidades já param na primeira pergunta.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "fill",
+      "prompt": "Complete o `Link` que leva à aba Sobre: `<Link ___=\"/sobre\">Sobre o app</Link>`",
+      "answer": [
+        [
+          "href"
+        ]
+      ],
+      "explanation": "O endereço do `Link` vai na prop `href`, como nos links de site. O toque abre a rota `/sobre`; como ela é uma aba, o app troca para a aba Sobre.",
+      "points": 1
+    }
+  ]
+}

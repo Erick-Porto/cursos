@@ -12,7 +12,7 @@ objectives:
 
 # A web e o JavaScript: do navegador ao Node
 
-Programador Mobile · Encontro E01 · Aula 1 de 89
+Programador Mobile · Encontro E01 · Aula 1 de 45
 
 ---
 
@@ -267,7 +267,7 @@ botao.addEventListener('click', () => {
 
 Sem JavaScript, a página é uma casa sem interruptores: bonita, mas nada acende.
 
-Hoje o código é só para ler. Você aprende a escrever código assim, parte por parte, a partir do E05.
+Você começa a escrever JavaScript no E02, uma parte de cada vez.
 
 ---
 
@@ -491,13 +491,13 @@ process.argv                   // 4
 
 | Encontros | Onde roda | O que você constrói |
 |---|---|---|
-| E02 a E20 | Node.js, no terminal | `lojinha-regras`: preços, frete, carrinho e checkout de uma loja |
-| E21 a E25 | Navegador | Minhas Tarefas, o seu primeiro app em React |
-| E26 a E29 | Celular, no Expo Go | Minhas Tarefas em React Native |
-| E30 a E40 | Celular | a Lojinha, com as regras do `lojinha-regras` |
+| E02 a E23 | Node.js, no terminal | Racha-conta, Agenda de contatos e Lista de tarefas, com testes |
+| E24 a E28 | Navegador | Livro de receitas, o seu primeiro app em React |
+| E29 a E32 | Celular, no Expo Go | Gota, um app de meta de água |
+| E33 a E40 | Celular | Casas de adoção, com navegação e formulários |
 | E41 a E45 | Celular | o app da sua equipe |
 
-Por que começar pelo terminal? Sem tela para desenhar, você foca na linguagem. Quando o app chegar, as regras da loja já estarão prontas e testadas.
+Por que começar pelo terminal? Sem tela para desenhar, você foca na linguagem. Quando o app chegar, você já sabe escrever e testar as regras dele.
 
 ---
 

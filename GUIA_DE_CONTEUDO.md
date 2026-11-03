@@ -150,7 +150,8 @@ entre aspas (`summary: "Monitoramento: métricas e ferramentas"`). Sem aspas, o 
 - O **primeiro slide é a capa**: começa com `# Título da aula` e tem no máximo duas linhas de texto.
 - **Todos os outros slides começam com `## Título do slide`.** Um único `##` por slide.
 - Use `###` só para subdivisões curtas dentro do slide.
-- Tamanho: de 8 a 20 slides por aula. Até 130 palavras por slide (aviso); 200 é o limite (erro).
+- Tamanho: de 8 a 20 slides por aula. Em curso com encontro presencial de 4h e uma aula por encontro
+  (o Programador Mobile), de 26 a 34 slides, contando os de seção. Até 130 palavras por slide (aviso); 200 é o limite (erro).
   Slides de seção (4.8) não entram na conta; o validador avisa acima de 40 slides de conteúdo.
 
 ### 4.3 Roteiro recomendado de uma aula
@@ -361,7 +362,7 @@ Uma **constante** é um valor guardado com um nome, que não muda depois de cria
 - **O gancho** prende a atenção: uma pergunta do cotidiano ou uma provocação curta, até 25 palavras
   (ideal até 15). É ele que o instrutor lê para abrir a conversa.
 - **Exemplos de uso** ("... na prática"): 2 ou 3 casos concretos demonstrados, com código e saída,
-  tirados da Lojinha, do projeto ou do dia a dia. Não é a sintaxe de novo: é o conceito resolvendo algo.
+  tirados do projeto da unidade ou do dia a dia. Não é a sintaxe de novo: é o conceito resolvendo algo.
 
 - **Para que serve:** é a pausa para a conversa em sala. O instrutor faz uma pergunta, ouve a turma
   e explica com a analogia; o roteiro diz o que perguntar em cada um.
@@ -789,7 +790,7 @@ Para remover do banco e do storage aulas, questões e imagens que você apagou d
 ## 8. Checklist final por aula
 
 - [ ] Capa com `#`, demais slides com um único `##`
-- [ ] 8 a 20 slides, até 130 palavras cada
+- [ ] 8 a 20 slides (26 a 34 numa aula de encontro de 4h), até 130 palavras cada
 - [ ] Um slide de seção antes de cada conceito novo, seguido da âncora que o ensina (4.8)
 - [ ] Turma iniciante: palavras novas, analogia da tabela 12.2 e tradução do código novo (seção 12)
 - [ ] Objetivos no início, resumo no fim
@@ -831,9 +832,13 @@ lessons:
 - O corpo é um **documento** em Markdown (sem separadores `---` de slide), com os mesmos blocos
   `:::tip`, `:::warning`, `:::steps` etc. e os ícones inline das aulas. Comece pelo `##`: o título vem do frontmatter.
 - Estrutura recomendada: Visão do encontro; Antes do encontro (checklist); Linha do tempo (tabela
-  horário, bloco, minutos); um `##` por bloco (Abertura, Bloco 1, Bloco 2, Laboratório, Fechamento,
+  horário, bloco, minutos); um `##` por bloco (Abertura, Bloco 1, Bloco 2, Projeto: sua vez, Fechamento,
   Encerramento) com o que o instrutor faz e diz, as demonstrações passo a passo e as perguntas para a
   turma; Dificuldades frequentes (sintoma, causa, como ajudar); Plano B.
+- Quando o curso tem projeto avaliado (seção 11), não há laboratório à parte: os passos do projeto
+  entram nos blocos, logo depois do conceito que usam (`**Projeto · Passo K (N min).**`), e o bloco
+  "Projeto: sua vez" traz o enunciado, o que observar e a solução de referência, que só o instrutor lê.
+  Modelo: `roteiros/04-e04.md` do Programador Mobile.
 - O validador exige título, aulas existentes e blocos fechados; avisa roteiros curtos (menos de 150 palavras)
   e código sem linguagem. Não há limite de palavras por seção.
 - Materiais que o roteiro pede para preparar (demonstrações, soluções de referência) ficam em `materiais/`
@@ -881,8 +886,9 @@ materiais/
 
 ## 11. Projetos avaliados (`projetos/NN-slug.md`)
 
-Um projeto é uma entrega prática avaliada por rubrica. Ele **não ocupa um encontro inteiro**: é feito
-em etapas pequenas, uma por encontro, cada uma ligada à aula em que acontece. O aluno lê o enunciado
+Um projeto é uma entrega prática avaliada por rubrica, feito em etapas, uma por encontro, cada uma ligada
+à aula em que acontece. **A etapa é a prática do encontro**: a turma faz em aula, junto com o instrutor,
+os passos com o código no slide, e depois uma "Sua vez" sozinha, sem a solução no slide. O aluno lê o enunciado
 na página do projeto (link na página do curso), entrega o link do repositório pela plataforma e recebe
 a nota por critério com o comentário do instrutor. Projetos obrigatórios contam para concluir o curso,
 como as aulas e as provas.
@@ -890,12 +896,12 @@ como as aulas e as provas.
 ```yaml
 ---
 title: "Projeto 3 · Lista de tarefas"
-summary: App web de tarefas com classes, erros próprios, código assíncrono e a interface feita por você.
+summary: "Lista de tarefas com classes, erros próprios, salvamento e uma API, testada no Jest. A tela vem pronta no kit."
 section: Módulo Básico            # agrupa os projetos na página do curso
 module: classes-e-controle        # opcional: módulo em que o projeto termina
-opens: e13a-if-else-e-switch      # aula em que o projeto é apresentado
-due: e21a-por-que-react           # aula até a qual a entrega deve chegar
-due_label: início do E21          # o prazo como o aluno lê
+opens: e17-condicoes-legiveis     # aula em que o projeto é apresentado
+due: e24-react-e-o-primeiro-componente  # aula até a qual a entrega deve chegar
+due_label: início do E24          # o prazo como o aluno lê
 passing_score: 70                 # padrão 70, igual às provas
 required: true                    # padrão true: conta para concluir o curso
 rubric:
@@ -908,16 +914,16 @@ rubric:
     points: 20
     description: "`npm test` verde, com um teste para cada regra e para cada borda."
 steps:
-  - lesson: e13b-condicoes-legiveis
-    when: E13
+  - lesson: e17-condicoes-legiveis
+    when: E17
     title: Prazo e prioridade
-    summary: "`situacaoDoPrazo` e `pesoDaPrioridade` em src/regras/tarefas.js, com testes."
+    summary: "`situacaoDoPrazo` e `pesoDaPrioridade` em src/regras/prazos.js, com testes."
 ---
 ```
 
 - **Nome do arquivo**: `NN-slug.md`; NN é a ordem na página do curso. O slug vira o endereço do projeto.
 - **Etapas** (`steps`): uma por encontro em que o projeto avança, em ordem. `lesson` é a aula do
-  encontro onde a etapa é apresentada (o slide da etapa fica nela); `when` é o rótulo curto ("E13").
+  encontro onde a etapa é feita (os slides da etapa ficam nela); `when` é o rótulo curto ("E17").
   A página do projeto mostra a linha do tempo com o link de cada aula.
 - **Rubrica** (`rubric`): de 3 a 6 critérios somando 100 pontos. A descrição diz o que vale ponto,
   em frases que o aluno consegue conferir sozinho antes de entregar.
@@ -930,8 +936,14 @@ steps:
   o instrutor, mostrado ao lado da rubrica na tela de correção. Para cada critério, o que conferir
   (comandos a rodar, telas a abrir), como pontuar (nota cheia, parcial, zero) e os erros mais comuns.
   Não traga a solução completa: o repositório do curso é público.
-- **Nas aulas e roteiros**: cada etapa tem um slide na aula do encontro e um bloco "Projeto" no roteiro.
-  Não existe aula só de projeto.
+- **Nas aulas e roteiros**: na aula do encontro, a etapa aparece em slides `Projeto N · Passo K` (juntos,
+  com o código e o "Pronto quando"), `Projeto N · Sua vez` (sozinho, com dicas e o "Pronto quando", sem a
+  solução) e `Projeto N · Etapa K pronta` (o que conferir e o commit). No roteiro, cada passo entra no bloco
+  em que acontece, e a solução da Sua vez fica no bloco "Projeto: sua vez". Não existe aula só de projeto
+  nem laboratório separado.
+- **Kits**: em projeto com React ou React Native, o aluno cria só 1 ou 2 componentes; os outros vêm prontos
+  num kit (`materiais/projeto-N/kit-.../`) e entram por `import`. Cada componente do kit diz, num comentário
+  no topo, as props que recebe, e o enunciado traz a tabela "Componentes do kit".
 - O validador exige título, resumo, aulas existentes (`opens`, `due`, etapas) e rubrica com critérios
   válidos; avisa rubrica que não soma 100, etapas fora de ordem e projeto sem guia de correção.
 - Publicação: o `content:sync` envia enunciado e guia (tabelas `projects` e `project_guides`, migration
@@ -942,7 +954,7 @@ steps:
 Vale para o Programador Mobile e para todo curso cuja turma começa do zero. A turma sabe usar
 computador e celular, mas nunca escreveu código. Os slides são o material de estudo: quem faltou,
 quem se perdeu e quem estuda para a prova precisa conseguir aprender só com eles. Referência:
-o E02 (`lessons/03-e02a-node-na-pratica.md`, `lessons/04-e02b-npm-e-package-json.md` e `roteiros/02-e02.md`).
+a aula 3 e o E04 (`lessons/03-e02a-node-na-pratica.md`, `lessons/04-e04-npm-e-o-racha-conta.md` e `roteiros/04-e04.md`).
 
 ### 12.1 Como escrever
 
@@ -963,8 +975,14 @@ o E02 (`lessons/03-e02a-node-na-pratica.md`, `lessons/04-e02b-npm-e-package-json
 8. **Pratique com resposta**: o desafio em `:::example` e a resposta em `:::tip Resposta`, para quem
    estuda sozinho conferir.
 9. **O slide se basta.** Nada de "slide anterior" (4.7): se o exercício usa um código, repita o código.
-10. **Leitura antes da escrita.** Quando um recurso aparece antes do encontro em que é ensinado, diga
-    que hoje é só para ler e em que encontro ele volta ("escrever `filter` vem no E09").
+10. **Tudo o que aparece no código é explicado.** Se um recurso entra num código da aula, a turma
+    aprende ali o que ele é e o que ele faz: seção própria (gancho, explicação com analogia, na prática)
+    e, para o que percorre uma lista ou escolhe um caminho (`if`, `filter`, `reduce`, laços), um passo
+    a passo com dados de verdade, em tabela ("item por item", "volta por volta") e, quando ajudar, uma
+    animação. Nunca "hoje é só para ler". Se a explicação não cabe na aula, troque o código por um mais
+    simples, que use só o que já foi ensinado. O encontro que aprofunda o recurso retoma com um lembrete
+    curto. Referência: as seções de comparação, `if`, `filter` e `reduce` da aula 3
+    (`lessons/03-e02a-node-na-pratica.md`).
 
 ### 12.2 Analogias do curso
 
@@ -986,7 +1004,9 @@ transporte, celular, loja) e mantenha-a nas aulas seguintes.
 | função | receita com nome, guardada para usar quando quiser |
 | parâmetro e argumento | o espaço do ingrediente na receita e o ingrediente que você põe nele |
 | `return` | o prato pronto que a receita entrega; o `console.log` só mostra a foto do prato |
+| comparação (`===`, `>`, `<`) | pergunta de sim ou não: a resposta é `true` ou `false` |
 | `filter` | peneira: fica só o que passa no teste |
+| o teste do `filter` (função com `=>`) | o furo da peneira: decide o que passa |
 | `map` | linha de produção: cada item entra e sai transformado, na mesma quantidade |
 | `reduce` | calculadora que vai acumulando |
 | cópia com spread, imutabilidade | tirar uma cópia e mexer na cópia, sem rasurar o original |
@@ -1028,6 +1048,73 @@ transporte, celular, loja) e mantenha-a nas aulas seguintes.
 | abas (tabs) | abas de um fichário |
 | estado global, contexto | quadro de avisos da casa: todos os cômodos leem o mesmo |
 | armazenamento no aparelho | gaveta do celular: guarda mesmo depois de fechar o app |
+| repositório e GitHub | álbum de fotos do projeto; o GitHub é o álbum na nuvem |
+| `.gitignore` | o que fica fora da foto |
+| README | o manual que vem na caixa |
+| operadores aritméticos | as teclas da calculadora |
+| `0.1 + 0.2` e o número com vírgula | 1/3 escrito em decimal, que nunca acaba |
+| dinheiro em centavos inteiros | moeda não se parte: o troco do caixa da padaria |
+| template string | mensagem pronta com lacunas |
+| resto da divisão (`%`) | 10 balas para 3 crianças, na conta armada |
+| valor padrão de parâmetro | "o de sempre": vale quando ninguém pede outra coisa |
+| regra pura | a receita só cozinha: não imprime, não lê arquivo |
+| Babel | o tradutor que o Jest usa para ler o seu `import` |
+| dependência de desenvolvimento (`-D`) | utensílio da cozinha, não ingrediente do prato |
+| ver o teste vermelho primeiro | o botão de teste do detector de fumaça |
+| `NaN` | o visor da calculadora mostrando "Erro" |
+| `includes` de texto | o Ctrl + F do texto |
+| `split` | a barra de chocolate que quebra nos sulcos |
+| `null` e `undefined` | `null` é a caixa vazia de propósito, o "não deu"; `undefined` é a caixa que ninguém encheu |
+| `&&`, `||` e `!` | a portaria do cinema: filme de 18 anos pede idade e documento; meia-entrada aceita estudante ou idoso |
+| `else if` | a estrada com várias saídas: vale a primeira que serve |
+| retorno antecipado (guarda) | o segurança na porta do show |
+| ternário | a placa "aberto/fechado" da porta da loja |
+| `switch` | o menu da central de atendimento |
+| `find` | a peneira que para no primeiro que passa |
+| `some` e `every` | "alguém tem caneta?" e "todos trouxeram documento?" |
+| `sort` com `localeCompare` | o dicionário |
+| validar dados | a vistoria do carro: a folha volta com o que reprovou; folha em branco, aprovado |
+| organizar o código em arquivos | o shopping: cada loja cuida de um assunto, na vitrine do `export` |
+| `this` | o "eu" da instância: quem é o "eu" depende de quem fala |
+| `get` | o visor da balança da feira: lê o valor sem parênteses |
+| composição | a lista de compras guarda os itens; quem risca um item risca na própria lista |
+| `finally` | arrumar o picadeiro, caia ou não o trapezista |
+| `localStorage` | a gaveta do navegador: cada site tem a sua |
+| teste sem `await` | a prova recolhida antes da resposta |
+| status da resposta HTTP | o aviso do garçom antes de entregar o prato |
+| busca e resposta de mentira nos testes | o garçom de treino |
+| Vite e o `localhost` | o servidor (a cozinha) dentro do seu computador |
+| chaves `{}` no JSX | a janela para o JavaScript |
+| um elemento pai no JSX | a receita entrega um prato só |
+| evento | a campainha: alguém aperta, o código atende |
+| função como prop | o botão do elevador: o filho avisa, o pai guarda |
+| carregando | a placa "preparando" da lanchonete, até a senha ser chamada |
+| app nativo e site | o site visita o celular; o app mora nele |
+| React Native | o intérprete: você fala React, o celular entende as peças dele |
+| Expo e Expo Go | a caixa de ferramentas; o Expo Go abre o projeto no celular |
+| QR code do Expo | o QR do cardápio da mesa |
+| mesma rede Wi-Fi; túnel | o rádio de alcance curto; o túnel é o desvio quando a estrada fecha |
+| coluna por padrão | as linhas do caderno: cada peça ganha a linha inteira |
+| `padding` | o plástico-bolha da caixa de mudança: espaço por dentro |
+| área segura | a margem do caderno, longe do furo e da espiral |
+| atalho `@/` nos imports | o endereço salvo como "Casa" no app de mapas |
+| `gap` e `flex: 1` | o vão da prateleira; a caixa que estica para ocupar o vão |
+| `StyleSheet` e o array de estilos | a parede e a tinta: a parede se constrói uma vez, a tinta vem da paleta da vez |
+| contraste | a placa de rua: precisa ser lida de longe |
+| ícone | a placa de trânsito: entende-se sem ler |
+| imagem da internet | o sofá comprado pela internet: meça o lugar antes de chegar |
+| imagem de reserva | o contato sem foto, que mostra as iniciais |
+| variante de componente | a camiseta do mesmo modelo em cores diferentes |
+| retorno visual do toque | o botão do elevador que acende na hora |
+| busca sem acento | passar os dois textos a limpo, na mesma letra |
+| rota com parâmetro | o endereço com número da casa |
+| escolher uma opção só | os botões de estação do rádio antigo do carro |
+| retorno ao usuário depois de salvar | o comprovante do Pix |
+| regra dos hooks | a chamada da escola pelo número: a ordem não pode mudar |
+| simular falha e atraso | o simulado de incêndio |
+| leitor de tela e rótulo | a legenda lida em voz alta |
+| área de toque | o interruptor de tecla larga |
+| `useWindowDimensions` | a fita métrica da tela |
 
 ### 12.3 No roteiro
 

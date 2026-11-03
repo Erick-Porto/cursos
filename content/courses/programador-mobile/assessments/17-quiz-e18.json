@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E18 · Classes",
+  "description": "Dez questões sobre classe e instância, constructor, this, métodos, get e a classe Tarefa do Projeto 3.",
+  "lesson": "e18-classes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No curso, a classe é a forma de bolo. Depois de `const luz = new Tarefa({ titulo: 'Pagar a conta de luz' });`, o que é `luz`?",
+      "options": {
+        "a": "Um bolo feito com a forma: uma instância da classe `Tarefa`",
+        "b": "Outra forma de bolo: uma segunda classe, copiada da `Tarefa`",
+        "c": "O preparo do bolo: o `constructor` da classe `Tarefa`",
+        "d": "A forma inteira, com todas as tarefas que ela já fez"
+      },
+      "answer": "a",
+      "explanation": "A classe `Tarefa` é a forma, escrita uma vez. Cada `new Tarefa(...)` faz um bolo novo com ela: uma instância, com os mesmos campos e os próprios valores. O `constructor` é a parte da forma que prepara cada bolo, não o bolo.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Com a classe `Tarefa` do passo 1 do Projeto 3, o que aparece no terminal?\n\n```javascript\nclass Tarefa {\n  constructor(dados) {\n    this.titulo = dados.titulo;\n    this.prioridade = dados.prioridade ?? 'media';\n    this.prazo = dados.prazo ?? null;\n    this.concluida = dados.concluida ?? false;\n  }\n}\n\nconst racao = new Tarefa({ titulo: 'Comprar ração do gato' });\nconsole.log(racao.prioridade, racao.prazo, racao.concluida);\n```",
+      "options": {
+        "a": "`media null false`",
+        "b": "`undefined undefined undefined`",
+        "c": "`media undefined false`",
+        "d": "`alta null false`"
+      },
+      "answer": "a",
+      "explanation": "A ficha só trouxe o título. Nos outros três campos, o valor da esquerda do `??` é `undefined`, então fica o da direita: `'media'`, `null` e `false`. Sem o `??`, os três sairiam `undefined`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Um colega escreveu a linha abaixo, sem o `new`. O que acontece?\n\n```javascript\nconst luz = Tarefa({ titulo: 'Pagar a conta de luz' });\n```",
+      "options": {
+        "a": "O JavaScript para com `TypeError: Class constructor Tarefa cannot be invoked without 'new'`",
+        "b": "Funciona igual ao `new Tarefa(...)`: o `new` é opcional",
+        "c": "Não dá erro, e `luz` fica com `undefined`",
+        "d": "O JavaScript para com `SyntaxError: Unexpected token`"
+      },
+      "answer": "a",
+      "explanation": "Uma classe só faz instâncias com o `new`: é ele que cria o objeto vazio, roda o `constructor` com o `this` e entrega o objeto pronto. Sem o `new`, o JavaScript recusa e diz o motivo na mensagem.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "No `constructor`, para guardar o título que veio na ficha na própria tarefa que está sendo feita, escreve-se: `___.titulo = dados.titulo;`",
+      "answer": [["this"]],
+      "explanation": "Dentro da classe, `this` é a própria instância: no `constructor`, a que o `new` está fazendo agora. `this.titulo` é \"o meu título\", o campo desta tarefa.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nclass Cofrinho {\n  constructor(dono) {\n    this.dono = dono;\n    this.saldo = 0;\n  }\n\n  depositar(valor) {\n    this.saldo = this.saldo + valor;\n  }\n}\n\nconst daAna = new Cofrinho('Ana');\nconst doBruno = new Cofrinho('Bruno');\ndaAna.depositar(20);\ndoBruno.depositar(5);\ndoBruno.depositar(3);\nconsole.log(daAna.saldo, doBruno.saldo);\n```",
+      "options": {
+        "a": "`20 8`",
+        "b": "`28 28`",
+        "c": "`20 5`",
+        "d": "`28 8`"
+      },
+      "answer": "a",
+      "explanation": "O método é um só, mas o `this` é quem vem antes do ponto. `daAna.depositar(20)` muda só o saldo da Ana: 0 + 20 = 20. As duas chamadas do Bruno mudam só o dele: 0 + 5 = 5 e 5 + 3 = 8. Cada cofrinho guarda o próprio saldo.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na `Tarefa`, o `concluir` ficou assim:\n\n```javascript\nconcluir() {\n  concluida = true;\n}\n```\n\nO teste `concluir marca a tarefa como concluída` fica vermelho, com `Expected: true` e `Received: false`. O que corrigir?",
+      "options": {
+        "a": "Escrever `this.concluida = true;`: sem o `this.`, o valor não vai para a tarefa",
+        "b": "Escrever `concluida = 'true';`, com aspas",
+        "c": "Chamar `regar.concluir` sem os parênteses no teste",
+        "d": "Receber o valor por parâmetro: `concluir(concluida)`"
+      },
+      "answer": "a",
+      "explanation": "O campo mora na instância: dentro da classe, campo é sempre `this.` e o nome. Sem o `this.`, a linha não mexe na tarefa, e ela continua com `concluida` igual a `false`. Sem os parênteses, o `concluir` nem chegaria a rodar.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nclass Cofrinho {\n  constructor(dono) {\n    this.dono = dono;\n    this.saldo = 0;\n  }\n\n  depositar(valor) {\n    this.saldo = this.saldo + valor;\n  }\n\n  get vazio() {\n    return this.saldo === 0;\n  }\n}\n\nconst doBruno = new Cofrinho('Bruno');\nconst antes = doBruno.vazio;\ndoBruno.depositar(3);\nconsole.log(antes, doBruno.vazio);\n```",
+      "options": {
+        "a": "`true false`",
+        "b": "`true true`",
+        "c": "`false false`",
+        "d": "`TypeError`, porque o `get` foi lido sem parênteses"
+      },
+      "answer": "a",
+      "explanation": "O `get` é lido sem parênteses e faz a conta na hora, como o visor da balança. Antes do depósito, o saldo é 0, e `antes` guarda `true`. Depois, o saldo é 3, e a nova leitura de `doBruno.vazio` dá `false`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A `Tarefa` tem o `get rotuloDaPrioridade`. Com `const prova = new Tarefa({ titulo: 'Estudar para a prova', prioridade: 'alta' });`, qual linha mostra `Alta`?",
+      "options": {
+        "a": "`console.log(prova.rotuloDaPrioridade);`",
+        "b": "`console.log(prova.rotuloDaPrioridade());`",
+        "c": "`console.log(rotuloDaPrioridade(prova));`",
+        "d": "`console.log(Tarefa.rotuloDaPrioridade);`"
+      },
+      "answer": "a",
+      "explanation": "Um `get` se lê como campo, sem parênteses, na instância. Com parênteses dá `TypeError: prova.rotuloDaPrioridade is not a function`, porque o `get` já devolveu o texto. Solto, sem o objeto antes do ponto, dá `ReferenceError`. Na forma, `Tarefa.rotuloDaPrioridade` é `undefined`: o rótulo é de cada tarefa.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "Na classe `Tarefa`, quais membros precisam ser **métodos**, chamados com parênteses, e não `get`? Marque todas as certas.",
+      "options": {
+        "a": "`concluir`, que marca a tarefa como concluída",
+        "b": "`situacao`, que depende do dia de hoje",
+        "c": "`rotuloDaPrioridade`, que dá `'Alta'`, `'Média'` ou `'Baixa'`",
+        "d": "`peso`, que dá o peso da prioridade da tarefa"
+      },
+      "answer": ["a", "b"],
+      "explanation": "O `concluir` faz algo: muda a tarefa. A `situacao` precisa receber o `hoje`, e um `get` não recebe nada: por isso é `situacao(hoje)`. O rótulo e o peso saem só da prioridade, sem receber nada: são `get`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Com a `Tarefa` completa da etapa 2 e `const HOJE = new Date(2026, 10, 10);`, o que aparece no terminal?\n\n```javascript\nconst regar = new Tarefa({ titulo: 'Regar as plantas', prazo: '2026-11-10' });\nregar.concluir();\nconsole.log(regar.prazoEmTexto(HOJE));\n```",
+      "options": {
+        "a": "`Concluída`",
+        "b": "`Vence hoje`",
+        "c": "`concluida`",
+        "d": "`Sem prazo`"
+      },
+      "answer": "a",
+      "explanation": "O `prazoEmTexto` responde primeiro pela tarefa concluída, num retorno antecipado: `'Concluída'`, com acento. Sem o `concluir()`, sairia `'Vence hoje'`, o `textoDoPrazo` do prazo. O `'concluida'`, sem acento, é o que a `situacao(hoje)` devolve.",
+      "points": 1
+    }
+  ]
+}

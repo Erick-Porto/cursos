@@ -1,0 +1,304 @@
+{
+  "title": "Prova 4 · Layout e componentes React Native",
+  "description": "Prova da unidade de layout, na última hora do E40. Cobre do E33 ao E39: Flexbox e área segura, tokens e tema, o CartaoCasa, a lista com busca, a navegação, o formulário, os estados da tela, a acessibilidade e a tela larga, com o código das Casas de adoção. São 20 questões, 60 minutos, uma tentativa, sem consulta, e a nota mínima é 70. O gabarito não aparece ao enviar.",
+  "lesson": "e40-revisao-de-layout",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Onde ficam os dois botões redondos, dentro da `Tela`?\n\n```jsx\n<View style={estilos.acoes}>\n  <View style={estilos.botao} />\n  <View style={estilos.botao} />\n</View>\n```\n\n```javascript\nacoes: { flexDirection: 'row', justifyContent: 'flex-end', gap: espaco.sm },\nbotao: { width: 48, height: 48, borderRadius: 24, borderWidth: 1 },\n```",
+      "options": {
+        "a": "Um em cada ponta da linha, com o espaço todo entre eles",
+        "b": "Lado a lado, juntos na ponta direita, com 8 entre eles",
+        "c": "Lado a lado, juntos na ponta esquerda, com 8 entre eles",
+        "d": "Um embaixo do outro, os dois encostados à direita"
+      },
+      "answer": "b",
+      "explanation": "O `'row'` põe os dois lado a lado, e o eixo principal vai para o lado. O `justifyContent: 'flex-end'` junta as caixas no fim desse eixo, a ponta direita, e o `gap` deixa 8 entre elas. Um em cada ponta seria o `'space-between'`; um embaixo do outro seria a coluna, o padrão, sem o `'row'`.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na faixa de números da Início, os três `Cartao` aparecem com larguras diferentes, encostados à esquerda, e sobra espaço à direita. O que deixa os três do mesmo tamanho, ocupando a linha toda?\n\n```javascript\nnumeros: { flexDirection: 'row', gap: espaco.sm },\nnumero: { alignItems: 'center' },\n```",
+      "options": {
+        "a": "`numeros: { flexDirection: 'row', justifyContent: 'center', gap: espaco.sm }`",
+        "b": "`numero: { alignItems: 'stretch' }`",
+        "c": "`numero: { flex: 1, alignItems: 'center' }`",
+        "d": "`numeros: { flex: 1, flexDirection: 'row', gap: espaco.sm }`"
+      },
+      "answer": "c",
+      "explanation": "Sem `flex: 1`, cada cartão tem o tamanho do seu conteúdo: o das 12 casas é mais estreito que o das 5 cidades. Com `flex: 1` em **cada** cartão, os três dividem o espaço que sobra em partes iguais, como as teclas da calculadora do E33. O `justifyContent: 'center'` só levaria os três, ainda desiguais, para o meio; o `flex: 1` na `View` de fora não muda a largura dos filhos.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "truefalse",
+      "prompt": "A `Tela` do kit põe um espaço fixo de 44 no topo da tela, igual em todo celular, para o título sair de trás do relógio.",
+      "answer": false,
+      "explanation": "Cada celular tem entalhe e barras de tamanhos diferentes. Quem mede é a `SafeAreaView`, que mora dentro da `Tela`: ela põe o espaço certo em cada aparelho, Android ou iPhone. Um número fixo sobraria num celular e faltaria em outro. O 16 que a `Tela` põe nas bordas é outro espaço, o `padding`, igual em todos.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O celular está no tema escuro. Como aparece o número?\n\n```jsx\nconst estilos = StyleSheet.create({\n  valor: { fontSize: fonte.destaque, fontWeight: 'bold', color: '#1f1a14' },\n});\n\n// na Início, com const { cores } = useTema();\n<Text style={[{ color: cores.primaria }, estilos.valor]}>{resumo.casas}</Text>\n```",
+      "options": {
+        "a": "Em verde-água, a primária do tema escuro: a cor do `useTema()` sempre ganha do `StyleSheet`",
+        "b": "Em verde-água, porque o `#1f1a14` só vale no tema claro",
+        "c": "Em marrom-escuro, `#1f1a14`, quase sumido no cartão escuro: o `estilos.valor` vem por último e ganha",
+        "d": "Não aparece: dois `color` no mesmo `style` dão erro"
+      },
+      "answer": "c",
+      "explanation": "O array é lido da esquerda para a direita e, se dois itens trazem a mesma propriedade, vale o último. Aqui o último é o `estilos.valor`, com o `#1f1a14`, a cor do texto do tema claro, escrita direto no `StyleSheet`: no escuro, o número some no cartão. O conserto: tirar o `color` do `StyleSheet` e deixar a cor do tema no fim, `[estilos.valor, { color: cores.primaria }]`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "multiple",
+      "prompt": "A etapa 2 pede tokens nos espaços, nos cantos e nas letras, e nenhum código de cor no `StyleSheet`. Quais destas linhas seguem a regra? Marque todas as certas.",
+      "options": {
+        "a": "`titulos: { flex: 1, gap: espaco.xs }`",
+        "b": "`nome: { fontSize: 16, fontWeight: 'bold' }`",
+        "c": "`foto: { width: 72, height: 72, borderRadius: raio.sm }`",
+        "d": "`detalhe: { fontSize: fonte.pequena, color: '#5c5348' }`"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "O `gap` com `espaco.xs` e o canto com `raio.sm` são tokens; o `flex: 1` e os `72` da foto continuam números, porque são medidas daquela caixa, e não espaços que se repetem. O `fontSize: 16` é um número solto: o token é `fonte.corpo`. E o `'#5c5348'` é uma cor dentro do `StyleSheet`, que não acompanha o tema; a cor vai no array, com `cores.textoSuave`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O selo do `CartaoCasa` é escolhido assim:\n\n```jsx\nconst livres = casa.capacidade - casa.ocupacao;\n\nlet selo = `${livres} vagas`;\nlet tom = 'sucesso';\nif (livres <= 0) {\n  selo = 'Lotada';\n  tom = 'perigo';\n} else if (livres === 1) {\n  selo = 'Última vaga';\n  tom = 'alerta';\n} else if (livres <= 3) {\n  selo = `Últimas ${livres} vagas`;\n  tom = 'alerta';\n}\n```\n\nForam cadastradas duas casas novas: a **A**, com capacidade 4 e ocupação 0, e a **B**, com capacidade 4 e ocupação 3. Que selos aparecem?",
+      "options": {
+        "a": "A: \"Últimas 4 vagas\", em laranja; B: \"Última vaga\", em laranja",
+        "b": "A: \"4 vagas\", em verde; B: \"Últimas 1 vagas\", em laranja",
+        "c": "A: \"4 vagas\", em verde; B: \"1 vagas\", em verde",
+        "d": "A: \"4 vagas\", em verde; B: \"Última vaga\", em laranja"
+      },
+      "answer": "d",
+      "explanation": "Na A, `livres` é 4: nenhuma pergunta dá `true` (4 não é `<= 0`, não é `=== 1`, não é `<= 3`), e o selo fica com os valores do começo, \"4 vagas\" e `sucesso`. Na B, `livres` é 1: a primeira pergunta dá `false`, a segunda dá `true`, e o selo é \"Última vaga\", `alerta`. \"Últimas 1 vagas\" só apareceria se o `<= 3` viesse antes do `=== 1`: na estrada com várias saídas, vale a primeira que serve.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No `CartaoCasa`, o retorno ao toque ficou assim, com `apertado: { opacity: 0.6 }`:\n\n```jsx\n<Pressable onPress={onPress} style={estilos.apertado}>\n  <Cartao style={estilos.cartao}>\n    {/* foto, textos e selo */}\n  </Cartao>\n</Pressable>\n```\n\nO que a pessoa vê?",
+      "options": {
+        "a": "O cartão translúcido o tempo todo, com ou sem toque",
+        "b": "O cartão mais claro só enquanto o dedo aperta, como no projeto",
+        "c": "O cartão sempre igual, e o toque deixa de funcionar",
+        "d": "Uma tela vermelha, porque o `style` do `Pressable` precisa ser uma função"
+      },
+      "answer": "a",
+      "explanation": "O `style` recebeu o estilo direto: a `opacity: 0.6` vale sempre. Para o estilo mudar só enquanto o dedo aperta, o `style` vira uma função que recebe o `pressed`: `style={({ pressed }) => (pressed ? estilos.apertado : null)}`. O toque continua funcionando, porque o `onPress` chegou ao `Pressable`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No `CartaoCasa`, o `estilos.foto` é `{ width: 72, height: 72, borderRadius: raio.sm }`. Qual linha mostra a foto da casa, que vem da internet?",
+      "options": {
+        "a": "`<Image source={casa.foto} style={estilos.foto} />`",
+        "b": "`<Image uri={casa.foto} style={estilos.foto} />`",
+        "c": "`<Image source={{ uri: 'casa.foto' }} style={estilos.foto} />`",
+        "d": "`<Image source={{ uri: casa.foto }} style={estilos.foto} />`"
+      },
+      "answer": "d",
+      "explanation": "A imagem remota vai no `source`, numa ficha com o campo `uri`: as chaves de fora são as do JSX, e as de dentro fazem a ficha. Com `'casa.foto'` entre aspas, o endereço vira o texto casa.foto, letra por letra, e não o campo da casa. O `width` e o `height` do `estilos.foto` são obrigatórios: sem eles, a foto fica com tamanho zero.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Na Início do fim do projeto, um colega esqueceu o bairro na busca:\n\n```jsx\nconst busca = paraBusca(termo);\nconst visiveis = casas.filter(\n  (casa) =>\n    paraBusca(casa.nome).includes(busca) ||\n    paraBusca(casa.cidade).includes(busca),\n);\n```\n\nO Cantinho dos Bichanos fica no bairro Água Verde, em Curitiba, e nenhuma casa tem \"água verde\" no nome nem na cidade. O que a Início mostra com o termo `Água Verde`?",
+      "options": {
+        "a": "O topo, com os números 12, 5 e 76, e embaixo o aviso \"Nenhuma casa encontrada\"",
+        "b": "O topo e o cartão do Cantinho dos Bichanos",
+        "c": "O topo, com os números 0, 0 e 0, e o aviso \"Nenhuma casa encontrada\"",
+        "d": "Só o aviso \"Nenhuma casa encontrada\", sem o topo"
+      },
+      "answer": "a",
+      "explanation": "A peneira só olha o nome e a cidade, e nenhum dos dois tem `'agua verde'`: nenhuma casa passa, e a `FlatList` mostra o `ListEmptyComponent` no lugar dos cartões. O topo continua, porque o `ListHeaderComponent` aparece mesmo com a lista vazia, e os números contam `casas`, e não `visiveis`. Com o `||` do bairro de volta, o Cantinho dos Bichanos passa.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No campo de busca da Início, alguém escreveu:\n\n```jsx\n<Campo\n  rotulo=\"Buscar casa\"\n  value={termo}\n  onChange={setTermo}\n/>\n```\n\nAo digitar a primeira letra, aparece a tela vermelha com `trim is not a function`. Por quê?",
+      "options": {
+        "a": "Falta o `placeholder`, e o campo começa sem texto nenhum",
+        "b": "O `onChange` entrega um evento, e não o texto: o `termo` vira uma ficha, e a `paraBusca` não consegue passar uma ficha a limpo",
+        "c": "O `Campo` só aceita o `onChange` quando tem um `icone`",
+        "d": "A `paraBusca` não aceita letras maiúsculas"
+      },
+      "answer": "b",
+      "explanation": "No celular, quem entrega o texto pronto é o `onChangeText`. O `onChange` entrega um evento, uma ficha com várias informações, e o `setTermo` guarda essa ficha no `termo`. No desenho seguinte, a `paraBusca(termo)` chama o `trim` do E09, que só existe em texto, e quebra. O conserto: `onChangeText={setTermo}`.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "fill",
+      "prompt": "Complete o `renderItem` da Início com o nome do campo em que a `FlatList` entrega cada casa:\n\n```jsx\nrenderItem={({ ___ }) => (\n  <CartaoCasa casa={___} onPress={() => router.push('/casa/' + ___.id)} />\n)}\n```",
+      "answer": [
+        [
+          "item"
+        ],
+        [
+          "item"
+        ],
+        [
+          "item"
+        ]
+      ],
+      "explanation": "A `FlatList` chama o `renderItem` com uma ficha, e cada casa vem no campo `item`: as chaves do parâmetro tiram esse campo. O cartão continua pedindo `casa`, por isso `casa={item}`. Com `({ casa })`, o campo não existe, e a tela vermelha diz `Cannot read property 'capacidade' of undefined`.",
+      "points": 1
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "O app está na aba Sobre. A pessoa toca na aba Casas, depois no cartão do Lar da Mel e, no Detalhe, toca uma vez na seta de voltar do cabeçalho. O que aparece?",
+      "options": {
+        "a": "A aba Sobre, onde a pessoa estava antes",
+        "b": "O Detalhe do Lar da Mel de novo",
+        "c": "A aba Casas, com a lista de casas",
+        "d": "Nada: o app fecha"
+      },
+      "answer": "c",
+      "explanation": "Trocar de aba não empilha nada: as abas são as de um fichário, e o grupo `(abas)` inteiro é uma carta só da pilha. O toque no cartão põe o Detalhe por cima dessa carta, e voltar tira o Detalhe: aparece a carta de baixo, com a aba que estava aberta, a Casas. A Sobre não ficou na pilha.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "A Marta criou o Detalhe no arquivo `app/casas/[id].js`, com a pasta `casas`, e no `app/_layout.js` escreveu `<Stack.Screen name=\"casas/[id]\" options={{ title: 'Casa' }} />`. O cartão da Início faz `router.push('/casa/' + item.id)`. O que aparece no toque do Lar da Mel?",
+      "options": {
+        "a": "O Detalhe do Lar da Mel: o Expo Router acerta o plural sozinho",
+        "b": "A tela `Unmatched Route`: nenhum arquivo de `app/` atende o endereço `/casa/1`",
+        "c": "\"Casa não encontrada\": o `find` não acha a casa",
+        "d": "Nada: o toque não faz nada, e não aparece mensagem"
+      },
+      "answer": "b",
+      "explanation": "No Expo Router, o nome do arquivo é o endereço: `app/casas/[id].js` atende `/casas/1`, e não `/casa/1`. O endereço pedido não bate com nenhum arquivo, e aparece a tela do Expo Router, `Unmatched Route`, a rota sem par. \"Casa não encontrada\" é o `EstadoVazio` do Detalhe: só aparece quando a tela do Detalhe abre e o `find` não acha a casa.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "No `renderItem` da Início, o `onPress` ficou sem a seta:\n\n```jsx\n<CartaoCasa casa={item} onPress={router.push('/casa/' + item.id)} />\n```\n\nO que acontece ao abrir o app?",
+      "options": {
+        "a": "Nada de diferente: o Detalhe só abre quando a pessoa toca num cartão",
+        "b": "O app mostra a tela `Unmatched Route`",
+        "c": "O toque em qualquer cartão abre sempre o Detalhe do Lar da Mel",
+        "d": "Antes de qualquer toque, um Detalhe abre sozinho, e o terminal avisa `Cannot update a component`"
+      },
+      "answer": "d",
+      "explanation": "Sem a seta, o `router.push(...)` roda na hora de desenhar a lista, e não no toque: o app navega sozinho, antes de a pessoa encostar no celular. É o `onClick={avisar()}` do E26. Com `onPress={() => router.push('/casa/' + item.id)}`, a seta guarda o pedido para a hora do toque.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "No Cadastro, a pessoa preencheu a capacidade com `'12'` e os animais lá hoje com `'0'`. A parte do `validar` da ocupação é:\n\n```jsx\nconst lugares = Number(capacidade);\nconst animais = Number(ocupacao);\nif (ocupacao.trim() === '') {\n  novos.ocupacao = 'Quantos animais estão lá hoje (0 se nenhum)';\n} else if (!Number.isInteger(animais) || animais < 0) {\n  novos.ocupacao = 'Use um número inteiro, como 12';\n} else if (animais > lugares) {\n  novos.ocupacao = 'Não pode passar da capacidade';\n}\n```\n\nQue mensagem aparece embaixo do campo Animais lá hoje?",
+      "options": {
+        "a": "\"Quantos animais estão lá hoje (0 se nenhum)\", porque 0 conta como vazio",
+        "b": "Nenhuma: `'0'` não é vazio, é inteiro e não passa de 12",
+        "c": "\"Use um número inteiro, como 12\", porque 0 não é maior que 0",
+        "d": "\"Não pode passar da capacidade\", porque `'0'` é texto"
+      },
+      "answer": "b",
+      "explanation": "O campo tem o texto `'0'`, com um caractere: o `trim()` dá `'0'`, que não é `''`. O `Number('0')` dá 0, que é inteiro e não é menor que 0. E `0 > 12` é `false`. Nenhuma saída da estrada serve, e a folha fica sem `ocupacao`. Uma casa sem nenhum animal hoje é um cadastro válido.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "multiple",
+      "prompt": "Sobre os campos do Cadastro, quais frases estão certas? Marque todas as certas.",
+      "options": {
+        "a": "O `placeholder` é só o exemplo em cinza: com o campo vazio, o estado continua `''`",
+        "b": "Com `keyboardType=\"number-pad\"`, ninguém consegue pôr letras no campo, e o `validar` não precisa conferir",
+        "c": "O `onChangeText` entrega o texto pronto, por isso o `setNome` vai direto, sem seta",
+        "d": "Com `erro={erros.bairro}` e `erros` igual a `{}`, aparece `undefined` em vermelho embaixo do campo"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "O placeholder não é o valor: se a pessoa não digitar, o estado é `''`, e é isso que o `validar` vê. O `onChangeText` entrega o próprio texto, e o `set` guarda. O teclado ajuda, mas não trava: dá para colar qualquer texto, e o `validar` confere tudo. E `erros.bairro`, fora da folha, é `undefined`: o `Campo` sem erro não mostra mensagem nenhuma.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "single",
+      "prompt": "No `validar`, a regra da cidade ficou com outro nome:\n\n```jsx\nif (cidade.trim() === '') novos.cidades = 'Informe a cidade';\n```\n\nE o campo é `<Campo rotulo=\"Cidade\" value={cidade} onChangeText={setCidade} erro={erros.cidade} />`. Com todos os campos certos, menos a cidade, vazia, o que acontece ao tocar em Cadastrar casa?",
+      "options": {
+        "a": "A mensagem \"Informe a cidade\" aparece embaixo da Cidade, como no projeto",
+        "b": "A casa é salva sem cidade, porque o `validar` não achou erro",
+        "c": "O aviso \"Confira o formulário\" aparece, mas a Cidade fica sem mensagem embaixo, e a casa não é salva",
+        "d": "A tela vermelha diz que `cidades` não existe"
+      },
+      "answer": "c",
+      "explanation": "A folha tem um campo, `cidades`, então `Object.keys(novos).length` é 1: o `salvar` mostra o aviso e para no `return`, e nada é salvo. Mas o campo procura `erros.cidade`, sem o s, que não está na folha: dá `undefined`, e a mensagem não aparece. O nome do campo é o mesmo na folha e no `erro`.",
+      "points": 2
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Um colega trocou a ordem dos dois retornos da Início:\n\n```jsx\nif (erro) return <EstadoErro mensagem={erro} onTentarDeNovo={recarregar} />;\nif (carregando) return <Carregando texto=\"Buscando as casas...\" />;\n```\n\nCom `falhas: 1` no `servidor.js`, o app mostra o erro. A pessoa toca em Tentar de novo. O que aparece durante os 800 milissegundos em que o servidor busca de novo?",
+      "options": {
+        "a": "A rodinha e \"Buscando as casas...\", como no projeto",
+        "b": "A lista vazia, com \"Nenhuma casa cadastrada\"",
+        "c": "A tela de erro e a rodinha, uma embaixo da outra",
+        "d": "A tela de erro continua, como se o toque não tivesse feito nada; depois chega a lista"
+      },
+      "answer": "d",
+      "explanation": "No Tentar de novo, o `carregando` vira `true`, mas o `erro` ainda tem a mensagem até a resposta chegar. Com o `if (erro)` primeiro, o segurança barra na porta pelo erro, e o `return` sai ali: a rodinha nunca aparece. Quando a busca dá certo, o `erro` volta a `null`, e a lista chega. Por isso o carregando vem primeiro.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "multiple",
+      "prompt": "Sobre a acessibilidade das Casas de adoção, quais frases estão certas? Marque todas as certas.",
+      "options": {
+        "a": "O `accessibilityLabel` é a frase que o leitor de tela lê, como \"Lar da Mel, Pinheiros, São Paulo. Cães. Lotada\"",
+        "b": "O `accessibilityHint` diz o que acontece no toque, como \"Abre os detalhes da casa\"",
+        "c": "O `Cartao` do kit já junta os textos de dentro num foco só, como o `Pressable`",
+        "d": "Com `accessibilityRole=\"header\"` no título, o leitor avisa que é um título, e quem usa leitor pula de título em título",
+        "e": "Nos links do Detalhe, `height: 44` é melhor que `minHeight: 44`, porque nunca corta o texto"
+      },
+      "answer": [
+        "a",
+        "b",
+        "d"
+      ],
+      "explanation": "O rótulo diz o que é; a dica, o que o toque faz; o papel `header` marca o título. O `Pressable` já junta o que tem dentro num foco só, mas a `View` e o `Cartao`, não: por isso cada `Cartao` de número ganhou `accessible` e o rótulo \"12 casas\". E o `minHeight` deixa o link crescer quando a letra do celular aumenta; a altura fixa cortaria o texto.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "A Início escolhe as colunas com `const colunas = width >= 700 ? 2 : 1;`, e a `FlatList` tem `key={colunas}` e `numColumns={colunas}`. Num tablet em pé, com 820 de largura, quantas colunas aparecem, e para que serve a `key`?",
+      "options": {
+        "a": "Uma coluna, porque o tablet está em pé; a `key` dá um crachá a cada cartão",
+        "b": "Duas colunas; a `key` faz a lista ser montada de novo quando o número de colunas muda",
+        "c": "Duas colunas; a `key` põe os cartões em ordem de `id`",
+        "d": "Duas colunas; a `key` mede a largura da tela"
+      },
+      "answer": "b",
+      "explanation": "Quem decide é a largura, não o aparelho: 820 é 700 ou mais, e `colunas` vale 2. A `FlatList` não troca o número de colunas com a lista já montada; com a `key={colunas}` na própria lista, mudou a coluna, crachá novo, lista nova. O crachá de cada cartão é o `keyExtractor`, e quem mede a tela é o `useWindowDimensions`.",
+      "points": 1
+    }
+  ]
+}

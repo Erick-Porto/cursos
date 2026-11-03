@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E21 · Código que espera",
+  "description": "Dez questões sobre setTimeout e callbacks, a ordem das linhas, Promise, async e await, localStorage com JSON e os testes que esperam da lista de tarefas.",
+  "lesson": "e21-codigo-que-espera",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Em que ordem as linhas aparecem no terminal?\n\n```javascript\nconsole.log('Abrindo a lista');\nsetTimeout(() => console.log('Tarefas carregadas'), 300);\nsetTimeout(() => console.log('Lembrete'), 0);\nconsole.log('Botões prontos');\n```",
+      "options": {
+        "a": "Abrindo a lista, Botões prontos, Lembrete, Tarefas carregadas",
+        "b": "Abrindo a lista, Tarefas carregadas, Lembrete, Botões prontos",
+        "c": "Abrindo a lista, Lembrete, Botões prontos, Tarefas carregadas",
+        "d": "Lembrete, Abrindo a lista, Botões prontos, Tarefas carregadas"
+      },
+      "answer": "a",
+      "explanation": "Primeiro sai todo o código de agora, de cima para baixo: \"Abrindo a lista\" e \"Botões prontos\". Depois vêm os callbacks, na ordem em que o tempo acaba: o de 0 ms e o de 300 ms. O 0 ms não fura a fila: ele espera o código de agora terminar, como o garçom que só vai à cozinha depois de atender a mesa.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O `esperar(ms)` é o da aula: uma Promise que termina depois de `ms` milissegundos. Em que ordem as linhas aparecem?\n\n```javascript\nasync function salvar() {\n  console.log('A: salvando');\n  await esperar(300);\n  console.log('B: salvo');\n}\n\nsalvar();\nconsole.log('C: botão liberado');\n```",
+      "options": {
+        "a": "A, C, B",
+        "b": "A, B, C",
+        "c": "C, A, B",
+        "d": "A, C, e o B nunca aparece"
+      },
+      "answer": "a",
+      "explanation": "A função começa e mostra A. No `await`, só ela pausa: a última linha do arquivo roda e mostra C. 300 ms depois, a senha é chamada, e a função continua de onde parou, mostrando B. O `await` espera a senha sem travar a fila.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que aparece no terminal, logo que o script roda?\n\n```javascript\nfunction esperar(ms) {\n  return new Promise((resolve) => {\n    setTimeout(resolve, ms);\n  });\n}\n\nconst senha = esperar(1000);\nconsole.log(senha);\n```",
+      "options": {
+        "a": "`Promise { <pending> }`",
+        "b": "`1000`",
+        "c": "`undefined`",
+        "d": "Nada por 1 segundo e, depois, `Promise { 1000 }`"
+      },
+      "answer": "a",
+      "explanation": "A função entrega a senha na hora, ainda pendente (`pending`). O `console.log` mostra a senha, não um resultado: ninguém esperou por ela com `await`. O `1000` é só o tempo que o `setTimeout` conta.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "A função `avisarPronto` mostra \"Prato pronto!\". Qual linha faz a mensagem aparecer só depois de 1 segundo?",
+      "options": {
+        "a": "`setTimeout(avisarPronto, 1000);`",
+        "b": "`setTimeout(avisarPronto(), 1000);`",
+        "c": "`setTimeout(1000, avisarPronto);`",
+        "d": "`avisarPronto(setTimeout, 1000);`"
+      },
+      "answer": "a",
+      "explanation": "O `setTimeout` recebe primeiro o callback, a função que vai rodar depois, e então o tempo em milissegundos. A função vai sem parênteses: você entrega a função, e quem chama é o `setTimeout`. Com parênteses, ela roda na hora, e o `setTimeout` recebe o resultado dela, quebrando com `The \"callback\" argument must be of type function`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Dá para usar `await` dentro de qualquer função, mesmo sem `async` na frente dela.",
+      "answer": false,
+      "explanation": "O `await` só vale dentro de uma função marcada com `async`, inclusive a seta do teste: `test('...', async () => { ... })`. Sem o `async`, o código nem começa a rodar: aparece `await is only valid in async functions` ou, no projeto e no Jest, `Unexpected reserved word`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No Console da página, o que aparece na segunda linha?\n\n```javascript\nlocalStorage.setItem('tarefa', { titulo: 'Regar as plantas' });\nconsole.log(localStorage.getItem('tarefa'));\n```",
+      "options": {
+        "a": "`[object Object]`",
+        "b": "`{ titulo: 'Regar as plantas' }`",
+        "c": "`Regar as plantas`",
+        "d": "`null`"
+      },
+      "answer": "a",
+      "explanation": "O `localStorage` só guarda texto. Sem o `JSON.stringify`, o objeto vira o texto `[object Object]`, e os dados se perdem. O certo é `setItem('tarefa', JSON.stringify(tarefa))` para gravar e `JSON.parse(getItem('tarefa'))` para ler.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Nada foi guardado com a chave `'chave-que-nao-existe'`. O que aparece?\n\n```javascript\nconst texto = localStorage.getItem('chave-que-nao-existe') ?? '[]';\nconst dados = JSON.parse(texto);\nconsole.log(dados.length);\n```",
+      "options": {
+        "a": "`0`",
+        "b": "`null`",
+        "c": "`2`, as letras de `'[]'`",
+        "d": "Um `SyntaxError` do `JSON.parse`"
+      },
+      "answer": "a",
+      "explanation": "Sem nada guardado, o `getItem` devolve `null`, e o `??` troca o `null` por `'[]'`. O `JSON.parse('[]')` dá uma lista vazia, com `length` 0. É assim que o `carregarTarefas` trata a primeira visita. O `.length` é da lista, não do texto: o texto já virou lista no `JSON.parse`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No Projeto 3, o que `await carregarTarefas(new ArmazenamentoFalso())` devolve, num armazenamento em que nada foi salvo?",
+      "options": {
+        "a": "Uma `ListaDeTarefas` com 0 tarefas",
+        "b": "`null`",
+        "c": "As seis tarefas de demonstração da tela",
+        "d": "Um erro, porque não há texto para o `JSON.parse`"
+      },
+      "answer": "a",
+      "explanation": "O `getItem(CHAVE)` devolve `null`, o `?? '[]'` troca por uma lista vazia em texto, e o `importar` não acrescenta nada. A função devolve uma `ListaDeTarefas` nova, com `tarefas.length` igual a 0. As tarefas de demonstração são da tela, não do seu código.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Este teste falha com `TypeError: Cannot read properties of null (reading 'length')`. Por quê?\n\n```javascript\ntest('salvarTarefas guarda a lista em texto JSON', async () => {\n  const lista = new ListaDeTarefas();\n  lista.adicionar(new Tarefa({ titulo: 'Pagar a conta de luz' }));\n  const armazenamento = new ArmazenamentoFalso();\n  salvarTarefas(lista, armazenamento);\n  const salvas = JSON.parse(armazenamento.getItem(CHAVE));\n  expect(salvas.length).toBe(1);\n});\n```",
+      "options": {
+        "a": "Faltou o `await` antes do `salvarTarefas`: o teste leu o armazenamento antes de a função gravar",
+        "b": "Faltou o `async` na seta do teste",
+        "c": "O `ArmazenamentoFalso` não guarda textos",
+        "d": "O `JSON.parse` não aceita a lista de tarefas"
+      },
+      "answer": "a",
+      "explanation": "O `salvarTarefas` espera 300 ms antes de gravar. Sem o `await`, o teste segue na hora: o `getItem` ainda não encontra nada e devolve `null`, e o `JSON.parse(null)` dá `null`, que não tem `length`. É a prova recolhida antes da resposta. A seta já é `async`; o que falta é esperar.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Por que `salvarTarefas` e `carregarTarefas` recebem o armazenamento como parâmetro, em vez de usar o `localStorage` direto? Marque todas as certas.",
+      "options": {
+        "a": "O Jest roda no Node, sem navegador, e lá o `localStorage` não existe",
+        "b": "O teste passa um armazenamento de mentira, com o mesmo `getItem` e `setItem`",
+        "c": "A tela passa o `localStorage` de verdade",
+        "d": "O `localStorage` só funciona dentro de funções `async`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Quem chama diz onde guardar. A tela passa o `localStorage`; o teste passa o `ArmazenamentoFalso`, que tem os mesmos dois botões e guarda os textos num objeto comum. Sem o parâmetro, o teste quebra com `localStorage is not defined`. O `localStorage` em si responde na hora e funciona em qualquer função: o `esperar(300)` só imita a demora de um servidor.",
+      "points": 2
+    }
+  ]
+}

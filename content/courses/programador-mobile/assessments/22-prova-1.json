@@ -1,0 +1,298 @@
+{
+  "title": "Prova 1 · JavaScript",
+  "description": "Prova da unidade de JavaScript, na última hora do E23. Cobre da aula 3 ao E22: npm e Git, valores, textos e dinheiro, funções e testes, decisões e repetições, objetos e listas, classes e erros, código que espera e o `fetch`, com o código dos três projetos. São 20 questões, 60 minutos, uma tentativa, sem consulta, e a nota mínima é 70. O gabarito não aparece ao enviar.",
+  "lesson": "e23-revisao-de-javascript",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "truefalse",
+      "prompt": "Uma colega clonou o seu `racha-conta` do GitHub, abriu a pasta no VS Code e rodou `npm run racha`. O terminal mostra `Cannot find package 'picocolors'`. Para o projeto rodar, ela precisa receber de você a pasta `node_modules` num pendrive.",
+      "answer": false,
+      "explanation": "O `node_modules` fica fora do GitHub pelo `.gitignore`, e não precisa ir: na raiz do projeto, o `npm install`, sem nome de pacote, lê o `package.json` e o `package-lock.json` e baixa tudo de novo, nas mesmas versões. O `Cannot find package` quase sempre quer dizer que faltou o `npm install`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Fim da etapa 6 da Lista de tarefas. Complete os três comandos: o primeiro chama tudo o que mudou para a foto, o segundo tira a foto com a legenda e o terceiro manda as fotos ao GitHub.\n\n```bash\ngit ___ .\ngit ___ -m \"Projeto 3: etapa 6, exemplos da API e entrega\"\ngit ___\n```",
+      "answer": [
+        [
+          "add"
+        ],
+        [
+          "commit"
+        ],
+        [
+          "push"
+        ]
+      ],
+      "explanation": "`git add .` chama para a foto tudo o que mudou; `git commit -m` tira a foto, no seu computador, com a legenda; `git push` manda as fotos ao GitHub. Sem o `push`, o commit existe só no seu computador, e a etapa não aparece no repositório.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nlet busca = '  PIZZA ';\nbusca.trim();\nbusca = busca.toLowerCase();\nconst itens = ['Pizza grande', 'Mini pizza', 'Suco'];\nconst achados = itens.filter((item) => item.toLowerCase().includes(busca));\nconsole.log(achados.length);\n```",
+      "options": {
+        "a": "`0`",
+        "b": "`2`",
+        "c": "`1`",
+        "d": "`3`"
+      },
+      "answer": "a",
+      "explanation": "A segunda linha faz uma cópia sem os espaços, mas ninguém guarda: a `busca` continua `'  PIZZA '` e vira `'  pizza '`, com dois espaços na frente e um atrás. Nenhum item tem esse trecho, nem `'mini pizza'`, que tem um espaço só antes de `pizza` e nenhum depois. Com `busca = busca.trim().toLowerCase()`, a peneira deixaria passar 2.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No Racha-conta, o `lerValor` do fim do Projeto 1 é este (o `paraCentavos` é o do E07, `Math.round(reais * 100)`):\n\n```javascript\nexport function lerValor(texto) {\n  let limpo = texto.trim();\n  limpo = limpo.replace('R$', '');\n  limpo = limpo.trim();\n  limpo = limpo.replace(',', '.');\n\n  const partes = limpo.split('.');\n  if (partes.length > 1 && partes[1].length > 2) {\n    return null;\n  }\n  const reais = Number(limpo);\n  if (Number.isNaN(reais) || reais <= 0) {\n    return null;\n  }\n  return paraCentavos(reais);\n}\n```\n\nO que devolvem `lerValor('R$ 12,345')`, `lerValor('0,00')` e `lerValor(' 9,9 ')`, nessa ordem?",
+      "options": {
+        "a": "`null`, `null` e `990`",
+        "b": "`1235`, `0` e `990`",
+        "c": "`null`, `0` e `99`",
+        "d": "`1234`, `null` e `990`"
+      },
+      "answer": "a",
+      "explanation": "`'R$ 12,345'` vira `'12.345'`; o `split('.')` dá `['12', '345']`, e a segunda parte tem 3 casas: `null`, sem chegar à conta. `'0,00'` vira o número 0, e `reais <= 0` dá `true`: `null`. `' 9,9 '` vira `9.9`, passa pelos dois `if`, e `paraCentavos(9.9)` dá `990`. O retorno antecipado barra cada problema logo na porta.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst prova = new Date(2026, 10, 3, 18, 5);\nconst dia = String(prova.getDate()).padStart(2, '0');\nconst mes = String(prova.getMonth() + 1).padStart(2, '0');\nconst minuto = String(prova.getMinutes()).padStart(2, '0');\nconsole.log(`${dia}/${mes} às ${prova.getHours()}:${minuto}`);\n```",
+      "options": {
+        "a": "`03/11 às 18:05`",
+        "b": "`03/10 às 18:05`",
+        "c": "`3/11 às 18:5`",
+        "d": "`03/11 às 18:50`"
+      },
+      "answer": "a",
+      "explanation": "O mês começa em 0: o 10 é novembro, e o `+ 1` mostra `11`. O `String` transforma o número em texto, e o `padStart(2, '0')` completa pela esquerda: o dia 3 vira `'03'`, e o minuto 5, `'05'`. Sem o `+ 1`, sairia `03/10`; e o zero vai à esquerda, nunca à direita.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "No Racha-conta, a soma da conta é feita em centavos, com o `paraCentavos(reais)`, que devolve `Math.round(reais * 100)`:\n\n```javascript\nexport function somarItens(itens) {\n  let soma = 0;\n  for (const item of itens) {\n    soma = soma + paraCentavos(item.preco) * item.quantidade;\n  }\n  return soma;\n}\n```\n\nO que esta chamada devolve?\n\n```javascript\nsomarItens([\n  { descricao: 'Bala', preco: 0.1, quantidade: 3 },\n  { descricao: 'Chiclete', preco: 0.2, quantidade: 1 },\n]);\n```",
+      "options": {
+        "a": "`50`",
+        "b": "`0.5`",
+        "c": "`0.5000000000000001`",
+        "d": "`30`"
+      },
+      "answer": "a",
+      "explanation": "Cada preço vira centavos antes da soma: `paraCentavos(0.1)` dá `10`, e `paraCentavos(0.2)` dá `20`. Volta 1: `0 + 10 * 3 = 30`; volta 2: `30 + 20 * 1 = 50`. A função devolve centavos inteiros, sem a sobra do `0.1 + 0.2`; quem mostra `R$ 0,50` é o `formatarReais`. O `30` seria esquecer a quantidade da bala.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que aparece no terminal, em ordem?\n\n```javascript\nfunction desconto(preco, percentual = 10) {\n  return preco - preco * percentual / 100;\n}\nfunction mostrar(preco) {\n  console.log(`R$ ${desconto(preco)}`);\n}\nconst a = desconto(200, 0);\nconst b = mostrar(50);\nconsole.log(a, b);\n```",
+      "options": {
+        "a": "`R$ 45` e, na linha de baixo, `200 undefined`",
+        "b": "`200 R$ 45`, numa linha só",
+        "c": "`R$ 45` e, na linha de baixo, `180 undefined`",
+        "d": "`R$ 45` e, na linha de baixo, `200 R$ 45`"
+      },
+      "answer": "a",
+      "explanation": "`desconto(200, 0)` não mostra nada e entrega `200`: o `0` veio, então vale, e o padrão 10 não entra. `mostrar(50)` chama `desconto(50)`, com o padrão de 10%, e mostra `R$ 45` na hora; como não tem `return`, a caixa `b` fica com `undefined`. O `console.log` só mostra a foto do prato; quem entrega o prato é o `return`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Na Lista de tarefas, `Tarefa` e `ErroDeTarefa` saem com `export default`, cada uma no seu arquivo de `src/modelos/`, e `proximoPrazo` sai com `export function`, em `src/regras/prazos.js`. Quais destas linhas, escritas num arquivo de `src/modelos/`, funcionam na tela, no navegador? Marque todas.",
+      "options": {
+        "a": "`import ErroDeTarefa from './ErroDeTarefa.js';`",
+        "b": "`import { proximoPrazo } from '../regras/prazos.js';`",
+        "c": "`import { Tarefa } from './Tarefa.js';`",
+        "d": "`import proximoPrazo from '../regras/prazos.js';`",
+        "e": "`import Tarefa from './Tarefa';`"
+      },
+      "answer": [
+        "a",
+        "b"
+      ],
+      "explanation": "O `export default` entra sem chaves, e o `export` com nome entra com chaves e o nome exato: (a) e (b). Em (c), as chaves pedem um `export` chamado `Tarefa`, que não existe (`does not provide an export named 'Tarefa'`). Em (d), faltam as chaves, e o arquivo não tem `default`. Em (e), falta o `.js`: o Jest aceita, mas o navegador não acha o arquivo.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O arquivo `dobro.js` tem a função certa: `export function dobro(n) { return n * 2; }`. O que o `npm test` mostra no resumo, com este arquivo de teste?\n\n```javascript\nimport { dobro } from './dobro.js';\n\ntest.each([\n  [2, 4],\n  [5, 11],\n  [0, 0],\n])('dobro(%i) dá %i', (n, esperado) => {\n  expect(dobro(n)).toBe(esperado);\n});\n\ntest('a lista dos dobros', () => {\n  const dobros = [];\n  dobros.push(dobro(1));\n  dobros.push(dobro(2));\n  expect(dobros).toBe([2, 4]);\n});\n```",
+      "options": {
+        "a": "`Tests: 2 failed, 2 passed, 4 total`",
+        "b": "`Tests: 1 failed, 3 passed, 4 total`",
+        "c": "`Tests: 1 failed, 1 passed, 2 total`",
+        "d": "`Tests: 4 passed, 4 total`"
+      },
+      "answer": "a",
+      "explanation": "O `test.each` faz um teste por linha da tabela: três, mais o da lista, dão 4. A linha `[5, 11]` fica vermelha, com `Expected: 11` e `Received: 10`: quem errou foi o gabarito. O teste da lista também, com `serializes to the same string`: o `toBe` pergunta se é a mesma lista, e o `toEqual` confere gaveta por gaveta. Passam o `[2, 4]` e o `[0, 0]`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfunction tipoDoDia(dia) {\n  if (dia === 'sábado' || 'domingo') {\n    return 'fim de semana';\n  }\n  return 'dia útil';\n}\nconsole.log(tipoDoDia('terça'), tipoDoDia('domingo'));\n```",
+      "options": {
+        "a": "`fim de semana fim de semana`",
+        "b": "`dia útil fim de semana`",
+        "c": "`dia útil dia útil`",
+        "d": "Um `SyntaxError`, porque o `||` precisa de duas comparações"
+      },
+      "answer": "a",
+      "explanation": "Cada lado do `||` é uma pergunta inteira. O lado direito, `'domingo'`, não pergunta nada: é um texto com letras, e no `if` ele conta como sim. Por isso o `if` dá `true` até na terça. O certo é `dia === 'sábado' || dia === 'domingo'`, e aí sairia `dia útil fim de semana`. O JavaScript não reclama: esse engano não tem mensagem.",
+      "points": 2
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nlet saldo = 100;\nlet saques = 0;\nwhile (saldo >= 30) {\n  saldo = saldo - 30;\n  saques = saques + 1;\n}\nconsole.log(`${saques} ${saques === 1 ? 'saque' : 'saques'}, sobram R$ ${saldo}`);\n```",
+      "options": {
+        "a": "`3 saques, sobram R$ 10`",
+        "b": "`4 saques, sobram R$ -20`",
+        "c": "`3 saque, sobram R$ 10`",
+        "d": "`2 saques, sobram R$ 40`"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta: 100 vira 70 (1 saque), 70 vira 40 (2) e 40 vira 10 (3). Com 10, a pergunta `saldo >= 30` dá `false`, e o laço termina antes da quarta volta: o `while` pergunta antes de cada volta. Com 3, o ternário escolhe `saques`, no plural.",
+      "points": 2
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst nomes = ['Ana', 'Bruno', 'Carla', 'Davi'];\nconst linhas = [];\nfor (let i = 0; i < nomes.length; i++) {\n  if (i % 2 === 0) {\n    linhas.push(`${i + 1}. ${nomes[i]}`);\n  }\n}\nconsole.log(linhas.join(' | '));\n```",
+      "options": {
+        "a": "`1. Ana | 3. Carla`",
+        "b": "`0. Ana | 2. Carla`",
+        "c": "`2. Bruno | 4. Davi`",
+        "d": "`1. Ana | 2. Bruno | 3. Carla | 4. Davi`"
+      },
+      "answer": "a",
+      "explanation": "O `i` vai de 0 a 3. O resto da divisão por 2 é 0 quando o `i` é 0 ou 2. Nessas voltas, o `push` guarda o número da pessoa, `i + 1`, e o nome da gaveta `i`: `'1. Ana'` e `'3. Carla'`. O `join(' | ')` junta a lista num texto, com o separador entre os itens.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst contatos = [\n  { nome: 'Mariana', grupo: 'amigos' },\n  { nome: 'Daniel', grupo: 'trabalho' },\n  { nome: 'Helena', grupo: 'amigos' },\n];\nconst amigos = contatos.filter((contato) => contato.grupo === 'amigos');\nconst iniciais = amigos.map((contato) => contato.nome[0]);\nconst letras = amigos.reduce((total, contato) => total + contato.nome.length, 0);\nconsole.log(iniciais, letras);\n```",
+      "options": {
+        "a": "`[ 'M', 'H' ] 13`",
+        "b": "`[ 'M', 'D', 'H' ] 19`",
+        "c": "`[ 'Mariana', 'Helena' ] 13`",
+        "d": "`2 13`"
+      },
+      "answer": "a",
+      "explanation": "A peneira deixa só os 2 amigos, a Mariana e a Helena. A linha de produção transforma cada um na primeira letra do nome, `nome[0]`: `['M', 'H']`. A calculadora soma o tamanho dos nomes dos amigos, a partir do 0: `0 + 7 = 7` e `7 + 6 = 13`. O Daniel fica fora das duas, porque elas trabalham com a lista `amigos`.",
+      "points": 2
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst original = ['arroz', 'feijão'];\nconst mesma = original;\nconst copia = [...original, 'café'];\nmesma.push('óleo');\nconsole.log(original.length, copia.length, copia.includes('óleo'));\n```",
+      "options": {
+        "a": "`3 3 false`",
+        "b": "`2 3 false`",
+        "c": "`3 4 true`",
+        "d": "`2 3 true`"
+      },
+      "answer": "a",
+      "explanation": "A `mesma` não é uma cópia: é outro papel com o mesmo endereço, e o `push` por ela muda a `original`, que fica com 3. A `copia` nasceu antes, com o spread: `arroz`, `feijão` e `café`, 3 itens, e o `óleo` não entra nela. Para mexer sem rasurar o original, tire uma cópia, como a `copia`.",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "single",
+      "prompt": "Na Agenda de contatos, o `buscarPorId` acha um contato pelo número. O que aparece no terminal?\n\n```javascript\nfunction buscarPorId(contatos, id) {\n  return contatos.find((contato) => contato.id === id);\n}\nconst contatos = [\n  { id: 1, nome: 'Mariana Souza', aniversario: { dia: 30, mes: 10 } },\n  { id: 2, nome: 'Daniel Rocha', aniversario: null },\n];\nconsole.log(buscarPorId(contatos, 2).aniversario?.dia ?? 'sem data');\nconsole.log(buscarPorId(contatos, 7)?.nome);\n```",
+      "options": {
+        "a": "`sem data` e, na linha de baixo, `undefined`",
+        "b": "`undefined` e, na linha de baixo, `undefined`",
+        "c": "`sem data` e, na linha de baixo, um `TypeError`",
+        "d": "`null` e, na linha de baixo, `undefined`"
+      },
+      "answer": "a",
+      "explanation": "O `find` acha o Daniel, que tem o aniversário `null`. O `?.` olha antes de entrar: a caixa está vazia, ele responde `undefined` sem erro, e o `??` troca por `'sem data'`. Ninguém tem o id 7: o `find` devolve `undefined`, e o `?.nome` responde `undefined`, sem o `TypeError` que o ponto sozinho daria.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "Na Lista de tarefas, com as classes e o `criarTarefa` do Projeto 3, o que aparece no terminal?\n\n```javascript\nconst hoje = new Date(2026, 10, 10);\nconst lista = new ListaDeTarefas();\nlista.adicionar(criarTarefa({ titulo: 'Pagar a conta de luz', prazo: '2026-11-12' }));\nlista.adicionar(criarTarefa({ titulo: 'Tomar o remédio', prazo: '2026-11-10', frequencia: 'diaria' }));\nlista.concluir(1, hoje);\nlista.concluir(2, hoje);\nconsole.log(lista.tarefas.length, lista.buscar(3).prazo, lista.proximoId);\n```",
+      "options": {
+        "a": "`3 2026-11-11 4`",
+        "b": "`2 2026-11-11 3`",
+        "c": "`4 2026-11-11 5`",
+        "d": "`3 2026-11-17 4`"
+      },
+      "answer": "a",
+      "explanation": "O `criarTarefa` faz uma `Tarefa` comum para a conta de luz e uma `TarefaRecorrente` para o remédio, que tem frequência. A lista não pergunta o tipo: cada tarefa conclui do seu jeito. A comum devolve `null`, e nada nasce. A diária devolve a próxima, com prazo no dia seguinte, `2026-11-11`, e a lista dá a ela o número 3. Ficam 3 tarefas, e o próximo número é 4.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "fill",
+      "prompt": "Complete a classe filha do Projeto 3. Ela é um tipo de `Tarefa` e monta a parte da mãe antes de guardar a frequência:\n\n```javascript\nexport default class TarefaRecorrente ___ Tarefa {\n  constructor(dados) {\n    ___(dados);\n    this.frequencia = dados.frequencia ?? 'semanal';\n  }\n}\n```",
+      "answer": [
+        [
+          "extends"
+        ],
+        [
+          "super"
+        ]
+      ],
+      "explanation": "`extends Tarefa` diz quem é a mãe: a filha ganha os campos, os métodos e os `get` dela. `super(dados)` roda o `constructor` da mãe com a mesma ficha e vem antes de qualquer `this`: com a ordem trocada, o Node para com `Must call super constructor`.",
+      "points": 1
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfunction validar(titulo) {\n  if (titulo.trim() === '') {\n    throw new Error('Título vazio');\n  }\n}\nlet entraram = 0;\nfor (const titulo of ['Regar', '  ', 'Varrer']) {\n  try {\n    validar(titulo);\n    entraram = entraram + 1;\n  } catch (erro) {\n    console.log(erro.message);\n  }\n}\nconsole.log(entraram);\n```",
+      "options": {
+        "a": "`Título vazio` e, na linha de baixo, `2`",
+        "b": "Só `Título vazio`: o erro para o programa",
+        "c": "Só `3`",
+        "d": "`Título vazio` e, na linha de baixo, `1`"
+      },
+      "answer": "a",
+      "explanation": "O `try` fica dentro do laço: a rede segura uma volta de cada vez. Na segunda volta, o `throw` para o `validar`, a linha do `entraram` não roda, e o `catch` mostra a mensagem. O laço segue para a terceira volta. Entram `'Regar'` e `'Varrer'`: 2. É o jeito do `importar` do Projeto 3.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "O `esperar(ms)` é o do Projeto 3: uma Promise que termina depois de `ms` milissegundos. Em que ordem as letras aparecem?\n\n```javascript\nconsole.log('A');\nsetTimeout(() => console.log('B'), 100);\nasync function carregar() {\n  console.log('C');\n  await esperar(50);\n  console.log('D');\n}\ncarregar();\nsetTimeout(() => console.log('E'), 0);\nconsole.log('F');\n```",
+      "options": {
+        "a": "A, C, F, E, D, B",
+        "b": "A, B, C, D, E, F",
+        "c": "A, C, D, F, E, B",
+        "d": "A, F, C, E, D, B"
+      },
+      "answer": "a",
+      "explanation": "Primeiro, todo o código de agora, de cima para baixo: `A`; o `carregar()` começa e mostra `C`; o `await` pausa só a função e dá a vez; a última linha mostra `F`. Depois, cada espera, na ordem em que acaba: o `E`, com 0 ms; o `D`, quando a senha de 50 ms é chamada e o `carregar` continua; o `B`, com 100 ms.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "Na DummyJSON, `/todos/2` responde `{ id: 2, todo: 'Memorize a poem', completed: true, userId: 13 }`, `/todos/4` responde `{ id: 4, todo: 'Watch a documentary', completed: false, userId: 84 }`, e a tarefa 9999 não existe. Com internet, o que aparece no terminal?\n\n```javascript\nasync function situacao(id) {\n  const resposta = await fetch(`https://dummyjson.com/todos/${id}`);\n  if (!resposta.ok) {\n    return `Erro ${resposta.status}`;\n  }\n  const tarefa = await resposta.json();\n  return tarefa.completed ? 'feita' : 'pendente';\n}\nasync function mostrar() {\n  console.log(await situacao(2), await situacao(4), await situacao(9999));\n}\nmostrar();\n```",
+      "options": {
+        "a": "`feita pendente Erro 404`",
+        "b": "`feita pendente` e, depois, o programa para com um erro do `fetch`",
+        "c": "`pendente feita Erro 404`",
+        "d": "`feita pendente undefined`"
+      },
+      "answer": "a",
+      "explanation": "Com a tarefa 2 e a 4, a resposta vem com `ok` verdadeiro; o segundo `await` transforma o corpo em objeto, e o ternário lê o `completed`. Com a 9999, a resposta chega com `ok` falso e status 404: o `fetch` não lança erro, e o `if` devolve `Erro 404` antes de ler o corpo. Só a falta de internet faz o `await fetch` lançar.",
+      "points": 2
+    }
+  ]
+}

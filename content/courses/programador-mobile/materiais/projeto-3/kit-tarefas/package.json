@@ -1,0 +1,14 @@
+{
+  "name": "lista-de-tarefas",
+  "version": "1.0.0",
+  "description": "Lista de tarefas com classes, erros próprios, salvamento e tarefas de exemplo de uma API",
+  "type": "module",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.7",
+    "babel-jest": "^30.5.2",
+    "jest": "^30.5.2"
+  }
+}

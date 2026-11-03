@@ -1,176 +1,123 @@
-## Como corrigir em 15 minutos
+---
+title: "Correção · Projeto 5 · Gota: meta de água"
+summary: O que conferir em cada critério, como pontuar, o check-in de cada etapa e os sinais de cópia.
+---
+
+## Antes de corrigir
+
+Corrija depois do prazo (início do E33). Links colados antes servem para os check-ins: enquanto você não corrige, o aluno pode trocá-los. Cada correção leva cerca de 15 minutos.
 
 :::steps
-1. Clone o repositório, rode `npm install` e `npx expo start` e abra no Expo Go. Não abriu? `npx expo start -c`; se faltar pacote, veja se `react-native-safe-area-context` está no `package.json`. App que não abre do zero é devolvido para ajuste, não zerado.
-2. Siga o roteiro de uso abaixo no celular (5 min). Anote o que falhou, critério por critério.
-3. `git log --oneline --date=short --format="%ad %s"`: os quatro commits de etapa e as datas.
-4. Leia `src/regras/agua.js`, `src/hooks/useConsumo.js`, `App.js` e `src/components/`, nessa ordem.
-5. Confira as regras sem o celular com o comando de "Regras no terminal".
-6. Leia o README: prints, como rodar e a seção Caça ao bug.
+1. Clone o repositório numa pasta de correção, fora dos seus projetos: `git clone <link>`, `cd gota`, `npm install`.
+2. `git log --oneline --reverse`: "Kit do Gota" e as três mensagens `Projeto 5: etapa N, ...`, com as datas.
+3. No terminal, a sua conta Expo (`npx expo whoami`; se não houver, `npx expo login`), a mesma do Expo Go do seu celular. Depois, `npx expo start` e o QR code. Não abriu? `npx expo start -c` limpa o cache; na rede da escola, `npx expo start --tunnel`.
+4. Use o app pelo roteiro abaixo, com o terminal à vista, e só depois leia o código.
 :::
 
-O Alert não funciona na versão web (tecla `w`): o `Alert.alert` não faz nada no navegador. Corrija a
-remoção sempre no Expo Go ou no emulador.
+O kit é do Expo SDK 58: o seu Expo Go precisa estar atualizado na loja. Se o `package.json` do aluno tiver outras versões de `expo` ou de `react-native-safe-area-context`, ele rodou um `npm install <pacote>` por conta própria; `npx expo install --check` mostra a diferença.
 
-### Roteiro de uso
+**Roteiro de uso (5 minutos):**
 
-| Passo | O que fazer | O que deve aparecer |
-|---|---|---|
-| 1 | Abrir o app | 0 ml de 2000 ml, barra vazia, lista vazia com mensagem, frase da faixa 0 |
-| 2 | +300 e +500 | 800 ml, 40%, faltam 1200 ml, dois registros com a hora atual, o mais novo no topo, frase da faixa 1 a 49 |
-| 3 | +500 três vezes | 2300 ml, 115%, barra cheia sem sair do cartão, nada falta, frase de meta batida |
-| 4 | Remover um de 500 e tocar em Cancelar | continua com 2300 ml |
-| 5 | Remover o mesmo e confirmar | 1800 ml, 90%, frase da faixa 50 a 99 |
-| 6 | Meta vazia, `2.000`, `2000,5`, `300` e `6000`, cada um com Salvar | erro embaixo do campo; a meta continua 2000 |
-| 7 | Meta `2500` | 72%, faltam 700 ml |
-| 8 | Remover todos | volta a mensagem de lista vazia |
+1. Abra: a gota, "Gota" e a saudação do aluno; "0 ml de 2000 ml", a barra vazia e "Faltam 2000 ml"; os três copos lado a lado; "Registros de hoje" e a lista vazia, com a gota clarinha.
+2. Toque em +300 e depois em +500: "800 ml", "40% da meta", "Faltam 1200 ml"; dois registros com a hora de agora, o de 500 em cima.
+3. Toque em +500 três vezes: "2300 ml", "114% da meta" (a conta dá 114,99..., e o número é cortado, não arredondado), a barra cheia sem sair do cartão e "Meta batida!".
+4. Remova o de 300: "2000 ml", "100% da meta", "Meta batida!" e quatro registros de 500.
+5. Remova o de cima: "1500 ml", "75% da meta", "Faltam 500 ml" e três registros; os horários mostram que saiu só aquele.
+6. Remova todos: "0 ml" e a lista vazia de volta.
+7. No terminal: nenhuma mensagem vermelha (`ERROR`) e nenhum aviso amarelo (`WARN`) de `key`.
 
-### Regras no terminal
+Recarregar o app (tecla `r` no terminal) zera o dia: é esperado, não desconte. Anote o que falhou e só então abra o `App.js` e o `src/components/BotaoCopo.js`: o código explica o porquê e decide entre nota parcial e zero.
 
-Na pasta do aluno, no Git Bash ou no terminal do VS Code:
+:::info O que é igual na turma toda
+Os passos "juntos em aula" saem dos slides, iguais para todos: os estilos do topo, a gota, o `BotaoCopo` com `Pressable` e estilo, o estado com `adicionarCopo`, o `reduce` do total, a `FlatList` com `keyExtractor` e a `ListaVazia`. Isso é esperado. O trabalho individual está nos trechos **Sua vez**: a meta do dia com `View` e `Text` (etapa 1), a prop `ml` com os três copos na `Linha` (etapa 2), o `removerRegistro` com `filter` e o README (etapa 3). A saudação é de cada um.
+:::
 
-```bash
-node -e "import('./src/regras/agua.js').then((r) => console.log(r.totalDoDia([{ ml: 300 }, { ml: 500 }]), r.percentualDaMeta(1999, 2000), r.percentualDaMeta(2500, 2000), r.quantoFalta(2500, 2000), r.mensagemDaFaixa(0), r.mensagemDaFaixa(50), r.validarMeta(' 2500 '), r.validarMeta('2000,5'), r.formatarHora(new Date(2026, 9, 28, 8, 5))))"
-```
+## Critério 1 · App no celular (15)
 
-Esperado: `800 99 125 0`, a frase da faixa 0, a frase da faixa 50 a 99,
-`{ valida: true, meta: 2500, mensagem: '' }`, um objeto com `valida: false` e uma mensagem, e `08:05`.
-O aviso `MODULE_TYPELESS_PACKAGE_JSON` do Node é normal. Se o comando quebrar com erro de `react`,
-`react-native` ou JSX, o arquivo de regras não é puro: isso pesa no critério Regras puras e hook.
+**O que conferir:** o passo 1 do roteiro, com o app abrindo do zero, sem tela vermelha. No `App.js`: a `Image` com `require('./assets/gota.png')` e um estilo com `width` e `height`; os dois `Text` do topo com `style={estilos.titulo}` e `style={estilos.saudacao}` (ou nomes do aluno); o `const estilos = StyleSheet.create(...)` no fim do arquivo, depois do componente.
 
-## Tela com componentes nativos (20)
+| Pontos | Quando |
+|---|---|
+| 15 | tudo acima |
+| 11 a 13 | um deslize: estilo escrito dentro da tag (`style={{ fontSize: 32 }}`), sem o `StyleSheet`; o `StyleSheet.create` no meio do arquivo; a gota sem `width` e `height`, enorme |
+| 6 a 9 | sem a gota, ou o topo sem estilo nenhum (texto preto e pequeno) |
+| 0 a 4 | o topo do kit sem mudança nenhuma ("Olá! Troque esta frase pela sua saudação.") |
 
-**O que conferir.** Em `src/components/`: `Cabecalho` com `Image` da `gota.png` (com `width` e
-`height`), `CartaoProgresso` com o trilho e o preenchimento em duas `View` e a largura em porcentagem,
-`BotaoCopo` com `Pressable`, `CampoMeta` e `ItemRegistro`. No `App`, `SafeAreaProvider` e
-`SafeAreaView` de `react-native-safe-area-context`, com `flex: 1`. Estilos com `StyleSheet.create` no
-fim de cada arquivo.
+App que não abre do zero não leva zero: devolva para ajuste antes da nota (veja o fim deste guia).
 
-**Como pontuar.**
+**Erros comuns:** `require('assets/gota.png')` sem o `./`, ou `../assets` no `App.js` (`Unable to resolve module`); `fontSize: '32px'` ou `width: '48px'`: o React Native usa número, sem `px`; o `Image` importado e esquecido no `import` (`Property 'Image' doesn't exist`).
 
-- **20**: tudo acima, nada atrás do notch, nomes de estilo pelo papel
-- **Parcial**: componente que ficou dentro do `App` (-3 cada, até -9); barra feita com texto, como
-  `"#####"` (-8); `Button` no lugar de `Pressable` (-4); título atrás do notch (-4); estilos inline
-  espalhados ou `StyleSheet.create` no meio do arquivo (-3)
-- **0**: a tela do modelo do Expo, ou a tela do `minhas-tarefas-mobile` com os textos trocados
+## Critério 2 · O seu BotaoCopo (25)
 
-**Erros comuns.** `SafeAreaView` importado de `react-native` (no Android não afasta nada);
-`require('./assets/gota.png')` dentro de `src/components/` (o caminho certo sobe duas pastas);
-preenchimento sem `height`, que some sem erro; `width: '60'` sem o `%`.
+**O que conferir:** `src/components/BotaoCopo.js`, com inicial maiúscula e `export default`. Dentro: um `Pressable` com um `Text`; as props desestruturadas no parâmetro, `{ ml, aoAdicionar }`; o texto `+{ml} ml`; `onPress={() => aoAdicionar(ml)}`; um `StyleSheet.create` no fim do arquivo, com o estilo do botão e o do texto (cores de `'../tema'` ou escritas como código: as duas valem). No `App`: três `<BotaoCopo ml={...} aoAdicionar={adicionarCopo} />`, de 200, 300 e 500, dentro da `<Linha>`. Os passos 2 e 3 do roteiro.
 
-## Registros, lista e remoção (25)
+| Pontos | Quando |
+|---|---|
+| 25 | tudo acima |
+| 18 a 22 | um deslize: os botões fora da `Linha`, um embaixo do outro; `Button` no lugar do `Pressable`; o `console.log` da etapa 2 ainda no toque, junto com o `aoAdicionar` (desconte 1) |
+| 10 a 15 | o botão ignora a prop: os três mostram "+200 ml", ou somam sempre o mesmo valor; ou três componentes quase iguais, um por copo |
+| 0 a 8 | sem componente: os três `Pressable` escritos direto no `App.js` |
 
-**O que conferir.** Roteiro, passos 2 a 5 e 8. No código: array novo ao adicionar e ao remover
-(spread e `filter`), `keyExtractor` devolvendo texto, `ListEmptyComponent`, `Alert.alert` com dois
-botões e `onPress` com arrow function no Remover, total com `reduce` e valor inicial.
+**Erros comuns:** `ml="300"`, com aspas: o total vira "0300500" (desconte aqui, não em Registros); `onPress={aoAdicionar(ml)}`, sem o `() =>`: o app se enche de copos sozinho e trava, com `Cannot update a component (App) while rendering a different component (BotaoCopo)` no terminal (devolva para ajuste); `import { cores } from './tema'` dentro de `src/components/` (`Unable to resolve module`).
 
-**Como pontuar.**
+## Critério 3 · Registros e total (25)
 
-- **25**: todos os passos do roteiro certos
-- **Parcial**: remove sem pedir confirmação (-6); Cancelar também remove (-6; o bug do enunciado ficou
-  no código); a barra passa do cartão (-4); sem mensagem de lista vazia (-4); `ScrollView` com `map` no
-  lugar da `FlatList` (-5); registro sem hora (-3); `keyExtractor` faltando ou com o índice (-2)
-- **0**: os botões não adicionam nada
+**O que conferir:** no `App`, `const [registros, setRegistros] = useState([])`; o `adicionarCopo(ml)` que cria `{ id: Date.now(), ml: ml, hora: horaAgora() }` e chama `setRegistros([novo, ...registros])`; antes do `return`, `const total` com `registros.reduce(...)` e valor inicial 0; `<ProgressoMeta total={total} meta={2000} />` no lugar da `View` da meta do dia. Os passos 2 e 3 do roteiro.
 
-**Erros comuns.** `registros.push(novo)`, que não redesenha; `onPress={onAdicionar(ml)}`, que adiciona
-copos sem parar ao abrir e termina em "Maximum update depth exceeded"; `ml="300"` no botão, que junta
-textos ("0300500"); `reduce` sem valor inicial, que quebra com a lista vazia ("Reduce of empty array
-with no initial value").
+| Pontos | Quando |
+|---|---|
+| 25 | tudo acima |
+| 18 a 22 | um deslize: o copo novo no fim da lista (`[...registros, novo]`); a linha provisória "Copos hoje" ou a `View` da meta da etapa 1 ainda na tela; a hora escrita fixa, sem `horaAgora()` |
+| 10 a 15 | o total num segundo `useState`, somado à mão: certo ao adicionar, errado depois de remover; ou o `ProgressoMeta` com `total` fixo |
+| 0 a 8 | `registros.push(novo)` com `setRegistros(registros)`: a lista é a mesma, o React não percebe a mudança e a tela não muda, sem erro nenhum |
 
-## Meta editável e validada (10)
+**Erros comuns:** `reduce` sem o valor inicial: com a lista vazia, a tela vermelha `Reduce of empty array with no initial value` logo ao abrir (devolva para ajuste); `id: 1` fixo, que dá o mesmo crachá a todos os registros (o terminal avisa `Encountered two children with the same key` e o Remover tira todos: desconte em Lista e remoção).
 
-**O que conferir.** Roteiro, passos 6 e 7. No `CampoMeta`: `TextInput` com `value` e
-`onChangeText`, `keyboardType="numeric"`, mensagem de erro num `Text` embaixo do campo, meta guardada
-como número.
+## Critério 4 · Lista e remoção (20)
 
-**Como pontuar.**
+**O que conferir:** a `FlatList` com `data={registros}`, `keyExtractor={(item) => String(item.id)}` e o `renderItem` que devolve um `ItemRegistro` com `ml`, `hora` e `aoRemover`; `ListEmptyComponent` com a `ListaVazia`; o `removerRegistro(id)` com `registros.filter(...)` que deixa passar quem tem outro `id`; `aoRemover={() => removerRegistro(item.id)}`. Os passos 4 a 6 do roteiro.
 
-- **10**: os cinco casos errados mostram erro e não mudam a meta; `2500` muda
-- **Parcial**: aceita `2000,5` (quase sempre por `parseInt`, que para na vírgula) (-2); erro num
-  `Alert` em vez de embaixo do campo (-2); meta guardada como texto (-2); aceita fora de 500 a 5000 (-3)
-- **3**: o campo muda a meta, mas não há validação nenhuma
-- **0**: meta fixa no código
+| Pontos | Quando |
+|---|---|
+| 20 | tudo acima |
+| 15 a 17 | um deslize: sem `keyExtractor` (funciona, porque o registro tem `id`: desconte 2); a mensagem de lista vazia escrita fora da `FlatList`, aparecendo também com copos |
+| 8 a 12 | o Remover não funciona (parou nos passos juntos); ou a lista num `registros.map(...)` dentro de uma `View`, sem a `FlatList`, que não rola com muitos copos |
+| 0 a 6 | sem lista: os registros não aparecem |
 
-## Regras puras e hook (20)
+**Erros comuns:** o `filter` com `===` no lugar de `!==`, que deixa só o copo tocado; `aoRemover={removerRegistro(item.id)}`, sem o `() =>`, que apaga os copos logo depois de aparecerem, com `Cannot update a component (App) while rendering a different component (CellRenderer)` no terminal; `splice` na lista do estado, que não muda a tela.
 
-**O que conferir.** O comando de "Regras no terminal". `agua.js` sem `import` de `react` ou de
-componentes, com as seis funções e os nomes do enunciado. `useConsumo` exportado com nome, devolvendo
-`{ registros, meta, total, percentual, falta, mensagem, adicionarCopo, removerRegistro, definirMeta }`
-e usando as regras. `App` sem `reduce` nem conta de percentual; `CampoMeta` usando `validarMeta`.
+## Critério 5 · Repositório e README (15)
 
-**Como pontuar.**
+| Pontos | O que vale |
+|---|---|
+| 5 | o commit do kit e os três das etapas, com as mensagens pedidas, em dias que acompanham os encontros |
+| 5 | README com o que o app faz, como rodar, os dois prints do celular aparecendo no GitHub e o nome, sem os trechos "Etapa 3" do kit sobrando |
+| 5 | repositório público, com o `.gitignore`, sem `node_modules/` nem `.expo/` |
 
-- **20**: tudo acima, com os resultados esperados
-- **Parcial**: cada regra com resultado errado nos exemplos (-3), como `Math.round` no percentual (1999
-  de 2000 vira 100) ou `quantoFalta` negativo; regra que lê a hora atual ou o estado por dentro, em vez
-  de receber o valor (-3); hook que recalcula sem usar as regras (-4); `App` ainda com cálculo (-4);
-  nomes diferentes do enunciado (-2, e peça o ajuste)
-- **0**: nem arquivo de regras nem hook; a lógica continua toda no `App`
-
-**Erros comuns.** Faixas com a borda trocada (`mensagemDaFaixa(50)` caindo em "começou");
-`formatarHora()` sem parâmetro, usando `new Date()` por dentro; `validarMeta` que devolve só
-`true` ou `false`, sem a mensagem; `useConsumo` com `export default` e importado com chaves.
-
-## Caça ao bug (10)
-
-**O bug.** No trecho do enunciado, o botão Remover tem `onPress: removerRegistro(registro.id)`. A
-função roda na hora em que o `Alert` é montado, e o `onPress` recebe o que ela devolve (`undefined`).
-Sintoma: o registro some assim que a caixa abre, e Cancelar não o traz de volta. Correção:
-`onPress: () => removerRegistro(registro.id)`.
-
-**O que conferir.** A seção Caça ao bug do README e o `confirmarRemocao` corrigido no código. O que
-vale mais é o "como isolou": um `console.log` em `removerRegistro` que aparece no terminal antes de
-qualquer toque na caixa, ou um breakpoint ali que pausa ao abrir o `Alert`.
-
-**Como pontuar.**
-
-- **10**: sintoma, passos, evidência do terminal ou do breakpoint, causa certa e correção testada
-- **6**: causa e correção certas, sem dizer como chegou nelas
-- **5**: processo bem descrito (reproduziu, isolou, testou hipóteses), mas a causa explicada errada
-- **3**: só "faltava a arrow function", sem sintoma nem evidência
-- **2**: bug corrigido no código, sem a seção no README
-- **0**: nada
-
-**Erros comuns.** Descrever o sintoma como "o Alert não funciona" (ele abre; o problema é a hora em
-que a remoção acontece); corrigir trocando o `Alert` por remoção direta, o que tira a confirmação e
-pesa também em Registros.
-
-## Repositório e README (15)
-
-**O que conferir.** Repositório público `gota`, sem `node_modules/`; os quatro commits de etapa com as
-mensagens do enunciado, de preferência em dias diferentes; README com o que o app faz, dois prints do
-celular, como rodar e a seção do bug; `app.json` com `"name": "Gota"`; o app abrindo do zero.
-
-**Como pontuar.**
-
-- **15**: tudo acima
-- **Parcial**: cada commit de etapa faltando (-2, até -6); um commit único no fim (no máximo 7); README
-  sem prints (-3); sem "como rodar" (-2); `node_modules/` no repositório (-3); `name` do modelo (-1)
-- **Devolver para ajuste**, antes da nota: repositório privado, link errado, app que não abre do zero
+Desconte por parte: um print só, 3 de 5; prints do computador no lugar do celular, 4 de 5; um commit só com tudo, 0 a 2 na primeira linha; `node_modules/` no repositório, 0 na terceira.
 
 ## Check-in por etapa
 
-No bloco Projeto do roteiro, o check-in tem 2 ou 3 minutos: mãos para quem fez o commit e **uma**
-coisa olhada num repositório aberto no projetor.
+A abertura de cada encontro tem 2 a 3 minutos de check-in: mãos levantadas para quem fez o commit da etapa anterior e **um** repositório no projetor, olhando uma coisa só.
 
-| Encontro | Commit da etapa anterior | Uma coisa para olhar |
+| Encontro | Etapa conferida | Olhe só isto |
 |---|---|---|
-| E27 | `Projeto 5: etapa 1, app no celular` | repositório público, sem `node_modules/`, README com "Como rodar" |
-| E28 | `Projeto 5: etapa 2, tela com StyleSheet` | `CartaoProgresso.js`: trilho e preenchimento em duas `View`, largura com `%` |
-| E29 | `Projeto 5: etapa 3, estado, lista e bug` | README: a seção Caça ao bug tem o "como isolou"? |
-| E30 | `Projeto 5: etapa 4, hook, regras e entrega` | `src/regras/agua.js` sem `import` de `react` (a entrega fecha no início do E30) |
+| E30 | 1 | o repositório no GitHub sem `node_modules/` e a meta do dia numa `View` com dois `Text` |
+| E31 | 2 | o `BotaoCopo.js` com `ml` desestruturado e, no `App`, `ml={300}` entre chaves |
+| E32 | 3 | no celular de um aluno, Remover tira só aquele copo e o total cai |
+| E33 | entrega | no painel do instrutor, aba Projetos, quantos entregaram |
+
+Quem não fez a etapa anterior fica com ela de tarefa, antes da próxima. Duas etapas atrasadas: converse no intervalo. No E29, quem não conseguiu conectar o celular faz a etapa 1 em casa, na rede de casa, e mostra no E30.
 
 ## Sinais de cópia
 
-- **Commits** todos no mesmo dia, perto do prazo, ou um commit só com o app pronto
-- **Código do laboratório** com nomes trocados: `CartaoTarefa` virou `ItemRegistro` com a mesma
-  estrutura e os mesmos estilos, placeholder "Nova tarefa", variáveis `tarefas` ou `pendentes`
-- **Código de colega**: mesmas cores, mesmos nomes de estilo, mesmas mensagens de erro, mesmos prints
-- **Seção do bug** igual à de outro aluno, ou genérica, sem nenhuma evidência do próprio terminal
-- **O aluno não explica o próprio código**
+- **Entre colegas**: a mesma saudação, as mesmas frases no README, os mesmos prints; a mesma solução incomum nos trechos Sua vez (o mesmo nome de função fora do padrão, o mesmo comentário, o mesmo erro no mesmo lugar).
+- **No histórico**: as três etapas commitadas no mesmo dia, perto do prazo; um commit gigante com tudo.
+- **De fora do curso**: recursos que a turma não viu até o E31, como navegação, `AsyncStorage`, contexto, hooks próprios, `useReducer`, TypeScript ou bibliotecas de componentes prontos.
+- **Na conversa**: o aluno não explica o próprio código.
 
-Como agir: converse em particular e peça, em 5 minutos, uma mudança ao vivo no próprio projeto:
-"troque o copo de 500 por 400", "deixe a barra verde quando bater a meta", "mostre onde o total é
-calculado". Quem fez resolve rápido. Se não explicar nem alterar, devolva o projeto para refazer as
-etapas com commits próprios e siga a regra da instituição para cópia; a conversa vale mais que a
-punição.
+**Como agir:** antes de dar a nota, chame o aluno por 5 minutos. Peça que explique o `adicionarCopo` e o `removerRegistro`, e que faça uma mudança pequena na hora, como trocar o copo de 500 por um de 400 ou mudar a cor do `BotaoCopo`. Quem explica e muda com segurança fica com a nota do código. Quem não consegue recebe a entrega devolvida para ajustes, com o combinado de refazer a parte copiada; em caso de cópia entre colegas, siga a regra da instituição para os dois.
+
+## Devolver ou dar a nota
+
+Devolva para ajustes quando o problema se resolve em até uma hora: o app que não abre do zero ou trava (`onPress` sem o `() =>`, `Reduce of empty array`, um `import` com o caminho errado), o Remover que falta, o README sem prints, o repositório privado. Escreva no comentário do critério o passo do roteiro de uso que falhou ("passo 5: Remover tira todos os copos"). Dê a nota final quando o app cumpre os critérios ou quando o aluno já usou a chance de ajuste.

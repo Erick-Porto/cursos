@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E04 · npm e o Racha-conta",
+  "description": "Dez questões sobre a conta em JSON, o subtotal com reduce, o package.json, os scripts do npm e os pacotes do Racha-conta.",
+  "lesson": "e04-npm-e-o-racha-conta",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O `conta.json` do Racha-conta foi lido com `JSON.parse` e guardado em `conta`. Os itens são:\n\n```json\n\"itens\": [\n  { \"descricao\": \"Pizza grande marguerita\", \"quantidade\": 1, \"preco\": 72.9 },\n  { \"descricao\": \"Pizza grande calabresa\", \"quantidade\": 1, \"preco\": 68.9 },\n  { \"descricao\": \"Refrigerante 2 litros\", \"quantidade\": 2, \"preco\": 14.5 }\n]\n```\n\nO que mostra `console.log(conta.itens[1].descricao)`?",
+      "options": {
+        "a": "`Pizza grande calabresa`",
+        "b": "`Pizza grande marguerita`",
+        "c": "`Refrigerante 2 litros`",
+        "d": "`undefined`, porque não existe o item 1"
+      },
+      "answer": "a",
+      "explanation": "A fileira de gavetas começa no 0: `itens[0]` é a marguerita, `itens[1]` é a calabresa e `itens[2]` é o refrigerante. O ponto depois do `[1]` entra no campo `descricao` daquela ficha.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o valor de `subtotal` depois destas linhas?\n\n```javascript\nconst itens = [\n  { preco: 10, quantidade: 2 },\n  { preco: 5, quantidade: 1 },\n];\nconst subtotal = itens.reduce((total, item) => total + item.preco * item.quantidade, 0);\n```",
+      "options": {
+        "a": "`25`",
+        "b": "`15`",
+        "c": "`18`",
+        "d": "`3`"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta: o visor começa em 0; na volta 1, `0 + 10 * 2` dá 20; na volta 2, `20 + 5 * 1` dá 25. A multiplicação vem antes da soma. O `15` esquece a quantidade, e o `3` é a soma das quantidades.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O subtotal da conta é `187.5`. O que mostra `console.log('Subtotal: R$', subtotal.toFixed(2))`?",
+      "options": {
+        "a": "`Subtotal: R$ 187.50`",
+        "b": "`Subtotal: R$ 187,50`",
+        "c": "`Subtotal: R$ 187.5`",
+        "d": "`Subtotal: R$ 188`"
+      },
+      "answer": "a",
+      "explanation": "O `toFixed(2)` mostra o número com 2 casas depois do ponto, então `187.5` vira `187.50`. A vírgula do jeito brasileiro não aparece sozinha: ela chega no Racha-conta no E09.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Logo depois do `npm init -y`, o `racha.js` passou a falhar com `SyntaxError: Cannot use import statement outside a module`. No `package.json` está `\"type\": \"commonjs\"`. Como corrigir?",
+      "options": {
+        "a": "Trocar a linha por `\"type\": \"module\"`",
+        "b": "Apagar as linhas de `import` do `racha.js`",
+        "c": "Rodar `npm install` de novo",
+        "d": "Apagar o `package.json`"
+      },
+      "answer": "a",
+      "explanation": "O código usa `import`, e o modo `commonjs` não entende `import`. Com `\"type\": \"module\"`, o Node lê os arquivos do projeto no modo certo. Deixe uma linha `type` só: se houver duas, vale a última.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O `package.json` do Racha-conta tem:\n\n```json\n\"scripts\": {\n  \"racha\": \"node src/scripts/racha.js\"\n}\n```\n\nQual comando mostra a conta?",
+      "options": {
+        "a": "`npm run racha`",
+        "b": "`npm racha`",
+        "c": "`node racha`",
+        "d": "`npm run src/scripts/racha.js`"
+      },
+      "answer": "a",
+      "explanation": "`npm run` mais o apelido roda o comando que está à direita do apelido. Sem o `run`, o npm responde `Unknown command`. O apelido existe justamente para você não precisar escrever o caminho do arquivo.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Uma colega entrou em `src/scripts` com `cd src/scripts` e rodou `npm run racha`. O que acontece?",
+      "options": {
+        "a": "Funciona: o npm roda o comando a partir da pasta raiz do projeto",
+        "b": "Dá `ENOENT`, porque o terminal está fora da pasta raiz",
+        "c": "Dá `Missing script`, porque o `package.json` não está em `src/scripts`",
+        "d": "Dá `Unknown command`"
+      },
+      "answer": "a",
+      "explanation": "O npm procura o `package.json` subindo de pasta em pasta e roda o script a partir da pasta raiz, onde ele está. Por isso o `ENOENT` da pasta errada, que aparecia com `node` dentro de `src/scripts` na aula 3, não acontece com `npm run`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Depois de mexer no `package.json`, todo `npm run` falha com `EJSONPARSE`. O trecho editado é:\n\n```json\n\"scripts\": {\n  \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  \"racha\": \"node src/scripts/racha.js\"\n},\n```\n\nO que está errado?",
+      "options": {
+        "a": "Falta a vírgula no fim da linha do `test`",
+        "b": "Sobra a vírgula depois da chave que fecha `scripts`",
+        "c": "O apelido `racha` precisa ficar sem aspas",
+        "d": "O comando precisa de aspas simples"
+      },
+      "answer": "a",
+      "explanation": "Dentro das chaves, cada linha termina com vírgula, menos a última. A linha do `test` não é a última, então precisa da vírgula. A vírgula depois de `}` está certa, porque ainda vêm outros campos. Em JSON, tudo vai com aspas duplas.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Na pasta raiz do Racha-conta, você roda `npm install picocolors`. O que muda no projeto? Marque todas as certas.",
+      "options": {
+        "a": "Aparece a pasta `node_modules/`, com o código do pacote",
+        "b": "O `package.json` ganha `\"picocolors\"` em `\"dependencies\"`",
+        "c": "Aparece o `package-lock.json`, com a versão exata instalada",
+        "d": "O `racha.js` ganha sozinho a linha `import pc from 'picocolors'`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `npm install` baixa o pacote para o `node_modules`, anota o nome em `dependencies` e grava a versão exata no `package-lock.json`. Ele não mexe no seu código: o `import` você escreve.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "Você vai levar o Racha-conta para outro computador num pendrive. O que precisa ir junto? Marque todas as certas.",
+      "options": {
+        "a": "A pasta `src/`",
+        "b": "O `package.json`",
+        "c": "O `package-lock.json`",
+        "d": "A pasta `node_modules/`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O código, a ficha e a nota fiscal vão junto. O `node_modules` fica: é grande, e no outro computador o `npm install` lê o `package.json` e o `package-lock.json` e baixa tudo de novo, nas mesmas versões.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No `package.json`, o pacote aparece como `\"picocolors\": \"^1.1.1\"`. O autor publicou as versões `1.2.0` e `2.0.0`. Sem `package-lock.json`, qual delas o `npm install` pode instalar?",
+      "options": {
+        "a": "A `1.2.0`, porque o primeiro número continua 1",
+        "b": "A `2.0.0`, porque é a mais nova",
+        "c": "Só a `1.1.1` exata, sem atualização",
+        "d": "Qualquer uma, porque o `^` aceita tudo"
+      },
+      "answer": "a",
+      "explanation": "O `^` aceita correções e novidades, desde que o primeiro número, o principal, continue o mesmo. A `2.0.0` muda o primeiro número e pode quebrar o código, então fica de fora.",
+      "points": 1
+    }
+  ]
+}

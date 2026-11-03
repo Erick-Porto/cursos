@@ -1,7 +1,7 @@
 {
-  "title": "Prova 3: Introdução ao ambiente React Native",
-  "description": "Prova do encontro E29, aplicada em sala na última hora. Cobre os encontros E26 a E29: mobile e React Native, Expo e Expo Go, componentes essenciais, StyleSheet e Flexbox, estado, FlatList e Alert, depuração e a passagem do app web para o celular. Uma tentativa, 60 minutos, nota mínima 70. O gabarito é liberado pelo instrutor após a correção.",
-  "lesson": "e29b-revisao-react-native",
+  "title": "Prova 3 · Introdução ao React Native",
+  "description": "Prova da unidade de React Native, na última hora do E32. Cobre do E29 ao E31: o app no celular com React Native e Expo, componentes nativos e estilo, estado e listas no Gota. São 20 questões, 60 minutos, uma tentativa, sem consulta, e a nota mínima é 70. O gabarito não aparece ao enviar.",
+  "lesson": "e32-revisao-de-react-native",
   "kind": "exam",
   "passing_score": 70,
   "max_attempts": 1,
@@ -14,265 +14,287 @@
     {
       "id": "q1",
       "type": "single",
-      "prompt": "Qual é a diferença essencial entre um app híbrido e um app React Native?",
+      "prompt": "Uma equipe precisa de um app de 8 telas, para Android e para iPhone. Quantas telas ela escreve do jeito tradicional (uma vez em Kotlin, outra em Swift) e quantas com React Native?",
       "options": {
-        "a": "O híbrido roda um site dentro de uma WebView; o React Native transforma o JavaScript em componentes nativos reais",
-        "b": "O híbrido é escrito em Kotlin e o React Native em Swift",
-        "c": "O React Native exige duas bases de código, uma por sistema; o híbrido usa uma só",
-        "d": "Não há diferença: os dois empacotam uma página web"
+        "a": "16 do jeito tradicional e 8 com React Native",
+        "b": "8 do jeito tradicional e 16 com React Native",
+        "c": "8 nos dois jeitos: o sistema copia as telas sozinho",
+        "d": "16 nos dois jeitos: o React Native também pede um código para cada sistema"
       },
       "answer": "a",
-      "explanation": "No híbrido, a interface é uma página web dentro do app. No React Native, cada `View` e `Text` vira um componente nativo do sistema, com a mesma base de código JavaScript para Android e iOS. Kotlin e Swift são as linguagens do desenvolvimento nativo."
+      "explanation": "No jeito tradicional, cada tela é escrita duas vezes, uma na língua de cada sistema: 8 + 8. O React Native é o intérprete: você escreve o JSX uma vez, e ele repete cada peça na língua do Android e na do iPhone. Por isso, as mesmas 8 telas servem aos dois.",
+      "points": 2
     },
     {
       "id": "q2",
-      "type": "multiple",
-      "prompt": "O que o Expo oferece a quem desenvolve em React Native?",
+      "type": "single",
+      "prompt": "O que o celular mostra?\n\n```jsx\n<Tela>\n  <Text>Gota</Text>\n  <View>\n    <Text>Meta do dia</Text>\n    {/* <Text>2000 ml</Text> */}\n    <Text>2500 ml</Text>\n  </View>\n</Tela>\n```",
       "options": {
-        "a": "Criar o projeto com um único comando",
-        "b": "Rodar o app no celular sem instalar Android Studio ou Xcode",
-        "c": "Publicar o app nas lojas sem nenhuma configuração",
-        "d": "Pacotes prontos para câmera, localização e outros recursos do aparelho"
+        "a": "`Gota`, `Meta do dia` e `2500 ml`, um embaixo do outro",
+        "b": "`Gota`, `Meta do dia`, `2000 ml` e `2500 ml`, um embaixo do outro",
+        "c": "`Gota`, `Meta do dia`, o texto do comentário e `2500 ml`",
+        "d": "O aviso `Text strings must be rendered within a <Text> component.`, porque o comentário ficou solto na `View`"
       },
-      "answer": [
-        "a",
-        "b",
-        "d"
-      ],
-      "explanation": "O Expo gera o projeto, roda no celular pelo Expo Go e traz pacotes para os recursos do aparelho. Publicar nas lojas continua exigindo contas, configuração e build; o Expo ajuda, mas não elimina esse trabalho.",
+      "answer": "a",
+      "explanation": "O que fica entre `{/*` e `*/}` é um comentário no JSX: não aparece no celular e não conta como texto solto. Os três `Text` aparecem em coluna, um embaixo do outro, com o espaço da `Tela` entre o \"Gota\" e a `View`.",
       "points": 2
     },
     {
       "id": "q3",
-      "type": "fill",
-      "prompt": "Para iniciar o servidor de desenvolvimento do app Expo e exibir o QR code, você roda npx expo ___ na pasta do projeto.",
-      "answer": [
-        [
-          "start"
-        ]
-      ],
-      "explanation": "`npx expo start` liga o servidor e mostra o QR code que o Expo Go lê. Com `-c` ele limpa o cache e com `--tunnel` funciona mesmo em redes diferentes."
+      "type": "single",
+      "prompt": "Ao salvar este trecho, uma faixa escura aparece embaixo da tela do celular, e o terminal mostra `Text strings must be rendered within a <Text> component.` O que está errado?\n\n```jsx\n<View>\n  <Text>Meta do dia</Text>\n  <Text>2000 ml</Text>.\n</View>\n```",
+      "options": {
+        "a": "O ponto final ficou fora do `</Text>`, solto dentro da `View`",
+        "b": "Uma `View` não pode ter dois `Text` dentro dela",
+        "c": "A `View` precisa ser escrita `view`, em minúscula",
+        "d": "Falta uma `<div>` em volta dos dois `Text`"
+      },
+      "answer": "a",
+      "explanation": "No celular, todo texto mora num `Text`, até um ponto. O `.` depois do `</Text>` ficou solto na `View`, e o React Native avisa. O conserto é apagar o ponto ou levá-lo para dentro: `<Text>2000 ml.</Text>`. Uma `View` agrupa quantas peças você quiser; `view`, em minúscula, e `div` não existem no celular.",
+      "points": 2
     },
     {
       "id": "q4",
-      "type": "single",
-      "prompt": "Ao ler o QR code, o Expo Go mostra \"Something went wrong\" e o app não abre. Qual é a primeira coisa a verificar?",
+      "type": "multiple",
+      "prompt": "No Wi-Fi da escola, Bia lê o QR code do terminal, e o Expo Go mostra `Something went wrong`. O que pode ser a causa? Marque todas as certas.",
       "options": {
-        "a": "Se o celular e o computador estão na mesma rede Wi-Fi",
-        "b": "Se o Node.js está instalado no celular",
-        "c": "Se o VS Code está aberto no projeto",
-        "d": "Se o app.json tem um ícone definido"
+        "a": "O celular está nos dados móveis, e não no Wi-Fi do computador",
+        "b": "A rede da escola não deixa um aparelho falar com o outro",
+        "c": "Na primeira vez, a janela do firewall do Windows apareceu, e Bia fechou sem clicar em **Permitir acesso**",
+        "d": "O `.gitignore` do projeto tem a linha `node_modules/`",
+        "e": "O `App.js` tem dois `Text` dentro da mesma `View`"
       },
-      "answer": "a",
-      "explanation": "O Expo Go baixa o app do servidor que roda no seu computador; se os dois não estão na mesma rede (ou um firewall bloqueia), a conexão falha. O plano B é `npx expo start --tunnel`. Node.js roda no computador, não no celular."
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "`Something went wrong` quer dizer que o celular não alcança o computador. O servidor é uma rádio de alcance curto: só pega no mesmo Wi-Fi, numa rede que deixe os aparelhos se falarem, e com o porteiro do computador, o firewall, liberando o Node.js. O `.gitignore` e o código não mudam a conexão. Se a rede bloqueia, o caminho é o túnel.",
+      "points": 2
     },
     {
       "id": "q5",
       "type": "single",
-      "prompt": "O que acontece ao renderizar este trecho no React Native?\n\n```jsx\n<View>\n  Minhas tarefas\n  <Text>3 pendentes</Text>\n</View>\n```",
+      "prompt": "A rede da sala isola os aparelhos, e o instrutor pede que todos liguem o servidor com `npx expo start --tunnel`. O que o túnel precisa para funcionar?",
       "options": {
-        "a": "Mostra as duas linhas normalmente",
-        "b": "Erro na tela vermelha: texto solto fora de um componente Text",
-        "c": "Mostra só \"3 pendentes\" e ignora o texto solto",
-        "d": "Mostra só \"Minhas tarefas\""
+        "a": "A conta Expo no terminal, com `npx expo login`",
+        "b": "O celular e o computador fora do Wi-Fi",
+        "c": "Rodar antes o `npm audit fix --force`",
+        "d": "Trocar a `View` do topo por uma `div`"
       },
-      "answer": "b",
-      "explanation": "No React Native todo texto precisa estar dentro de `Text`. \"Minhas tarefas\" está direto na `View`, o que gera o erro \"Text strings must be rendered within a <Text> component\" e para o app.",
-      "points": 2
+      "answer": "a",
+      "explanation": "O túnel leva o app pela internet, como um desvio quando a rua de sempre está fechada, e ele pede a conta Expo no terminal. Sem o login, o terminal avisa `Couldn't create a signed tunnel URL for this project. You're not logged in to your Expo account`. O `npm audit fix --force` troca o Expo do kit por um antigo, que o Expo Go não abre.",
+      "points": 1
     },
     {
       "id": "q6",
-      "type": "single",
-      "prompt": "A imagem remota abaixo não aparece na tela. O que falta?\n\n```jsx\n<Image source={{ uri: 'https://exemplo.com/foto.png' }} />\n```",
-      "options": {
-        "a": "O atributo alt com a descrição",
-        "b": "Um style com width e height",
-        "c": "Usar require em vez de uri",
-        "d": "Nada: imagens remotas demoram a carregar"
-      },
-      "answer": "b",
-      "explanation": "Imagens remotas não têm tamanho conhecido antes de carregar, então ocupam zero pixels. É preciso informar `width` e `height` no `style`. `require` serve para imagens locais da pasta `assets/`."
+      "type": "truefalse",
+      "prompt": "Depois de apertar Ctrl + C no terminal do `npx expo start`, o celular continua recebendo as mudanças do `App.js` a cada vez que você salva.",
+      "answer": false,
+      "explanation": "O Ctrl + C desliga o servidor: a rádio sai do ar, e o Fast Refresh para. Para o celular voltar a mudar ao salvar, é preciso ligar de novo com `npx expo start` e, se ele não reconectar sozinho, ler o QR code outra vez.",
+      "points": 1
     },
     {
       "id": "q7",
-      "type": "truefalse",
-      "prompt": "No React Native, Pressable aceita qualquer conteúdo e estilo próprio, enquanto Button recebe apenas um título e tem aparência fixa do sistema.",
-      "answer": true,
-      "explanation": "`Button` é rápido de usar, mas só aceita `title`, `onPress` e `color`. `Pressable` envolve o que você quiser (Text, Image, View) e recebe `style`, por isso é a escolha para botões com identidade visual."
+      "type": "single",
+      "prompt": "No E29, o Gota ganhou um `.gitignore` com estas duas linhas. Por que as duas pastas ficam fora do Git?\n\n```plaintext\nnode_modules/\n.expo/\n```",
+      "options": {
+        "a": "A `node_modules/` tem os pacotes, que o `npm install` refaz; a `.expo/` tem configurações da sua máquina, criadas pelo `npx expo start`",
+        "b": "As duas têm o código que você escreveu, e o Git guardaria tudo duas vezes",
+        "c": "Sem as duas no `.gitignore`, o `npx expo start` não liga",
+        "d": "A `.expo/` guarda os prints do README, e a `node_modules/`, o seu `BotaoCopo.js`"
+      },
+      "answer": "a",
+      "explanation": "O `.gitignore` é o que fica fora da foto. O `node_modules/` são centenas de megabytes de pacotes, que qualquer um baixa de novo com `npm install`, nas versões do `package-lock.json`. A `.expo/` nasce no `npx expo start`, com configurações da sua máquina. O seu código, como o `App.js` e o `BotaoCopo.js`, entra no commit.",
+      "points": 1
     },
     {
       "id": "q8",
       "type": "single",
-      "prompt": "Qual objeto de estilo está escrito corretamente para o StyleSheet do React Native?",
+      "prompt": "Como os três textos aparecem no celular?\n\n```jsx\n<View>\n  <Text style={estilos.titulo}>Gota</Text>\n  <Text style={estilos.meta}>2000 ml</Text>\n  <Text>Meta do dia</Text>\n</View>\n\nconst estilos = StyleSheet.create({\n  titulo: {\n    fontSize: 32,\n    fontWeight: 'bold',\n  },\n  meta: {\n    fontsize: 24,\n    color: cores.agua,\n  },\n});\n```",
       "options": {
-        "a": "{ 'font-size': '18px' }",
-        "b": "{ fontSize: 18 }",
-        "c": "{ fontSize: '18px' }",
-        "d": "{ font-size: 18 }"
+        "a": "`Gota` grande e em negrito; `2000 ml` azul, no tamanho padrão; `Meta do dia` preto, no tamanho padrão",
+        "b": "`Gota` grande e em negrito; `2000 ml` azul e com letra 24; `Meta do dia` preto, no tamanho padrão",
+        "c": "A tela de erro, porque o `estilos` foi criado depois do `return`",
+        "d": "Os três grandes e em negrito, porque o primeiro estilo vale para a `View` inteira"
       },
-      "answer": "b",
-      "explanation": "No StyleSheet as propriedades ficam em camelCase e os números não levam unidade: `fontSize: 18`. `'18px'` é uma string com unidade, que não é válida."
+      "answer": "a",
+      "explanation": "O nome da propriedade é `fontSize`, em camelCase, com o S maiúsculo. Escrito `fontsize`, o React Native não reconhece e ignora, sem erro: o `2000 ml` fica azul, pela `color`, mas no tamanho padrão. Cada estilo vale só para a peça que tem o `style` dele; o `Text` sem `style` fica preto e no tamanho padrão. O `estilos` no fim do arquivo funciona, porque a tela só é desenhada depois que o arquivo inteiro foi lido.",
+      "points": 2
     },
     {
       "id": "q9",
       "type": "single",
-      "prompt": "Como os dois textos ficam na tela?\n\n```jsx\n<View style={{ flexDirection: 'row', justifyContent: 'center' }}>\n  <Text>Título</Text>\n  <Text>Alta</Text>\n</View>\n```",
+      "prompt": "Um colega quer pôr a gota pequena dentro do `BotaoCopo`, no arquivo `src/components/BotaoCopo.js`. A imagem está em `assets/gota.png`, na raiz do projeto, a mesma que o `App.js` usa. Qual linha acha o arquivo?",
       "options": {
-        "a": "Lado a lado, juntos no centro da linha",
-        "b": "Um embaixo do outro, centralizados",
-        "c": "Lado a lado, um em cada extremidade da linha",
-        "d": "Lado a lado, colados à esquerda"
+        "a": "`<Image source={require('../../assets/gota.png')} style={estilos.gota} />`",
+        "b": "`<Image source={require('./assets/gota.png')} style={estilos.gota} />`",
+        "c": "`<Image source={require('../assets/gota.png')} style={estilos.gota} />`",
+        "d": "`<Image src=\"assets/gota.png\" style={estilos.gota} />`"
       },
       "answer": "a",
-      "explanation": "`flexDirection: 'row'` coloca os filhos lado a lado e `justifyContent: 'center'` os agrupa no centro do eixo principal (a linha). Para um em cada extremidade seria `space-between`; sem `row`, ficariam um embaixo do outro.",
-      "points": 2
+      "explanation": "O caminho do `require` parte da pasta do arquivo. De `src/components/`, o primeiro `..` sobe para `src/`, e o segundo, para a raiz, onde está `assets/`, como o `cd ../..` da aula 3. É o caminho da `ListaVazia` do kit. Com `'../assets/gota.png'`, a busca vai para `src/assets/`, e a tela de erro diz `Unable to resolve`. O `src` é da `<img>` da web.",
+      "points": 1
     },
     {
       "id": "q10",
-      "type": "multiple",
-      "prompt": "Quais trechos aplicam estilos corretamente no React Native?",
+      "type": "single",
+      "prompt": "No `BotaoCopo`, o toque ficou assim. A pessoa toca no botão que tem `ml={300}`. O que aparece no terminal do `npx expo start`?\n\n```jsx\n<Pressable\n  style={estilos.botao}\n  onPress={() => console.log('Copo de ${ml} ml')}\n>\n```",
       "options": {
-        "a": "style={estilos.cartao}",
-        "b": "style=\"cartao\"",
-        "c": "style={[estilos.cartao, concluida && estilos.concluida]}",
-        "d": "className={estilos.cartao}"
+        "a": "` LOG  Copo de ${ml} ml`",
+        "b": "` LOG  Copo de 300 ml`",
+        "c": "` LOG  Copo de ml ml`",
+        "d": "Nada: o terminal só mostra os erros"
       },
-      "answer": [
-        "a",
-        "c"
-      ],
-      "explanation": "`style` recebe um objeto do StyleSheet ou um array de objetos (o `false` do `&&` é ignorado, o que permite o estilo condicional). String em `style` e `className` são hábitos da web que não existem no React Native.",
+      "answer": "a",
+      "explanation": "A template string, a mensagem pronta com lacunas do E06, vai entre crases. Entre aspas simples, o `${ml}` é só texto e aparece letra por letra. Com crases, a lacuna recebe o 300, e o terminal mostra `Copo de 300 ml`. O `console.log` do app sempre aparece no terminal do `npx expo start`, com `LOG` na frente.",
       "points": 2
     },
     {
       "id": "q11",
       "type": "single",
-      "prompt": "No TextInput do React Native, qual prop entrega o texto digitado diretamente, como string, sem e.target.value?",
+      "prompt": "O `BotaoCopo` é o da etapa 2: fundo azul, cantos redondos e `+{ml} ml` em branco. Como os botões aparecem no celular?\n\n```jsx\n<Tela>\n  <BotaoCopo ml={200} />\n  <Linha>\n    <BotaoCopo ml={300} />\n    <BotaoCopo ml={500} />\n  </Linha>\n</Tela>\n```",
       "options": {
-        "a": "onChange",
-        "b": "onChangeText",
-        "c": "onInput",
-        "d": "onSubmit"
+        "a": "Em cima, `+200 ml` numa faixa azul da largura da tela; embaixo, `+300 ml` e `+500 ml` lado a lado, cada um do tamanho do texto",
+        "b": "Os três lado a lado, porque a `Linha` vale para a `Tela` inteira",
+        "c": "Três faixas azuis da largura da tela, uma embaixo da outra",
+        "d": "Só o `+200 ml`, porque a `Tela` aceita uma peça só"
       },
-      "answer": "b",
-      "explanation": "`onChangeText` recebe o texto pronto, por isso `onChangeText={setTexto}` funciona. `onChange` existe, mas entrega um evento nativo sem `target`, e `onInput` e `onSubmit` são da web."
+      "answer": "a",
+      "explanation": "Na `Tela`, as peças ficam em coluna, e cada uma ganha a linha inteira, como no caderno: o `+200 ml`, sozinho, vira uma faixa. A `Linha` do kit põe lado a lado só o que está entre `<Linha>` e `</Linha>`, com o espaço dividido entre as peças: o `+300 ml` numa ponta, o `+500 ml` na outra.",
+      "points": 2
     },
     {
       "id": "q12",
-      "type": "single",
-      "prompt": "Qual prop falta nesta FlatList para desenhar cada tarefa na tela?\n\n```jsx\n<FlatList\n  data={tarefas}\n  keyExtractor={(item) => String(item.id)}\n/>\n```",
+      "type": "multiple",
+      "prompt": "Sobre o `BotaoCopo.js` do Gota, marque todas as frases certas.",
       "options": {
-        "a": "renderItem={({ item }) => <CartaoTarefa titulo={item.titulo} />}",
-        "b": "children={tarefas.map((t) => <CartaoTarefa titulo={t.titulo} />)}",
-        "c": "item={<CartaoTarefa />}",
-        "d": "map={(item) => <CartaoTarefa titulo={item.titulo} />}"
+        "a": "O estilo da caixa (`backgroundColor`, `borderRadius` e `padding`) vai no `Pressable`; o da letra (`color`, `fontSize` e `fontWeight`), no `Text` de dentro",
+        "b": "O `padding: 12` deixa 12 pontos de espaço entre a borda do botão e o texto, nos quatro lados",
+        "c": "O `estilos` do `BotaoCopo.js` se mistura com o do `App.js`, por isso os dois precisam ter nomes diferentes",
+        "d": "No `Pressable`, o toque vai no `onClick`, como no `<button>` do Projeto 4",
+        "e": "Sem o `export default`, o `import` do `App` não recebe a peça, e a tela mostra `Element type is invalid`"
       },
-      "answer": "a",
-      "explanation": "A `FlatList` percorre `data` por você e chama `renderItem` para cada item, entregando um objeto `{ item, index }`. Colocar um `map` como filho faz a lista perder a eficiência e não é a forma correta.",
+      "answer": [
+        "a",
+        "b",
+        "e"
+      ],
+      "explanation": "A caixa recebe a cor do fundo, os cantos e o espaço por dentro, o plástico-bolha; a cor e o tamanho da letra são do `Text`. Cada arquivo tem o seu `estilos`, sem confusão. No celular, o toque é o `onPress`; o `onClick` é da web. O `export default` põe a peça na vitrine; sem ele, o `import` não acha nada para encaixar.",
       "points": 2
     },
     {
       "id": "q13",
-      "type": "single",
-      "prompt": "Como abrir a caixa nativa de confirmação antes de remover uma tarefa?",
-      "options": {
-        "a": "window.confirm('Remover?')",
-        "b": "Alert.alert('Remover?', 'Esta ação não pode ser desfeita', [{ text: 'Cancelar' }, { text: 'Remover', onPress: () => removerTarefa(id) }])",
-        "c": "console.log('Remover?')",
-        "d": "Alert('Remover?', () => removerTarefa(id))"
-      },
-      "answer": "b",
-      "explanation": "`Alert.alert` recebe título, mensagem e uma lista de botões; cada botão é um objeto com `text` e, se precisar agir, `onPress`. `window.confirm` é do navegador e `Alert` não é chamado diretamente como função."
+      "type": "fill",
+      "prompt": "No CSS do E01, a cor do fundo era `background`. Complete o estilo do botão com o nome da propriedade no `StyleSheet`:\n\n```jsx\nbotao: {\n  ___: cores.agua,\n  borderRadius: 12,\n  padding: 12,\n},\n```",
+      "answer": [
+        [
+          "backgroundColor"
+        ]
+      ],
+      "explanation": "A cor do fundo é `backgroundColor`, em camelCase: as palavras emendadas, com maiúscula no começo da segunda, como as corcovas do camelo. O valor vem do tema, `cores.agua`, sem escrever o código da cor.",
+      "points": 1
     },
     {
       "id": "q14",
       "type": "single",
-      "prompt": "Onde aparece a saída de um console.log em um app rodando no Expo Go?",
+      "prompt": "Um colega escreveu o `adicionarCopo` assim. Ao abrir, `registros` está vazio; a pessoa toca em +200 e depois em +500. O que a lista mostra, de cima para baixo, e qual é o total?\n\n```jsx\nfunction adicionarCopo(ml) {\n  const novo = { id: Date.now(), ml: ml, hora: horaAgora() };\n  setRegistros([...registros, novo]);\n}\n```",
       "options": {
-        "a": "No console do navegador, aba Console",
-        "b": "No terminal onde npx expo start está rodando",
-        "c": "Em uma caixa na tela do celular",
-        "d": "No arquivo app.json"
+        "a": "200 ml e 500 ml; total de 700 ml",
+        "b": "500 ml e 200 ml; total de 700 ml",
+        "c": "Só o de 500 ml; total de 500 ml",
+        "d": "Nenhum copo: sem o `push`, a lista não muda"
       },
-      "answer": "b",
-      "explanation": "O Expo envia os logs do celular para o terminal do servidor de desenvolvimento. O console do navegador só vale para apps web; na tela do celular aparecem apenas os erros (tela vermelha) e os avisos (amarelo)."
+      "answer": "a",
+      "explanation": "Em `[...registros, novo]`, os três pontos copiam os registros de antes, e o `novo` vem depois deles: o copo novo vai para o fim, e o mais antigo fica em cima. A ordem não muda o total: 200 + 500 = 700. No Gota, o pedido é o novo em cima: `[novo, ...registros]`. O `push` é que não serve: ele rasura a lista velha, e o React não desenha de novo.",
+      "points": 2
     },
     {
       "id": "q15",
-      "type": "truefalse",
-      "prompt": "Um aviso amarelo (warning) no Expo interrompe a execução do app até que o problema seja corrigido.",
-      "answer": false,
-      "explanation": "O aviso amarelo avisa, mas o app continua rodando; é a tela vermelha que para o app. Mesmo assim, avisos como key faltando merecem correção."
+      "type": "single",
+      "prompt": "Estes são os registros do dia. O que o `ProgressoMeta` mostra?\n\n```jsx\nconst registros = [\n  { id: 4, ml: 500, hora: '15:10' },\n  { id: 3, ml: 500, hora: '13:00' },\n  { id: 2, ml: 300, hora: '10:20' },\n  { id: 1, ml: 200, hora: '08:05' },\n];\nconst total = registros.reduce((soma, registro) => soma + registro.ml, 0);\n\n<ProgressoMeta total={total} meta={2000} />\n```",
+      "options": {
+        "a": "1500 ml, 75% da meta e Faltam 500 ml",
+        "b": "500 ml, 25% da meta e Faltam 1500 ml",
+        "c": "4 ml, 0% da meta e Faltam 1996 ml",
+        "d": "2000 ml, 100% da meta e Meta batida!"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta, a calculadora vai acumulando: 0 + 500 = 500; 500 + 500 = 1000; 1000 + 300 = 1300; 1300 + 200 = 1500. Com 1500 de 2000, o cartão mostra 75% e faltam 500. O 500 é só o primeiro copo, e o 4 é a quantidade de copos, o `registros.length`.",
+      "points": 2
     },
     {
       "id": "q16",
       "type": "single",
-      "prompt": "Qual é a tradução correta deste campo do app web para o React Native?\n\n```jsx\n<input value={texto} onChange={(e) => setTexto(e.target.value)} />\n```",
+      "prompt": "No `App`, o copo do meio ficou com aspas: `<BotaoCopo ml=\"300\" aoAdicionar={adicionarCopo} />`. Ao abrir, a pessoa toca duas vezes nele. O que o cartão da meta mostra no lugar do total?",
       "options": {
-        "a": "<TextInput value={texto} onChangeText={setTexto} />",
-        "b": "<TextInput value={texto} onChange={(e) => setTexto(e.target.value)} />",
-        "c": "<input value={texto} onChangeText={setTexto} />",
-        "d": "<Text value={texto} onChangeText={setTexto} />"
+        "a": "`600 ml`",
+        "b": "`0300300 ml`",
+        "c": "`300300 ml`",
+        "d": "`NaN ml`"
       },
-      "answer": "a",
-      "explanation": "O componente é `TextInput` e o evento é `onChangeText`, que já entrega a string. `e.target.value` não existe no React Native, `input` é uma tag HTML e `Text` só exibe texto.",
+      "answer": "b",
+      "explanation": "Com aspas, o `ml` chega como texto, `'300'`. No `reduce`, o visor começa no número 0, e `0 + '300'` junta em vez de somar: `'0300'`; mais `'300'`, `'0300300'`. O botão mostra `+300 ml` do mesmo jeito, por isso o engano passa despercebido até a soma. Número vai entre chaves: `ml={300}`.",
       "points": 2
     },
     {
       "id": "q17",
-      "type": "multiple",
-      "prompt": "Você vai levar o `minhas-tarefas` do navegador para o `minhas-tarefas-mobile`. Quais partes podem ser copiadas **sem mudar uma linha**?",
-      "options": {
-        "a": "A função `alternarConcluida`, que usa `map` e spread para criar um array novo",
-        "b": "A função `carregarTarefas`, com `fetch` e `async/await`, e o `useEffect` que a chama",
-        "c": "O JSX do cartão, com `li`, `span` e `button`",
-        "d": "O arquivo `CartaoTarefa.module.css`, com as classes do cartão"
-      },
+      "type": "fill",
+      "prompt": "Complete o `keyExtractor` da `FlatList` do Gota. Ele devolve o crachá de cada registro: o `id`, transformado em texto.\n\n```jsx\nkeyExtractor={(item) => ___(item.id)}\n```",
       "answer": [
-        "a",
-        "b"
+        [
+          "String"
+        ]
       ],
-      "explanation": "Funções de estado, `map`, spread, `fetch`, `async/await` e `useEffect` são JavaScript e React, não navegador: rodam iguais no celular. O que desenha a tela muda: `li`, `span` e `button` não existem no React Native (viram `View`, `Text` e `Pressable`), e arquivos CSS não são lidos; os estilos viram objetos do `StyleSheet`.",
-      "points": 2
+      "explanation": "A `FlatList` pede o crachá de cada item como texto. O `String()` transforma o número do `id`, que vem do `Date.now()`, em texto: é o par do `Number()` do E09, que faz o caminho contrário.",
+      "points": 1
     },
     {
       "id": "q18",
-      "type": "fill",
-      "prompt": "Você trocou o name no app.json, mas o Expo Go continua mostrando o nome antigo. Pare o servidor e rode npx expo start ___ para limpar o cache.",
-      "answer": [
-        [
-          "-c",
-          "--clear"
-        ]
-      ],
-      "explanation": "`-c` (ou `--clear`) limpa o cache do empacotador, que às vezes guarda versões antigas dos arquivos. É o caminho depois de mudar o `app.json` ou quando o código \"não muda\" nem com `r`. `--tunnel` muda só o caminho até o celular, não o cache."
+      "type": "single",
+      "prompt": "O `removerRegistro` ficou com `===`. A lista tem três copos: 500 ml (id 3), 300 ml (id 2) e 200 ml (id 1). A pessoa toca em Remover no copo de 300. O que fica na lista, e qual é o total?\n\n```jsx\nfunction removerRegistro(id) {\n  setRegistros(registros.filter((registro) => registro.id === id));\n}\n```",
+      "options": {
+        "a": "Só o copo de 300 ml; total de 300 ml",
+        "b": "Os copos de 500 e de 200 ml; total de 700 ml",
+        "c": "Nenhum copo, e a lista vazia volta",
+        "d": "Os três copos, porque o `filter` não muda a lista"
+      },
+      "answer": "a",
+      "explanation": "Item por item, o teste pergunta \"o seu `id` é igual a 2?\": o 3 não é, e sai; o 2 é, e fica; o 1 não é, e sai. A peneira deixou passar só o copo tocado. Para tirar só ele, o teste pergunta \"é diferente?\", `registro.id !== id`, e ficam o de 500 e o de 200, com 700 ml.",
+      "points": 2
     },
     {
       "id": "q19",
-      "type": "single",
-      "prompt": "Ao tocar em Adicionar, nenhuma tarefa aparece e não há erro. O `console.log(tarefas)` mostra no terminal o array crescendo a cada toque. Qual é a causa?\n\n```jsx\nfunction adicionarTarefa(titulo) {\n  const nova = { id: Date.now(), titulo, concluida: false };\n  tarefas.push(nova);\n  console.log(tarefas);\n}\n```",
+      "type": "multiple",
+      "prompt": "Sobre a lista do Gota, marque todas as frases certas.",
       "options": {
-        "a": "`push` altera o mesmo array e ninguém chama `setTarefas`, então a tela não é redesenhada",
-        "b": "A `FlatList` precisa estar dentro de uma `ScrollView` para mostrar itens novos",
-        "c": "O `console.log` dentro da função impede que a tela seja redesenhada",
-        "d": "`Date.now()` gera um `id` repetido e a `FlatList` descarta a tarefa nova"
+        "a": "A `FlatList` é uma esteira: desenha só os itens que cabem na tela e troca os itens conforme a rolagem",
+        "b": "O `ListEmptyComponent` recebe uma peça em JSX, que aparece só enquanto a `data` está vazia",
+        "c": "Depois de apertar `r` no terminal, os copos registrados continuam na lista",
+        "d": "O `total` precisa de um `useState` próprio, somado a cada toque e subtraído a cada Remover",
+        "e": "Em `renderItem={({ item }) => ...}`, as chaves tiram da ficha que a `FlatList` entrega o campo `item`, o registro da vez"
       },
-      "answer": "a",
-      "explanation": "A tela só muda quando o estado é trocado pelo `set`. O `push` muda o array por dentro, sem `setTarefas`: o terminal mostra o array maior, mas o React não fica sabendo. A correção é `setTarefas([...tarefas, nova])`. `FlatList` dentro de `ScrollView` só gera aviso amarelo, o `console.log` não interfere na tela e `Date.now()` muda a cada milissegundo.",
+      "answer": [
+        "a",
+        "b",
+        "e"
+      ],
+      "explanation": "A esteira desenha o que está na tela, e o aviso de lista vazia acompanha a `data`. Recarregar com `r` roda o app do zero: o estado mora na memória, e o dia começa vazio. O `total` sai do `reduce` a cada desenho, como a lista `visiveis` do E26; um segundo estado, somado à mão, um dia ficaria errado. As chaves em `({ item })` são a desestruturação do E13.",
       "points": 2
     },
     {
       "id": "q20",
       "type": "single",
-      "prompt": "No cabeçalho abaixo, o título e o contador ficam lado a lado, mas colados no topo da linha. Qual propriedade, acrescentada a `linha`, centraliza os dois **na vertical**?\n\n```jsx\nconst estilos = StyleSheet.create({\n  linha: { flexDirection: 'row', justifyContent: 'space-between', height: 64 },\n});\n```",
+      "prompt": "No `renderItem`, o `aoRemover` ficou sem a seta. O que acontece quando a lista tem copos?\n\n```jsx\nrenderItem={({ item }) => (\n  <ItemRegistro\n    ml={item.ml}\n    hora={item.hora}\n    aoRemover={removerRegistro(item.id)}\n  />\n)}\n```",
       "options": {
-        "a": "`alignItems: 'center'`",
-        "b": "`justifyContent: 'center'`",
-        "c": "`textAlign: 'center'`",
-        "d": "`flexDirection: 'column'`"
+        "a": "Os copos somem logo depois de aparecer, e o terminal mostra `Cannot update a component (App) while rendering a different component (CellRenderer)`",
+        "b": "Funciona igual a `aoRemover={() => removerRegistro(item.id)}`",
+        "c": "Os copos ficam na lista, e o Remover tira todos de uma vez",
+        "d": "A tela de erro mostra `aoRemover is not a function` logo ao abrir"
       },
       "answer": "a",
-      "explanation": "Com `flexDirection: 'row'`, o eixo principal é o horizontal e o cruzado é o vertical. `alignItems` age no eixo cruzado, então `'center'` centraliza na vertical. `justifyContent` age no eixo principal: com `'center'`, os dois se juntariam no meio da linha, ainda no topo. `textAlign` alinha o texto dentro do `Text`, e `column` empilharia os dois."
+      "explanation": "Com os parênteses e sem a seta, `removerRegistro(item.id)` roda na hora de desenhar cada cartão, e não no toque: cada desenho remove copos, e a lista esvazia sozinha. A seta, `() => removerRegistro(item.id)`, guarda o pedido, com o `id` daquele cartão, para a hora do toque. É o mesmo engano do `onPress={aoAdicionar(ml)}` no `BotaoCopo`.",
+      "points": 2
     }
   ]
 }

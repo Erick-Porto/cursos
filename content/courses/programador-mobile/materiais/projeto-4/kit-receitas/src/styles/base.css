@@ -1,0 +1,76 @@
+/*
+  base.css: as cores, a fonte e o layout da página.
+  O kit cuida deste arquivo; você não precisa mexer aqui.
+
+  Classes que você usa no App.jsx:
+    conteudo  a parte do meio da página    <main className="conteudo">
+    grade     arruma os cartões lado a lado <div className="grade">
+    aviso     a caixa tracejada do começo, que o seu cartão substitui
+*/
+
+:root {
+  --cor-fundo: #fbf7f2;
+  --cor-superficie: #ffffff;
+  --cor-texto: #2b2118;
+  --cor-texto-suave: #6b5a4a;
+  --cor-borda: #eadfd2;
+  --cor-destaque: #b4441c;
+  --cor-destaque-forte: #8f3415;
+  --cor-destaque-fundo: #fbe9e1;
+  --raio: 12px;
+  --sombra: 0 1px 2px rgb(43 33 24 / 6%), 0 4px 12px rgb(43 33 24 / 6%);
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.conteudo {
+  flex: 1;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 24px 16px 40px;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.aviso {
+  margin: 0;
+  padding: 40px 16px;
+  border: 2px dashed var(--cor-borda);
+  border-radius: var(--raio);
+  color: var(--cor-texto-suave);
+  text-align: center;
+}

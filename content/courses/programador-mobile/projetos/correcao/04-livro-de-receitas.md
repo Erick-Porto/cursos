@@ -5,128 +5,115 @@ summary: O que conferir em cada critério, como pontuar, o check-in de cada etap
 
 ## Antes de corrigir
 
-Corrija depois do prazo (início do E26). Links colados antes servem para os check-ins: enquanto você não corrige, o aluno pode trocá-los. Cada correção leva cerca de 15 minutos.
+Corrija depois do prazo (início do E29). Links colados antes servem para os check-ins: enquanto você não corrige, o aluno pode trocá-los. Cada correção leva cerca de 15 minutos.
 
 :::steps
 1. Clone o repositório numa pasta de correção, fora dos seus projetos: `git clone <link>`, `cd livro-de-receitas`, `npm install`.
-2. `git log --oneline --reverse`: as cinco mensagens `Projeto 4: etapa N, ...` e as datas de cada uma.
-3. `npm run lint`: anote os erros (contam no critério de entrega e, se forem de hooks, no de hooks).
-4. `npm run dev`, Chrome com o DevTools aberto nas abas **Console** e **Rede** (filtro `recipes`).
-5. Use o app pelo roteiro abaixo, nesta ordem, e só depois leia o código.
+2. `git log --oneline --reverse`: "Kit do livro de receitas" e as quatro mensagens `Projeto 4: etapa N, ...`, com as datas.
+3. `npm run dev`, Chrome com o DevTools aberto nas abas **Console** e **Rede** (filtro `recipes`).
+4. Use o app pelo roteiro abaixo, nesta ordem, e só depois leia o código.
 :::
 
 **Roteiro de uso (5 minutos):**
 
-1. Abra: "Carregando receitas..." e depois 12 cartões. No `npm run dev`, duas requisições, a primeira cancelada (é o `StrictMode`, aula 47).
-2. Digite `pizza` depressa: na aba Rede, uma requisição só, com `q=pizza`; o campo mostra "Buscando..." enquanto você digita. Depois `frango`: `Nenhuma receita encontrada para "frango".`
-3. Apague a busca e escolha Média: só selos "Média". Escolha Difícil: a mensagem de lista vazia (a API não tem receitas difíceis).
-4. Favorite duas receitas e desfavorite uma: o cabeçalho passa por "1 favorita", "2 favoritas", "1 favorita". Aperte F5: a mesma receita continua favorita.
-5. No Console, `localStorage.setItem('livro-de-receitas:favoritas', '{quebrado')` e F5: o app abre, com "Nenhuma favorita". (Se o aluno usou outra chave, veja qual na aba **Application**.)
-6. "Ver receita": ficha, ingredientes e modo de preparo. "Voltar para a lista": a busca e o filtro continuam como estavam.
-7. Sem a API: na aba Rede, clique com o botão direito na requisição de `recipes`, **Block request domain**, e aperte F5. Esperado: "Não foi possível carregar as receitas." e "Tentar de novo", sem "Carregando..." preso. Desbloqueie (`Ctrl + Shift + P`, "Show Network request blocking") e clique em "Tentar de novo": a lista volta.
+1. Abra: "Carregando receitas..." por um instante e depois 30 cartões, com os nomes em inglês. Na aba Rede, **um** pedido a `recipes` (o kit não usa `StrictMode`, então é um só também no `npm run dev`).
+2. Olhe um cartão: foto, nome, "Italian, 35 minutos", "4 porções, nota 4.6", a etiqueta "Fácil" e o botão "Favoritar".
+3. Busque `chicken` (5 cartões), depois `CHICKEN` (os mesmos 5) e `xyz` (`Nenhuma receita encontrada para "xyz".`). Apague a busca: os 30 voltam.
+4. Favorite duas receitas: o cabeçalho passa a "2 favoritas". Desmarque uma: "1 favorita". Busque `zzz` e apague: a que ficou continua com "Favorita".
+5. Sem a API: na aba Rede, clique com o botão direito no pedido `recipes`, **Bloquear URL da solicitação** (*Block request URL*), e aperte F5. Esperado: "Não foi possível carregar as receitas.", sem "Carregando receitas..." preso. Desbloqueie (`Ctrl + Shift + P`, "Show Network request blocking") e aperte F5.
+6. No Console, nada vermelho além do pedido bloqueado do passo 5.
 
 Anote o que falhou e só então abra `src/`: o código explica o porquê e decide entre nota parcial e zero.
 
-## Critério 1 · Componentes, props e listas (20)
+:::info O que é igual na turma toda
+Os passos "juntos em aula" saem dos slides, iguais para todos: o `CampoBusca` ligado ao estado, o `filter` da busca, o `let conteudo` com `if`, o `map` com as props, o efeito com o `fetch`. Isso é esperado. O trabalho individual está nos trechos **Sua vez**: as props `porcoes` e `nota` (etapa 2), o desmarcar e o total no cabeçalho (etapa 3), o `try`/`catch`/`finally` com o erro (etapa 4) e o README.
+:::
 
-**O que conferir:** `src/components/` com `Cabecalho`, `Filtros`, `ListaReceitas`, `CartaoReceita` e `DetalheReceita`, um por arquivo, em PascalCase, com `export default`; `CartaoReceita({ receita, ... })` lendo os campos por desestruturação; o `map` da `ListaReceitas` com `key={receita.id}`; um `.module.css` por componente com estilo; `src/utils/receitas.js` com `tempoTotal` e `rotuloDificuldade`.
+## Critério 1 · Seus componentes (25)
 
-| Pontos | Quando |
-|---|---|
-| 20 | tudo acima, console sem aviso de `key`, selo com texto e cor por dificuldade |
-| 14 a 16 | um deslize: `key={i}`, um componente com estilo no `index.css`, ou o tempo total calculado dentro do JSX em vez de `tempoTotal` |
-| 8 a 12 | cartão recebe os campos soltos (`nome={...} imagem={...}`) em vez da prop `receita`, ou todos os estilos em CSS global |
-| 0 a 5 | tudo no `App.jsx`, sem componentes próprios, ou cartões escritos à mão em vez de `map` |
-
-**Erros comuns:** `key` na `<article>` de dentro do `CartaoReceita` (o aviso continua); selo só com cor, sem o texto; `rotuloDificuldade` com `if` encadeado que esquece um caso (aceite, desde que funcione); `alt` vazio ou "imagem".
-
-## Critério 2 · Estado e eventos (20)
-
-**O que conferir:** no `App` (ou no `useFavoritos`, depois da etapa 4), `alternarFavorita` com `filter` e spread; o campo de busca e o seletor com `value` e `onChange`, o estado no `App` e o `Filtros` recebendo valores e funções por props; a lista da tela calculada antes do `return`; o contador no `Cabecalho` com singular e plural; o cartão favorito destacado.
+**O que conferir:** `src/components/CartaoReceita.jsx` e `src/components/BotaoFavorito.jsx`, um componente por arquivo, nome com inicial maiúscula e `export default`. O cartão desestrutura as props no parâmetro (`nome`, `foto`, `cozinha`, `minutos`, `dificuldade`, `porcoes`, `nota`, `favorita`, `aoFavoritar`), usa as classes do `cartao.css`, a `Etiqueta` do kit com `dificuldade={dificuldade}` e o `BotaoFavorito` com `ativo` e `aoClicar`. O botão troca a classe (`favorito` ou `favorito favorito--ativo`) e o texto ("Favoritar" ou "Favorita") pelo `ativo` e entrega a função ao `onClick`, sem parênteses.
 
 | Pontos | Quando |
 |---|---|
-| 20 | favoritar e desfavoritar, busca e filtro combinados, contador certo nos três casos, nada mutado |
-| 14 a 16 | um deslize: "1 favoritas", destaque só por cor, ou um `useState` a mais para guardar a lista filtrada (funciona, mas duplica o estado) |
-| 8 a 12 | filtro e busca que não se combinam (um apaga o outro), ou estado de busca dentro do `Filtros` com uma cópia no `App` |
-| 0 a 5 | `favoritas.push(id)` ou `splice` no estado (a tela não acompanha), ou campo não controlado |
+| 25 | tudo acima, foto com `alt` igual ao nome |
+| 18 a 22 | um deslize: `alt` vazio ou fixo ("foto"); props com outros nomes, mas coerentes nos dois lados; ou o cartão recebe a receita inteira (`receita={receita}`) e lê os campos dentro dele |
+| 10 a 15 | o botão de favorito escrito dentro do cartão, sem o `BotaoFavorito`; ou o cartão ainda com textos fixos que deveriam ser props (todas as receitas com "4 porções, nota 4.6") |
+| 0 a 8 | sem componentes próprios: tudo escrito no `App.jsx` |
 
-**Erros comuns:** `onClick={onFavoritar(id)}` (dispara ao desenhar: todas viram favoritas ou aparece "Too many re-renders"); filtros dentro de um `<form>` com botões sem `type="button"` (a página recarrega); `'difícil'` com acento no `value` de um lado e sem do outro.
+**Erros comuns:** a etiqueta escrita à mão (`<span>Fácil</span>`) em vez da `Etiqueta`: aceite com 2 pontos a menos; `onClick={aoClicar()}`, que marca as receitas sozinho e mostra `Cannot update a component (App) while rendering a different component (BotaoFavorito)`; `onclick` com c minúsculo (nada acontece; o Console diz ``Invalid event handler property `onclick` ``).
 
-## Critério 3 · Receitas da API (20)
+## Critério 2 · Lista e busca (20)
 
-**O que conferir:** `src/api/receitas.js` com `buscarReceitas(busca, sinal)` e `traduzirReceita(item)`; a URL `https://dummyjson.com/recipes/search?q=...&limit=12` com `encodeURIComponent` e `trim`; `resposta.ok` conferido; a lista lida de `dados.recipes`; as três dificuldades traduzidas; na tela, carregando, erro com "Tentar de novo", vazio com o termo e "Buscando...".
-
-| Pontos | Quando |
-|---|---|
-| 20 | os passos 1, 2, 3 e 7 do roteiro de uso funcionam |
-| 14 a 16 | um estado faltando: busca vazia sem o termo, sem "Buscando...", ou `Hard` fora da tradução |
-| 8 a 12 | sem rede, fica em "Carregando receitas..." para sempre (`setCarregando(false)` dentro do `try`), ou "Tentar de novo" que não busca de novo (`tentativa` fora das dependências) |
-| 0 a 5 | dados ainda locais, ou o `fetch` sem tradução (cartões vazios) |
-
-**Erros comuns:** `dados.map is not a function` porque a lista está em `dados.recipes`; `limit` diferente de 12 (aceite: não muda nada importante); `useReceitas(busca)` em vez da busca atrasada (cada letra vira uma requisição; desconte aqui, não no critério de hooks).
-
-## Critério 4 · Hooks próprios e favoritas salvas (15)
-
-**O que conferir:** `src/hooks/useDebounce.js`, `useReceitas.js` e `useFavoritos.js`, com export nomeado e nome começando por `use`; todos chamados no topo do `App`, antes de qualquer `return` e fora de `if`; o `App` sem `useEffect` e sem `fetch`; o efeito do `useReceitas` com limpeza (`AbortController`) e as dependências certas (`[busca, tentativa]` ou equivalente); o `useFavoritos` lendo o `localStorage` no valor inicial e salvando num efeito com `[favoritas]`; os passos 4 e 5 do roteiro de uso.
+**O que conferir:** no `App`, o `map` sobre a lista filtrada, com `key={receita.id}` na tag `CartaoReceita` que ele devolve; o estado `busca` com `useState('')`, ligado ao `CampoBusca` por `valor` e `aoMudar`; a lista filtrada calculada antes do `return`, com `toLowerCase` no nome e na busca; a `ListaVazia` com `busca={busca}` quando nada passa; os passos 3 e 6 do roteiro de uso.
 
 | Pontos | Quando |
 |---|---|
-| 15 | três hooks certos, `npm run lint` sem `react-hooks/...`, favoritas depois do F5 e o JSON quebrado sem derrubar o app |
-| 10 a 12 | favoritas salvas, mas o JSON quebrado deixa a tela em branco (sem `try/catch`), ou o efeito sem limpeza |
-| 5 a 8 | favoritas não sobrevivem ao F5: salva, mas não lê o `localStorage` no valor inicial do `useState` |
-| 0 a 3 | lógica toda no `App`, sem hooks próprios, ou hook chamado depois de um `return` (o app quebra) |
+| 20 | tudo acima, sem aviso de `key` no Console |
+| 14 a 16 | um deslize: `key={index}` ou a `key` no elemento de dentro do cartão (o aviso continua); ou `toLowerCase` só de um lado (`CHICKEN` não acha nada) |
+| 8 a 12 | sem a `ListaVazia` (a tela fica vazia sem aviso); ou um campo próprio sem `value`, que não é controlado pelo estado |
+| 0 a 5 | cartões escritos um a um, sem `map`; ou sem busca |
 
-**Erros comuns:** `useEffect(async () => ...)`; o `useFavoritos` que começa com `useState([])` e lê o `localStorage` num efeito: o lint acusa `react-hooks/set-state-in-effect` e, no `npm run dev`, as favoritas somem a cada F5 (o `StrictMode` roda o efeito que salva `[]` antes da segunda leitura); `catch (erro)` sem usar `erro`, que o lint acusa como `no-unused-vars` (o enunciado ensina o `catch {`). O `useDebounce` igual ao da aula 48 é esperado e não desconta: ele é genérico, e o enunciado permite.
+**Erros comuns:** a lista filtrada guardada num `useState` a mais, atualizada à mão (funciona até a busca mudar sem atualizar a cópia): desconte 4; a busca no `cuisine` em vez do `name`.
 
-## Critério 5 · Detalhe da receita (10)
+## Critério 3 · Favoritas (15)
 
-**O que conferir:** `DetalheReceita` com a ficha, `<ul>` de ingredientes e `<ol>` do modo de preparo, com `key` nos dois `map`; "Ver receita" no cartão; no `App`, um estado com o id (ou a receita) aberto e a troca entre lista e detalhe; ao voltar, a busca e o filtro intactos (o estado continua no `App`).
+**O que conferir:** no `App`, o estado `favoritas` com `useState([])`, uma lista de ids; `alternarFavorita(id)` que confere com `includes` e devolve uma lista **nova** (spread para pôr, `filter` para tirar); no `map`, `favorita={favoritas.includes(receita.id)}` e `aoFavoritar={() => alternarFavorita(receita.id)}`; o `Cabecalho` com `totalFavoritas={favoritas.length}`; o passo 4 do roteiro de uso.
 
 | Pontos | Quando |
 |---|---|
-| 10 | passo 6 do roteiro de uso completo, sem aviso no console |
-| 6 a 8 | falta parte da ficha ou o modo de preparo, ou a busca zera ao voltar |
-| 3 a 5 | detalhe abre, mas "Voltar" recarrega a página |
-| 0 | sem detalhe |
+| 15 | marca, desmarca, total no cabeçalho, marca que sobrevive à busca |
+| 10 a 12 | marca e desmarca, mas sem o total no cabeçalho |
+| 5 a 8 | só marca (parou no passo juntos: clicar de novo não desmarca); ou o estado dentro do `BotaoFavorito`, com `useState` próprio: alterna, mas a marca some ao buscar e o cabeçalho não conta |
+| 0 a 3 | `favoritas.push(id)` ou `splice` (a tela não muda, sem erro), ou sem favoritas |
 
-**Erros comuns:** `key` ausente nas listas do detalhe (aviso no console); um `useState` declarado depois do `if (aberta) return ...` (`Rendered more hooks than during the previous render`).
+**Erros comuns:** `if (favoritas.includes(id))` com o `filter` invertido (`item === id`), que apaga todas as outras; dois `setFavoritas` seguidos, sem `else`: o segundo vence, e a receita nunca é desmarcada.
 
-## Critério 6 · Repositório, README e lint (15)
+## Critério 4 · Receitas da API (25)
+
+**O que conferir:** no `App`, o `useEffect` com `[]` no fim e, dentro dele, uma função `async` chamada logo em seguida (o efeito em si não é `async`); o `fetch` de `https://dummyjson.com/recipes`, o `ok` da resposta conferido, `setReceitas(dados.recipes)`; os estados `carregando` (começa `true`) e `erro` (começa `false`); o `try`/`catch`/`finally`, com `setCarregando(false)` no `finally`; no `if` do `conteudo`, o carregando primeiro e o erro em seguida; o `import` das receitas locais fora do `App`; os passos 1 e 5 do roteiro de uso.
+
+| Pontos | Quando |
+|---|---|
+| 25 | os passos 1 e 5 do roteiro funcionam e o código tem tudo acima |
+| 18 a 22 | um deslize: sem conferir o `ok` (troque o endereço por `https://dummyjson.com/recipes/9999`: a tela fica em branco, com `Cannot read properties of undefined (reading 'filter')`, em vez do erro); ou o carregando que nunca aparece porque o estado começa `false` |
+| 10 a 15 | sem a API, fica preso em "Carregando receitas..." (`setCarregando(false)` só no `try`, ou sem `catch`); ou o efeito sem `[]`, que repete o pedido sem parar na aba Rede |
+| 0 a 8 | as receitas ainda vêm do `src/data/receitas.js` |
+
+**Erros comuns:** `setReceitas(dados)` em vez de `dados.recipes` (`receitas.filter is not a function`, tela branca); `useEffect(async () => ...)`, que funciona mas mostra no Console `useEffect must not return anything besides a function`: desconte 3; `catch (erro)`, com o mesmo nome do estado: funciona, não desconte, mas comente.
+
+## Critério 5 · Repositório e README (15)
 
 | Pontos | O que vale |
 |---|---|
-| 5 | cinco commits com as mensagens pedidas, em dias diferentes, acompanhando os encontros |
-| 5 | README com o que o app faz, como rodar e os dois prints aparecendo no GitHub |
-| 5 | `npm run lint` sem erros, console sem avisos, repositório público sem `node_modules` |
+| 5 | o commit do kit e os quatro das etapas, com as mensagens pedidas, em dias que acompanham os encontros |
+| 5 | README com o que o app faz, como rodar e o print aparecendo no GitHub, sem os trechos "Etapa 4" do kit sobrando |
+| 5 | repositório público, com o `.gitignore`, sem `node_modules/` nem `dist/` |
 
-Desconte por parte: README sem prints, 3 de 5; um commit só com tudo, 0 a 2 na primeira linha; `node_modules` no repositório, 0 na terceira.
+Desconte por parte: README sem o print, 3 de 5; um commit só com tudo, 0 a 2 na primeira linha; `node_modules/` no repositório, 0 na terceira.
 
 ## Check-in por etapa
 
-O bloco de projeto de cada encontro abre com 2 a 3 minutos de check-in: mãos levantadas para quem fez o commit da etapa anterior e **um** repositório no projetor, olhando uma coisa só.
+A abertura de cada encontro tem 2 a 3 minutos de check-in: mãos levantadas para quem fez o commit da etapa anterior e **um** repositório no projetor, olhando uma coisa só.
 
 | Encontro | Etapa conferida | Olhe só isto |
 |---|---|---|
-| E22 | 1 | o commit da etapa 1 no GitHub e o `CartaoReceita` com `{preparo + cozimento}` (não "35" digitado) |
-| E23 | 2 | `CartaoReceita({ receita })` e o `map` da `ListaReceitas` com `key={receita.id}` |
-| E24 | 3 | a lista da tela calculada antes do `return`, sem `useState` para ela; digite "lamen" e veja o "Lámen japonês" |
-| E25 | 4 | na aba Rede do app do aluno, `pizza` digitado depressa gera uma requisição só |
-| E26 | 5 (entrega) | no painel do instrutor, aba Projetos, quantos entregaram |
+| E25 | 1 | o repositório no GitHub sem `node_modules/` e o `{preparo + cozimento}` no cartão (não "35" digitado) |
+| E26 | 2 | o brigadeiro com "8 porções, nota 4.2" e o Console sem o aviso de `key` |
+| E27 | 3 | digite `FRANGO` e desmarque uma favorita: o total acompanha |
+| E28 | 4 | na aba Rede, um pedido a `recipes`; com o pedido bloqueado, a mensagem de erro |
+| E29 | entrega | no painel do instrutor, aba Projetos, quantos entregaram |
 
 Quem não fez a etapa anterior fica com ela de tarefa, antes da próxima. Duas etapas atrasadas: converse no intervalo.
 
 ## Sinais de cópia
 
-- **Do laboratório**: nomes do `minhas-tarefas` que sobraram (`tarefas`, `prioridade`, `onAlternar`, `CartaoTarefa`), o título "Minhas Tarefas" no `index.html`, a mensagem "Não foi possível carregar as tarefas.", ou `useTarefas` renomeado com as funções de adicionar e remover que o projeto não pede.
-- **Entre colegas**: o mesmo CSS (cores, nomes de classe incomuns), os mesmos comentários e as mesmas frases no README, os mesmos erros nos mesmos lugares.
-- **No histórico**: as cinco etapas commitadas no mesmo dia, perto do prazo; um commit gigante com tudo.
+- **Entre colegas**: as mesmas frases no README; a mesma solução incomum nos trechos Sua vez (o mesmo nome de variável fora do padrão, o mesmo comentário, o mesmo erro no mesmo lugar).
+- **No histórico**: as quatro etapas commitadas no mesmo dia, perto do prazo; um commit gigante com tudo.
+- **De fora do curso**: recursos que a turma não viu, como hooks próprios, `useReducer`, `useMemo`, CSS Modules ou TypeScript.
 - **Na conversa**: o aluno não explica o próprio código.
 
-O `useDebounce` igual ao da aula e um `useReceitas` com a mesma forma do `useTarefas` são esperados: o que é do aluno está na tradução dos campos, nas mensagens, nos componentes e no CSS.
-
-**Como agir:** antes de dar a nota, chame o aluno por 5 minutos. Peça que explique o efeito do `useReceitas` e o `alternarFavorita`, e que faça uma mudança pequena na hora, como trocar "Nenhuma favorita" por "Sem favoritas" ou mostrar a cozinha no detalhe. Quem explica e muda com segurança fica com a nota do código. Quem não consegue recebe a entrega devolvida para ajustes, com o combinado de refazer a parte copiada; em caso de cópia entre colegas, siga a regra da instituição para os dois.
+**Como agir:** antes de dar a nota, chame o aluno por 5 minutos. Peça que explique o `alternarFavorita` e o efeito que busca a API, e que faça uma mudança pequena na hora, como trocar o texto "Favoritar" por "Salvar" ou mostrar só o tempo de preparo no cartão. Quem explica e muda com segurança fica com a nota do código. Quem não consegue recebe a entrega devolvida para ajustes, com o combinado de refazer a parte copiada; em caso de cópia entre colegas, siga a regra da instituição para os dois.
 
 ## Devolver ou dar a nota
 
-Devolva para ajustes quando o problema se resolve em até uma hora: favoritas que somem no F5, falta o "Tentar de novo", README sem prints, lint com erro. Escreva no comentário do critério o passo do roteiro de uso que falhou ("passo 7: sem rede, fica em Carregando"). Dê a nota final quando o app cumpre os critérios ou quando o aluno já usou a chance de ajuste.
+Devolva para ajustes quando o problema se resolve em até uma hora: o carregando preso sem internet, o desmarcar que falta, o total no cabeçalho, o README sem print. Escreva no comentário do critério o passo do roteiro de uso que falhou ("passo 5: sem a API, fica em Carregando"). Dê a nota final quando o app cumpre os critérios ou quando o aluno já usou a chance de ajuste.

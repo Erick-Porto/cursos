@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E24 · React e o primeiro componente",
+  "description": "Dez questões sobre componentes, o Vite e o localhost, as regras do JSX, as chaves, o import de componentes e o cartão da etapa 1 do Livro de receitas.",
+  "lesson": "e24-react-e-o-primeiro-componente",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No React, o que é um **componente**?",
+      "options": {
+        "a": "Uma função que devolve um pedaço de tela, escrito em JSX, e que você usa como tag",
+        "b": "Um arquivo de CSS com o visual de uma parte da página",
+        "c": "Um pacote do npm que você instala para cada tela do app",
+        "d": "Uma tag do HTML, como `<p>` ou `<img>`, escrita com letra maiúscula"
+      },
+      "answer": "a",
+      "explanation": "O componente é a peça de Lego da tela: uma função, com nome em maiúscula, que devolve JSX. Você a usa como tag, por exemplo `<CartaoReceita />`, quantas vezes quiser. O CSS cuida do visual, e o React é o pacote que junta as peças; ele não é instalado de novo para cada tela.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que este componente mostra na tela?\n\n```jsx\nfunction CartaoSalada() {\n  const preparo = 10\n  const cozimento = 0\n\n  return <p>Salada caprese, {preparo + cozimento} minutos</p>\n}\n```",
+      "options": {
+        "a": "`Salada caprese, 10 minutos`",
+        "b": "`Salada caprese, preparo + cozimento minutos`",
+        "c": "`Salada caprese, {preparo + cozimento} minutos`",
+        "d": "`Salada caprese, 100 minutos`"
+      },
+      "answer": "a",
+      "explanation": "As chaves abrem uma janela para o JavaScript: o que está dentro delas é calculado, e só o resultado vai para a tela. `preparo + cozimento` é `10 + 0`, que dá 10. As chaves não aparecem na tela, e o texto em volta delas fica como está. Seria `100` se os dois valores fossem textos, mas são números.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que este componente mostra na tela?\n\n```jsx\nfunction Porcoes() {\n  const porcoes = 4\n\n  return <p>Rende porcoes * 2 pedaços</p>\n}\n```",
+      "options": {
+        "a": "`Rende porcoes * 2 pedaços`",
+        "b": "`Rende 8 pedaços`",
+        "c": "`Rende 4 * 2 pedaços`",
+        "d": "Nada: o Vite mostra a tela de erro com `porcoes is not defined`"
+      },
+      "answer": "a",
+      "explanation": "Sem chaves, o JSX mostra o texto do jeito que ele foi escrito, sem erro nenhum. Para aparecer `Rende 8 pedaços`, a conta precisa ir entre chaves: `{porcoes * 2}`. A constante `porcoes` existe, mas a linha nunca a usa: ali a palavra é só texto.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual destas linhas segue as regras do JSX e aparece na tela sem erro e sem aviso?",
+      "options": {
+        "a": "`<img className=\"cartao__foto\" src=\"pizza.webp\" alt=\"Pizza margherita\" />`",
+        "b": "`<img class=\"cartao__foto\" src=\"pizza.webp\" alt=\"Pizza margherita\" />`",
+        "c": "`<img className=\"cartao__foto\" src=\"pizza.webp\" alt=\"Pizza margherita\">`",
+        "d": "`<Img className=\"cartao__foto\" src=\"pizza.webp\" alt=\"Pizza margherita\" />`"
+      },
+      "answer": "a",
+      "explanation": "No JSX, a classe se escreve `className` e toda tag fecha: a `<img>`, que não tem conteúdo, termina com `/>`. Com `class`, a página funciona, mas o Console avisa ``Invalid DOM property `class` ``. Sem o `/>`, o Vite mostra a tela de erro. Com `Img` maiúsculo, o React procura uma peça chamada `Img`, que não existe, e o Console diz `Img is not defined`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Ao salvar este componente, o Vite mostra a tela de erro com `Adjacent JSX elements must be wrapped in an enclosing tag.`\n\n```jsx\nfunction CartaoReceita() {\n  return (\n    <h2 className=\"cartao__nome\">Brigadeiro</h2>\n    <p className=\"cartao__info\">Brasileira, 30 minutos</p>\n  )\n}\n```\n\nComo corrigir?",
+      "options": {
+        "a": "Pôr as duas tags dentro de uma só, como um `<article className=\"cartao\">` ou o fragmento `<>...</>`",
+        "b": "Trocar `className` por `class` nas duas tags",
+        "c": "Escrever um `return` para cada tag",
+        "d": "Tirar os parênteses do `return`"
+      },
+      "answer": "a",
+      "explanation": "O `return` devolve um elemento só, como a receita entrega um prato só: as duas tags precisam de um pai em volta. Pode ser uma tag de verdade, como o `<article>` do cartão, ou o fragmento `<>...</>`, que agrupa sem aparecer na página. Um segundo `return` nunca roda, porque a função termina no primeiro. Sem os parênteses, o erro continua.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Depois do `npm run dev`, o terminal mostra `Local: http://localhost:5173/`. O que quer dizer o `localhost`?",
+      "options": {
+        "a": "Este computador: o navegador pede a página ao servidor que o Vite ligou na sua própria máquina",
+        "b": "Um site na internet, que qualquer pessoa abre com esse endereço",
+        "c": "O servidor do GitHub onde o projeto foi publicado",
+        "d": "A pasta do projeto no disco, a `livro-de-receitas`"
+      },
+      "answer": "a",
+      "explanation": "`localhost` quer dizer \"este computador\", e o `5173` é a porta em que o Vite atende. O endereço não está na internet: só você vê, e só enquanto o `npm run dev` está ligado. O GitHub guarda o código, mas não roda o projeto.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "Com o `npm run dev` ligado, salvar uma mudança no `App.jsx` atualiza a página no navegador sozinha, sem apertar F5.",
+      "answer": true,
+      "explanation": "O Vite vigia os arquivos do projeto: salvou, ele troca na página só o arquivo que mudou, e o terminal escreve `hmr update /src/App.jsx`. Se o `npm run dev` for desligado com Ctrl + C, a página nem abre: o navegador diz que a conexão com localhost foi recusada.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O `App.jsx` está em `src`. O `CartaoReceita.jsx` está em `src/components` e termina com `export default CartaoReceita`. Qual linha, no topo do `App.jsx`, traz o cartão?",
+      "options": {
+        "a": "`import CartaoReceita from './components/CartaoReceita.jsx'`",
+        "b": "`import { CartaoReceita } from './components/CartaoReceita.jsx'`",
+        "c": "`import CartaoReceita from './CartaoReceita.jsx'`",
+        "d": "`import CartaoReceita from 'components/CartaoReceita.jsx'`"
+      },
+      "answer": "a",
+      "explanation": "Com `export default`, o `import` vem sem chaves, como no E16; com chaves, o navegador diz que não existe um export chamado `CartaoReceita`. O `./` parte da pasta do `App.jsx`, a `src`, e o cartão está dentro de `components`. Sem o `./`, o Vite procura um pacote com esse nome e mostra `Failed to resolve import`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No fim da etapa 1, o `CartaoReceita` tem, antes do `return`:\n\n```jsx\nconst porcoes = 4\nconst nota = 4.6\n```\n\ne, no corpo do cartão:\n\n```jsx\n<p className=\"cartao__info\">{porcoes} porções, nota {nota}</p>\n<div className=\"cartao__rodape\">\n  <Etiqueta dificuldade=\"Easy\" />\n</div>\n```\n\nO que essas linhas mostram no cartão?",
+      "options": {
+        "a": "`4 porções, nota 4.6` e a etiqueta verde `Fácil`",
+        "b": "`{porcoes} porções, nota {nota}` e a etiqueta `Easy`",
+        "c": "`porcoes porções, nota nota` e a etiqueta verde `Fácil`",
+        "d": "`4 porções, nota 4,6` e a etiqueta `Easy`"
+      },
+      "answer": "a",
+      "explanation": "Entre chaves, `porcoes` e `nota` viram os valores das constantes, 4 e 4.6. O número aparece com ponto, como foi guardado. A `Etiqueta` do kit recebe `\"Easy\"` e mostra, como diz o manual dela, a etiqueta verde \"Fácil\".",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Marque todas as frases certas sobre o JSX.",
+      "options": {
+        "a": "A classe do CSS se escreve `className`, porque `class` é palavra do JavaScript",
+        "b": "Toda tag fecha; a tag sem conteúdo, como a `<img>`, termina com `/>`",
+        "c": "O nome de um componente começa com letra maiúscula, como `CartaoReceita`",
+        "d": "Entre as chaves cabe um `if`, para escolher o que mostrar"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "As três primeiras são regras do JSX. A maiúscula é o que faz o React tratar `<CartaoReceita />` como uma peça, e não como uma tag do HTML. Entre as chaves cabe só o que dá um valor, como uma constante, uma conta ou um método; o `if` escolhe um caminho e não dá valor, então não cabe ali.",
+      "points": 2
+    }
+  ]
+}

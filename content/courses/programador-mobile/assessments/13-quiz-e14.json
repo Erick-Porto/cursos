@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E14 · Listas a fundo",
+  "description": "Dez questões sobre map, find, some, every, includes, a seta com chaves, sort, a cópia e a busca da agenda de contatos.",
+  "lesson": "e14-listas-a-fundo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst contatos = [\n  { id: 7, nome: 'Ana' },\n  { id: 3, nome: 'Caio' },\n  { id: 9, nome: 'Bia' },\n];\nconst ids = contatos.map((contato) => contato.id);\nconsole.log(ids);\n```",
+      "options": {
+        "a": "`[ 7, 3, 9 ]`",
+        "b": "`[ 3, 7, 9 ]`",
+        "c": "`[ 'Ana', 'Caio', 'Bia' ]`",
+        "d": "`3`"
+      },
+      "answer": "a",
+      "explanation": "O `map` é a linha de produção: cada ficha entra, a seta devolve o `id` dela, e o id vai para a mesma gaveta da lista nova. Entram 3, saem 3, na mesma ordem. O `map` não ordena (isso é o `sort`) e não conta (o `3` seria o `.length`).",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Na agenda do Projeto 2, `buscarPorId` usa o `find`:\n\n```javascript\nexport function buscarPorId(contatos, id) {\n  return contatos.find((contato) => contato.id === id);\n}\n```\n\nOs 15 contatos do kit têm os ids de 1 a 15. O que devolve `buscarPorId(contatos, 99)`?",
+      "options": {
+        "a": "`undefined`",
+        "b": "`[]`, uma lista vazia",
+        "c": "`-1`",
+        "d": "`null`"
+      },
+      "answer": "a",
+      "explanation": "O `find` entrega o primeiro item que passa no teste. Se ninguém passa, ele entrega `undefined`, a caixa em que ninguém pôs nada. A lista vazia é o que o `filter` devolveria, e o `-1` é o que o `findIndex` devolve quando não acha.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst nomes = ['Ana', 'Caio', 'Bia'];\nconsole.log(nomes.findIndex((nome) => nome === 'Bia'), nomes.findIndex((nome) => nome === 'Davi'));\n```",
+      "options": {
+        "a": "`2 -1`",
+        "b": "`3 -1`",
+        "c": "`2 undefined`",
+        "d": "`Bia undefined`"
+      },
+      "answer": "a",
+      "explanation": "O `findIndex` entrega a gaveta do primeiro item que passa no teste. A fileira começa no 0, então a Bia está na gaveta 2. Quando ninguém passa, como com `'Davi'`, ele entrega `-1`. Quem entrega o próprio item, ou `undefined`, é o `find`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Com esta lista, quais linhas dão `true`? Marque todas as certas.\n\n```javascript\nconst contatos = [\n  { nome: 'Ana', email: 'ana@exemplo.com' },\n  { nome: 'Caio', email: '' },\n  { nome: 'Bia', email: 'bia@exemplo.com' },\n];\n```",
+      "options": {
+        "a": "`contatos.some((contato) => contato.email === '')`",
+        "b": "`contatos.every((contato) => contato.email !== '')`",
+        "c": "`contatos.every((contato) => contato.nome !== '')`",
+        "d": "`['Ana', 'Bia'].includes('An')`"
+      },
+      "answer": ["a", "c"],
+      "explanation": "O `some` pergunta \"alguém passa?\": o Caio tem o e-mail vazio, então dá `true`. O primeiro `every` pergunta \"todos têm e-mail?\" e para no Caio com `false`. O segundo `every` dá `true`: todos têm nome. O `includes` de lista procura o item inteiro, e `'An'` não é um item da lista: `false`. Procurar um pedaço é com o `includes` de texto.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Dois dos quatro contatos têm `favorito: true`. O que aparece no terminal?\n\n```javascript\nconst favoritos = contatos.filter((contato) => {\n  contato.favorito;\n});\nconsole.log(favoritos.length);\n```",
+      "options": {
+        "a": "`0`",
+        "b": "`2`",
+        "c": "`4`",
+        "d": "Um erro, porque a seta não pode ter chaves"
+      },
+      "answer": "a",
+      "explanation": "Com chaves, a seta só entrega o resultado com `return`. Sem ele, ela devolve `undefined` para todo contato, e o `undefined` conta como \"não\": ninguém passa na peneira. A correção é `return contato.favorito;`, ou a seta de uma linha, sem chaves: `(contato) => contato.favorito`.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Na agenda do Projeto 2, `buscarContatos` deixa o termo e o nome em minúsculas antes de comparar:\n\n```javascript\nconst procurado = termo.trim().toLowerCase();\nreturn contatos.filter((contato) => {\n  const noNome = contato.nome.toLowerCase().includes(procurado);\n  const noTelefone = contato.telefone.includes(procurado);\n  return noNome || noTelefone;\n});\n```\n\nCom os 15 contatos do kit, o que devolve `buscarContatos(contatos, 'MAR')`?",
+      "options": {
+        "a": "Mariana Souza, Helena Martins e Marcos Teixeira, nessa ordem",
+        "b": "Uma lista vazia, porque nenhum nome está em maiúsculas",
+        "c": "Só Mariana Souza e Marcos Teixeira, os que começam com \"Mar\"",
+        "d": "Helena Martins, Marcos Teixeira e Mariana Souza, em ordem alfabética"
+      },
+      "answer": "a",
+      "explanation": "O termo vira `'mar'`, e cada nome também vai para minúsculas: `'helena martins'` tem `'mar'` no meio, e o `includes` acha o trecho em qualquer lugar, não só no começo. O `filter` mantém a ordem da lista. A ordem alfabética só vem depois, com o `ordenarPorNome`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst dias = [30, 8, 14, 3];\ndias.sort();\nconsole.log(dias);\n```",
+      "options": {
+        "a": "`[ 14, 3, 30, 8 ]`",
+        "b": "`[ 3, 8, 14, 30 ]`",
+        "c": "`[ 30, 14, 8, 3 ]`",
+        "d": "`[ 30, 8, 14, 3 ]`"
+      },
+      "answer": "a",
+      "explanation": "Sem comparador, o `sort` compara os números como texto, letra por letra: `'14'` começa com `'1'`, que vem antes de `'3'`, e `'30'` vem antes de `'8'`. Para pôr do menor ao maior, ele precisa do comparador `(a, b) => a - b`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Complete o comparador para as notas ficarem do menor para o maior, `[ 5, 7, 10 ]`:\n\n```javascript\nconst notas = [7, 10, 5];\nnotas.sort((a, b) => ___);\n```",
+      "answer": [["a - b", "a-b"]],
+      "explanation": "O `sort` olha o sinal do comparador: negativo, o `a` vem antes; positivo, o `b` vem antes. Com `a - b`, o menor sempre dá negativo contra o maior e vai para a frente. `b - a` faria o contrário: do maior para o menor.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst nomes = ['Caio', 'Ana', 'Bia'];\nconst copia = [...nomes];\ncopia.sort((a, b) => a.localeCompare(b));\nconsole.log(nomes[0], copia[0]);\n```",
+      "options": {
+        "a": "`Caio Ana`",
+        "b": "`Ana Ana`",
+        "c": "`Caio Caio`",
+        "d": "`Ana Caio`"
+      },
+      "answer": "a",
+      "explanation": "O `[...nomes]` tira uma cópia: uma lista nova, com os mesmos itens. O `sort` mexe só na cópia, que fica com a Ana na frente, e `nomes` continua como estava. Com `const copia = nomes;`, sem os três pontos, seria outro nome para a mesma lista, e apareceria `Ana Ana`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst fila = ['Ana', 'Bia', 'Caio', 'Davi'];\nconst pedaco = fila.slice(1, 3);\nconsole.log(pedaco, fila.length);\n```",
+      "options": {
+        "a": "`[ 'Bia', 'Caio' ] 4`",
+        "b": "`[ 'Bia', 'Caio', 'Davi' ] 4`",
+        "c": "`[ 'Ana', 'Bia', 'Caio' ] 4`",
+        "d": "`[ 'Bia', 'Caio' ] 2`"
+      },
+      "answer": "a",
+      "explanation": "O `slice(1, 3)` copia da gaveta 1 até antes da gaveta 3: a Bia e o Caio. A gaveta do fim não entra. E o `slice` não mexe no original: a `fila` continua com os 4 nomes.",
+      "points": 1
+    }
+  ]
+}

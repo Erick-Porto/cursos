@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agenda de contatos</title>
+    <script>
+      // Endereço sem a barra no fim (/web em vez de /web/): o navegador procuraria o
+      // estilo.css e o tela.js uma pasta acima. A barra resolve.
+      const ultimaParte = location.pathname.split('/').pop();
+      if (ultimaParte !== '' && ultimaParte !== 'index' && !ultimaParte.includes('.')) {
+        location.replace(location.pathname + '/' + location.search);
+      }
+    </script>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="estilo.css" />
+    <script type="module" src="tela.js"></script>
+  </head>
+  <body>
+    <main>
+      <header class="topo">
+        <p class="sobre">Programador Mobile · Projeto 2</p>
+        <h1>Agenda de contatos</h1>
+        <p class="lead" id="resumo">
+          A página é pronta. Quem busca, ordena, guarda e confere os contatos são as funções do
+          seu <code>src/regras/</code>.
+        </p>
+      </header>
+
+      <section id="aviso" class="aviso" role="alert">
+        <h2 id="aviso-titulo">Carregando as suas funções...</h2>
+        <div id="aviso-texto">
+          <p>
+            Se esta mensagem não sumir, abra a página pelo servidor. Na raiz do projeto (a pasta
+            do <code>package.json</code>), rode <code>npx serve .</code> e acesse
+            <code>http://localhost:3000/web/</code>. Aberta com dois cliques, a página não
+            consegue importar os seus arquivos.
+          </p>
+        </div>
+      </section>
+
+      <div id="app" hidden>
+        <details class="cartao status" id="status">
+          <summary id="status-titulo">Funções do seu projeto</summary>
+          <p class="dica">
+            Cada parte da página chama uma função sua, com o nome e o arquivo combinados no
+            enunciado. O que ainda falta aparece aqui, com a etapa em que a função nasce.
+          </p>
+          <div id="status-lista"></div>
+        </details>
+
+        <section class="cartao" aria-labelledby="t-busca">
+          <h2 id="t-busca" class="visualmente-oculto">Buscar</h2>
+          <label for="busca">Buscar por nome ou telefone</label>
+          <div class="campo-busca">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input
+              id="busca"
+              type="search"
+              list="sugestoes"
+              autocomplete="off"
+              placeholder="ana, mar, 9876..."
+              aria-describedby="busca-dica"
+            />
+          </div>
+          <datalist id="sugestoes"></datalist>
+          <p class="dica" id="busca-dica"></p>
+        </section>
+
+        <section class="cartao" aria-labelledby="t-aniversarios">
+          <h2 id="t-aniversarios">Aniversariantes do mês</h2>
+          <div id="aniversariantes"></div>
+        </section>
+
+        <details class="cartao" id="painel-form">
+          <summary id="titulo-form">Novo contato</summary>
+          <form id="form-contato" novalidate>
+            <div class="campo">
+              <label for="campo-nome">Nome</label>
+              <input id="campo-nome" autocomplete="off" />
+            </div>
+            <div class="campo">
+              <label for="campo-telefone">Telefone com DDD</label>
+              <input id="campo-telefone" type="tel" placeholder="(11) 98765-4321" />
+            </div>
+            <div class="campo">
+              <label for="campo-email">E-mail <span class="opcional">(opcional)</span></label>
+              <input id="campo-email" type="email" autocomplete="off" />
+            </div>
+            <div class="campo">
+              <label for="campo-grupo">Grupo</label>
+              <select id="campo-grupo">
+                <option value="">Escolha...</option>
+                <option value="familia">Família</option>
+                <option value="amigos">Amigos</option>
+                <option value="trabalho">Trabalho</option>
+              </select>
+            </div>
+            <fieldset class="campo">
+              <legend>Aniversário <span class="opcional">(opcional)</span></legend>
+              <div class="lado-a-lado">
+                <div>
+                  <label for="campo-dia">Dia</label>
+                  <select id="campo-dia"></select>
+                </div>
+                <div>
+                  <label for="campo-mes">Mês</label>
+                  <select id="campo-mes"></select>
+                </div>
+              </div>
+            </fieldset>
+
+            <div id="erros-form" class="erros" role="alert" hidden>
+              <p id="erros-titulo">Confira antes de salvar:</p>
+              <ul id="erros-lista"></ul>
+            </div>
+            <p class="dica" id="aviso-form"></p>
+
+            <div class="acoes">
+              <button type="submit" class="botao" id="salvar">Salvar contato</button>
+              <button type="button" class="botao secundario" id="cancelar" hidden>
+                Cancelar edição
+              </button>
+            </div>
+          </form>
+        </details>
+
+        <div class="mensagem" id="mensagem" role="status" aria-live="polite" hidden>
+          <span id="mensagem-texto"></span>
+          <button type="button" class="botao-texto" id="desfazer">Desfazer</button>
+        </div>
+
+        <section aria-labelledby="t-lista">
+          <h2 id="t-lista">Contatos</h2>
+          <div id="notas-lista"></div>
+          <div id="lista"></div>
+        </section>
+      </div>
+
+      <footer>
+        Página pronta do curso: você não precisa mudar estes arquivos. Recarregar a página volta
+        aos 15 contatos do kit. Se algo sair errado, o problema está numa função sua, e o teste
+        dela é o melhor lugar para achar.
+      </footer>
+    </main>
+  </body>
+</html>

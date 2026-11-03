@@ -1,0 +1,148 @@
+// Projeto 2 · Agenda de contatos: os 15 contatos de exemplo, que vêm no kit.
+// Nomes, telefones e e-mails são inventados.
+//
+// Cada contato é uma ficha com estes campos:
+// - id: número, um por contato
+// - nome e telefone: textos; o telefone vem com DDD, como na tela do celular
+// - email: texto, ou '' quando não foi informado
+// - grupo: 'familia', 'amigos' ou 'trabalho'
+// - aniversario: uma ficha dentro da ficha, { dia, mes }, ou null quando não foi informado
+// - favorito: true ou false
+
+export const contatos = [
+  {
+    id: 1,
+    nome: 'Mariana Souza',
+    telefone: '(11) 98765-4321',
+    email: 'mariana.souza@exemplo.com',
+    grupo: 'amigos',
+    aniversario: { dia: 30, mes: 10 },
+    favorito: true,
+  },
+  {
+    id: 2,
+    nome: 'Bruno Carvalho',
+    telefone: '(21) 99812-3344',
+    email: 'bruno.carvalho@exemplo.com',
+    grupo: 'amigos',
+    aniversario: { dia: 14, mes: 3 },
+    favorito: false,
+  },
+  {
+    id: 3,
+    nome: 'Helena Martins',
+    telefone: '(11) 3456-7890',
+    email: 'helena.martins@exemplo.com',
+    grupo: 'familia',
+    aniversario: { dia: 2, mes: 7 },
+    favorito: true,
+  },
+  {
+    id: 4,
+    nome: 'Álvaro Mendes',
+    telefone: '(31) 98877-1020',
+    email: 'alvaro.mendes@empresa.exemplo.com',
+    grupo: 'trabalho',
+    aniversario: { dia: 21, mes: 1 },
+    favorito: false,
+  },
+  {
+    id: 5,
+    nome: 'Juliana Ribeiro',
+    telefone: '(11) 97654-3210',
+    email: 'juliana.ribeiro@empresa.exemplo.com',
+    grupo: 'trabalho',
+    aniversario: { dia: 8, mes: 10 },
+    favorito: false,
+  },
+  {
+    id: 6,
+    nome: 'Rafael Gomes',
+    telefone: '(41) 99123-8765',
+    email: 'rafa.gomes@exemplo.com',
+    grupo: 'amigos',
+    aniversario: { dia: 17, mes: 5 },
+    favorito: false,
+  },
+  {
+    id: 7,
+    nome: 'Ana Beatriz Costa',
+    telefone: '(11) 99234-5678',
+    email: 'anabia@exemplo.com',
+    grupo: 'familia',
+    aniversario: { dia: 5, mes: 12 },
+    favorito: false,
+  },
+  {
+    id: 8,
+    nome: 'Gustavo Pereira',
+    telefone: '(11) 98123-4567',
+    email: 'gustavo.pereira@empresa.exemplo.com',
+    grupo: 'trabalho',
+    aniversario: { dia: 29, mes: 8 },
+    favorito: false,
+  },
+  {
+    id: 9,
+    nome: 'Fernanda Lima',
+    telefone: '(51) 98456-1122',
+    email: '',
+    grupo: 'amigos',
+    aniversario: { dia: 3, mes: 3 },
+    favorito: false,
+  },
+  {
+    id: 10,
+    nome: 'Érica Nogueira',
+    telefone: '(11) 99876-5401',
+    email: 'erica.nogueira@exemplo.com',
+    grupo: 'familia',
+    aniversario: { dia: 11, mes: 2 },
+    favorito: false,
+  },
+  {
+    id: 11,
+    nome: 'Daniel Rocha',
+    telefone: '(21) 98765-0099',
+    email: 'daniel.rocha@exemplo.com',
+    grupo: 'amigos',
+    aniversario: null,
+    favorito: false,
+  },
+  {
+    id: 12,
+    nome: 'Carla Dias',
+    telefone: '(11) 97788-6655',
+    email: 'carla.dias@empresa.exemplo.com',
+    grupo: 'trabalho',
+    aniversario: { dia: 24, mes: 6 },
+    favorito: false,
+  },
+  {
+    id: 13,
+    nome: 'João Pedro Alves',
+    telefone: '(85) 99654-3388',
+    email: 'joaopedro@exemplo.com',
+    grupo: 'amigos',
+    aniversario: { dia: 12, mes: 9 },
+    favorito: false,
+  },
+  {
+    id: 14,
+    nome: 'Paula Fernandes',
+    telefone: '(11) 99345-2211',
+    email: 'paula.fernandes@exemplo.com',
+    grupo: 'familia',
+    aniversario: { dia: 27, mes: 4 },
+    favorito: false,
+  },
+  {
+    id: 15,
+    nome: 'Marcos Teixeira',
+    telefone: '(61) 98234-7766',
+    email: 'marcos.teixeira@empresa.exemplo.com',
+    grupo: 'trabalho',
+    aniversario: { dia: 19, mes: 11 },
+    favorito: false,
+  },
+];

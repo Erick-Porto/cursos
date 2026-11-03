@@ -1,0 +1,143 @@
+{
+  "title": "Quiz: E36 · Listas no app",
+  "description": "Dez questões sobre o useCasas, a FlatList com o topo no ListHeaderComponent, o Campo controlado, a paraBusca, o puxar para atualizar e a lista vazia do Casas de adoção.",
+  "lesson": "e36-listas-no-app",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A Início lê as casas com `const { casas } = useCasas();`. O servidor do kit responde 800 milissegundos depois de o app abrir. O que a Início mostra logo que o app abre?",
+      "options": {
+        "a": "Os números 0, 0 e 0 e nenhum cartão; as 12 casas chegam menos de um segundo depois",
+        "b": "As 12 casas na hora, porque elas moram num arquivo do app",
+        "c": "Uma tela vermelha, porque `casas` ainda não existe",
+        "d": "Os números 12, 5 e 76, mas nenhum cartão"
+      },
+      "answer": "a",
+      "explanation": "Até o servidor responder, a `casas` do quadro é uma lista vazia, `[]`: o `resumoDasCasas` conta 0 casas, 0 cidades e 0 vagas, e não há cartão para desenhar. Quando a resposta chega, o quadro muda, e a Início é desenhada de novo com as 12. Não dá erro: a lista existe, só está vazia.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A Início trocou o `casas.map` por uma `FlatList`, mas continua com `<Tela rolar>` em volta dela. O que acontece?",
+      "options": {
+        "a": "O app avisa `VirtualizedLists should never be nested`: uma lista que rola dentro de uma tela que rola quebra a esteira; a correção é `<Tela>`, sem `rolar`",
+        "b": "Nada: o `rolar` e a `FlatList` combinam, e a lista fica mais rápida",
+        "c": "A lista não rola mais, e o celular mostra só os primeiros cartões",
+        "d": "O app avisa `Each child in a list should have a unique key`"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` já rola sozinha e só desenha o que cabe na tela. Dentro da `Tela rolar`, que por dentro é outra caixa que rola, ela perde o controle de quantos cartões desenhar, e o React Native avisa. Por isso a `Tela` fica sem `rolar` quando a lista é uma `FlatList`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Com o código abaixo e `casas` igual a `[]`, o que aparece na tela?\n\n```jsx\n<FlatList\n  data={casas}\n  keyExtractor={(casa) => String(casa.id)}\n  renderItem={({ item }) => <Text>{item.nome}</Text>}\n  ListHeaderComponent={<Text>Casas de adoção</Text>}\n  ListEmptyComponent={<Text>Nenhuma casa por aqui</Text>}\n/>\n```",
+      "options": {
+        "a": "`Casas de adoção` e, embaixo, `Nenhuma casa por aqui`",
+        "b": "Só `Nenhuma casa por aqui`: sem itens, o cabeçalho some",
+        "c": "Só `Casas de adoção`: o aviso aparece só depois de uma busca",
+        "d": "Nada: com a lista vazia, a `FlatList` não desenha nada"
+      },
+      "answer": "a",
+      "explanation": "O `ListHeaderComponent` aparece sempre, antes dos itens, com ou sem itens. O `ListEmptyComponent` entra no lugar dos itens só enquanto a `data` está vazia. Por isso, na Início, o topo e a busca continuam na tela quando \"geladeira\" não acha nenhuma casa.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual linha liga o `Campo` da busca ao estado `termo`, criado com `const [termo, setTermo] = useState('');`?",
+      "options": {
+        "a": "`<Campo rotulo=\"Buscar casa\" value={termo} onChangeText={setTermo} />`",
+        "b": "`<Campo rotulo=\"Buscar casa\" value={termo} onChange={setTermo} />`",
+        "c": "`<Campo rotulo=\"Buscar casa\" onChangeText={termo} value={setTermo} />`",
+        "d": "`<Campo rotulo=\"Buscar casa\" value=\"termo\" onChangeText={setTermo} />`"
+      },
+      "answer": "a",
+      "explanation": "O `value` mostra na caixa o que está no estado, e o `onChangeText` entrega o texto novo a cada letra: o estado manda, o campo obedece. Com `onChange`, o `setTermo` recebe um evento, não o texto, e a `paraBusca` quebra com `trim is not a function`. Com `value=\"termo\"`, entre aspas, a caixa mostra a palavra termo, fixa.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que mostra este código?\n\n```javascript\nimport { paraBusca } from '@/utils';\n\nconsole.log(paraBusca('  Ribeirão Preto '));\n```",
+      "options": {
+        "a": "`ribeirao preto`",
+        "b": "`Ribeirao Preto`",
+        "c": "`  ribeirão preto `",
+        "d": "`ribeirãopreto`"
+      },
+      "answer": "a",
+      "explanation": "A `paraBusca` passa o texto a limpo: tira os espaços das pontas (o `trim`), põe tudo em minúsculas (o `toLowerCase`) e troca cada letra com acento pela letra sem acento. O espaço do meio fica: ele separa as palavras.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Estas são quatro das casas da lista:\n\n| `nome` | `cidade` |\n|---|---|\n| Lar da Mel | São Paulo |\n| Recanto São Francisco | Campinas |\n| Casa do Bigode | São Paulo |\n| Lar Temporário Ronrom | Ribeirão Preto |\n\nCom `termo` igual a `'SÃO'`, quantas destas casas passam no `filter`?\n\n```jsx\nconst busca = paraBusca(termo);\nconst visiveis = casas.filter((casa) => paraBusca(casa.nome).includes(busca));\n```",
+      "options": {
+        "a": "1: só o Recanto São Francisco",
+        "b": "3: o Recanto e as duas casas de São Paulo",
+        "c": "0: o termo está em maiúsculas",
+        "d": "4: com a `paraBusca`, todas passam"
+      },
+      "answer": "a",
+      "explanation": "A `busca` vale `'sao'`, e o teste olha só o nome: `'recanto sao francisco'` tem `'sao'`; `'lar da mel'`, `'casa do bigode'` e `'lar temporario ronrom'`, não. As casas de São Paulo têm o \"sao\" na cidade, que este teste não pergunta: para achá-las, entram mais perguntas com o `||`. A maiúscula não atrapalha, porque a `paraBusca` passa os dois lados a limpo.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O topo da Início, com o `Campo` da busca, está numa `const topo`. Uma colega escreveu `ListHeaderComponent={() => topo}`. O app abre, mas o teclado fecha a cada letra digitada. Por quê?",
+      "options": {
+        "a": "Com a seta, o cabeçalho vira uma peça nova a cada desenho: a cada letra, o topo é refeito, e o campo perde o teclado; a correção é `ListHeaderComponent={topo}`",
+        "b": "O `Campo` do kit não funciona dentro de uma `FlatList`",
+        "c": "Falta o `keyExtractor` na `FlatList`",
+        "d": "O `topo` precisa ser um estado, com `useState`"
+      },
+      "answer": "a",
+      "explanation": "Cada letra chama o `setTermo`, e a Início é desenhada de novo. Com `{topo}`, a peça pronta, o React reaproveita o mesmo campo. Com `() => topo`, a `FlatList` recebe uma função nova a cada desenho, joga o topo fora e monta outro, e o campo novo não tem o teclado.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "truefalse",
+      "prompt": "Numa lista com o estado dela, sem o kit, a função abaixo está no `onRefresh`, e `atualizando` está no `refreshing`. Ao puxar a lista para baixo, a rodinha aparece e some sozinha depois de 1,5 segundo.\n\n```jsx\nconst [atualizando, setAtualizando] = useState(false);\n\nfunction atualizar() {\n  setAtualizando(true);\n  setTimeout(() => {\n    console.log('dados novos');\n  }, 1500);\n}\n```",
+      "answer": false,
+      "explanation": "A rodinha gira enquanto `refreshing` for `true`, e a lista não desliga sozinha. Aqui, ninguém chama `setAtualizando(false)`: depois de 1,5 segundo, o terminal mostra `dados novos`, mas a rodinha continua girando para sempre. Na Início, quem desliga é o quadro das casas, quando o servidor responde.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "fill",
+      "prompt": "Complete as duas props que ligam o puxar para atualizar da Início ao quadro das casas, com `const { casas, atualizando, recarregar } = useCasas();`:\n\n```jsx\n<FlatList\n  data={visiveis}\n  ___={atualizando}\n  ___={recarregar}\n/>\n```",
+      "answer": [["refreshing"], ["onRefresh"]],
+      "explanation": "O `refreshing` diz se a rodinha está girando: recebe o `atualizando`, que é `true` ou `false`. O `onRefresh` diz o que fazer quando a pessoa puxa e solta: recebe a função `recarregar`, que pede as casas de novo ao servidor.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No fim da etapa 4, a busca olha o nome, o bairro e a cidade, sempre com a `paraBusca`, e a lista vazia mostra o `EstadoVazio`. A Casa do Bigode fica no bairro Liberdade, em São Paulo. O que a Início mostra com o termo `liberdade`?",
+      "options": {
+        "a": "O topo com os números 12, 5 e 76, a busca e um cartão só, o da Casa do Bigode",
+        "b": "O topo com os números 1, 1 e 3, a busca e o cartão da Casa do Bigode",
+        "c": "O `EstadoVazio`, porque `liberdade` não está no nome de nenhuma casa",
+        "d": "As 12 casas, porque o bairro não entra na busca"
+      },
+      "answer": "a",
+      "explanation": "`paraBusca('Liberdade')` dá `'liberdade'`, e a pergunta do bairro responde `true`: com o `||`, um sim já deixa a Casa do Bigode passar. Os números vêm do `resumoDasCasas(casas)`, com a lista inteira, e não da `visiveis`: continuam 12, 5 e 76.",
+      "points": 2
+    }
+  ]
+}

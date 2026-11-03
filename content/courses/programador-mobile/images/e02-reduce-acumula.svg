@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 350" font-family="Inter, system-ui, sans-serif">
+  <title>reduce em ação: o total começa em 0 e cada produto de áudio soma o seu preço; 0 mais 199.9 dá 199.9, mais 249.9 dá 449.8, mais 329.9 dá 779.7, o resultado</title>
+  <style>
+    .t    { fill: #e8edf7; font-size: 22px; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .mono { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ini  { fill: #a78bfa; font-weight: 700; }
+    .vem  { fill: #34d399; font-weight: 700; }
+    .caixa { fill: #34d399; }
+    .tot  { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .soma { fill: #34d399; font-size: 24px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .media { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cell { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .seta { fill: none; stroke: #a78bfa; stroke-width: 2.5; stroke-dasharray: 7 5; marker-end: url(#ponta); }
+
+    .v1 { animation: v1 8s infinite; }
+    .v2 { animation: v2 8s infinite; }
+    .v3 { animation: v3 8s infinite; }
+    .fim { animation: fim 8s infinite; }
+    @keyframes v1  { 0%, 8%  { opacity: 0; } 16%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes v2  { 0%, 26% { opacity: 0; } 34%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes v3  { 0%, 44% { opacity: 0; } 52%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes fim { 0%, 62% { opacity: 0; } 70%, 92% { opacity: 1; } 100% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .v1, .v2, .v3, .fim { animation: none; }
+    }
+  </style>
+  <defs>
+    <marker id="ponta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="350" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="40" y="44">o total começa em 0</text>
+
+  <!-- volta 1 -->
+  <g class="v1">
+    <rect class="cell" x="40" y="66" width="640" height="56" rx="10"/>
+    <text class="t" x="60" y="101">Fone Bluetooth</text>
+    <text class="mono" x="300" y="101"><tspan class="ini">0</tspan> + 199.9 =</text>
+    <rect class="caixa" x="560" y="74" width="104" height="40" rx="8"/>
+    <text class="tot" x="612" y="101" text-anchor="middle">199.9</text>
+  </g>
+
+  <!-- volta 2 -->
+  <g class="v2">
+    <path class="seta" d="M612 116 C 612 140, 340 128, 320 154"/>
+    <rect class="cell" x="40" y="156" width="640" height="56" rx="10"/>
+    <text class="t" x="60" y="191">Caixa de Som</text>
+    <text class="mono" x="300" y="191"><tspan class="vem">199.9</tspan> + 249.9 =</text>
+    <rect class="caixa" x="560" y="164" width="104" height="40" rx="8"/>
+    <text class="tot" x="612" y="191" text-anchor="middle">449.8</text>
+  </g>
+
+  <!-- volta 3 -->
+  <g class="v3">
+    <path class="seta" d="M612 206 C 612 230, 340 218, 320 244"/>
+    <rect class="cell" x="40" y="246" width="640" height="56" rx="10"/>
+    <text class="t" x="60" y="281">Microfone USB</text>
+    <text class="mono" x="300" y="281"><tspan class="vem">449.8</tspan> + 329.9 =</text>
+    <rect class="caixa" x="560" y="254" width="104" height="40" rx="8"/>
+    <text class="tot" x="612" y="281" text-anchor="middle">779.7</text>
+  </g>
+
+  <!-- resultado -->
+  <g class="fim">
+    <text class="soma" x="40" y="334">soma = 779.7</text>
+    <text class="media" x="270" y="334">média = 779.7 / 3 = 259.9</text>
+  </g>
+</svg>

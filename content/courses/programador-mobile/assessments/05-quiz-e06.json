@@ -1,0 +1,143 @@
+{
+  "title": "Quiz: E06 · Números, textos e dinheiro",
+  "description": "Dez questões sobre tipos, const e let, operadores, o 0.1 + 0.2, centavos inteiros, template string, Math.floor e o resto da conta do Racha-conta.",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst pessoas = '4';\nconsole.log(typeof pessoas);\n```",
+      "options": {
+        "a": "`string`",
+        "b": "`number`",
+        "c": "`4`",
+        "d": "`boolean`"
+      },
+      "answer": "a",
+      "explanation": "O valor está entre aspas, então é texto: `string`. As aspas mandam mais que o dígito. Sem aspas, `4` seria `number`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst preco = '14.5';\nconsole.log(preco + 2);\n```",
+      "options": {
+        "a": "`14.52`",
+        "b": "`16.5`",
+        "c": "`NaN`",
+        "d": "`TypeError`"
+      },
+      "answer": "a",
+      "explanation": "`preco` é texto, porque está entre aspas. Com um texto de um lado, o `+` junta em vez de somar: `'14.5' + 2` vira o texto `'14.52'`. Só com dois números, `14.5 + 2`, daria `16.5`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que acontece quando o Node roda estas linhas?\n\n```javascript\nconst gorjeta = 10;\ngorjeta = 15;\nconsole.log(gorjeta);\n```",
+      "options": {
+        "a": "Para com `TypeError: Assignment to constant variable.` antes do `console.log`",
+        "b": "Mostra `15`, o último valor guardado",
+        "c": "Mostra `10`, porque a `const` ignora a troca",
+        "d": "Mostra `undefined`"
+      },
+      "answer": "a",
+      "explanation": "A `const` é a caixa lacrada: guardar outro valor nela, reatribuir, é erro, e o Node para na segunda linha. Se o valor precisa trocar, a caixa nasce com `let`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O subtotal é `187.5`, a gorjeta é `18.75` e a mesa tem `4` pessoas. Qual linha calcula a parte de cada pessoa, `51.5625`?",
+      "options": {
+        "a": "`(187.5 + 18.75) / 4`",
+        "b": "`187.5 + 18.75 / 4`",
+        "c": "`187.5 + (18.75 / 4)`",
+        "d": "`187.5 / 4 + 18.75`"
+      },
+      "answer": "a",
+      "explanation": "A divisão vem antes da soma. Sem parênteses, só a gorjeta é dividida: `187.5 + 18.75 / 4` dá `192.1875`. Os parênteses fazem a soma primeiro, e o total é dividido pelas 4 pessoas.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "No JavaScript, `0.1 + 0.2 === 0.3` dá `true`.",
+      "answer": false,
+      "explanation": "O computador guarda os números em binário, e em binário 0,1 não tem conta exata. `0.1 + 0.2` dá `0.30000000000000004`, e a comparação com `0.3` dá `false`.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Por que o Racha-conta faz as contas de dinheiro em centavos inteiros, como `18750`, e não em reais, como `187.5`?",
+      "options": {
+        "a": "Porque inteiros são guardados sem sobra, e decimais como 0,1 ficam com uma sobra minúscula que muda o centavo",
+        "b": "Porque o `conta.json` não aceita preço com ponto",
+        "c": "Porque o `toFixed(2)` só funciona com inteiros",
+        "d": "Porque o terminal não mostra números com casas decimais"
+      },
+      "answer": "a",
+      "explanation": "Inteiro é exato: 18750 é 18750. Em reais, 15% de R$ 33,30 dá `4.994999999999999` e vira R$ 4,99; em centavos, `Math.round(3330 * 15 / 100)` dá `500`, os R$ 5,00 certos. O `conta.json` aceita ponto, e o `toFixed(2)` funciona com qualquer número.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No `racha.js` da etapa 3, `subtotalCentavos` vale `18750` e `conta.gorjeta` vale `10`. Quanto vale `totalCentavos`?\n\n```javascript\nconst gorjetaCentavos = Math.round(subtotalCentavos * conta.gorjeta / 100);\nconst totalCentavos = subtotalCentavos + gorjetaCentavos;\n```",
+      "options": {
+        "a": "`20625`",
+        "b": "`18760`",
+        "c": "`206.25`",
+        "d": "`1875`"
+      },
+      "answer": "a",
+      "explanation": "Da esquerda para a direita: `18750 * 10` dá `187500`, dividido por `100` dá `1875`, a gorjeta em centavos. O total é `18750 + 1875`, `20625` centavos, que aparecem como `R$ 206.25`. O `18760` soma o percentual em vez da gorjeta, e o `206.25` é o total já em reais.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst gorjetaCentavos = 1875;\nconsole.log(`Gorjeta: R$ ${(gorjetaCentavos / 100).toFixed(2)}`);\n```",
+      "options": {
+        "a": "`Gorjeta: R$ 18.75`",
+        "b": "`Gorjeta: R$ 1875`",
+        "c": "`Gorjeta: R$ 18,75`",
+        "d": "`Gorjeta: R$ ${(gorjetaCentavos / 100).toFixed(2)}`"
+      },
+      "answer": "a",
+      "explanation": "Entre crases, o `${ }` é uma lacuna: o JavaScript divide `1875` por `100`, que dá `18.75`, mostra com 2 casas e encaixa no texto. O ponto continua ponto: a vírgula do real chega no E09. O texto com `${...}` escrito só aparece quando se usam aspas no lugar das crases.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "A linha do total saiu assim no terminal: `Total: R$ ${(totalCentavos / 100).toFixed(2)}`, com a conta escrita em vez do valor. O que aconteceu?",
+      "options": {
+        "a": "O texto foi escrito com aspas simples no lugar das crases",
+        "b": "Faltou o `Math.round` no total",
+        "c": "O `totalCentavos` foi criado com `let`",
+        "d": "Faltou dividir por 100"
+      },
+      "answer": "a",
+      "explanation": "Só a template string, entre crases, enche as lacunas `${ }`. Entre aspas simples, o `${...}` é texto comum e sai escrito do jeito que está. A correção é trocar a aspa do começo e a do fim por crases.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "fill",
+      "prompt": "Uma conta de R$ 110,00, em centavos `11000`, é dividida entre 3 pessoas.\n\n```javascript\nconsole.log(Math.floor(11000 / 3));\nconsole.log(11000 % 3);\n```\n\nA primeira linha mostra ___ e a segunda mostra ___.",
+      "answer": [["3666"], ["2"]],
+      "explanation": "`11000 / 3` dá `3666.666...`; o `Math.floor` corta as casas e fica com `3666` centavos para cada um. O `%` dá o resto: 3 vezes 3666 são 10998, e sobram `2` centavos para chegar a 11000.",
+      "points": 2
+    }
+  ]
+}

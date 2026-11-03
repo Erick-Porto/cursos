@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" font-family="Inter, system-ui, sans-serif">
+  <title>Pilha com abas: o grupo (abas), com Casas e Sobre, é a carta de baixo; o push põe o Detalhe do Lar da Mel por cima, cobrindo a barra de abas; voltar tira o Detalhe e as abas voltam como estavam</title>
+  <style>
+    .card { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .top  { fill: #34d399; }
+    .n    { fill: #e8edf7; font-size: 22px; font-weight: 700; }
+    .nt   { fill: #06281c; font-size: 22px; font-weight: 700; }
+    .c    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .ct   { fill: #06281c; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .cap  { fill: #a78bfa; font-size: 24px; font-weight: 700; }
+    .sub  { fill: #b4bfd3; font-size: 22px; }
+    .entra { animation: entra 8s ease-out infinite; }
+    .col3  { animation: col3 8s ease-out infinite; }
+    .sai   { opacity: 0.25; animation: sai 8s ease-in-out infinite; }
+    .volta { animation: volta 8s ease-out infinite; }
+    @keyframes entra {
+      0%, 14%  { opacity: 0; transform: translateX(48px); }
+      26%, 92% { opacity: 1; transform: translateX(0); }
+      100%     { opacity: 0; transform: translateX(0); }
+    }
+    @keyframes col3 {
+      0%, 40%  { opacity: 0; }
+      48%, 92% { opacity: 1; }
+      100%     { opacity: 0; }
+    }
+    @keyframes sai {
+      0%, 56%   { opacity: 1; transform: translateY(36px); }
+      68%, 100% { opacity: 0.25; transform: translateY(0); }
+    }
+    @keyframes volta {
+      0%, 60%   { opacity: 0; }
+      68%, 100% { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .entra, .col3, .sai, .volta { animation: none; }
+    }
+  </style>
+  <rect width="720" height="360" rx="16" fill="#0b1020"/>
+
+  <!-- coluna 1: o app abre nas abas -->
+  <text class="cap" x="128" y="50" text-anchor="middle">1 · abre</text>
+  <text class="sub" x="128" y="84" text-anchor="middle">as abas na tela</text>
+  <rect class="top" x="28" y="228" width="200" height="76" rx="10"/>
+  <text class="ct" x="128" y="259" text-anchor="middle">(abas)</text>
+  <text class="nt" x="128" y="291" text-anchor="middle">Casas · Sobre</text>
+
+  <!-- coluna 2: push do Detalhe -->
+  <text class="cap" x="360" y="50" text-anchor="middle">2 · push</text>
+  <text class="sub" x="360" y="84" text-anchor="middle">o Detalhe entra</text>
+  <rect class="card" x="260" y="228" width="200" height="76" rx="10"/>
+  <text class="c" x="360" y="259" text-anchor="middle">(abas)</text>
+  <text class="n" x="360" y="291" text-anchor="middle">Casas · Sobre</text>
+  <g class="entra">
+    <rect class="top" x="260" y="144" width="200" height="76" rx="10"/>
+    <text class="ct" x="360" y="175" text-anchor="middle">casa/[id]</text>
+    <text class="nt" x="360" y="207" text-anchor="middle">Lar da Mel</text>
+  </g>
+
+  <!-- coluna 3: voltar -->
+  <g class="col3">
+    <text class="cap" x="592" y="50" text-anchor="middle">3 · voltar</text>
+    <text class="sub" x="592" y="84" text-anchor="middle">o Detalhe sai</text>
+    <rect class="card" x="492" y="228" width="200" height="76" rx="10"/>
+    <text class="c" x="592" y="259" text-anchor="middle">(abas)</text>
+    <text class="n" x="592" y="291" text-anchor="middle">Casas · Sobre</text>
+    <g class="volta">
+      <rect class="top" x="492" y="228" width="200" height="76" rx="10"/>
+      <text class="ct" x="592" y="259" text-anchor="middle">(abas)</text>
+      <text class="nt" x="592" y="291" text-anchor="middle">Casas · Sobre</text>
+    </g>
+    <g class="sai">
+      <rect class="top" x="492" y="108" width="200" height="76" rx="10"/>
+      <text class="ct" x="592" y="139" text-anchor="middle">casa/[id]</text>
+      <text class="nt" x="592" y="171" text-anchor="middle">Lar da Mel</text>
+    </g>
+  </g>
+
+  <!-- legenda -->
+  <rect class="top" x="40" y="322" width="22" height="22" rx="4"/>
+  <text class="sub" x="74" y="341">a tela visível; o Detalhe cobre as abas inteiras</text>
+</svg>

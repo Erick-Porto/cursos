@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E41 · Do briefing ao backlog",
+  "description": "Dez questões sobre o briefing, a divisão da equipe, as histórias com Pronto quando, os rótulos do backlog, as Issues e o repositório da equipe com git clone.",
+  "lesson": "e41-do-briefing-ao-backlog",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual destas é uma história de usuário bem escrita para o Controle de gastos?",
+      "options": {
+        "a": "Como usuária, quero ver os meus lançamentos, do mais novo para o mais velho, para saber para onde foi o dinheiro",
+        "b": "Tela de lançamentos com uma `FlatList` e a lixeira em cada item",
+        "c": "Como programadora, quero usar uma `FlatList`, para a lista ficar mais rápida",
+        "d": "Como usuária, quero controlar os meus gastos, para controlar os meus gastos"
+      },
+      "answer": "a",
+      "explanation": "A história diz quem usa, o que a pessoa quer e para quê, e descreve uma necessidade, não uma tela. A (b) fala de tela e de código. A (c) tem a forma \"Como, quero, para\", mas fala de quem programa, não de quem usa o app. A (d) é o app inteiro, e o \"para\" só repete o \"quero\".",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Quais destes itens são um bom Pronto quando, que qualquer pessoa da equipe confere no celular? Marque todas as certas.",
+      "options": {
+        "a": "Com os dados do kit, o saldo é R$ 1727,10",
+        "b": "O saldo aparece certo",
+        "c": "Com 2 X-Burger e 1 Suco de laranja no carrinho, o total é R$ 54,80",
+        "d": "A tela do carrinho fica bonita"
+      },
+      "answer": ["a", "c"],
+      "explanation": "O Pronto quando é a conferência da encomenda na entrega: quem testa abre o app e compara com um número dos dados do kit. \"Aparece certo\" e \"fica bonita\" não dizem o que conferir: cada pessoa acharia uma coisa.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A equipe do Cardápio e pedidos listou a história \"Pagar pelo app\". Pagamento não está no curso, e a apresentação mostra o app sem ele. Onde essa história fica?",
+      "options": {
+        "a": "Sem issue: anotada para o README, em \"Fora desta versão\"",
+        "b": "Numa issue com o rótulo `precisa-ter`",
+        "c": "Numa issue com o rótulo `deveria-ter`",
+        "d": "Numa issue sem rótulo, para decidir no E45"
+      },
+      "answer": "a",
+      "explanation": "Na festa com pouco dinheiro, os fogos ficam de fora, e fica escrito. O que não vai ter desta vez não vira issue: vai para o README, em \"Fora desta versão\". `precisa-ter` é o que, sem ele, não há app; `deveria-ter` é o importante que cabe nos cinco encontros.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "truefalse",
+      "prompt": "Se a equipe põe o rótulo `precisa-ter` em todas as issues, o backlog mostra com clareza o que fazer primeiro.",
+      "answer": false,
+      "explanation": "Se tudo é `precisa-ter`, nada é prioridade: a equipe não sabe o que fica para depois se o tempo acabar. Os rótulos `deveria-ter` e `poderia-ter` existem para separar o que a apresentação vive sem.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O `src/data/equipe.js` tem esta linha:\n\n```javascript\n{ nome: 'Bruno Lima', github: 'bruno-lima' },\n```\n\nA tela Sobre do kit mostra cada pessoa com:\n\n```jsx\ntexto={`${pessoa.nome} · github.com/${pessoa.github}`}\n```\n\nO que aparece na linha do Bruno?",
+      "options": {
+        "a": "`Bruno Lima · github.com/bruno-lima`",
+        "b": "`Bruno Lima · github.com/@bruno-lima`",
+        "c": "`${pessoa.nome} · github.com/${pessoa.github}`",
+        "d": "`bruno-lima · github.com/Bruno Lima`"
+      },
+      "answer": "a",
+      "explanation": "É a mensagem pronta com lacunas do E06: cada `${...}` é trocado pelo valor do campo. `pessoa.nome` é `'Bruno Lima'` e `pessoa.github` é `'bruno-lima'`. O `@` não aparece porque o `equipe.js` guarda o usuário sem ele.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "A Ana fez o primeiro push do Gasto Certo com este `.gitignore` na raiz:\n\n```plaintext\nnode_modules/\n.expo/\ndist/\n```\n\nNo computador dela, o projeto tem `app/`, `src/`, `package.json`, `package-lock.json`, `.gitignore` e `node_modules/`. Logo depois do `git clone`, antes de qualquer outro comando, o que existe na pasta do Bruno? Marque todas as certas.",
+      "options": {
+        "a": "As pastas `app/` e `src/`",
+        "b": "O `package.json` e o `package-lock.json`",
+        "c": "O `.gitignore`",
+        "d": "A pasta `node_modules/`"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `git clone` baixa o álbum inteiro: tudo o que entrou nos commits, inclusive o próprio `.gitignore`. O `node_modules/` nunca entrou numa foto, porque o `.gitignore` deixou de fora. Por isso, depois do clone, vem o `npm install`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O Bruno fez o `git clone`, entrou na pasta com `cd gasto-certo` e rodou `npx expo start`. Apareceu:\n\n```plaintext\nConfigError: Cannot determine the project's Expo SDK version because the module `expo` is not installed.\n```\n\nO que ele faz?",
+      "options": {
+        "a": "`npm install`, sem nome de pacote, e `npx expo start` de novo",
+        "b": "`git clone` de novo, porque o clone veio incompleto",
+        "c": "`git remote add origin` com o endereço do GitHub",
+        "d": "Apaga o `package-lock.json` e roda `npx expo start` de novo"
+      },
+      "answer": "a",
+      "explanation": "O clone não traz o `node_modules`, então o Expo ainda não está no computador. O `npm install` lê o `package.json` e o lock e baixa tudo, nas versões do kit. O clone não está incompleto, ele já sabe o endereço do GitHub, e o lock não pode sair: é ele que garante as mesmas versões para a equipe toda.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Quem cuida do repositório criou a pasta `app/(abas)`, levou para dentro dela o `index.js` e o `sobre.js` e criou o `app/(abas)/_layout.js`. Qual linha o `app/_layout.js` precisa ter agora, dentro da `Stack`?",
+      "options": {
+        "a": "`<Stack.Screen name=\"(abas)\" options={{ headerShown: false }} />`",
+        "b": "`<Stack.Screen name=\"index\" options={{ headerShown: false }} />`",
+        "c": "`<Stack.Screen name=\"abas\" options={{ headerShown: false }} />`",
+        "d": "`<Stack.Screen name=\"(abas)/index\" options={{ headerShown: false }} />`"
+      },
+      "answer": "a",
+      "explanation": "Como no E37, o grupo `(abas)` inteiro é uma carta da pilha, e o nome vai com os parênteses, igual ao da pasta. Com `index`, a pilha procura um arquivo que saiu de lá; sem os parênteses, o nome não bate com a pasta, e aparece `No route named`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "A Carla escreveu a issue \"Lançar uma entrada ou uma saída\" e quer aparecer como responsável. Ela abre **Assignees**, mas o nome dela não aparece na lista. O que falta?",
+      "options": {
+        "a": "Aceitar o convite de colaboradora que chegou por e-mail",
+        "b": "Pôr o rótulo `precisa-ter` antes de escolher o responsável",
+        "c": "Fazer o `git clone` do repositório",
+        "d": "Escrever o próprio nome no título da issue"
+      },
+      "answer": "a",
+      "explanation": "Só colaborador pode ser responsável por uma issue, e a pessoa vira colaboradora quando aceita o convite (**View invitation**, **Accept invitation**). O rótulo é outra coisa, e o clone traz o código para o computador, mas não dá a chave da casa.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No Projeto 7, numa equipe de 3 do Controle de gastos, com o que cada pessoa fica?",
+      "options": {
+        "a": "Uma tela do briefing, um componente seu e uma tarefa da equipe",
+        "b": "As três telas, feitas por todos juntos no mesmo arquivo",
+        "c": "Uma peça de `src/components/ui/` para reescrever do zero",
+        "d": "Uma tarefa da equipe só; as telas ficam com quem cuida do repositório"
+      },
+      "answer": "a",
+      "explanation": "É a reforma da casa: cada um na sua parte. Cada pessoa monta uma tela com as peças do kit, cria um componente seu e cuida de uma tarefa (repositório, dados no celular, publicação ou README). As peças do kit não mudam, e todos no mesmo arquivo é o jeito mais rápido de um atropelar o outro.",
+      "points": 1
+    }
+  ]
+}

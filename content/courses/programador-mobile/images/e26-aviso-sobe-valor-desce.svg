@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>O clique no BotaoFavorito sobe por aoClicar e aoFavoritar até o App, que troca o estado com setFavoritas; o valor novo desce por favorita e ativo até o botão, que mostra Favorita</title>
+  <style>
+    .box   { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .app   { fill: #131c33; stroke: #34d399; stroke-width: 3; }
+    .b     { fill: #e8edf7; font-size: 24px; font-weight: 700; }
+    .m     { fill: #b4bfd3; font-size: 22px; }
+    .code  { font-family: 'JetBrains Mono', Consolas, monospace; }
+    .sobe  { stroke: #fbbf24; stroke-width: 3; fill: none; stroke-dasharray: 8 6; marker-end: url(#ponta-sobe); }
+    .desce { stroke: #34d399; stroke-width: 3; fill: none; marker-end: url(#ponta-desce); }
+    .ls    { fill: #fbbf24; font-size: 22px; font-weight: 700; }
+    .ld    { fill: #34d399; font-size: 22px; font-weight: 700; }
+  </style>
+  <defs>
+    <marker id="ponta-sobe" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#fbbf24"/></marker>
+    <marker id="ponta-desce" viewBox="0 0 10 10" markerWidth="6" markerHeight="6" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#34d399"/></marker>
+  </defs>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <!-- legendas -->
+  <text class="ls" x="28" y="56">o aviso sobe</text>
+  <text class="ld" x="692" y="56" text-anchor="end">o valor desce</text>
+
+  <!-- App: o dono do estado -->
+  <rect class="app" x="210" y="20" width="300" height="84" rx="12"/>
+  <text class="b" x="360" y="54" text-anchor="middle">App</text>
+  <text class="m code" x="360" y="88" text-anchor="middle" fill="#e8edf7">setFavoritas([1])</text>
+
+  <!-- o cartão -->
+  <rect class="box" x="210" y="168" width="300" height="84" rx="12"/>
+  <text class="b" x="360" y="219" text-anchor="middle">CartaoReceita</text>
+
+  <!-- o botão -->
+  <rect class="box" x="210" y="316" width="300" height="84" rx="12"/>
+  <text class="b" x="360" y="350" text-anchor="middle">BotaoFavorito</text>
+  <text class="m" x="360" y="384" text-anchor="middle">mostra Favorita</text>
+
+  <!-- sobe: as funções -->
+  <path class="sobe" d="M 250 312 L 250 260"/>
+  <text class="ls code" x="234" y="294" text-anchor="end">aoClicar</text>
+  <path class="sobe" d="M 250 164 L 250 112"/>
+  <text class="ls code" x="234" y="146" text-anchor="end">aoFavoritar</text>
+
+  <!-- desce: os valores -->
+  <path class="desce" d="M 470 108 L 470 160"/>
+  <text class="ld code" x="486" y="146">favorita={true}</text>
+  <path class="desce" d="M 470 256 L 470 308"/>
+  <text class="ld code" x="486" y="294">ativo={true}</text>
+</svg>

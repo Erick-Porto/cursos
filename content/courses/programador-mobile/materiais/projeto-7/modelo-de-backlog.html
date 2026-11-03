@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Modelo de backlog · Projeto 7</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --ok-suave: #dcfce7;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --ok-suave: rgba(74, 222, 128, 0.14);
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, td code, h3 code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    a { color: var(--destaque); }
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    h3 { margin: 0 0 8px; font-size: 1.05rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    .cartao + .cartao { margin-top: 12px; }
+    .cartao p { margin: 0; }
+    .cartao p + p, .cartao p + ul, .cartao ul + p { margin-top: 8px; }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .codigo { margin-top: 12px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; white-space: pre-wrap; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+    .tabela { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { padding: 8px 10px; border-bottom: 1px solid var(--borda); text-align: left; vertical-align: top; }
+    th { color: var(--texto-2); font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td input {
+      width: 100%;
+      min-width: 90px;
+      padding: 8px 10px;
+      border: 1px solid var(--borda);
+      border-radius: 8px;
+      background: var(--fundo);
+      color: var(--texto);
+      font: inherit;
+    }
+    ul.lista { margin: 8px 0 0; padding-left: 1.2em; }
+    ul.lista li + li { margin-top: 6px; }
+    .compara { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 12px; }
+    @media (min-width: 640px) { .compara { grid-template-columns: 1fr 1fr; } }
+    .vago, .bom { padding: 12px 16px; border-radius: 12px; }
+    .vago { background: var(--alerta-suave); border-left: 4px solid var(--alerta); }
+    .bom { background: var(--ok-suave); border-left: 4px solid var(--ok); }
+    .vago strong, .bom strong { display: block; font-size: 0.8rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    .selo {
+      display: inline-block;
+      padding: 1px 10px;
+      border-radius: 999px;
+      background: var(--destaque-suave);
+      color: var(--destaque);
+      font-size: 0.85rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .abas { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .abas button {
+      padding: 8px 14px;
+      border: 1px solid var(--borda);
+      border-radius: 999px;
+      background: var(--cartao);
+      color: var(--texto);
+    }
+    .abas button[aria-selected="true"] { background: var(--destaque); border-color: var(--destaque); color: var(--sobre-destaque); font-weight: 700; }
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      [role="tabpanel"][hidden] { display: block !important; }
+      td input { border: 0; border-bottom: 1px solid #999; border-radius: 0; background: none; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+    <symbol id="i-notebook-pen" viewBox="0 0 24 24"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"/><path d="M2 6h4"/><path d="M2 10h4"/><path d="M2 14h4"/><path d="M2 18h4"/><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-tags" viewBox="0 0 24 24"><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/><path d="M9.586 5.586A2 2 0 0 0 8.172 5H3a1 1 0 0 0-1 1v5.172a2 2 0 0 0 .586 1.414L8.29 18.29a2.426 2.426 0 0 0 3.42 0l3.58-3.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="6.5" cy="9.5" r=".5" fill="currentColor"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M3 12h.01"/><path d="M3 18h.01"/><path d="M3 6h.01"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M8 6h13"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="i-mouse" viewBox="0 0 24 24"><path d="M14 4.1 12 6"/><path d="m5.1 8-2.9-.8"/><path d="m6 12-1.9 2"/><path d="M7.2 2.2 8 5.1"/><path d="M9.037 9.69a.498.498 0 0 1 .653-.653l11 4.5a.5.5 0 0 1-.074.949l-4.349 1.041a1 1 0 0 0-.74.739l-1.04 4.35a.5.5 0 0 1-.95.074z"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · Projeto 7 · E41</p>
+      <h1>Modelo de backlog</h1>
+      <p class="lead">
+        O backlog é a lista do que a equipe vai fazer, da coisa mais importante para a menos. No projeto
+        integrador, ele mora nas Issues do repositório da equipe: uma issue para cada história.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-quem">
+      <h2 id="t-quem"><svg class="ico"><use href="#i-users"/></svg>Quem faz o quê</h2>
+      <div class="cartao">
+        <p>
+          Cada pessoa fica com uma tela, um componente seu e uma tarefa da equipe. Na equipe de 3, alguém
+          fica com duas tarefas e a tela 4 fica de fora. O que você digita aqui fica só neste navegador:
+          imprima ou copie para o README.
+        </p>
+        <div class="tabela" style="margin-top: 12px">
+          <table>
+            <thead><tr><th>Pessoa</th><th>Tela</th><th>Componente</th><th>Tarefa da equipe</th></tr></thead>
+            <tbody>
+              <tr><td><input aria-label="Pessoa 1" data-campo="p1"></td><td><input aria-label="Tela da pessoa 1" data-campo="t1"></td><td><input aria-label="Componente da pessoa 1" data-campo="c1"></td><td><input aria-label="Tarefa da pessoa 1" data-campo="f1" placeholder="Repositório"></td></tr>
+              <tr><td><input aria-label="Pessoa 2" data-campo="p2"></td><td><input aria-label="Tela da pessoa 2" data-campo="t2"></td><td><input aria-label="Componente da pessoa 2" data-campo="c2"></td><td><input aria-label="Tarefa da pessoa 2" data-campo="f2" placeholder="Dados no celular"></td></tr>
+              <tr><td><input aria-label="Pessoa 3" data-campo="p3"></td><td><input aria-label="Tela da pessoa 3" data-campo="t3"></td><td><input aria-label="Componente da pessoa 3" data-campo="c3"></td><td><input aria-label="Tarefa da pessoa 3" data-campo="f3" placeholder="Publicação"></td></tr>
+              <tr><td><input aria-label="Pessoa 4" data-campo="p4"></td><td><input aria-label="Tela da pessoa 4" data-campo="t4"></td><td><input aria-label="Componente da pessoa 4" data-campo="c4"></td><td><input aria-label="Tarefa da pessoa 4" data-campo="f4" placeholder="README"></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="acoes nao-imprime">
+          <button class="botao" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-historia">
+      <h2 id="t-historia"><svg class="ico"><use href="#i-notebook-pen"/></svg>Uma história, em três partes</h2>
+      <div class="cartao">
+        <p>
+          Uma <strong>história de usuário</strong> descreve o que uma pessoa quer fazer no app, não uma tela.
+          Ela cabe numa frase: <strong>Como</strong> quem, <strong>quero</strong> o quê, <strong>para</strong> quê.
+          O "para quê" ajuda a equipe a decidir os detalhes.
+        </p>
+        <p>
+          Embaixo dela, o <strong>Pronto quando</strong>: a lista do que qualquer pessoa da equipe confere no
+          celular para dizer que a história ficou pronta. Use os números dos dados do kit.
+        </p>
+        <div class="codigo">
+          <div class="codigo-topo"><span>a descrição da issue</span><button class="copiar nao-imprime" type="button" data-alvo="#modelo-issue">Copiar</button></div>
+<pre><code id="modelo-issue">**História:** Como cliente, quero ver os horários livres do dia,
+para marcar sem ligar para o salão.
+
+**Pronto quando:**
+- [ ] Na segunda, aparecem 6 horários: o 10:00 e o 14:00 já estão ocupados
+- [ ] Na quarta, aparecem 7: o 09:00 está ocupado
+- [ ] Sem escolher o dia, aparece "Escolha o dia" embaixo das opções
+
+**Tela:** Agendar (app/agendar/[id].js)</code></pre>
+        </div>
+        <p style="margin-top: 12px">
+          O <code>- [ ]</code> vira uma caixinha no GitHub: quem testa marca cada item atendido. O título da
+          issue é curto e começa por verbo: "Ver os horários livres do dia".
+        </p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-pronto">
+      <h2 id="t-pronto"><svg class="ico"><use href="#i-check"/></svg>Pronto quando que dá para conferir</h2>
+      <div class="cartao">
+        <p>Se ninguém consegue conferir no celular, não é Pronto quando. Troque o vago pelo número.</p>
+        <div class="compara">
+          <div class="vago"><strong>Vago</strong>O saldo aparece certo</div>
+          <div class="bom"><strong>Dá para conferir</strong>Com os dados do kit, o saldo é R$ 1727,10</div>
+          <div class="vago"><strong>Vago</strong>O carrinho funciona direito</div>
+          <div class="bom"><strong>Dá para conferir</strong>Com 2 X-Burger e 1 suco, o total é R$ 54,80</div>
+          <div class="vago"><strong>Vago</strong>O app é rápido</div>
+          <div class="bom"><strong>Dá para conferir</strong>Fechei o app e abri de novo: o lançamento continua lá</div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-rotulos">
+      <h2 id="t-rotulos"><svg class="ico"><use href="#i-tags"/></svg>Os rótulos de prioridade</h2>
+      <div class="cartao">
+        <p>
+          Pense numa festa com pouco dinheiro: o bolo precisa ter; os docinhos deveriam ter; o mágico, só se
+          sobrar dinheiro; os fogos ficam de fora. No backlog é igual. É o MoSCoW, das iniciais em inglês de
+          <em>must</em>, <em>should</em>, <em>could</em> e <em>won't</em>.
+        </p>
+        <div class="tabela" style="margin-top: 12px">
+          <table>
+            <thead><tr><th>Rótulo</th><th>Quer dizer</th><th>Quando entra</th></tr></thead>
+            <tbody>
+              <tr><td><span class="selo">precisa-ter</span></td><td>sem isso, não há app</td><td>E42 e E43</td></tr>
+              <tr><td><span class="selo">deveria-ter</span></td><td>importante, mas a apresentação vive sem</td><td>E43 e E44</td></tr>
+              <tr><td><span class="selo">poderia-ter</span></td><td>só se sobrar tempo</td><td>E44, se der</td></tr>
+              <tr><td>(sem issue)</td><td>não vai ter desta vez</td><td>no README, em "Fora desta versão"</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin-top: 12px">Se tudo é <code>precisa-ter</code>, nada é prioridade: o que não cabe em cinco encontros vai para baixo.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-github">
+      <h2 id="t-github"><svg class="ico"><use href="#i-mouse"/></svg>No GitHub</h2>
+      <div class="cartao">
+        <h3>Os rótulos (uma pessoa, uma vez)</h3>
+        <ul class="lista">
+          <li>No repositório da equipe, aba <strong>Issues</strong>, botão <strong>Labels</strong></li>
+          <li><strong>New label</strong>, o nome <code>precisa-ter</code> e <strong>Create label</strong>. Repita para <code>deveria-ter</code> e <code>poderia-ter</code></li>
+        </ul>
+      </div>
+      <div class="cartao">
+        <h3>Uma issue (cada pessoa, para a sua tela)</h3>
+        <ul class="lista">
+          <li>Aba <strong>Issues</strong>, botão <strong>New issue</strong></li>
+          <li>O título curto, com verbo, e a descrição com a história e o Pronto quando (o modelo acima)</li>
+          <li>À direita: em <strong>Assignees</strong>, você; em <strong>Labels</strong>, o rótulo</li>
+          <li><strong>Create</strong>. A issue ganha um número, como <code>#4</code>: no E42, o pull request da tela diz <code>Closes #4</code> e fecha a issue sozinho no merge</li>
+        </ul>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-partida">
+      <h2 id="t-partida"><svg class="ico"><use href="#i-list"/></svg>Histórias de partida</h2>
+      <p class="nao-imprime" style="margin: 0 0 12px; color: var(--texto-2)">
+        Os títulos abaixo são um começo. Cada pessoa escreve as da sua tela, com a história e o Pronto quando,
+        e a equipe acrescenta, tira ou muda o rótulo. De 8 a 12 issues no total.
+      </p>
+      <div class="abas nao-imprime" role="tablist" aria-label="Briefing">
+        <button type="button" role="tab" id="aba-agenda" aria-controls="painel-agenda" aria-selected="true">Agenda de serviços</button>
+        <button type="button" role="tab" id="aba-cardapio" aria-controls="painel-cardapio" aria-selected="false">Cardápio e pedidos</button>
+        <button type="button" role="tab" id="aba-gastos" aria-controls="painel-gastos" aria-selected="false">Controle de gastos</button>
+      </div>
+
+      <div class="cartao tabela" role="tabpanel" id="painel-agenda" aria-labelledby="aba-agenda">
+        <h3>Agenda de serviços</h3>
+        <table>
+          <thead><tr><th>Título da issue</th><th>Tela</th><th>Rótulo</th></tr></thead>
+          <tbody>
+            <tr><td>Ver os serviços com duração e preço</td><td>Serviços</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Abrir o agendamento de um serviço</td><td>Serviços</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver os horários livres do dia</td><td>Agendar</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Agendar com o meu nome</td><td>Agendar</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver os meus agendamentos</td><td>Agendados</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Cancelar um agendamento</td><td>Agendados</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Ver o dia inteiro, livre e ocupado</td><td>Horários</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Guardar os agendamentos no celular</td><td>todas</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Avisar quando não há agendamentos</td><td>Agendados</td><td><span class="selo">poderia-ter</span></td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 12px">Fora desta versão: pagar pelo app, lembrete uma hora antes.</p>
+      </div>
+
+      <div class="cartao tabela" role="tabpanel" id="painel-cardapio" aria-labelledby="aba-cardapio" hidden>
+        <h3>Cardápio e pedidos</h3>
+        <table>
+          <thead><tr><th>Título da issue</th><th>Tela</th><th>Rótulo</th></tr></thead>
+          <tbody>
+            <tr><td>Ver os produtos de uma categoria</td><td>Cardápio</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver o que está esgotado</td><td>Cardápio</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Escolher a quantidade e a observação</td><td>Produto</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Pôr um produto no carrinho</td><td>Produto</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver os itens e o total do carrinho</td><td>Carrinho</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Tirar um item do carrinho</td><td>Carrinho</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Fazer o pedido com o mínimo de R$ 15,00</td><td>Carrinho ou Finalizar</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Saber quanto tempo falta para retirar</td><td>Finalizar</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Guardar o carrinho no celular</td><td>todas</td><td><span class="selo">precisa-ter</span></td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 12px">Fora desta versão: pagamento pelo app, entrega em casa.</p>
+      </div>
+
+      <div class="cartao tabela" role="tabpanel" id="painel-gastos" aria-labelledby="aba-gastos" hidden>
+        <h3>Controle de gastos</h3>
+        <table>
+          <thead><tr><th>Título da issue</th><th>Tela</th><th>Rótulo</th></tr></thead>
+          <tbody>
+            <tr><td>Ver o saldo, as entradas e as saídas</td><td>Início</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Abrir o lançamento novo pela Início</td><td>Início</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver os lançamentos, do mais novo para o mais velho</td><td>Lançamentos</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Apagar um lançamento</td><td>Lançamentos</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Lançar uma entrada ou uma saída</td><td>Novo lançamento</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver o que falta preencher no formulário</td><td>Novo lançamento</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Ver quanto foi para cada categoria</td><td>Categorias</td><td><span class="selo">deveria-ter</span></td></tr>
+            <tr><td>Guardar os lançamentos no celular</td><td>todas</td><td><span class="selo">precisa-ter</span></td></tr>
+            <tr><td>Avisar quando não há lançamentos</td><td>Lançamentos</td><td><span class="selo">poderia-ter</span></td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 12px">Fora desta versão: troca de mês, conexão com a conta do banco.</p>
+      </div>
+    </section>
+
+    <footer>Material do Projeto 7 do curso Programador Mobile. O que você digita na tabela fica só neste navegador.</footer>
+  </main>
+
+  <script>
+    // Tabela "Quem faz o quê": guarda no localStorage deste navegador. Sem acesso a ele
+    // (modo privado, armazenamento bloqueado), a página funciona igual, só não lembra.
+    const CHAVE = 'pm-p7-quem-faz-o-que'
+    const campos = [...document.querySelectorAll('[data-campo]')]
+
+    function ler() {
+      try {
+        const dados = JSON.parse(localStorage.getItem(CHAVE) || '{}')
+        return dados && typeof dados === 'object' ? dados : {}
+      } catch {
+        return {}
+      }
+    }
+
+    function gravar() {
+      const dados = {}
+      for (const c of campos) dados[c.dataset.campo] = c.value
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(dados))
+      } catch {
+        // sem armazenamento: segue sem lembrar
+      }
+    }
+
+    const salvos = ler()
+    for (const c of campos) {
+      c.value = salvos[c.dataset.campo] ?? ''
+      c.addEventListener('input', gravar)
+    }
+
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+
+    // abas dos briefings
+    const abas = [...document.querySelectorAll('[role="tab"]')]
+    for (const aba of abas) {
+      aba.addEventListener('click', () => {
+        for (const outra of abas) {
+          const escolhida = outra === aba
+          outra.setAttribute('aria-selected', String(escolhida))
+          document.getElementById(outra.getAttribute('aria-controls')).hidden = !escolhida
+        }
+      })
+    }
+
+    // botão "Copiar" do modelo
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>

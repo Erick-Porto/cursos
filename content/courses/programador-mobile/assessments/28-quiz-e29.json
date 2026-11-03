@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E29 · React Native e Expo",
+  "description": "Dez questões sobre app e site, React Native, Expo e Expo Go, a conta Expo, a rede, View e Text e o terminal do npx expo start.",
+  "lesson": "e29-react-native-e-expo",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Qual frase descreve um **app nativo**, e não um site?",
+      "options": {
+        "a": "É instalado da loja, tem ícone na tela inicial e usa as peças do sistema do celular",
+        "b": "Abre pelo endereço, no navegador, e a tela é feita com as tags do HTML",
+        "c": "É um site salvo nos favoritos do navegador do celular",
+        "d": "Só funciona no iPhone, porque o Android abre apenas sites"
+      },
+      "answer": "a",
+      "explanation": "O app nativo mora no celular: vem da loja, fica na tela inicial e usa as peças do sistema, o Android ou o iOS, com avisos, câmera e digital. Abrir pelo endereço, no navegador, com tags do HTML, é o jeito do site, mesmo quando o site está nos favoritos.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No React Native, o que acontece com a `View` e o `Text` quando o app abre no celular?",
+      "options": {
+        "a": "Viram peças nativas do sistema, as mesmas que um app escrito só para o Android ou só para o iPhone usaria",
+        "b": "Viram `<div>` e `<p>`, mostrados por um navegador escondido dentro do app",
+        "c": "Viram uma imagem da tela, que o Expo Go mostra como foto",
+        "d": "Não aparecem no celular: só funcionam no navegador do computador"
+      },
+      "answer": "a",
+      "explanation": "O React Native trabalha como um intérprete: você escreve JSX, e ele repete cada peça na língua do sistema. Por isso a tela é nativa, e o mesmo código serve ao Android e ao iPhone. Não existe HTML nem `div` no celular.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O `App.js` do Gota tem este `return`. O que o celular mostra?\n\n```jsx\n<Tela>\n  <View>\n    <Text>Gota</Text>\n    <Text>Olá, Bia! Vamos de água?</Text>\n  </View>\n\n  {/* Etapa 1 (E29), sua vez: a meta do dia */}\n</Tela>\n```",
+      "options": {
+        "a": "`Gota` e, embaixo, `Olá, Bia! Vamos de água?`",
+        "b": "`Gota`, `Olá, Bia! Vamos de água?` e `Etapa 1 (E29), sua vez: a meta do dia`",
+        "c": "Uma tela de erro, porque uma `View` não pode ter dois `Text`",
+        "d": "Nada: a `Tela` esconde tudo o que está dentro dela"
+      },
+      "answer": "a",
+      "explanation": "Os dois `Text` aparecem um embaixo do outro, dentro da `View`, no fundo azul-claro da `Tela`. O que está entre `{/*` e `*/}` é um comentário no JSX: não aparece no celular. Uma `View` agrupa quantas peças você quiser.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Um aluno escreveu a meta assim e salvou. O que o React Native faz?\n\n```jsx\n<View>\n  Meta do dia\n</View>\n```",
+      "options": {
+        "a": "Avisa `Text strings must be rendered within a <Text> component.`",
+        "b": "Mostra `Meta do dia` normalmente, como a `<div>` do Projeto 4",
+        "c": "Escreve ` LOG  Meta do dia` no terminal",
+        "d": "Desliga o `npx expo start`"
+      },
+      "answer": "a",
+      "explanation": "No celular, a única peça que mostra letras é o `Text`. Texto solto numa `View` gera o aviso, no celular e no terminal. O conserto é pôr o texto dentro de um `Text`: `<View><Text>Meta do dia</Text></View>`. No Projeto 4, a `<div>` aceitava texto solto; a `View`, não.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Uma colega trouxe do Projeto 4 este trecho para o Gota, e o celular mostra a tela **Render Error**, com ``View config getter callback for component `div` must be a function``:\n\n```jsx\n<div>\n  <Text>Gota</Text>\n</div>\n```\n\nQual é o conserto?",
+      "options": {
+        "a": "Trocar a `<div>` por `<View>`",
+        "b": "Trocar o `<Text>` por `<p>`",
+        "c": "Rodar o `npm install` de novo",
+        "d": "Ler o QR code outra vez"
+      },
+      "answer": "a",
+      "explanation": "Sem navegador, não há HTML: o celular não conhece a `div` nem o `p`. A caixa que agrupa no React Native é a `View`, importada de `react-native`. Trocar o `Text` por `<p>` piora: o `p` também é uma tag da web. O `npm install` e o QR code não mudam o código.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O computador está no Wi-Fi da escola, e o celular, nos dados móveis. Ao ler o QR code, o Expo Go mostra `Something went wrong`. O que resolve?",
+      "options": {
+        "a": "Ligar o celular no mesmo Wi-Fi do computador",
+        "b": "Rodar o `npm install` de novo",
+        "c": "Trocar as `View` por `Text` no `App.js`",
+        "d": "Criar uma conta Expo nova"
+      },
+      "answer": "a",
+      "explanation": "O QR code guarda o endereço do computador na rede, como `exp://192.168.101.6:8081`. O servidor é uma rádio de alcance curto: só pega quem está na mesma rede. Nos dados móveis, o celular fica fora do alcance. O `npm install` e o código não têm a ver com a conexão.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Celular e computador estão no mesmo Wi-Fi, mas a rede da escola não deixa um aparelho falar com o outro. Qual comando liga o servidor por um caminho pela internet?",
+      "options": {
+        "a": "`npx expo start --tunnel`",
+        "b": "`npx expo start -c`",
+        "c": "`npm run dev`",
+        "d": "`npx expo whoami`"
+      },
+      "answer": "a",
+      "explanation": "O túnel leva o app pela internet, como um desvio quando a rua de sempre está fechada: funciona em quase qualquer rede, só que mais devagar, e precisa da conta Expo no terminal. O `-c` liga o servidor sem a cópia velha guardada (o cache), mas continua usando a mesma rede. O `npm run dev` é o Vite do Projeto 4.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Ana usa iPhone. Ela entrou no Expo Go com a conta Expo dela, mas, no terminal, `npx expo whoami` responde `Not logged in`. O Expo Go não abre o app. O que falta?",
+      "options": {
+        "a": "`npx expo login` no terminal, com a mesma conta do Expo Go",
+        "b": "Criar uma segunda conta Expo, só para o terminal",
+        "c": "Sair da conta no Expo Go",
+        "d": "Nada: o problema é a rede, e a conta não importa no iPhone"
+      },
+      "answer": "a",
+      "explanation": "Desde setembro de 2026, o Expo Go do iPhone só abre o app de desenvolvimento quando a mesma conta Expo está no terminal e no Expo Go. O `npx expo login` abre o navegador para entrar, e depois o `whoami` mostra o usuário. Uma segunda conta não resolve: as duas pontas precisam ser a mesma.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Com o `npx expo start` ligado e o app aberto no celular, você põe esta linha dentro da função `App`, antes do `return`, e salva. Onde a mensagem aparece?\n\n```jsx\nconsole.log('Copo registrado');\n```",
+      "options": {
+        "a": "No terminal do `npx expo start`, como ` LOG  Copo registrado`",
+        "b": "Na tela do celular, embaixo de `Gota`",
+        "c": "No Console do navegador, com F12",
+        "d": "Em lugar nenhum: o `console.log` não funciona no celular"
+      },
+      "answer": "a",
+      "explanation": "O app roda no celular, mas os recados do `console.log` vão para o terminal do servidor, com `LOG` na frente: é o que diz a linha `Logs for your project will appear below`. Não há navegador no celular, então o F12 do Projeto 4 não serve aqui. E o `console.log` nunca aparece na tela do app: quem aparece é o `Text`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Com o `npx expo start` ligado e o app aberto no celular, o que é verdade? Marque todas as certas.",
+      "options": {
+        "a": "Salvar o `App.js` atualiza o celular em um ou dois segundos, sem ler o QR code de novo",
+        "b": "A tecla `r` no terminal abre o app de novo, do começo",
+        "c": "<kbd>Ctrl</kbd> + <kbd>C</kbd> desliga o servidor, e o celular para de atualizar",
+        "d": "O endereço `exp://` do QR code é o mesmo em qualquer rede, em casa ou na escola"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Salvou, mudou: é o Fast Refresh. A tecla `r` recarrega o app (o terminal escreve `› Reloading apps`), e <kbd>Ctrl</kbd> + <kbd>C</kbd> tira o servidor do ar. O endereço `exp://` é o do computador na rede: em outra rede, o número muda, e é preciso ler o QR code de novo.",
+      "points": 2
+    }
+  ]
+}

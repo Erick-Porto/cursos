@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checklist de qualidade · Projeto 7</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --fundo: #f1f5f9;
+      --cartao: #ffffff;
+      --borda: #dbe2ea;
+      --texto: #0f172a;
+      --texto-2: #475569;
+      --destaque: #0e7490;
+      --sobre-destaque: #ffffff;
+      --destaque-suave: #e0f7fb;
+      --alerta: #b45309;
+      --alerta-suave: #fef3c7;
+      --ok: #15803d;
+      --codigo-fundo: #0b1020;
+      --codigo-texto: #e8edf7;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --fundo: #0b1020;
+        --cartao: #131c33;
+        --borda: rgba(148, 163, 184, 0.22);
+        --texto: #e8edf7;
+        --texto-2: #b4bfd3;
+        --destaque: #22d3ee;
+        --sobre-destaque: #04252c;
+        --destaque-suave: rgba(34, 211, 238, 0.12);
+        --alerta: #fbbf24;
+        --alerta-suave: rgba(251, 191, 36, 0.14);
+        --ok: #4ade80;
+        --codigo-fundo: #0a0f1d;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--fundo);
+      color: var(--texto);
+      font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    }
+    main { max-width: 760px; margin: 0 auto; padding: 32px 16px 56px; }
+    :focus-visible { outline: 3px solid var(--destaque); outline-offset: 2px; }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace; }
+    code { font-size: 0.92em; }
+    p code, li code, dd code, td code { padding: 1px 5px; border-radius: 6px; background: var(--destaque-suave); }
+    a { color: var(--destaque); }
+    .sobre {
+      margin: 0 0 4px;
+      color: var(--destaque);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(1.6rem, 6vw, 2.2rem); line-height: 1.2; }
+    .lead { margin: 0; color: var(--texto-2); }
+    section { margin-top: 36px; }
+    h2 { display: flex; align-items: center; gap: 8px; margin: 0 0 12px; font-size: 1.2rem; }
+    .ico {
+      width: 1.15em;
+      height: 1.15em;
+      flex: none;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .cartao {
+      padding: 20px;
+      background: var(--cartao);
+      border: 1px solid var(--borda);
+      border-radius: 16px;
+    }
+    button { font: inherit; cursor: pointer; }
+    .botao {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border: 1px solid var(--borda);
+      border-radius: 12px;
+      background: transparent;
+      color: var(--destaque);
+      font-weight: 700;
+    }
+    .acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+    .progresso { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 16px; }
+    .progresso p { margin: 0; }
+    .progresso strong { font-size: 1.2rem; }
+    .progresso small { display: block; color: var(--texto-2); }
+    .barra { height: 8px; margin-top: 14px; border-radius: 999px; background: var(--destaque-suave); overflow: hidden; }
+    .barra div { height: 100%; width: 0; background: var(--destaque); transition: width 0.3s; }
+    .tela { margin-top: 14px; }
+    .tela label { display: block; font-size: 0.85rem; font-weight: 700; color: var(--texto-2); }
+    .tela input {
+      width: 100%;
+      margin-top: 4px;
+      padding: 10px 12px;
+      border: 1px solid var(--borda);
+      border-radius: 10px;
+      background: var(--fundo);
+      color: var(--texto);
+      font: inherit;
+    }
+    .item { margin-top: 16px; }
+    .item.feito { border-color: var(--ok); }
+    .item.feito h3 { color: var(--texto-2); text-decoration: line-through; }
+    .item-topo { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+    .item-topo input { width: 22px; height: 22px; margin: 3px 0 0; flex: none; accent-color: var(--destaque); }
+    .item-topo h3 { margin: 0; font-size: 1.05rem; }
+    .item-topo small { display: block; color: var(--texto-2); }
+    .item dl { margin: 8px 0 0 34px; }
+    dt {
+      margin-top: 12px;
+      color: var(--texto-2);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    dd { margin: 4px 0 0; }
+    dd ul { margin: 4px 0 0; padding-left: 1.2em; }
+    dd li + li { margin-top: 4px; }
+    @media (max-width: 480px) { .item dl { margin-left: 0; } }
+    .codigo { margin-top: 8px; overflow: hidden; border-radius: 12px; background: var(--codigo-fundo); color: var(--codigo-texto); }
+    .codigo-topo {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 10px 6px 14px;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+      font-size: 0.85rem;
+    }
+    .copiar {
+      padding: 3px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 8px;
+      background: transparent;
+      color: inherit;
+      font-size: 0.82rem;
+    }
+    pre { margin: 0; padding: 12px 14px; overflow-x: auto; font-size: 0.88rem; line-height: 1.6; }
+    pre code { padding: 0; background: none; font-size: inherit; }
+    .dica {
+      margin: 16px 0 0;
+      padding: 12px 16px;
+      border-left: 4px solid var(--destaque);
+      border-radius: 0 12px 12px 0;
+      background: var(--destaque-suave);
+    }
+    .dica p { margin: 0; }
+    footer { margin-top: 48px; color: var(--texto-2); font-size: 0.85rem; }
+    @media print {
+      body { background: #fff; color: #000; }
+      main { padding: 0; max-width: none; }
+      .nao-imprime { display: none !important; }
+      .cartao { break-inside: avoid; border-color: #bbb; }
+      .codigo { background: #f3f4f6; color: #000; border: 1px solid #bbb; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+    <symbol id="i-list-checks" viewBox="0 0 24 24"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></symbol>
+    <symbol id="i-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></symbol>
+    <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
+    <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+  </svg>
+
+  <main>
+    <header>
+      <p class="sobre">Programador Mobile · Projeto 7 · E44</p>
+      <h1>Checklist de qualidade</h1>
+      <p class="lead">
+        Antes do APK, cada pessoa passa a sua tela por estes nove itens, no próprio celular. O que falhar vira
+        uma correção na branch <code>qualidade-</code> mais o nome da tela, com pull request. A banca confere
+        os mesmos itens no E45.
+      </p>
+    </header>
+
+    <section aria-labelledby="t-progresso">
+      <h2 id="t-progresso"><svg class="ico"><use href="#i-list-checks"/></svg>A sua tela</h2>
+      <div class="cartao">
+        <div class="progresso">
+          <p>
+            <strong id="progresso-texto">0 de 9 itens conferidos</strong>
+            <small>As marcações ficam só neste navegador.</small>
+          </p>
+          <div class="acoes nao-imprime">
+            <button class="botao" type="button" id="imprimir"><svg class="ico"><use href="#i-printer"/></svg>Imprimir</button>
+            <button class="botao" type="button" id="limpar"><svg class="ico"><use href="#i-rotate-ccw"/></svg>Limpar marcações</button>
+          </div>
+        </div>
+        <div class="barra" aria-hidden="true"><div id="progresso-barra"></div></div>
+        <div class="tela">
+          <label for="nome-tela">Tela e componente conferidos</label>
+          <input id="nome-tela" placeholder="Lançamentos e ItemLancamento">
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-itens">
+      <h2 id="t-itens"><svg class="ico"><use href="#i-smartphone"/></svg>Os nove itens</h2>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-abre">
+          <span><h3>1. Abre sem tela vermelha e sem aviso amarelo</h3><small>Na main atualizada, com o Expo Go.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd><code>git switch main</code>, <code>git pull</code> e <code>npx expo start -c</code>. Abra a sua tela e faça tudo o que ela faz. Olhe o celular e o terminal.</dd>
+          <dt>Se falhar</dt>
+          <dd>Leia a mensagem inteira: ela diz o arquivo e a linha. Aviso de <code>key</code> numa lista: falta o <code>keyExtractor</code> da <code>FlatList</code> ou a <code>key</code> no <code>map</code>.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-escuro">
+          <span><h3>2. Legível no tema claro e no escuro</h3><small>Nenhum texto some, nenhum bloco fica branco no escuro.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Troque o tema pelo botão da aba Sobre e, depois, pelo tema do celular, com o app aberto.</dd>
+          <dt>Se falhar</dt>
+          <dd>O texto precisa da cor do tema no array de <code>style</code>: <code>[estilos.nome, { color: cores.texto }]</code>, com <code>const { cores } = useTema();</code>.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-cores">
+          <span><h3>3. Nenhuma cor nem medida solta</h3><small>As cores vêm do tema; espaços, raios e letras, dos tokens.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>
+            No terminal, na pasta do app. A primeira busca deve vir vazia:
+            <div class="codigo">
+              <div class="codigo-topo"><span>terminal</span><button class="copiar nao-imprime" type="button" data-alvo="#cmd-cores">Copiar</button></div>
+<pre><code id="cmd-cores">git grep -n -E "#[0-9a-fA-F]{3,8}\b" -- app src/components ":(exclude)src/components/ui"
+git grep -n -E "(fontSize|gap|padding|margin|borderRadius): [0-9]" -- app src/components ":(exclude)src/components/ui"</code></pre>
+            </div>
+          </dd>
+          <dt>Se falhar</dt>
+          <dd>Troque <code>padding: 16</code> por <code>padding: espaco.md</code> e <code>fontSize: 24</code> por <code>fontSize: fonte.titulo</code>, com <code>import { espaco, fonte } from '@/theme';</code>. Medidas de tamanho, como <code>width: 72</code>, podem ficar.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-vazio">
+          <span><h3>4. A lista vazia explica o que fazer</h3><small>Um EstadoVazio com uma frase, e não a tela em branco.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Apague tudo pela sua tela (ou cancele, ou esvazie o carrinho). A lista mostra o aviso. Tela sem lista: marque e siga.</dd>
+          <dt>Se falhar</dt>
+          <dd>Na <code>FlatList</code>, <code>ListEmptyComponent={&lt;EstadoVazio titulo="Nenhum lançamento" mensagem="..." /&gt;}</code>.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-form">
+          <span><h3>5. O formulário diz o que corrigir</h3><small>Uma mensagem embaixo de cada campo com erro, e nada é salvo.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Toque em salvar com tudo vazio. Depois, preencha um campo errado de cada vez. Toque em cada campo: o teclado certo aparece (o numérico no valor). Tela sem formulário: marque e siga.</dd>
+          <dt>Se falhar</dt>
+          <dd>A função <code>validar()</code> devolve um objeto com uma mensagem por campo, e cada <code>Campo</code> e cada <code>Opcoes</code> recebe a sua com a prop <code>erro</code>, como no Projeto 6.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-leitor">
+          <span><h3>6. O leitor de tela entende a tela</h3><small>Cada botão só com ícone tem rótulo; cada cartão é lido numa frase.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Ligue o TalkBack (Android: Configurações, Acessibilidade) ou o VoiceOver (iPhone) e toque uma vez em cada cartão e em cada botão. Desligue antes de continuar.</dd>
+          <dt>Se falhar</dt>
+          <dd><code>BotaoIcone</code> sempre com <code>rotulo</code>, como <code>rotulo={`Apagar ${lancamento.descricao}`}</code>. No bloco do cartão, <code>accessible</code> e um <code>accessibilityLabel</code> com tudo numa frase.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-letra">
+          <span><h3>7. Letra grande não corta nada</h3><small>Os textos quebram a linha, nada fica por cima de nada.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Nas configurações do celular, aumente o tamanho da fonte ao máximo e volte ao app. Volte o tamanho depois.</dd>
+          <dt>Se falhar</dt>
+          <dd>O bloco dos textos precisa de <code>flex: 1</code> para quebrar a linha, como a coluna do cartão no Projeto 6.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-dados">
+          <span><h3>8. Os dados ficam no celular</h3><small>Fechou de verdade, abriu de novo: está tudo lá.</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Crie ou apague algo pela sua tela. Tire o Expo Go da lista de apps abertos e abra o app de novo.</dd>
+          <dt>Se falhar</dt>
+          <dd>A tela precisa usar o <code>adicionar</code> ou o <code>remover</code> do quadro (<code>useContext</code>), e não um <code>useState</code> próprio com a lista.</dd>
+        </dl>
+      </article>
+
+      <article class="cartao item">
+        <label class="item-topo">
+          <input type="checkbox" id="c-textos">
+          <span><h3>9. Os textos são do app de verdade</h3><small>Nada de "Em construção", "teste" ou "aaa".</small></span>
+        </label>
+        <dl>
+          <dt>Como conferir</dt>
+          <dd>Leia a sua tela em voz alta, do título ao último botão. Procure no código: <code>git grep -n "Em construção" -- app</code> deve vir vazio no fim.</dd>
+          <dt>Se falhar</dt>
+          <dd>Troque pelo texto que a pessoa do briefing entende, sem palavra técnica.</dd>
+        </dl>
+      </article>
+
+      <div class="dica">
+        <p>Tudo marcado? Commit na branch <code>qualidade-</code> mais o nome da tela, push e pull request. O APK sai da <code>main</code> com todas as correções.</p>
+      </div>
+    </section>
+
+    <footer>Material do Projeto 7 do curso Programador Mobile. As marcações ficam só neste navegador.</footer>
+  </main>
+
+  <script>
+    // Marcações e o nome da tela: ficam no localStorage deste navegador. Sem acesso a ele
+    // (modo privado, armazenamento bloqueado), a página funciona igual, só não lembra.
+    const CHAVE = 'pm-p7-checklist-de-qualidade'
+    const caixas = [...document.querySelectorAll('.item input[type="checkbox"]')]
+    const nomeTela = document.querySelector('#nome-tela')
+    const texto = document.querySelector('#progresso-texto')
+    const barra = document.querySelector('#progresso-barra')
+
+    function ler() {
+      try {
+        const dados = JSON.parse(localStorage.getItem(CHAVE) || '{}')
+        return dados && typeof dados === 'object' ? dados : {}
+      } catch {
+        return {}
+      }
+    }
+
+    function gravar() {
+      const dados = { tela: nomeTela.value, feitos: caixas.filter((c) => c.checked).map((c) => c.id) }
+      try {
+        localStorage.setItem(CHAVE, JSON.stringify(dados))
+      } catch {
+        // sem armazenamento: segue sem lembrar
+      }
+    }
+
+    function atualizar() {
+      const feitos = caixas.filter((c) => c.checked)
+      for (const c of caixas) c.closest('.item').classList.toggle('feito', c.checked)
+      texto.textContent = `${feitos.length} de ${caixas.length} itens conferidos`
+      barra.style.width = `${(feitos.length / caixas.length) * 100}%`
+      gravar()
+    }
+
+    const salvos = ler()
+    const feitosSalvos = Array.isArray(salvos.feitos) ? salvos.feitos : []
+    nomeTela.value = typeof salvos.tela === 'string' ? salvos.tela : ''
+    nomeTela.addEventListener('input', gravar)
+    for (const c of caixas) {
+      c.checked = feitosSalvos.includes(c.id)
+      c.addEventListener('change', atualizar)
+    }
+    atualizar()
+
+    document.querySelector('#limpar').addEventListener('click', () => {
+      for (const c of caixas) c.checked = false
+      atualizar()
+    })
+    document.querySelector('#imprimir').addEventListener('click', () => print())
+
+    for (const botao of document.querySelectorAll('.copiar')) {
+      botao.addEventListener('click', async () => {
+        const alvo = document.querySelector(botao.dataset.alvo)
+        try {
+          await navigator.clipboard.writeText(alvo.textContent)
+          botao.textContent = 'Copiado'
+        } catch {
+          getSelection().selectAllChildren(alvo)
+          botao.textContent = 'Use Ctrl+C'
+        }
+        setTimeout(() => { botao.textContent = 'Copiar' }, 2000)
+      })
+    }
+  </script>
+</body>
+</html>

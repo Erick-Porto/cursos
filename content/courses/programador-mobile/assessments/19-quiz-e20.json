@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E20 · Erros",
+  "description": "Dez questões sobre throw, o ErroDeTarefa, toThrow, try e catch, relançar o bug, finally e as conferências da lista de tarefas.",
+  "lesson": "e20-erros",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfunction dividir(total, pessoas) {\n  if (pessoas < 1) {\n    throw new Error('A conta precisa de pelo menos 1 pessoa.');\n  }\n  return total / pessoas;\n}\n\ntry {\n  console.log('A');\n  console.log(dividir(100, 0));\n  console.log('B');\n} catch (erro) {\n  console.log(erro.message);\n}\nconsole.log('C');\n```",
+      "options": {
+        "a": "`A`, depois `A conta precisa de pelo menos 1 pessoa.` e `C`",
+        "b": "`A`, `B` e `C`",
+        "c": "`A`, `Infinity`, `B` e `C`",
+        "d": "`A`, depois `A conta precisa de pelo menos 1 pessoa.`, `B` e `C`"
+      },
+      "answer": "a",
+      "explanation": "O `throw` para o `dividir` na hora, e o `try` pula direto para o `catch`: o `B` nunca roda. O `catch` mostra a `message`, e o `C`, que vem depois da rede, roda normalmente. O `Infinity` só apareceria sem a conferência, porque 100 dividido por 0 dá `Infinity` no JavaScript.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "A `Tarefa` do Projeto 3 recusa o título vazio com um `ErroDeTarefa`. O que aparece no terminal com `enviar('   ')`?\n\n```javascript\nfunction enviar(titulo) {\n  try {\n    console.log('1');\n    new Tarefa({ titulo: titulo });\n    console.log('2');\n  } catch (erro) {\n    console.log('3');\n  } finally {\n    console.log('4');\n  }\n}\n```",
+      "options": {
+        "a": "`1`, `3` e `4`",
+        "b": "`1`, `2` e `4`",
+        "c": "`1` e `3`",
+        "d": "`1`, `2`, `3` e `4`"
+      },
+      "answer": "a",
+      "explanation": "O título só com espaços vira `''`, e o `validar` lança. O `try` para antes do `2` e pula para o `catch` (`3`). O `finally` roda sempre, com erro ou sem erro (`4`). Com um título válido, sairiam `1`, `2` e `4`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A classe do Projeto 3 é:\n\n```javascript\nexport default class ErroDeTarefa extends Error {\n  constructor(mensagem, campo = null) {\n    super(mensagem);\n    this.name = 'ErroDeTarefa';\n    this.campo = campo;\n  }\n}\n```\n\nO que mostra `console.log(new ErroDeTarefa('Sem conexão com a internet.').campo)`?",
+      "options": {
+        "a": "`null`",
+        "b": "`undefined`",
+        "c": "`Sem conexão com a internet.`",
+        "d": "`ErroDeTarefa`"
+      },
+      "answer": "a",
+      "explanation": "O `campo` não veio na chamada, então o valor padrão do parâmetro entra: `campo = null`. Sem o `= null`, ele seria `undefined`. A mensagem fica na `message`, e `'ErroDeTarefa'` é o `name`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Qual destes testes passa (fica verde) com a `Tarefa` que recusa o título vazio?",
+      "options": {
+        "a": "`expect(() => new Tarefa({ titulo: '' })).toThrow('Escreva o título da tarefa.');`",
+        "b": "`expect(new Tarefa({ titulo: '' })).toThrow('Escreva o título da tarefa.');`",
+        "c": "`expect(() => new Tarefa({ titulo: 'Regar as plantas' })).toThrow();`",
+        "d": "`expect(() => new Tarefa({ titulo: '' })).toBe('Escreva o título da tarefa.');`"
+      },
+      "answer": "a",
+      "explanation": "O `toThrow` precisa receber uma função: a seta embrulha a chamada, e o Jest roda dentro do `expect`. Sem a seta (b), o erro estoura antes do `expect` e derruba o teste. Em (c), o título é válido e nada é lançado: `Received function did not throw`. O `toBe` (d) compara um valor, não confere erro.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Numa lista nova do Projeto 3, quanto devolve esta chamada?\n\n```javascript\nlista.importar([{ titulo: 'Pagar a conta de luz' }, { titulo: '' }]);\n```",
+      "options": {
+        "a": "`1`",
+        "b": "`2`",
+        "c": "`0`",
+        "d": "Nada: o título vazio lança um `ErroDeTarefa` e o `importar` para"
+      },
+      "answer": "a",
+      "explanation": "A primeira tarefa entra e o `quantas` vai a 1. A segunda lança \"Escreva o título da tarefa.\", que cai no `catch` dentro do `for...of`: como é um `ErroDeTarefa`, o `importar` pula e segue. No fim, devolve quantas entraram: 1.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "No Projeto 3, `new Tarefa({ titulo: '   ' })` lança um `ErroDeTarefa`. O `campo` desse erro é ___.",
+      "answer": [["titulo", "'titulo'"]],
+      "explanation": "O `validar` lança `new ErroDeTarefa('Escreva o título da tarefa.', 'titulo')`. A tela usa o `campo` para mostrar a mensagem embaixo do título. Ele vai sem acento, porque é um valor de código.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No `importar`, o `catch` é assim:\n\n```javascript\n} catch (erro) {\n  if (erro.name !== 'ErroDeTarefa') {\n    throw erro;\n  }\n}\n```\n\nPara que serve o `if` com o `throw erro`?",
+      "options": {
+        "a": "Para deixar passar o erro que não é da tarefa, como um nome escrito errado: o bug aparece, em vez de ficar escondido",
+        "b": "Para lançar de novo o `ErroDeTarefa` e parar o `importar` na primeira tarefa com problema",
+        "c": "Para contar quantas tarefas tinham problema",
+        "d": "Para trocar a mensagem do erro antes de mostrar na tela"
+      },
+      "answer": "a",
+      "explanation": "O `catch` segura qualquer erro. O `ErroDeTarefa` é esperado: o `importar` pula a tarefa. Um `ReferenceError` ou um `TypeError` é bug: o `throw erro` o relança, e ele aparece com a linha. Sem o `if`, um nome escrito errado faria o `importar` pular todas as tarefas e devolver 0, sem aviso nenhum.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Quais destes são **erros esperados** no Projeto 3, que a pessoa resolve lendo a mensagem? Marque todos os certos.",
+      "options": {
+        "a": "A pessoa enviou o título vazio",
+        "b": "A pessoa enviou um título que já está pendente na lista",
+        "c": "O código chama `criarTarefas`, com um `s` a mais, e aparece `criarTarefas is not defined`",
+        "d": "Uma tarefa importada chegou com o prazo `'10/11/2026'`",
+        "e": "Aparece `Cannot read properties of undefined (reading 'titulo')`"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Título vazio, título repetido e prazo fora do formato são culpa do dado que chegou: viram `ErroDeTarefa`, e a mensagem diz à pessoa o que fazer. O nome escrito errado e o `undefined.titulo` são bugs: culpa do código, e quem resolve é você, corrigindo. A rede relança esses dois.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Um colega escreveu:\n\n```javascript\nexport default class ErroDeTarefa extends Error {\n  constructor(mensagem, campo = null) {\n    super(mensagem);\n    this.campo = campo;\n  }\n}\n```\n\nNa tela, o título vazio mostra \"O seu código lançou um erro inesperado\", e não a mensagem embaixo do campo. O que falta?",
+      "options": {
+        "a": "`this.name = 'ErroDeTarefa';` no `constructor`",
+        "b": "`this.message = mensagem;` no `constructor`",
+        "c": "Trocar `extends Error` por `extends Tarefa`",
+        "d": "Tirar o `super(mensagem)`"
+      },
+      "answer": "a",
+      "explanation": "Sem o `name` escrito à mão, o erro continua se chamando `'Error'`, e a tela, que confere `erro.name === 'ErroDeTarefa'`, acha que é um erro inesperado. A `message` já é guardada pelo `super(mensagem)`. Sem o `super`, o `this.campo` daria `Must call super constructor`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "A lista tem a tarefa pendente \"Pagar a conta de luz\". O que acontece com `lista.adicionar(new Tarefa({ titulo: 'PAGAR A CONTA DE LUZ' }))`?",
+      "options": {
+        "a": "Lança `ErroDeTarefa` com \"Já existe uma tarefa pendente com esse título.\", e a lista continua com 1 tarefa",
+        "b": "A tarefa entra com o id 2, porque as maiúsculas deixam os títulos diferentes",
+        "c": "Lança o erro, mas a tarefa entra mesmo assim, e a lista fica com 2",
+        "d": "A nova tarefa substitui a antiga"
+      },
+      "answer": "a",
+      "explanation": "O `adicionar` compara os títulos com `toLowerCase`, então \"PAGAR\" e \"Pagar\" ficam iguais. O `some` acha a pendente repetida, e o `throw` vem antes de dar o id e do `push`: a lista não muda. Se a tarefa antiga estivesse concluída, a nova entraria.",
+      "points": 1
+    }
+  ]
+}

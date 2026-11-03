@@ -1,0 +1,297 @@
+{
+  "title": "Prova 2 · Introdução ao React",
+  "description": "Prova da unidade de React, na última hora do E28. Cobre do E24 ao E27: componente e JSX, props e listas, estado e eventos, efeitos e a API do Livro de receitas. São 20 questões, 60 minutos, uma tentativa, sem consulta, e a nota mínima é 70. O gabarito não aparece ao enviar.",
+  "lesson": "e28-revisao-de-react",
+  "kind": "exam",
+  "passing_score": 70,
+  "max_attempts": 1,
+  "time_limit_minutes": 60,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": false,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O Livro de receitas está aberto no navegador, em `http://localhost:5173`. Você aperta Ctrl + C no terminal do `npm run dev` e, depois, F5 no navegador. O que acontece?",
+      "options": {
+        "a": "A página abre igual, porque o navegador guardou uma cópia dela",
+        "b": "A página não abre: a conexão com localhost é recusada, porque o servidor era o terminal ligado",
+        "c": "A página abre, mas sem as fotos, que vêm da internet",
+        "d": "O Vite liga sozinho de novo e atende na porta 5174"
+      },
+      "answer": "b",
+      "explanation": "O `localhost` é o seu próprio computador, e quem atende nele é o Vite, ligado pelo `npm run dev`. Com o terminal desligado, não há servidor: a página só volta depois de outro `npm run dev`. A porta 5174 aparece quando já existe um Vite ligado na 5173.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que este componente mostra na tela?\n\n```jsx\nfunction Festa() {\n  const doce = 'Brigadeiro'\n  const convidados = 12\n  const preco = 2.5\n\n  return (\n    <div>\n      <h2>{doce} para {convidados * 3}</h2>\n      <p>R$ {(preco * convidados).toFixed(2)}</p>\n    </div>\n  )\n}\n```",
+      "options": {
+        "a": "`Brigadeiro para 36` e `R$ 30.00`",
+        "b": "`Brigadeiro para 36` e `R$ 30,00`",
+        "c": "`doce para convidados * 3` e `R$ (preco * convidados).toFixed(2)`",
+        "d": "`Brigadeiro para 36` e `R$ 30`"
+      },
+      "answer": "a",
+      "explanation": "Entre chaves, o JavaScript é calculado: `{doce}` vira Brigadeiro, `{convidados * 3}` vira 36, e `(2.5 * 12).toFixed(2)` dá o texto `30.00`, com duas casas e ponto, como no E04. O que está fora das chaves, como `para` e `R$`, aparece como está. Sem o `toFixed(2)`, apareceria `R$ 30`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O `App.jsx` traz o aviso assim:\n\n```jsx\nimport Aviso from './components/Aviso.jsx'\n```\n\nE o arquivo `src/components/Aviso.jsx` tem só isto:\n\n```jsx\nfunction Aviso() {\n  return <p className=\"aviso\">Lave as mãos antes de cozinhar.</p>\n}\n```\n\nA tela fica branca, e o Console mostra `does not provide an export named 'default'`. O que falta?",
+      "options": {
+        "a": "Trocar `className` por `class` no `<p>`",
+        "b": "Chaves no `import`: `import { Aviso } from ...`",
+        "c": "A linha `export default Aviso` no fim do `Aviso.jsx`",
+        "d": "Rodar o `npm install` de novo"
+      },
+      "answer": "c",
+      "explanation": "O `import` sem chaves pega a peça principal que o arquivo põe na vitrine, com `export default`. Sem essa linha, a vitrine está vazia, e o navegador avisa que o arquivo não tem `default`. As chaves no `import` são para o `export` com nome, como o `{ receitas }` do E25; aqui, o erro só mudaria de nome.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "multiple",
+      "prompt": "Em quais destes componentes o Vite mostra a tela de erro, no lugar da página? Marque todos.",
+      "options": {
+        "a": "`function Titulo() { return <h2>Pizza</h2><p>35 minutos</p> }`",
+        "b": "`function Titulo() { return <p class=\"aviso\">Pizza</p> }`",
+        "c": "`function Titulo() { return <img src=\"pizza.webp\" alt=\"Pizza\"> }`",
+        "d": "`function Titulo() { return <><h2>Pizza</h2><p>35 minutos</p></> }`"
+      },
+      "answer": [
+        "a",
+        "c"
+      ],
+      "explanation": "A tela de erro aparece quando o JSX quebra uma regra de escrita: duas tags soltas, sem um pai (a), e a `<img>` sem o `/>` (c). Com `class` (b), a página funciona, e só o Console avisa que o nome certo é `className`. O fragmento `<>...</>` (d) é um pai que não aparece na página: está certo.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "No Livro de receitas, quem desenha o `App` dentro da `<div id=\"root\">` do `index.html` é o `src/main.jsx`, um arquivo do kit em que você não mexe.",
+      "answer": true,
+      "explanation": "O `index.html` tem a caixa vazia, a `<div id=\"root\">`. O `main.jsx` liga o React à página e desenha o `App` dentro dela. Você trabalha no `App.jsx` e nos seus componentes; o `main.jsx` fica como veio no kit.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que aparece na tela, e em que ordem?\n\n```jsx\nfunction Item({ nome, preco }) {\n  return <p>{nome}: R$ {preco}</p>\n}\n\nconst bebidas = [\n  { id: 4, nome: 'Suco de caju', preco: 6 },\n  { id: 9, nome: 'Café', preco: 4 },\n  { id: 2, nome: 'Água de coco', preco: 5 },\n]\n\n// no return do App, dentro de uma <div>:\n{bebidas.map((bebida) => (\n  <Item key={bebida.id} nome={bebida.nome} preco={bebida.preco * 2} />\n))}\n```",
+      "options": {
+        "a": "`Água de coco: R$ 10`, `Suco de caju: R$ 12` e `Café: R$ 8`, na ordem do `id`",
+        "b": "`Suco de caju: R$ 6`, `Café: R$ 4` e `Água de coco: R$ 5`, os preços da lista",
+        "c": "`Suco de caju: R$ 12`, `Café: R$ 8` e `Água de coco: R$ 10`, na ordem da lista",
+        "d": "Um parágrafo só, com as três bebidas juntas"
+      },
+      "answer": "c",
+      "explanation": "O `map` é a linha de produção: cada bebida entra e sai como um `<Item>`, na ordem da lista; três entram, três saem. A prop `preco` vai entre chaves, então a conta `bebida.preco * 2` é feita antes de chegar ao `Item`. A `key` é só o crachá para o React: não muda a ordem nem aparece na tela.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O `App` usa `<CartaoReceita nome={receitas[0].name} cozinha={receitas[0].cuisine} />`, e o cartão começa assim:\n\n```jsx\nfunction CartaoReceita(nome, cozinha) {\n  return (\n    <article className=\"cartao\">\n      <h2 className=\"cartao__nome\">{nome}</h2>\n      <p className=\"cartao__info\">{cozinha}</p>\n    </article>\n  )\n}\n```\n\nA tela fica branca, e o Console mostra `Objects are not valid as a React child (found: object with keys {nome, cozinha})`. O que está errado?",
+      "options": {
+        "a": "Faltam as chaves no parâmetro: `function CartaoReceita({ nome, cozinha })`",
+        "b": "Faltam aspas nas props do `App`: `nome=\"receitas[0].name\"`",
+        "c": "Falta a `key` no `<article>` do cartão",
+        "d": "O nome do componente precisa começar com letra minúscula"
+      },
+      "answer": "a",
+      "explanation": "O React entrega as props numa ficha só, no primeiro parâmetro. Sem as chaves, `nome` recebe a ficha inteira, `{ nome, cozinha }`, e o React não sabe mostrar uma ficha na tela. Com as chaves, o parâmetro desestrutura a ficha, e cada prop vai para a sua caixa. Com aspas, apareceria o texto `receitas[0].name`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "fill",
+      "prompt": "Complete o `map` para cada cartão ter o seu crachá, o número único de cada receita:\n\n```jsx\n{receitas.map((receita) => (\n  <CartaoReceita ___={receita.___} nome={receita.name} />\n))}\n```",
+      "answer": [
+        [
+          "key"
+        ],
+        [
+          "id"
+        ]
+      ],
+      "explanation": "A `key` é o crachá que o React pede em toda lista feita com `map`, na tag que o `map` devolve. O `id` é único e não muda. A cozinha ou a dificuldade se repetem, e o Console avisaria `Encountered two children with the same key`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No `CartaoReceita` do Livro de receitas está a linha `<Etiqueta dificuldade={dificuldade} />`. O que ela quer dizer?",
+      "options": {
+        "a": "A `Etiqueta` é o pai do cartão e manda a dificuldade para ele",
+        "b": "A `Etiqueta` lê a dificuldade direto do `receitas.js`, sem passar pelo cartão",
+        "c": "Os dois nomes iguais, dos dois lados do `=`, fazem a linha dar erro",
+        "d": "O cartão é o pai da `Etiqueta` e repassa a ela a `dificuldade` que recebeu do `App`"
+      },
+      "answer": "d",
+      "explanation": "O cartão é filho do `App` e pai da `Etiqueta`. À esquerda do `=` está o nome da prop que a `Etiqueta` pede no manual dela; à direita, entre chaves, a caixa `dificuldade` que chegou ao cartão pelo parâmetro. Os dois nomes podem ser iguais, e no projeto são.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "O manual do `Rodape` do kit diz: `autor (opcional) o seu nome, um texto. Sem ela, aparece \"Seu nome aqui\".` Qual tag faz o rodapé mostrar `Feito por Ana Souza no curso Programador Mobile.`?",
+      "options": {
+        "a": "`<Rodape Autor=\"Ana Souza\" />`",
+        "b": "`<Rodape autor=\"Ana Souza\" />`",
+        "c": "`<Rodape nome=\"Ana Souza\" />`",
+        "d": "`<Rodape autor={Ana Souza} />`"
+      },
+      "answer": "b",
+      "explanation": "O nome da prop é o do manual, letra por letra: `autor`, minúsculo. Com `Autor` ou `nome`, a peça não recebe o pedido e mostra \"Seu nome aqui\", sem erro. Texto pronto vai entre aspas; entre chaves, `Ana Souza` seria lido como JavaScript, e o Vite mostra a tela de erro.",
+      "points": 1
+    },
+    {
+      "id": "q11",
+      "type": "single",
+      "prompt": "A pessoa digita `ana` no campo. O que aparece no campo e no parágrafo?\n\n```jsx\nfunction Saudacao() {\n  const [nome, setNome] = useState('')\n\n  return (\n    <>\n      <input value={nome} onChange={(evento) => setNome(evento.target.value.toUpperCase())} />\n      <p>Olá, {nome}</p>\n    </>\n  )\n}\n```",
+      "options": {
+        "a": "`ana` no campo e `Olá, ANA` no parágrafo",
+        "b": "`ana` no campo e `Olá, ana` no parágrafo",
+        "c": "`ANA` no campo e `Olá, ANA` no parágrafo",
+        "d": "O campo não aceita letra nenhuma, e o parágrafo fica `Olá,`"
+      },
+      "answer": "c",
+      "explanation": "É um campo controlado: o estado manda, o campo obedece. A cada letra, o `onChange` guarda no estado o texto do campo em maiúsculas, e o `value={nome}` faz o campo mostrar o que está no estado. Por isso os dois mostram `ANA`. O campo travaria só sem o `onChange`.",
+      "points": 2
+    },
+    {
+      "id": "q12",
+      "type": "single",
+      "prompt": "As 8 receitas do kit são: Pizza margherita, Cookies com gotas de chocolate, Fettuccine Alfredo com frango, Salada caprese, Biryani de frango, Lámen japonês, Moussaka grega e Brigadeiro. A pessoa digita `CO` na busca. O que aparece?\n\n```jsx\nconst visiveis = receitas.filter((receita) =>\n  receita.name.toLowerCase().includes(busca.toLowerCase())\n)\n\nlet conteudo\nif (visiveis.length === 0) {\n  conteudo = <ListaVazia busca={busca} />\n} else {\n  conteudo = <p>{visiveis.length} receitas</p>\n}\n```",
+      "options": {
+        "a": "`Nenhuma receita encontrada para \"CO\".`, porque nenhum nome tem `CO` em maiúsculas",
+        "b": "`2 receitas`: os cookies e o fettuccine têm `co` no nome",
+        "c": "`3 receitas`: os cookies, o fettuccine e a salada caprese",
+        "d": "`8 receitas`, porque a busca só filtra a palavra inteira"
+      },
+      "answer": "b",
+      "explanation": "O `toLowerCase` dos dois lados transforma a busca em `co` e cada nome em minúsculas. Passam na peneira os nomes que têm `co` dentro: \"cookies com gotas de chocolate\" e \"fettuccine alfredo com frango\". \"Salada caprese\" tem `ca`, não `co`. Com `visiveis.length` igual a 2, o `if` segue o caminho do `else`.",
+      "points": 2
+    },
+    {
+      "id": "q13",
+      "type": "single",
+      "prompt": "No `BotaoFavorito`, uma colega escreveu o `onClick` assim:\n\n```jsx\n<button className=\"favorito\" onClick={aoClicar()}>\n  {ativo ? 'Favorita' : 'Favoritar'}\n</button>\n```\n\nAo abrir o Livro de receitas, as favoritas mudam sozinhas, sem clique, e o Console mostra `Cannot update a component (App) while rendering a different component (BotaoFavorito)`. Por quê?",
+      "options": {
+        "a": "Com os parênteses, `aoClicar` roda ao desenhar o botão, e não no clique",
+        "b": "O `onClick` precisa ser escrito com c minúsculo: `onclick`",
+        "c": "O `ativo` precisa ir entre aspas: `'ativo' ? ...`",
+        "d": "O botão precisa de uma `key`, como os itens de uma lista"
+      },
+      "answer": "a",
+      "explanation": "Com os parênteses, `aoClicar()` roda na hora de desenhar o botão, e o `onClick` recebe o que ela devolve, não a função. Cada desenho troca o estado do `App` e pede outro desenho. O certo é entregar a função, sem chamar: `onClick={aoClicar}`, e o React chama no clique. O `onclick` minúsculo não funciona.",
+      "points": 1
+    },
+    {
+      "id": "q14",
+      "type": "single",
+      "prompt": "O `App` tem a `alternarFavorita` abaixo, e `favoritas` vale `[3, 35]` (os cookies e o brigadeiro). A pessoa clica no Favoritar dos cookies (id 3) e, depois, no da pizza (id 1). Quanto vale `favoritas` no fim, e o que mostra o `<Cabecalho totalFavoritas={favoritas.length} />`?\n\n```jsx\nfunction alternarFavorita(id) {\n  if (favoritas.includes(id)) {\n    setFavoritas(favoritas.filter((item) => item !== id))\n  } else {\n    setFavoritas([...favoritas, id])\n  }\n}\n```",
+      "options": {
+        "a": "`[3, 35, 1]` e \"3 favoritas\"",
+        "b": "`[1]` e \"1 favorita\"",
+        "c": "`[35]` e \"1 favorita\"",
+        "d": "`[35, 1]` e \"2 favoritas\""
+      },
+      "answer": "d",
+      "explanation": "No primeiro clique, o 3 já está na lista: o `includes` responde `true`, e o `filter` tira só o 3, ficando `[35]`. No segundo, o 1 não está: o spread faz uma lista nova com o 1 no fim, `[35, 1]`. O total é o `length`, 2, e o cabeçalho mostra \"2 favoritas\".",
+      "points": 2
+    },
+    {
+      "id": "q15",
+      "type": "multiple",
+      "prompt": "Sobre o estado no Livro de receitas, marque todas as frases certas.",
+      "options": {
+        "a": "Quando o `setBusca` troca a busca, o React desenha o `App` de novo, e o `filter` roda outra vez",
+        "b": "Uma variável `let` que muda no clique faz a tela mudar, como um estado",
+        "c": "A lista `visiveis` não é estado: ela sai do `filter` sobre as receitas a cada desenho",
+        "d": "As favoritas moram no `App` porque o cabeçalho conta todas e a marca não pode sumir quando a busca esconde o cartão",
+        "e": "O `BotaoFavorito` guarda as favoritas num `useState` próprio e avisa o `App` só para contar"
+      },
+      "answer": [
+        "a",
+        "c",
+        "d"
+      ],
+      "explanation": "O estado é o placar: o `set` troca o valor, e o React redesenha, calculando de novo o que sai dele, como a `visiveis`. A variável comum muda, mas o React não fica sabendo, e a tela continua igual. O pai guarda, o filho avisa: o `BotaoFavorito` só recebe `ativo` e `aoClicar`, e quem guarda a lista é o `App`.",
+      "points": 2
+    },
+    {
+      "id": "q16",
+      "type": "single",
+      "prompt": "No Livro de receitas, o efeito ficou sem o `[]` no fim:\n\n```jsx\nuseEffect(() => {\n  async function carregarReceitas() {\n    const resposta = await fetch('https://dummyjson.com/recipes')\n    const dados = await resposta.json()\n    setReceitas(dados.recipes)\n  }\n  carregarReceitas()\n})\n```\n\nO que a aba Rede do DevTools mostra?",
+      "options": {
+        "a": "Um pedido só a `recipes`, como acontece com o `[]`",
+        "b": "Nenhum pedido: sem o `[]`, o efeito não roda",
+        "c": "Dois pedidos: um antes de desenhar a tela e outro depois",
+        "d": "Pedidos a `recipes` sem parar: cada resposta muda o estado, e o efeito pede de novo"
+      },
+      "answer": "d",
+      "explanation": "Sem a lista de dependências, o efeito roda depois de todo desenho. O `setReceitas` recebe uma lista nova a cada resposta, o React desenha de novo, e o efeito busca outra vez: um pedido atrás do outro. Com o `[]`, ele roda só depois do primeiro desenho.",
+      "points": 2
+    },
+    {
+      "id": "q17",
+      "type": "fill",
+      "prompt": "Complete o fim do efeito para ele rodar uma vez só, depois do primeiro desenho do `App`:\n\n```jsx\nuseEffect(() => {\n  async function carregarReceitas() {\n    // o fetch das receitas\n  }\n  carregarReceitas()\n}, ___)\n```",
+      "answer": [
+        [
+          "[]",
+          "[ ]"
+        ]
+      ],
+      "explanation": "O `[]` no fim é a lista de dependências vazia: \"só uma vez, quando o App aparece\". Sem ela, o efeito roda depois de todo desenho.",
+      "points": 1
+    },
+    {
+      "id": "q18",
+      "type": "single",
+      "prompt": "Um colega escreveu o `if` do `conteudo` nesta ordem. A busca está vazia, e o estado `carregando` começa `true`.\n\n```jsx\nlet conteudo\nif (visiveis.length === 0) {\n  conteudo = <ListaVazia busca={busca} />\n} else if (carregando) {\n  conteudo = <Carregando />\n} else {\n  // a grade com os cartões\n}\n```\n\nAo abrir a página, antes de a resposta da API chegar, o que aparece?",
+      "options": {
+        "a": "O `Carregando`, porque o estado `carregando` vale `true`",
+        "b": "A `ListaVazia`, \"Nenhuma receita por aqui.\": a lista está vazia, e esse caminho vem primeiro",
+        "c": "A grade, ainda sem nenhum cartão e sem aviso",
+        "d": "A `ListaVazia` e o `Carregando`, um embaixo do outro"
+      },
+      "answer": "b",
+      "explanation": "O `if` com `else if` é a bifurcação: segue o primeiro caminho que dá sim e nem olha os outros. Antes da resposta, `visiveis` está vazia, e o primeiro teste já dá sim. Por isso, no Livro de receitas, o caminho do carregando vem antes do da lista vazia.",
+      "points": 2
+    },
+    {
+      "id": "q19",
+      "type": "single",
+      "prompt": "A DummyJSON não tem a receita 9999: ela responde com o status 404 e o JSON `{\"message\":\"Recipe with id '9999' not found\"}`. O que o Console mostra com `verReceita(9999)`?\n\n```javascript\nasync function verReceita(id) {\n  try {\n    const resposta = await fetch('https://dummyjson.com/recipes/' + id)\n    const receita = await resposta.json()\n    console.log(receita.name)\n  } catch (falha) {\n    console.log('Falhou:', falha.message)\n  } finally {\n    console.log('Fim')\n  }\n}\n```",
+      "options": {
+        "a": "`Falhou: A API respondeu 404` e `Fim`",
+        "b": "`Falhou: Failed to fetch` e `Fim`",
+        "c": "`undefined` e `Fim`",
+        "d": "Só `undefined`, sem o `Fim`"
+      },
+      "answer": "c",
+      "explanation": "O 404 é uma resposta: o `fetch` não falha, e o código não cai no `catch`. O `json()` lê o objeto da mensagem, que não tem `name`, e aparece `undefined`. O `finally` roda sempre: `Fim`. Para o 404 cair no `catch`, falta conferir o `resposta.ok` e lançar um erro com `throw`, como no Livro de receitas.",
+      "points": 2
+    },
+    {
+      "id": "q20",
+      "type": "single",
+      "prompt": "No Livro de receitas completo, a pessoa abre a página com internet. Em que ordem as coisas acontecem?",
+      "options": {
+        "a": "O efeito pede as receitas; a resposta muda o estado; o React desenha uma vez só, já com os 30 cartões",
+        "b": "Desenha com a lista vazia e o carregando; o efeito pede as receitas; a resposta muda o estado; desenha de novo, com os 30 cartões",
+        "c": "Desenha com os 30 cartões; o efeito pede as receitas; a resposta muda o estado; aparece o carregando por um instante",
+        "d": "Desenha com a lista vazia e o carregando; o efeito pede as receitas; cada resposta faz o efeito pedir de novo"
+      },
+      "answer": "b",
+      "explanation": "O `useEffect` é o bilhete \"depois de desenhar a tela, faça isto\": primeiro vem o desenho, com o estado inicial (`receitas` vazia e `carregando` igual a `true`). Depois, o efeito busca. A resposta muda o estado, e o React desenha de novo. Com o `[]`, o efeito não roda nesse segundo desenho.",
+      "points": 2
+    }
+  ]
+}

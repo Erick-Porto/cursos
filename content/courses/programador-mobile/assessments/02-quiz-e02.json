@@ -1,7 +1,7 @@
 {
-  "title": "Quiz: E02 · Node na prática e npm",
-  "description": "Dez questões sobre o REPL, argumentos, arquivos e JSON, a leitura do relatório, o package.json, os scripts e os pacotes do lojinha-regras.",
-  "lesson": "e02b-npm-e-package-json",
+  "title": "Quiz: aula 3 · Node na prática",
+  "description": "Dez questões sobre o REPL, a const, os argumentos, objetos e listas, arquivos e JSON, comparações, o if, o filter e o reduce do lojinha-regras.",
+  "lesson": "e02a-node-na-pratica",
   "kind": "quiz",
   "passing_score": 70,
   "max_attempts": 3,
@@ -28,6 +28,20 @@
     {
       "id": "q2",
       "type": "single",
+      "prompt": "O arquivo `frete.js` tem:\n\n```javascript\nconst frete = 15;\nfrete = 20;\nconsole.log('Frete:', frete);\n```\n\nO que acontece com `node frete.js`?",
+      "options": {
+        "a": "Aparece o erro `TypeError: Assignment to constant variable.`",
+        "b": "Aparece `Frete: 20`, porque vale o último valor",
+        "c": "Aparece `Frete: 15`, porque o Node pula a segunda linha",
+        "d": "Aparece `Frete: 35`, porque o Node soma os dois valores"
+      },
+      "answer": "a",
+      "explanation": "A `const` é a caixa lacrada: depois de criada, o valor não muda. A segunda linha tenta trocar o conteúdo, e o Node para com `TypeError: Assignment to constant variable.`, \"atribuição a uma constante\". O `Frete: 20` sairia com `let`, a caixa que deixa trocar o conteúdo.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
       "prompt": "O arquivo `ola.js` tem:\n\n```javascript\nconst nome = process.argv[2];\nconsole.log('Olá,', nome);\n```\n\nO que aparece com `node ola.js Ana Souza`?",
       "options": {
         "a": "`Olá, Ana`",
@@ -40,7 +54,21 @@
       "points": 1
     },
     {
-      "id": "q3",
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que aparece no terminal, nesta ordem?\n\n```javascript\nconst produto = { nome: 'Garrafa Térmica', preco: 79.9 };\nconst categorias = ['audio', 'casa', 'esporte', 'livros'];\n\nconsole.log(produto.nome);\nconsole.log(categorias[1]);\nconsole.log(categorias.length);\n```",
+      "options": {
+        "a": "`Garrafa Térmica`, `casa` e `4`",
+        "b": "`Garrafa Térmica`, `audio` e `4`",
+        "c": "`Garrafa Térmica`, `casa` e `3`",
+        "d": "`nome`, `casa` e `4`"
+      },
+      "answer": "a",
+      "explanation": "`produto.nome` lê o valor do campo `nome` da ficha, e não o nome do campo. A lista começa a contar do 0: `categorias[0]` é `audio`, e `categorias[1]` é `casa`. O `.length` conta quantos itens a lista tem, 4; a contagem do tamanho não começa do 0.",
+      "points": 2
+    },
+    {
+      "id": "q5",
       "type": "fill",
       "prompt": "Complete o script para ler o catálogo como texto e transformá-lo em objeto:\n\n```javascript\nimport fs from 'node:fs';\n\nconst texto = fs.___('src/data/catalogo.json', 'utf-8');\nconst catalogo = JSON.___(texto);\nconsole.log(catalogo.produtos.length);\n```",
       "answer": [["readFileSync"], ["parse"]],
@@ -48,101 +76,73 @@
       "points": 2
     },
     {
-      "id": "q4",
-      "type": "single",
-      "prompt": "Qual destas linhas é um JSON válido?",
-      "options": {
-        "a": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199.9}`",
-        "b": "`{'nome': 'Fone Bluetooth', 'preco': 199.9}`",
-        "c": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199,9}`",
-        "d": "`{\"nome\": \"Fone Bluetooth\", \"preco\": 199.9,}`"
-      },
-      "answer": "a",
-      "explanation": "No JSON, nomes e textos vão entre aspas duplas, número usa ponto e não pode sobrar vírgula no fim. A **b** usa aspas simples, a **c** escreve o preço com vírgula e a **d** tem uma vírgula sobrando. As três fazem o `JSON.parse` falhar com `SyntaxError`.",
-      "points": 1
-    },
-    {
-      "id": "q5",
+      "id": "q6",
       "type": "single",
       "prompt": "Na pasta raiz do `lojinha-regras`, o relatório funciona. Uma colega entra em `src/scripts` com `cd src/scripts`, roda `node relatorio-catalogo.js` e recebe um erro `ENOENT` que termina em `src\\scripts\\src\\data\\catalogo.json`. O que aconteceu?",
       "options": {
         "a": "O caminho do `fs` parte da pasta em que o terminal está; dentro de `src/scripts`, ele procura uma pasta que não existe",
         "b": "O arquivo `catalogo.json` foi apagado",
         "c": "O Node não aceita rodar arquivos de dentro de uma subpasta",
-        "d": "Faltou rodar `npm install`"
+        "d": "O `catalogo.json` tem um erro de JSON, como uma vírgula sobrando"
       },
       "answer": "a",
-      "explanation": "O caminho `'src/data/catalogo.json'` parte da pasta do terminal. De dentro de `src/scripts`, ele vira `src/scripts/src/data/catalogo.json`, como a própria mensagem mostra. A correção é voltar para a raiz com `cd ../..`, ou usar `npm run relatorio`, que sempre roda da raiz.",
+      "explanation": "O caminho `'src/data/catalogo.json'` parte da pasta do terminal. De dentro de `src/scripts`, ele vira `src/scripts/src/data/catalogo.json`, como a própria mensagem mostra. A correção é voltar para a raiz com `cd ../..` e rodar `node src/scripts/relatorio-catalogo.js`. Um erro de JSON daria `SyntaxError`, não `ENOENT`.",
       "points": 1
     },
     {
-      "id": "q6",
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Quais destas comparações dão `true`? Marque todas as certas.",
+      "options": {
+        "a": "`'casa' === 'Casa'`",
+        "b": "`249.9 > 200`",
+        "c": "`120 >= 150`",
+        "d": "`59.9 < 100`"
+      },
+      "answer": ["b", "d"],
+      "explanation": "`249.9 > 200` pergunta \"é maior?\", e 249.9 passa de 200: `true`. `59.9 < 100` pergunta \"é menor?\": `true`. `120 >= 150` é `false`, porque 120 não é maior nem igual a 150. E `'casa' === 'Casa'` é `false`: texto só é igual letra por letra, maiúsculas incluídas.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O que este código mostra?\n\n```javascript\nconst total = 150;\nlet frete = 15;\n\nif (total >= 150) {\n  frete = 0;\n}\n\nconsole.log('Frete:', frete);\n```",
+      "options": {
+        "a": "`Frete: 0`",
+        "b": "`Frete: 15`",
+        "c": "`Frete: 150`",
+        "d": "Um erro, porque o `frete` muda de valor"
+      },
+      "answer": "a",
+      "explanation": "A pergunta do `if` vira `150 >= 150`, \"é maior ou igual?\". 150 é igual a 150, então a resposta é `true`, e o Node roda o que está nas chaves: o `frete` passa a 0. Com `>` no lugar de `>=`, a resposta seria `false`, o Node pularia as chaves e sairia `Frete: 15`. O `frete` pode mudar porque foi criado com `let`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
       "type": "single",
       "prompt": "No relatório, o que esta linha faz?\n\n```javascript\nconst destaques = lista.filter((produto) => produto.destaque);\n```",
       "options": {
-        "a": "Passa produto por produto e fica só com os que estão em destaque",
+        "a": "Passa produto por produto e guarda numa lista nova só os que estão em destaque",
         "b": "Apaga do arquivo os produtos que não estão em destaque",
         "c": "Coloca todos os produtos em destaque",
         "d": "Conta quantos produtos existem no catálogo"
       },
       "answer": "a",
-      "explanation": "O `filter` funciona como uma peneira: olha cada produto e guarda numa lista nova só os que passam no teste, aqui `produto.destaque`. A lista original e o arquivo não mudam. Para saber quantos são, o relatório usa `destaques.length`.",
+      "explanation": "O `filter` funciona como uma peneira: faz o teste com cada produto, aqui `produto.destaque`, e guarda numa lista nova só os que respondem `true`. A lista original e o arquivo não mudam. Para saber quantos são, o relatório usa `destaques.length`.",
       "points": 1
-    },
-    {
-      "id": "q7",
-      "type": "single",
-      "prompt": "Logo depois do `npm init -y`, o relatório passou a falhar com `SyntaxError: Cannot use import statement outside a module`. No `package.json` está `\"type\": \"commonjs\"`. Como corrigir?",
-      "options": {
-        "a": "Trocar a linha por `\"type\": \"module\"`",
-        "b": "Apagar as linhas de `import` do relatório",
-        "c": "Rodar `npm install` de novo",
-        "d": "Apagar o `package.json`"
-      },
-      "answer": "a",
-      "explanation": "O código usa `import`, e o modo `commonjs` não entende `import`. Com `\"type\": \"module\"`, o Node lê os arquivos do projeto no modo certo. Deixe uma linha `type` só.",
-      "points": 1
-    },
-    {
-      "id": "q8",
-      "type": "single",
-      "prompt": "O `package.json` do `lojinha-regras` tem:\n\n```json\n\"scripts\": {\n  \"relatorio\": \"node src/scripts/relatorio-catalogo.js\"\n}\n```\n\nQual comando mostra o relatório só da categoria livros?",
-      "options": {
-        "a": "`npm run relatorio livros`",
-        "b": "`npm relatorio livros`",
-        "c": "`npm run livros`",
-        "d": "`node relatorio livros`"
-      },
-      "answer": "a",
-      "explanation": "`npm run` mais o apelido roda o comando do script, e o que vem depois do apelido vai para o script como argumento. Sem o `run`, o npm responde `Unknown command`.",
-      "points": 1
-    },
-    {
-      "id": "q9",
-      "type": "multiple",
-      "prompt": "Na pasta raiz do `lojinha-regras`, você roda `npm install picocolors`. O que muda no projeto? Marque todas as certas.",
-      "options": {
-        "a": "Aparece a pasta `node_modules/`, com o código do pacote",
-        "b": "O `package.json` ganha `\"picocolors\"` em `\"dependencies\"`",
-        "c": "Aparece o `package-lock.json`, com a versão exata instalada",
-        "d": "O relatório ganha sozinho a linha `import pc from 'picocolors'`"
-      },
-      "answer": ["a", "b", "c"],
-      "explanation": "O `npm install` baixa o pacote para o `node_modules`, anota o nome em `dependencies` e grava a versão exata no `package-lock.json`. Ele não mexe no seu código: o `import` você escreve.",
-      "points": 2
     },
     {
       "id": "q10",
       "type": "single",
-      "prompt": "No `package.json`, o pacote aparece como `\"picocolors\": \"^1.1.1\"`. O autor publicou as versões `1.2.0` e `2.0.0`. Sem `package-lock.json`, qual delas o `npm install` pode instalar?",
+      "prompt": "Qual é o valor de `resultado` depois destas linhas?\n\n```javascript\nconst precos = [10, 25, 5];\nconst resultado = precos.reduce((total, preco) => total + preco, 0);\n```",
       "options": {
-        "a": "A `1.2.0`, porque o primeiro número continua 1",
-        "b": "A `2.0.0`, porque é a mais nova",
-        "c": "Só a `1.1.1` exata, sem atualização",
-        "d": "Qualquer uma, porque o `^` aceita tudo"
+        "a": "`40`",
+        "b": "`5`",
+        "c": "`[10, 25, 5]`",
+        "d": "`3`"
       },
       "answer": "a",
-      "explanation": "O `^` aceita correções e novidades, desde que o primeiro número, o principal, continue o mesmo. A `2.0.0` muda o primeiro número e pode quebrar o código, então fica de fora.",
+      "explanation": "O `reduce` é a calculadora que acumula: o `total` começa no `0` e, volta por volta, recebe o preço da vez. 0 + 10 = 10, 10 + 25 = 35 e 35 + 5 = 40. Ele devolve um valor só, não uma lista; o `3` seria o `precos.length`.",
       "points": 1
     }
   ]

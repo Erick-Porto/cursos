@@ -1,0 +1,602 @@
+/* Lista de tarefas: tela pronta do Projeto 3 (Programador Mobile).
+   Tema claro e escuro seguem o sistema. No celular, uma coluna; a partir de 960 px,
+   o formulário e a lista dos itens da página ficam à esquerda e as tarefas à direita. */
+
+:root {
+  color-scheme: light dark;
+  --fundo: #f1f5f9;
+  --cartao: #ffffff;
+  --borda: #dbe2ea;
+  --texto: #0f172a;
+  --texto-2: #475569;
+  --destaque: #0e7490;
+  --sobre-destaque: #ffffff;
+  --destaque-suave: #e0f7fb;
+  --perigo: #b91c1c;
+  --perigo-suave: #fee2e2;
+  --atencao: #92400e;
+  --atencao-suave: #fef3c7;
+  --sucesso: #047857;
+  --sucesso-suave: #d1fae5;
+  --raio: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fundo: #0b1020;
+    --cartao: #131c33;
+    --borda: rgba(148, 163, 184, 0.22);
+    --texto: #e8edf7;
+    --texto-2: #b4bfd3;
+    --destaque: #22d3ee;
+    --sobre-destaque: #04252c;
+    --destaque-suave: rgba(34, 211, 238, 0.12);
+    --perigo: #f87171;
+    --perigo-suave: rgba(248, 113, 113, 0.14);
+    --atencao: #fbbf24;
+    --atencao-suave: rgba(251, 191, 36, 0.14);
+    --sucesso: #34d399;
+    --sucesso-suave: rgba(52, 211, 153, 0.14);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font:
+    16px/1.5 system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, Menlo, monospace;
+  font-size: 0.9em;
+  overflow-wrap: anywhere;
+}
+
+:focus-visible {
+  outline: 3px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.invisivel {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- topo ---------- */
+.topo {
+  border-bottom: 1px solid var(--borda);
+  background: var(--cartao);
+}
+
+.topo-conteudo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 4px 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.sobre {
+  color: var(--destaque);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.status {
+  min-height: 1.5em;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+
+/* ---------- layout ---------- */
+.conteudo {
+  display: grid;
+  grid-template-areas: 'aviso' 'nova' 'lista' 'exemplos' 'funcoes';
+  gap: 16px;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+}
+
+.aviso {
+  grid-area: aviso;
+}
+.cartao-nova {
+  grid-area: nova;
+}
+.cartao-lista {
+  grid-area: lista;
+}
+.cartao-exemplos {
+  grid-area: exemplos;
+}
+.cartao-funcoes {
+  grid-area: funcoes;
+}
+
+@media (min-width: 960px) {
+  .conteudo {
+    grid-template-columns: 380px minmax(0, 1fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-template-areas:
+      'aviso aviso'
+      'nova lista'
+      'exemplos lista'
+      'funcoes lista';
+    align-items: start;
+    gap: 20px 24px;
+    padding-top: 24px;
+  }
+}
+
+.cartao,
+.aviso {
+  padding: 16px;
+  border: 1px solid var(--borda);
+  border-radius: 16px;
+  background: var(--cartao);
+}
+
+.cartao h2 {
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+}
+
+.nota {
+  margin-bottom: 12px;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+
+/* ---------- aviso: servidor, import ou o que falta ---------- */
+.aviso {
+  border-color: var(--atencao);
+  background: var(--atencao-suave);
+}
+
+.aviso.problema {
+  border-color: var(--perigo);
+  background: var(--perigo-suave);
+}
+
+.aviso h2 {
+  margin-bottom: 6px;
+  color: var(--atencao);
+  font-size: 1.05rem;
+}
+
+.aviso.problema h2 {
+  color: var(--perigo);
+}
+
+.aviso p + p {
+  margin-top: 6px;
+}
+
+/* ---------- formulário ---------- */
+.campos {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.campos:disabled {
+  opacity: 0.55;
+}
+
+.campo {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  margin-bottom: 12px;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.opcional {
+  color: var(--texto-2);
+  font-weight: 400;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+input,
+select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  background: var(--fundo);
+  color: var(--texto);
+}
+
+input:focus,
+select:focus {
+  border-color: var(--destaque);
+}
+
+[aria-invalid='true'] {
+  border-color: var(--perigo);
+  box-shadow: 0 0 0 1px var(--perigo);
+}
+
+.campos-lado-a-lado {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  align-items: start;
+  gap: 0 12px;
+}
+
+.erro {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  color: var(--perigo);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.erro .ico {
+  margin-top: 2px;
+}
+
+#erro-formulario {
+  margin-bottom: 12px;
+}
+
+/* ---------- botões ---------- */
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.botao {
+  width: 100%;
+  border: 0;
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-weight: 700;
+}
+
+.secundario {
+  width: 100%;
+  border: 1px solid var(--destaque);
+  background: transparent;
+  color: var(--destaque);
+  font-weight: 600;
+}
+
+.status-importacao {
+  margin-top: 8px;
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+
+.status-importacao:empty {
+  display: none;
+}
+
+.status-importacao.problema {
+  color: var(--perigo);
+  font-weight: 600;
+}
+
+/* ---------- lista ---------- */
+.cabecalho-lista {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+  margin-bottom: 8px;
+}
+
+.cabecalho-lista h2 {
+  margin-bottom: 0;
+}
+
+.resumo {
+  color: var(--texto-2);
+  font-size: 0.9rem;
+}
+
+.ferramentas {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.ferramentas select {
+  width: auto;
+  min-width: 160px;
+}
+
+.lista {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tarefa {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--borda);
+  border-left: 4px solid var(--borda);
+  border-radius: var(--raio);
+  background: var(--cartao);
+}
+
+.tarefa-info {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.tarefa-titulo {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.tarefa-detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  margin-top: 4px;
+  color: var(--texto-2);
+  font-size: 0.875rem;
+}
+
+.tarefa-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.selo {
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--destaque-suave);
+  color: var(--destaque);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.prioridade-alta .selo {
+  background: var(--perigo-suave);
+  color: var(--perigo);
+}
+
+.prioridade-media .selo {
+  background: var(--atencao-suave);
+  color: var(--atencao);
+}
+
+.tarefa .selo-repete {
+  border: 1px dashed var(--destaque);
+  background: transparent;
+  color: var(--destaque);
+}
+
+/* a situação do prazo: a borda muda de cor e o texto diz o motivo */
+.tarefa.atrasada {
+  border-left-color: var(--perigo);
+}
+.tarefa.atrasada .prazo {
+  color: var(--perigo);
+  font-weight: 600;
+}
+.tarefa.vence-hoje {
+  border-left-color: var(--atencao);
+}
+.tarefa.vence-hoje .prazo {
+  color: var(--atencao);
+  font-weight: 600;
+}
+.tarefa.em-dia {
+  border-left-color: var(--destaque);
+}
+.tarefa.concluida {
+  border-left-color: var(--sucesso);
+  background: transparent;
+}
+.tarefa.concluida .tarefa-titulo {
+  color: var(--texto-2);
+  text-decoration: line-through;
+}
+.tarefa.concluida .prazo {
+  color: var(--sucesso);
+  font-weight: 600;
+}
+.tarefa.com-erro {
+  border-left-color: var(--perigo);
+  border-style: dashed;
+}
+
+.botao-concluir {
+  border: 1px solid var(--sucesso);
+  background: var(--sucesso-suave);
+  color: var(--sucesso);
+  font-weight: 600;
+}
+
+.botao-remover {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--perigo);
+}
+
+.botao-remover:hover {
+  border-color: var(--perigo);
+}
+
+.vazio {
+  padding: 24px 16px;
+  border: 1px dashed var(--borda);
+  border-radius: var(--raio);
+  color: var(--texto-2);
+  text-align: center;
+}
+
+/* ---------- o que a página usa ---------- */
+.etapa {
+  border-top: 1px solid var(--borda);
+}
+
+.etapa:first-child {
+  border-top: 0;
+}
+
+.etapa summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.etapa summary small {
+  color: var(--texto-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.etapa.completa summary small {
+  color: var(--sucesso);
+}
+
+.itens {
+  display: grid;
+  gap: 6px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+.itens li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+}
+
+.itens li .ico {
+  margin-top: 3px;
+}
+
+.itens .ok .ico {
+  color: var(--sucesso);
+}
+
+.itens .falta .ico {
+  color: var(--texto-2);
+}
+
+.itens .errado {
+  border-color: var(--perigo);
+}
+
+.itens .errado .ico {
+  color: var(--perigo);
+}
+
+.itens small {
+  display: block;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+.itens .errado small {
+  color: var(--perigo);
+}
+
+/* ---------- rodapé ---------- */
+.rodape {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 16px 24px;
+  color: var(--texto-2);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 560px) {
+  .botao,
+  .secundario {
+    width: auto;
+  }
+}

@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E12 · Datas, recibo e a página web",
+  "description": "Dez questões sobre datas e getters, o zero à esquerda, testes com data fixa, o join e o recibo do Racha-conta e o servidor local da interface web.",
+  "lesson": "e12-datas-recibo-e-pagina-web",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Que data esta linha cria?\n\n```javascript\nconst d = new Date(2026, 11, 25);\n```",
+      "options": {
+        "a": "25 de dezembro de 2026",
+        "b": "25 de novembro de 2026",
+        "c": "11 de dezembro de 2026",
+        "d": "25 de outubro de 2026"
+      },
+      "answer": "a",
+      "explanation": "Os números vêm na ordem ano, mês e dia, e o mês começa em 0, como as gavetas de uma lista: 0 é janeiro e 11 é dezembro. Quem conta a partir do 1 chega a novembro, que é o mês 10.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst jantar = new Date(2026, 9, 28, 19, 42);\nconsole.log(jantar.getDate(), jantar.getMonth());\n```",
+      "options": {
+        "a": "`28 9`",
+        "b": "`28 10`",
+        "c": "`3 9`",
+        "d": "`28 09`"
+      },
+      "answer": "a",
+      "explanation": "`getDate()` devolve o dia do mês, 28. `getMonth()` devolve o mês a partir do 0: outubro é o 9. O `+ 1` só entra quando o mês vai ser mostrado para gente ler. O `3` seria o `getDay()`, o dia da semana (quarta-feira), e o `09` precisaria do `String` e do `padStart`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "fill",
+      "prompt": "Na `formatarDataHora`, outubro precisa aparecer como `10`. Complete a linha do mês:\n\n```javascript\nconst mes = String(data.getMonth() + ___).padStart(2, '0');\n```",
+      "answer": [["1"]],
+      "explanation": "O `getMonth()` conta a partir do 0, então o mês de verdade é o getter mais 1: outubro, o 9, vira 10. O `+ 1` fica dentro do `String(...)`, porque a conta é feita com o número antes de ele virar texto.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que aparece nas duas linhas?\n\n```javascript\nconst minuto = 5;\nconsole.log(String(minuto).padStart(2, '0'));\nconsole.log(String(45).padStart(2, '0'));\n```",
+      "options": {
+        "a": "`05` e `45`",
+        "b": "`05` e `045`",
+        "c": "`5` e `45`",
+        "d": "`50` e `45`"
+      },
+      "answer": "a",
+      "explanation": "O `String` transforma o número em texto, e o `padStart(2, '0')` completa com `'0'` pela **esquerda** só até o texto ter 2 caracteres. O `'5'` vira `'05'`; o `'45'` já tem 2 e fica igual.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Por que o teste da `formatarDataHora` usa `new Date(2026, 9, 28, 19, 42)`, e não `new Date()`?",
+      "options": {
+        "a": "Com `new Date()`, a data muda a cada minuto, e o resultado esperado só valeria naquele minuto",
+        "b": "O Jest não aceita `new Date()` dentro de um teste",
+        "c": "`new Date()` sem números devolve `undefined`",
+        "d": "Com a data fixa, o teste roda mais rápido"
+      },
+      "answer": "a",
+      "explanation": "Um teste é uma prova com gabarito: a mesma entrada precisa dar sempre a mesma saída. `new Date()` é a data de agora e funciona no Jest, mas muda a cada minuto, e o gabarito deixa de servir. Por isso a regra recebe a data pelo parâmetro: o script passa a de agora, e o teste, uma data fixa.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst lanches = ['X-salada', 'Suco', 'Pudim'];\nconsole.log(lanches.join(' + '));\n```",
+      "options": {
+        "a": "`X-salada + Suco + Pudim`",
+        "b": "`X-salada,Suco,Pudim`",
+        "c": "`[ 'X-salada', 'Suco', 'Pudim' ]`",
+        "d": "`X-salada + Suco + Pudim +`"
+      },
+      "answer": "a",
+      "explanation": "O `join` junta os itens da lista num texto só, com o separador **entre** eles: depois do último, nada. A vírgula sem espaço só aparece com `join()`, sem separador, e a lista entre colchetes é o que o `console.log` mostraria sem o `join`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No Racha-conta, o que devolve `formatarDataHora(new Date(2027, 0, 9, 8, 5))`?",
+      "options": {
+        "a": "`'09/01/2027 08:05'`",
+        "b": "`'09/00/2027 08:05'`",
+        "c": "`'9/1/2027 8:5'`",
+        "d": "`'09/02/2027 08:05'`"
+      },
+      "answer": "a",
+      "explanation": "O mês 0 é janeiro, e a função soma 1: sai `01`. Dia, mês, hora e minuto passam pelo `String` e pelo `padStart(2, '0')`, então todos ganham o zero à esquerda: `09`, `01`, `08` e `05`. Sem o `+ 1`, sairia `00`; sem o `padStart`, `9/1/2027 8:5`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No Racha-conta, o script chama:\n\n```javascript\nconst recibo = montarRecibo({\n  restaurante: 'Bar do Zé',\n  subtotal: 10000,\n  percentual: 10,\n  pessoas: 3,\n  data: new Date(2026, 11, 24, 21, 3),\n});\n```\n\nQuantas linhas tem o texto `recibo`, e qual é a última?",
+      "options": {
+        "a": "8 linhas; a última é `Pessoa 3: R$ 36,66`",
+        "b": "8 linhas; a última é `Pessoa 3: R$ 36,67`",
+        "c": "9 linhas; a última é `Pessoa 4: R$ 27,50`",
+        "d": "3 linhas, uma para cada pessoa"
+      },
+      "answer": "a",
+      "explanation": "O recibo tem o restaurante, a data, o subtotal, a gorjeta e o total (5 linhas) e uma linha por pessoa (3): 8 linhas, juntas com `join('\\n')`. O total é 11000 centavos; dividido por 3, dá 3666 e sobram 2 centavos, que vão para as duas primeiras pessoas. A terceira fica com R$ 36,66.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Você abriu o `web/index.html` com dois cliques. A página aparece, mas avisa que não encontrou as suas funções. O que fazer?",
+      "options": {
+        "a": "Na raiz do repositório, rodar `npx serve .` e abrir `http://localhost:3000/web/`",
+        "b": "Rodar `npm run racha` antes de abrir a página",
+        "c": "Copiar o `conta.js` para dentro da pasta `web/`",
+        "d": "Entrar na pasta `web/` e rodar `npx serve .` lá"
+      },
+      "answer": "a",
+      "explanation": "Aberta como arquivo (`file://`), a página não pode importar outros arquivos do disco: o navegador bloqueia, por segurança. Pelo servidor, ela funciona como um site. O servidor abre na raiz porque o `tela.js` importa `../src/regras/conta.js`: aberto dentro de `web/`, ele não enxerga o `src`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "multiple",
+      "prompt": "Sobre o `npx serve .`, rodado na raiz do `racha-conta`, marque todas as certas.",
+      "options": {
+        "a": "Ele liga um servidor local, e `localhost` é o seu próprio computador",
+        "b": "Enquanto ele roda, o terminal fica preso a ele, e Ctrl + C para o servidor",
+        "c": "O `npx` acrescenta o `serve` em `dependencies`, no `package.json`",
+        "d": "O `.` quer dizer \"esta pasta\": o servidor entrega os arquivos da raiz do projeto"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O `serve` é um servidor local: entrega ao navegador os arquivos da pasta indicada, e o `.` é a pasta atual, a raiz. Ele fica rodando até o Ctrl + C; para outros comandos, abre-se outro terminal. O `npx` roda o pacote sem instalar no projeto: o `package.json` não muda.",
+      "points": 2
+    }
+  ]
+}

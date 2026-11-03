@@ -1,0 +1,144 @@
+{
+  "title": "Quiz: E05 · Git e GitHub",
+  "description": "Dez questões sobre o repositório, o .gitignore, os commits, o push para o GitHub, o README em Markdown e o histórico do Racha-conta.",
+  "lesson": "e05-git-e-github",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "Para o Git, o que é um **commit**?",
+      "options": {
+        "a": "Uma foto do projeto naquele momento, com uma legenda dizendo o que mudou",
+        "b": "O envio dos arquivos do computador para o GitHub",
+        "c": "A pasta oculta `.git`, onde o álbum do projeto fica guardado",
+        "d": "A lista do que fica fora das fotos do projeto"
+      },
+      "answer": "a",
+      "explanation": "O commit é a foto com legenda: guarda como todos os arquivos estavam naquele momento. Mandar as fotos para o GitHub é o push, a pasta `.git` é onde mora o repositório, e a lista do que fica fora é o `.gitignore`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Logo depois do `git init` no `racha-conta`, o `git status` mostra:\n\n```plaintext\nUntracked files:\n\tnode_modules/\n\tpackage-lock.json\n\tpackage.json\n\tsrc/\n```\n\nQual é o jeito certo de deixar o `node_modules/` fora das fotos, sem quebrar o projeto?",
+      "options": {
+        "a": "Criar na raiz o arquivo `.gitignore`, com a linha `node_modules/`",
+        "b": "Apagar a pasta `node_modules/`",
+        "c": "Criar na raiz o arquivo `gitignore.txt`, com a linha `node_modules/`",
+        "d": "Rodar o `git init` de novo"
+      },
+      "answer": "a",
+      "explanation": "O `.gitignore` é a lista do que o Git não fotografa, e o nome precisa ser exato: ponto no começo, sem extensão, na raiz. Apagar o `node_modules/` faz o `npm run racha` falhar com `Cannot find package` até o próximo `npm install`, e a pasta volta para a lista. Com o nome `gitignore.txt`, o Git não lê a lista; o `git init` de novo não muda nada.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O `git status` mostra:\n\n```plaintext\nChanges to be committed:\n\tmodified:   README.md\n\nChanges not staged for commit:\n\tmodified:   src/data/conta.json\n```\n\nSe você rodar agora `git commit -m \"Atualiza o README\"`, o que entra na foto?",
+      "options": {
+        "a": "Só o `README.md`",
+        "b": "Só o `src/data/conta.json`",
+        "c": "Os dois arquivos",
+        "d": "Nenhum: o commit dá erro"
+      },
+      "answer": "a",
+      "explanation": "O commit grava só o que está em `Changes to be committed`, o que já foi chamado para a foto com `git add`. O `conta.json` mudou, mas não passou pelo `git add`: fica fora desta foto e continua em `Changes not staged for commit`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "fill",
+      "prompt": "Complete o comando que tira a foto do projeto com esta legenda:\n\n```bash\ngit ___ -m \"Projeto 1: etapa 2, GitHub e README\"\n```",
+      "answer": [["commit"]],
+      "explanation": "`git commit -m \"...\"` tira a foto do que foi chamado com `git add` e grava a legenda entre aspas. O `-m` vem de *message*, mensagem.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "truefalse",
+      "prompt": "Logo depois do `git commit`, a foto nova já aparece no GitHub.",
+      "answer": false,
+      "explanation": "O commit fica no álbum do seu computador. Quem manda as fotos para o GitHub é o `git push`. Por isso, toda etapa termina com commit **e** push.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Depois de um commit, o `git log --oneline` mostra:\n\n```plaintext\n3889264 (HEAD -> main) Corrige a frase do README\n8505def (origin/main) Projeto 1: etapa 2, GitHub e README\n801afb4 Projeto 1: etapa 1, a conta no terminal\n```\n\nO que essa saída diz?",
+      "options": {
+        "a": "O GitHub ainda não tem a foto `Corrige a frase do README`: falta o `git push`",
+        "b": "O GitHub já tem as três fotos: está tudo enviado",
+        "c": "A foto mais velha do álbum é a `3889264`",
+        "d": "A foto `8505def` foi apagada do computador"
+      },
+      "answer": "a",
+      "explanation": "A foto mais nova fica em cima. O `origin/main` marca a foto mais nova que o GitHub tem, e ele está uma linha abaixo do `HEAD -> main`: a foto de cima ainda não subiu. Depois do `git push`, os dois aparecem na mesma linha.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No `README.md`, você escreveu:\n\n```markdown\n#racha-conta\n\n## Como rodar\n```\n\nNo GitHub, `Como rodar` aparece como título de seção, mas `#racha-conta` aparece como texto comum, com o `#`. Por quê?",
+      "options": {
+        "a": "Falta o espaço entre o `#` e o texto",
+        "b": "O título da página precisa de dois `#`",
+        "c": "O título precisa ficar entre três crases",
+        "d": "O GitHub só mostra títulos depois de um push com `-u`"
+      },
+      "answer": "a",
+      "explanation": "No Markdown, o `#` vira título só com um espaço depois dele: `# racha-conta`. Dois `#` fazem um título de seção, menor. Entre três crases, o texto vira bloco de código, não título.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Num repositório novo, ainda sem nenhum commit, você roda `git push -u origin main` e recebe `error: src refspec main does not match any`. O que fazer?",
+      "options": {
+        "a": "Tirar a primeira foto, com `git add .` e `git commit -m \"...\"`, e rodar o push de novo",
+        "b": "Rodar o `git remote add origin` outra vez",
+        "c": "Apagar o repositório do GitHub e criar de novo, com README",
+        "d": "Apagar a pasta `.git` e rodar o push"
+      },
+      "answer": "a",
+      "explanation": "A `main` só passa a existir com a primeira foto: sem commit, não há o que mandar. O `remote add` de novo dá `remote origin already exists`, e um repositório criado com README faz o push ser recusado com `fetch first`.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "Fim da etapa 2 do Racha-conta. O que aparece na página do repositório `racha-conta` no GitHub? Marque todas as certas.",
+      "options": {
+        "a": "A pasta `src/`",
+        "b": "O `package-lock.json`",
+        "c": "O `README.md`",
+        "d": "A pasta `node_modules/`",
+        "e": "O `.gitignore`"
+      },
+      "answer": ["a", "b", "c", "e"],
+      "explanation": "Vai o código (`src/`), a ficha e a nota fiscal do projeto (`package.json` e `package-lock.json`), o `.gitignore` e o README. O `node_modules/` está no `.gitignore`: fica fora, porque o `npm install` refaz a pasta em qualquer computador.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No primeiro envio, você rodou `git push -u origin main`. O que o `-u` muda nos envios seguintes?",
+      "options": {
+        "a": "Ele grava o destino: dali em diante, o comando é só `git push`",
+        "b": "Ele manda também a pasta `node_modules/`",
+        "c": "Ele deixa o repositório público",
+        "d": "Ele faz o commit antes de enviar"
+      },
+      "answer": "a",
+      "explanation": "O `-u` guarda que a `main` daqui vai para a `main` do `origin`, o apelido do endereço do GitHub. Por isso o push da etapa 2 é só `git push`. Público ou privado se escolhe no GitHub, e o commit continua sendo um passo seu.",
+      "points": 1
+    }
+  ]
+}

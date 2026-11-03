@@ -1,0 +1,155 @@
+{
+  "title": "Quiz: E35 · Componentes próprios",
+  "description": "Dez questões sobre o CartaoCasa: props de dados e de ação, ícones, a foto da internet, o retorno ao toque, o Alert e as variantes.",
+  "lesson": "e35-componentes-proprios",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "A Início usa a peça do kit `EstadoVazio` assim:\n\n```jsx\n<EstadoVazio\n  titulo=\"Nenhuma casa encontrada\"\n  mensagem=\"Tente outro nome, bairro ou cidade.\"\n  textoAcao=\"Limpar busca\"\n  onAcao={() => setTermo('')}\n/>\n```\n\nQual destas é uma **prop de ação**?",
+      "options": {
+        "a": "`onAcao`",
+        "b": "`textoAcao`",
+        "c": "`titulo`",
+        "d": "`mensagem`"
+      },
+      "answer": "a",
+      "explanation": "A prop de ação leva uma função: o que fazer quando algo acontece, aqui o toque no botão. É o `onAcao`, que recebe `() => setTermo('')`. O `textoAcao` tem \"Acao\" no nome, mas leva um texto, o que o botão mostra: é uma prop de dados, como `titulo` e `mensagem`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "No `CartaoCasa`, a foto é escolhida assim:\n\n```jsx\n{casa.foto ? (\n  <Image source={{ uri: casa.foto }} style={estilos.foto} />\n) : (\n  <View style={[estilos.foto, estilos.semFoto, { backgroundColor: cores.borda }]}>\n    <Ionicons name=\"paw\" size={32} color={cores.textoSuave} />\n  </View>\n)}\n```\n\nO Gatil Sete Vidas tem `foto: ''`. O que o cartão dele mostra no lugar da foto?",
+      "options": {
+        "a": "A caixa na cor da borda com a pata no meio",
+        "b": "Uma `Image` vazia, de 72 por 72",
+        "c": "Nada: o espaço da foto some e o texto vai para a esquerda",
+        "d": "Um erro, porque a `uri` não pode ser vazia"
+      },
+      "answer": "a",
+      "explanation": "O texto vazio `''` conta como \"não\" no ternário, como o `undefined` no `if` da aula 3. Por isso vale o lado depois do `:`, a imagem de reserva: a `View` na cor da borda com o `Ionicons` da pata. A `Image` só aparece quando `casa.foto` tem um endereço.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "No cartão, a foto foi escrita assim, sem estilo:\n\n```jsx\n<Image source={{ uri: 'https://picsum.photos/id/237/600/400' }} />\n```\n\nO celular está com internet. O que aparece?",
+      "options": {
+        "a": "Nada, e sem mensagem de erro: sem `width` e `height`, a foto fica com tamanho zero",
+        "b": "A foto com 600 por 400, o tamanho do arquivo",
+        "c": "A foto ocupando a tela inteira",
+        "d": "Uma tela vermelha com o erro `width is required`"
+      },
+      "answer": "a",
+      "explanation": "Na imagem remota, o app só sabe o tamanho depois que a foto baixa. Por isso o `width` e o `height` são obrigatórios: é o sofá comprado pela internet, com o espaço medido antes de ele chegar. Sem as medidas, a foto fica com tamanho zero, e nada aparece. A imagem local do E30, com `require`, é que aparece no tamanho do arquivo.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Uma pessoa escreveu `<Ionicons name=\"pata\" size={16} color={cores.textoSuave} />`. O nome `pata` não existe no Ionicons. O que acontece?",
+      "options": {
+        "a": "Aparece um `?` no lugar do desenho, e o terminal avisa que o nome não é válido",
+        "b": "O app fecha com uma tela vermelha",
+        "c": "Aparece a pata, porque o Ionicons traduz o nome",
+        "d": "Aparece um ícone qualquer, escolhido pelo Ionicons"
+      },
+      "answer": "a",
+      "explanation": "Nome errado não derruba o app: o desenho vira um `?`, e o terminal do `npx expo start` mostra `\"pata\" is not a valid icon name for family \"ionicons\"`. Os nomes são em inglês, letra por letra, e estão em icons.expo.fyi: a pata é `paw` ou `paw-outline`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst carga = 5;\n\nlet aviso = 'Bateria boa';\nlet tom = 'sucesso';\nif (carga <= 5) {\n  aviso = 'Carregue agora';\n  tom = 'perigo';\n} else if (carga <= 20) {\n  aviso = 'Bateria fraca';\n  tom = 'alerta';\n}\n\nconsole.log(aviso, tom);\n```",
+      "options": {
+        "a": "`Carregue agora perigo`",
+        "b": "`Bateria fraca alerta`",
+        "c": "`Bateria boa sucesso`",
+        "d": "`Carregue agora perigo` e, na linha de baixo, `Bateria fraca alerta`"
+      },
+      "answer": "a",
+      "explanation": "O `<=` quer dizer \"menor ou igual\": `5 <= 5` é `true`, então vale a primeira saída da estrada. O `else if` vale só quando a pergunta de cima deu `false`, por isso ele nem é perguntado, mesmo que `5 <= 20` também seja `true`. Os valores do começo, `Bateria boa` e `sucesso`, ficam só para quando nenhuma saída é tomada.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `CartaoCasa` tem:\n\n```jsx\n<Pressable onPress={onPress} style={({ pressed }) => (pressed ? estilos.apertado : null)}>\n```\n\ncom `apertado: { opacity: 0.6 }`. A pessoa encosta o dedo no cartão e depois solta. O que acontece?",
+      "options": {
+        "a": "Enquanto o dedo está no cartão, `pressed` é `true` e ele fica translúcido; ao soltar, volta ao normal e o `onPress` é chamado",
+        "b": "Depois do primeiro toque, o cartão fica translúcido para sempre",
+        "c": "O `onPress` é chamado quando o dedo encosta, e o cartão nunca muda de aparência",
+        "d": "O `style` é lido uma vez só, ao desenhar a tela, então o cartão nunca muda"
+      },
+      "answer": "a",
+      "explanation": "O `style` é uma função: o `Pressable` chama de novo quando o dedo encosta e quando solta, entregando a ficha com `pressed`. Com `true`, vale `estilos.apertado` (opacidade 0.6); com `false`, `null`, nada a mais. O `onPress` é chamado ao soltar. É o retorno visual: o botão do elevador que acende na hora.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Na Início, o `map` ficou assim, **sem a seta** no `onPress`:\n\n```jsx\n{casas.map((casa) => (\n  <CartaoCasa\n    key={casa.id}\n    casa={casa}\n    onPress={Alert.alert(casa.nome, `Visitas: ${casa.visitas}`)}\n  />\n))}\n```\n\nO que acontece ao abrir o app?",
+      "options": {
+        "a": "Os avisos abrem sozinhos, um por casa, antes de qualquer toque",
+        "b": "Nada: o aviso só abre quando alguém toca num cartão",
+        "c": "Só o aviso da última casa abre, ao tocar em qualquer cartão",
+        "d": "O app não abre: falta o `return` dentro do `onPress`"
+      },
+      "answer": "a",
+      "explanation": "Sem a seta, `Alert.alert(...)` é chamado na hora de desenhar a tela, uma vez para cada casa: são 12 avisos, um atrás do outro. Com `() => Alert.alert(...)`, a seta guarda o aviso para a hora do toque, como o `console.log` do `BotaoCopo` no E30.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Uma tela de cadastro chama:\n\n```jsx\nAlert.alert('Casa cadastrada', 'Lar do Totó já aparece na lista.');\n```\n\nComo o aviso aparece no celular?",
+      "options": {
+        "a": "Uma caixa por cima do app, com \"Casa cadastrada\" em negrito no alto, a frase embaixo e o botão OK",
+        "b": "Uma caixa com dois botões, \"Casa cadastrada\" e \"Lar do Totó já aparece na lista.\"",
+        "c": "Uma linha no terminal do `npx expo start`, como o `console.log`",
+        "d": "Um texto novo no fim da Início, abaixo dos cartões"
+      },
+      "answer": "a",
+      "explanation": "O primeiro texto do `Alert.alert` é o título, em negrito; o segundo é a mensagem. O botão OK vem sozinho e fecha o aviso. Quem escreve no terminal é o `console.log`. No navegador, o `Alert` não aparece: confira no celular.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O `Badge` do kit recebe `texto` e `tom` (`'neutro'`, o padrão, `'sucesso'`, `'alerta'` ou `'perigo'`). Como aparece `<Badge texto=\"Lotada\" />`, sem `tom`, no tema claro?",
+      "options": {
+        "a": "Cinza: sem `tom`, vale o padrão, `neutro`",
+        "b": "Vermelho: o `Badge` descobre pelo texto que a casa está lotada",
+        "c": "Sem cor nenhuma, só o texto",
+        "d": "Com um erro, porque o `tom` é obrigatório"
+      },
+      "answer": "a",
+      "explanation": "O `tom` é a variante do `Badge`: a mesma peça com outra aparência, escolhida por uma prop. Sem ela, vale o padrão `neutro`, que aponta para a cor `textoSuave`. O `Badge` não lê o texto para escolher a cor: quem escolhe o tom é quem usa a peça, como o `CartaoCasa` com o `if` e o `else if`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Uma pessoa esqueceu as chaves no parâmetro do cartão:\n\n```jsx\nexport default function CartaoCasa(casa) {\n  // ...\n  <Text>{casa.nome}</Text>\n  <Badge texto={`${casa.capacidade - casa.ocupacao} vagas`} />\n```\n\nA Início usa `<CartaoCasa key={casa.id} casa={casa} />`. O que aparece em cada cartão?",
+      "options": {
+        "a": "O nome em branco e o selo \"NaN vagas\"",
+        "b": "O nome da casa e o selo certo, como antes",
+        "c": "O texto `[object Object]` no lugar do nome",
+        "d": "A tela vermelha `Element type is invalid`"
+      },
+      "answer": "a",
+      "explanation": "Sem as chaves, o parâmetro `casa` recebe a ficha inteira das props, `{ casa: {...}, onPress }`. Essa ficha não tem `nome` nem `capacidade`: os dois são `undefined`, e `undefined - undefined` dá `NaN`. Com `function CartaoCasa({ casa, onPress })`, as chaves tiram da ficha o campo `casa`, e tudo volta.",
+      "points": 2
+    }
+  ]
+}

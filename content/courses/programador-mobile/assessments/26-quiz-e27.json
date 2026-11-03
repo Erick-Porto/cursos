@@ -1,0 +1,153 @@
+{
+  "title": "Quiz: E27 · Efeitos e dados da API",
+  "description": "Dez questões sobre o useEffect e o [], o fetch dentro do efeito, as receitas no estado, o carregando e o erro do Livro de Receitas.",
+  "lesson": "e27-efeitos-e-dados-da-api",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O `App` tem estas linhas:\n\n```jsx\nfunction App() {\n  const [busca, setBusca] = useState('')\n\n  console.log('A')\n\n  useEffect(() => {\n    console.log('B')\n  }, [])\n  // ... o resto do App\n}\n```\n\nA pessoa abre a página e digita `pi` na busca. O que o Console mostra, em ordem?",
+      "options": {
+        "a": "`A`, `B`, `A`, `A`",
+        "b": "`B`, `A`, `A`, `A`",
+        "c": "`A`, `B`, `A`, `B`, `A`, `B`",
+        "d": "`A`, `B`"
+      },
+      "answer": "a",
+      "explanation": "O React desenha primeiro (`A`) e só depois roda o efeito (`B`). Cada letra muda o estado `busca` e desenha o `App` de novo: mais um `A` por letra. Com o `[]`, o efeito já rodou e não roda de novo. O `B` vem depois do primeiro `A`, nunca antes.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O mesmo `App`, agora com o efeito sem o `[]` no fim:\n\n```jsx\nconsole.log('A')\n\n  useEffect(() => {\n    console.log('B')\n  })\n```\n\nA pessoa abre a página e digita `pi` na busca. O que o Console mostra, em ordem?",
+      "options": {
+        "a": "`A`, `B`, `A`, `B`, `A`, `B`",
+        "b": "`A`, `B`, `A`, `A`",
+        "c": "`B`, `B`, `B`, `A`, `A`, `A`",
+        "d": "`A`, `A`, `A`"
+      },
+      "answer": "a",
+      "explanation": "Sem o `[]`, o efeito roda depois de **todo** desenho: o primeiro, ao abrir, e um a cada letra. Por isso, um efeito que busca dados e muda o estado, sem o `[]`, pede à API sem parar.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Uma colega escreveu o efeito abaixo. Ela salva, aperta F5, e nada acontece: o Console não mostra nada e a aba Rede não tem pedido a `recipes`. Por quê?\n\n```jsx\nuseEffect(() => {\n  async function carregarReceitas() {\n    const resposta = await fetch('https://dummyjson.com/recipes')\n    const dados = await resposta.json()\n    console.log(dados)\n  }\n}, [])\n```",
+      "options": {
+        "a": "A função `carregarReceitas` foi criada, mas ninguém a chama: falta `carregarReceitas()` antes do `}, [])`",
+        "b": "O `[]` impede o efeito de rodar",
+        "c": "O `fetch` não funciona dentro do `useEffect`",
+        "d": "Falta o `async` na função do efeito: `useEffect(async () => ...)`"
+      },
+      "answer": "a",
+      "explanation": "Criar uma função não a executa: é a receita guardada com nome, que só vira prato quando alguém a chama. O efeito roda, cria a `carregarReceitas` e termina. A linha `carregarReceitas()`, logo abaixo, é a que faz o pedido. O `[]` só diz que o efeito roda uma vez, e a função do efeito não pode ser `async`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Por que não se escreve `useEffect(async () => { ... }, [])`?",
+      "options": {
+        "a": "Uma função `async` sempre devolve uma Promise, e o React quer que a função do efeito não devolva nada",
+        "b": "O `async` só funciona no Node, não no navegador",
+        "c": "O `fetch` não aceita ser usado com `await`",
+        "d": "Com `async`, o `[]` deixa de valer e o efeito roda a cada desenho"
+      },
+      "answer": "a",
+      "explanation": "A função `async` devolve uma Promise, a senha da lanchonete, e o React reclama no Console: `useEffect must not return anything besides a function`. Por isso a função `async` mora dentro do efeito e é chamada logo abaixo. O `async`/`await` funciona no navegador e no Node.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No Livro de Receitas, a DummyJSON responde com este objeto, guardado em `dados`:\n\n```json\n{ \"recipes\": [ ... 30 receitas ... ], \"total\": 50, \"skip\": 0, \"limit\": 30 }\n```\n\nQual linha guarda as 30 receitas no estado, para o `filter` e o `map` do `App` funcionarem?",
+      "options": {
+        "a": "`setReceitas(dados.recipes)`",
+        "b": "`setReceitas(dados)`",
+        "c": "`setReceitas(dados.total)`",
+        "d": "`setReceitas(resposta)`"
+      },
+      "answer": "a",
+      "explanation": "`dados` é um objeto, e a lista fica dentro dele, no campo `recipes`. Com `setReceitas(dados)`, o estado vira o objeto inteiro e a tela fica branca com `receitas.filter is not a function`: objeto não tem `filter`, lista tem. `dados.total` é um número, e `resposta` ainda nem virou objeto.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O `if` do `conteudo` no fim da etapa 4:\n\n```jsx\nlet conteudo\nif (carregando) {\n  conteudo = <Carregando />\n} else if (erro) {\n  conteudo = <MensagemErro texto=\"Não foi possível carregar as receitas.\" />\n} else if (visiveis.length === 0) {\n  conteudo = <ListaVazia busca={busca} />\n} else {\n  // a grade com os cartões\n}\n```\n\nCom `carregando` igual a `false`, `erro` igual a `true` e `visiveis.length` igual a `0`, o que aparece na tela?",
+      "options": {
+        "a": "A `MensagemErro`: \"Não foi possível carregar as receitas.\"",
+        "b": "A `ListaVazia`: \"Nenhuma receita por aqui.\"",
+        "c": "O `Carregando`: \"Carregando receitas...\"",
+        "d": "A `MensagemErro` e a `ListaVazia`, uma embaixo da outra"
+      },
+      "answer": "a",
+      "explanation": "O `if` com `else if` testa de cima para baixo e segue só o primeiro caminho que dá sim. `carregando` é `false`, então pula; `erro` é `true`, então `conteudo` vira a `MensagemErro`, e os caminhos de baixo nem são testados. A lista vazia também daria sim, mas vem depois.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "truefalse",
+      "prompt": "Quando a API responde com o status 404 (por exemplo, `https://dummyjson.com/recipes/9999`), o `fetch` falha e o código cai sozinho no `catch`.",
+      "answer": false,
+      "explanation": "O 404 é uma resposta: o garçom chegou à cozinha e ouviu \"esse prato não existe\". O `fetch` não falha, e `resposta.ok` vale `false`. Para cair no `catch`, você confere o `ok` e lança um erro com `throw`. O `fetch` só falha sozinho quando o pedido nem chega, como sem internet.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Um aluno escreveu o `carregarReceitas` assim, sem o `finally`:\n\n```jsx\nasync function carregarReceitas() {\n  try {\n    const resposta = await fetch('https://dummyjson.com/recipes')\n    const dados = await resposta.json()\n    setReceitas(dados.recipes)\n    setCarregando(false)\n  } catch (falha) {\n    setErro(true)\n  }\n}\n```\n\nO `if` do `conteudo` testa o `carregando` primeiro e o `erro` depois. Sem internet, o que a tela mostra?",
+      "options": {
+        "a": "\"Carregando receitas...\" para sempre",
+        "b": "\"Não foi possível carregar as receitas.\"",
+        "c": "\"Nenhuma receita por aqui.\"",
+        "d": "A tela fica em branco"
+      },
+      "answer": "a",
+      "explanation": "Sem internet, o `fetch` falha na primeira linha do `try` e o código pula direto para o `catch`: o `setCarregando(false)` nunca roda. O `erro` vira `true`, mas o `carregando` continua `true`, e o primeiro caminho do `if` é o do carregando. O `finally` roda com erro e sem erro: é o lugar do `setCarregando(false)`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "O Livro de Receitas está com a etapa 4 completa. A pessoa abre o app sem internet. Depois que o `carregarReceitas` termina, o que é verdade? Marque todas as certas.",
+      "options": {
+        "a": "O estado `erro` vale `true`",
+        "b": "O estado `carregando` vale `false`",
+        "c": "O estado `receitas` continua com a lista vazia, `[]`",
+        "d": "A tela mostra \"Nenhuma receita por aqui.\", porque a lista está vazia"
+      },
+      "answer": [
+        "a",
+        "b",
+        "c"
+      ],
+      "explanation": "O `fetch` falha: o `catch` liga o `erro`, o `finally` desliga o `carregando`, e o `setReceitas` nunca roda, então a lista continua vazia. Na tela aparece a `MensagemErro`, e não a `ListaVazia`: no `if` do `conteudo`, o caminho do erro vem antes do da lista vazia.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No Livro de Receitas, por que o estado `carregando` começa com `useState(true)`, e não com `false`?",
+      "options": {
+        "a": "Porque, ao abrir, o app já está buscando: o primeiro desenho mostra \"Carregando receitas...\"",
+        "b": "Porque o `useState` só aceita `true` como valor inicial",
+        "c": "Porque, com `true`, o efeito roda uma vez só",
+        "d": "Porque o `fetch` só funciona quando `carregando` é `true`"
+      },
+      "answer": "a",
+      "explanation": "O primeiro desenho acontece antes de a resposta chegar. Com `false`, ele cairia na lista vazia e mostraria \"Nenhuma receita por aqui.\" por um instante. Quem faz o efeito rodar uma vez é o `[]`, não o `carregando`, e o `fetch` não depende de estado nenhum.",
+      "points": 1
+    }
+  ]
+}

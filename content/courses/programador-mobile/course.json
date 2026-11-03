@@ -49,25 +49,25 @@
     {
       "slug": "primeiro-script",
       "title": "Primeiro script",
-      "description": "Concluiu o Ambiente JavaScript: Node.js, npm, Git e testes prontos para programar.",
+      "description": "Concluiu o Ambiente JavaScript: Node.js, npm e Git prontos, e o Racha-conta no GitHub.",
       "icon": "terminal",
       "rarity": "common",
       "xp": 30,
       "rule": {
         "type": "lessons_completed",
-        "count": 8
+        "count": 5
       }
     },
     {
       "slug": "javascript-a-fundo",
       "title": "JavaScript a fundo",
-      "description": "Concluiu as três unidades de JavaScript, do primeiro if ao checkout com a API de verdade.",
+      "description": "Concluiu as três unidades de JavaScript, do primeiro script às classes e à API de verdade.",
       "icon": "braces",
       "rarity": "rare",
       "xp": 80,
       "rule": {
         "type": "lessons_completed",
-        "count": 40
+        "count": 23
       }
     },
     {
@@ -79,7 +79,7 @@
       "xp": 40,
       "rule": {
         "type": "lessons_completed",
-        "count": 49
+        "count": 28
       }
     },
     {
@@ -91,25 +91,25 @@
       "xp": 60,
       "rule": {
         "type": "lessons_completed",
-        "count": 57
+        "count": 32
       }
     },
     {
       "slug": "ui-kit-pronto",
       "title": "UI kit pronto",
-      "description": "Concluiu Layout e componentes React Native: a Lojinha com UI kit, navegação e acessibilidade.",
+      "description": "Concluiu Layout e componentes React Native: as Casas de adoção com UI kit, navegação e acessibilidade.",
       "icon": "layers",
       "rarity": "epic",
       "xp": 120,
       "rule": {
         "type": "lessons_completed",
-        "count": 79
+        "count": 40
       }
     },
     {
       "slug": "programador-mobile",
       "title": "Programador Mobile",
-      "description": "Concluiu as 180 horas, do primeiro script ao app publicado no Demo Day.",
+      "description": "Concluiu as 180 horas, do primeiro script ao app da equipe apresentado para a banca.",
       "icon": "rocket",
       "rarity": "legendary",
       "xp": 250,

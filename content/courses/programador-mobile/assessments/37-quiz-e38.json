@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E38 · Formulários",
+  "description": "Dez questões sobre o Campo e o teclado certo, as Opcoes, a validação por campo com o objeto de erros e o salvar do cadastro de casa.",
+  "lesson": "e38-formularios",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No cadastro de casa, o campo do nome é assim:\n\n```jsx\nconst [nome, setNome] = useState('');\n\n<Campo rotulo=\"Nome da casa\" placeholder=\"Lar da Mel\"\n  value={nome} onChangeText={setNome} />\n```\n\nO que faz o `onChangeText={setNome}`?",
+      "options": {
+        "a": "A cada letra digitada, entrega o texto novo ao `setNome`, e o estado `nome` muda",
+        "b": "Mostra no campo o que está guardado no estado `nome`",
+        "c": "Guarda o texto só quando a pessoa toca em Cadastrar casa",
+        "d": "Deixa escrito \"Lar da Mel\" no estado enquanto a pessoa não digita"
+      },
+      "answer": "a",
+      "explanation": "O `onChangeText` roda a cada letra e já entrega o texto pronto, por isso o `setNome` vai direto. Quem mostra o estado no campo é o `value`. O `placeholder` é só o exemplo em cinza: sem nada digitado, `nome` continua `''`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual `keyboardType` abre o teclado do discador, o certo para o campo Telefone?",
+      "options": {
+        "a": "`'phone-pad'`",
+        "b": "`'number-pad'`",
+        "c": "`'email-address'`",
+        "d": "`'default'`"
+      },
+      "answer": "a",
+      "explanation": "O `'phone-pad'` abre o teclado de discar, com os números grandes. O `'number-pad'` traz só os algarismos, bom para a capacidade; o `'email-address'` traz letras com `@` e `.`; o `'default'` é o de letras. O teclado ajuda, mas não trava: por isso o formulário ainda confere o telefone no `validar`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O cadastro tem:\n\n```jsx\nconst [aceita, setAceita] = useState('');\n\n<Opcoes rotulo=\"A casa aceita\" opcoes={['Cães', 'Gatos', 'Cães e gatos']}\n  valor={aceita} onMudar={setAceita} />\n```\n\nA pessoa toca em Gatos e depois em Cães. O que fica na tela?",
+      "options": {
+        "a": "Só Cães cheio, com o visto: `aceita` vale `'Cães'`",
+        "b": "Cães e Gatos cheios: `aceita` guarda os dois",
+        "c": "Só Gatos cheio: o primeiro toque é o que vale",
+        "d": "Nenhum cheio, até a pessoa tocar em Cadastrar casa"
+      },
+      "answer": "a",
+      "explanation": "A cada toque, o `Opcoes` chama `onMudar` com a opção tocada: primeiro `setAceita('Gatos')`, depois `setAceita('Cães')`. O estado guarda uma opção só, e o botão cheio é o que tem o mesmo texto de `valor`, como as estações do rádio antigo do carro: apertar uma solta a outra.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Os dois valores vieram de campos do formulário. O que aparece no terminal?\n\n```javascript\nconst capacidade = '10';\nconst ocupacao = '6';\n\nconsole.log(ocupacao > capacidade);\nconsole.log(Number(ocupacao) > Number(capacidade));\n```",
+      "options": {
+        "a": "`true` e depois `false`",
+        "b": "`false` e depois `false`",
+        "c": "`false` e depois `true`",
+        "d": "`true` e depois `true`"
+      },
+      "answer": "a",
+      "explanation": "Do campo vem texto. Texto compara letra por letra, como no dicionário: o `'6'` vem depois do `'1'`, então `'6' > '10'` é `true`. Com `Number`, a pergunta vira `6 > 10`, que é `false`. É por isso que a regra da ocupação compara números.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No cadastro, a pessoa deixou: nome `'Lá'`, cidade `'Campinas'`, telefone `'(19) 3251-4400'`, nenhuma opção escolhida (`aceita` é `''`) e capacidade `'2,5'`. O `validar` é este:\n\n```jsx\nfunction validar() {\n  const novos = {};\n  if (nome.trim().length < 3) novos.nome = 'Escreva o nome da casa, com pelo menos 3 letras';\n  if (cidade.trim() === '') novos.cidade = 'Informe a cidade';\n  if (telefone.trim().length < 10) novos.telefone = 'Telefone com DDD, como 11 91234-5678';\n  if (aceita === '') novos.aceita = 'Escolha quem a casa aceita';\n  const lugares = Number(capacidade);\n  if (!Number.isInteger(lugares) || lugares < 1) {\n    novos.capacidade = 'Quantos animais cabem: um número inteiro, a partir de 1';\n  }\n  return novos;\n}\n```\n\nO que mostra `console.log(Object.keys(validar()))`?",
+      "options": {
+        "a": "`[ 'nome', 'aceita', 'capacidade' ]`",
+        "b": "`[ 'nome', 'telefone', 'aceita', 'capacidade' ]`",
+        "c": "`[ 'nome', 'aceita' ]`",
+        "d": "`[]`"
+      },
+      "answer": "a",
+      "explanation": "Campo por campo: `'Lá'` tem 2 letras (erro); `'Campinas'` não está vazia (passa); `'(19) 3251-4400'` tem 14 caracteres, 10 ou mais (passa); `aceita` vazia (erro); `Number('2,5')` dá `NaN`, que não é inteiro (erro). A folha tem 3 campos, e o `Object.keys` devolve os nomes deles, na ordem em que entraram.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "A pessoa deixou a capacidade vazia. No `validar`, `Number('')` dá ___, e a regra `lugares < 1` recusa o campo.",
+      "answer": [["0"]],
+      "explanation": "O texto vazio vira o número `0`, que é inteiro: por isso a regra da capacidade não para no `Number.isInteger` e precisa do `lugares < 1` para recusar o campo vazio.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Depois do `setErros(novos)`, o estado `erros` vale `{ nome: 'Escreva o nome da casa, com pelo menos 3 letras' }`. O campo do telefone é:\n\n```jsx\n<Campo rotulo=\"Telefone\" value={telefone} onChangeText={setTelefone} erro={erros.telefone} />\n```\n\nO que aparece embaixo dele?",
+      "options": {
+        "a": "Nada: `erros.telefone` é `undefined`, e o `Campo` sem erro não mostra mensagem",
+        "b": "A mensagem do nome, porque é o único erro da folha",
+        "c": "A palavra `undefined`, em vermelho",
+        "d": "A tela vermelha de erro, porque o campo `telefone` não existe no objeto"
+      },
+      "answer": "a",
+      "explanation": "Ler um campo que não está no objeto dá `undefined`, sem erro. Com `erro` vazio, o `Campo` fica com a borda comum e sem mensagem. Cada mensagem vai só para o campo com o mesmo nome: a do nome aparece embaixo do nome.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No E16, o `validarContato` da agenda devolvia uma lista, como `['Informe o nome']`. Por que o `validar` do cadastro devolve um objeto, como `{ cidade: 'Informe a cidade' }`?",
+      "options": {
+        "a": "Para cada mensagem levar o nome do seu campo, e a tela saber embaixo de qual campo mostrar",
+        "b": "Porque o React Native não aceita lista dentro de um estado",
+        "c": "Para mostrar só o primeiro erro e esconder os outros",
+        "d": "Porque um objeto é conferido mais rápido do que uma lista"
+      },
+      "answer": "a",
+      "explanation": "É a folha da vistoria do E16 com o nome de cada item ao lado do problema. Na lista, a mensagem ia para o fim da fila, sem dizer de que campo era. No objeto, `erros.cidade` aponta a mensagem da cidade. O estado aceita listas sem problema, e o objeto continua trazendo todos os erros de uma vez.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "multiple",
+      "prompt": "Quais destes jeitos fazem o `salvar` rodar só quando a pessoa toca no botão? Marque todas as certas.",
+      "options": {
+        "a": "`<Botao titulo=\"Cadastrar casa\" onPress={salvar} />`",
+        "b": "`<Botao titulo=\"Cadastrar casa\" onPress={() => salvar()} />`",
+        "c": "`<Botao titulo=\"Cadastrar casa\" onPress={salvar()} />`",
+        "d": "`<Botao titulo=\"Cadastrar casa\" onPress=\"salvar\" />`"
+      },
+      "answer": ["a", "b"],
+      "explanation": "Sem parênteses, `salvar` entrega a função, e o botão a chama no toque; com a seta, a chamada fica guardada para o toque. Com `salvar()`, a função roda ao desenhar a tela, chama `setErros`, a tela se redesenha e roda de novo: `Too many re-renders`. Entre aspas, `\"salvar\"` é só um texto, não a função.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Sem erros, o `salvar` termina assim:\n\n```jsx\nadicionarCasa({ nome: nome.trim(), cidade: cidade.trim(), aceita, capacidade: Number(capacidade) });\nAlert.alert('Casa cadastrada', `${nome.trim()} já aparece na lista.`);\nrouter.back();\n```\n\nO que a pessoa vê?",
+      "options": {
+        "a": "O aviso, e a tela Nova casa sai de cima da pilha: a Início aparece, com a casa nova no topo",
+        "b": "O aviso, e uma Início nova abre por cima do Cadastro, com a casa nova no fim da lista",
+        "c": "O aviso, mas a casa só aparece na Início depois de puxar a lista para atualizar",
+        "d": "O aviso, e o app recarrega inteiro, com as 12 casas de antes"
+      },
+      "answer": "a",
+      "explanation": "O `adicionarCasa` põe a casa no começo da lista do `useCasas()`, o quadro de avisos que a Início também lê, então ela já aparece no topo. O `router.back()` tira a carta de cima da pilha, e a Início, que estava embaixo, volta. Quem põe uma tela nova por cima é o `router.push`.",
+      "points": 1
+    }
+  ]
+}

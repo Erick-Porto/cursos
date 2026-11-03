@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E16 · Módulos e a agenda na web",
+  "description": "Dez questões sobre export com nome e default, a validação com lista de erros, o soDigitos do kit, a organização em arquivos e a página da agenda.",
+  "lesson": "e16-modulos-e-a-agenda-na-web",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O `src/regras/validacao.js` tem:\n\n```javascript\nexport default function validarContato(dados) {\n  // as regras\n}\n```\n\nQual linha importa a função no `validacao.test.js`, que está na mesma pasta?",
+      "options": {
+        "a": "`import validarContato from './validacao.js';`",
+        "b": "`import { validarContato } from './validacao.js';`",
+        "c": "`import validarContato from 'validacao';`",
+        "d": "`export validarContato from './validacao.js';`"
+      },
+      "answer": "a",
+      "explanation": "O destaque da vitrine, o `export default`, se importa sem chaves, e o nome é quem importa que escolhe. Com chaves, o `import` pede um `export` com nome, que esse arquivo não tem: no Jest, aparece `(0 , _validacao.validarContato) is not a function`. Sem o `./` e o `.js`, o caminho não aponta para o arquivo, e quem importa é o `import`, não o `export`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal com `node app.js`?\n\n```javascript\n// clima.js\nconst AVISOS = { chuva: 'Leve o guarda-chuva', sol: 'Use protetor solar' };\n\nexport default function avisoDoDia(tempo) {\n  return AVISOS[tempo];\n}\n\nexport const CIDADES = ['Recife', 'Natal'];\n```\n\n```javascript\n// app.js, na mesma pasta\nimport aviso, { CIDADES } from './clima.js';\n\nconsole.log(aviso('chuva'), CIDADES.length);\n```",
+      "options": {
+        "a": "`Leve o guarda-chuva 2`",
+        "b": "`SyntaxError`, porque o `clima.js` não tem nada chamado `aviso`",
+        "c": "`undefined 2`",
+        "d": "`Leve o guarda-chuva undefined`"
+      },
+      "answer": "a",
+      "explanation": "O destaque vem primeiro, sem chaves, com o nome que quem importa escolher: `aviso` é a `avisoDoDia`. Depois da vírgula, entre chaves, vem o `CIDADES`, com o nome exato. `aviso('chuva')` lê `AVISOS['chuva']`, e a lista tem 2 cidades. O nome `aviso` só daria erro se estivesse entre chaves.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "A página da agenda mostra no topo: `Não deu para importar src/regras/contato.js: The requested module './grupos.js' does not provide an export named 'NOMES_DOS_GRUPOS'`. O `grupos.js` está assim:\n\n```javascript\nconst NOMES_DOS_GRUPOS = {\n  familia: 'Família',\n  amigos: 'Amigos',\n  trabalho: 'Trabalho',\n};\n```\n\nO que corrigir?",
+      "options": {
+        "a": "Pôr o `export` na frente: `export const NOMES_DOS_GRUPOS = {`",
+        "b": "Trocar a primeira linha por `export default const NOMES_DOS_GRUPOS = {`",
+        "c": "Copiar a ficha de volta para o `contato.js` e para o `validacao.js`",
+        "d": "Abrir a página com dois cliques no `index.html`"
+      },
+      "answer": "a",
+      "explanation": "Sem `export`, a ficha fica no estoque do `grupos.js`, e o `import { NOMES_DOS_GRUPOS }` não acha nada na vitrine. O `export default const` nem existe (dá `Unexpected token 'const'`), e um default não se importa com chaves. As cópias funcionam até o dia em que uma muda e a outra não. Com dois cliques, a página não consegue importar arquivo nenhum.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que mostra o `console.log`?\n\n```javascript\nfunction validarApelido(apelido) {\n  const erros = [];\n  if (apelido.trim() === '') {\n    erros.push('Informe o apelido');\n  }\n  if (apelido.length > 12) {\n    erros.push('Use até 12 letras');\n  }\n  if (apelido.includes(' ')) {\n    erros.push('Sem espaço');\n  }\n  return erros;\n}\n\nconsole.log(validarApelido('Ana Maria Souza'));\n```",
+      "options": {
+        "a": "`[ 'Use até 12 letras', 'Sem espaço' ]`",
+        "b": "`[ 'Use até 12 letras' ]`",
+        "c": "`[ 'Sem espaço', 'Use até 12 letras' ]`",
+        "d": "`[]`"
+      },
+      "answer": "a",
+      "explanation": "Cada regra tem o seu `if`, sem `else`, e todas são conferidas. O apelido não está vazio; tem 15 letras, contando os espaços, e passa de 12; e tem espaço. A lista traz os dois problemas, na ordem das regras. Só o primeiro apareceria se a terceira regra fosse um `else if`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "No fim da etapa 4 do Projeto 2, o que o `validarContato` devolve para esta ficha?\n\n```javascript\nvalidarContato({\n  nome: 'Ana',\n  telefone: '(21) 3456-789',\n  email: 'ana@exemplo',\n  grupo: 'familia',\n  aniversario: null,\n});\n```",
+      "options": {
+        "a": "`['O telefone precisa de 10 ou 11 dígitos, com o DDD', 'E-mail inválido']`",
+        "b": "`['E-mail inválido']`",
+        "c": "`['O telefone precisa de 10 ou 11 dígitos, com o DDD']`",
+        "d": "`[]`"
+      },
+      "answer": "a",
+      "explanation": "O nome não está vazio. O `soDigitos` do telefone dá `'213456789'`, 9 algarismos: nem 10 nem 11. O e-mail tem `@`, mas não tem ponto, e faltar um dos dois já é problema. O grupo `familia` é uma das chaves de `NOMES_DOS_GRUPOS`. São dois problemas, na ordem dos campos.",
+      "points": 2
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O kit traz pronta a `soDigitos`:\n\n```javascript\nexport function soDigitos(texto) {\n  let digitos = '';\n  for (const letra of texto) {\n    if ('0123456789'.includes(letra)) {\n      digitos = digitos + letra;\n    }\n  }\n  return digitos;\n}\n```\n\nQual é o valor de `soDigitos('+55 (11) 3456-7890').length`?",
+      "options": {
+        "a": "`12`",
+        "b": "`10`",
+        "c": "`18`",
+        "d": "`13`"
+      },
+      "answer": "a",
+      "explanation": "O `for...of` percorre o texto letra por letra, e só os algarismos entram em `digitos`: `'551134567890'`. São 12: o `+`, os parênteses, os espaços e o hífen ficam de fora. Com 12, o `validarContato` recusa o telefone, porque o 55 do país sobra. O 18 é o tamanho do texto inteiro.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Sobre o `export default`, marque todas as certas.",
+      "options": {
+        "a": "Um arquivo tem no máximo um",
+        "b": "Quem importa escolhe o nome",
+        "c": "Ele se importa sem chaves",
+        "d": "O arquivo que tem um default não pode ter `export` com nome"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O default é o destaque da vitrine: um só por arquivo (dois dão `Duplicate export of 'default'`), importado sem chaves e com o nome que quem importa quiser. O mesmo arquivo pode ter outras coisas com nome, como o `cardapio.js` da aula, importado assim: `import pratoDoDia, { BEBIDAS } from './cardapio.js'`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "No Projeto 2, o `contato.js` e o `validacao.js` usam a mesma ficha `NOMES_DOS_GRUPOS`. Qual organização o projeto usa?",
+      "options": {
+        "a": "A ficha mora em `grupos.js`, com `export`, e os dois arquivos importam de lá",
+        "b": "Cada arquivo tem a sua cópia da ficha, para não depender do outro",
+        "c": "A ficha mora no `validacao.js`, e o `contato.js` importa de lá",
+        "d": "A ficha mora no `web/tela.js`, e as regras importam da página"
+      },
+      "answer": "a",
+      "explanation": "O que dois arquivos usam mora num terceiro, e os dois importam de lá: a ficha muda num lugar só. Com uma cópia em cada arquivo, um dia alguém muda uma e esquece a outra. Morando no `validacao.js`, o `contato.js` teria de importar do arquivo de outro assunto. E as regras nunca importam da página: é a página que importa as regras.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Todos os testes do `validacao.test.js` ficam vermelhos com `TypeError: (0 , _validacao.default) is not a function`. O teste começa com `import validarContato from './validacao.js';`. Qual é a causa mais provável?",
+      "options": {
+        "a": "A função saiu com `export function validarContato`, sem o `default`",
+        "b": "Falta o `.js` no `import` do teste",
+        "c": "O teste usa `toEqual` no lugar do `toBe`",
+        "d": "A ficha `certo` do teste não tem o campo `email`"
+      },
+      "answer": "a",
+      "explanation": "O `import` sem chaves pede o destaque do arquivo, o `default`. Se a função saiu com `export` com nome, o arquivo não tem destaque, e o Jest avisa que o `default` não é uma função. A correção é `export default function validarContato`. O `.js` está no `import`, e o `toEqual` é o certo para comparar listas.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "truefalse",
+      "prompt": "No `validarContato`, se a regra do telefone fosse um `else if` ligado à regra do nome, salvar o formulário vazio mostraria as duas mensagens: a do nome e a do telefone.",
+      "answer": false,
+      "explanation": "Com `else if`, o segundo caminho só é conferido quando o primeiro dá `false`. O nome vazio dá `true` na primeira regra, e a do telefone é pulada: só `Informe o nome` aparece. Por isso cada regra tem o seu `if`, sem `else`: a lista traz todos os problemas de uma vez.",
+      "points": 1
+    }
+  ]
+}

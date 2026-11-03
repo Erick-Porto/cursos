@@ -12,7 +12,7 @@ objectives:
 
 # Ambiente de desenvolvimento: Node.js, VS Code, Git e GitHub
 
-Programador Mobile · Encontro E01 · Aula 2 de 89
+Programador Mobile · Encontro E01 · Aula 2 de 45
 
 ---
 
@@ -140,7 +140,7 @@ Dá para rodar JavaScript sem abrir o navegador?
 
 Na aula 1, o mesmo motor ia num carro comum ou numa ambulância, e o que mudava era o equipamento. O **Node.js** é um runtime de JavaScript para o computador: o motor V8, o mesmo do Chrome, com as ferramentas do computador no lugar das da página. Ele lê arquivos, usa a rede e conversa com o terminal.
 
-Com ele, você roda um programa com um comando, sem abrir navegador nenhum. É assim que vão funcionar os seus programas do E02 ao E20.
+Com ele, você roda um programa com um comando, sem abrir navegador nenhum. É assim que vão funcionar os seus programas do E02 ao E23.
 
 ---
 
@@ -164,13 +164,13 @@ Se o `node -v` mostrar um primeiro número ímpar, como `v25.1.0`, você baixou 
 
 Para fazer um bolo, você compra a farinha pronta, em vez de plantar o trigo. Programar é igual: muita coisa já existe pronta. O **npm** vem junto com o Node.js e baixa **pacotes**: código pronto, escrito por outras pessoas, de um catálogo público com milhões de opções.
 
-Um exemplo: em vez de escrever do zero um programa que testa o seu código, você instala o Jest com um comando. É o que você faz no E04.
+Um exemplo: em vez de escrever do zero um programa que testa o seu código, você instala o Jest com um comando. É o que você faz no E08.
 
 ```bash
 npm -v    # mostra a versão do npm, instalado junto com o Node
 ```
 
-No E02, você usa o npm de verdade e cria o `package.json`, a ficha do seu projeto.
+No E04, você usa o npm de verdade e cria o `package.json`, a ficha do seu projeto.
 
 ---
 
@@ -231,7 +231,7 @@ Dois atalhos que valem ouro:
 | ESLint | aponta erros e descuidos no código, como um corretor ortográfico |
 | Error Lens | mostra o aviso na própria linha, sem passar o mouse |
 
-Instale pela aba Extensions (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>): procure pelo nome e clique em **Install**. O Prettier e o ESLint ganham as regras do seu projeto no E03.
+Instale pela aba Extensions (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>): procure pelo nome e clique em **Install**. No E07, você arruma o código com um atalho do VS Code, o Formatar Documento.
 
 ---
 
@@ -267,7 +267,7 @@ Com o álbum:
 - sabe exatamente o que mudou entre duas fotos
 - várias pessoas trabalham no mesmo projeto sem apagar o trabalho umas das outras
 
-Hoje você só instala o Git e se apresenta a ele. Os primeiros commits ficam para o E03.
+Hoje você só instala o Git e se apresenta a ele. Os primeiros commits ficam para o E05.
 
 ---
 
@@ -335,7 +335,7 @@ O **GitHub** é um site que guarda repositórios na nuvem: o álbum do projeto f
 - **portfólio** (a coleção dos seus trabalhos): recrutadores olham o que você publicou
 - **ponto de encontro**: a equipe trabalha no mesmo código
 
-Crie a conta em github.com/signup com um nome de usuário que caberia em um currículo, como `ana-souza`, e não um apelido de jogo. Confirme o e-mail e coloque uma foto no perfil. No E03, você envia o seu primeiro projeto para lá.
+Crie a conta em github.com/signup com um nome de usuário que caberia em um currículo, como `ana-souza`, e não um apelido de jogo. Confirme o e-mail e coloque uma foto no perfil. No E05, você envia o seu primeiro projeto para lá.
 
 ---
 
@@ -467,14 +467,14 @@ No Prompt de Comando, a mensagem começa com `'node' não é reconhecido como um
 | O que | Quantos | Como |
 |---|---|---|
 | Quizzes | um em quase todo encontro | no fim do encontro, na plataforma |
-| Provas | 4: no E20, no E25, no E29 e no E40 | uma tentativa, 60 minutos |
-| Projetos | 6, três por módulo | em etapas, um pouco a cada encontro |
+| Provas | 4: no E23, no E28, no E32 e no E40 | uma tentativa, 60 minutos |
+| Projetos | 7: seis individuais e o app da equipe, no fim | em etapas, um pouco a cada encontro |
 
-- Cada projeto é um repositório seu no GitHub, feito sozinho, com um commit por etapa
-- Para entregar, você cola o link do repositório na página do projeto; o instrutor corrige critério por critério e pode devolver para ajustes
+- Cada projeto é um repositório no GitHub, com um commit por etapa
+- Para entregar, você cola o link do repositório na página do projeto; o instrutor corrige critério por critério
 - Provas e projetos aprovam com 70
 
-O primeiro projeto, o Racha-conta, começa no E02.
+O primeiro projeto, o Racha-conta, começa no E04.
 
 ---
 
@@ -501,8 +501,8 @@ Ferramentas instaladas e conferidas. No E02, o Node deixa de ser só um número 
 
 :::steps
 1. Você escreve o seu primeiro programa em um arquivo e o roda com `node`
-2. O npm cria o `package.json`, a ficha do projeto
-3. Nasce o `lojinha-regras`, o projeto que guarda as regras da Lojinha até o E20
+2. Você guarda valores com nome e manda informações para o programa pelo comando
+3. Nasce o `lojinha-regras`, o seu projeto de estudo, com os produtos de uma loja de exemplo
 :::
 
 Antes do E02, termine o [checklist de instalação](materiais/e01/aluno/checklist-instalacao.html): sem o Node instalado, não dá para acompanhar.

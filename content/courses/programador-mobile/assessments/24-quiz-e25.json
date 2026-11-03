@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E25 · Props e listas",
+  "description": "Dez questões sobre props, aspas e chaves, a desestruturação no parâmetro, o map que devolve JSX e a key do Livro de Receitas.",
+  "lesson": "e25-props-e-listas",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No `App.jsx` do Livro de Receitas está a linha `<Rodape autor=\"Ana Souza\" />`. O que é o `autor`?",
+      "options": {
+        "a": "Uma prop: o pedido que o `App` faz à peça `Rodape`",
+        "b": "Um componente novo, que o `App` cria",
+        "c": "Uma constante do `App`, que guarda o nome",
+        "d": "O nome do arquivo em que o rodapé está"
+      },
+      "answer": "a",
+      "explanation": "A prop é o pedido feito à peça: o pai, aqui o `App`, escreve na tag como quer o rodapé. O nome da prop, `autor`, vem do manual no topo do `Rodape.jsx`, e o valor é o pedido. Não é uma constante: ela nasce na tag, não num `const`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "fill",
+      "prompt": "Complete o parâmetro do cartão para que ele desestruture as props `nome` e `foto`:\n\n```jsx\nfunction CartaoReceita(___ nome, foto ___) {\n  return <img src={foto} alt={nome} />\n}\n```",
+      "answer": [["{"], ["}"]],
+      "explanation": "As chaves no parâmetro desestruturam: da ficha de props que chega, elas tiram o `nome` e a `foto`, cada um na sua caixa. É o `const { nome, foto } = props` do E13, escrito direto no parâmetro. Sem as chaves, `nome` recebe a ficha inteira, e o React reclama com `Objects are not valid as a React child`.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O cartão mostra `<p>{minutos} minutos</p>`. No `App`, a tag é:\n\n```jsx\n<CartaoReceita minutos=\"20 + 10\" />\n```\n\nO que aparece na tela?",
+      "options": {
+        "a": "`20 + 10 minutos`",
+        "b": "`30 minutos`",
+        "c": "`minutos minutos`",
+        "d": "Nada: a tela fica branca"
+      },
+      "answer": "a",
+      "explanation": "Entre aspas, o valor é um texto pronto: o React copia `20 + 10` letra por letra, sem fazer a conta. Para chegar o número 30, a prop vai entre chaves, que abrem o JavaScript: `minutos={20 + 10}`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O kit tem 8 receitas em `receitas`, e o brigadeiro é a oitava. Qual tag pede um cartão com o nome do brigadeiro?",
+      "options": {
+        "a": "`<CartaoReceita nome={receitas[7].name} />`",
+        "b": "`<CartaoReceita nome=\"receitas[7].name\" />`",
+        "c": "`<CartaoReceita nome={receitas[8].name} />`",
+        "d": "`<CartaoReceita name={receitas[7].nome} />`"
+      },
+      "answer": "a",
+      "explanation": "A fileira começa no 0, então a oitava receita é a `receitas[7]`. O campo é `name`, em inglês, como a API manda, e a prop do cartão é `nome`. Entre aspas, aparece o texto `receitas[7].name`; com `[8]`, não existe a gaveta, e a tela fica branca com `Cannot read properties of undefined`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O cartão começa assim e usa `{nota}` no `return`:\n\n```jsx\nfunction CartaoReceita({\n  nome,\n  foto,\n  cozinha,\n  minutos,\n  dificuldade,\n  porcoes,\n}) {\n```\n\nA tela fica branca, e o Console mostra `ReferenceError: nota is not defined`. Como corrigir?",
+      "options": {
+        "a": "Acrescentar `nota,` na lista do parâmetro",
+        "b": "Trocar `{nota}` por `\"nota\"` no `return`",
+        "c": "Acrescentar `key={nota}` no cartão",
+        "d": "Importar a `nota` do arquivo `receitas.js`"
+      },
+      "answer": "a",
+      "explanation": "O cartão só tem as caixas que tira da ficha no parâmetro. Sem `nota` na lista, a caixa `nota` não existe, e o JavaScript avisa que ela não está definida. Com `nota,` no parâmetro e `nota={receita.rating}` na tag do `App`, o pedido chega.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que aparece na tela?\n\n```jsx\nconst pratos = [\n  { id: 1, nome: 'Arroz' },\n  { id: 2, nome: 'Feijão' },\n  { id: 3, nome: 'Farofa' },\n]\n\n// dentro do JSX:\n{pratos.map((prato) => (\n  <p key={prato.id}>{prato.nome}</p>\n))}\n```",
+      "options": {
+        "a": "Três parágrafos: Arroz, Feijão e Farofa, nessa ordem",
+        "b": "Um parágrafo só, com Arroz",
+        "c": "Um parágrafo só, com ArrozFeijãoFarofa",
+        "d": "Três parágrafos com os números 1, 2 e 3"
+      },
+      "answer": "a",
+      "explanation": "O `map` é a linha de produção: 3 pratos entram, 3 parágrafos saem, na ordem da lista. A cada volta, `prato` é o prato da vez, e `{prato.nome}` escreve o nome dele. O `id` vai só na `key`, o crachá, que não aparece na tela.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "Uma colega escreveu o `map` com chaves no lugar dos parênteses:\n\n```jsx\n{pratos.map((prato) => {\n  <p key={prato.id}>{prato.nome}</p>\n})}\n```\n\nO que acontece?",
+      "options": {
+        "a": "Nenhum parágrafo aparece, e o Console fica sem mensagem",
+        "b": "Os três parágrafos aparecem normalmente",
+        "c": "A tela fica branca com `prato is not defined`",
+        "d": "Os parágrafos aparecem, com o aviso de `key` no Console"
+      },
+      "answer": "a",
+      "explanation": "Com chaves depois da seta, a função precisa de um `return` para devolver alguma coisa. Sem ele, cada volta devolve nada, e o React não tem o que desenhar. Nenhum erro aparece, por isso a pista é a tela vazia. Com parênteses, `(prato) => ( ... )`, a seta devolve o JSX direto.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Quais frases sobre a `key` estão certas? Marque todas as certas.",
+      "options": {
+        "a": "Ela vai na tag que o `map` devolve, como o `<CartaoReceita>`",
+        "b": "Ela precisa ser única entre os itens da lista",
+        "c": "No Livro de Receitas, o `id` da receita serve de `key`",
+        "d": "O cartão recebe a `key` como prop e pode mostrá-la na tela"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A `key` é o crachá de cada item: único, e conferido pelo React na tag que o `map` devolve. Colocada no `<article>` de dentro do cartão, o aviso continua. O `id` é único e não muda, por isso é o crachá certo. A `key` é só para o React: ela não chega ao cartão como prop.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Com `key={receita.cuisine}`, o Console mostra `Encountered two children with the same key` e o nome `Italiana`. Por quê?",
+      "options": {
+        "a": "Três receitas são italianas, e o crachá precisa ser único",
+        "b": "A `key` precisa ser sempre um número",
+        "c": "A `key` não pode ficar na tag `<CartaoReceita>`",
+        "d": "O campo `cuisine` não existe nas receitas"
+      },
+      "answer": "a",
+      "explanation": "A pizza, o fettuccine e a salada caprese têm a cozinha `Italiana`: três itens com o mesmo crachá, e o React não sabe quem é quem. A cozinha não identifica uma receita; o `id`, sim. A `key` pode ser texto, desde que seja única.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No fim da etapa 2, o `map` do `App` passa `porcoes={receita.servings}` e `nota={receita.rating}`, e o cartão mostra `<p className=\"cartao__info\">{porcoes} porções, nota {nota}</p>`. O brigadeiro tem `servings: 8` e `rating: 4.2`. O que o cartão dele mostra nessa linha?",
+      "options": {
+        "a": "`8 porções, nota 4.2`",
+        "b": "`4 porções, nota 4.6`",
+        "c": "`servings porções, nota rating`",
+        "d": "Só as palavras porções e nota, sem os números"
+      },
+      "answer": "a",
+      "explanation": "O pedido leva os campos da receita da vez: `servings` vira a prop `porcoes`, e `rating` vira a `nota`. O `4 porções, nota 4.6` era o texto fixo da pizza, antes da Sua vez. Sem número nenhum, só se o nome da prop fosse diferente nos dois lados.",
+      "points": 1
+    }
+  ]
+}

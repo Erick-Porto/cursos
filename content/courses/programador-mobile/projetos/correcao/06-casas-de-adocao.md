@@ -1,234 +1,207 @@
 ## Antes de corrigir
 
 Guia só para instrutores. Não traz a solução: a de referência fica na sua máquina, fora do
-repositório do curso (`privado/projetos/projeto-6/`), com um README do que conferir.
+repositório do curso (`privado/projetos/projeto-6/`), com o estado do código no fim de cada etapa e
+um README do que conferir.
 
 :::steps
-1. Clone o repositório do aluno, rode `npm install` e `npx expo start`, e abra no Expo Go. Erro de
-   versão de pacote: `npx expo install --fix` e `npx expo start -c`
-2. Confira que `src/data/casas.js` é o do curso (12 casas, ids de 1 a 12). Se o aluno mudou os dados,
-   a tabela abaixo não vale: peça para voltar ao arquivo do curso
-3. Corrija com o celular e o código lado a lado, na ordem dos critérios. Um tablet ou um emulador de
-   tablet ajuda no critério de responsividade; sem ele, use o celular deitado
+1. Clone o repositório do aluno, rode `npm install` e `npx expo start` e abra no Expo Go (SDK 58).
+   Erro de versão de pacote: `npx expo install --fix` e `npx expo start -c`
+2. Confira que `src/data/casas.js`, `src/data/servidor.js`, `src/data/CasasContext.js` e
+   `src/components/ui/` são os do kit (`git diff` contra o kit, ou abra e compare). Se o aluno mudou os
+   dados, a tabela abaixo não vale: peça para voltar aos arquivos do kit
+3. Confira em `src/data/servidor.js` que a simulação voltou a `atraso: 800`, `falhas: 0` e
+   `vazio: false`
+4. Corrija com o celular e o código lado a lado, na ordem dos critérios. Deite o celular para o
+   critério de estados e acessibilidade
 :::
 
 ### O que a tela mostra com os dados do curso
 
 | Onde | Resultado esperado |
 |---|---|
-| Início | 5 seções nesta ordem: Belo Horizonte, MG (2), Campinas, SP (3), Curitiba, PR (2), Ribeirão Preto, SP (2), São Paulo, SP (3) |
-| Selos | Lotada: Lar da Mel e Gatil Sete Vidas. Última vaga: Casa da Pipoca. Últimas 2 vagas: Abrigo Focinho Feliz. Últimas 3 vagas: Casa do Bigode. As outras 7: "N vagas" |
-| Busca | "sao": 4 casas (as 3 de São Paulo e o Recanto São Francisco). "RIBEIRAO": 2. "pinheiros": Lar da Mel. "geladeira": lista vazia com saída |
-| Filtros | cães: 8; gatos: 8; cães e gatos: 4; só com vagas: 10; gatos e só com vagas: 7 |
-| Sobre | 12 casas, 5 cidades, 76 vagas |
-| CEP | 01001-000 preenche Praça da Sé, Sé, São Paulo, SP; 99999-999: CEP não encontrado; modo avião: mensagem de falta de conexão |
+| Números da Início e da Sobre | 12 casas, 5 cidades, 76 vagas |
+| Selos | Lotada: Lar da Mel e Gatil Sete Vidas. Última vaga: Casa da Pipoca. Últimas 2 vagas: Abrigo Focinho Feliz. Últimas 3 vagas: Casa do Bigode. As outras 7: "N vagas", em verde |
+| Busca | "sao": 4 casas (as 3 de São Paulo e o Recanto São Francisco). "RIBEIRAO": 2. "pinheiros": Lar da Mel. "geladeira": lista vazia com Limpar busca |
+| Detalhe do Lar da Mel | Rua Cardeal Arcoverde, 451; Marta Ribeiro; 0 vagas de 20; outras casas: Casa do Bigode e Abrigo Rabo Abanando |
+| Cadastro | capacidade 10 e 12 animais: "Não pode passar da capacidade". Com 6 animais: a casa no topo, com "4 vagas", e 13 casas nos números |
 
-Os textos dos selos e das mensagens podem variar, desde que digam a mesma coisa. Os números não.
+Os textos das mensagens podem variar, desde que digam a mesma coisa. Os números não.
 
-## Critério 1 · Telas e navegação (20)
+## Critério 1 · Início com flexbox, tokens e tema (20)
 
-**O que conferir.** Faça este roteiro no celular:
+**O que conferir.** No celular: o topo com título, frase e o botão de tema à direita; os três números
+lado a lado, do mesmo tamanho; os cartões com a foto à esquerda. Troque o tema pelo botão e pelo
+sistema, com o app aberto: nenhum texto some, nenhum bloco fica branco no escuro. No código:
 
-1. Casas: toque em Lar da Mel. O Detalhe abre por cima das abas, com o nome no cabeçalho
-2. Volte pelo botão do cabeçalho e pelo voltar do sistema (ou o gesto, no iPhone)
-3. Nova casa, depois Cancelar: volta à Início sem salvar
-4. Filtros: o modal sobe por cima; feche pelo gesto sem aplicar e confira que a lista não mudou
-5. Detalhe de qualquer casa, Editar: o formulário vem preenchido e o título é "Editar casa". Mude a
-   ocupação, salve, e confira o selo no Detalhe e na Início
-6. Remover: Cancelar não remove; Remover tira a casa da lista e volta
-7. Abas Favoritas e Sobre abrem, cada uma com ícone
+```bash
+git grep -n -E "#[0-9a-fA-F]{3,8}\b" -- app src/components/CartaoCasa.js
+git grep -n -E "(fontSize|gap|padding|margin|borderRadius): [0-9]" -- app src/components/CartaoCasa.js
+```
 
-No código: `app/(abas)/` com as três abas; `casa/[id].js`, `cadastro.js` e `filtros.js` fora do grupo;
-`presentation: 'modal'` no filtros.
-
-**Como pontuar.**
-
-- 20: o roteiro inteiro funciona
-- 15: um item falha, como Remover sem confirmação ou o título fixo no Detalhe
-- 10: dois itens falham, ou Editar cria uma casa nova em vez de mudar a existente
-- 5: só a pilha funciona, sem abas nem modal
-- 0: sem Expo Router (o `App.js` ainda decide a tela)
-
-**Erros comuns.** Detalhe dentro de `(abas)`, com a barra de abas embaixo dele; `router.push('/')`
-depois de salvar, e o voltar leva de novo ao formulário; `onPress={router.push(...)}` sem arrow
-function, que navega ao desenhar; o `id` comparado sem `Number(id)`, e o Detalhe sempre diz "não
-encontrada".
-
-Editar e Remover podem ter entrado só no commit da etapa 9: o enunciado permite. Não desconte.
-
-## Critério 2 · Regras e estado (20)
-
-**O que conferir.** Abra `src/regras/casas.js`:
-
-- as funções do enunciado com esses nomes: `vagas`, `situacao`, `textoDaSituacao`, `tomDaSituacao`,
-  `textoDeAceita`, `agruparPorCidade`, `buscarCasas`, `filtrarCasas`, `validarCasa`, `proximoId` e
-  `resumoDasCasas`, mais a constante `LIMITE_POUCAS_VAGAS`
-- nada de React, `useState` ou `Alert` no arquivo
-- nenhuma lista recebida alterada: `sort` só sobre cópia (`[...lista]`), sem `push` na lista recebida
-
-Depois confira os resultados da tabela do início deste guia e o contexto: cadastre uma casa (ela
-aparece na seção da cidade), favorite (aparece na aba Favoritas e o coração muda no Detalhe), remova
-uma favorita (some das duas abas) e veja os números da Sobre mudarem.
-
-Em `src/contexts/CasasContext.js`: `useState` (não `useReducer`, que é do E42), `useCasas()` com
-guarda, `alternarFavorita` criando um `Set` novo.
-
-**Como pontuar.**
-
-- 20: nomes, resultados e contexto certos
-- 15: uma função com nome diferente, ou um resultado errado da tabela
-- 10: regras escritas dentro das telas, funcionando; ou uma lista do estado alterada no lugar
-- 5: a maior parte das regras falta ou dá resultado errado
-- 0: sem `src/regras/casas.js`
-
-**Erros comuns.**
-
-- `casas.sort(...)` dentro de `agruparPorCidade`: ordena o estado do contexto no lugar, e a ordem muda
-  em outras telas sem ninguém pedir
-- `proximoId` como `casas.length + 1`: depois de remover uma casa, o próximo cadastro repete um id.
-  Teste: remova a Associação Patinhas do Bem (id 3) e cadastre uma casa; ela ganha o id 12, o mesmo
-  do Cantinho dos Bichanos, e tocar numa delas abre a outra
-- busca sem tirar acento: "sao" não acha São Paulo
-- `aceita.includes('cães')`, com acento, quando o dado é `'caes'`
-- capacidade e ocupação comparadas como texto: `'9' > '10'` é `true`
-- `favoritas.add(id); setFavoritas(favoritas)`: o mesmo `Set`, e a tela não atualiza
-
-## Critério 3 · Formulário e CEP (20)
-
-**O que conferir.** No Cadastro:
-
-- toque em cada campo: celular com teclado de telefone, e-mail com @, CEP e números com teclado
-  numérico, nome com maiúscula no início das palavras
-- o Próximo pula para o campo seguinte; no iPhone, teclado numérico não tem Próximo: não desconte
-- digite `11912345678` no celular: aparece `(11) 91234-5678`. `01001000` no CEP: `01001-000`
-- Salvar com tudo vazio: uma mensagem embaixo de cada campo obrigatório, e nada é salvo
-- saia de um campo inválido: a mensagem aparece na hora; ao corrigir, some
-- ocupação maior que a capacidade é recusada
-- com o teclado aberto, o botão Salvar continua alcançável rolando
-- CEP: `01001-000`, `99999-999` e o celular em modo avião, com a tabela do início do guia. Depois de
-  preenchido pelo CEP, os campos continuam editáveis
-
-No código, `src/api/viacep.js` com `fetch`, `await` e o teste `if (dados.erro)`; no Cadastro, `try` e
-`catch` em volta da busca e um estado para a espera.
+O primeiro deve vir vazio. O segundo pode trazer medidas de tamanho (`width: 72`, `height: 220`,
+`minHeight: 44`), mas não espaços, raios e tamanhos de letra soltos. A cor primária pode ser a do kit
+ou um dos pares do comentário do `tokens.js`.
 
 **Como pontuar.**
 
 - 20: tudo acima
-- 15: falta uma parte, como a máscara de CEP ou o Próximo
-- 10: erros só num `Alert` geral, sem mensagem no campo; ou o CEP sem tratar inexistente e falta de
-  conexão
-- 5: formulário sem validação
-- 0: sem formulário
+- 15: um número solto ou uma cor fora do lugar, ou um texto sem a cor do tema
+- 10: a Início montada, mas sem tema (o escuro fica ilegível) ou sem tokens
+- 5: só o kit, com pouca coisa montada
+- 0: a Início do kit sem mudança
 
-**Erros comuns.** `dados.erro === true`: a ViaCEP manda `"true"` em texto, e o CEP inexistente vira
-"achado" com campos vazios. Busca disparada a cada tecla, com o CEP incompleto (a ViaCEP responde 400).
-`fetch` sem `await`. Validação que conta os caracteres da máscara em vez dos números.
+**Erros comuns.** Cor dentro do `StyleSheet.create` (não acompanha o tema); `useTema()` chamado fora da
+função do componente ("Invalid hook call"); faltou `flex: 1` na coluna de textos, e um nome comprido
+empurra o selo; os três números com larguras diferentes porque faltou `flex: 1` em cada um.
 
-## Critério 4 · Tokens, tema e UI kit (15)
+## Critério 2 · O seu CartaoCasa (20)
 
-**O que conferir.** Na pasta do projeto:
+**O que conferir.** Abra `src/components/CartaoCasa.js`:
 
-```bash
-git grep -n -E "#[0-9a-fA-F]{3,8}\b" -- src app ":!src/theme/tokens.js"
-git grep -n -E "'(white|black|gray|grey)'" -- src app
-```
+- `export default function CartaoCasa({ casa, onPress })`, com as props desestruturadas
+- `Image` com `source={{ uri: casa.foto }}` e largura e altura; o ternário que mostra a pata quando
+  `casa.foto` é `''` (ONG Amigo Fiel, Gatil Sete Vidas, Lar Temporário Ronrom e Cantinho dos Bichanos)
+- os ícones `location-outline` e `paw-outline` com cores do tema
+- `Pressable` com o `onPress` recebido e o estilo que muda com `pressed`
+- o selo escolhido por `if`/`else if` (ou equivalente), com os textos e os tons da tabela do enunciado
 
-Os dois devem vir vazios (`rgba` no `android_ripple` é aceitável). Troque o tema pelo botão e pelo
-sistema, com o app aberto, e passe por todas as telas no escuro: nenhum bloco branco, nenhum texto
-sumindo, relógio e bateria visíveis. Confira no README os números de contraste da etapa 2.
-
-Kit: `src/components/ui/` com `Botao`, `Cartao`, `Badge`, `Campo`, `Estado` e o `index.js`;
-procure `<Pressable` nas telas: os botões de texto devem ser `Botao`. `CartaoCasa` montado com
-`Cartao` e `Badge`. Fonte própria com `useFonts` e `familia` nos tokens. Sobre ao lado do protótipo
-(`materiais/projeto-6/prototipo-sobre.svg`): ícone, nome, números em 3 colunas, "Como funciona" com
-3 linhas, botão de tema e rodapé.
+No celular, confira os selos com a tabela do início deste guia e toque num cartão: ele fica mais transparente
+enquanto o dedo aperta.
 
 **Como pontuar.**
 
-- 15: tudo acima
-- 11: uma cor literal fora do `tokens.js`, ou uma tela que ignora o kit
-- 7: tema escuro com partes ilegíveis, ou o kit criado e pouco usado
-- 3: só os tokens
-- 0: cores e medidas soltas em todo lugar
+- 20: tudo acima
+- 15: um selo errado (por exemplo, "Últimas 1 vagas" no lugar de "Última vaga"), ou sem retorno ao toque
+- 10: o componente existe, mas a casa sem foto fica com um buraco, ou o selo é sempre o mesmo
+- 5: o cartão continua dentro da Início, sem componente próprio
+- 0: sem cartão
 
-**Erros comuns.** Cor dentro do `StyleSheet.create` (não acompanha o tema); `StatusBar style="auto"`
-com o botão de tema; `fontWeight: 'bold'` sobre a fonte própria; a paleta da Lojinha copiada sem
-mudança (desconte só se o enunciado foi ignorado de propósito; converse antes).
+**Erros comuns.** `function CartaoCasa(casa)` sem as chaves: aparece "NaN vagas" em todos os cartões;
+`Image` remota sem `width` e `height` (a foto não aparece); `onPress` recebido e não repassado ao
+`Pressable`; import com chaves (`import { CartaoCasa }`) de um `export default`, que dá "Element type
+is invalid".
 
-## Critério 5 · Responsividade, acessibilidade e estados (15)
+## Critério 3 · Lista, busca e navegação (20)
+
+**O que conferir.** No celular, faça este roteiro:
+
+1. Busque "sao", "RIBEIRAO", "pinheiros" e "geladeira" e confira com a tabela; toque em Limpar busca
+2. Puxe a lista para baixo: a rodinha aparece e para sozinha
+3. Toque no Lar da Mel: o Detalhe abre por cima das abas, com o nome no cabeçalho, foto, descrição,
+   vagas, visitas, endereço, responsável e telefone
+4. Toque em Casa do Bigode, em Outras casas: abre o Detalhe dela. Volte duas vezes, pelo cabeçalho e
+   pelo voltar do sistema (ou o gesto): Lar da Mel, depois a lista
+5. Toque na aba Sobre e volte para Casas
+
+No código: `FlatList` com `keyExtractor` que devolve texto; `app/casa/[id].js` com
+`useLocalSearchParams` e `Number(id)`; `app/(abas)/_layout.js` com `Tabs` e as abas `index` e `sobre`;
+no `app/_layout.js`, `(abas)` sem cabeçalho e `casa/[id]` na pilha.
+
+**Como pontuar.**
+
+- 20: o roteiro inteiro funciona
+- 15: um item falha, como a busca só pelo nome ou as outras casas sem `Link`
+- 10: dois itens falham, ou o Detalhe abre dentro das abas, com a barra embaixo
+- 5: só a lista, sem Detalhe
+- 0: a lista ainda com `map` dentro da `Tela` com `rolar`, sem busca nem navegação
+
+**Erros comuns.** `item.id === id` sem `Number`: o Detalhe sempre diz "Casa não encontrada";
+`onPress={router.push(...)}` sem `() =>`, que navega ao desenhar a lista; a pasta `casa/` dentro de
+`(abas)/`; o `ListHeaderComponent` escrito como função (`() => topo`), e o teclado fecha a cada letra
+da busca; a `Tela` ainda com `rolar` em volta da `FlatList` (aviso de lista dentro de `ScrollView`).
+
+## Critério 4 · Cadastro de casa (20)
+
+**O que conferir.** No Cadastro:
+
+- toque em cada campo: o teclado de telefone no Telefone, o numérico na Capacidade e nos Animais, a
+  maiúscula no começo das palavras em Nome, Bairro e Cidade
+- Cadastrar com tudo vazio: uma mensagem embaixo de cada um dos sete campos, e nada é salvo
+- capacidade 10 com 12 animais: a mensagem embaixo dos Animais; com 6, salva
+- a casa nova aparece no topo da lista com o selo "4 vagas", e os números da Início e da Sobre mudam
+
+No código: um `useState` por campo, uma função de validação que devolve um objeto de erros, e
+`adicionarCasa` com os valores convertidos com `Number` na capacidade e na ocupação.
+
+**Como pontuar.**
+
+- 20: tudo acima
+- 15: falta um campo, ou um teclado errado
+- 10: os erros só num `Alert` geral, sem mensagem no campo; ou a ocupação maior que a capacidade aceita
+- 5: o formulário salva sem validar
+- 0: sem formulário
+
+**Erros comuns.** Capacidade e ocupação comparadas como texto (`'6' > '10'` é `true`); `onPress={salvar()}`
+com parênteses ("Too many re-renders"); `onChangeText={setNome()}`; a casa salva sem `adicionarCasa`,
+só com o `Alert`.
+
+## Critério 5 · Estados e acessibilidade (10)
 
 **O que conferir.**
 
-- celular deitado e, se tiver, tablet: o Detalhe põe a foto ao lado; a lista não estica de borda a
-  borda
-- fonte do sistema no máximo: nada cortado nos cartões, nos botões e no formulário
-- TalkBack ou VoiceOver na Início: cada cartão é lido numa frase (nome, cidade, animais, vagas) e
-  anunciado como botão; o coração diz "Favoritar" mais o nome e se está selecionado; os títulos de
-  cidade são lidos como título
-- alvos pequenos: coração e ícones com 44 por 44
-- estados: Favoritas sem nenhuma, busca sem resultado e casa não encontrada usam o `Estado`; a espera
-  do CEP mostra o carregando; favoritar faz o coração pulsar
-- README com a tabela "Acessibilidade" e pelo menos 3 correções
+- em `src/data/servidor.js`, troque para `atraso: 3000` e recarregue: a Início mostra o Carregando
+- `falhas: 1`: a tela de erro, e Tentar de novo traz a lista
+- `vazio: true`: "Nenhuma casa cadastrada", sem o botão Limpar busca
+- volte os três valores e ligue o TalkBack (ou o VoiceOver): um toque no cartão do Lar da Mel lê
+  "Lar da Mel, Pinheiros, São Paulo. Cães. Lotada" e diz que é um botão; os números são lidos como
+  "12 casas"
+- deite o celular (ou use um tablet): duas colunas de cartões
 
 **Como pontuar.**
 
-- 15: tudo acima
-- 11: falta uma parte, como a tabela no README ou o layout largo
-- 7: acessibilidade parcial (coração sem rótulo, cartão lido em pedaços) ou um dos estados em branco
-- 3: só os estados
+- 10: tudo acima
+- 7: falta uma parte, como as duas colunas ou os números acessíveis
+- 4: só os estados, sem acessibilidade
 - 0: nada desta lista
 
-**Erros comuns.** Coração dentro do `Pressable` do cartão (o leitor lê os dois juntos, e o toque no
-coração abre o Detalhe); `numColumns` trocado sem mudar a `key`; selo de vagas que só muda de cor.
+**Erros comuns.** `useWindowDimensions` ou `useState` depois do `if (carregando) return`, que dá erro de
+hooks na troca de estado; `numColumns` sem a `key` que muda junto ("Changing numColumns on the fly");
+`columnWrapperStyle` com uma coluna só; o rótulo do cartão no `Text` de dentro, e não no `Pressable`.
 
 ## Critério 6 · Repositório e README (10)
 
-**O que conferir.** `git log --oneline --date=short --format="%ad %s"`: 11 commits com as mensagens
-do enunciado, em datas que acompanham os encontros. README com o que o app faz, como rodar, prints
-(pelo menos um no tema escuro), a tabela de acessibilidade, decisões e pendências. Sem `node_modules/`
+**O que conferir.** `git log --oneline --date=short --format="%ad %s"`: 7 commits com as mensagens do
+enunciado, em datas que acompanham os encontros. README com o que o app faz, como rodar, o que o aluno
+fez e os prints em `docs/` (Início clara e escura, Detalhe e Cadastro com erros). Sem `node_modules/`
 no repositório.
 
 **Como pontuar.**
 
 - 10: tudo acima
-- 7: faltam até 3 commits de etapa, ou falta um item do README
+- 7: faltam até 2 commits de etapa, ou falta um item do README
 - 4: um commit só, ou README sem prints
-- 0: repositório privado ou sem README
+- 0: repositório privado, ou o README do kit sem mudança
 
 ## Check-in por etapa
 
-No começo do bloco de projeto de cada encontro, 2 a 3 minutos: pergunte quem fez o commit da etapa
-anterior, abra um repositório no projetor e olhe **uma** coisa. A tabela traz o commit da etapa e o que
-olhar no encontro seguinte.
+No começo do encontro seguinte, 2 a 3 minutos: pergunte quem fez o commit da etapa anterior, abra um
+repositório no projetor e olhe **uma** coisa.
 
 | Etapa | Commit | O que olhar |
 |---|---|---|
-| 1 · E30 | `etapa 1, projeto e tela Início` | `src/data/casas.js` igual ao do curso e o `flex: 1` na coluna de textos do cartão |
-| 2 · E31 | `etapa 2, tokens e tema` | busca por `#` em `src/telas` vazia; a primária não é a da Lojinha |
-| 3 · E32 | `etapa 3, toque, ícones, fotos e fonte` | o `style` do cartão como função de `pressed`; a casa sem foto com a pata |
-| 4 · E33 | `etapa 4, UI kit e CartaoCasa` | o `Badge` por mapa e as regras de situação em `src/regras/casas.js` |
-| 5 · E34 | `etapa 5, lista por cidade e busca` | `agruparPorCidade` sem `sort` na lista recebida; busca "sao" ao vivo |
-| 6 · E35 | `etapa 6, formulário de cadastro` | `validarCasa` devolvendo um objeto de erros; o `ref` do Próximo |
-| 7 · E36 | `etapa 7, pilha e CasasContext` | `useCasas()` com guarda; `Number(id)` no Detalhe |
-| 8 · E37 | `etapa 8, abas, filtros e edição` | o rascunho do modal em `useState` local, gravado só no Aplicar |
-| 9 · E38 | `etapa 9, responsividade e acessibilidade` | o rótulo do `CartaoCasa` e a tabela no README |
-| 10 · E39 | `etapa 10, estados, animação e CEP` | `if (dados.erro)` no `viacep.js`; teste o 99999-999 ao vivo |
-| 11 · E40 | `etapa 11, acabamento e entrega` | o link na página do projeto (painel do instrutor, aba Projetos) |
+| 1 · E33 | `etapa 1, tela Início com flexbox` | o `.gitignore` com `node_modules/` e o `flex: 1` na coluna de textos |
+| 2 · E34 | `etapa 2, tokens e tema` | busca por `#` em `app/` vazia; a cor no array de `style` |
+| 3 · E35 | `etapa 3, CartaoCasa` | a desestruturação `{ casa, onPress }` e o selo da Casa da Pipoca |
+| 4 · E36 | `etapa 4, lista com busca` | "sao" ao vivo; o `keyExtractor` com `String` |
+| 5 · E37 | `etapa 5, detalhe e abas` | o `Number(id)` e a pasta `(abas)` |
+| 6 · E38 | `etapa 6, cadastro de casa` | o objeto de erros e o `Number` na comparação da ocupação |
+| 7 · E39 | `etapa 7, estados, acessibilidade e entrega` | o link na página do projeto (painel do instrutor, aba Projetos) |
 
 Etapa atrasada não perde ponto no check-in: anote e lembre que a nota é da entrega final.
 
 ## Sinais de cópia
 
 - Todos os commits no mesmo dia, ou um commit só com o projeto inteiro
-- Código da Lojinha com nomes trocados: variáveis `produto` e `itens`, `formatarPreco`, `categorias`,
-  restos de carrinho, a mesma paleta e a mesma Galeria
-- Dois alunos com os mesmos nomes incomuns, os mesmos comentários e os mesmos bugs
-- Bibliotecas e padrões que o curso não usou até o E40: `useReducer`, Redux ou Zustand, `axios`,
-  `react-hook-form`, `styled-components`, TypeScript, comentários em inglês por todo o código
+- Dois alunos com os mesmos nomes de variáveis incomuns, os mesmos comentários e os mesmos erros
+- O kit alterado para esconder uma parte que o aluno devia escrever (por exemplo, um `CartaoCasa`
+  dentro de `src/components/ui/`)
+- Bibliotecas e padrões que o curso não usou: TypeScript, `styled-components`, `react-hook-form`,
+  `axios`, hooks próprios, comentários em inglês por todo o código
 - O aluno não explica o próprio código
 
-**Como agir.** Converse em particular, sem acusar. Peça para explicar uma função (o
-`agruparPorCidade`, por exemplo) e para mudar algo ao vivo: "troque o `LIMITE_POUCAS_VAGAS` para 5;
-o que muda na Início?". Quem fez responde em um minuto. Se não souber, devolva o projeto para ajustes
-com um prazo e o pedido de refazer a parte copiada, e siga a política da instituição para casos
-repetidos. Ajuda de colega e consulta à aula não são cópia; código idêntico sem entendimento é.
+**Como agir.** Converse em particular, sem acusar. Peça para explicar o selo do `CartaoCasa` e para
+mudar algo ao vivo: "faça a Casa do Bigode mostrar 'Poucas vagas' em vez de 'Últimas 3 vagas'".
+Quem fez responde em um minuto. Se não souber, devolva o projeto para ajustes com um prazo e o pedido
+de refazer a parte copiada, e siga a política da instituição para casos repetidos. Ajuda de colega e
+consulta à aula não são cópia; código idêntico sem entendimento é.

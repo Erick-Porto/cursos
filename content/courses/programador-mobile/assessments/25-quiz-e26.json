@@ -1,0 +1,143 @@
+{
+  "title": "Quiz: E26 · Estado e eventos",
+  "description": "Dez questões sobre eventos, useState, o input controlado, a busca das receitas e as favoritas do Projeto 4.",
+  "lesson": "e26-estado-e-eventos",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O componente tem a função `avisar`, que escreve `Oi!` no Console. Qual botão escreve `Oi!` **só quando alguém clica** nele?",
+      "options": {
+        "a": "`<button onClick={avisar}>Diga oi</button>`",
+        "b": "`<button onClick={avisar()}>Diga oi</button>`",
+        "c": "`<button onclick={avisar}>Diga oi</button>`",
+        "d": "`<button onClick=\"avisar\">Diga oi</button>`"
+      },
+      "answer": "a",
+      "explanation": "`onClick={avisar}` entrega a função, e o React a chama no clique. Com `avisar()`, os parênteses rodam a função ao desenhar a tela, sem clique nenhum. `onclick` minúsculo não funciona no React, e entre aspas vai só um texto, não a função.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que o botão mostra depois de **três cliques**?\n\n```jsx\nimport { useState } from 'react'\n\nfunction Contador() {\n  const [contador, setContador] = useState(0)\n\n  return (\n    <button onClick={() => setContador(contador + 1)}>\n      Cliques: {contador}\n    </button>\n  )\n}\n```",
+      "options": {
+        "a": "`Cliques: 3`",
+        "b": "`Cliques: 0`",
+        "c": "`Cliques: 1`",
+        "d": "`Cliques: contador`"
+      },
+      "answer": "a",
+      "explanation": "O placar começa em 0. A cada clique, `setContador(contador + 1)` guarda o valor de agora mais 1 e o React redesenha: 1, 2 e 3. O texto entre chaves mostra o valor, não a palavra `contador`.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Neste botão, o número fica guardado numa variável comum:\n\n```jsx\nlet cliques = 0\n\nfunction ContadorComum() {\n  function contar() {\n    cliques = cliques + 1\n    console.log(cliques)\n  }\n\n  return <button onClick={contar}>Cliques: {cliques}</button>\n}\n```\n\nO que acontece depois de três cliques?",
+      "options": {
+        "a": "O Console mostra 1, 2 e 3, e o botão continua em `Cliques: 0`",
+        "b": "O Console mostra 1, 2 e 3, e o botão mostra `Cliques: 3`",
+        "c": "O Console não mostra nada, e o botão mostra `Cliques: 3`",
+        "d": "Aparece um erro, porque `let` não funciona no React"
+      },
+      "answer": "a",
+      "explanation": "A variável muda, por isso o Console mostra 1, 2 e 3. Mas ninguém avisou o React, e ele não redesenha a tela. Só o `set` de um estado, criado com `useState`, pede o redesenho: é a diferença entre o papel no bolso e o placar do estádio.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Em `const [gols, setGols] = useState(0)`, o que é o `setGols`?",
+      "options": {
+        "a": "A função que troca o valor de `gols` e faz o React redesenhar a tela",
+        "b": "O valor de agora, que começa em 0",
+        "c": "O valor inicial, usado só na primeira vez",
+        "d": "Uma cópia de `gols`, para não rasurar o original"
+      },
+      "answer": "a",
+      "explanation": "O `useState` devolve dois itens, e os colchetes dão um nome a cada um pela posição: o primeiro, `gols`, é o valor de agora; o segundo, `setGols`, é a função que troca o valor e pede o redesenho. O `0` entre os parênteses é o valor inicial.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "fill",
+      "prompt": "Complete o input controlado, para o estado receber o texto que está no campo a cada letra:\n\n```jsx\n<input value={nome} onChange={(evento) => setNome(evento.___.value)} />\n```",
+      "answer": [["target"]],
+      "explanation": "O `evento.target` é o alvo do evento, o campo em que a pessoa digitou, e o `value` dele é o texto que está lá agora, já com a letra nova. O `value={nome}` faz o campo mostrar o estado: o estado manda, o campo obedece.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "multiple",
+      "prompt": "Sobre o `CampoBusca` do kit, usado como `<CampoBusca valor={busca} aoMudar={setBusca} />`, quais frases estão certas? Marque todas as certas.",
+      "options": {
+        "a": "O `value={valor}` faz o campo mostrar o texto que o `App` mandou",
+        "b": "A cada letra, o `onChange` chama `aoMudar` com o texto novo, que é o `setBusca` do `App`",
+        "c": "O `htmlFor` do rótulo liga o texto \"Buscar receita\" ao campo de `id=\"busca\"`",
+        "d": "O `CampoBusca` guarda a busca num `useState` próprio, e o `App` não sabe o que foi digitado"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "O `CampoBusca` é um input controlado: ele não guarda o texto. O `App` guarda a busca no estado e entrega ao campo o valor e a função que troca. O `htmlFor` é o `for` do HTML, renomeado como o `class` virou `className`.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "As 8 receitas do kit são: Pizza margherita, Cookies com gotas de chocolate, Fettuccine Alfredo com frango, Salada caprese, Biryani de frango, Lámen japonês, Moussaka grega e Brigadeiro. Com a busca `de`, quantos cartões aparecem?\n\n```jsx\nconst visiveis = receitas.filter((receita) =>\n  receita.name.toLowerCase().includes(busca.toLowerCase())\n)\n```",
+      "options": {
+        "a": "3: os cookies, o biryani e o brigadeiro",
+        "b": "2: os cookies e o biryani",
+        "c": "1: só o biryani de frango",
+        "d": "8, porque a busca só filtra palavras inteiras"
+      },
+      "answer": "a",
+      "explanation": "O `includes` procura o texto em qualquer parte do nome, não só em palavras inteiras: \"cookies com gotas **de** chocolate\", \"biryani **de** frango\" e \"briga**de**iro\" têm `de` dentro. As outras cinco respondem `false` e ficam fora de `visiveis`.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "Uma colega escreveu o `filter` da busca assim e digitou `FRANGO`:\n\n```jsx\nconst visiveis = receitas.filter((receita) =>\n  receita.name.toLowerCase().includes(busca)\n)\n```\n\nO que aparece na tela?",
+      "options": {
+        "a": "A `ListaVazia`, porque nenhum nome em minúsculas tem `FRANGO` dentro",
+        "b": "Os 2 cartões de frango, porque o nome já está em minúsculas",
+        "c": "Os 8 cartões, porque a busca é ignorada",
+        "d": "Uma tela de erro do Vite"
+      },
+      "answer": "a",
+      "explanation": "O nome vira minúsculas, mas a busca continua `FRANGO`, em maiúsculas. `'biryani de frango'.includes('FRANGO')` é `false`, e nada passa. O `toLowerCase` precisa estar dos dois lados: no nome e na busca.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "No passo 4 do projeto, o `App` tem:\n\n```jsx\nconst [favoritas, setFavoritas] = useState([])\n\nfunction alternarFavorita(id) {\n  setFavoritas([...favoritas, id])\n}\n```\n\nA pessoa clica duas vezes no Favoritar da pizza, de id 1. Quanto vale `favoritas` depois do segundo clique?",
+      "options": {
+        "a": "`[1, 1]`, e a pizza continua marcada",
+        "b": "`[]`, e a pizza fica desmarcada",
+        "c": "`[1]`, porque o spread não repete o id",
+        "d": "`1`, um número, e não uma lista"
+      },
+      "answer": "a",
+      "explanation": "Cada clique entrega uma lista nova com o id a mais: `[1]` no primeiro e `[1, 1]` no segundo. O spread copia o que já estava e acrescenta o novo, sem conferir repetidos. Para desmarcar, a função precisa perguntar com `includes` e tirar o id com `filter`.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "truefalse",
+      "prompt": "Trocar `setFavoritas([...favoritas, id])` por `favoritas.push(id)` seguido de `setFavoritas(favoritas)` faz o botão passar a mostrar Favorita.",
+      "answer": false,
+      "explanation": "O `push` muda a lista velha por dentro, e o `set` recebe a mesma lista. O React compara, acha igual e não redesenha: o clique não muda nada, e não aparece erro. Lista no estado é sempre uma lista nova, com o spread para pôr e o `filter` para tirar.",
+      "points": 1
+    }
+  ]
+}

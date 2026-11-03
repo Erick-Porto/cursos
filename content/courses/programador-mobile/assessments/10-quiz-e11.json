@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E11 · Repetições",
+  "description": "Dez questões sobre o for...of, o acumulador, o for com índice, o push, o toEqual e as regras somarItens e dividirConta do Racha-conta.",
+  "lesson": "e11-repeticoes",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst pedidos = ['suco', 'pastel', 'café'];\nfor (const pedido of pedidos) {\n  console.log(`Saiu: ${pedido}`);\n}\n```",
+      "options": {
+        "a": "Três linhas: `Saiu: suco`, `Saiu: pastel` e `Saiu: café`",
+        "b": "Uma linha só: `Saiu: suco,pastel,café`",
+        "c": "Três linhas, de trás para a frente: `Saiu: café`, `Saiu: pastel` e `Saiu: suco`",
+        "d": "Uma linha só: `Saiu: suco`"
+      },
+      "answer": "a",
+      "explanation": "O `for...of` dá uma volta para cada item da lista, na ordem: a cada volta, `pedido` recebe o item da vez e o `console.log` roda. São 3 itens, então são 3 voltas e 3 linhas, da gaveta 0 até a última.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "Qual é o valor de `soma` no fim?\n\n```javascript\nconst itens = [\n  { preco: 10, quantidade: 2 },\n  { preco: 5, quantidade: 3 },\n];\nlet soma = 0;\nfor (const item of itens) {\n  soma = soma + item.preco * item.quantidade;\n}\n```",
+      "options": {
+        "a": "`35`",
+        "b": "`15`",
+        "c": "`20`",
+        "d": "`5`"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta: o acumulador começa em 0; na volta 1, `0 + 10 * 2` dá 20; na volta 2, `20 + 5 * 3` dá 35. O `15` é só o segundo item, o `20` é só o primeiro e o `5` é a soma das quantidades.",
+      "points": 1
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Esta função deveria somar a lista. O que mostra o `console.log`?\n\n```javascript\nfunction somar(lista) {\n  let soma = 0;\n  for (const n of lista) {\n    soma = soma + n;\n    return soma;\n  }\n}\nconsole.log(somar([4, 6, 10]));\n```",
+      "options": {
+        "a": "`4`",
+        "b": "`20`",
+        "c": "`10`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "O `return` está dentro das chaves do `for`: na primeira volta, a função soma o 4 e já entrega o resultado, sem dar as outras voltas. O certo é o `return soma;` depois da `}` do `for`, como no `somarItens`. Aí sairia 20.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nfor (let i = 0; i < 3; i++) {\n  console.log(`Mesa ${i + 1}`);\n}\n```",
+      "options": {
+        "a": "`Mesa 1`, `Mesa 2` e `Mesa 3`",
+        "b": "`Mesa 0`, `Mesa 1` e `Mesa 2`",
+        "c": "`Mesa 1`, `Mesa 2`, `Mesa 3` e `Mesa 4`",
+        "d": "`Mesa 1` e `Mesa 2`"
+      },
+      "answer": "a",
+      "explanation": "O `i` começa em 0 e vai até 2: com 3, a condição `i < 3` dá `false` e o laço termina. São 3 voltas. O texto usa `i + 1`, então as mesas aparecem a partir de 1. O `Mesa 0` esqueceria o `+ 1`.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A conta tem 4 itens, em `conta.itens[0]` a `conta.itens[3]`. Qual condição faz o `for (let i = 0; ...; i++)` passar por todas as gavetas, sem passar do fim?",
+      "options": {
+        "a": "`i < conta.itens.length`",
+        "b": "`i <= conta.itens.length`",
+        "c": "`i < conta.itens.length - 1`",
+        "d": "`i > conta.itens.length`"
+      },
+      "answer": "a",
+      "explanation": "`conta.itens.length` é 4, e as gavetas vão do 0 ao 3: com `<`, o `i` vai do 0 ao 3. Com `<=`, o laço dá uma volta a mais e abre a gaveta 4, que não existe. Com `- 1`, o último item fica de fora. Com `>`, a condição nasce falsa e o laço não dá nenhuma volta.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "O que mostra o `console.log`?\n\n```javascript\nconst fila = [];\nfila.push('Ana');\nfila.push('Bruno');\nfila.push('Carla');\nconsole.log(fila[0], fila.length);\n```",
+      "options": {
+        "a": "`Ana 3`",
+        "b": "`Carla 3`",
+        "c": "`Ana 2`",
+        "d": "`TypeError`, porque a `fila` é `const`"
+      },
+      "answer": "a",
+      "explanation": "Cada `push` põe o item no fim da lista: Ana vai para a gaveta 0, Bruno para a 1 e Carla para a 2. A lista termina com 3 itens. A `const` não impede o `push`: a caixa continua com a mesma lista, e só os itens de dentro mudam.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "No Racha-conta, a `dividirConta(total, pessoas)` dá a cada pessoa a parte inteira e passa os centavos que sobram, um a um, para as primeiras pessoas. O que `dividirConta(500, 3)` devolve?",
+      "options": {
+        "a": "`[167, 167, 166]`",
+        "b": "`[168, 166, 166]`",
+        "c": "`[166, 166, 166]`",
+        "d": "`[166, 167, 167]`"
+      },
+      "answer": "a",
+      "explanation": "`Math.floor(500 / 3)` dá 166 e `500 % 3` dá 2: sobram 2 centavos. Nas voltas com `i` igual a 0 e 1, `i < 2` dá `true` e a parte é 167; na volta com `i` igual a 2, é 166. 167 + 167 + 166 dá 500. O `[168, 166, 166]` põe a sobra toda na primeira pessoa, e o `[166, 166, 166]` perde 2 centavos.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Sobre o `for` dentro da `dividirConta`, marque todas as certas.\n\n```javascript\nconst partes = [];\nfor (let i = 0; i < pessoas; i++) {\n  if (i < sobra) {\n    partes.push(parte + 1);\n  } else {\n    partes.push(parte);\n  }\n}\nreturn partes;\n```",
+      "options": {
+        "a": "O laço dá uma volta para cada pessoa",
+        "b": "O `if (i < sobra)` decide quem leva um centavo a mais",
+        "c": "O `push` põe a parte de cada pessoa no fim da lista `partes`",
+        "d": "O `i` pode ser `const`, porque começa em 0"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "Com `i` de 0 até `pessoas - 1`, são tantas voltas quantas pessoas; o `if` dá `parte + 1` às primeiras, enquanto `i` é menor que a sobra; o `push` monta a lista. O `i` precisa ser `let`: o `i++` muda o valor a cada volta, e com `const` o Node para com `TypeError: Assignment to constant variable.`",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "truefalse",
+      "prompt": "No Jest, o teste `expect(dividirConta(20625, 4)).toBe([5157, 5156, 5156, 5156])` passa, porque a função devolve exatamente esses quatro números.",
+      "answer": false,
+      "explanation": "Cada `[ ]` cria uma lista nova, e o `toBe` pergunta se é a mesma lista, não se os itens são iguais. O Jest falha com `Received: serializes to the same string`. Para listas, use `toEqual`, que compara item por item.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Qual `for...of` faz a mesma conta deste `reduce`?\n\n```javascript\nconst total = precos.reduce((soma, preco) => soma + preco, 0);\n```",
+      "options": {
+        "a": "`let total = 0;` antes do `for...of` e, dentro dele, `total = total + preco;`",
+        "b": "`let total = 0;` e `total = total + preco;`, as duas linhas dentro do `for...of`",
+        "c": "`let total = 0;` antes do `for...of` e, dentro dele, `total = preco;`",
+        "d": "`const total = 0;` antes do `for...of` e, dentro dele, `total = total + preco;`"
+      },
+      "answer": "a",
+      "explanation": "O `0` do fim do `reduce` é o visor no começo: o acumulador nasce antes do laço, com `let`. A conta de cada volta soma o preço ao que já está lá. Com as duas linhas dentro, o total volta a 0 a cada volta e, depois do laço, nem existe; com `total = preco`, fica só o último preço; com `const`, o Node para com `TypeError: Assignment to constant variable.`",
+      "points": 2
+    }
+  ]
+}

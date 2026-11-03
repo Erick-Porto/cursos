@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" font-family="Inter, system-ui, sans-serif">
+  <title>A classe Tarefa é a forma, com os campos titulo, prioridade, prazo e concluida em branco e o método concluir; cada new Tarefa faz uma tarefa com os próprios valores, como luz e racao</title>
+  <style>
+    .box  { fill: #131c33; stroke: #2a3a5c; stroke-width: 1.5; }
+    .head { fill: #34d399; }
+    .h    { fill: #06281c; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .lbl  { fill: #a78bfa; font-size: 22px; font-weight: 700; }
+    .f    { fill: #b4bfd3; font-size: 22px; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .v    { fill: #e8edf7; font-size: 22px; }
+    .name { fill: #e8edf7; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .meth { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .new  { fill: #a78bfa; font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .blank { stroke: #b4bfd3; stroke-width: 1.5; stroke-dasharray: 4 4; }
+    .arr  { stroke: #a78bfa; stroke-width: 3; fill: none; marker-end: url(#seta); }
+  </style>
+  <defs>
+    <marker id="seta" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto"><path d="M0,0 L14,7 L0,14 z" fill="#a78bfa"/></marker>
+  </defs>
+  <rect width="720" height="420" rx="16" fill="#0b1020"/>
+
+  <text class="lbl" x="24" y="38">a forma</text>
+  <text class="lbl" x="290" y="38">as tarefas: uma por new</text>
+
+  <!-- a classe -->
+  <rect class="box" x="24" y="54" width="210" height="346" rx="12"/>
+  <path class="head" d="M36 54 H222 A12 12 0 0 1 234 66 V100 H24 V66 A12 12 0 0 1 36 54 Z"/>
+  <text class="h" x="40" y="85">class Tarefa</text>
+  <text class="f" x="40" y="146">titulo</text>
+  <path class="blank" d="M140 152 H218"/>
+  <text class="f" x="40" y="194">prioridade</text>
+  <path class="blank" d="M186 200 H218"/>
+  <text class="f" x="40" y="242">prazo</text>
+  <path class="blank" d="M126 248 H218"/>
+  <text class="f" x="40" y="290">concluida</text>
+  <path class="blank" d="M174 296 H218"/>
+  <path d="M24 318 H234" stroke="#2a3a5c" stroke-width="1.5"/>
+  <text class="meth" x="40" y="366">concluir()</text>
+
+  <!-- new -->
+  <path class="arr" d="M238 150 L284 136"/>
+  <text class="new" x="240" y="124">new</text>
+  <path class="arr" d="M238 300 L284 314"/>
+  <text class="new" x="240" y="342">new</text>
+
+  <!-- as instâncias -->
+  <rect class="box" x="290" y="54" width="410" height="164" rx="12"/>
+  <text class="name" x="306" y="86">luz</text>
+  <text class="f" x="306" y="118">titulo</text>
+  <text class="v" x="452" y="118">Pagar a conta de luz</text>
+  <text class="f" x="306" y="146">prioridade</text>
+  <text class="v" x="452" y="146">alta</text>
+  <text class="f" x="306" y="174">prazo</text>
+  <text class="v" x="452" y="174">2026-11-12</text>
+  <text class="f" x="306" y="202">concluida</text>
+  <text class="v" x="452" y="202">false</text>
+
+  <rect class="box" x="290" y="236" width="410" height="164" rx="12"/>
+  <text class="name" x="306" y="268">racao</text>
+  <text class="f" x="306" y="300">titulo</text>
+  <text class="v" x="452" y="300">Comprar ração do gato</text>
+  <text class="f" x="306" y="328">prioridade</text>
+  <text class="v" x="452" y="328">media</text>
+  <text class="f" x="306" y="356">prazo</text>
+  <text class="v" x="452" y="356">null</text>
+  <text class="f" x="306" y="384">concluida</text>
+  <text class="v" x="452" y="384">false</text>
+</svg>

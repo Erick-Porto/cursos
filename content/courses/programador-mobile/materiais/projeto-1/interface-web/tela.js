@@ -6,10 +6,6 @@
 //
 // Abra com o servidor, na raiz do repositório: npx serve . e http://localhost:3000/web/
 
-// Este arquivo roda no navegador. A linha abaixo avisa ao ESLint do projeto, configurado
-// para o Node, que estes nomes existem aqui: assim o npm run lint passa sem mudar nada.
-/* global document, location, window */
-
 const CAMINHO_DAS_REGRAS = '../src/regras/conta.js';
 
 // As funções que a página usa, com os nomes e as assinaturas do enunciado.

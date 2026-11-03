@@ -654,8 +654,8 @@ const media = soma / precos.length;
 console.log('Soma: R$', soma);
 console.log('Média: R$', media);</code></pre>
           </div>
-          <p>Saiu algo como <code>399.59999999999997</code>? Você somou em outra ordem. O computador às vezes erra lá no fim das contas com casas decimais; no E05 você vê por quê e como a Lojinha evita isso.</p>
-          <p>Somar gaveta por gaveta funciona com 4 preços. Com 300, não dá: no E09 você aprende a somar uma lista inteira de uma vez.</p>
+          <p>Saiu algo como <code>399.59999999999997</code>? Você somou em outra ordem. O computador às vezes erra lá no fim das contas com casas decimais; no E06 você vê por quê e como evitar isso.</p>
+          <p>Somar gaveta por gaveta funciona com 4 preços. Com 300, não dá: o <code>reduce</code>, mais adiante na aula 3, soma uma lista inteira de uma vez.</p>
         </details>
         <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="7"><span>Fiz este exercício</span></label>
       </article>
@@ -944,7 +944,7 @@ TypeError: Cannot read properties of undefined (reading 'nome')
 TypeError: Cannot read properties of undefined (reading 'nome')</code></pre>
           </div>
           <p>O argumento escolhe a gaveta. Com <code>5</code>, a gaveta não existe e <code>produtos[5]</code> é <code>undefined</code>. Sem argumento, a posição é <code>undefined</code>, e a gaveta também. Nos dois casos, a linha seguinte tenta ler o campo <code>nome</code> de algo que não existe: é o que a mensagem diz, "não dá para ler propriedades de undefined (lendo 'nome')".</p>
-          <p>Essa é uma das mensagens mais comuns de quem programa. Quando ela aparecer, pergunte: qual gaveta ou campo veio vazio antes do <code>.nome</code>? Avisar o usuário em vez de quebrar pede um <code>if</code>, que vem no E07.</p>
+          <p>Essa é uma das mensagens mais comuns de quem programa. Quando ela aparecer, pergunte: qual gaveta ou campo veio vazio antes do <code>.nome</code>? Avisar o usuário em vez de quebrar pede um <code>if</code>, que aparece mais adiante na aula 3.</p>
         </details>
         <label class="feito-linha nao-imprime"><input type="checkbox" data-ex="15"><span>Fiz este exercício</span></label>
       </article>

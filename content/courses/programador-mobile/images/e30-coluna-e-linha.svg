@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 312" font-family="Inter, system-ui, sans-serif">
+  <title>Na Tela, as peças ficam em coluna, uma embaixo da outra, e cada uma ocupa a largura toda; dentro da Linha, os três botões ficam lado a lado</title>
+  <style>
+    .tela { fill: #131c33; stroke: #2a3a5c; stroke-width: 2; }
+    .peca { fill: none; stroke: #a78bfa; stroke-width: 2; stroke-dasharray: 8 6; }
+    .t    { fill: #e8edf7; font-size: 20px; }
+    .btn  { fill: #0369a1; }
+    .bt   { fill: #ffffff; font-size: 20px; font-weight: 700; }
+    .nome { fill: #a78bfa; font-size: 20px; font-weight: 700; font-family: 'JetBrains Mono', Consolas, monospace; }
+    .nota { fill: #b4bfd3; font-size: 20px; }
+  </style>
+  <rect width="640" height="312" rx="16" fill="#0b1020"/>
+
+  <!-- a tela do celular -->
+  <rect class="tela" x="24" y="24" width="372" height="264" rx="20"/>
+
+  <!-- coluna: cada peça na largura toda -->
+  <rect class="peca" x="40" y="40" width="340" height="64" rx="10"/>
+  <text class="t" x="56" y="79">o topo</text>
+  <rect class="peca" x="40" y="116" width="340" height="64" rx="10"/>
+  <text class="t" x="56" y="155">a meta do dia</text>
+
+  <!-- a Linha também ocupa a largura toda; dentro dela, lado a lado -->
+  <rect class="peca" x="40" y="192" width="340" height="80" rx="10"/>
+  <rect class="btn" x="48" y="208" width="96" height="48" rx="12"/>
+  <text class="bt" x="96" y="239" text-anchor="middle">+200 ml</text>
+  <rect class="btn" x="162" y="208" width="96" height="48" rx="12"/>
+  <text class="bt" x="210" y="239" text-anchor="middle">+300 ml</text>
+  <rect class="btn" x="276" y="208" width="96" height="48" rx="12"/>
+  <text class="bt" x="324" y="239" text-anchor="middle">+500 ml</text>
+
+  <!-- os nomes das peças -->
+  <text class="nome" x="420" y="66">View</text>
+  <text class="nota" x="420" y="92">a largura toda</text>
+  <text class="nome" x="420" y="142">View</text>
+  <text class="nota" x="420" y="168">a largura toda</text>
+  <text class="nome" x="420" y="226">Linha</text>
+  <text class="nota" x="420" y="252">dentro, lado a lado</text>
+</svg>

@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E17 · Condições legíveis",
+  "description": "Dez questões sobre switch e break, a ordem do else if, a guarda, ?? e ?., while e as regras do prazo do Projeto 3.",
+  "lesson": "e17-condicoes-legiveis",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Projeto 3, o `pesoDaPrioridade` é este:\n\n```javascript\nexport function pesoDaPrioridade(prioridade) {\n  switch (prioridade) {\n    case 'alta':\n      return 3;\n    case 'media':\n      return 2;\n    case 'baixa':\n      return 1;\n    default:\n      return 0;\n  }\n}\n```\n\nQuanto devolve `pesoDaPrioridade('Alta')`, com A maiúsculo?",
+      "options": {
+        "a": "`0`",
+        "b": "`3`",
+        "c": "`undefined`",
+        "d": "`'Alta'`"
+      },
+      "answer": "a",
+      "explanation": "Cada `case` compara com `===`, letra por letra: `'Alta'` não é igual a `'alta'`. Nenhum caso bate, e o `default` devolve `0`. O `3` seria a resposta para `'alta'`, em minúsculas. O `undefined` só sairia se não houvesse `default`.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst prioridade = 'alta';\nlet rotulo;\nswitch (prioridade) {\n  case 'alta':\n    rotulo = 'Urgente';\n  case 'media':\n    rotulo = 'Normal';\n    break;\n  default:\n    rotulo = 'Sem pressa';\n}\nconsole.log(rotulo);\n```",
+      "options": {
+        "a": "`Normal`",
+        "b": "`Urgente`",
+        "c": "`Sem pressa`",
+        "d": "`undefined`"
+      },
+      "answer": "a",
+      "explanation": "O `case 'alta'` bate e guarda `'Urgente'`, mas não tem `break`: a execução desce para o caso de baixo, troca para `'Normal'` e só sai no `break`. O `default` nem roda. `Urgente` seria a saída com um `break` logo depois da primeira troca.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O que devolve `clima(38)`?\n\n```javascript\nfunction clima(graus) {\n  if (graus >= 25) {\n    return 'Calor';\n  } else if (graus >= 35) {\n    return 'Muito calor';\n  } else {\n    return 'Fresco';\n  }\n}\n```",
+      "options": {
+        "a": "`'Calor'`",
+        "b": "`'Muito calor'`",
+        "c": "`'Fresco'`",
+        "d": "`'Calor'` e depois `'Muito calor'`"
+      },
+      "answer": "a",
+      "explanation": "Na cadeia de `else if`, vale a primeira saída que dá `true`. 38 é `>= 25`, então a primeira pergunta já responde, e a segunda nem é feita: `'Muito calor'` nunca aparece. Com `>=`, a faixa maior precisa vir primeiro: `graus >= 35` em cima, depois `graus >= 25`.",
+      "points": 1
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "Uma colega escreveu a `situacaoDoPrazo` com a guarda depois do `diasAte`:\n\n```javascript\nexport function situacaoDoPrazo(prazo, hoje) {\n  const dias = diasAte(prazo, hoje);\n  if (prazo === null) {\n    return 'sem-prazo';\n  }\n  if (dias < 0) {\n    return 'atrasada';\n  } else if (dias === 0) {\n    return 'vence-hoje';\n  } else {\n    return 'em-dia';\n  }\n}\n```\n\nO que acontece com `situacaoDoPrazo(null, HOJE)`?",
+      "options": {
+        "a": "Para com o erro do kit: `O prazo precisa ser um texto 'AAAA-MM-DD'; chegou null.`",
+        "b": "Devolve `'sem-prazo'`, porque a guarda continua na função",
+        "c": "Devolve `'em-dia'`, porque o `null` cai no `else`",
+        "d": "Devolve `undefined`, porque nenhum `return` roda"
+      },
+      "answer": "a",
+      "explanation": "O código roda de cima para baixo: a primeira linha chama o `diasAte` com `null`, e o kit para com o erro antes de chegar à guarda. A guarda só protege o que vem depois dela. Por isso o `if (prazo === null)` vem na primeira linha, antes do `diasAte`.",
+      "points": 2
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst semGorjeta = { restaurante: 'Cantina Bella Nonna', gorjeta: 0 };\nconst semCampo = { restaurante: 'Cantina Bella Nonna' };\n\nconsole.log(semGorjeta.gorjeta ?? 10, semCampo.gorjeta ?? 10);\n```",
+      "options": {
+        "a": "`0 10`",
+        "b": "`10 10`",
+        "c": "`0 undefined`",
+        "d": "`10 0`"
+      },
+      "answer": "a",
+      "explanation": "O `??` só troca a caixa vazia, `null` ou `undefined`. A primeira conta tem um 0 dentro: não está vazia, e o 0 fica. A segunda não tem o campo `gorjeta`, que vale `undefined`, e o `??` troca por 10. O `10 10` seria a resposta de quem acha que o `??` também troca o zero.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "truefalse",
+      "prompt": "Um contato da agenda tem `email: ''`, um texto vazio. Então `contato.email ?? 'sem e-mail'` devolve `'sem e-mail'`.",
+      "answer": false,
+      "explanation": "Falso. O `??` só troca `null` e `undefined`. O texto vazio `''` é um valor que veio, e o resultado é `''`. Para trocar o texto vazio, a pergunta precisa ser outra, como `contato.email === ''`.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "multiple",
+      "prompt": "Na agenda do Projeto 2:\n\n```javascript\nconst daniel = { nome: 'Daniel Rocha', aniversario: null };\n```\n\nQuais linhas rodam sem `TypeError`? Marque todas as certas.",
+      "options": {
+        "a": "`console.log(daniel.aniversario?.dia);`",
+        "b": "`console.log(daniel.aniversario?.dia ?? 'sem data');`",
+        "c": "`console.log(daniel.aniversario.dia);`",
+        "d": "`console.log(daniel.nome.length);`"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "Com o `?.`, a leitura para no `null` e responde `undefined`, sem erro; com o `?? 'sem data'`, sai `sem data`. Sem o `?.`, ler `dia` de `null` dá `TypeError: Cannot read properties of null (reading 'dia')`. O `nome` existe, então `daniel.nome.length` funciona e dá 12: o `?.` só é preciso onde o valor pode faltar.",
+      "points": 2
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "O celular carrega 25% a cada 10 minutos. O que aparece no terminal?\n\n```javascript\nlet bateria = 40;\nlet minutos = 0;\nwhile (bateria < 100) {\n  bateria = bateria + 25;\n  minutos = minutos + 10;\n}\nconsole.log(minutos, bateria);\n```",
+      "options": {
+        "a": "`30 115`",
+        "b": "`20 90`",
+        "c": "`30 100`",
+        "d": "`40 115`"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta: 40 < 100, sim, a bateria vai a 65 e os minutos a 10; 65 < 100, sim, 90 e 20; 90 < 100, sim, 115 e 30; 115 < 100, não, e o laço termina. Foram 3 voltas. O `20 90` para uma volta antes da hora: com 90, a condição ainda é `true`.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Qual destes laços nunca termina?",
+      "options": {
+        "a": "`let n = 10; while (n > 0) { n = n + 1; }`",
+        "b": "`let n = 0; while (n < 10) { n = n + 2; }`",
+        "c": "`let n = 10; while (n > 0) { n = n - 1; }`",
+        "d": "`let n = 150; while (n < 100) { n = n + 30; }`"
+      },
+      "answer": "a",
+      "explanation": "Em `a`, o `n` muda, mas para o lado errado: começa em 10 e só cresce, e `n > 0` fica `true` para sempre. Em `b` e em `c`, o `n` anda na direção da saída. Em `d`, a condição já nasce `false` e o laço roda zero vezes. Um laço parado se encerra com Ctrl + C.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "No Projeto 3, com `const HOJE = new Date(2026, 10, 10);` (10 de novembro de 2026):\n\n```javascript\nexport function proximoPrazo(prazo, frequencia, hoje) {\n  const dias = frequencia === 'diaria' ? 1 : 7;\n  let novo = somarDias(prazo, dias);\n  while (diasAte(novo, hoje) <= 0) {\n    novo = somarDias(novo, dias);\n  }\n  return novo;\n}\n```\n\nO que devolve `proximoPrazo('2026-11-03', 'semanal', HOJE)`?",
+      "options": {
+        "a": "`'2026-11-17'`",
+        "b": "`'2026-11-10'`",
+        "c": "`'2026-11-24'`",
+        "d": "`'2026-11-03'`"
+      },
+      "answer": "a",
+      "explanation": "Semanal soma 7: o primeiro `novo` é `'2026-11-10'`, e o `diasAte` dele é 0. Como `0 <= 0` é `true`, o `while` soma mais 7: `'2026-11-17'`, a 7 dias de hoje. Aí `7 <= 0` é `false`, e a função devolve. O `'2026-11-10'` seria a resposta com `< 0`: a próxima vez cairia hoje mesmo.",
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+{
+  "title": "Quiz: E31 · Estado e listas no celular",
+  "description": "Dez questões sobre o estado dos registros, a lista nova, o total com reduce, a FlatList, a lista vazia, o remover e a entrega do Gota.",
+  "lesson": "e31-estado-e-listas-no-celular",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No Gota, `registros` tem um copo só: o de 300 ml, registrado às 09:15. Às 10:42, você toca em +500, e roda `adicionarCopo(500)`:\n\n```jsx\nfunction adicionarCopo(ml) {\n  const novo = { id: Date.now(), ml: ml, hora: horaAgora() };\n  setRegistros([novo, ...registros]);\n}\n```\n\nComo fica a lista nova?",
+      "options": {
+        "a": "Dois registros: primeiro o de 500, às 10:42, e depois o de 300, às 09:15",
+        "b": "Dois registros: primeiro o de 300, às 09:15, e depois o de 500, às 10:42",
+        "c": "Um registro só, o de 500: o novo toma o lugar do antigo",
+        "d": "Três registros: o de 500 e duas cópias do de 300"
+      },
+      "answer": "a",
+      "explanation": "Em `[novo, ...registros]`, o `novo` vem primeiro, e os três pontos do spread copiam os registros de antes logo depois dele. Por isso o copo mais novo fica em cima. Com `[...registros, novo]`, o de 500 iria para o fim. O spread copia cada registro uma vez só.",
+      "points": 2
+    },
+    {
+      "id": "q2",
+      "type": "multiple",
+      "prompt": "Sobre o estado `const [registros, setRegistros] = useState([])` do Gota, marque todas as certas.",
+      "options": {
+        "a": "O `useState` vem do pacote `react`: `import { useState } from 'react'`",
+        "b": "Ao abrir o app, `registros` é uma lista vazia",
+        "c": "`registros.push(novo)` seguido de `setRegistros(registros)` faz a tela mostrar o copo novo",
+        "d": "Apertar `r` no terminal do `npx expo start` recarrega o app, e `registros` volta a ser uma lista vazia"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O `useState` vem de `react`, não de `react-native`, e o `[]` é o começo: nenhum copo. Recarregar roda o app do zero, e o estado volta ao começo, porque mora na memória. Com o `push`, o `setRegistros` recebe a mesma lista, no mesmo endereço: o React compara, acha igual e não desenha de novo.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "Estes são os registros de hoje. O que o `ProgressoMeta` mostra?\n\n```jsx\nconst registros = [\n  { id: 3, ml: 500, hora: '10:42' },\n  { id: 2, ml: 300, hora: '09:15' },\n  { id: 1, ml: 200, hora: '07:30' },\n];\nconst total = registros.reduce((soma, registro) => soma + registro.ml, 0);\n\n<ProgressoMeta total={total} meta={2000} />\n```",
+      "options": {
+        "a": "1000 ml, 50% da meta e Faltam 1000 ml",
+        "b": "500 ml, 25% da meta e Faltam 1500 ml",
+        "c": "200 ml, 10% da meta e Faltam 1800 ml",
+        "d": "3 ml, 0% da meta e Faltam 1997 ml"
+      },
+      "answer": "a",
+      "explanation": "Volta por volta: o visor começa no 0; `0 + 500` dá 500; `500 + 300` dá 800; `800 + 200` dá 1000. O `total` é 1000, metade da meta. O 500 é só o primeiro copo, o 200 é só o último, e o 3 é a quantidade de copos, o `registros.length`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "O Gota está pronto e no GitHub. O que você cola na página do Projeto 5, na plataforma?",
+      "options": {
+        "a": "O link do repositório público `gota`, no GitHub",
+        "b": "O endereço `exp://` que o terminal mostra no `npx expo start`",
+        "c": "O texto do `App.js`, copiado e colado",
+        "d": "Um print do QR code do terminal"
+      },
+      "answer": "a",
+      "explanation": "O instrutor abre o repositório, roda `npm install` e `npx expo start` e usa o app no celular dele. O `exp://` e o QR code só funcionam enquanto o seu computador está com o servidor ligado, e o `App.js` sozinho não traz o `BotaoCopo`, o README nem os commits.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "Por que o Gota mostra os registros numa `FlatList`, e não com um `map` dentro de uma `View`?",
+      "options": {
+        "a": "A `FlatList` é uma esteira: desenha só os itens que cabem na tela, troca os itens conforme a rolagem e rola sozinha",
+        "b": "A `FlatList` guarda os registros no celular, mesmo depois de fechar o app",
+        "c": "A `FlatList` põe os registros em ordem de hora, sem nenhuma conta",
+        "d": "Sem a `FlatList`, o `useState` não funciona no celular"
+      },
+      "answer": "a",
+      "explanation": "A `FlatList` é a lista do React Native: com 10 ou 1.000 copos, ela desenha os que estão na tela e o app continua leve. Ela não guarda nada (os registros ficam no estado, na memória) e não ordena: o copo novo vai em cima por causa do `[novo, ...registros]`. O `useState` funciona com ou sem ela.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "fill",
+      "prompt": "Complete o `renderItem` da `FlatList` do Gota. A cada item, a `FlatList` entrega uma ficha, e as chaves tiram dela o campo com o registro da vez:\n\n```jsx\nrenderItem={({ ___ }) => (\n  <ItemRegistro ml={item.ml} hora={item.hora} />\n)}\n```",
+      "answer": [["item"]],
+      "explanation": "A `FlatList` entrega uma ficha com `item`, `index` e um terceiro campo. As chaves em `({ item })` pegam só o `item`, como a desestruturação das props. Sem as chaves, `(item) => ...` recebe a ficha inteira, e `item.ml` fica `undefined`: o cartão aparece sem os ml e sem a hora.",
+      "points": 1
+    },
+    {
+      "id": "q7",
+      "type": "single",
+      "prompt": "O que o `keyExtractor` abaixo devolve para o registro `{ id: 1793725500000, ml: 300, hora: '14:05' }`?\n\n```jsx\nkeyExtractor={(item) => String(item.id)}\n```",
+      "options": {
+        "a": "`'1793725500000'`, o id como texto",
+        "b": "`1793725500000`, o id como número",
+        "c": "`'300'`, os ml como texto",
+        "d": "`'14:05'`, a hora do registro"
+      },
+      "answer": "a",
+      "explanation": "O `keyExtractor` devolve o crachá de cada item, e a `FlatList` pede o crachá como texto. O `String()` transforma o número do `id` em texto: é o par do `Number()`, que faz o caminho contrário. Os ml e a hora se repetem entre copos, então não servem de crachá.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "single",
+      "prompt": "A `FlatList` do Gota tem `ListEmptyComponent={<ListaVazia texto=\"Nenhum copo registrado hoje\" />}`. Quando a frase aparece?",
+      "options": {
+        "a": "Só enquanto `registros` está vazio: some no primeiro copo e volta quando todos são removidos",
+        "b": "Sempre, embaixo do último copo da lista",
+        "c": "Uma vez, ao abrir o app, e nunca mais, mesmo removendo todos os copos",
+        "d": "Só quando o total passa da meta de 2000 ml"
+      },
+      "answer": "a",
+      "explanation": "O `ListEmptyComponent` recebe uma peça pronta, em JSX, e a `FlatList` mostra essa peça no lugar dos itens só enquanto a `data` está vazia. Como a `data` é o estado `registros`, a frase acompanha a lista: some no primeiro copo e volta quando ela esvazia.",
+      "points": 1
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nconst registros = [\n  { id: 3, ml: 500 },\n  { id: 2, ml: 300 },\n  { id: 1, ml: 200 },\n];\nconst sem = registros.filter((registro) => registro.id !== 2);\nconsole.log(sem.length, registros.length);\n```",
+      "options": {
+        "a": "`2 3`",
+        "b": "`2 2`",
+        "c": "`1 3`",
+        "d": "`3 3`"
+      },
+      "answer": "a",
+      "explanation": "Item por item: `3 !== 2` é `true` e fica; `2 !== 2` é `false` e sai; `1 !== 2` é `true` e fica. A lista nova tem 2 registros, e a `registros` continua com os 3, porque o `filter` não rasura o original. O `1 3` seria com `===`, que deixa passar só o de id 2.",
+      "points": 2
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Um aluno escreveu assim o `Pressable` do `BotaoCopo`. O que acontece ao abrir o app?\n\n```jsx\n<Pressable style={estilos.botao} onPress={aoAdicionar(ml)}>\n```",
+      "options": {
+        "a": "O `aoAdicionar` roda ao desenhar a tela, e não no toque: a lista se enche de copos sozinha e o app trava",
+        "b": "Funciona igual a `onPress={() => aoAdicionar(ml)}`",
+        "c": "O app abre normal, mas o toque não faz nada",
+        "d": "O botão aparece sem o texto +200 ml"
+      },
+      "answer": "a",
+      "explanation": "Com os parênteses, `aoAdicionar(ml)` roda na hora de desenhar o botão; cada copo novo desenha a tela de novo, e a conta não para. O terminal mostra `Cannot update a component (App) while rendering a different component (BotaoCopo)`. A seta, `() => aoAdicionar(ml)`, guarda o pedido para o toque.",
+      "points": 1
+    }
+  ]
+}

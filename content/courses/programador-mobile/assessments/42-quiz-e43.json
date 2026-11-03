@@ -1,0 +1,150 @@
+{
+  "title": "Quiz: E43 · Dados no aparelho",
+  "description": "Dez questões sobre o quadro de avisos da equipe (createContext, Provider e useContext), a gaveta do celular (AsyncStorage) e os dois efeitos com a trava carregado.",
+  "lesson": "e43-dados-no-aparelho",
+  "kind": "quiz",
+  "passing_score": 70,
+  "max_attempts": 3,
+  "time_limit_minutes": null,
+  "shuffle_questions": true,
+  "shuffle_options": true,
+  "show_answers": true,
+  "is_required": true,
+  "questions": [
+    {
+      "id": "q1",
+      "type": "single",
+      "prompt": "No primeiro uso do app, nada foi guardado ainda com a chave `'gastos.lancamentos'`. O que aparece no terminal?\n\n```javascript\nconst texto = await AsyncStorage.getItem('gastos.lancamentos');\nconsole.log(texto);\n```",
+      "options": {
+        "a": "`null`",
+        "b": "`[]`",
+        "c": "`undefined`",
+        "d": "os 6 lançamentos de exemplo"
+      },
+      "answer": "a",
+      "explanation": "Sem nada guardado naquela etiqueta, o `getItem` devolve `null`, como o `getItem` do `localStorage` do E21. É por isso que o primeiro efeito confere `if (texto !== null)` antes do `JSON.parse`: no primeiro uso, a lista fica nos exemplos do `useState`. O `[]` só sairia da gaveta se alguém tivesse guardado uma lista vazia.",
+      "points": 1
+    },
+    {
+      "id": "q2",
+      "type": "single",
+      "prompt": "O que aparece no terminal?\n\n```javascript\nawait AsyncStorage.setItem('gastos.teste', JSON.stringify([{ id: 1 }, { id: 2 }]));\nconst texto = await AsyncStorage.getItem('gastos.teste');\nconsole.log(texto.length, JSON.parse(texto).length);\n```",
+      "options": {
+        "a": "`19 2`",
+        "b": "`2 2`",
+        "c": "`2 19`",
+        "d": "`undefined 2`"
+      },
+      "answer": "a",
+      "explanation": "A gaveta guarda **texto**: o `getItem` devolve `'[{\"id\":1},{\"id\":2}]'`, e o `.length` de um texto conta as letras e os sinais: 19. Só depois do `JSON.parse` o texto volta a ser lista, com 2 itens. O `2 2` é o erro de quem esquece que o que sai da gaveta é texto.",
+      "points": 2
+    },
+    {
+      "id": "q3",
+      "type": "single",
+      "prompt": "O quadro dos lançamentos começa com os 6 exemplos, do mais novo, Venda de bolos, ao mais velho. No Provider:\n\n```jsx\nfunction adicionar(novo) {\n  setLancamentos([{ ...novo, id: Date.now() }, ...lancamentos]);\n}\n\nfunction remover(id) {\n  setLancamentos(lancamentos.filter((item) => item.id !== id));\n}\n```\n\nA pessoa salva \"Pão\" na tela Novo, que chama `adicionar`. Depois, na Lançamentos, toca na lixeira do Cinema, que chama `remover(5)`. Como fica a lista?",
+      "options": {
+        "a": "6 lançamentos, com Pão em primeiro",
+        "b": "7 lançamentos, com Pão em primeiro",
+        "c": "6 lançamentos, com Pão em último",
+        "d": "5 lançamentos, sem o Pão"
+      },
+      "answer": "a",
+      "explanation": "O `adicionar` monta uma lista nova com o lançamento novo na frente, com um crachá do `Date.now()`: 7, com Pão em primeiro. O `remover(5)` peneira com `item.id !== 5`: fica tudo, menos o Cinema. Sobram 6, com Pão no topo. O 7 esquece o `remover`; o \"Pão em último\" confunde a ordem do spread: o novo vem antes do `...lancamentos`.",
+      "points": 2
+    },
+    {
+      "id": "q4",
+      "type": "single",
+      "prompt": "No segundo efeito do quadro, para que serve a trava `carregado`?\n\n```jsx\nuseEffect(() => {\n  if (carregado) {\n    AsyncStorage.setItem(CHAVE, JSON.stringify(lancamentos));\n  }\n}, [lancamentos, carregado]);\n```",
+      "options": {
+        "a": "Para não guardar a lista do primeiro desenho, os exemplos, por cima do que estava na gaveta antes de a leitura terminar",
+        "b": "Para a tela mostrar um aviso de carregando enquanto o app lê a gaveta",
+        "c": "Para o app ler a gaveta uma vez só, quando abre",
+        "d": "Para o `getItem` não devolver `null` no primeiro uso do app"
+      },
+      "answer": "a",
+      "explanation": "Os dois efeitos rodam logo depois do primeiro desenho, quando a lista ainda tem os exemplos. Com o `if (carregado)`, o segundo efeito só guarda depois que o primeiro terminou de ler e ligou a trava com `setCarregado(true)`: primeiro ler, depois guardar. Quem faz a leitura rodar uma vez só é o `[]` do primeiro efeito, não a trava; e nenhum aviso aparece na tela por causa dela.",
+      "points": 1
+    },
+    {
+      "id": "q5",
+      "type": "single",
+      "prompt": "A Início tem `const { lancamentos } = useContext(GastosContext);`, mas ninguém pôs o `GastosProvider` no `app/_layout.js`. O quadro foi criado com `createContext(null)`. O que acontece ao abrir a Início?",
+      "options": {
+        "a": "O app para com `Cannot read property 'lancamentos' of null`",
+        "b": "A Início mostra a lista vazia e o saldo R$ 0,00",
+        "c": "A Início mostra os 6 lançamentos de exemplo",
+        "d": "O app abre normalmente e guarda os dados na gaveta"
+      },
+      "answer": "a",
+      "explanation": "Fora de um Provider, o `useContext` devolve o valor do `createContext`, que é `null`. Tirar `lancamentos` de `null` não dá, e o app para com a mensagem. A correção é pôr o `<GastosProvider>` em volta da `<Pilha />`, no `app/_layout.js`. Os exemplos só existem dentro do Provider, no `useState` dele.",
+      "points": 1
+    },
+    {
+      "id": "q6",
+      "type": "single",
+      "prompt": "Num teste, o efeito só escreve no terminal:\n\n```jsx\nconst [lancamentos, setLancamentos] = useState(lancamentosDeExemplo); // 6 itens\n\nuseEffect(() => {\n  console.log('guardando', lancamentos.length);\n}, [lancamentos]);\n```\n\nA tela abre e, depois, a pessoa apaga um lançamento com o `filter`. O que aparece no terminal, do começo ao fim?",
+      "options": {
+        "a": "`guardando 6` e, depois, `guardando 5`",
+        "b": "só `guardando 6`",
+        "c": "só `guardando 5`",
+        "d": "nada: o efeito só roda com `[]` no fim"
+      },
+      "answer": "a",
+      "explanation": "O efeito roda depois do primeiro desenho, com 6, e de novo a cada desenho em que `lancamentos` mudou: o `filter` fez uma lista nova, com 5. Com `[]` no fim, sairia só `guardando 6`: é a diferença entre o efeito que lê ao abrir e o que guarda quando a lista muda.",
+      "points": 2
+    },
+    {
+      "id": "q7",
+      "type": "fill",
+      "prompt": "Complete o segundo efeito do quadro. A gaveta só guarda texto:\n\n```jsx\nuseEffect(() => {\n  if (carregado) {\n    AsyncStorage.___(CHAVE, JSON.___(lancamentos));\n  }\n}, [lancamentos, carregado]);\n```",
+      "answer": [["setItem"], ["stringify"]],
+      "explanation": "O `setItem(chave, texto)` guarda o texto com a etiqueta; o `getItem` é o que lê. Antes de ir para a gaveta, a lista vira texto com `JSON.stringify`; na volta, o `JSON.parse` faz o caminho contrário. Sem o `stringify`, o terminal avisa `is not a string`.",
+      "points": 1
+    },
+    {
+      "id": "q8",
+      "type": "multiple",
+      "prompt": "Na tela Novo lançamento, o que entra para o `salvar` pôr o lançamento no quadro da equipe? Marque todas as certas.",
+      "options": {
+        "a": "o `useContext` no `import` de `'react'`",
+        "b": "`import { GastosContext } from '@/data/GastosContext';`",
+        "c": "`const { adicionar } = useContext(GastosContext);`, dentro da função `Novo`",
+        "d": "`import AsyncStorage from '@react-native-async-storage/async-storage';`",
+        "e": "um `<GastosProvider>` em volta do `return` da Novo"
+      },
+      "answer": ["a", "b", "c"],
+      "explanation": "A tela só fala com o quadro: o `useContext`, o quadro e o `adicionar`, chamado no `salvar` antes do `Alert`. Quem fala com a gaveta é o Provider, nos dois efeitos: a tela não importa o AsyncStorage. E o Provider já está no `app/_layout.js`: um segundo `GastosProvider` em volta da Novo seria outro quadro, com outra lista, que a Início não lê.",
+      "points": 2
+    },
+    {
+      "id": "q9",
+      "type": "single",
+      "prompt": "Alguém esqueceu o `await` no primeiro efeito:\n\n```jsx\nconst texto = AsyncStorage.getItem(CHAVE);\nif (texto !== null) {\n  setLancamentos(JSON.parse(texto));\n}\n```\n\nPor que, ao abrir o app, aparece um aviso com `JSON Parse error`?",
+      "options": {
+        "a": "Sem o `await`, `texto` guarda a Promise, e não o texto guardado: o `JSON.parse` não consegue ler",
+        "b": "A gaveta estava vazia e devolveu `null`",
+        "c": "O `JSON.parse` só funciona num efeito com `[]` no fim",
+        "d": "Faltou um `JSON.stringify` antes do `JSON.parse`"
+      },
+      "answer": "a",
+      "explanation": "O `getItem` devolve uma Promise, a senha da lanchonete do E21. Sem o `await`, a caixa `texto` fica com a senha, não com o prato: ela não é `null`, então o `if` deixa passar, e o `JSON.parse` recebe algo que não é texto JSON. Com `const texto = await AsyncStorage.getItem(CHAVE);`, dentro da função `async`, chega o texto. Se a gaveta estivesse vazia, o `if` pararia o `null` antes do `parse`.",
+      "points": 1
+    },
+    {
+      "id": "q10",
+      "type": "single",
+      "prompt": "Quem cuida dos dados terminou o quadro na branch `dados-no-celular`. Qual é o caminho para ele chegar à `main` da equipe?",
+      "options": {
+        "a": "Commit, `git push -u origin dados-no-celular`, pull request aprovado por um colega, merge e, em todos os computadores, `git switch main` e `git pull`",
+        "b": "Commit na `main` e `git push`",
+        "c": "`npm install` do pacote do AsyncStorage na `main`, commit e `git push`",
+        "d": "Commit, push da branch e merge do pull request aprovado pelo próprio autor"
+      },
+      "answer": "a",
+      "explanation": "Desde o E42, a regra da `main` recusa o push direto e pede a aprovação de outra pessoa: o autor não aprova o próprio pull request. Depois do merge, cada pessoa traz a `main` nova com `git pull`. E ninguém instala o pacote: ele já veio no kit, e instalar em duas branches daria conflito no `package-lock.json`.",
+      "points": 1
+    }
+  ]
+}
