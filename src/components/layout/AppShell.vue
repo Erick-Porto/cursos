@@ -1,20 +1,18 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
-import { BookOpen, Home, LogOut, Moon, Sun, Trophy, UserRound, Users } from 'lucide-vue-next'
+import { computed, ref, watch } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import { BookOpen, Home, Moon, PanelLeftClose, PanelLeftOpen, Sun, Trophy, UserRound, Users } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeStore } from '@/stores/theme'
-import { useCatalogStore } from '@/stores/catalog'
-import { useAchievementsStore } from '@/stores/achievements'
-import { levelInfo } from '@/lib/xp'
 import UserAvatar from '@/components/ui/UserAvatar.vue'
 import BrandMark from '@/components/ui/BrandMark.vue'
+import ProfileDrawer from '@/components/layout/ProfileDrawer.vue'
+
+const COLLAPSED_KEY = 'cursos:sidenav-collapsed'
 
 const auth = useAuthStore()
 const theme = useThemeStore()
-const catalog = useCatalogStore()
-const achievements = useAchievementsStore()
-const router = useRouter()
+const route = useRoute()
 
 const nav = computed(() => {
   const items = [
@@ -27,18 +25,33 @@ const nav = computed(() => {
   return items
 })
 
-const level = computed(() => levelInfo(auth.stats?.xp ?? 0))
-
-async function signOut() {
-  await auth.signOut()
-  catalog.reset()
-  achievements.reset()
-  router.replace('/entrar')
+// ---- barra lateral recolhida: a escolha fica guardada neste navegador ----
+function readCollapsed(): boolean {
+  try {
+    return localStorage.getItem(COLLAPSED_KEY) === '1'
+  } catch {
+    return false
+  }
 }
+
+const collapsed = ref(readCollapsed())
+
+function toggleCollapsed() {
+  collapsed.value = !collapsed.value
+  try {
+    localStorage.setItem(COLLAPSED_KEY, collapsed.value ? '1' : '0')
+  } catch {
+    /* armazenamento indisponível: vale só até recarregar a página */
+  }
+}
+
+// ---- gavetinha do perfil, aberta pela foto ----
+const profileOpen = ref(false)
+watch(() => route.fullPath, () => (profileOpen.value = false))
 </script>
 
 <template>
-  <div class="shell">
+  <div class="shell" :class="{ 'is-collapsed': collapsed }">
     <header class="topbar">
       <RouterLink to="/inicio" class="brand" aria-label="Início">
         <BrandMark :size="28" />
@@ -49,49 +62,74 @@ async function signOut() {
           <Sun v-if="theme.theme === 'dark'" />
           <Moon v-else />
         </button>
-        <RouterLink to="/perfil" class="topbar__avatar" aria-label="Perfil">
+        <button
+          class="avatar-btn"
+          :class="{ 'is-open': profileOpen }"
+          type="button"
+          data-profile-trigger
+          aria-label="Abrir o menu do perfil"
+          aria-haspopup="dialog"
+          aria-controls="profile-drawer"
+          :aria-expanded="profileOpen"
+          @click="profileOpen = !profileOpen"
+        >
           <UserAvatar :name="auth.displayName" :src="auth.profile?.avatar_url" :size="34" />
-        </RouterLink>
+        </button>
       </div>
     </header>
 
     <aside class="sidenav">
-      <RouterLink to="/inicio" class="brand brand--side">
-        <BrandMark :size="34" />
-        <span>Cursos</span>
-      </RouterLink>
+      <div class="sidenav__head">
+        <RouterLink to="/inicio" class="brand brand--side" aria-label="Cursos, ir para o início">
+          <BrandMark :size="34" />
+          <span class="sidenav__label">Cursos</span>
+        </RouterLink>
+        <button
+          class="btn btn--ghost btn--icon btn--sm sidenav__toggle"
+          type="button"
+          :title="collapsed ? 'Expandir o menu' : 'Recolher o menu'"
+          :aria-label="collapsed ? 'Expandir o menu' : 'Recolher o menu'"
+          :aria-expanded="!collapsed"
+          @click="toggleCollapsed"
+        >
+          <PanelLeftOpen v-if="collapsed" />
+          <PanelLeftClose v-else />
+        </button>
+      </div>
 
       <nav class="sidenav__nav" aria-label="Principal">
-        <RouterLink v-for="item in nav" :key="item.to" :to="item.to" class="sidenav__link" active-class="is-active">
+        <RouterLink
+          v-for="item in nav"
+          :key="item.to"
+          :to="item.to"
+          class="sidenav__link"
+          active-class="is-active"
+          :title="collapsed ? item.label : undefined"
+        >
           <component :is="item.icon" />
-          <span>{{ item.label }}</span>
+          <span class="sidenav__label">{{ item.label }}</span>
         </RouterLink>
       </nav>
 
       <div class="sidenav__user">
-        <RouterLink to="/perfil" class="sidenav__profile">
+        <button
+          class="avatar-btn"
+          :class="{ 'is-open': profileOpen }"
+          type="button"
+          data-profile-trigger
+          title="Seu perfil"
+          aria-label="Abrir o menu do perfil"
+          aria-haspopup="dialog"
+          aria-controls="profile-drawer"
+          :aria-expanded="profileOpen"
+          @click="profileOpen = !profileOpen"
+        >
           <UserAvatar :name="auth.displayName" :src="auth.profile?.avatar_url" :size="40" />
-          <div class="grow">
-            <div class="sidenav__name">{{ auth.displayName }}</div>
-            <div class="sidenav__level">Nível {{ level.level }} · {{ level.title }}</div>
-          </div>
-        </RouterLink>
-        <div class="sidenav__xp" :title="`${auth.stats?.xp ?? 0} XP`">
-          <span :style="{ width: level.pct + '%' }"></span>
-        </div>
-        <div class="row between">
-          <button class="btn btn--ghost btn--sm" type="button" @click="theme.toggle()">
-            <Sun v-if="theme.theme === 'dark'" />
-            <Moon v-else />
-            {{ theme.theme === 'dark' ? 'Claro' : 'Escuro' }}
-          </button>
-          <button class="btn btn--ghost btn--sm" type="button" @click="signOut">
-            <LogOut />
-            Sair
-          </button>
-        </div>
+        </button>
       </div>
     </aside>
+
+    <ProfileDrawer :open="profileOpen" :collapsed="collapsed" @close="profileOpen = false" />
 
     <main class="shell__main">
       <slot />
@@ -142,9 +180,19 @@ async function signOut() {
   border-bottom: 1px solid var(--border);
 }
 
-.topbar__avatar {
+.avatar-btn {
   display: inline-flex;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: box-shadow var(--t-fast);
+}
+
+.avatar-btn:hover,
+.avatar-btn.is-open {
+  box-shadow: var(--glow-primary);
 }
 
 .shell__main {
@@ -218,13 +266,61 @@ async function signOut() {
     flex-direction: column;
     gap: 8px;
     padding: 22px 16px;
+    overflow: hidden;
     background: var(--bg-elev);
     border-right: 1px solid var(--border);
+    transition: width var(--t) var(--ease), padding var(--t) var(--ease);
+  }
+
+  .sidenav__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 0 0 16px 8px;
   }
 
   .brand--side {
-    padding: 0 8px 16px;
     font-size: 1.2rem;
+  }
+
+  .sidenav__toggle {
+    flex: none;
+    color: var(--muted);
+  }
+
+  .sidenav__label {
+    white-space: nowrap;
+  }
+
+  /* recolhida: só os ícones; os nomes continuam disponíveis para leitores de tela */
+  .is-collapsed .sidenav {
+    width: var(--sidenav-w-collapsed);
+    padding-inline: 12px;
+  }
+
+  .is-collapsed .sidenav__head {
+    flex-direction: column;
+    gap: 12px;
+    padding-left: 0;
+  }
+
+  .is-collapsed .sidenav__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .is-collapsed .sidenav__link {
+    justify-content: center;
+    padding-inline: 0;
+  }
+
+  .is-collapsed .sidenav__user {
+    justify-content: center;
+    padding-left: 0;
   }
 
   .sidenav__nav {
@@ -263,47 +359,13 @@ async function signOut() {
   .sidenav__user {
     margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: 12px;
-    border-radius: var(--radius-lg);
-    background: var(--surface);
-    border: 1px solid var(--border);
+    padding: 6px 0 2px 8px;
   }
+}
 
-  .sidenav__profile {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text);
-    text-decoration: none;
-  }
-
-  .sidenav__name {
-    font-weight: 700;
-    font-size: 0.92rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .sidenav__level {
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
-
-  .sidenav__xp {
-    height: 6px;
-    border-radius: 3px;
-    background: var(--surface-3);
-    overflow: hidden;
-  }
-
-  .sidenav__xp span {
-    display: block;
-    height: 100%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    transition: width var(--t) var(--ease);
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .sidenav {
+    transition: none;
   }
 }
 </style>

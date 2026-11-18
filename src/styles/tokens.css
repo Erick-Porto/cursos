@@ -62,6 +62,7 @@
   --header-h: 56px;
   --bottomnav-h: 64px;
   --sidenav-w: 248px;
+  --sidenav-w-collapsed: 72px;
   --content-max: 1180px;
   --gutter: 16px;
 
