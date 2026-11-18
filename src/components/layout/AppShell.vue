@@ -363,8 +363,43 @@ watch(() => route.fullPath, () => (profileOpen.value = false))
   }
 }
 
+/* com mouse, o botão de reabrir fica atrás da logo e os dois trocam de lugar quando o cursor entra na barra */
+@media (min-width: 1024px) and (hover: hover) {
+  .is-collapsed .sidenav__head {
+    display: grid;
+    place-items: center;
+    justify-content: center;
+  }
+
+  .is-collapsed .brand--side,
+  .is-collapsed .sidenav__toggle {
+    grid-area: 1 / 1;
+    transition: opacity var(--t-fast);
+  }
+
+  .is-collapsed .sidenav__toggle {
+    opacity: 0;
+  }
+
+  .is-collapsed .sidenav:hover .sidenav__toggle,
+  .is-collapsed .sidenav__toggle:focus-visible {
+    opacity: 1;
+  }
+
+  .is-collapsed .sidenav:hover .brand--side {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .is-collapsed .sidenav__head:has(.sidenav__toggle:focus-visible) .brand--side {
+    opacity: 0;
+  }
+}
+
 @media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
-  .sidenav {
+  .sidenav,
+  .is-collapsed .brand--side,
+  .is-collapsed .sidenav__toggle {
     transition: none;
   }
 }
