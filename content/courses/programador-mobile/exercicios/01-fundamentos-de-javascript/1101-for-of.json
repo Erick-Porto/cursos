@@ -1,0 +1,65 @@
+{
+  "title": "for...of",
+  "lesson": "e11-repeticoes",
+  "recap": "O **`for...of`** dá uma volta para cada item de uma lista, na ordem. A cada volta, o item da vez fica numa caixa com o nome que você escolher.\n\n```javascript\nconst frutas = ['maçã', 'uva'];\nfor (const fruta of frutas) {\n  console.log(fruta);\n}\n// maçã\n// uva\n```",
+  "exercises": [
+    {
+      "id": "lista-de-compras",
+      "type": "code",
+      "prompt": "Copie a lista abaixo e use um `for...of` para mostrar cada item em uma linha, com um traço na frente.\n\n**Saída esperada**\n\n```plaintext\n- arroz\n- feijão\n- macarrão\n- café\n```",
+      "starter": "const compras = ['arroz', 'feijão', 'macarrão', 'café'];\n\n// escreva o for...of aqui\n",
+      "solution": "const compras = ['arroz', 'feijão', 'macarrão', 'café'];\n\nfor (const item of compras) {\n  console.log(`- ${item}`);\n}\n",
+      "expected_output": "- arroz\n- feijão\n- macarrão\n- café",
+      "explanation": "O laço dá uma volta por item. A template string junta o traço e o item da vez, e o `console.log` escreve uma linha em cada volta."
+    },
+    {
+      "id": "comanda-da-lanchonete",
+      "type": "code",
+      "prompt": "Cada pedido da lanchonete é uma ficha com `quantidade` e `nome`. Mostre uma linha por pedido, no formato da saída.\n\n**Saída esperada**\n\n```plaintext\n2 x Coxinha\n1 x Pastel\n3 x Suco de laranja\n```",
+      "starter": "const pedidos = [\n  { nome: 'Coxinha', quantidade: 2 },\n  { nome: 'Pastel', quantidade: 1 },\n  { nome: 'Suco de laranja', quantidade: 3 },\n];\n\n// escreva o for...of aqui\n",
+      "solution": "const pedidos = [\n  { nome: 'Coxinha', quantidade: 2 },\n  { nome: 'Pastel', quantidade: 1 },\n  { nome: 'Suco de laranja', quantidade: 3 },\n];\n\nfor (const pedido of pedidos) {\n  console.log(`${pedido.quantidade} x ${pedido.nome}`);\n}\n",
+      "expected_output": "2 x Coxinha\n1 x Pastel\n3 x Suco de laranja",
+      "explanation": "A caixa `pedido` guarda a ficha inteira da volta. Com o ponto, você lê cada campo dela: `pedido.quantidade` e `pedido.nome`."
+    },
+    {
+      "id": "notas-de-aprovados",
+      "type": "code",
+      "prompt": "Mostre só os alunos com nota **7 ou mais**. Use um `if` dentro do `for...of`.\n\n**Saída esperada**\n\n```plaintext\nAprovado: Bia\nAprovado: Davi\n```",
+      "starter": "const alunos = [\n  { nome: 'Ana', nota: 6.5 },\n  { nome: 'Bia', nota: 7 },\n  { nome: 'Caio', nota: 4 },\n  { nome: 'Davi', nota: 9.5 },\n];\n\n// escreva o for...of aqui\n",
+      "solution": "const alunos = [\n  { nome: 'Ana', nota: 6.5 },\n  { nome: 'Bia', nota: 7 },\n  { nome: 'Caio', nota: 4 },\n  { nome: 'Davi', nota: 9.5 },\n];\n\nfor (const aluno of alunos) {\n  if (aluno.nota >= 7) {\n    console.log(`Aprovado: ${aluno.nome}`);\n  }\n}\n",
+      "expected_output": "Aprovado: Bia\nAprovado: Davi",
+      "explanation": "O `if` roda uma vez por volta e decide para cada aluno. O `>=` inclui a nota 7, por isso a Bia aparece."
+    },
+    {
+      "id": "voltas-da-lista-vazia",
+      "type": "single",
+      "prompt": "Quantas voltas este laço dá?\n\n```javascript\nconst itens = [];\nfor (const item of itens) {\n  console.log(item);\n}\n```",
+      "options": {
+        "a": "Nenhuma: a lista está vazia, e nada aparece",
+        "b": "Uma volta, mostrando `undefined`",
+        "c": "Uma volta, mostrando `[]`",
+        "d": "O script quebra com uma mensagem de erro"
+      },
+      "answer": "a",
+      "explanation": "O `for...of` dá uma volta por item. Sem itens, são zero voltas: o script segue para a linha depois da `}`, sem erro e sem mostrar nada."
+    },
+    {
+      "id": "partes-do-for-of",
+      "type": "drag",
+      "prompt": "Arraste cada trecho do código para o que ele faz em `for (const item of conta.itens) { console.log(item.descricao); }`.",
+      "layout": "list",
+      "slots": [
+        { "key": "lista", "label": "A lista que será percorrida" },
+        { "key": "caixa", "label": "A caixa que guarda o item da vez" },
+        { "key": "corpo", "label": "O que acontece a cada volta" }
+      ],
+      "items": [
+        { "key": "a", "text": "`conta.itens`" },
+        { "key": "b", "text": "`const item`" },
+        { "key": "c", "text": "`console.log(item.descricao)`" }
+      ],
+      "answer": { "lista": "a", "caixa": "b", "corpo": "c" },
+      "explanation": "Depois do `of` vem a lista. Antes dele, a caixa que recebe um item por volta. Entre as chaves fica o trecho que se repete."
+    }
+  ]
+}

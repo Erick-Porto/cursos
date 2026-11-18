@@ -1,0 +1,61 @@
+{
+  "title": "toLowerCase e toUpperCase",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`toLowerCase`** devolve o texto em minúsculas, e o **`toUpperCase`**, em maiúsculas. Para comparar sem ligar para maiúsculas, ponha **os dois lados** em minúsculas.\n\n```javascript\nconst cidade = 'Olinda';\nconsole.log(cidade.toUpperCase());                // OLINDA\nconsole.log(cidade.toLowerCase() === 'olinda');   // true\n```",
+  "exercises": [
+    {
+      "id": "email-e-turma",
+      "type": "code",
+      "prompt": "A escola guarda os e-mails em letras minúsculas e o código da turma em letras maiúsculas. Use o `toLowerCase` no e-mail e o `toUpperCase` na turma.\n\n**Saída esperada**\n\n```plaintext\njoao.pereira@escola.com\nINFO-3B\n```",
+      "starter": "const email = 'Joao.Pereira@Escola.COM';\nconst turma = 'info-3b';\n\n// mostre o e-mail em minúsculas e a turma em maiúsculas aqui\n",
+      "solution": "const email = 'Joao.Pereira@Escola.COM';\nconst turma = 'info-3b';\n\nconsole.log(email.toLowerCase());\nconsole.log(turma.toUpperCase());\n",
+      "expected_output": "joao.pereira@escola.com\nINFO-3B",
+      "explanation": "O `toLowerCase` devolve uma cópia do texto em minúsculas, e o `toUpperCase`, uma cópia em maiúsculas. O ponto, a arroba, o hífen e os números não são letras e ficam como estão."
+    },
+    {
+      "id": "resposta-do-jogo",
+      "type": "code",
+      "prompt": "Num jogo de perguntas no celular, a resposta certa é `Brasília`, e o jogador digitou tudo em maiúsculas. Compare os textos como vieram e depois com os **dois lados** em minúsculas. Se a segunda comparação der certo, mostre a última linha com um `if`.\n\n**Saída esperada**\n\n```plaintext\nComo vieram: false\nEm minúsculas: true\nResposta certa\n```",
+      "starter": "const certa = 'Brasília';\nconst digitada = 'BRASÍLIA';\n\n// escreva as comparações e o if aqui\n",
+      "solution": "const certa = 'Brasília';\nconst digitada = 'BRASÍLIA';\n\nconsole.log(`Como vieram: ${digitada === certa}`);\nconsole.log(`Em minúsculas: ${digitada.toLowerCase() === certa.toLowerCase()}`);\n\nif (digitada.toLowerCase() === certa.toLowerCase()) {\n  console.log('Resposta certa');\n}\n",
+      "expected_output": "Como vieram: false\nEm minúsculas: true\nResposta certa",
+      "explanation": "Para o `===`, maiúscula e minúscula são letras diferentes. Com os dois lados em minúsculas, os dois textos viram `brasília`, e a comparação dá `true`. Converter um lado só não resolveria, porque o outro continuaria com maiúscula."
+    },
+    {
+      "id": "busca-na-feira",
+      "type": "code",
+      "prompt": "O aplicativo da feira procura produtos sem ligar para maiúsculas. A pessoa digitou `BaNaNa`. Use o `filter` e chame o `toLowerCase` e o `includes` em sequência para achar os produtos. Mostre quantos são e depois a lista.\n\n**Saída esperada**\n\n```plaintext\nAchados: 3\n[ 'Banana prata', 'banana nanica', 'BANANA DA TERRA' ]\n```",
+      "starter": "const produtos = ['Banana prata', 'Maçã gala', 'banana nanica', 'Uva Itália', 'BANANA DA TERRA'];\nconst busca = 'BaNaNa';\n\n// escreva o filter aqui\n",
+      "solution": "const produtos = ['Banana prata', 'Maçã gala', 'banana nanica', 'Uva Itália', 'BANANA DA TERRA'];\nconst busca = 'BaNaNa';\n\nconst termo = busca.toLowerCase();\nconst achados = produtos.filter((produto) => produto.toLowerCase().includes(termo));\n\nconsole.log(`Achados: ${achados.length}`);\nconsole.log(achados);\n",
+      "expected_output": "Achados: 3\n[ 'Banana prata', 'banana nanica', 'BANANA DA TERRA' ]",
+      "explanation": "Os dois lados precisam estar em minúsculas: a busca vira `banana`, e cada produto vira uma cópia em minúsculas antes do `includes`. A lista nova guarda os produtos originais, com a escrita de cada um."
+    },
+    {
+      "id": "deixar-em-maiusculas",
+      "type": "fill",
+      "prompt": "Complete o código para mostrar `PROMOÇÃO` na tela.\n\n```javascript\nconst aviso = 'promoção';\nconsole.log(aviso.___());\n```",
+      "answer": [
+        [
+          "toUpperCase"
+        ]
+      ],
+      "explanation": "O `toUpperCase` (*upper case*, \"caixa alta\") devolve o texto todo em maiúsculas. O `toLowerCase` faz o contrário: deixa tudo em minúsculas."
+    },
+    {
+      "id": "comparacoes-que-dao-true",
+      "type": "multiple",
+      "prompt": "Com `const bairro = 'Boa Viagem';`, quais comparações dão `true`?",
+      "options": {
+        "a": "`bairro === 'boa viagem'`",
+        "b": "`bairro.toUpperCase() === 'BOA VIAGEM'`",
+        "c": "`bairro.toLowerCase() === 'Boa Viagem'`",
+        "d": "`bairro.toLowerCase() === 'boa viagem'`"
+      },
+      "answer": [
+        "b",
+        "d"
+      ],
+      "explanation": "Cada método devolve o texto todo de um jeito só, e o outro lado precisa estar escrito igual. A alternativa com `toLowerCase` e `'Boa Viagem'` parece certa, mas compara `boa viagem` com um texto que tem maiúsculas, e dá `false`."
+    }
+  ]
+}

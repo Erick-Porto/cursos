@@ -1,0 +1,57 @@
+{
+  "title": "toEqual",
+  "lesson": "e08-testes-com-jest",
+  "recap": "O **`toEqual`** compara listas gaveta por gaveta, na ordem. O `toBe` pergunta se é a **mesma** fileira, e uma lista escrita no teste é outra fileira.\n\n```javascript\ntest('fica só o 8', () => {\n  expect([5, 8].filter((n) => n > 6)).toEqual([8]);\n});\n```",
+  "exercises": [
+    {
+      "id": "notas-azuis",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA escola quer só as notas **7 ou mais**. A função `notasAzuis` já está pronta. Escreva um teste com o nome `ficam só as notas 7 ou mais`, que confira se `notasAzuis([5, 8, 7, 3])` devolve a lista `[8, 7]`.\n\n**Saída esperada**\n\n```plaintext\n√ ficam só as notas 7 ou mais\n```",
+      "starter": "function notasAzuis(notas) {\n  return notas.filter((nota) => nota >= 7);\n}\n\n// escreva o teste aqui\n",
+      "solution": "function notasAzuis(notas) {\n  return notas.filter((nota) => nota >= 7);\n}\n\ntest('ficam só as notas 7 ou mais', () => {\n  expect(notasAzuis([5, 8, 7, 3])).toEqual([8, 7]);\n});\n",
+      "expected_output": "√ ficam só as notas 7 ou mais",
+      "explanation": "A função devolve uma lista nova, e o gabarito é outra lista. O `toEqual` abre as gavetas e compara uma por uma. Com `toBe`, o teste falharia, mesmo com o conteúdo igual."
+    },
+    {
+      "id": "halteres-leves",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA academia separa os halteres de até 5 quilos. Escreva **três testes** para a função `halteresLeves`, usando o `toEqual`.\n\n| Nome do teste | Chamada | Gabarito |\n|---|---|---|\n| `mantém a ordem da lista` | `halteresLeves([2, 10, 5, 8, 1])` | `[2, 5, 1]` |\n| `nenhum leve: a lista vazia` | `halteresLeves([10, 8])` | `[]` |\n| `todos leves: a lista inteira` | `halteresLeves([1, 2, 3])` | `[1, 2, 3]` |\n\n**Saída esperada**\n\n```plaintext\n√ mantém a ordem da lista\n√ nenhum leve: a lista vazia\n√ todos leves: a lista inteira\n```",
+      "starter": "function halteresLeves(pesos) {\n  return pesos.filter((peso) => peso <= 5);\n}\n\n// escreva os três testes aqui\n",
+      "solution": "function halteresLeves(pesos) {\n  return pesos.filter((peso) => peso <= 5);\n}\n\ntest('mantém a ordem da lista', () => {\n  expect(halteresLeves([2, 10, 5, 8, 1])).toEqual([2, 5, 1]);\n});\n\ntest('nenhum leve: a lista vazia', () => {\n  expect(halteresLeves([10, 8])).toEqual([]);\n});\n\ntest('todos leves: a lista inteira', () => {\n  expect(halteresLeves([1, 2, 3])).toEqual([1, 2, 3]);\n});\n",
+      "expected_output": "√ mantém a ordem da lista\n√ nenhum leve: a lista vazia\n√ todos leves: a lista inteira",
+      "explanation": "O `filter` mantém a ordem da lista, e o `toEqual` confere essa ordem gaveta por gaveta. Quando ninguém passa, o `filter` devolve a lista vazia, e o gabarito é `[]`."
+    },
+    {
+      "id": "encomendas-da-padaria",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA padaria quer separar as encomendas grandes e somar as unidades. Crie duas funções:\n\n- `encomendasGrandes(lista)` devolve só as encomendas com `quantidade` de **10 ou mais**\n- `totalDeUnidades(lista)` devolve a soma das quantidades, com `reduce`\n\nDepois, escreva os três testes da tabela. Use `toEqual` para lista e `toBe` para número.\n\n| Nome do teste | Chamada | Gabarito |\n|---|---|---|\n| `ficam as encomendas de 10 ou mais` | `encomendasGrandes(encomendas)` | as fichas da Rita e da Luna, nesta ordem |\n| `sem encomenda grande: a lista vazia` | `encomendasGrandes([{ cliente: 'Davi', quantidade: 5 }])` | `[]` |\n| `as unidades somam 27` | `totalDeUnidades(encomendas)` | `27` |\n\n**Saída esperada**\n\n```plaintext\n√ ficam as encomendas de 10 ou mais\n√ sem encomenda grande: a lista vazia\n√ as unidades somam 27\n```",
+      "starter": "const encomendas = [\n  { cliente: 'Rita', quantidade: 12 },\n  { cliente: 'Davi', quantidade: 5 },\n  { cliente: 'Luna', quantidade: 10 },\n];\n\n// escreva as duas funções aqui\n\n// escreva os três testes aqui\n",
+      "solution": "const encomendas = [\n  { cliente: 'Rita', quantidade: 12 },\n  { cliente: 'Davi', quantidade: 5 },\n  { cliente: 'Luna', quantidade: 10 },\n];\n\nfunction encomendasGrandes(lista) {\n  return lista.filter((encomenda) => encomenda.quantidade >= 10);\n}\n\nfunction totalDeUnidades(lista) {\n  return lista.reduce((total, encomenda) => total + encomenda.quantidade, 0);\n}\n\ntest('ficam as encomendas de 10 ou mais', () => {\n  expect(encomendasGrandes(encomendas)).toEqual([\n    { cliente: 'Rita', quantidade: 12 },\n    { cliente: 'Luna', quantidade: 10 },\n  ]);\n});\n\ntest('sem encomenda grande: a lista vazia', () => {\n  expect(encomendasGrandes([{ cliente: 'Davi', quantidade: 5 }])).toEqual([]);\n});\n\ntest('as unidades somam 27', () => {\n  expect(totalDeUnidades(encomendas)).toBe(27);\n});\n",
+      "expected_output": "√ ficam as encomendas de 10 ou mais\n√ sem encomenda grande: a lista vazia\n√ as unidades somam 27",
+      "explanation": "O `filter` devolve uma lista, por isso os dois primeiros testes usam `toEqual`, que abre cada gaveta e compara o conteúdo. O `reduce` devolve um número, e número se confere com `toBe`."
+    },
+    {
+      "id": "tobe-com-lista",
+      "type": "single",
+      "prompt": "O que acontece com este teste?\n\n```javascript\ntest('a fila tem Ana e Rui', () => {\n  expect(['Ana', 'Rui']).toBe(['Ana', 'Rui']);\n});\n```",
+      "options": {
+        "a": "Passa: as duas listas têm o mesmo conteúdo",
+        "b": "Falha: são duas fileiras, mesmo com conteúdo igual",
+        "c": "Passa: o `toBe` abre as gavetas uma por uma",
+        "d": "Falha: o `toBe` não aceita texto dentro da lista"
+      },
+      "answer": "b",
+      "explanation": "O `toBe` pergunta se é a **mesma** fileira, e cada lista escrita no código é uma fileira nova. O conteúdo bate, mas o teste falha. Para comparar gaveta por gaveta, use o `toEqual`."
+    },
+    {
+      "id": "ordem-no-toequal",
+      "type": "truefalse",
+      "prompt": "O teste `expect([8, 7]).toEqual([7, 8])` passa, porque as duas listas têm os mesmos números.",
+      "answer": false,
+      "explanation": "O `toEqual` compara gaveta por gaveta, na ordem: a primeira gaveta tem `8` de um lado e `7` do outro. Os números são os mesmos, mas a ordem é diferente, e o teste falha."
+    }
+  ]
+}

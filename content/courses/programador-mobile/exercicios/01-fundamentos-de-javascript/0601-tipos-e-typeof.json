@@ -1,0 +1,65 @@
+{
+  "title": "Tipos e typeof",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "Todo valor tem um **tipo**, o que cabe na caixa: `number`, `string` ou `boolean`. O **`typeof`** responde o tipo, como texto.\n\n```javascript\nconsole.log(typeof 9.5);       // number\nconsole.log(typeof '9.5');     // string\nconsole.log(typeof (9.5 > 5)); // boolean\n```",
+  "exercises": [
+    {
+      "id": "ficha-da-academia",
+      "type": "code",
+      "prompt": "A ficha de uma aluna da academia está em três caixas. Use o `typeof` para mostrar o tipo de cada valor, um por linha.\n\n**Saída esperada**\n\n```plaintext\nnome: string\nidade: number\nmensalidadePaga: boolean\n```",
+      "starter": "const nome = 'Marina';\nconst idade = 27;\nconst mensalidadePaga = true;\n\n// mostre aqui o tipo de cada caixa\n",
+      "solution": "const nome = 'Marina';\nconst idade = 27;\nconst mensalidadePaga = true;\n\nconsole.log('nome:', typeof nome);\nconsole.log('idade:', typeof idade);\nconsole.log('mensalidadePaga:', typeof mensalidadePaga);\n",
+      "expected_output": "nome: string\nidade: number\nmensalidadePaga: boolean",
+      "explanation": "O texto entre aspas é `string`, o número sem aspas é `number`, e `true` é `boolean`. A vírgula no `console.log` separa o rótulo da resposta do `typeof`."
+    },
+    {
+      "id": "preco-digitado-no-mercado",
+      "type": "code",
+      "prompt": "No mercado, o preço da etiqueta é um número, e o preço digitado no caixa é um texto. Para cada preço, mostre numa linha o tipo e o resultado de somar `1`, separados por vírgula no `console.log`.\n\n**Saída esperada**\n\n```plaintext\nnumber 9.5\nstring 8.51\n```",
+      "starter": "const precoEtiqueta = 8.5;\nconst precoDigitado = '8.5';\n\n// mostre aqui o tipo e a soma com 1 de cada preço\n",
+      "solution": "const precoEtiqueta = 8.5;\nconst precoDigitado = '8.5';\n\nconsole.log(typeof precoEtiqueta, precoEtiqueta + 1);\nconsole.log(typeof precoDigitado, precoDigitado + 1);\n",
+      "expected_output": "number 9.5\nstring 8.51",
+      "explanation": "Com um número de cada lado, o `+` soma: `8.5 + 1` dá `9.5`. Com um texto de um lado, o `+` junta os dois como texto: `'8.5' + 1` dá `'8.51'`."
+    },
+    {
+      "id": "gasto-com-passagem",
+      "type": "code",
+      "prompt": "Uma passagem de ônibus custa R$ 5,20, e você fez 3 viagens. Crie três caixas: `gasto`, com a conta; `gastoNaTela`, com o `gasto` em 2 casas, usando `toFixed(2)`; e `passouDe15`, com a resposta de `gasto > 15`. Depois, mostre o valor de `gastoNaTela` e o tipo de cada caixa.\n\n**Saída esperada**\n\n```plaintext\nGasto: 15.60\ngasto: number\ngastoNaTela: string\npassouDe15: boolean\n```",
+      "starter": "const passagem = 5.2;\nconst viagens = 3;\n\n// crie as três caixas e mostre as quatro linhas aqui\n",
+      "solution": "const passagem = 5.2;\nconst viagens = 3;\n\nconst gasto = passagem * viagens;\nconst gastoNaTela = gasto.toFixed(2);\nconst passouDe15 = gasto > 15;\n\nconsole.log('Gasto:', gastoNaTela);\nconsole.log('gasto:', typeof gasto);\nconsole.log('gastoNaTela:', typeof gastoNaTela);\nconsole.log('passouDe15:', typeof passouDe15);\n",
+      "expected_output": "Gasto: 15.60\ngasto: number\ngastoNaTela: string\npassouDe15: boolean",
+      "explanation": "A conta dá um `number`. O `toFixed(2)` devolve texto, por isso `gastoNaTela` é `string`: ele serve para mostrar, não para fazer conta. A comparação responde `true` ou `false`, um `boolean`."
+    },
+    {
+      "id": "senha-com-aspas",
+      "type": "single",
+      "prompt": "O que este código mostra?\n\n```javascript\nconst senha = '1234';\nconsole.log(typeof senha);\n```",
+      "options": {
+        "a": "`number`, porque a caixa só tem dígitos",
+        "b": "`boolean`, porque a caixa tem um valor",
+        "c": "`string`, porque o valor está entre aspas",
+        "d": "`1234`, porque o `typeof` mostra o valor"
+      },
+      "answer": "c",
+      "explanation": "As aspas mandam mais que o dígito: `'1234'` é texto, e o `typeof` responde `string`. A alternativa `number` atrai porque só há dígitos, mas o valor só seria número sem as aspas."
+    },
+    {
+      "id": "cada-valor-com-seu-tipo",
+      "type": "drag",
+      "prompt": "Arraste cada tipo para o valor que ele descreve.",
+      "layout": "list",
+      "slots": [
+        { "key": "numero", "label": "`15`" },
+        { "key": "texto", "label": "`'15'`" },
+        { "key": "comparacao", "label": "`15 > 10`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`boolean`" },
+        { "key": "b", "text": "`number`" },
+        { "key": "c", "text": "`string`" }
+      ],
+      "answer": { "numero": "b", "texto": "c", "comparacao": "a" },
+      "explanation": "Sem aspas, `15` é `number`. Com aspas, `'15'` é `string`, mesmo sendo feito de dígitos. A comparação `15 > 10` responde `true`, e `true` é `boolean`."
+    }
+  ]
+}

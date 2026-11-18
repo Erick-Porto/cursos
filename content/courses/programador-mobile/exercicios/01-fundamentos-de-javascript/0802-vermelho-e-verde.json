@@ -1,0 +1,72 @@
+{
+  "title": "Vermelho e verde: ler a falha",
+  "lesson": "e08-testes-com-jest",
+  "recap": "O **vermelho** é o teste que falhou, e o **verde**, o que passou. `Expected` é o gabarito, e `Received` é a resposta da função. Leia os dois e decida quem errou.\n\n```javascript\ntest('o dobro de 4 é 8', () => {\n  expect(dobro(4)).toBe(8);\n});\n// × o dobro de 4 é 8\n//   Expected: 8 | Received: 6\n```",
+  "exercises": [
+    {
+      "id": "ovos-por-duzia",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e corrija o código que vem depois delas.\n\nO teste está certo, mas a função `totalDeOvos` tem um erro. Rode o código, leia o vermelho e corrija **a função**.\n\n**O que aparece agora**\n\n```plaintext\n× 3 dúzias são 36 ovos\n  Expected: 36 | Received: 15\n```\n\n**Saída esperada**\n\n```plaintext\n√ 3 dúzias são 36 ovos\n```",
+      "starter": "// corrija o erro nesta função\nfunction totalDeOvos(duzias) {\n  return duzias + 12;\n}\n\ntest('3 dúzias são 36 ovos', () => {\n  expect(totalDeOvos(3)).toBe(36);\n});\n",
+      "solution": "function totalDeOvos(duzias) {\n  return duzias * 12;\n}\n\ntest('3 dúzias são 36 ovos', () => {\n  expect(totalDeOvos(3)).toBe(36);\n});\n",
+      "expected_output": "√ 3 dúzias são 36 ovos",
+      "explanation": "O `Received: 15` mostra que a função somou `3 + 12`. Cada dúzia tem 12 ovos, então a conta é de vezes. Com o `*`, a resposta bate com o gabarito."
+    },
+    {
+      "id": "meio-centavo-do-mercado",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e corrija o código que vem depois delas.\n\nO mercado calcula o desconto em centavos, sempre um número inteiro. Um teste passa e o outro falha. Corrija **a função** para os dois ficarem verdes.\n\n**O que aparece agora**\n\n```plaintext\n√ 10% de 1000 centavos são 100\n× 10% de 1255 centavos arredonda para 126\n  Expected: 126 | Received: 125.5\n```\n\n**Saída esperada**\n\n```plaintext\n√ 10% de 1000 centavos são 100\n√ 10% de 1255 centavos arredonda para 126\n```",
+      "starter": "// corrija o erro nesta função\nfunction calcularDesconto(centavos, percentual) {\n  return centavos * percentual / 100;\n}\n\ntest('10% de 1000 centavos são 100', () => {\n  expect(calcularDesconto(1000, 10)).toBe(100);\n});\n\ntest('10% de 1255 centavos arredonda para 126', () => {\n  expect(calcularDesconto(1255, 10)).toBe(126);\n});\n",
+      "solution": "function calcularDesconto(centavos, percentual) {\n  return Math.round(centavos * percentual / 100);\n}\n\ntest('10% de 1000 centavos são 100', () => {\n  expect(calcularDesconto(1000, 10)).toBe(100);\n});\n\ntest('10% de 1255 centavos arredonda para 126', () => {\n  expect(calcularDesconto(1255, 10)).toBe(126);\n});\n",
+      "expected_output": "√ 10% de 1000 centavos são 100\n√ 10% de 1255 centavos arredonda para 126",
+      "explanation": "O `Received: 125.5` tem meio centavo, e moeda não se parte. O `Math.round` leva ao inteiro mais perto, e 125.5 sobe para 126. O primeiro teste já passava porque a conta dele dava um número inteiro."
+    },
+    {
+      "id": "boletim-com-dois-erros",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e corrija o código que vem depois delas.\n\nO boletim da escola tem **dois erros**, um em cada função. Leia o `Expected` e o `Received` de cada teste e corrija as funções, sem mudar os testes.\n\n**O que aparece agora**\n\n```plaintext\n× a média de 8 e 6 é 7\n  Expected: 7 | Received: 11\nAna tirou 7\n× a frase do boletim traz o nome e a nota\n  Expected: \"Ana tirou 7\" | Received: undefined\n```\n\n**Saída esperada**\n\n```plaintext\n√ a média de 8 e 6 é 7\n√ a frase do boletim traz o nome e a nota\n```",
+      "starter": "// corrija o erro destas duas funções\nfunction calcularMedia(prova, trabalho) {\n  return prova + trabalho / 2;\n}\n\nfunction fraseDoBoletim(aluno, nota) {\n  console.log(`${aluno} tirou ${nota}`);\n}\n\ntest('a média de 8 e 6 é 7', () => {\n  expect(calcularMedia(8, 6)).toBe(7);\n});\n\ntest('a frase do boletim traz o nome e a nota', () => {\n  expect(fraseDoBoletim('Ana', 7)).toBe('Ana tirou 7');\n});\n",
+      "solution": "function calcularMedia(prova, trabalho) {\n  return (prova + trabalho) / 2;\n}\n\nfunction fraseDoBoletim(aluno, nota) {\n  return `${aluno} tirou ${nota}`;\n}\n\ntest('a média de 8 e 6 é 7', () => {\n  expect(calcularMedia(8, 6)).toBe(7);\n});\n\ntest('a frase do boletim traz o nome e a nota', () => {\n  expect(fraseDoBoletim('Ana', 7)).toBe('Ana tirou 7');\n});\n",
+      "expected_output": "√ a média de 8 e 6 é 7\n√ a frase do boletim traz o nome e a nota",
+      "explanation": "A divisão acontece antes da soma, por isso `8 + 6 / 2` dá 11. Os parênteses fazem a soma primeiro. Na segunda função, o `Received: undefined` avisa que faltou o `return`: o `console.log` só mostrou a foto do prato."
+    },
+    {
+      "id": "quem-errou",
+      "type": "single",
+      "prompt": "A função `calcularTaxa` devolve 10% do valor. O teste dela falhou assim:\n\n```plaintext\n× 10% de 2000 é 210\n  Expected: 210 | Received: 200\n```\n\nO que você faz?",
+      "options": {
+        "a": "Corrige a função, para ela devolver `210`",
+        "b": "Troca o `toBe` pelo `toEqual` no teste",
+        "c": "Roda o teste de novo, até ele passar",
+        "d": "Corrige o gabarito do teste para `200`"
+      },
+      "answer": "d",
+      "explanation": "10% de 2000 é 200: a função acertou, e o gabarito errou. Mudar a função para devolver `210` deixaria o teste verde e a conta errada. Antes de consertar, decida quem errou: a função ou o gabarito."
+    },
+    {
+      "id": "ciclo-do-vermelho",
+      "type": "drag",
+      "prompt": "O detector de fumaça tem um botão de teste para você ouvir o apito. Com um teste novo é igual. Coloque os passos em ordem.",
+      "layout": "flow",
+      "slots": [
+        { "key": "passo1", "label": "Passo 1" },
+        { "key": "passo2", "label": "Passo 2" },
+        { "key": "passo3", "label": "Passo 3" },
+        { "key": "passo4", "label": "Passo 4" },
+        { "key": "passo5", "label": "Passo 5" }
+      ],
+      "items": [
+        { "key": "a", "text": "Consertar a função" },
+        { "key": "b", "text": "Escrever o teste novo" },
+        { "key": "c", "text": "Rodar `npm test` e ver o verde" },
+        { "key": "d", "text": "Quebrar a função de propósito" },
+        { "key": "e", "text": "Rodar `npm test` e ler o vermelho" }
+      ],
+      "answer": { "passo1": "b", "passo2": "d", "passo3": "e", "passo4": "a", "passo5": "c" },
+      "explanation": "Um teste que nunca ficou vermelho pode não estar conferindo nada. Por isso, você quebra a função de propósito, lê o vermelho, conserta e vê o verde. Quem pula o vermelho não sabe se o teste apita."
+    }
+  ]
+}

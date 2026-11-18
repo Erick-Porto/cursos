@@ -1,0 +1,67 @@
+{
+  "title": "O 0.1 + 0.2 e o dinheiro em centavos",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "Decimais não são exatos no computador: `0.1 + 0.2` dá `0.30000000000000004`. Conte o dinheiro em **centavos inteiros**, como as moedas do caixa, que não se partem.\n\n```javascript\nconst centavos = Math.round(4.35 * 100);\nconsole.log(centavos);                    // 435\nconsole.log((centavos / 100).toFixed(2)); // 4.35\n```",
+  "exercises": [
+    {
+      "id": "soma-de-decimais",
+      "type": "code",
+      "prompt": "Um pão custa R$ 1,10, e um suco, R$ 2,20. Guarde a soma numa caixa chamada `soma`. Mostre a soma e, na linha de baixo, a resposta da comparação `soma === 3.3`.\n\n**Saída esperada**\n\n```plaintext\n3.3000000000000003\nfalse\n```",
+      "starter": "const pao = 1.1;\nconst suco = 2.2;\n\n// calcule a soma e faça a comparação aqui\n",
+      "solution": "const pao = 1.1;\nconst suco = 2.2;\n\nconst soma = pao + suco;\n\nconsole.log(soma);\nconsole.log(soma === 3.3);\n",
+      "expected_output": "3.3000000000000003\nfalse",
+      "explanation": "O computador guarda tudo em binário, e nele 1,1 e 2,2 nunca acabam, como 1 dividido por 3 em decimal. A sobra minúscula aparece na soma e faz a comparação responder `false`."
+    },
+    {
+      "id": "convertendo-precos",
+      "type": "code",
+      "prompt": "Converta os preços do mercado para centavos inteiros. Mostre primeiro o leite vezes 100, sem arredondar, para ver a sobra. Depois, mostre o leite e o café em centavos, com `Math.round`.\n\n**Saída esperada**\n\n```plaintext\nLeite vezes 100: 434.99999999999994\nLeite em centavos: 435\nCafé em centavos: 1999\n```",
+      "starter": "const leite = 4.35;\nconst cafe = 19.99;\n\n// mostre as três linhas aqui\n",
+      "solution": "const leite = 4.35;\nconst cafe = 19.99;\n\nconsole.log('Leite vezes 100:', leite * 100);\nconsole.log('Leite em centavos:', Math.round(leite * 100));\nconsole.log('Café em centavos:', Math.round(cafe * 100));\n",
+      "expected_output": "Leite vezes 100: 434.99999999999994\nLeite em centavos: 435\nCafé em centavos: 1999",
+      "explanation": "Multiplicar por 100 pode deixar uma sobra do binário. O `Math.round` leva ao inteiro mais perto e acerta o valor: `434.99999999999994` vira `435`."
+    },
+    {
+      "id": "carrinho-do-mercado",
+      "type": "code",
+      "prompt": "O carrinho tem três produtos e 5% de desconto. Converta cada preço para centavos, uma vez, com `Math.round`. Faça as contas em centavos e arredonde o desconto com `Math.round`. Só na hora de mostrar, volte a reais com `/ 100` e `toFixed(2)`.\n\n**Saída esperada**\n\n```plaintext\nSubtotal: R$ 41.14\nDesconto: R$ 2.06\nTotal: R$ 39.08\n```",
+      "starter": "const arroz = 24.9;\nconst feijao = 8.75;\nconst oleo = 7.49;\nconst percentual = 5;\n\n// converta os preços para centavos aqui\n\n// calcule o subtotal, o desconto e o total em centavos\n\n// mostre os três valores em reais\n",
+      "solution": "const arroz = 24.9;\nconst feijao = 8.75;\nconst oleo = 7.49;\nconst percentual = 5;\n\nconst arrozCentavos = Math.round(arroz * 100);\nconst feijaoCentavos = Math.round(feijao * 100);\nconst oleoCentavos = Math.round(oleo * 100);\n\nconst subtotalCentavos = arrozCentavos + feijaoCentavos + oleoCentavos;\nconst descontoCentavos = Math.round(subtotalCentavos * percentual / 100);\nconst totalCentavos = subtotalCentavos - descontoCentavos;\n\nconsole.log('Subtotal: R$', (subtotalCentavos / 100).toFixed(2));\nconsole.log('Desconto: R$', (descontoCentavos / 100).toFixed(2));\nconsole.log('Total: R$', (totalCentavos / 100).toFixed(2));\n",
+      "expected_output": "Subtotal: R$ 41.14\nDesconto: R$ 2.06\nTotal: R$ 39.08",
+      "explanation": "Em centavos, o subtotal é 4114. O desconto dá 205,7 e arredonda para 206, e o total é 3908. Os parênteses fazem a divisão por 100 antes do `toFixed(2)`."
+    },
+    {
+      "id": "regras-do-dinheiro",
+      "type": "multiple",
+      "prompt": "Quais frases sobre dinheiro em centavos estão certas? Marque todas.",
+      "options": {
+        "a": "Em centavos inteiros, a conta não tem a sobra do binário",
+        "b": "Multiplicar por 100 sempre dá um inteiro, sem precisar arredondar",
+        "c": "A conversão acontece uma vez, na entrada, com `Math.round`",
+        "d": "Para mostrar em reais, você divide os centavos por 100",
+        "e": "Guardar o preço entre aspas, como texto, evita a sobra na conta"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "Inteiro não tem sobra, por isso a conta em centavos é exata. Multiplicar por 100 pode dar `434.99999999999994`, e é por isso que o `Math.round` entra na conversão. Preço entre aspas é texto, e o `+` com texto junta em vez de somar."
+    },
+    {
+      "id": "caminho-do-dinheiro",
+      "type": "drag",
+      "prompt": "Uma compra tem produto e frete em reais. Arraste cada trecho para a sua etapa no caminho do dinheiro. Um dos trechos não entra.",
+      "layout": "flow",
+      "slots": [
+        { "key": "entrada", "label": "Entrada: reais viram centavos" },
+        { "key": "conta", "label": "Conta: tudo em centavos" },
+        { "key": "saida", "label": "Saída: centavos viram reais" }
+      ],
+      "items": [
+        { "key": "a", "text": "`(totalCentavos / 100).toFixed(2)`" },
+        { "key": "b", "text": "`Math.round(frete * 100)`" },
+        { "key": "c", "text": "`produtoCentavos + freteCentavos`" },
+        { "key": "d", "text": "`frete.toFixed(2) + produto`" }
+      ],
+      "answer": { "entrada": "b", "conta": "c", "saida": "a" },
+      "explanation": "Primeiro, `Math.round(frete * 100)` converte. Depois, a soma acontece em centavos inteiros. No fim, `/ 100` e `toFixed(2)` mostram em reais. O trecho `frete.toFixed(2) + produto` junta texto com número e não faz a soma."
+    }
+  ]
+}

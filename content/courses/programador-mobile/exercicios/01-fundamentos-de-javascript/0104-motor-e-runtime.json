@@ -1,0 +1,73 @@
+{
+  "title": "Motor e runtime",
+  "lesson": "e01a-a-web-e-o-javascript",
+  "theory_only": true,
+  "theory_reason": "O tema compara os lugares onde o JavaScript roda, e o compilador on-line mostra só um deles: o Node.",
+  "recap": "O **motor** lê e executa o seu código. O **runtime** é o motor somado às **APIs**, as ferramentas do lugar onde ele roda. O que é da linguagem roda em qualquer lugar.\n\n```javascript\n5 * 4            // nos dois\ndocument.title   // só no navegador\nprocess.version  // só no Node\n```",
+  "exercises": [
+    {
+      "id": "papel-do-tc39",
+      "type": "single",
+      "prompt": "As regras oficiais do JavaScript estão num documento público, o **ECMAScript**. Qual é o papel do comitê **TC39**?",
+      "options": {
+        "a": "Executar o código JavaScript dentro do navegador",
+        "b": "Revisar as regras e publicar uma edição por ano",
+        "c": "Criar as ferramentas que o Node oferece ao programa",
+        "d": "Corrigir os erros no código de quem está programando"
+      },
+      "answer": "b",
+      "explanation": "O TC39 revisa as regras do ECMAScript e publica uma edição nova por ano: ES2015, ES2016 e assim por diante. Quem executa o código é o **motor**, e não o comitê."
+    },
+    {
+      "id": "onde-esta-cada-motor",
+      "type": "drag",
+      "prompt": "Arraste cada motor de JavaScript para o lugar onde você o encontra.",
+      "layout": "list",
+      "slots": [
+        { "key": "chrome", "label": "Chrome, Edge e Node.js" },
+        { "key": "safari", "label": "Safari" },
+        { "key": "firefox", "label": "Firefox" },
+        { "key": "native", "label": "Apps React Native" }
+      ],
+      "items": [
+        { "key": "a", "text": "Hermes" },
+        { "key": "b", "text": "SpiderMonkey" },
+        { "key": "c", "text": "V8" },
+        { "key": "d", "text": "JavaScriptCore" }
+      ],
+      "answer": { "chrome": "c", "safari": "d", "firefox": "b", "native": "a" },
+      "explanation": "O **V8**, do Google, está no Chrome, no Edge e no Node.js. O **JavaScriptCore**, da Apple, está no Safari. O **SpiderMonkey**, da Mozilla, está no Firefox. O **Hermes**, da Meta, roda os apps React Native. O Node.js não tem motor próprio: ele usa o mesmo V8 do Chrome."
+    },
+    {
+      "id": "linhas-que-rodam-no-node",
+      "type": "multiple",
+      "prompt": "Quais linhas funcionam no **Node**? Marque todas as certas.",
+      "options": {
+        "a": "`document.title`",
+        "b": "`7 * 6`",
+        "c": "`process.version`",
+        "d": "`alert('Ônibus chegou')`",
+        "e": "`console.log('Ônibus chegou')`"
+      },
+      "answer": ["b", "c", "e"],
+      "explanation": "A conta é da linguagem, o `console.log` existe nos dois lugares e o `process` é uma ferramenta do Node. Já `document` e `alert` são do navegador: no Node, aparece `document is not defined` ou `alert is not defined`."
+    },
+    {
+      "id": "o-que-e-runtime",
+      "type": "fill",
+      "prompt": "O runtime é o ___ somado às ___, as ferramentas prontas do lugar onde ele roda.",
+      "answer": [
+        ["motor", "engine"],
+        ["APIs", "API"]
+      ],
+      "explanation": "O motor só entende a linguagem: contas, textos e listas. As **APIs** trazem o resto, como `document` no navegador e `fs` no Node. Juntos, eles formam o **runtime**. Motor sozinho não é runtime: sem as APIs, ele nem sabe o que é uma página."
+    },
+    {
+      "id": "mesmo-motor-outro-lugar",
+      "type": "truefalse",
+      "prompt": "O Chrome e o Node usam o mesmo motor, o V8. Por isso, todo código que roda no Chrome também roda no Node.",
+      "answer": false,
+      "explanation": "O motor é o mesmo, mas as ferramentas do lugar mudam. É como o carro comum e a ambulância: só a ambulância tem sirene. No Chrome existe `document`; no Node, não."
+    }
+  ]
+}

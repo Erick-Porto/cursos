@@ -1,0 +1,54 @@
+{
+  "title": "Number.isInteger",
+  "lesson": "e10-decisoes",
+  "recap": "**`Number.isInteger`** responde se o valor é um número inteiro: `true` ou `false`. Texto não conta: converta antes, com `Number`.\n\n```javascript\nconsole.log(Number.isInteger(7));     // true\nconsole.log(Number.isInteger(1.5));   // false\nconsole.log(Number.isInteger('7'));   // false\n```",
+  "exercises": [
+    {
+      "id": "conferir-os-numeros",
+      "type": "code",
+      "prompt": "Mostre, com `Number.isInteger`, se cada valor é inteiro. Na última linha, converta o texto com `Number` antes de perguntar.\n\n**Saída esperada**\n\n```plaintext\nCaixas: true\nQuilos: false\nDigitado: false\nDigitado convertido: true\n```",
+      "starter": "const caixas = 3;\nconst quilos = 1.5;\nconst digitado = '12';\n\n// mostre as quatro respostas aqui\n",
+      "solution": "const caixas = 3;\nconst quilos = 1.5;\nconst digitado = '12';\n\nconsole.log('Caixas:', Number.isInteger(caixas));\nconsole.log('Quilos:', Number.isInteger(quilos));\nconsole.log('Digitado:', Number.isInteger(digitado));\nconsole.log('Digitado convertido:', Number.isInteger(Number(digitado)));\n",
+      "expected_output": "Caixas: true\nQuilos: false\nDigitado: false\nDigitado convertido: true",
+      "explanation": "`'12'` é um texto, e o `Number.isInteger` responde `false` para texto. Depois do `Number`, o valor vira o número 12, e a resposta passa a ser `true`."
+    },
+    {
+      "id": "ovos-da-feira",
+      "type": "code",
+      "prompt": "Na feira, ovo só se vende inteiro. Escreva a função `conferirOvos(quantidade)`. Use `!Number.isInteger(quantidade)` no `if` para recusar a quantidade quebrada e mostre uma das duas mensagens da saída.\n\n**Saída esperada**\n\n```plaintext\n12 ovos: pedido aceito\n2.5 ovos: não vendemos ovo partido\n30 ovos: pedido aceito\n```",
+      "starter": "// escreva a função conferirOvos aqui\n\nconferirOvos(12);\nconferirOvos(2.5);\nconferirOvos(30);\n",
+      "solution": "function conferirOvos(quantidade) {\n  if (!Number.isInteger(quantidade)) {\n    console.log(`${quantidade} ovos: não vendemos ovo partido`);\n  } else {\n    console.log(`${quantidade} ovos: pedido aceito`);\n  }\n}\n\nconferirOvos(12);\nconferirOvos(2.5);\nconferirOvos(30);\n",
+      "expected_output": "12 ovos: pedido aceito\n2.5 ovos: não vendemos ovo partido\n30 ovos: pedido aceito",
+      "explanation": "`Number.isInteger(2.5)` dá `false`, e o `!` inverte para `true`: a pergunta vira \"não é inteiro?\". Por isso o caminho do `if` recusa o 2.5, e o `else` aceita os inteiros."
+    },
+    {
+      "id": "series-do-treino",
+      "type": "code",
+      "prompt": "O app da academia recebe o número de séries como texto. Escreva a função `lerSeries(texto)`: ela tira os espaços das pontas, converte com `Number` e devolve o número quando ele é **inteiro, de 1 a 5**. Nos outros casos, ela devolve `null`.\n\n**Saída esperada**\n\n```plaintext\n3\n5\nnull\nnull\nnull\nnull\n```",
+      "starter": "// escreva a função lerSeries aqui\n\nconsole.log(lerSeries('3'));\nconsole.log(lerSeries(' 5 '));\nconsole.log(lerSeries('2.5'));\nconsole.log(lerSeries('6'));\nconsole.log(lerSeries('três'));\nconsole.log(lerSeries(''));\n",
+      "solution": "function lerSeries(texto) {\n  const series = Number(texto.trim());\n  if (Number.isInteger(series) && series >= 1 && series <= 5) {\n    return series;\n  } else {\n    return null;\n  }\n}\n\nconsole.log(lerSeries('3'));\nconsole.log(lerSeries(' 5 '));\nconsole.log(lerSeries('2.5'));\nconsole.log(lerSeries('6'));\nconsole.log(lerSeries('três'));\nconsole.log(lerSeries(''));\n",
+      "expected_output": "3\n5\nnull\nnull\nnull\nnull",
+      "explanation": "As três perguntas vão juntas com `&&`, e todas precisam dar `true`. `'três'` vira `NaN`, que não é inteiro. `''` vira 0, que é inteiro, mas não passa em `series >= 1`."
+    },
+    {
+      "id": "inteiro-em-texto",
+      "type": "single",
+      "prompt": "O que aparece na tela?\n\n```javascript\nconsole.log(Number.isInteger('8'));\n```",
+      "options": {
+        "a": "`8`, porque ele converte o texto",
+        "b": "`true`, porque 8 é um número inteiro",
+        "c": "`false`, porque `'8'` é um texto",
+        "d": "`NaN`, porque texto não é número"
+      },
+      "answer": "c",
+      "explanation": "O `Number.isInteger` não converte nada: ele responde `false` para qualquer valor que não seja número. A alternativa do `true` engana porque o 8 parece inteiro, mas entre aspas ele é texto. Para aceitar, converta antes: `Number.isInteger(Number('8'))`."
+    },
+    {
+      "id": "virgula-no-numero",
+      "type": "truefalse",
+      "prompt": "Depois de `const caixas = Number('3,5');`, a linha `Number.isInteger(caixas)` dá `false`.",
+      "answer": true,
+      "explanation": "O `Number` não entende vírgula, então `caixas` guarda `NaN`. Como `NaN` não é um número inteiro, a resposta é `false`, e a afirmação está certa. Com `'3.5'`, a resposta também seria `false`, mas por outro motivo: 3.5 tem casas depois do ponto."
+    }
+  ]
+}

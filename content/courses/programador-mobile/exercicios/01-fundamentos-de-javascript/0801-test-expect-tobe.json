@@ -1,0 +1,64 @@
+{
+  "title": "test, expect e toBe",
+  "lesson": "e08-testes-com-jest",
+  "recap": "Um **teste** é uma prova com gabarito que o computador corrige. O `test` dá o nome da questão, o `expect` pega a resposta da função, e o `toBe` confere o gabarito.\n\n```javascript\ntest('o dobro de 4 é 8', () => {\n  expect(dobro(4)).toBe(8);\n});\n// √ o dobro de 4 é 8\n```",
+  "exercises": [
+    {
+      "id": "duzia-de-paes",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA padaria vende pão por dúzia. Escreva um teste com o nome `uma dúzia de pães de 50 centavos custa 600`, que confira se `precoDaDuzia(50)` devolve `600`.\n\n**Saída esperada**\n\n```plaintext\n√ uma dúzia de pães de 50 centavos custa 600\n```",
+      "starter": "function precoDaDuzia(precoDoPao) {\n  return precoDoPao * 12;\n}\n\n// escreva o teste aqui\n",
+      "solution": "function precoDaDuzia(precoDoPao) {\n  return precoDoPao * 12;\n}\n\ntest('uma dúzia de pães de 50 centavos custa 600', () => {\n  expect(precoDaDuzia(50)).toBe(600);\n});\n",
+      "expected_output": "√ uma dúzia de pães de 50 centavos custa 600",
+      "explanation": "O `test` dá o nome da questão. Dentro dele, o `expect` pega a resposta da função, e o `toBe(600)` compara com o gabarito. Como os dois batem, a linha sai com `√`."
+    },
+    {
+      "id": "portaria-da-academia",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA academia só libera a entrada de quem tem 16 anos ou mais. Escreva **três testes** para as funções do código, um para cada linha da tabela, com os nomes da saída.\n\n| Chamada | Gabarito |\n|---|---|\n| `podeTreinar(16)` | `true` |\n| `podeTreinar(15)` | `false` |\n| `avisoDaPorta('Rui')` | `'Bom treino, Rui!'` |\n\n**Saída esperada**\n\n```plaintext\n√ com 16 anos pode treinar\n√ com 15 anos não pode treinar\n√ o aviso chama o aluno pelo nome\n```",
+      "starter": "function podeTreinar(idade) {\n  return idade >= 16;\n}\n\nfunction avisoDaPorta(nome) {\n  return `Bom treino, ${nome}!`;\n}\n\n// escreva os três testes aqui\n",
+      "solution": "function podeTreinar(idade) {\n  return idade >= 16;\n}\n\nfunction avisoDaPorta(nome) {\n  return `Bom treino, ${nome}!`;\n}\n\ntest('com 16 anos pode treinar', () => {\n  expect(podeTreinar(16)).toBe(true);\n});\n\ntest('com 15 anos não pode treinar', () => {\n  expect(podeTreinar(15)).toBe(false);\n});\n\ntest('o aviso chama o aluno pelo nome', () => {\n  expect(avisoDaPorta('Rui')).toBe('Bom treino, Rui!');\n});\n",
+      "expected_output": "√ com 16 anos pode treinar\n√ com 15 anos não pode treinar\n√ o aviso chama o aluno pelo nome",
+      "explanation": "O `toBe` confere número, texto e `true` ou `false`. O caso de 16 anos é o limite da regra, e o de 15 anos é o primeiro que fica de fora: os dois juntos mostram que o `>=` está certo."
+    },
+    {
+      "id": "desconto-da-feira",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nAgora você escreve a função e os testes. Crie `calcularDesconto(centavos, percentual = 5)`, que devolve o desconto em centavos, arredondado com `Math.round`. Depois, escreva um teste para cada linha da tabela, com os nomes da saída.\n\n| Chamada | Gabarito |\n|---|---|\n| `calcularDesconto(1000, 10)` | `100` |\n| `calcularDesconto(999, 5)` | `50` |\n| `calcularDesconto(2000)` | `100` |\n| `typeof calcularDesconto(1000, 10)` | `'number'` |\n\n**Saída esperada**\n\n```plaintext\n√ 10% de 1000 centavos são 100\n√ 5% de 999 centavos arredonda para 50\n√ sem o percentual, o desconto é de 5%\n√ o desconto é um número\n```",
+      "starter": "// escreva a função calcularDesconto aqui\n\n// escreva os quatro testes aqui\n",
+      "solution": "function calcularDesconto(centavos, percentual = 5) {\n  return Math.round(centavos * percentual / 100);\n}\n\ntest('10% de 1000 centavos são 100', () => {\n  expect(calcularDesconto(1000, 10)).toBe(100);\n});\n\ntest('5% de 999 centavos arredonda para 50', () => {\n  expect(calcularDesconto(999, 5)).toBe(50);\n});\n\ntest('sem o percentual, o desconto é de 5%', () => {\n  expect(calcularDesconto(2000)).toBe(100);\n});\n\ntest('o desconto é um número', () => {\n  expect(typeof calcularDesconto(1000, 10)).toBe('number');\n});\n",
+      "expected_output": "√ 10% de 1000 centavos são 100\n√ 5% de 999 centavos arredonda para 50\n√ sem o percentual, o desconto é de 5%\n√ o desconto é um número",
+      "explanation": "A conta de 5% sobre 999 dá 49.95, e o `Math.round` sobe para 50. O teste sem o segundo argumento confere o valor padrão. O `typeof` responde o tipo como texto, por isso o gabarito é `'number'`."
+    },
+    {
+      "id": "prova-e-teste",
+      "type": "drag",
+      "prompt": "Um teste é uma prova com gabarito. Veja o teste abaixo e arraste cada item para o papel dele na prova.\n\n```javascript\nexpect(contarOvos(2)).toBe(24);\n```",
+      "layout": "list",
+      "slots": [
+        { "key": "questao", "label": "A questão" },
+        { "key": "resposta", "label": "A resposta do aluno" },
+        { "key": "gabarito", "label": "O gabarito" },
+        { "key": "correcao", "label": "A correção" }
+      ],
+      "items": [
+        { "key": "a", "text": "`24`, calculado uma vez, à mão" },
+        { "key": "b", "text": "Chamar `contarOvos(2)`" },
+        { "key": "c", "text": "O computador compara os dois valores" },
+        { "key": "d", "text": "O valor que `contarOvos(2)` devolve" }
+      ],
+      "answer": { "questao": "b", "resposta": "d", "gabarito": "a", "correcao": "c" },
+      "explanation": "A questão chama a função com uma entrada, e o valor devolvido é a resposta. O gabarito é o resultado que você espera, calculado à mão. A correção fica com o computador, sempre do mesmo jeito."
+    },
+    {
+      "id": "test-sem-import",
+      "type": "truefalse",
+      "prompt": "Num arquivo de teste do Jest, o `test` e o `expect` funcionam sem `import`.",
+      "answer": true,
+      "explanation": "O Jest entrega o `test` e o `expect` a todo arquivo de teste. O `import` continua necessário para a **sua** função, porque ela mora em outro arquivo."
+    }
+  ]
+}

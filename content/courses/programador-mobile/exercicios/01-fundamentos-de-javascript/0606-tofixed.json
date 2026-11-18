@@ -1,0 +1,55 @@
+{
+  "title": "toFixed",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "O **`toFixed(2)`** mostra o número com 2 casas depois do ponto e devolve **texto**. Ele serve para mostrar, não para fazer conta.\n\n```javascript\nconst preco = 7.5;\nconsole.log(preco.toFixed(2));        // 7.50\nconsole.log(typeof preco.toFixed(2)); // string\n```",
+  "exercises": [
+    {
+      "id": "etiquetas-da-padaria",
+      "type": "code",
+      "prompt": "Monte as etiquetas da padaria. Mostre o preço de cada produto com 2 casas depois do ponto.\n\n**Saída esperada**\n\n```plaintext\nPão: R$ 0.80\nBolo: R$ 25.00\nSonho: R$ 6.50\n```",
+      "starter": "const pao = 0.8;\nconst bolo = 25;\nconst sonho = 6.5;\n\n// mostre as etiquetas aqui\n",
+      "solution": "const pao = 0.8;\nconst bolo = 25;\nconst sonho = 6.5;\n\nconsole.log('Pão: R$', pao.toFixed(2));\nconsole.log('Bolo: R$', bolo.toFixed(2));\nconsole.log('Sonho: R$', sonho.toFixed(2));\n",
+      "expected_output": "Pão: R$ 0.80\nBolo: R$ 25.00\nSonho: R$ 6.50",
+      "explanation": "O `toFixed(2)` completa com zeros até ter 2 casas: `0.8` aparece como `0.80`, e `25`, como `25.00`."
+    },
+    {
+      "id": "gastos-do-dia",
+      "type": "code",
+      "prompt": "Os gastos do dia estão em centavos. Some os dois em centavos e mostre cada valor em reais, com 2 casas. Use parênteses para a divisão por 100 acontecer antes do `toFixed(2)`.\n\n**Saída esperada**\n\n```plaintext\nPassagem: R$ 5.20\nLanche: R$ 14.75\nTotal: R$ 19.95\n```",
+      "starter": "const passagem = 520;\nconst lanche = 1475;\n\n// calcule o total e mostre as três linhas aqui\n",
+      "solution": "const passagem = 520;\nconst lanche = 1475;\n\nconst total = passagem + lanche;\n\nconsole.log('Passagem: R$', (passagem / 100).toFixed(2));\nconsole.log('Lanche: R$', (lanche / 100).toFixed(2));\nconsole.log('Total: R$', (total / 100).toFixed(2));\n",
+      "expected_output": "Passagem: R$ 5.20\nLanche: R$ 14.75\nTotal: R$ 19.95",
+      "explanation": "Os parênteses fazem a divisão primeiro, e o `toFixed(2)` vale para o resultado. A soma acontece em centavos inteiros, antes de virar texto."
+    },
+    {
+      "id": "total-que-nao-soma",
+      "type": "code",
+      "prompt": "O código abaixo mostra `Total: R$ 12.5040.00`. O `toFixed(2)` devolve texto, e o `+` com texto junta. Corrija o programa: a conta do total usa os números, e o `toFixed(2)` do total fica só na hora de mostrar.\n\n**Saída esperada**\n\n```plaintext\nFrete: R$ 12.50\nProduto: R$ 40.00\nTotal: R$ 52.50\n```",
+      "starter": "const frete = 12.5;\nconst produto = 40;\n\nconst freteNaTela = frete.toFixed(2);\nconst produtoNaTela = produto.toFixed(2);\n\n// corrija as linhas do total\nconst total = freteNaTela + produtoNaTela;\n\nconsole.log('Frete: R$', freteNaTela);\nconsole.log('Produto: R$', produtoNaTela);\nconsole.log('Total: R$', total);\n",
+      "solution": "const frete = 12.5;\nconst produto = 40;\n\nconst freteNaTela = frete.toFixed(2);\nconst produtoNaTela = produto.toFixed(2);\n\nconst total = frete + produto;\n\nconsole.log('Frete: R$', freteNaTela);\nconsole.log('Produto: R$', produtoNaTela);\nconsole.log('Total: R$', total.toFixed(2));\n",
+      "expected_output": "Frete: R$ 12.50\nProduto: R$ 40.00\nTotal: R$ 52.50",
+      "explanation": "`frete + produto` soma dois números e dá `52.5`. O `toFixed(2)` entra só no `console.log`, para mostrar `52.50`. Somar os dois textos colava um no outro."
+    },
+    {
+      "id": "tofixed-devolve-numero",
+      "type": "truefalse",
+      "prompt": "Depois de `const preco = 12.5;`, o resultado de `preco.toFixed(2)` é um número, pronto para entrar em outras contas.",
+      "answer": false,
+      "explanation": "O `toFixed(2)` devolve o texto `'12.50'`, um valor do tipo `string`. Por isso as contas são feitas com números, e ele fica só na hora de mostrar."
+    },
+    {
+      "id": "quais-mostram-duas-casas",
+      "type": "multiple",
+      "prompt": "Quais trechos mostram `9.50` na tela? Marque todos.\n\n```javascript\nconst centavos = 950;\n```",
+      "options": {
+        "a": "`console.log(centavos.toFixed(2) / 100);`",
+        "b": "`console.log((centavos / 100).toFixed(2));`",
+        "c": "`console.log((centavos / 100).toFixed(1));`",
+        "d": "`const reais = centavos / 100; console.log(reais.toFixed(2));`",
+        "e": "`console.log(centavos / 100);`"
+      },
+      "answer": ["b", "d"],
+      "explanation": "A divisão precisa vir antes do `toFixed(2)`, entre parênteses ou guardada numa caixa. A alternativa `centavos.toFixed(2) / 100` atrai, mas a divisão vem depois e o resultado volta a ser número: `9.5`, sem o zero."
+    }
+  ]
+}

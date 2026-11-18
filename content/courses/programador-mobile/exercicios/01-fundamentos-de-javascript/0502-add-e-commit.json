@@ -1,0 +1,71 @@
+{
+  "title": "git add e git commit",
+  "lesson": "e05-git-e-github",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line não tem Git: o commit acontece no terminal, na pasta do projeto.",
+  "recap": "O **commit** é uma foto do projeto, com uma legenda. Ele se faz em dois passos, como a foto de grupo: o `git add .` chama para a foto, e o `git commit -m` clica.\n\n```bash\ngit add .\ngit commit -m \"Cria o cardápio da padaria\"\n```",
+  "exercises": [
+    {
+      "id": "foto-de-grupo",
+      "type": "drag",
+      "prompt": "Você corrigiu o preço do pão no projeto da padaria e quer registrar a mudança. Arraste cada ação para a sua etapa, na ordem da foto de grupo. Uma peça sobra.",
+      "layout": "flow",
+      "slots": [
+        { "key": "cena", "label": "Arrumar a cena" },
+        { "key": "chamar", "label": "Chamar quem vai sair na foto" },
+        { "key": "clicar", "label": "Clicar e gravar a legenda" },
+        { "key": "album", "label": "Abrir o álbum e ver a foto" }
+      ],
+      "items": [
+        { "key": "a", "text": "`git log --oneline`" },
+        { "key": "b", "text": "Salvar o arquivo alterado" },
+        { "key": "c", "text": "`git commit -m \"Corrige o preço do pão\"`" },
+        { "key": "d", "text": "`git add .`" },
+        { "key": "e", "text": "`git status`" }
+      ],
+      "answer": { "cena": "b", "chamar": "d", "clicar": "c", "album": "a" },
+      "explanation": "Primeiro a mudança precisa estar salva. O `git add .` chama para a foto, o `git commit -m` clica e grava a legenda, e o `git log --oneline` mostra o álbum. O `git status` sobra: ele é o painel do que mudou desde a última foto e não lista as fotos."
+    },
+    {
+      "id": "mudanca-depois-do-add",
+      "type": "single",
+      "prompt": "Você rodou `git add .`. Depois, mudou o `README.md` e salvou. Por fim, rodou `git commit -m \"Cria o cardápio\"`. O que acontece com essa última mudança do README?",
+      "options": {
+        "a": "Fica fora da foto, porque veio depois do `git add .`",
+        "b": "Entra na foto, porque o arquivo já estava salvo",
+        "c": "Entra na foto, porque o `git add .` vale até o commit",
+        "d": "Impede o commit, e o Git mostra uma mensagem de erro"
+      },
+      "answer": "a",
+      "explanation": "O commit grava só o que foi chamado pelo `git add`. Salvar o arquivo não chama ninguém para a foto: a mudança fica em `Changes not staged for commit` e espera o próximo `git add`."
+    },
+    {
+      "id": "foto-no-github",
+      "type": "truefalse",
+      "prompt": "Logo depois do `git commit`, a foto nova já aparece na página do projeto no GitHub.",
+      "answer": false,
+      "explanation": "Falso. O commit grava a foto no álbum do seu computador, e o GitHub ainda não sabe dela. Quem manda as fotos para a nuvem é o `git push`."
+    },
+    {
+      "id": "legenda-e-preparacao",
+      "type": "fill",
+      "prompt": "Complete o comando e a frase.\n\n```bash\ngit commit ___ \"Corrige o preço do pão\"\n```\n\nQuem foi chamado pelo `git add` espera na área de ___.",
+      "answer": [["-m", "--message"], ["preparação", "preparacao"]],
+      "explanation": "O `-m` vem de *message*, mensagem, e traz a legenda entre aspas. A área de preparação guarda quem vai sair na próxima foto."
+    },
+    {
+      "id": "resposta-do-commit",
+      "type": "multiple",
+      "prompt": "O `git commit` respondeu assim:\n\n```plaintext\n[main (root-commit) a3f9c21] Cria o cardápio da padaria\n 3 files changed, 42 insertions(+)\n```\n\nMarque **todas** as afirmações corretas.",
+      "options": {
+        "a": "A foto já foi enviada para o GitHub",
+        "b": "Esta é a primeira foto do álbum",
+        "c": "`a3f9c21` é o código desta foto",
+        "d": "A foto mudou 42 arquivos do projeto",
+        "e": "3 arquivos entraram nesta foto"
+      },
+      "answer": ["b", "c", "e"],
+      "explanation": "`root-commit` indica a primeira foto, `a3f9c21` é o código dela e `3 files changed` conta os arquivos. O `42 insertions(+)` conta **linhas** novas, e não arquivos. A foto fica no seu computador até o `git push`."
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "title": "Como ler mensagens de erro",
+  "lesson": "e01a-a-web-e-o-javascript",
+  "recap": "A **mensagem de erro** é a luz do painel do carro: diz o que aconteceu e onde. `is not defined` quer dizer que o JavaScript não conhece aquele nome. Texto sem aspas vira um nome.\n\n```javascript\nconsole.log(Oi)   // Oi is not defined\nconsole.log('Oi') // Oi\n```",
+  "exercises": [
+    {
+      "id": "painel-do-mercado",
+      "type": "code",
+      "prompt": "O painel do mercado deveria mostrar a palavra Promoção, mas o código para com esta mensagem:\n\n```plaintext\nReferenceError: Promoção is not defined\n```\n\nCorrija o código e rode de novo. Entregue o código corrigido e a saída.\n\n**Saída esperada**\n\n```plaintext\nPromoção\n```",
+      "starter": "// corrija a linha abaixo\nconsole.log(Promoção)\n",
+      "solution": "console.log('Promoção')\n",
+      "expected_output": "Promoção",
+      "explanation": "Sem aspas, `Promoção` não é texto: é um nome, e esse nome não existe. Com as aspas, o JavaScript entende que é um texto e mostra a palavra na tela."
+    },
+    {
+      "id": "horarios-do-onibus",
+      "type": "code",
+      "prompt": "O programa deveria mostrar os horários do ônibus, mas só a primeira linha aparece. Logo depois, surge esta mensagem:\n\n```plaintext\nReferenceError: consol is not defined\n```\n\nEncontre o nome digitado errado, corrija e rode de novo. Entregue o código corrigido e a saída.\n\n**Saída esperada**\n\n```plaintext\nLinha 302\nSaída às 7h\nChegada às 8h\n```",
+      "starter": "// encontre e corrija o erro\nconsole.log('Linha 302')\nconsol.log('Saída às 7h')\nconsole.log('Chegada às 8h')\n",
+      "solution": "console.log('Linha 302')\nconsole.log('Saída às 7h')\nconsole.log('Chegada às 8h')\n",
+      "expected_output": "Linha 302\nSaída às 7h\nChegada às 8h",
+      "explanation": "A mensagem aponta o nome desconhecido: `consol`, sem a última letra de `console`. O código parou nessa linha, por isso só a primeira mensagem apareceu antes do erro."
+    },
+    {
+      "id": "ficha-de-treino",
+      "type": "code",
+      "prompt": "A ficha de treino da academia tem **três erros**. O programa para no primeiro, então você vê um erro de cada vez. Rode, leia a mensagem, corrija e rode de novo, até a ficha aparecer inteira. Entregue o código corrigido e a saída.\n\n**Saída esperada**\n\n```plaintext\nFicha de treino\nPernas\nSéries\n4\nTotal de repetições\n48\n```",
+      "starter": "// corrija um erro de cada vez\nconsole.log('Ficha de treino')\nconsole.log(Pernas)\nConsole.log('Séries')\nconsole.log(4)\nconsol.log('Total de repetições')\nconsole.log(4 * 12)\n",
+      "solution": "console.log('Ficha de treino')\nconsole.log('Pernas')\nconsole.log('Séries')\nconsole.log(4)\nconsole.log('Total de repetições')\nconsole.log(4 * 12)\n",
+      "expected_output": "Ficha de treino\nPernas\nSéries\n4\nTotal de repetições\n48",
+      "explanation": "As três mensagens têm `is not defined`. `Pernas` ficou sem aspas, `Console` começa com letra maiúscula e `consol` perdeu a última letra. Para o JavaScript, maiúscula e minúscula são diferentes: `Console` não é o mesmo nome que `console`."
+    },
+    {
+      "id": "partes-da-mensagem",
+      "type": "drag",
+      "prompt": "Um programa parou com a mensagem `Uncaught ReferenceError: Troco is not defined`. Arraste cada parte da mensagem para o que ela quer dizer.",
+      "layout": "list",
+      "slots": [
+        { "key": "parou", "label": "Ninguém cuidou do erro, e o código parou ali" },
+        { "key": "tipo", "label": "O tipo do erro: um nome que o JavaScript não conhece" },
+        { "key": "nome", "label": "O nome que faltou no código" }
+      ],
+      "items": [
+        { "key": "a", "text": "`Troco is not defined`" },
+        { "key": "b", "text": "`Uncaught`" },
+        { "key": "c", "text": "`ReferenceError`" }
+      ],
+      "answer": { "parou": "b", "tipo": "c", "nome": "a" },
+      "explanation": "`Uncaught` quer dizer não tratado: ninguém cuidou do erro. `ReferenceError` é o tipo do erro, e não o nome que faltou. O nome vem depois dos dois-pontos: `Troco is not defined` diz que `Troco` não foi definido."
+    },
+    {
+      "id": "document-no-node",
+      "type": "single",
+      "prompt": "Você rodou `document.title` no Node e recebeu `document is not defined`. O que resolve?",
+      "options": {
+        "a": "Pôr `document` entre aspas, para virar um texto",
+        "b": "Usar `document` só no navegador, onde há página",
+        "c": "Conferir letra por letra o nome `document`",
+        "d": "Instalar o Node de novo, porque ele está com defeito"
+      },
+      "answer": "b",
+      "explanation": "No Node não há página, então `document` não existe lá. O nome está certo, por isso conferir as letras não ajuda. Com aspas, o erro some, mas o código vira só um texto e não lê título nenhum."
+    }
+  ]
+}

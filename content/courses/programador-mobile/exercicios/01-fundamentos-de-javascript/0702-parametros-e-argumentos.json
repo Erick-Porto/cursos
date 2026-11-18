@@ -1,0 +1,54 @@
+{
+  "title": "Parâmetros e argumentos",
+  "lesson": "e07-funcoes",
+  "recap": "O **parâmetro** é o espaço do ingrediente na receita. O **argumento** é o ingrediente que você põe nesse espaço ao chamar a função.\n\n```javascript\nfunction pedir(sabor) {\n  console.log(`Suco de ${sabor}`);\n}\n\npedir('uva');\n// Suco de uva\n```",
+  "exercises": [
+    {
+      "id": "senha-do-mercado",
+      "type": "code",
+      "prompt": "O painel do mercado chama cada cliente pela senha. Crie a função `chamarSenha`, com o parâmetro `numero`, que mostra a frase da saída. Chame a função com os argumentos `12` e `13`.\n\n**Saída esperada**\n\n```plaintext\nSenha 12, vá ao caixa\nSenha 13, vá ao caixa\n```",
+      "starter": "// escreva a função chamarSenha aqui\n\n// chame a função com 12 e com 13 aqui\n",
+      "solution": "function chamarSenha(numero) {\n  console.log(`Senha ${numero}, vá ao caixa`);\n}\n\nchamarSenha(12);\nchamarSenha(13);\n",
+      "expected_output": "Senha 12, vá ao caixa\nSenha 13, vá ao caixa",
+      "explanation": "A cada chamada, o parâmetro `numero` recebe o argumento daquela chamada: primeiro `12`, depois `13`. O `${numero}` encaixa o valor no texto."
+    },
+    {
+      "id": "pesagem-da-feira",
+      "type": "code",
+      "prompt": "Na feira, o preço depende do peso. Crie a função `mostrarPesagem`, com os parâmetros `quilos` e `precoDoQuilo`, que calcula quanto o cliente paga e mostra o valor com duas casas depois do ponto. Chame a função para estas duas pesagens, nesta ordem:\n\n- `1.5` quilo a R$ `9` o quilo\n- `2` quilos a R$ `4.75` o quilo\n\n**Saída esperada**\n\n```plaintext\n1.5 kg: R$ 13.50\n2 kg: R$ 9.50\n```",
+      "starter": "// escreva a função mostrarPesagem aqui\n\n// chame a função para as duas pesagens aqui\n",
+      "solution": "function mostrarPesagem(quilos, precoDoQuilo) {\n  const total = quilos * precoDoQuilo;\n  console.log(`${quilos} kg: R$ ${total.toFixed(2)}`);\n}\n\nmostrarPesagem(1.5, 9);\nmostrarPesagem(2, 4.75);\n",
+      "expected_output": "1.5 kg: R$ 13.50\n2 kg: R$ 9.50",
+      "explanation": "O primeiro argumento vai para o primeiro parâmetro, e o segundo, para o segundo. O `toFixed(2)` escreve o total com duas casas depois do ponto."
+    },
+    {
+      "id": "series-da-academia",
+      "type": "code",
+      "prompt": "A academia monta o treino de cada aluno. Crie a função `mostrarTreino`, com três parâmetros: `aluno`, `series` e `repeticoes`. Ela calcula o total de repetições (séries vezes repetições) e mostra a frase da saída. Chame a função para cada linha da tabela:\n\n| Aluno | Séries | Repetições |\n|---|---|---|\n| Bia | 3 | 12 |\n| Caio | 4 | 10 |\n| Duda | 2 | 15 |\n\n**Saída esperada**\n\n```plaintext\nBia: 3 x 12 = 36 repetições\nCaio: 4 x 10 = 40 repetições\nDuda: 2 x 15 = 30 repetições\n```",
+      "starter": "// escreva a função mostrarTreino aqui\n\n// chame a função para os três alunos aqui\n",
+      "solution": "function mostrarTreino(aluno, series, repeticoes) {\n  const total = series * repeticoes;\n  console.log(`${aluno}: ${series} x ${repeticoes} = ${total} repetições`);\n}\n\nmostrarTreino('Bia', 3, 12);\nmostrarTreino('Caio', 4, 10);\nmostrarTreino('Duda', 2, 15);\n",
+      "expected_output": "Bia: 3 x 12 = 36 repetições\nCaio: 4 x 10 = 40 repetições\nDuda: 2 x 15 = 30 repetições",
+      "explanation": "Os três argumentos entram nos três parâmetros, na mesma ordem. Dentro da função, a conta usa os valores da chamada da vez, por isso cada linha sai com o seu total."
+    },
+    {
+      "id": "quais-sao-argumentos",
+      "type": "multiple",
+      "prompt": "Neste código, quais valores são **argumentos**? Marque todos os certos.\n\n```javascript\nfunction mostrarTroco(pago, preco) {\n  console.log(pago - preco);\n}\n\nmostrarTroco(20, 12.5);\n```",
+      "options": {
+        "a": "`20`",
+        "b": "`pago`",
+        "c": "`12.5`",
+        "d": "`preco`"
+      },
+      "answer": ["a", "c"],
+      "explanation": "Argumento é o ingrediente que você põe na hora da chamada: `20` e `12.5`. Já `pago` e `preco` estão nos parênteses da `function`: são os parâmetros, os espaços que recebem esses valores."
+    },
+    {
+      "id": "argumento-que-falta",
+      "type": "fill",
+      "prompt": "Leia o código e complete as frases.\n\n```javascript\nfunction mostrarMedia(nota1, nota2) {\n  console.log((nota1 + nota2) / 2);\n}\n\nmostrarMedia(8);\n```\n\nO valor `8` entra no parâmetro ___. O outro parâmetro fica sem ingrediente e vale ___. Por isso, a tela mostra ___.",
+      "answer": [["nota1"], ["undefined"], ["NaN", "Not a Number"]],
+      "explanation": "O primeiro argumento vai para o primeiro parâmetro, `nota1`. O `nota2` não recebeu nada e vale `undefined`, e não `0`. A conta com `undefined` não dá número, e o resultado é `NaN`."
+    }
+  ]
+}

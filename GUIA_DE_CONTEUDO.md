@@ -1123,6 +1123,61 @@ transporte, celular, loja) e mantenha-a nas aulas seguintes.
 - Os minutos de cada bloco continuam somando o mesmo: a conversa da seção substitui a explicação
   que antes era feita em cima do slide de conteúdo.
 
+## 13. Listas de exercícios (`exercicios/NN-slug/`)
+
+Uma lista é treino por tema, feito na plataforma. Não conta para o progresso do curso. Cada lista é uma pasta:
+
+```
+exercicios/
+└── 01-fundamentos-de-javascript/
+    ├── lista.json            título, resumo, introdução e corretores de bolso
+    ├── 0601-tipos-e-typeof.json   um arquivo por tema: AANN-slug.json
+    └── 1101-for-of.json           AA = número da aula no curso, NN = ordem do tema na aula
+```
+
+**Cada tema tem 5 exercícios:** 3 de código e 2 de teoria, de tipos diferentes. O tema que não roda num compilador
+on-line (terminal, npm, Git, arquivos, `import`) tem 5 de teoria, com pelo menos 3 tipos, e declara
+`"theory_only": true` e `"theory_reason": "por que não roda"`.
+
+```json
+{
+  "title": "for...of",
+  "lesson": "e11-repeticoes",
+  "recap": "Lembrete curto do conteúdo, com um exemplo de código.",
+  "exercises": [ ]
+}
+```
+
+| `type` | Campos próprios | Resposta |
+|---|---|---|
+| `code` | `starter` (opcional), `solution`, `expected_output`, `harness` (opcional) | o aluno entrega o código e a saída; o instrutor aprova ou devolve |
+| `single` | `options` | `"answer": "a"` |
+| `multiple` | `options` | `"answer": ["a", "c"]` |
+| `truefalse` | | `"answer": true` |
+| `fill` | `___` no `prompt` | `"answer": [["for"], ["of"]]`, uma lista de respostas aceitas por lacuna |
+| `drag` | `layout`, `slots`, `items` | `"answer": { "<slot>": "<item>" }` |
+
+Todo exercício tem `id` (minúsculas e hífens), `type`, `prompt` e `explanation`.
+
+**Arrastar e soltar (`drag`):** `slots` são os lugares (`{ "key", "label" }`) e `items` são as peças
+(`{ "key", "text" }`). Pode haver peças a mais, como distratores. `"layout": "list"` mostra os lugares em lista, para
+associar. `"layout": "flow"` mostra os lugares ligados por setas, como um diagrama: use para sequências e fluxos.
+
+**Regras de código**, conferidas pelo `content:check`, que **roda cada solução no Node**:
+
+- A saída da `solution` precisa ser igual a `expected_output`.
+- O código roda num arquivo só, no [OneCompiler](https://onecompiler.com/nodejs) ou similar: sem `import`, `export`,
+  `require`, `document` ou leitura do teclado. Para simular um argumento, o `starter` traz `process.argv[2] = 'Ana';`.
+- Só vale o que já apareceu nos blocos de JavaScript ou nas linhas do REPL até a aula do tema (`lesson`). Recurso ou
+  método de aula posterior é erro.
+- Para testes, `"harness": "mini-jest"` põe no começo do código o corretor de bolso de `lista.json`, que faz o papel do Jest.
+
+Para validar só alguns temas: `node scripts/content.mjs check --course=<curso> --topics=06`.
+
+**Boas práticas:** os 3 exercícios de código vão do mais fácil ao desafio; o enunciado traz a **Saída esperada**;
+situações do dia a dia, diferentes dos exemplos dos slides; a `explanation` diz por que a resposta está certa e por que
+a alternativa mais tentadora está errada.
+
 ## Apêndice A: ícones inline disponíveis
 
 Nomes aceitos em `:icon[nome]`. A lista é gerada por `node scripts/inline-icons.mjs` a partir de

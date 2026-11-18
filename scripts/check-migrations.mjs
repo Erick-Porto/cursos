@@ -379,7 +379,109 @@ ok(grantLog.length === 1 && grantLog[0].meta.extra === 3, 'a liberação aparece
 await submit(quizP)
 ok(await fails('select public.submit_attempt($1, $2::jsonb)', [quizP, JSON.stringify(bad)], /limite de tentativas/), 'liberação vale só para a avaliação escolhida')
 
+// ---------------------------------------------------------------------
+// listas de exercícios (migration 0006): código entregue e teoria corrigida
+// ---------------------------------------------------------------------
+console.log('> listas de exercícios')
 await db.exec('reset role')
+const progressOf = async (user, course) =>
+  Number((await db.query('select progress_pct from public.enrollments where user_id = $1 and course_id = $2', [user, course])).rows[0].progress_pct)
+const progressBefore = await progressOf(student, course2)
+const { rows: xl } = await db.query(
+  `insert into public.exercise_lists (course_id, slug, title) values ($1, 'lista-1', 'Lista 1') returning id`,
+  [course2],
+)
+const listId = xl[0].id
+const { rows: xt } = await db.query(
+  `insert into public.exercise_topics (list_id, slug, title, position) values ($1, 'for-of', 'for...of', 1) returning id`,
+  [listId],
+)
+const { rows: xs } = await db.query(
+  `insert into public.exercises (list_id, topic_id, key, position, type, prompt_md, options) values
+   ($1, $2, 'ex1', 1, 'code',   'Mostre os itens.', null),
+   ($1, $2, 'ex2', 2, 'single', 'Quantas voltas?',  '[{"key":"a","text":"3"},{"key":"b","text":"4"}]'),
+   ($1, $2, 'ex3', 3, 'drag',   'Ligue as partes.', '{"layout":"flow","slots":[{"key":"s1","label":"começo"}],"items":[{"key":"i1","text":"let i = 0"}]}')
+   returning id, key`,
+  [listId, xt[0].id],
+)
+const xid = Object.fromEntries(xs.map((x) => [x.key, x.id]))
+await db.query(
+  `insert into public.exercise_keys (exercise_id, answer, explanation_md, solution_code, expected_output) values
+   ($1, null, 'Um console.log por volta.', 'console.log(1);', '1'),
+   ($2, '"b"', 'São 4 itens.', null, null),
+   ($3, '{"s1":"i1"}', 'O começo cria o contador.', null, null)`,
+  [xid.ex1, xid.ex2, xid.ex3],
+)
+const { rows: u3 } = await db.query(
+  `insert into auth.users (email, raw_user_meta_data) values ('fora@example.com', '{"full_name":"Fora da Turma"}') returning id`,
+)
+const outsider = u3[0].id
+const submitX = (id, answer, code = null, output = null) =>
+  db.query('select public.submit_exercise($1, $2::jsonb, $3, $4) as r', [id, answer === null ? null : JSON.stringify(answer), code, output])
+
+await asUser(outsider)
+ok(await fails('select public.submit_exercise($1, $2::jsonb)', [xid.ex2, '"b"'], /matrícula/), 'exercício exige matrícula')
+
+await asUser(student)
+const { rows: keysAsStudent } = await db.query('select * from public.exercise_keys')
+ok(keysAsStudent.length === 0, 'RLS: aluno não lê exercise_keys (gabarito)')
+const { rows: xVisible } = await db.query('select id from public.exercises where list_id = $1', [listId])
+ok(xVisible.length === 3, 'aluno lê os enunciados da lista')
+ok(
+  await fails(
+    `insert into public.exercise_answers (user_id, exercise_id, list_id, course_id, status) values ($1, $2, $3, $4, 'approved')`,
+    [student, xid.ex1, listId, course2],
+    /./,
+  ),
+  'RLS: aluno não grava exercise_answers diretamente',
+)
+ok(await fails('select public.submit_exercise($1, null, $2, $3)', [xid.ex1, '', 'saida'], /código/), 'entrega sem código é recusada')
+ok(await fails('select public.submit_exercise($1, null, $2, $3)', [xid.ex1, 'console.log(1);', '  '], /saída/), 'entrega sem saída é recusada')
+let { rows: xr } = await submitX(xid.ex1, null, 'console.log(1);', '1')
+ok(xr[0].r.answer.status === 'submitted' && xr[0].r.reveal === null, 'código entregue fica aguardando, sem revelar a solução')
+ok(await fails(`select public.review_exercise($1, true)`, [xr[0].r.answer.id], /instrutores/), 'aluno não aprova o próprio código')
+const codeAnswerId = xr[0].r.answer.id
+
+;({ rows: xr } = await submitX(xid.ex2, 'a'))
+ok(xr[0].r.answer.correct === false && xr[0].r.answer.tries === 1 && xr[0].r.reveal === null, 'teoria errada: corrigida no servidor e sem revelar o gabarito')
+;({ rows: xr } = await submitX(xid.ex2, 'a'))
+;({ rows: xr } = await submitX(xid.ex2, 'a'))
+ok(xr[0].r.answer.tries === 3 && xr[0].r.reveal?.answer === 'b', 'na terceira tentativa errada o gabarito aparece')
+ok(await fails('select public.submit_exercise($1, $2::jsonb)', [xid.ex2, '"b"'], /encerrado/), 'depois de 3 tentativas a questão encerra')
+ok(await fails('select public.submit_exercise($1, $2::jsonb)', [xid.ex3, 'null'], /responda/), 'teoria sem resposta é recusada')
+;({ rows: xr } = await submitX(xid.ex3, { s1: 'i1' }))
+ok(xr[0].r.answer.correct === true && xr[0].r.reveal?.explanation_md, 'arrastar e soltar corrigido, com a explicação')
+ok(await fails('select public.submit_exercise($1, $2::jsonb)', [xid.ex3, '{"s1":"i1"}'], /encerrado/), 'questão certa não aceita nova tentativa')
+
+await asUser(userId)
+const { rows: xKeys } = await db.query('select * from public.exercise_keys')
+ok(xKeys.length === 3, 'instrutor lê o gabarito dos exercícios')
+ok(await fails('select public.review_exercise($1, false)', [codeAnswerId], /comentário/), 'devolver exige um comentário')
+let { rows: xv } = await db.query('select public.review_exercise($1, false, $2) as r', [codeAnswerId, 'Faltou mostrar o total.'])
+ok(xv[0].r.answer.status === 'returned' && xv[0].r.answer.reviewed_by === userId, 'instrutor devolve para ajustes')
+
+await asUser(student)
+;({ rows: xr } = await submitX(xid.ex1, null, 'console.log(2);', '2'))
+ok(xr[0].r.answer.status === 'submitted' && xr[0].r.answer.tries === 2 && xr[0].r.answer.code === 'console.log(2);', 'aluno reenvia o código devolvido')
+ok(xr[0].r.answer.feedback === null && xr[0].r.answer.reviewed_at === null, 'o reenvio limpa o comentário da correção anterior')
+
+await asUser(userId)
+;({ rows: xv } = await db.query('select public.review_exercise($1, true) as r', [codeAnswerId]))
+ok(xv[0].r.answer.status === 'approved', 'instrutor aprova o código')
+
+await asUser(student)
+ok(await fails('select public.submit_exercise($1, null, $2, $3)', [xid.ex1, 'x', 'y'], /aprovado/), 'código aprovado não pode ser trocado')
+const { rows: mineX } = await db.query('select public.my_exercise_answers($1) as r', [listId])
+const mineCode = mineX[0].r.find((a) => a.exercise_id === xid.ex1)
+ok(mineX[0].r.length === 3 && mineCode.reveal?.solution_code === 'console.log(1);', 'depois de aprovado, o aluno vê a solução de referência')
+
+await asUser(outsider)
+const { rows: othersX } = await db.query('select * from public.exercise_answers')
+const { rows: mineOutsider } = await db.query('select public.my_exercise_answers($1) as r', [listId])
+ok(othersX.length === 0 && mineOutsider[0].r.length === 0, 'RLS: aluno não vê as respostas dos colegas')
+
+await db.exec('reset role')
+ok((await progressOf(student, course2)) === progressBefore, 'as listas não mudam o progresso do curso')
 await db.close()
 
 console.log(failures === 0 ? '\nTudo certo.' : `\n${failures} falha(s).`)

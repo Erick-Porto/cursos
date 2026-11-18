@@ -1,0 +1,68 @@
+{
+  "title": "GitHub, remote e push",
+  "lesson": "e05-git-e-github",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line não tem Git nem acesso à sua conta do GitHub: o envio acontece no terminal do seu computador.",
+  "recap": "O **GitHub** guarda o álbum de fotos na nuvem. O **push** manda para lá as fotos do seu computador. Só vai o que já virou commit.\n\n```bash\ngit remote add origin https://github.com/seu-usuario/feira.git\ngit push -u origin main\n```\n\nDepois do primeiro envio, o comando é só `git push`.",
+  "exercises": [
+    {
+      "id": "caminho-ate-a-nuvem",
+      "type": "drag",
+      "prompt": "A mudança sai da pasta do projeto e chega ao GitHub em três etapas. Arraste cada comando para a etapa que ele faz. Uma peça sobra.",
+      "layout": "flow",
+      "slots": [
+        { "key": "preparar", "label": "Da pasta do projeto para a área de preparação" },
+        { "key": "gravar", "label": "Da área de preparação para o álbum do computador" },
+        { "key": "enviar", "label": "Do álbum do computador para o GitHub" }
+      ],
+      "items": [
+        { "key": "a", "text": "`git push`" },
+        { "key": "b", "text": "`git add .`" },
+        { "key": "c", "text": "`git log --oneline`" },
+        { "key": "d", "text": "`git commit -m \"Novo cardápio\"`" }
+      ],
+      "answer": { "preparar": "b", "gravar": "d", "enviar": "a" },
+      "explanation": "O `git add .` chama a mudança para a área de preparação, o `git commit -m` grava a foto no álbum do computador e o `git push` manda as fotos para o GitHub. O `git log --oneline` sobra: ele só mostra o álbum e não move nada."
+    },
+    {
+      "id": "apelido-origin",
+      "type": "single",
+      "prompt": "No comando abaixo, o que é o `origin`?\n\n```bash\ngit remote add origin https://github.com/seu-usuario/feira.git\n```",
+      "options": {
+        "a": "O nome da linha principal do histórico",
+        "b": "O apelido do endereço do repositório no GitHub",
+        "c": "O nome da sua conta de usuário no GitHub",
+        "d": "O nome da pasta do projeto no computador"
+      },
+      "answer": "b",
+      "explanation": "O `git remote add` guarda o endereço do GitHub com o apelido `origin`. A tentação é pensar na linha principal do histórico, mas essa se chama `main`."
+    },
+    {
+      "id": "primeiro-envio",
+      "type": "fill",
+      "prompt": "Complete o comando do primeiro envio e a frase.\n\n```bash\ngit push ___ origin main\n```\n\nA cópia do álbum que fica no GitHub se chama repositório ___.",
+      "answer": [["-u", "--set-upstream"], ["remoto"]],
+      "explanation": "O `-u` grava o destino: dali em diante, o comando é só `git push`. O repositório é remoto porque fica longe de você, na nuvem."
+    },
+    {
+      "id": "push-sem-commit",
+      "type": "truefalse",
+      "prompt": "Você mudou um arquivo, salvou e rodou `git push`, sem fazer commit. Mesmo assim, a mudança chega ao GitHub.",
+      "answer": false,
+      "explanation": "Falso. O push manda só o que já virou foto. O que mudou e não teve commit fica para trás: antes do push, rode `git add .` e `git commit -m`."
+    },
+    {
+      "id": "preparar-o-primeiro-push",
+      "type": "multiple",
+      "prompt": "Você vai enviar ao GitHub um projeto que já tem fotos no seu computador. Marque **todas** as atitudes corretas.",
+      "options": {
+        "a": "Criar o repositório no GitHub já com um README",
+        "b": "Fazer o primeiro commit antes do primeiro push",
+        "c": "Rodar o `git remote add` antes de cada `git push`",
+        "d": "Criar o repositório vazio, sem README nem licença"
+      },
+      "answer": ["b", "d"],
+      "explanation": "O repositório nasce vazio porque as fotos vão do seu computador para lá: com um README criado no site, o push volta com `[rejected]` e `fetch first`. Sem commit, aparece `src refspec main does not match any`. O `git remote add` roda uma vez só: na segunda, o Git avisa `remote origin already exists`."
+    }
+  ]
+}

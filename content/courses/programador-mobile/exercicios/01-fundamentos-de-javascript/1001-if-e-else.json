@@ -1,0 +1,61 @@
+{
+  "title": "if e else",
+  "lesson": "e10-decisoes",
+  "recap": "O **`if`** (se) roda as chaves quando a pergunta dá `true`. O **`else`** (senão) é o outro lado da bifurcação na estrada: roda quando dá `false`. Sempre um dos dois caminhos roda.\n\n```javascript\nconst idade = 16;\nif (idade >= 18) {\n  console.log('Pode dirigir');\n} else {\n  console.log('Ainda não');\n}\n// Ainda não\n```",
+  "exercises": [
+    {
+      "id": "saldo-do-cartao-de-onibus",
+      "type": "code",
+      "prompt": "O cartão de ônibus guarda o saldo em centavos. Use `if` e `else` para comparar o saldo com o preço da passagem. Com saldo igual ou maior que a passagem, mostre `Catraca liberada`. Nos outros casos, mostre `Saldo insuficiente`.\n\n**Saída esperada**\n\n```plaintext\nSaldo insuficiente\n```",
+      "starter": "const saldoCentavos = 350;\nconst passagemCentavos = 500;\n\n// escreva o if e o else aqui\n",
+      "solution": "const saldoCentavos = 350;\nconst passagemCentavos = 500;\n\nif (saldoCentavos >= passagemCentavos) {\n  console.log('Catraca liberada');\n} else {\n  console.log('Saldo insuficiente');\n}\n",
+      "expected_output": "Saldo insuficiente",
+      "explanation": "`350 >= 500` dá `false`, então o JavaScript pega o caminho do `else`. Com saldo de 500, a pergunta daria `true`, porque o `>=` inclui o valor exato."
+    },
+    {
+      "id": "turma-da-natacao",
+      "type": "code",
+      "prompt": "Na academia, ficha de número **par** nada de manhã, e ficha de número **ímpar** nada à tarde. Um número é par quando o resto da divisão dele por 2 é 0. Use `if` e `else` para mostrar a turma da ficha, no formato da saída.\n\n**Saída esperada**\n\n```plaintext\nFicha 27: turma da tarde\n```",
+      "starter": "const ficha = 27;\n\n// escreva o if e o else aqui\n",
+      "solution": "const ficha = 27;\n\nif (ficha % 2 === 0) {\n  console.log(`Ficha ${ficha}: turma da manhã`);\n} else {\n  console.log(`Ficha ${ficha}: turma da tarde`);\n}\n",
+      "expected_output": "Ficha 27: turma da tarde",
+      "explanation": "`27 % 2` dá 1, o resto da divisão. Como `1 === 0` dá `false`, roda o caminho do `else`. A pergunta usa `===`, porque um `=` só guardaria um valor em vez de comparar."
+    },
+    {
+      "id": "entrega-do-mercado",
+      "type": "code",
+      "prompt": "O mercado entrega de graça as compras de **R$ 150,00 ou mais**. Abaixo disso, a entrega custa R$ 12,00. Escreva a função `descreverEntrega(compra)`, que recebe o valor da compra em centavos e **devolve** o texto `entrega grátis` ou o texto `entrega de R$ 12,00`. Para escrever o valor, use a função `formatarReais`, que já vem pronta.\n\n**Saída esperada**\n\n```plaintext\nR$ 129,90: entrega de R$ 12,00\nR$ 150,00: entrega grátis\nR$ 203,50: entrega grátis\n```",
+      "starter": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\n// escreva a função descreverEntrega aqui\n\nconsole.log(`${formatarReais(12990)}: ${descreverEntrega(12990)}`);\nconsole.log(`${formatarReais(15000)}: ${descreverEntrega(15000)}`);\nconsole.log(`${formatarReais(20350)}: ${descreverEntrega(20350)}`);\n",
+      "solution": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\nfunction descreverEntrega(compra) {\n  if (compra >= 15000) {\n    return 'entrega grátis';\n  } else {\n    return `entrega de ${formatarReais(1200)}`;\n  }\n}\n\nconsole.log(`${formatarReais(12990)}: ${descreverEntrega(12990)}`);\nconsole.log(`${formatarReais(15000)}: ${descreverEntrega(15000)}`);\nconsole.log(`${formatarReais(20350)}: ${descreverEntrega(20350)}`);\n",
+      "expected_output": "R$ 129,90: entrega de R$ 12,00\nR$ 150,00: entrega grátis\nR$ 203,50: entrega grátis",
+      "explanation": "R$ 150,00 são 15000 centavos. O `>=` inclui esse valor exato, por isso a segunda compra já ganha a entrega. Cada caminho tem o seu `return`, e a função entrega um texto só."
+    },
+    {
+      "id": "sinal-do-celular",
+      "type": "single",
+      "prompt": "O que este código mostra?\n\n```javascript\nconst barras = 2;\n\nif (barras > 2) {\n  console.log('Chamada completa');\n} else {\n  console.log('Sinal fraco');\n}\n```",
+      "options": {
+        "a": "`Chamada completa`",
+        "b": "`Sinal fraco`",
+        "c": "`Chamada completa` e `Sinal fraco`",
+        "d": "Nada aparece na tela"
+      },
+      "answer": "b",
+      "explanation": "`2 > 2` dá `false`, porque 2 não é maior que ele mesmo. Com `false`, roda o caminho do `else`. A alternativa \"nada aparece\" engana: com `else`, sempre um dos dois caminhos roda."
+    },
+    {
+      "id": "guarda-chuva",
+      "type": "fill",
+      "prompt": "Complete as lacunas para mostrar `Leve o guarda-chuva` quando `chuva` for `true` e `Pode sair sem ele` nos outros casos.\n\n```javascript\nconst chuva = true;\n\n___ (chuva) {\n  console.log('Leve o guarda-chuva');\n} ___ {\n  console.log('Pode sair sem ele');\n}\n```",
+      "answer": [
+        [
+          "if"
+        ],
+        [
+          "else"
+        ]
+      ],
+      "explanation": "O `if` faz a pergunta e abre o caminho do `true`. O `else` não leva pergunta: ele pega todo o resto. Um `else if` na segunda lacuna pediria uma condição entre parênteses."
+    }
+  ]
+}

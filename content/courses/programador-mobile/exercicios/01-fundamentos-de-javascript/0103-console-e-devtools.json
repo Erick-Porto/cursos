@@ -1,0 +1,65 @@
+{
+  "title": "DevTools e Console",
+  "lesson": "e01a-a-web-e-o-javascript",
+  "recap": "As **DevTools** são o raio-x da página: abra com `F12`. Na aba **Console**, o `console.log` escreve na tela o que está entre os parênteses. Texto vai entre aspas. Conta vai sem aspas.\n\n```javascript\nconsole.log('Pão quente!')\nconsole.log(3 + 4)\n// Pão quente!\n// 7\n```",
+  "exercises": [
+    {
+      "id": "avisos-da-academia",
+      "type": "code",
+      "prompt": "A academia quer mostrar três avisos, um em cada linha. Escreva um `console.log` para cada aviso. Lembre: texto vai entre aspas.\n\n**Saída esperada**\n\n```plaintext\nAberta das 6h às 22h\nAula de dança às 19h\nTraga a sua toalha\n```",
+      "starter": "// Avisos da academia:\n// Aberta das 6h às 22h\n// Aula de dança às 19h\n// Traga a sua toalha\n\n// escreva os três console.log aqui\n",
+      "solution": "// Avisos da academia:\n// Aberta das 6h às 22h\n// Aula de dança às 19h\n// Traga a sua toalha\n\nconsole.log('Aberta das 6h às 22h')\nconsole.log('Aula de dança às 19h')\nconsole.log('Traga a sua toalha')\n",
+      "expected_output": "Aberta das 6h às 22h\nAula de dança às 19h\nTraga a sua toalha",
+      "explanation": "Cada `console.log` escreve uma linha, na ordem em que aparece no código. As aspas avisam o JavaScript de que aquilo é texto."
+    },
+    {
+      "id": "contas-do-mercado",
+      "type": "code",
+      "prompt": "No mercado, você comprou 3 pacotes de café a 12 reais cada e 4 caixas de leite a 5 reais cada. Mostre o valor de cada compra, um por linha.\n\nEscreva a **conta** dentro do `console.log`, sem aspas, e deixe o JavaScript calcular. O `*` é a multiplicação. No compilador on-line, uma conta só aparece na tela dentro de um `console.log`.\n\n**Saída esperada**\n\n```plaintext\n36\n20\n```",
+      "starter": "// 3 pacotes de café a 12 reais cada\n// 4 caixas de leite a 5 reais cada\n\n// escreva as duas contas aqui, cada uma dentro de um console.log\n",
+      "solution": "// 3 pacotes de café a 12 reais cada\n// 4 caixas de leite a 5 reais cada\n\nconsole.log(3 * 12)\nconsole.log(4 * 5)\n",
+      "expected_output": "36\n20",
+      "explanation": "Sem aspas, o JavaScript faz a conta e mostra o resultado. Com aspas, `'3 * 12'` seria só um texto, e a tela mostraria `3 * 12`."
+    },
+    {
+      "id": "conta-da-feira",
+      "type": "code",
+      "prompt": "Monte a conta da feira de sábado: 2 kg de tomate a 8 reais o quilo, 3 kg de banana a 6 reais o quilo e 1 abacaxi de 7 reais.\n\nMostre o nome de cada parte em uma linha e, na linha de baixo, o valor. No total, escreva a conta inteira dentro do `console.log`. O JavaScript faz primeiro as multiplicações e depois as somas, como na matemática da escola.\n\n**Saída esperada**\n\n```plaintext\nTomate\n16\nBanana\n18\nAbacaxi\n7\nTotal da feira\n41\n```",
+      "starter": "// 2 kg de tomate a 8 reais o quilo\n// 3 kg de banana a 6 reais o quilo\n// 1 abacaxi de 7 reais\n\n// escreva o seu código aqui\n",
+      "solution": "// 2 kg de tomate a 8 reais o quilo\n// 3 kg de banana a 6 reais o quilo\n// 1 abacaxi de 7 reais\n\nconsole.log('Tomate')\nconsole.log(2 * 8)\nconsole.log('Banana')\nconsole.log(3 * 6)\nconsole.log('Abacaxi')\nconsole.log(7)\nconsole.log('Total da feira')\nconsole.log(2 * 8 + 3 * 6 + 7)\n",
+      "expected_output": "Tomate\n16\nBanana\n18\nAbacaxi\n7\nTotal da feira\n41",
+      "explanation": "Texto entre aspas aparece como está, e conta sem aspas aparece calculada. No total, o JavaScript resolve `2 * 8` e `3 * 6` primeiro e depois soma: 16 + 18 + 7 dá 41."
+    },
+    {
+      "id": "abas-das-devtools",
+      "type": "drag",
+      "prompt": "Arraste cada aba das DevTools para o que ela faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "pagina", "label": "Mostra o HTML e o CSS da página, ao vivo" },
+        { "key": "codigo", "label": "Roda JavaScript e mostra mensagens e erros" },
+        { "key": "rede", "label": "Lista os pedidos feitos ao servidor" }
+      ],
+      "items": [
+        { "key": "a", "text": "**Network**" },
+        { "key": "b", "text": "**Elements**" },
+        { "key": "c", "text": "**Console**" }
+      ],
+      "answer": { "pagina": "b", "codigo": "c", "rede": "a" },
+      "explanation": "**Elements** quer dizer elementos: as peças da página, com o HTML e o CSS. **Console** roda JavaScript e mostra mensagens e erros. **Network** quer dizer rede: ali ficam os pedidos feitos ao servidor. Não procure o HTML no Console: ele fica em Elements."
+    },
+    {
+      "id": "recarregar-a-pagina",
+      "type": "single",
+      "prompt": "Pelas DevTools, você trocou o título do site da sua escola para \"Bem-vindos\". Depois, recarregou a página. O que acontece?",
+      "options": {
+        "a": "O novo título continua, só no seu navegador",
+        "b": "O novo título aparece para todos os visitantes",
+        "c": "O site sai do ar até o servidor ser corrigido",
+        "d": "O título original volta, e o arquivo segue igual"
+      },
+      "answer": "d",
+      "explanation": "Nas DevTools, você mexe na maquete que o navegador montou na memória, o **DOM**. O arquivo no servidor continua igual, então tudo volta ao normal quando você recarrega. Por isso a mudança não fica guardada nem no seu navegador."
+    }
+  ]
+}

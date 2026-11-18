@@ -1,0 +1,54 @@
+{
+  "title": "Math.round",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "O **`Math.round`** leva ao inteiro mais perto, e o meio, `.5`, sobe. A `Math` reúne as ferramentas de matemática que já vêm no JavaScript.\n\n```javascript\nconsole.log(Math.round(7.4)); // 7\nconsole.log(Math.round(7.5)); // 8\nconsole.log(Math.round(7.6)); // 8\n```",
+  "exercises": [
+    {
+      "id": "boletim-arredondado",
+      "type": "code",
+      "prompt": "A escola arredonda as médias para o inteiro mais perto. Mostre a média arredondada de cada aluno com `Math.round`.\n\n**Saída esperada**\n\n```plaintext\nAna: 6\nBruno: 7\nCarla: 7\n```",
+      "starter": "const ana = 6.4;\nconst bruno = 6.5;\nconst carla = 6.7;\n\n// mostre as médias arredondadas aqui\n",
+      "solution": "const ana = 6.4;\nconst bruno = 6.5;\nconst carla = 6.7;\n\nconsole.log('Ana:', Math.round(ana));\nconsole.log('Bruno:', Math.round(bruno));\nconsole.log('Carla:', Math.round(carla));\n",
+      "expected_output": "Ana: 6\nBruno: 7\nCarla: 7",
+      "explanation": "`6.4` está mais perto de 6, e `6.7`, de 7. O `6.5` está exatamente no meio, e o meio sobe: dá 7."
+    },
+    {
+      "id": "frios-na-balanca",
+      "type": "code",
+      "prompt": "Na balança da feira, o preço de cada produto é o preço do quilo, em centavos, vezes o peso. Arredonde cada produto ao centavo com `Math.round` e some os valores já arredondados.\n\n**Saída esperada**\n\n```plaintext\nQueijo: 3374 centavos\nPresunto: 998 centavos\nTotal: 4372 centavos\n```",
+      "starter": "const quiloDoQueijo = 4590;\nconst pesoDoQueijo = 0.735;\nconst quiloDoPresunto = 3990;\nconst pesoDoPresunto = 0.25;\n\n// calcule e mostre os três valores aqui\n",
+      "solution": "const quiloDoQueijo = 4590;\nconst pesoDoQueijo = 0.735;\nconst quiloDoPresunto = 3990;\nconst pesoDoPresunto = 0.25;\n\nconst queijo = Math.round(quiloDoQueijo * pesoDoQueijo);\nconst presunto = Math.round(quiloDoPresunto * pesoDoPresunto);\nconst total = queijo + presunto;\n\nconsole.log('Queijo:', queijo, 'centavos');\nconsole.log('Presunto:', presunto, 'centavos');\nconsole.log('Total:', total, 'centavos');\n",
+      "expected_output": "Queijo: 3374 centavos\nPresunto: 998 centavos\nTotal: 4372 centavos",
+      "explanation": "O queijo dá 3373,65, mais perto de 3374. O presunto dá 997,5, exatamente o meio, que sobe para 998. Somar inteiros dá um total exato: 4372."
+    },
+    {
+      "id": "desconto-na-mensalidade",
+      "type": "code",
+      "prompt": "A mensalidade da academia custa R$ 89,90 e tem 15% de desconto. Converta a mensalidade para centavos com `Math.round`. Calcule o desconto em centavos, também com `Math.round`. Mostre o valor a pagar em reais, com 2 casas.\n\n**Saída esperada**\n\n```plaintext\nMensalidade: 8990 centavos\nDesconto: 1349 centavos\nA pagar: R$ 76.41\n```",
+      "starter": "const mensalidade = 89.9;\nconst percentual = 15;\n\n// calcule em centavos e mostre as três linhas aqui\n",
+      "solution": "const mensalidade = 89.9;\nconst percentual = 15;\n\nconst mensalidadeCentavos = Math.round(mensalidade * 100);\nconst descontoCentavos = Math.round(mensalidadeCentavos * percentual / 100);\nconst aPagarCentavos = mensalidadeCentavos - descontoCentavos;\n\nconsole.log('Mensalidade:', mensalidadeCentavos, 'centavos');\nconsole.log('Desconto:', descontoCentavos, 'centavos');\nconsole.log('A pagar: R$', (aPagarCentavos / 100).toFixed(2));\n",
+      "expected_output": "Mensalidade: 8990 centavos\nDesconto: 1349 centavos\nA pagar: R$ 76.41",
+      "explanation": "15% de 8990 dá 1348,5, exatamente o meio centavo, que sobe para 1349. A subtração em inteiros dá 7641 centavos, e a divisão por 100 mostra R$ 76.41."
+    },
+    {
+      "id": "o-meio-sobe",
+      "type": "single",
+      "prompt": "O que este código mostra, na ordem?\n\n```javascript\nconsole.log(Math.round(3.5));\nconsole.log(Math.round(3.49));\n```",
+      "options": {
+        "a": "`4` e `3`",
+        "b": "`4` e `4`",
+        "c": "`3` e `3`",
+        "d": "`3.5` e `3.49`"
+      },
+      "answer": "a",
+      "explanation": "`3.5` está no meio, e o meio sobe: dá `4`. `3.49` está mais perto de 3: dá `3`. A alternativa `4` e `4` atrai quem arredonda duas vezes, de 3.49 para 3.5 e depois para 4, mas o `Math.round` olha só o número original."
+    },
+    {
+      "id": "completar-a-conversao",
+      "type": "fill",
+      "prompt": "Complete a linha que converte R$ 12,35 em centavos inteiros.\n\n```javascript\nconst centavos = Math.___(12.35 * ___);\n```",
+      "answer": [["round"], ["100"]],
+      "explanation": "Um real tem 100 centavos, por isso a conta multiplica por `100`. O `round` tira a sobra do binário e deixa o valor inteiro: `1235`."
+    }
+  ]
+}

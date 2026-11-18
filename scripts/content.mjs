@@ -11,6 +11,7 @@
 // O formato dos arquivos está descrito em GUIA_DE_CONTEUDO.md. As regras
 // daqui e as do guia andam juntas: ao mudar uma, atualize a outra.
 // =====================================================================
+import { execFileSync } from 'node:child_process'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, dirname, extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -23,6 +24,8 @@ const args = process.argv.slice(2)
 const command = args[0]
 const prune = args.includes('--prune')
 const onlyCourse = (args.find((a) => a.startsWith('--course=')) ?? '').split('=')[1] || null
+// --topics=06 valida só os temas de exercícios cujo arquivo começa com 06 (rodar as soluções leva tempo)
+const onlyTopics = (args.find((a) => a.startsWith('--topics=')) ?? '').split('=')[1] || null
 
 const LEVELS = ['iniciante', 'intermediario', 'avancado']
 const RARITIES = ['common', 'rare', 'epic', 'legendary']
@@ -288,7 +291,53 @@ function loadCourse(dir, report) {
         .map((f) => loadScript(join(guidesDir, f), report))
     : []
 
-  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts, materials, projects, projectGuides }
+  // listas de exercícios (uma pasta por lista, um arquivo por tema)
+  const exercisesDir = join(dir, 'exercicios')
+  const exerciseLists = existsSync(exercisesDir)
+    ? readdirSync(exercisesDir, { withFileTypes: true })
+        .filter((e) => e.isDirectory())
+        .map((e) => e.name)
+        .sort()
+        .map((name) => loadExerciseList(join(exercisesDir, name), report))
+        .filter(Boolean)
+    : []
+
+  return { dir, slug, json, description_md, descPath, lessons, assessments, images, scripts, materials, projects, projectGuides, exerciseLists }
+}
+
+/** Lista de exercícios: exercicios/NN-slug/lista.json + um arquivo NNNN-tema.json por tema. */
+function loadExerciseList(dir, report) {
+  const name = basename(dir)
+  const m = name.match(/^(\d{1,3})-([a-z0-9-]+)$/)
+  const file = join(dir, 'lista.json')
+  if (!m) report.error(rel(dir), 'pasta da lista deve se chamar NN-slug (ex.: 01-fundamentos)')
+  if (!existsSync(file)) {
+    report.error(rel(dir), 'lista sem o arquivo lista.json')
+    return null
+  }
+  let json
+  try {
+    json = JSON.parse(readFileSync(file, 'utf8'))
+  } catch (e) {
+    report.error(rel(file), `JSON inválido: ${e.message}`)
+    return null
+  }
+  const topics = readdirSync(dir)
+    .filter((f) => f.endsWith('.json') && f !== 'lista.json')
+    .sort()
+    .map((f) => {
+      const path = join(dir, f)
+      const tm = f.match(/^(\d{1,4})-([a-z0-9-]+)\.json$/)
+      if (!tm) report.error(rel(path), 'tema deve se chamar NNNN-slug.json (ex.: 1101-for-of.json)')
+      try {
+        return { file: path, slug: tm ? tm[2] : f, position: tm ? Number(tm[1]) : 0, json: JSON.parse(readFileSync(path, 'utf8')) }
+      } catch (e) {
+        report.error(rel(path), `JSON inválido: ${e.message}`)
+        return null
+      }
+    })
+    .filter(Boolean)
+  return { dir, file, slug: m ? m[2] : name, position: m ? Number(m[1]) : 0, json, topics }
 }
 
 /** Arquivos de uma pasta, recursivo, sem ocultos. */
@@ -476,6 +525,14 @@ function validateCourse(course, report) {
   }
   for (const p of course.projects) {
     if (!course.projectGuides.some((g) => g.name === p.name)) report.warn(rel(p.file), `projeto sem guia de correção (projetos/correcao/${p.name}.md)`)
+  }
+
+  // listas de exercícios
+  const listSlugs = new Set()
+  for (const list of course.exerciseLists) {
+    if (listSlugs.has(list.slug)) report.error(rel(list.dir), `slug de lista repetido: ${list.slug}`)
+    listSlugs.add(list.slug)
+    validateExerciseList(list, course, ctx, report)
   }
 
   // imagens
@@ -949,8 +1006,368 @@ function validateAssessment(a, lessonSlugs, course, ctx, report) {
 }
 
 // ---------------------------------------------------------------------
+// listas de exercícios
+// ---------------------------------------------------------------------
+const EXERCISE_TYPES = ['code', 'single', 'multiple', 'truefalse', 'fill', 'drag']
+const DRAG_LAYOUTS = ['list', 'flow']
+const EXERCISES_PER_TOPIC = 5
+const CODE_PER_TOPIC = 3
+
+/** Recursos da linguagem: um exercício só usa o que uma aula já mostrou até aquele ponto. */
+const JS_FEATURES = [
+  ['template string', /`/],
+  ['function', /\bfunction\b/],
+  ['função seta (=>)', /=>/],
+  ['let', /\blet\b/],
+  ['if', /\bif\s*\(/],
+  ['else', /\belse\b/],
+  ['for', /\bfor\s*\(/],
+  ['while', /\bwhile\s*\(/],
+  ['do...while', /\bdo\s*\{/],
+  ['switch', /\bswitch\s*\(/],
+  ['try/catch', /\btry\s*\{/],
+  ['class', /\bclass\s+[A-Za-z]/],
+  ['async/await', /\b(async|await)\b/],
+  ['new', /\bnew\s+[A-Z]/],
+  ['spread (...)', /\.\.\.[A-Za-z_[{]/],
+  ['ternário', /[\w)\]'"]\s\?\s[^.]/],
+  ['&&', /&&/],
+  ['||', /\|\|/],
+  ['! (não)', /![^=]/],
+  ['%', /%/],
+  ['**', /\*\*/],
+  ['++', /\+\+/],
+  ['--', /--/],
+  ['+=', /\+=/],
+  ['typeof', /\btypeof\b/],
+  ['null', /\bnull\b/],
+  ['Number()', /(?<![.\w])Number\s*\(/],
+  ['String()', /(?<![.\w])String\s*\(/],
+  ['Boolean()', /(?<![.\w])Boolean\s*\(/],
+  ['parseInt()', /\bparseInt\s*\(/],
+  ['parseFloat()', /\bparseFloat\s*\(/],
+  ['isNaN()', /(?<![.\w])isNaN\s*\(/],
+]
+
+/** Tira comentários e textos entre aspas, para não confundir palavras soltas com código. */
+function stripJsNoise(code) {
+  return code
+    .replace(/\/\*[\s\S]*?\*\//g, ' ')
+    .replace(/'(?:[^'\\\n]|\\.)*'/g, "''")
+    .replace(/"(?:[^"\\\n]|\\.)*"/g, '""')
+    .replace(/(^|[^:])\/\/.*$/gm, '$1')
+}
+
+const jsMethods = (code) => new Set([...code.matchAll(/\.([a-zA-Z_$][\w$]*)\s*\(/g)].map((m) => m[1]))
+
+/**
+ * O que cada aula já ensinou, acumulado: recursos e métodos que aparecem nos blocos de
+ * JavaScript ou nas linhas do REPL da aula e das anteriores. Devolve uma função que responde "até esta aula".
+ */
+function taughtUpTo(course) {
+  const lessons = [...course.lessons].sort((a, b) => (a.position ?? 0) - (b.position ?? 0))
+  const seen = { features: new Set(), methods: new Set() }
+  const byLesson = new Map()
+  for (const l of lessons) {
+    for (const m of l.body.matchAll(/^```(\w*)\s*\n([\s\S]*?)^```/gm)) {
+      // nos outros blocos, só contam as linhas digitadas no REPL ("> typeof 72.9")
+      const typed = ['javascript', 'js'].includes(m[1])
+        ? m[2]
+        : m[2].split('\n').filter((line) => line.startsWith('> ')).map((line) => line.slice(2)).join('\n')
+      const code = stripJsNoise(typed)
+      for (const [label, re] of JS_FEATURES) if (re.test(code)) seen.features.add(label)
+      for (const name of jsMethods(code)) seen.methods.add(name)
+    }
+    byLesson.set(l.slug, { features: new Set(seen.features), methods: new Set(seen.methods) })
+  }
+  return (slug) => byLesson.get(slug) ?? null
+}
+
+/** Roda o código no Node de verdade e devolve a saída, como o aluno veria no compilador on-line. */
+function runJs(code) {
+  try {
+    const stdout = execFileSync(process.execPath, ['-'], { input: code, encoding: 'utf8', timeout: 8000, stdio: ['pipe', 'pipe', 'pipe'] })
+    return { ok: true, output: stdout }
+  } catch (e) {
+    const last = String(e.stderr ?? e.message).trim().split('\n').filter((l) => /Error/.test(l))[0]
+    return { ok: false, output: String(e.stdout ?? ''), error: last ?? 'o código não terminou (laço sem fim?)' }
+  }
+}
+
+const normalizeOutput = (s) =>
+  String(s ?? '')
+    .replace(/\r\n?/g, '\n')
+    .split('\n')
+    .map((l) => l.trimEnd())
+    .join('\n')
+    .trimEnd()
+
+/** Código inicial que o aluno recebe: o corretor de bolso (se houver) e o começo do exercício. */
+function exerciseStarter(list, ex) {
+  const harness = ex.harness ? list.json.harnesses?.[ex.harness] : null
+  return [harness, ex.starter].filter((p) => typeof p === 'string' && p.trim()).join('\n\n') || null
+}
+
+function validateAnswerShape(q, options, keys, qw, report) {
+  if (q.type === 'single' || q.type === 'multiple') {
+    if (!options || options.length < 2) report.error(qw, 'precisa de pelo menos 2 opções')
+    if (new Set(keys).size !== keys.length) report.error(qw, 'chaves de opção repetidas')
+    if (options && options.some((o) => !o.key || !o.text)) report.error(qw, 'cada opção precisa de key e text')
+    if (options && options.some((o) => /todas as (anteriores|alternativas)|nenhuma das/i.test(o.text))) report.warn(qw, 'evite "todas as anteriores" / "nenhuma das anteriores"')
+  }
+  if (q.type === 'single' && (typeof q.answer !== 'string' || !keys.includes(q.answer))) report.error(qw, '"answer" deve ser a key de uma opção')
+  if (q.type === 'multiple' && (!Array.isArray(q.answer) || !q.answer.length || q.answer.some((k) => !keys.includes(k)))) report.error(qw, '"answer" deve ser uma lista de keys válidas')
+  if (q.type === 'truefalse' && typeof q.answer !== 'boolean') report.error(qw, '"answer" deve ser true ou false')
+  if (q.type === 'fill') {
+    const blanks = (String(q.prompt ?? '').match(/_{3,}/g) ?? []).length
+    if (!blanks) report.error(qw, 'prompt de "fill" precisa de pelo menos uma lacuna "___"')
+    if (!Array.isArray(q.answer) || q.answer.length !== blanks) report.error(qw, `"answer" deve ter ${blanks} lista(s) de respostas aceitas, uma por lacuna`)
+    else if (q.answer.some((v) => !Array.isArray(v) || !v.length || v.some((s) => typeof s !== 'string' || !s.trim()))) report.error(qw, 'cada lacuna precisa de uma lista de textos aceitos, ex.: [["WHERE"]]')
+  }
+}
+
+function validateDragExercise(ex, qw, course, ctx, report) {
+  if (!DRAG_LAYOUTS.includes(ex.layout)) report.error(qw, `"layout" deve ser um de: ${DRAG_LAYOUTS.join(', ')}`)
+  const slots = Array.isArray(ex.slots) ? ex.slots : []
+  const items = Array.isArray(ex.items) ? ex.items : []
+  if (slots.length < 2 || slots.length > 8) report.error(qw, '"slots" deve ter de 2 a 8 lugares ({ key, label })')
+  if (items.length < slots.length) report.error(qw, '"items" precisa de pelo menos um item por lugar ({ key, text })')
+  const slotKeys = slots.map((s) => s.key)
+  const itemKeys = items.map((i) => i.key)
+  if (slots.some((s) => !s.key || !s.label)) report.error(qw, 'cada lugar precisa de key e label')
+  if (items.some((i) => !i.key || !i.text)) report.error(qw, 'cada item precisa de key e text')
+  if (new Set(slotKeys).size !== slotKeys.length) report.error(qw, 'chaves de lugar repetidas')
+  if (new Set(itemKeys).size !== itemKeys.length) report.error(qw, 'chaves de item repetidas')
+  for (const t of [...slots.map((s) => s.label), ...items.map((i) => i.text)]) {
+    if (typeof t === 'string') validateProse(t, qw, course, ctx, report, { noLocalImages: true })
+  }
+  const answer = ex.answer && typeof ex.answer === 'object' && !Array.isArray(ex.answer) ? ex.answer : null
+  if (!answer) {
+    report.error(qw, '"answer" deve ser um objeto { "<lugar>": "<item>" }')
+    return
+  }
+  const used = Object.values(answer)
+  if (slotKeys.some((k) => !(k in answer)) || Object.keys(answer).some((k) => !slotKeys.includes(k))) report.error(qw, '"answer" deve ter exatamente um item para cada lugar')
+  if (used.some((k) => !itemKeys.includes(k))) report.error(qw, '"answer" aponta para um item que não existe')
+  if (new Set(used).size !== used.length) report.error(qw, '"answer" usa o mesmo item em dois lugares')
+}
+
+function validateCodeExercise(ex, list, taught, qw, report) {
+  for (const k of ['solution', 'expected_output']) {
+    if (typeof ex[k] !== 'string' || !ex[k].trim()) report.error(qw, `exercício de código precisa de "${k}"`)
+  }
+  if (typeof ex.solution !== 'string' || typeof ex.expected_output !== 'string') return
+  if (ex.harness && typeof list.json.harnesses?.[ex.harness] !== 'string') report.error(qw, `"harness" ${ex.harness} não existe em lista.json`)
+  if (ex.starter !== undefined && typeof ex.starter !== 'string') report.error(qw, '"starter" deve ser texto')
+  if (ex.starter && ex.starter.trim() === ex.solution.trim()) report.error(qw, '"starter" é igual à solução: o aluno já receberia a resposta')
+
+  // precisa rodar num arquivo só, no compilador on-line, sem terminal e sem pacotes
+  const own = `${ex.starter ?? ''}\n${ex.solution}`
+  if (/^\s*(import|export)\s/m.test(own) || /\brequire\s*\(/.test(own)) report.error(qw, 'o código roda num arquivo só no compilador on-line: sem import, export ou require')
+  if (/\b(document|window|alert|localStorage|readline)\b/.test(stripJsNoise(own))) report.error(qw, 'o compilador on-line é Node: sem document, window, alert, localStorage ou leitura do teclado')
+
+  // só o que já foi ensinado até a aula do tema
+  if (taught) {
+    const code = stripJsNoise(own)
+    for (const [label, re] of JS_FEATURES) {
+      if (re.test(code) && !taught.features.has(label)) report.error(qw, `usa ${label}, que ainda não foi ensinado nesta aula`)
+    }
+    for (const name of jsMethods(code)) {
+      if (!taught.methods.has(name)) report.error(qw, `usa .${name}(), que ainda não foi ensinado nesta aula`)
+    }
+  }
+
+  const harness = ex.harness ? (list.json.harnesses?.[ex.harness] ?? '') : ''
+  const run = runJs(`${harness}\n${ex.solution}`)
+  if (!run.ok) {
+    report.error(qw, `a solução não roda: ${run.error}`)
+    return
+  }
+  if (normalizeOutput(run.output) !== normalizeOutput(ex.expected_output)) {
+    report.error(qw, `a saída da solução é diferente de "expected_output".\n    saída real: ${JSON.stringify(normalizeOutput(run.output))}\n    esperada:   ${JSON.stringify(normalizeOutput(ex.expected_output))}`)
+  }
+}
+
+function validateExerciseList(list, course, ctx, report) {
+  const lw = rel(list.file)
+  const j = list.json
+  if (!j.title) report.error(lw, '"title" é obrigatório')
+  if (!j.summary) report.warn(lw, 'lista sem "summary" (aparece na página do curso)')
+  if (EMOJI.test(JSON.stringify(j))) report.error(lw, 'não use emojis nas listas')
+  if (typeof j.intro === 'string') validateProse(j.intro, `${lw} (intro)`, course, ctx, report, { noLocalImages: true })
+  if (!list.topics.length) report.error(lw, 'lista sem temas')
+
+  const lessons = new Map(course.lessons.map((l) => [l.slug, l]))
+  const taught = taughtUpTo(course)
+  const seen = new Set()
+  const positions = new Set()
+
+  for (const t of list.topics) {
+    if (onlyTopics && !basename(t.file).startsWith(onlyTopics)) continue
+    const tw = rel(t.file)
+    const tj = t.json
+    if (seen.has(t.slug)) report.error(tw, `tema repetido: ${t.slug}`)
+    seen.add(t.slug)
+    if (positions.has(t.position)) report.error(tw, `posição ${t.position} repetida em outro tema`)
+    positions.add(t.position)
+    if (!tj.title) report.error(tw, '"title" é obrigatório')
+    if (!tj.lesson) report.error(tw, '"lesson" é obrigatório (slug da aula que ensina o tema)')
+    else if (!lessons.has(tj.lesson)) report.error(tw, `aula "${tj.lesson}" não existe em lessons/`)
+    if (!tj.recap) report.warn(tw, 'tema sem "recap" (lembrete curto antes dos exercícios)')
+    else validateProse(String(tj.recap), `${tw} (recap)`, course, ctx, report, { noLocalImages: true })
+    if (EMOJI.test(JSON.stringify(tj))) report.error(tw, 'não use emojis nos exercícios')
+
+    const exercises = Array.isArray(tj.exercises) ? tj.exercises : []
+    if (exercises.length !== EXERCISES_PER_TOPIC) report.error(tw, `tema com ${exercises.length} exercício(s); cada tema tem ${EXERCISES_PER_TOPIC}`)
+
+    const codeCount = exercises.filter((e) => e.type === 'code').length
+    if (tj.theory_only === true) {
+      if (codeCount) report.error(tw, '"theory_only" não combina com exercícios de código')
+      if (!tj.theory_reason) report.error(tw, '"theory_only" precisa de "theory_reason" (por que o tema não roda no compilador on-line)')
+    } else if (codeCount !== CODE_PER_TOPIC) {
+      report.error(tw, `tema com ${codeCount} exercício(s) de código; o padrão é ${CODE_PER_TOPIC} de código e ${EXERCISES_PER_TOPIC - CODE_PER_TOPIC} de teoria (ou "theory_only": true)`)
+    }
+    const theoryTypes = exercises.filter((e) => e.type !== 'code').map((e) => e.type)
+    const distinct = new Set(theoryTypes).size
+    if (theoryTypes.length >= 2 && distinct < Math.min(2, theoryTypes.length)) report.warn(tw, 'alterne os tipos de teoria dentro do tema')
+    if (tj.theory_only === true && distinct < 3) report.warn(tw, 'tema só de teoria: use pelo menos 3 tipos diferentes')
+
+    const ids = new Set()
+    exercises.forEach((ex, i) => {
+      const qw = `${tw} (exercício ${ex.id ?? i + 1})`
+      if (!ex.id || !/^[a-z0-9-]+$/.test(String(ex.id))) report.error(qw, '"id" com letras minúsculas, números e hífens')
+      if (ids.has(ex.id)) report.error(qw, `id repetido: ${ex.id}`)
+      ids.add(ex.id)
+      if (!EXERCISE_TYPES.includes(ex.type)) {
+        report.error(qw, `"type" deve ser um de: ${EXERCISE_TYPES.join(', ')}`)
+        return
+      }
+      if (!ex.prompt) report.error(qw, 'exercício sem "prompt"')
+      if (!ex.explanation) report.error(qw, 'exercício sem "explanation" (o aluno aprende com o porquê)')
+      const options = normalizeOptions(ex.options)
+      const keys = options ? options.map((o) => o.key) : []
+      for (const text of [ex.prompt, ex.explanation, ...(options ?? []).map((o) => o.text)]) {
+        if (typeof text === 'string') validateProse(text, qw, course, ctx, report, { noLocalImages: true })
+      }
+      if (ex.type === 'code') validateCodeExercise(ex, list, tj.lesson ? taught(tj.lesson) : null, qw, report)
+      else if (ex.type === 'drag') validateDragExercise(ex, qw, course, ctx, report)
+      else validateAnswerShape(ex, options, keys, qw, report)
+    })
+  }
+}
+
+// ---------------------------------------------------------------------
 // sincronização
 // ---------------------------------------------------------------------
+async function syncExerciseLists(c, course, sb, must, isMissingTable) {
+  const moduleTitle = new Map((c.json.modules ?? []).map((m) => [m.slug, m.title]))
+  const lessonBySlug = new Map(c.lessons.map((l) => [l.slug, l]))
+  let total = 0
+  for (const list of c.exerciseLists) {
+    const res = await sb
+      .from('exercise_lists')
+      .upsert(
+        {
+          course_id: course.id,
+          slug: list.slug,
+          title: list.json.title,
+          summary: list.json.summary ?? null,
+          intro_md: list.json.intro ?? '',
+          position: list.position,
+          is_published: list.json.published !== false,
+        },
+        { onConflict: 'course_id,slug' },
+      )
+      .select()
+      .single()
+    if (isMissingTable(res.error)) return { missing: true, total }
+    const row = must(res, `lista ${list.slug}`)
+
+    let position = 0
+    for (const t of list.topics) {
+      const lesson = lessonBySlug.get(t.json.lesson)
+      const topic = must(
+        await sb
+          .from('exercise_topics')
+          .upsert(
+            {
+              list_id: row.id,
+              slug: t.slug,
+              title: t.json.title,
+              module_title: lesson?.fm.module ? (moduleTitle.get(lesson.fm.module) ?? null) : null,
+              lesson_slug: t.json.lesson,
+              lesson_title: lesson?.fm.title ?? null,
+              recap_md: t.json.recap ?? null,
+              position: t.position,
+            },
+            { onConflict: 'list_id,slug' },
+          )
+          .select()
+          .single(),
+        `tema ${t.slug}`,
+      )
+      const keep = []
+      for (const ex of t.json.exercises) {
+        position++
+        keep.push(ex.id)
+        const options =
+          ex.type === 'drag'
+            ? { layout: ex.layout, slots: ex.slots, items: ex.items }
+            : normalizeOptions(ex.options)
+        const xrow = must(
+          await sb
+            .from('exercises')
+            .upsert(
+              {
+                list_id: row.id,
+                topic_id: topic.id,
+                key: ex.id,
+                position,
+                type: ex.type,
+                prompt_md: ex.prompt,
+                starter_code: ex.type === 'code' ? exerciseStarter(list, ex) : null,
+                options: options ?? null,
+              },
+              { onConflict: 'topic_id,key' },
+            )
+            .select()
+            .single(),
+          `exercício ${t.slug}/${ex.id}`,
+        )
+        must(
+          await sb.from('exercise_keys').upsert(
+            {
+              exercise_id: xrow.id,
+              answer: ex.type === 'code' ? null : ex.answer,
+              explanation_md: ex.explanation ?? null,
+              solution_code: ex.type === 'code' ? ex.solution : null,
+              expected_output: ex.type === 'code' ? ex.expected_output : null,
+            },
+            { onConflict: 'exercise_id' },
+          ),
+          `gabarito ${t.slug}/${ex.id}`,
+        )
+        total++
+      }
+      if (prune) {
+        // apagar um exercício apaga também as respostas dos alunos (on delete cascade)
+        must(await sb.from('exercises').delete().eq('topic_id', topic.id).not('key', 'in', `(${keep.map((k) => `"${k}"`).join(',')})`), 'prune exercícios')
+      }
+    }
+    if (prune) {
+      const slugs = list.topics.map((t) => `"${t.slug}"`).join(',')
+      must(await sb.from('exercise_topics').delete().eq('list_id', row.id).not('slug', 'in', `(${slugs})`), 'prune temas')
+    }
+  }
+  if (prune) {
+    const del = sb.from('exercise_lists').delete().eq('course_id', course.id)
+    const res = await (c.exerciseLists.length ? del.not('slug', 'in', `(${c.exerciseLists.map((l) => `"${l.slug}"`).join(',')})`) : del)
+    if (isMissingTable(res.error)) return { missing: true, total }
+    must(res, 'prune listas')
+  }
+  return { missing: false, total }
+}
+
 async function sync(courses) {
   const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -1176,6 +1593,12 @@ async function sync(courses) {
       console.log(`  aviso: tabela projects não existe no banco; aplique supabase/migrations/0004_projects.sql e rode o sync de novo (${c.projects.length} projeto(s) não enviados)`)
     } else if (c.projects.length) console.log(`  ${c.projects.length} projeto(s), ${c.projectGuides.length} guia(s) de correção`)
 
+    // listas de exercícios (tabelas da migration 0006; sem ela, avisa e segue)
+    const exerciseSync = await syncExerciseLists(c, course, sb, must, isMissingTable)
+    if (exerciseSync.missing) {
+      console.log(`  aviso: tabela exercise_lists não existe no banco; aplique supabase/migrations/0006_exercise_lists.sql e rode o sync de novo (${c.exerciseLists.length} lista(s) não enviadas)`)
+    } else if (c.exerciseLists.length) console.log(`  ${c.exerciseLists.length} lista(s) de exercícios, ${exerciseSync.total} exercício(s)`)
+
     // conquistas do curso (slug global = curso--slug)
     const achievements = Array.isArray(j.achievements) ? j.achievements : []
     const achSlugs = []
@@ -1281,7 +1704,8 @@ for (const c of courses) validateCourse(c, report)
 for (const c of courses) {
   const slides = c.lessons.reduce((n, l) => n + l.slides.length, 0)
   const questions = c.assessments.reduce((n, a) => n + (Array.isArray(a.json.questions) ? a.json.questions.length : 0), 0)
-  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s), ${c.materials.length} material(is), ${c.projects.length} projeto(s)`)
+  const exercises = c.exerciseLists.reduce((n, l) => n + l.topics.reduce((m, t) => m + (Array.isArray(t.json.exercises) ? t.json.exercises.length : 0), 0), 0)
+  console.log(`  ${c.slug}: ${c.lessons.length} aula(s), ${slides} slide(s), ${c.assessments.length} avaliação(ões), ${questions} questão(ões), ${c.images.length} imagem(ns), ${c.scripts.length} roteiro(s), ${c.materials.length} material(is), ${c.projects.length} projeto(s), ${exercises} exercício(s)`)
 }
 if (report.warnings.length || report.errors.length) console.log('')
 for (const w of report.warnings) console.log(`  aviso  ${w}`)

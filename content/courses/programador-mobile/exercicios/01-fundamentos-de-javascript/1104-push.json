@@ -1,0 +1,59 @@
+{
+  "title": "push",
+  "lesson": "e11-repeticoes",
+  "recap": "O **`push`** (empurrar) põe um item no fim da lista, como abrir uma gaveta nova depois da última. A lista pode nascer vazia e crescer dentro de um laço.\n\n```javascript\nconst pares = [];\nfor (let i = 1; i <= 3; i++) {\n  pares.push(i * 2);\n}\nconsole.log(pares); // [ 2, 4, 6 ]\n```",
+  "exercises": [
+    {
+      "id": "cesta-da-feira",
+      "type": "code",
+      "prompt": "A cesta começa vazia. Use `push` para pôr nela, nesta ordem, `laranja`, `couve` e `mamão`. Depois, mostre a lista e a quantidade de itens com `.length`.\n\n**Saída esperada**\n\n```plaintext\n[ 'laranja', 'couve', 'mamão' ]\nItens na cesta: 3\n```",
+      "starter": "const cesta = [];\n\n// use o push aqui\n",
+      "solution": "const cesta = [];\n\ncesta.push('laranja');\ncesta.push('couve');\ncesta.push('mamão');\n\nconsole.log(cesta);\nconsole.log(`Itens na cesta: ${cesta.length}`);\n",
+      "expected_output": "[ 'laranja', 'couve', 'mamão' ]\nItens na cesta: 3",
+      "explanation": "Cada `push` abre uma gaveta nova no fim da lista, por isso a ordem da saída é a ordem dos `push`. A `const` continua guardando a mesma lista: o `push` só põe itens dentro dela."
+    },
+    {
+      "id": "lista-de-faltas",
+      "type": "code",
+      "prompt": "A chamada da escola é uma lista de fichas com `nome` e `presente`. Monte uma lista nova só com os **nomes** de quem faltou. Use `for...of`, `if` e `push`. Depois, mostre a lista e quantos alunos faltaram.\n\n**Saída esperada**\n\n```plaintext\n[ 'Caio', 'Nara' ]\nFaltaram 2 alunos\n```",
+      "starter": "const chamada = [\n  { nome: 'Lia', presente: true },\n  { nome: 'Caio', presente: false },\n  { nome: 'Rui', presente: true },\n  { nome: 'Nara', presente: false },\n  { nome: 'Gabi', presente: true },\n];\n\n// monte a lista de faltas aqui\n",
+      "solution": "const chamada = [\n  { nome: 'Lia', presente: true },\n  { nome: 'Caio', presente: false },\n  { nome: 'Rui', presente: true },\n  { nome: 'Nara', presente: false },\n  { nome: 'Gabi', presente: true },\n];\n\nconst faltas = [];\nfor (const aluno of chamada) {\n  if (!aluno.presente) {\n    faltas.push(aluno.nome);\n  }\n}\n\nconsole.log(faltas);\nconsole.log(`Faltaram ${faltas.length} alunos`);\n",
+      "expected_output": "[ 'Caio', 'Nara' ]\nFaltaram 2 alunos",
+      "explanation": "A lista `faltas` nasce antes do laço, como um acumulador, e ganha um item só quando o `if` dá `true`. O `push` guarda `aluno.nome`, e não a ficha inteira, porque a saída pede os nomes."
+    },
+    {
+      "id": "treino-progressivo",
+      "type": "code",
+      "prompt": "Um plano de corrida começa com um tempo e aumenta um pouco a cada semana, sem passar de um limite. Escreva a função `montarTreino(inicio, aumento, semanas, limite)`, que devolve uma lista com os minutos de cada semana:\n\n- na semana de índice `i`, os minutos são `inicio + aumento * i`\n- se esse valor passar de `limite`, a semana fica com o valor de `limite`\n\nO código que mostra o plano já vem pronto.\n\n**Saída esperada**\n\n```plaintext\n[ 20, 25, 30, 35, 35, 35 ]\nSemana 1: 20 minutos\nSemana 2: 25 minutos\nSemana 3: 30 minutos\nSemana 4: 35 minutos\nSemana 5: 35 minutos\nSemana 6: 35 minutos\n```",
+      "starter": "// escreva a função montarTreino aqui\n\nconst plano = montarTreino(20, 5, 6, 35);\nconsole.log(plano);\n\nfor (let i = 0; i < plano.length; i++) {\n  console.log(`Semana ${i + 1}: ${plano[i]} minutos`);\n}\n",
+      "solution": "function montarTreino(inicio, aumento, semanas, limite) {\n  const treino = [];\n  for (let i = 0; i < semanas; i++) {\n    const minutos = inicio + aumento * i;\n    if (minutos > limite) {\n      treino.push(limite);\n    } else {\n      treino.push(minutos);\n    }\n  }\n  return treino;\n}\n\nconst plano = montarTreino(20, 5, 6, 35);\nconsole.log(plano);\n\nfor (let i = 0; i < plano.length; i++) {\n  console.log(`Semana ${i + 1}: ${plano[i]} minutos`);\n}\n",
+      "expected_output": "[ 20, 25, 30, 35, 35, 35 ]\nSemana 1: 20 minutos\nSemana 2: 25 minutos\nSemana 3: 30 minutos\nSemana 4: 35 minutos\nSemana 5: 35 minutos\nSemana 6: 35 minutos",
+      "explanation": "Cada volta calcula os minutos da semana, e o `if` escolhe o que entra na lista. Nas semanas 5 e 6, a conta daria 40 e 45, e o limite segura em 35. O `return treino` fica depois da `}` do `for`, para a função entregar a lista inteira."
+    },
+    {
+      "id": "push-com-const",
+      "type": "truefalse",
+      "prompt": "Este código dá erro, porque `fila` foi criada com `const`.\n\n```javascript\nconst fila = [];\nfila.push('Rosa');\nconsole.log(fila);\n```",
+      "answer": false,
+      "explanation": "O código funciona e mostra `[ 'Rosa' ]`. A caixa `fila` continua com a mesma lista, e o `push` só põe um item dentro dela. O erro apareceria ao trocar a lista por outra, como em `fila = ['Rosa']`."
+    },
+    {
+      "id": "senhas-do-atendimento",
+      "type": "multiple",
+      "prompt": "Depois de rodar o código abaixo, quais frases estão certas?\n\n```javascript\nconst senhas = [];\nsenhas.push(10);\nsenhas.push(20);\nsenhas.push(30);\n```",
+      "options": {
+        "a": "`senhas[3]` guarda o valor `30`",
+        "b": "`senhas[0]` guarda o valor `10`",
+        "c": "Cada `push` põe o item no começo da lista",
+        "d": "`senhas.length` vale `3`",
+        "e": "O `30` está na última gaveta da lista"
+      },
+      "answer": [
+        "b",
+        "d",
+        "e"
+      ],
+      "explanation": "O `push` põe cada item no fim, então a lista fica `[ 10, 20, 30 ]`, com 3 itens. As gavetas começam no 0: o `30` está na gaveta 2, e `senhas[3]` dá `undefined`. Essa é a alternativa que mais engana, porque o 30 foi o terceiro a entrar."
+    }
+  ]
+}

@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
-import { BookOpen, ClipboardList, Clock, Download, GraduationCap, ListChecks, Plus, Target, Users, TrendingUp } from 'lucide-vue-next'
+import { BookOpen, ClipboardList, Clock, Code, Download, GraduationCap, ListChecks, Plus, Target, Users, TrendingUp } from 'lucide-vue-next'
 import {
   fetchAssessmentsForStaff,
   fetchAttemptGrantsForStaff,
   fetchAttemptSummariesForStaff,
   fetchClassScripts,
   fetchCoursesForStaff,
+  fetchExerciseAnswersForStaff,
+  fetchExerciseContent,
+  fetchExerciseLists,
   fetchLessonsIndex,
   fetchProjectsForStaff,
   fetchStudentProgress,
@@ -24,6 +27,9 @@ import type {
   AttemptSummary,
   ClassScript,
   Course,
+  Exercise,
+  ExerciseAnswer,
+  ExerciseList,
   LessonSummary,
   Project,
   ProjectSubmission,
@@ -38,7 +44,7 @@ import EmptyState from '@/components/ui/EmptyState.vue'
 const route = useRoute()
 const toast = useToastStore()
 
-type Tab = 'alunos' | 'avaliacoes' | 'roteiros' | 'projetos'
+type Tab = 'alunos' | 'avaliacoes' | 'exercicios' | 'roteiros' | 'projetos'
 const tab = ref<Tab>('alunos')
 
 // ---- alunos ----
@@ -225,6 +231,98 @@ async function grantAttempts(r: EvRow) {
   }
 }
 
+// ---- listas de exercícios: entregas de cada aluno ----
+const exCourses = ref<Course[]>([])
+const exCourseId = ref('')
+const exLists = ref<ExerciseList[]>([])
+const exListId = ref('')
+const exItems = ref<Exercise[]>([])
+const exAnswers = ref<ExerciseAnswer[]>([])
+const exLoading = ref(false)
+const exReady = ref(false)
+let wantedListId = ''
+
+const exCourse = computed(() => exCourses.value.find((c) => c.id === exCourseId.value) ?? null)
+const exList = computed(() => exLists.value.find((l) => l.id === exListId.value) ?? null)
+const exCodeIds = computed(() => new Set(exItems.value.filter((x) => x.type === 'code').map((x) => x.id)))
+const exCodeTotal = computed(() => exCodeIds.value.size)
+const exTheoryTotal = computed(() => exItems.value.length - exCodeTotal.value)
+
+/** Situação de cada aluno na lista: quem tem código aguardando correção aparece primeiro. */
+const exRows = computed(() =>
+  rows.value
+    .filter((r) => r.course_id === exCourseId.value)
+    .map((student) => {
+      const mine = exAnswers.value.filter((a) => a.user_id === student.user_id)
+      const code = mine.filter((a) => exCodeIds.value.has(a.exercise_id))
+      const theory = mine.filter((a) => !exCodeIds.value.has(a.exercise_id))
+      return {
+        student,
+        delivered: code.length,
+        waiting: code.filter((a) => a.status === 'submitted').length,
+        approved: code.filter((a) => a.status === 'approved').length,
+        returned: code.filter((a) => a.status === 'returned').length,
+        theoryDone: theory.length,
+        theoryRight: theory.filter((a) => a.correct).length,
+      }
+    })
+    .sort((a, b) => b.waiting - a.waiting || a.student.full_name.localeCompare(b.student.full_name)),
+)
+
+async function loadExerciseAnswers() {
+  exItems.value = []
+  exAnswers.value = []
+  if (!exListId.value) return
+  exLoading.value = true
+  try {
+    const [content, answers] = await Promise.all([fetchExerciseContent(exListId.value), fetchExerciseAnswersForStaff(exListId.value)])
+    exItems.value = content.exercises
+    exAnswers.value = answers
+  } catch (e) {
+    toast.error('Não foi possível carregar os exercícios', friendlyError(e))
+  } finally {
+    exLoading.value = false
+  }
+}
+
+async function loadExerciseLists() {
+  exLists.value = []
+  exListId.value = ''
+  if (!exCourseId.value) return
+  exLoading.value = true
+  try {
+    const lists = await fetchExerciseLists(exCourseId.value)
+    exLists.value = lists
+    exListId.value = (lists.find((l) => l.id === wantedListId) ?? lists[0])?.id ?? ''
+    wantedListId = ''
+  } catch (e) {
+    toast.error('Não foi possível carregar as listas', friendlyError(e))
+  } finally {
+    exLoading.value = false
+  }
+}
+
+async function openExercicios(courseHint = '') {
+  tab.value = 'exercicios'
+  if (exReady.value) return
+  exLoading.value = true
+  try {
+    const list = await fetchCoursesForStaff()
+    exCourses.value = list
+    exReady.value = true
+    const hinted = list.find((c) => c.id === courseHint)
+    if (hinted) exCourseId.value = hinted.id
+    else if (!exCourseId.value && list.length) exCourseId.value = (list.find((c) => c.is_published) ?? list[0]).id
+  } catch (e) {
+    toast.error('Não foi possível carregar os cursos', friendlyError(e))
+  } finally {
+    exLoading.value = false
+  }
+}
+
+watch(exCourseId, () => void loadExerciseLists())
+watch(exListId, () => void loadExerciseAnswers())
+
 // ---- roteiros de aula ----
 const scriptCourses = ref<Course[]>([])
 const scriptCourseId = ref('')
@@ -379,6 +477,9 @@ onMounted(async () => {
     void openProjetos(String(route.query.curso ?? ''))
   } else if (route.query.aba === 'avaliacoes') {
     void openAvaliacoes()
+  } else if (route.query.aba === 'exercicios') {
+    wantedListId = String(route.query.lista ?? '')
+    void openExercicios(String(route.query.curso ?? ''))
   }
   try {
     rows.value = await fetchStudentProgress()
@@ -405,6 +506,9 @@ onMounted(async () => {
       </button>
       <button class="tabs__tab" :class="{ 'is-active': tab === 'avaliacoes' }" type="button" role="tab" :aria-selected="tab === 'avaliacoes'" @click="openAvaliacoes">
         <ListChecks /> Avaliações
+      </button>
+      <button class="tabs__tab" :class="{ 'is-active': tab === 'exercicios' }" type="button" role="tab" :aria-selected="tab === 'exercicios'" @click="openExercicios()">
+        <Code /> Exercícios
       </button>
       <button class="tabs__tab" :class="{ 'is-active': tab === 'roteiros' }" type="button" role="tab" :aria-selected="tab === 'roteiros'" @click="openRoteiros">
         <ClipboardList /> Roteiros de aula
@@ -578,6 +682,79 @@ onMounted(async () => {
           />
         </div>
       </template>
+    </template>
+
+    <!-- ===================== Listas de exercícios ===================== -->
+    <template v-else-if="tab === 'exercicios'">
+      <p class="hint" style="margin: 0 0 14px; max-width: 72ch">
+        O código entregue espera a sua correção: aprove ou devolva com um comentário. A teoria é corrigida automaticamente.
+      </p>
+
+      <div class="ev-filters ev-filters--two">
+        <select v-model="exCourseId" class="input" aria-label="Curso">
+          <option v-if="!exCourses.length" value="">Nenhum curso</option>
+          <option v-for="c in exCourses" :key="c.id" :value="c.id">{{ c.title }}{{ c.is_published ? '' : ' (não publicado)' }}</option>
+        </select>
+        <select v-model="exListId" class="input" aria-label="Lista de exercícios" :disabled="!exLists.length">
+          <option v-if="!exLists.length" value="">Nenhuma lista</option>
+          <option v-for="l in exLists" :key="l.id" :value="l.id">{{ l.title }}</option>
+        </select>
+      </div>
+
+      <LoadingBlock v-if="exLoading" text="Carregando exercícios" />
+
+      <div v-else-if="!exLists.length" class="card">
+        <EmptyState
+          :icon="Code"
+          title="Nenhuma lista neste curso"
+          text="Crie as listas em content/courses/<curso>/exercicios/ e rode npm run content:sync (a migration 0006 precisa estar aplicada)."
+        />
+      </div>
+
+      <div v-else class="card" style="padding: 0">
+        <div v-if="exRows.length" class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Aguardando</th>
+                <th>Código entregue</th>
+                <th>Aprovados</th>
+                <th>Teoria certa</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="r in exRows" :key="r.student.user_id">
+                <td>
+                  <div class="row">
+                    <UserAvatar :name="r.student.full_name" :src="r.student.avatar_url" :size="30" />
+                    <div>
+                      <div style="font-weight: 600">{{ r.student.full_name }}</div>
+                      <div class="hint">{{ r.student.username ? '@' + r.student.username : '' }}</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="badge" :class="r.waiting ? 'badge--info' : ''">{{ r.waiting }}</span></td>
+                <td>{{ r.delivered }} de {{ exCodeTotal }}</td>
+                <td>{{ r.approved }}<span v-if="r.returned" class="hint"> ({{ r.returned }} a refazer)</span></td>
+                <td>{{ r.theoryRight }} de {{ exTheoryTotal }}</td>
+                <td style="text-align: right">
+                  <RouterLink
+                    v-if="exCourse && exList && (r.delivered || r.theoryDone)"
+                    :to="`/instrutor/exercicios/${exCourse.slug}/${exList.slug}/${r.student.user_id}`"
+                    class="btn btn--sm"
+                    :class="r.waiting ? 'btn--primary' : 'btn--outline'"
+                  >
+                    {{ r.waiting ? 'Corrigir' : 'Abrir' }}
+                  </RouterLink>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <EmptyState v-else :icon="Users" title="Nenhum aluno matriculado" text="Quando alunos se matricularem, as entregas aparecem aqui." />
+      </div>
     </template>
 
     <!-- ===================== Projetos avaliados ===================== -->
@@ -769,6 +946,9 @@ onMounted(async () => {
 @media (min-width: 720px) {
   .ev-filters {
     grid-template-columns: minmax(0, 300px) minmax(0, 420px) minmax(0, 240px);
+  }
+  .ev-filters--two {
+    grid-template-columns: minmax(0, 300px) minmax(0, 420px);
   }
 }
 .ev-meta {

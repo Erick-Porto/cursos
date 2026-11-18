@@ -1,0 +1,70 @@
+{
+  "title": "VS Code e extensões",
+  "lesson": "e01b-ambiente-de-desenvolvimento",
+  "theory_only": true,
+  "theory_reason": "O VS Code é um programa instalado no seu computador, e o compilador on-line não abre o editor nem as extensões.",
+  "recap": "O **VS Code** é o editor onde você escreve o código. **Extensões** são como os apps do celular: você instala e o editor ganha uma função nova. No terminal, este comando abre a pasta atual no editor:\n\n```bash\ncode .\n```",
+  "exercises": [
+    {
+      "id": "para-que-serve-cada-extensao",
+      "type": "drag",
+      "prompt": "Arraste cada extensão do VS Code para o que ela faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "aparencia", "label": "Arruma a aparência do código: espaços, aspas e quebras de linha" },
+        { "key": "corretor", "label": "Aponta erros e descuidos, como um corretor ortográfico" },
+        { "key": "aviso", "label": "Mostra o aviso na própria linha, sem passar o mouse" }
+      ],
+      "items": [
+        { "key": "a", "text": "Error Lens" },
+        { "key": "b", "text": "Prettier" },
+        { "key": "c", "text": "ESLint" }
+      ],
+      "answer": { "aparencia": "b", "corretor": "c", "aviso": "a" },
+      "explanation": "O **Prettier** só cuida da aparência: ele não procura erros. Quem procura erros e descuidos é o **ESLint**. O **Error Lens** escreve o aviso na própria linha, para você ver o problema sem passar o mouse."
+    },
+    {
+      "id": "atalho-do-terminal",
+      "type": "single",
+      "prompt": "Você está escrevendo um arquivo no VS Code e quer abrir o terminal sem sair do editor. Qual atalho você usa?",
+      "options": {
+        "a": "`Ctrl + S`",
+        "b": "``Ctrl + ` ``",
+        "c": "`Ctrl + P`",
+        "d": "`Ctrl + Shift + X`"
+      },
+      "answer": "b",
+      "explanation": "O ``Ctrl + ` `` (crase) abre o terminal embaixo, já na pasta aberta. O `Ctrl + P` procura um arquivo pelo nome, o `Ctrl + S` salva e o `Ctrl + Shift + X` abre a aba de extensões."
+    },
+    {
+      "id": "quem-escreve-e-quem-roda",
+      "type": "truefalse",
+      "prompt": "O VS Code é o programa que roda o JavaScript no computador, e o Node.js é o programa onde você escreve o código.",
+      "answer": false,
+      "explanation": "É o contrário. Você escreve o código no **VS Code**, e o **Node.js** roda o JavaScript fora do navegador."
+    },
+    {
+      "id": "ajuda-do-editor",
+      "type": "multiple",
+      "prompt": "O que o VS Code faz por você enquanto você digita o código? Marque todas as certas.",
+      "options": {
+        "a": "Pinta cada parte do código de uma cor",
+        "b": "Completa os nomes enquanto você escreve",
+        "c": "Envia o arquivo para o GitHub a cada linha",
+        "d": "Aponta os erros no momento em que aparecem",
+        "e": "Instala o Node.js quando ele estiver faltando"
+      },
+      "answer": ["a", "b", "d"],
+      "explanation": "O VS Code é um editor feito para programar: colore o código, completa nomes e aponta erros. Ele não envia nada ao GitHub por conta própria e não instala o Node.js: essas tarefas são suas."
+    },
+    {
+      "id": "aviso-do-error-lens",
+      "type": "fill",
+      "prompt": "Você salvou a linha `console.log('Oi'` e o Error Lens mostrou `')' expected.`. Esse aviso quer dizer que faltou fechar o ___.",
+      "answer": [
+        ["parêntese", "parentese", "parênteses", "parenteses"]
+      ],
+      "explanation": "O `')' expected.` avisa que o JavaScript esperava um `)`. Feche o parêntese e salve com `Ctrl + S`: o aviso some. As aspas estão certas, porque abrem e fecham em volta de `Oi`."
+    }
+  ]
+}

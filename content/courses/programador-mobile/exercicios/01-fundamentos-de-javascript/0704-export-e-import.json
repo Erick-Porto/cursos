@@ -1,0 +1,69 @@
+{
+  "title": "export, import e regras puras",
+  "lesson": "e07-funcoes",
+  "theory_only": true,
+  "theory_reason": "O export e o import ligam dois arquivos, e o compilador on-line roda um arquivo só.",
+  "recap": "O `export` põe a função na vitrine, e o `import` pega de lá. A **regra pura** só cozinha: recebe valores e devolve com `return`, sem `console.log` e sem `fs`.\n\n```javascript\n// src/regras/conta.js\nexport function dobro(n) {\n  return n * 2;\n}\n\n// src/scripts/app.js\nimport { dobro } from '../regras/conta.js';\n```",
+  "exercises": [
+    {
+      "id": "caminho-do-import",
+      "type": "single",
+      "prompt": "O arquivo `src/telas/caixa.js` precisa da função `calcularTaxa`, que está em `src/regras/taxa.js`. Qual linha de `import` está certa?",
+      "options": {
+        "a": "`import { calcularTaxa } from '../regras/taxa';`",
+        "b": "`import { calcularTaxa } from 'regras/taxa.js';`",
+        "c": "`import { calcularTaxa } from '../regras/taxa.js';`",
+        "d": "`import { calcularTaxa } from '../taxa.js';`"
+      },
+      "answer": "c",
+      "explanation": "O caminho parte da pasta do arquivo que importa, `telas/`. O `..` sobe para `src/`, e `regras/taxa.js` entra na pasta e chega ao arquivo. A opção sem o `.js` parece certa, mas o `.js` no fim é obrigatório."
+    },
+    {
+      "id": "quais-sao-regras-puras",
+      "type": "multiple",
+      "prompt": "Quais destas funções são **regras puras**? Marque todas as certas.",
+      "options": {
+        "a": "`function mostrarTaxa(v) { console.log(v * 2); }`",
+        "b": "`function dobrar(v) { return v * 2; }`",
+        "c": "`function lerPrecos() { return readFileSync('precos.json', 'utf8'); }`",
+        "d": "`function arredondar(v) { return Math.round(v); }`"
+      },
+      "answer": ["b", "d"],
+      "explanation": "A regra pura só cozinha: recebe os ingredientes pelos parâmetros e entrega o prato com `return`. A `mostrarTaxa` tira foto com o `console.log`. A `lerPrecos` tem `return`, mas vai buscar os dados no armário com o `fs`."
+    },
+    {
+      "id": "sem-export-fica-no-estoque",
+      "type": "truefalse",
+      "prompt": "Uma função escrita sem `export` pode ser importada por outro arquivo, desde que o nome no `import` esteja certo.",
+      "answer": false,
+      "explanation": "O que não tem `export` fica no estoque, e só o próprio arquivo usa. O `import` pega apenas o que está na vitrine. Mesmo com o nome certo, o Node responde com `does not provide an export named`."
+    },
+    {
+      "id": "vitrine-do-modulo",
+      "type": "fill",
+      "prompt": "Complete o código: o primeiro arquivo põe a função na vitrine, e o segundo pega a função de lá.\n\n```javascript\n// src/regras/frete.js\n___ function calcularFrete(peso) {\n  return peso * 3;\n}\n\n// src/scripts/entrega.js\n___ { calcularFrete } ___ '../regras/frete.js';\n```",
+      "answer": [["export"], ["import"], ["from"]],
+      "explanation": "O `export` põe a função na vitrine. O `import` pega a função pelo nome exato, entre chaves, e o `from` diz de qual arquivo. Trocar a ordem não funciona: quem oferece a função é o arquivo da regra."
+    },
+    {
+      "id": "mensagens-do-modulo",
+      "type": "drag",
+      "prompt": "Arraste cada mensagem para o que ela quer dizer.",
+      "layout": "list",
+      "slots": [
+        { "key": "sem-export", "label": "Faltou o `export`, ou o nome é diferente" },
+        { "key": "caminho", "label": "O caminho do `import` está errado" },
+        { "key": "sem-import", "label": "A função não está nas chaves do `import`" },
+        { "key": "sem-return", "label": "A função da conta está sem `return`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`calcularFrete is not defined`" },
+        { "key": "b", "text": "`does not provide an export named`" },
+        { "key": "c", "text": "`Cannot find module`" },
+        { "key": "d", "text": "`R$ NaN` nas linhas de dinheiro" }
+      ],
+      "answer": { "sem-export": "b", "caminho": "c", "sem-import": "a", "sem-return": "d" },
+      "explanation": "`does not provide an export named` avisa que a vitrine não tem aquele nome. `Cannot find module` diz que o arquivo não está no caminho. `is not defined` aparece quando o nome não entrou no `import`. O `NaN` surge quando a conta usa o `undefined` de uma função sem `return`."
+    }
+  ]
+}

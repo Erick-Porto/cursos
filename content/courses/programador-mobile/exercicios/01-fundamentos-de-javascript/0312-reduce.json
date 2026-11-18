@@ -1,0 +1,69 @@
+{
+  "title": "reduce",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "O **`reduce`** é a calculadora que acumula: junta a lista inteira num valor só. O `0` no fim é o visor no começo, e cada volta soma ao `total`.\n\n```javascript\nconst gastos = [5, 7];\nconst soma = gastos.reduce((total, gasto) => total + gasto, 0);\nconsole.log(soma); // 12\n```",
+  "exercises": [
+    {
+      "id": "gastos-da-semana",
+      "type": "code",
+      "prompt": "A lista `gastos` guarda quanto você gastou em cada dia da semana. Use o `reduce` para somar tudo, começando do 0, e mostre a quantidade de dias e a soma.\n\n**Saída esperada**\n\n```plaintext\nDias com gasto: 5\nGasto da semana: 80\n```",
+      "starter": "const gastos = [12, 30, 8, 25, 5];\n\n// escreva o reduce aqui\n\n// mostre as duas linhas aqui\n",
+      "solution": "const gastos = [12, 30, 8, 25, 5];\n\nconst soma = gastos.reduce((total, gasto) => total + gasto, 0);\n\nconsole.log('Dias com gasto:', gastos.length);\nconsole.log('Gasto da semana:', soma);\n",
+      "expected_output": "Dias com gasto: 5\nGasto da semana: 80",
+      "explanation": "O visor começa em 0, e cada volta soma o gasto da vez ao `total`: 12, 42, 50, 75 e 80. Quando a lista acaba, o `reduce` entrega o último total."
+    },
+    {
+      "id": "cesta-do-mercado",
+      "type": "code",
+      "prompt": "A lista `cesta` traz os produtos de uma compra, com preço e quantidade. Use **dois** `reduce`: um para somar as unidades e outro para calcular o total da compra. Em cada volta do total, some o preço do item vezes a quantidade dele.\n\n**Saída esperada**\n\n```plaintext\nUnidades na cesta: 12\nTotal da compra: 119\n```",
+      "starter": "const cesta = [\n  { nome: 'Arroz', preco: 25, qtd: 2 },\n  { nome: 'Feijão', preco: 8, qtd: 3 },\n  { nome: 'Café', preco: 15, qtd: 1 },\n  { nome: 'Leite', preco: 5, qtd: 6 },\n];\n\n// escreva os dois reduce aqui\n\n// mostre as duas linhas aqui\n",
+      "solution": "const cesta = [\n  { nome: 'Arroz', preco: 25, qtd: 2 },\n  { nome: 'Feijão', preco: 8, qtd: 3 },\n  { nome: 'Café', preco: 15, qtd: 1 },\n  { nome: 'Leite', preco: 5, qtd: 6 },\n];\n\nconst unidades = cesta.reduce((total, item) => total + item.qtd, 0);\nconst valor = cesta.reduce((total, item) => total + item.preco * item.qtd, 0);\n\nconsole.log('Unidades na cesta:', unidades);\nconsole.log('Total da compra:', valor);\n",
+      "expected_output": "Unidades na cesta: 12\nTotal da compra: 119",
+      "explanation": "A conta de cada volta muda conforme a pergunta. Para as unidades, ela soma `item.qtd`. Para o valor, soma `item.preco * item.qtd`: 50, 24, 15 e 30, que dão 119."
+    },
+    {
+      "id": "caixa-da-feira",
+      "type": "code",
+      "prompt": "A lista `vendas` traz as vendas de uma barraca da feira, e algumas ainda não foram pagas. Primeiro, use o `filter` para ficar só com as vendas pagas. Depois, use o `reduce` para somar o valor delas. Por fim, calcule a média por venda paga, que é a soma dividida pela quantidade de vendas pagas, e mostre com 2 casas decimais usando `.toFixed(2)`.\n\n**Saída esperada**\n\n```plaintext\nVendas pagas: 3\nTotal recebido: 310\nMédia por venda: 103.33\n```",
+      "starter": "const vendas = [\n  { cliente: 'Dona Lurdes', valor: 120, paga: true },\n  { cliente: 'Seu Jorge', valor: 60, paga: false },\n  { cliente: 'Marta', valor: 90, paga: true },\n  { cliente: 'Caio', valor: 40, paga: false },\n  { cliente: 'Renata', valor: 100, paga: true },\n];\n\n// escreva o filter, o reduce e a média aqui\n\n// mostre as três linhas aqui\n",
+      "solution": "const vendas = [\n  { cliente: 'Dona Lurdes', valor: 120, paga: true },\n  { cliente: 'Seu Jorge', valor: 60, paga: false },\n  { cliente: 'Marta', valor: 90, paga: true },\n  { cliente: 'Caio', valor: 40, paga: false },\n  { cliente: 'Renata', valor: 100, paga: true },\n];\n\nconst pagas = vendas.filter((venda) => venda.paga);\nconst soma = pagas.reduce((total, venda) => total + venda.valor, 0);\nconst media = soma / pagas.length;\n\nconsole.log('Vendas pagas:', pagas.length);\nconsole.log('Total recebido:', soma);\nconsole.log('Média por venda:', media.toFixed(2));\n",
+      "expected_output": "Vendas pagas: 3\nTotal recebido: 310\nMédia por venda: 103.33",
+      "explanation": "O `filter` separa as 3 vendas pagas, e o `reduce` soma só essas: 120, 210 e 310. A média usa `pagas.length`, e não `vendas.length`, porque as vendas não pagas ficam de fora da conta. O `.toFixed(2)` deixa 2 casas decimais: `103.33`."
+    },
+    {
+      "id": "frases-sobre-o-reduce",
+      "type": "multiple",
+      "prompt": "Marque as frases certas sobre o `reduce`.",
+      "options": {
+        "a": "O `total` volta para 0 no começo de cada volta",
+        "b": "O resultado de cada volta vira o `total` da seguinte",
+        "c": "O `reduce` entrega uma lista nova com os itens somados",
+        "d": "O `0` no fim é o valor do visor antes do primeiro item",
+        "e": "O `reduce` junta a lista inteira num valor só"
+      },
+      "answer": ["b", "d", "e"],
+      "explanation": "O `reduce` acumula: o total de uma volta é o começo da próxima, e o 0 no fim só vale para a primeira volta. Quem entrega uma lista é o `filter`. O `reduce` entrega um valor só."
+    },
+    {
+      "id": "volta-por-volta",
+      "type": "drag",
+      "prompt": "Arraste cada etapa para a ordem em que este `reduce` trabalha.\n\n```javascript\nconst pontos = [4, 6];\nconst soma = pontos.reduce((total, ponto) => total + ponto, 0);\n```",
+      "layout": "flow",
+      "slots": [
+        { "key": "inicio", "label": "Início" },
+        { "key": "volta1", "label": "Volta 1" },
+        { "key": "volta2", "label": "Volta 2" },
+        { "key": "fim", "label": "Fim" }
+      ],
+      "items": [
+        { "key": "a", "text": "`4 + 6` dá `10`" },
+        { "key": "b", "text": "O `reduce` entrega `10`" },
+        { "key": "c", "text": "O visor começa em `0`" },
+        { "key": "d", "text": "`0 + 4` dá `4`" },
+        { "key": "e", "text": "`0 + 6` dá `6`" }
+      ],
+      "answer": { "inicio": "c", "volta1": "d", "volta2": "a", "fim": "b" },
+      "explanation": "O visor começa em 0. Na volta 1, o item é o `4`, e o total vai a 4. Na volta 2, o total de 4 recebe o `6` e vai a 10. A conta `0 + 6` está errada porque o total não volta a zero entre as voltas."
+    }
+  ]
+}

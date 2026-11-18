@@ -1,0 +1,70 @@
+{
+  "title": "Aspas no terminal",
+  "lesson": "e09-trabalhando-com-textos",
+  "theory_only": true,
+  "theory_reason": "O tema depende do npm e do PowerShell, que não existem no compilador on-line.",
+  "recap": "No comando, o **espaço** separa os argumentos, e as **aspas** juntam tudo num detalhe só. No **PowerShell**, o terminal do VS Code no Windows, a vírgula sem aspas vira espaço. Use aspas duplas e deixe um espaço depois do `R$`.\n\n```bash\nnpm run caixa \"R$ 45,90\"\n```",
+  "exercises": [
+    {
+      "id": "comando-certo",
+      "type": "single",
+      "prompt": "No PowerShell, qual comando entrega ao script o valor `R$ 45,90` inteiro?",
+      "options": {
+        "a": "`npm run caixa \"R$ 45,90\"`",
+        "b": "`npm run caixa \"R$45,90\"`",
+        "c": "`npm run caixa R$ 45,90`",
+        "d": "`npm run caixa R$45,90`"
+      },
+      "answer": "a",
+      "explanation": "As aspas duplas juntam o valor num argumento só, e o espaço depois do `R$` protege o `$`. A alternativa com `\"R$45,90\"` parece certa, mas o PowerShell lê `$45` como uma caixa vazia, e chega só `R,90`."
+    },
+    {
+      "id": "o-que-chega-ao-script",
+      "type": "drag",
+      "prompt": "Arraste para cada comando, digitado no PowerShell, o que chega ao script. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "duplas-com-espaco", "label": "`npm run caixa \"R$ 45,90\"`" },
+        { "key": "sem-aspas", "label": "`npm run caixa 45,90`" },
+        { "key": "duplas-sem-espaco", "label": "`npm run caixa \"R$45,90\"`" },
+        { "key": "simples", "label": "`npm run caixa 'R$45,90'`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`45 90`" },
+        { "key": "b", "text": "`R$45,90`" },
+        { "key": "c", "text": "`R$ 45,90`" },
+        { "key": "d", "text": "`45,90`" },
+        { "key": "e", "text": "`R,90`" }
+      ],
+      "answer": { "duplas-com-espaco": "c", "sem-aspas": "a", "duplas-sem-espaco": "e", "simples": "b" },
+      "explanation": "Sem aspas, a vírgula vira espaço. Entre aspas duplas, o `$45` vira uma caixa vazia do PowerShell. As aspas simples protegem o `$`. A peça `45,90` sobra: nenhum desses comandos entrega o número sem o `R$` e com a vírgula."
+    },
+    {
+      "id": "nome-sem-aspas",
+      "type": "truefalse",
+      "prompt": "No comando `npm run cadastro Rita Alves`, o script recebe o nome completo num argumento só.",
+      "answer": false,
+      "explanation": "O espaço separa um argumento do outro, então chegam dois: `Rita` e `Alves`. Para o nome chegar inteiro, use aspas: `npm run cadastro \"Rita Alves\"`."
+    },
+    {
+      "id": "espaco-e-aspas",
+      "type": "fill",
+      "prompt": "Complete a frase: no comando, o ___ separa um argumento do outro, e as ___ juntam tudo num detalhe só.",
+      "answer": [["espaço", "espaco"], ["aspas"]],
+      "explanation": "Cada argumento é um detalhe do pedido. No balcão, \"lanche de frango com queijo\" é um pedido só. No comando, as aspas fazem esse papel."
+    },
+    {
+      "id": "linha-do-npm",
+      "type": "multiple",
+      "prompt": "Você digitou `npm run caixa 45,90` no PowerShell, e o npm escreveu estas linhas antes da saída. O que elas mostram?\n\n```plaintext\n> feira@1.0.0 caixa\n> node src/caixa.js 45 90\n```",
+      "options": {
+        "a": "O valor chegou inteiro ao script, com a vírgula",
+        "b": "O script recebeu dois argumentos: `45` e `90`",
+        "c": "A vírgula se perdeu no caminho até o script",
+        "d": "O valor foi digitado entre aspas duplas"
+      },
+      "answer": ["b", "c"],
+      "explanation": "A segunda linha mostra o que chegou ao script: `45 90`, dois pedaços sem a vírgula. Com `npm run caixa \"45,90\"`, a linha mostraria `45,90`, e aí o valor teria chegado inteiro."
+    }
+  ]
+}

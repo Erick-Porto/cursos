@@ -1,0 +1,71 @@
+{
+  "title": "README e Markdown",
+  "lesson": "e05-git-e-github",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line não mostra Markdown: o README é um arquivo do projeto, que você confere no VS Code e no GitHub.",
+  "recap": "O **README** é o manual que vem na caixa: diz o que o projeto faz e como rodar. Ele é escrito em **Markdown**, texto com algumas marcas:\n\n```markdown\n# padaria\n\n## Como rodar\n\n- npm install\n```",
+  "exercises": [
+    {
+      "id": "marcas-do-markdown",
+      "type": "drag",
+      "prompt": "Arraste cada marca para o que o GitHub mostra. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "titulo", "label": "O título da página, grande" },
+        { "key": "secao", "label": "O título de uma seção, menor" },
+        { "key": "item", "label": "Um item de lista, com bolinha" },
+        { "key": "codigo", "label": "Um bloco de código" }
+      ],
+      "items": [
+        { "key": "a", "text": "`- npm install`" },
+        { "key": "b", "text": "Uma frase entre linhas em branco" },
+        { "key": "c", "text": "`## Como rodar`" },
+        { "key": "d", "text": "Três crases com `bash`, o código, três crases" },
+        { "key": "e", "text": "`# padaria`" }
+      ],
+      "answer": { "titulo": "e", "secao": "c", "item": "a", "codigo": "d" },
+      "explanation": "Um `#` faz o título da página, `##` faz o título de uma seção, `-` faz o item de lista e as três crases fazem o bloco de código. A frase entre linhas em branco sobra: ela vira um parágrafo."
+    },
+    {
+      "id": "titulo-sem-espaco",
+      "type": "single",
+      "prompt": "A Ana escreveu `#padaria` na primeira linha do README. Na prévia, a linha saiu como texto comum. O que falta?",
+      "options": {
+        "a": "Um segundo `#` antes da palavra `padaria`",
+        "b": "Uma linha em branco antes da palavra `padaria`",
+        "c": "Letra maiúscula no começo da palavra `padaria`",
+        "d": "Um espaço entre o `#` e a palavra `padaria`"
+      },
+      "answer": "d",
+      "explanation": "O título pede um espaço depois do `#`: `# padaria`. Um segundo `#` não resolve, porque `##padaria` também fica sem o espaço e continua como texto comum."
+    },
+    {
+      "id": "linhas-seguidas",
+      "type": "truefalse",
+      "prompt": "No README, duas frases escritas em linhas seguidas, sem linha em branco entre elas, aparecem como um parágrafo só.",
+      "answer": true,
+      "explanation": "Verdadeiro. Trocar de linha não cria um parágrafo novo. É a linha em branco que separa um parágrafo do outro."
+    },
+    {
+      "id": "manual-e-previa",
+      "type": "fill",
+      "prompt": "Complete as frases.\n\nO manual do projeto fica no arquivo ___, na pasta raiz. No VS Code, o atalho Ctrl + Shift + ___ mostra a prévia dele.",
+      "answer": [["README.md"], ["V"]],
+      "explanation": "O GitHub mostra o `README.md` embaixo da lista de arquivos. O atalho Ctrl + Shift + V mostra, no VS Code, o README como o GitHub vai mostrar."
+    },
+    {
+      "id": "bloco-de-codigo",
+      "type": "multiple",
+      "prompt": "Marque **todas** as afirmações corretas sobre o bloco de código do README.",
+      "options": {
+        "a": "Três acentos agudos (`´´´`) também abrem o bloco",
+        "b": "O bloco abre com três crases e o nome da linguagem",
+        "c": "O bloco termina sozinho na primeira linha em branco",
+        "d": "Para comandos do terminal, a linguagem é `bash`",
+        "e": "O bloco fecha com outras três crases"
+      },
+      "answer": ["b", "d", "e"],
+      "explanation": "O bloco abre com três crases e o nome da linguagem, como `bash` para comandos do terminal, e fecha com três crases. Com o acento agudo, o bloco não aparece. A linha em branco não fecha o bloco: quem fecha são as três crases."
+    }
+  ]
+}

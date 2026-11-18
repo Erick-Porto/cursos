@@ -1,0 +1,71 @@
+{
+  "title": "HTML, CSS e JavaScript",
+  "lesson": "e01a-a-web-e-o-javascript",
+  "theory_only": true,
+  "theory_reason": "HTML e CSS precisam de uma página aberta no navegador, e o compilador on-line só roda JavaScript no Node.",
+  "recap": "**HTML** é a estrutura: as paredes da casa. **CSS** é a aparência: a pintura e os móveis. **JavaScript** é o comportamento: os interruptores.\n\n```html\n<h1>Padaria da Esquina</h1>\n```\n\n```css\nh1 {\n  color: brown;\n}\n```",
+  "exercises": [
+    {
+      "id": "qual-e-a-linguagem",
+      "type": "drag",
+      "prompt": "A página de uma padaria usa as três linguagens da web. Arraste cada trecho de código para a linguagem em que ele está escrito.",
+      "layout": "list",
+      "slots": [
+        { "key": "html", "label": "HTML: a estrutura da página" },
+        { "key": "css", "label": "CSS: a aparência da página" },
+        { "key": "js", "label": "JavaScript: o comportamento da página" }
+      ],
+      "items": [
+        { "key": "a", "text": "`p { color: gray; }`" },
+        { "key": "b", "text": "`alert('Pedido anotado!')`" },
+        { "key": "c", "text": "`<p>Pão quentinho às 17h</p>`" }
+      ],
+      "answer": { "html": "c", "css": "a", "js": "b" },
+      "explanation": "Tags entre `<` e `>` são HTML. Um seletor com propriedades entre chaves é CSS. O `alert` é JavaScript: ele faz a página reagir e mostrar um aviso. O `p` aparece nos dois primeiros, mas no CSS ele é o seletor que escolhe todos os parágrafos."
+    },
+    {
+      "id": "site-sem-css",
+      "type": "single",
+      "prompt": "O site de uma empresa de ônibus abriu, mas o arquivo de **CSS** não carregou. O que você vê?",
+      "options": {
+        "a": "Os botões funcionam, mas a página fica sem estilo",
+        "b": "O texto aparece, mas os botões param de funcionar",
+        "c": "A página fica toda em branco, sem nenhum texto",
+        "d": "Uma mensagem de erro aparece no lugar da página"
+      },
+      "answer": "a",
+      "explanation": "Sem CSS, o HTML e o JavaScript continuam lá: o texto aparece e os botões funcionam, com letra preta, links azuis e imagens no tamanho original. Botão que não reage é o que acontece quando falta o JavaScript, e não o CSS."
+    },
+    {
+      "id": "tag-img-nao-fecha",
+      "type": "truefalse",
+      "prompt": "A tag `<img>` precisa de uma tag de fechamento, como `</img>`.",
+      "answer": false,
+      "explanation": "A tag `<img>` não fecha. O `src` diz qual arquivo mostrar, e o `alt` descreve a foto para quem não enxerga. Tags como `<h1>` e `<p>` é que abrem e fecham."
+    },
+    {
+      "id": "pedidos-para-o-css",
+      "type": "multiple",
+      "prompt": "O site de uma academia recebeu vários pedidos de mudança. Quais deles você resolve com **CSS**? Marque todas as certas.",
+      "options": {
+        "a": "Trocar a cor de todos os títulos da página",
+        "b": "Mostrar um aviso quando alguém clicar em Matricular",
+        "c": "Deixar em negrito todos os links da página",
+        "d": "Acrescentar um parágrafo com o horário de domingo",
+        "e": "Arredondar os cantos do botão Matricular"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "Cor, negrito e cantos arredondados mudam a aparência, e aparência é CSS. O parágrafo novo é conteúdo, então é HTML. O aviso depois do clique é uma reação, então é JavaScript."
+    },
+    {
+      "id": "seletor-e-propriedades",
+      "type": "fill",
+      "prompt": "No CSS, o ___ escolhe as peças da página, e as ___ dizem como elas ficam.",
+      "answer": [
+        ["seletor"],
+        ["propriedades", "propriedade"]
+      ],
+      "explanation": "Em `p { color: gray; }`, o `p` é o **seletor**: ele diz quem muda. O `color: gray` é uma **propriedade** com o seu valor: ela diz como a peça fica. Para não trocar os dois, lembre: o seletor vem antes das chaves, e as propriedades ficam dentro delas."
+    }
+  ]
+}

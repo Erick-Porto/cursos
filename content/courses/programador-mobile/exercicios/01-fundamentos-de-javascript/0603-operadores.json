@@ -1,0 +1,66 @@
+{
+  "title": "Operadores aritméticos",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "Os **operadores** são as teclas da calculadora: `+`, `-`, `*` e `/`. O `*` e a `/` vêm antes de `+` e `-`, e os parênteses mudam a ordem.\n\n```javascript\nconsole.log(2 + 3 * 4);   // 14\nconsole.log((2 + 3) * 4); // 20\n```",
+  "exercises": [
+    {
+      "id": "compra-na-feira",
+      "type": "code",
+      "prompt": "Na feira, você levou tomate e banana. Calcule o valor de cada fruta, multiplicando os quilos pelo preço, e o total da compra.\n\n**Saída esperada**\n\n```plaintext\nTomate: R$ 21\nBanana: R$ 12\nTotal: R$ 33\n```",
+      "starter": "const quilosDeTomate = 3;\nconst precoDoTomate = 7;\nconst quilosDeBanana = 2;\nconst precoDaBanana = 6;\n\n// calcule e mostre os valores aqui\n",
+      "solution": "const quilosDeTomate = 3;\nconst precoDoTomate = 7;\nconst quilosDeBanana = 2;\nconst precoDaBanana = 6;\n\nconst tomate = quilosDeTomate * precoDoTomate;\nconst banana = quilosDeBanana * precoDaBanana;\nconst total = tomate + banana;\n\nconsole.log('Tomate: R$', tomate);\nconsole.log('Banana: R$', banana);\nconsole.log('Total: R$', total);\n",
+      "expected_output": "Tomate: R$ 21\nBanana: R$ 12\nTotal: R$ 33",
+      "explanation": "O `*` multiplica os quilos pelo preço: 3 vezes 7 dá 21, e 2 vezes 6 dá 12. O `+` junta os dois valores no total."
+    },
+    {
+      "id": "media-das-notas",
+      "type": "code",
+      "prompt": "Mostre a soma e a média das três notas do boletim. Na conta da média, use parênteses, para a soma acontecer antes da divisão.\n\n**Saída esperada**\n\n```plaintext\nSoma: 24\nMédia: 8\n```",
+      "starter": "const prova = 6;\nconst trabalho = 8.5;\nconst participacao = 9.5;\n\n// calcule e mostre a soma e a média aqui\n",
+      "solution": "const prova = 6;\nconst trabalho = 8.5;\nconst participacao = 9.5;\n\nconst soma = prova + trabalho + participacao;\nconst media = (prova + trabalho + participacao) / 3;\n\nconsole.log('Soma:', soma);\nconsole.log('Média:', media);\n",
+      "expected_output": "Soma: 24\nMédia: 8",
+      "explanation": "Sem os parênteses, a divisão viria primeiro, e só a última nota seria dividida por 3. Com eles, a soma dá 24, e 24 dividido por 3 dá 8."
+    },
+    {
+      "id": "plano-anual-da-academia",
+      "type": "code",
+      "prompt": "O plano anual da academia dá 15% de desconto sobre 12 mensalidades de R$ 90. Calcule os quatro valores da saída. O desconto é o valor sem desconto, vezes o percentual, dividido por 100. O valor por mês é o total com desconto dividido pelos meses: escreva essa conta com parênteses.\n\n**Saída esperada**\n\n```plaintext\nSem desconto: R$ 1080\nDesconto: R$ 162\nCom desconto: R$ 918\nPor mês: R$ 76.5\n```",
+      "starter": "const mensalidade = 90;\nconst meses = 12;\nconst percentual = 15;\n\n// calcule e mostre os quatro valores aqui\n",
+      "solution": "const mensalidade = 90;\nconst meses = 12;\nconst percentual = 15;\n\nconst semDesconto = mensalidade * meses;\nconst desconto = semDesconto * percentual / 100;\nconst comDesconto = semDesconto - desconto;\nconst porMes = (semDesconto - desconto) / meses;\n\nconsole.log('Sem desconto: R$', semDesconto);\nconsole.log('Desconto: R$', desconto);\nconsole.log('Com desconto: R$', comDesconto);\nconsole.log('Por mês: R$', porMes);\n",
+      "expected_output": "Sem desconto: R$ 1080\nDesconto: R$ 162\nCom desconto: R$ 918\nPor mês: R$ 76.5",
+      "explanation": "`*` e `/` lado a lado vão da esquerda para a direita: 1080 vezes 15, dividido por 100, dá 162. Os parênteses em `porMes` fazem a subtração antes da divisão."
+    },
+    {
+      "id": "ordem-da-conta",
+      "type": "drag",
+      "prompt": "Arraste as contas para a ordem em que o JavaScript resolve `2 + 6 * (5 - 3)`. Uma das contas não entra.",
+      "layout": "flow",
+      "slots": [
+        { "key": "primeiro", "label": "Primeiro" },
+        { "key": "depois", "label": "Depois" },
+        { "key": "fim", "label": "Por último" }
+      ],
+      "items": [
+        { "key": "a", "text": "`6 * 2` dá `12`" },
+        { "key": "b", "text": "`2 + 12` dá `14`" },
+        { "key": "c", "text": "`5 - 3` dá `2`" },
+        { "key": "d", "text": "`2 + 6` dá `8`" }
+      ],
+      "answer": { "primeiro": "c", "depois": "a", "fim": "b" },
+      "explanation": "Os parênteses vêm primeiro: `5 - 3` dá `2`. Depois, o `*` vem antes do `+`: `6 * 2` dá `12`. Por último, `2 + 12` dá `14`. Fazer `2 + 6` antes ignora a prioridade do `*`."
+    },
+    {
+      "id": "lanche-das-amigas",
+      "type": "single",
+      "prompt": "Quatro amigas pediram um lanche de R$ 80 e uma sobremesa de R$ 40. Qual conta mostra quanto cada uma paga?",
+      "options": {
+        "a": "`80 + 40 / 4`",
+        "b": "`80 / 4 + 40`",
+        "c": "`(80 + 40) * 4`",
+        "d": "`(80 + 40) / 4`"
+      },
+      "answer": "d",
+      "explanation": "Os parênteses fazem a soma primeiro: 120 dividido por 4 dá 30. Em `80 + 40 / 4`, a divisão vem antes da soma, só a sobremesa é dividida, e o resultado é 90."
+    }
+  ]
+}

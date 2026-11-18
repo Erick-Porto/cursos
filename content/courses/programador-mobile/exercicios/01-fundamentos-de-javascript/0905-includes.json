@@ -1,0 +1,55 @@
+{
+  "title": "includes",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`includes(trecho)`** pergunta se o trecho aparece em algum lugar do texto e responde `true` ou `false`. É o Ctrl + F do texto. Maiúscula conta.\n\n```javascript\nconst aviso = 'Ônibus atrasado';\nconsole.log(aviso.includes('atrasado'));   // true\nconsole.log(aviso.includes('Atrasado'));   // false\n```",
+  "exercises": [
+    {
+      "id": "ingredientes-do-pao",
+      "type": "code",
+      "prompt": "A padaria guarda os ingredientes de um pão num texto. Use o `includes` para responder se a receita tem `leite` e se tem `chocolate`.\n\n**Saída esperada**\n\n```plaintext\nTem leite: true\nTem chocolate: false\n```",
+      "starter": "const ingredientes = 'farinha, ovos, leite, fermento';\n\n// faça as duas perguntas aqui\n",
+      "solution": "const ingredientes = 'farinha, ovos, leite, fermento';\n\nconsole.log(`Tem leite: ${ingredientes.includes('leite')}`);\nconsole.log(`Tem chocolate: ${ingredientes.includes('chocolate')}`);\n",
+      "expected_output": "Tem leite: true\nTem chocolate: false",
+      "explanation": "O `includes` procura o trecho em qualquer lugar do texto e responde `true` ou `false`. A palavra `leite` aparece no meio do texto, e `chocolate` não aparece."
+    },
+    {
+      "id": "aviso-de-alergia",
+      "type": "code",
+      "prompt": "O mercado confere o rótulo de um biscoito. Escreva um `if` para cada ingrediente: mostre `Atenção: contém lactose` só se o rótulo falar de `lactose`, e `Atenção: contém glúten` só se falar de `glúten`. No fim, mostre sempre `Rótulo conferido`.\n\n**Saída esperada**\n\n```plaintext\nAtenção: contém lactose\nRótulo conferido\n```",
+      "starter": "const rotulo = 'Biscoito de polvilho com queijo, contém lactose';\n\n// escreva os dois if aqui\n",
+      "solution": "const rotulo = 'Biscoito de polvilho com queijo, contém lactose';\n\nif (rotulo.includes('lactose')) {\n  console.log('Atenção: contém lactose');\n}\n\nif (rotulo.includes('glúten')) {\n  console.log('Atenção: contém glúten');\n}\n\nconsole.log('Rótulo conferido');\n",
+      "expected_output": "Atenção: contém lactose\nRótulo conferido",
+      "explanation": "O `includes` responde `true` ou `false`, e o `if` usa essa resposta para decidir. O rótulo fala de lactose e não fala de glúten, por isso só o primeiro aviso aparece. A última linha fica fora dos `if` e roda sempre."
+    },
+    {
+      "id": "linhas-do-centro",
+      "type": "code",
+      "prompt": "No aplicativo de ônibus, a pessoa procura as linhas que passam pelo `Centro`. Use o `filter` com o `includes` para guardar essas linhas. Mostre quantas são e depois a lista.\n\n**Saída esperada**\n\n```plaintext\nLinhas encontradas: 2\n[ '101 Centro', '310 Centro Histórico' ]\n```",
+      "starter": "const linhas = ['101 Centro', '205 Terminal Sul', '310 Centro Histórico', '412 Aeroporto', '518 Vila Nova'];\n\n// escreva o filter aqui\n",
+      "solution": "const linhas = ['101 Centro', '205 Terminal Sul', '310 Centro Histórico', '412 Aeroporto', '518 Vila Nova'];\n\nconst achadas = linhas.filter((linha) => linha.includes('Centro'));\nconsole.log(`Linhas encontradas: ${achadas.length}`);\nconsole.log(achadas);\n",
+      "expected_output": "Linhas encontradas: 2\n[ '101 Centro', '310 Centro Histórico' ]",
+      "explanation": "A peneira do `filter` faz a mesma pergunta a cada linha: o trecho `Centro` aparece em você? As duas que respondem `true` ficam na lista nova, e o `length` conta quantas ficaram."
+    },
+    {
+      "id": "maiuscula-conta",
+      "type": "truefalse",
+      "prompt": "A chamada `'Açaí com banana'.includes('Banana')` responde `true`.",
+      "answer": false,
+      "explanation": "Para o JavaScript, `B` e `b` são letras diferentes. O texto tem `banana` com minúscula, por isso a resposta é `false`."
+    },
+    {
+      "id": "quais-respondem-true",
+      "type": "multiple",
+      "prompt": "Com `const recado = 'Aula de reforço na sala 12';`, quais chamadas respondem `true`?",
+      "options": {
+        "a": "`recado.includes('sala')`",
+        "b": "`recado.includes('aula')`",
+        "c": "`recado.includes(' na ')`",
+        "d": "`recado.includes('sala 13')`",
+        "e": "`recado.includes('Aula')`"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "O trecho pode estar em qualquer lugar e pode ter espaços, como `' na '`. A alternativa com `'aula'` parece certa, mas o texto começa com `A` maiúsculo, e maiúscula conta. O trecho `'sala 13'` não aparece: a sala é a 12."
+    }
+  ]
+}

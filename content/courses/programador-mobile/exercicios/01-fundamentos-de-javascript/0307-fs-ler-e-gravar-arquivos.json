@@ -1,0 +1,71 @@
+{
+  "title": "fs: ler e gravar arquivos",
+  "lesson": "e02a-node-na-pratica",
+  "theory_only": true,
+  "theory_reason": "O fs precisa de import e de arquivos de verdade no computador, e o compilador on-line roda um arquivo só, sem import.",
+  "recap": "O **`fs`** (*file system*, sistema de arquivos) deixa o Node mexer em arquivos. O `writeFileSync` grava, e o `readFileSync` lê.\n\n```javascript\nimport fs from 'node:fs';\n\nfs.writeFileSync('nota.txt', 'Comprar pão');\nconsole.log(fs.readFileSync('nota.txt', 'utf-8'));\n// Comprar pão\n```",
+  "exercises": [
+    {
+      "id": "gravar-duas-vezes",
+      "type": "single",
+      "prompt": "O que aparece na tela quando este script roda?\n\n```javascript\nimport fs from 'node:fs';\n\nfs.writeFileSync('treino.txt', 'Treino às 8h');\nfs.writeFileSync('treino.txt', 'Treino às 9h');\nconsole.log(fs.readFileSync('treino.txt', 'utf-8'));\n```",
+      "options": {
+        "a": "`Treino às 8h` e `Treino às 9h`, um em cada linha",
+        "b": "`Treino às 9h`, porque gravar de novo substitui o texto",
+        "c": "`Treino às 8h`, porque o primeiro texto fica no arquivo",
+        "d": "Um erro, porque o arquivo `treino.txt` já existe"
+      },
+      "answer": "b",
+      "explanation": "O `writeFileSync` cria o arquivo ou substitui o que havia nele. A segunda gravação troca o texto inteiro, então só resta `Treino às 9h`. Ele não acrescenta uma linha nova, e gravar por cima de um arquivo que já existe não dá erro."
+    },
+    {
+      "id": "ferramentas-do-fs",
+      "type": "drag",
+      "prompt": "Arraste cada trecho de código para o que ele faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "traz", "label": "Traz o `fs` para o script" },
+        { "key": "grava", "label": "Grava um arquivo: cria ou substitui" },
+        { "key": "le", "label": "Lê um arquivo e devolve o texto dele" },
+        { "key": "acentos", "label": "Acerta os acentos na leitura" }
+      ],
+      "items": [
+        { "key": "a", "text": "`fs.readFileSync`" },
+        { "key": "b", "text": "`'utf-8'`" },
+        { "key": "c", "text": "`import fs from 'node:fs'`" },
+        { "key": "d", "text": "`fs.writeFileSync`" },
+        { "key": "e", "text": "`JSON.parse`" }
+      ],
+      "answer": { "traz": "c", "grava": "d", "le": "a", "acentos": "b" },
+      "explanation": "O `import` traz o `fs`, que já vem com o Node. O `writeFileSync` grava, o `readFileSync` lê e o `'utf-8'` acerta os acentos. O `JSON.parse` sobra: ele transforma texto em objeto, mas não mexe em arquivos."
+    },
+    {
+      "id": "caminho-parte-do-terminal",
+      "type": "truefalse",
+      "prompt": "O caminho escrito dentro do `fs` parte da pasta em que o terminal está, e não da pasta em que o script está.",
+      "answer": true,
+      "explanation": "Por isso o mesmo script funciona na pasta raiz do projeto e falha dentro de `src/scripts`. Antes de rodar, confira o caminho que o terminal mostra."
+    },
+    {
+      "id": "erro-de-arquivo",
+      "type": "fill",
+      "prompt": "Quando o Node não encontra o arquivo, a mensagem de erro traz o código ___.",
+      "answer": [["ENOENT"]],
+      "explanation": "`ENOENT` quer dizer arquivo não encontrado. Quase sempre o script rodou da pasta errada. Leia o caminho da mensagem, volte para a pasta raiz com `cd ..` e confira o nome do arquivo."
+    },
+    {
+      "id": "frases-sobre-o-fs",
+      "type": "multiple",
+      "prompt": "Marque as frases certas sobre o `fs`.",
+      "options": {
+        "a": "O `fs` já vem com o Node: você não instala nada",
+        "b": "O `writeFileSync` acrescenta o texto no fim do arquivo",
+        "c": "O `readFileSync` devolve o texto que está no arquivo",
+        "d": "O `writeFileSync` cria o arquivo quando ele não existe",
+        "e": "O navegador usa o `fs` para abrir qualquer arquivo seu"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "O `fs` vem com o Node, grava e lê arquivos. O `writeFileSync` substitui o conteúdo, em vez de acrescentar. E o navegador não pode abrir os arquivos do seu computador, por segurança."
+    }
+  ]
+}

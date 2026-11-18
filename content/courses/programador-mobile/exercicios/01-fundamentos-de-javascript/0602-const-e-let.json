@@ -1,0 +1,48 @@
+{
+  "title": "const e let",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "A **`const`** é a caixa lacrada: o valor não troca. O **`let`** é a caixa que deixa trocar o conteúdo. Comece sempre com `const`.\n\n```javascript\nconst nome = 'Rui';\nlet pontos = 20;\npontos = pontos - 5;\nconsole.log(nome, pontos); // Rui 15\n```",
+  "exercises": [
+    {
+      "id": "pontos-da-padaria",
+      "type": "code",
+      "prompt": "O cartão fidelidade da padaria começa com 40 pontos. Crie a caixa `pontos` com `let`, some os pontos das duas compras e mostre o resultado.\n\n**Saída esperada**\n\n```plaintext\nPontos: 80\n```",
+      "starter": "const compraDaManha = 15;\nconst compraDaTarde = 25;\n\n// crie a caixa pontos e faça as duas somas aqui\n",
+      "solution": "const compraDaManha = 15;\nconst compraDaTarde = 25;\n\nlet pontos = 40;\npontos = pontos + compraDaManha;\npontos = pontos + compraDaTarde;\n\nconsole.log('Pontos:', pontos);\n",
+      "expected_output": "Pontos: 80",
+      "explanation": "`pontos = pontos + compraDaManha` diz: pegue o que está na caixa, some e guarde de volta. O `let` permite essa troca, e os valores das compras continuam em `const` porque não mudam."
+    },
+    {
+      "id": "estoque-de-paes",
+      "type": "code",
+      "prompt": "A padaria abre com 120 pães. Crie a caixa `paes` com `let`. Tire a venda da manhã, tire a venda da tarde e some a fornada. Depois de cada mudança, mostre o valor da caixa.\n\n**Saída esperada**\n\n```plaintext\nDepois da manhã: 85\nDepois da tarde: 37\nDepois da fornada: 67\n```",
+      "starter": "const vendaDaManha = 35;\nconst vendaDaTarde = 48;\nconst fornada = 30;\n\n// crie a caixa paes aqui e mostre o valor depois de cada mudança\n",
+      "solution": "const vendaDaManha = 35;\nconst vendaDaTarde = 48;\nconst fornada = 30;\n\nlet paes = 120;\n\npaes = paes - vendaDaManha;\nconsole.log('Depois da manhã:', paes);\n\npaes = paes - vendaDaTarde;\nconsole.log('Depois da tarde:', paes);\n\npaes = paes + fornada;\nconsole.log('Depois da fornada:', paes);\n",
+      "expected_output": "Depois da manhã: 85\nDepois da tarde: 37\nDepois da fornada: 67",
+      "explanation": "O script roda de cima para baixo, e cada linha parte do valor que está na caixa naquele momento: 120 menos 35 dá 85, 85 menos 48 dá 37, e 37 mais 30 dá 67."
+    },
+    {
+      "id": "series-do-treino",
+      "type": "code",
+      "prompt": "O app da academia conta as séries do treino, mas o código quebra com `TypeError: Assignment to constant variable.` Troque `const` por `let` só na caixa que precisa mudar. Depois, crie a caixa `faltam`, com quantas séries faltam para a meta, e mostre a segunda linha da saída.\n\n**Saída esperada**\n\n```plaintext\nCaio fez 9 séries\nFaltam 3 séries\n```",
+      "starter": "const aluno = 'Caio';\nconst metaDeSeries = 12;\nconst seriesFeitas = 0;\n\nseriesFeitas = seriesFeitas + 4;\nseriesFeitas = seriesFeitas + 5;\n\nconsole.log(aluno, 'fez', seriesFeitas, 'séries');\n\n// crie aqui a caixa faltam e mostre quantas séries faltam\n",
+      "solution": "const aluno = 'Caio';\nconst metaDeSeries = 12;\nlet seriesFeitas = 0;\n\nseriesFeitas = seriesFeitas + 4;\nseriesFeitas = seriesFeitas + 5;\n\nconsole.log(aluno, 'fez', seriesFeitas, 'séries');\n\nconst faltam = metaDeSeries - seriesFeitas;\nconsole.log('Faltam', faltam, 'séries');\n",
+      "expected_output": "Caio fez 9 séries\nFaltam 3 séries",
+      "explanation": "Só `seriesFeitas` recebe outro valor, então só ela vira `let`. O nome do aluno, a meta e `faltam` são calculados uma vez e ficam em `const`."
+    },
+    {
+      "id": "o-igual-guarda",
+      "type": "truefalse",
+      "prompt": "Em `vagas = vagas - 1`, o sinal `=` pergunta se os dois lados são iguais.",
+      "answer": false,
+      "explanation": "O `=` **guarda**: primeiro calcula o lado direito, depois põe o resultado na caixa da esquerda. A pergunta \"é igual?\" é o `===`."
+    },
+    {
+      "id": "nome-da-troca",
+      "type": "fill",
+      "prompt": "Complete as lacunas: guardar outro valor numa caixa que já existe é ___. Numa `const`, isso dá o erro ___.",
+      "answer": [["reatribuir", "reatribuição", "reatribuicao"], ["TypeError", "Type Error"]],
+      "explanation": "Trocar o conteúdo de uma caixa existente é **reatribuir**. O `let` deixa, e a `const`, a caixa lacrada, responde com `TypeError: Assignment to constant variable.`"
+    }
+  ]
+}

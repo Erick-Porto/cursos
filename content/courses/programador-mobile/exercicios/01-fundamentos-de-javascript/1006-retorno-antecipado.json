@@ -1,0 +1,96 @@
+{
+  "title": "Retorno antecipado",
+  "lesson": "e10-decisoes",
+  "recap": "O `return` entrega o resultado e **sai da função na hora**. No **retorno antecipado**, cada `if` barra um problema na entrada, como o segurança na porta do show, e o fim da função cuida de quem passou.\n\n```javascript\nfunction sacar(saldo, valor) {\n  if (valor > saldo) {\n    return 'Saldo insuficiente';\n  }\n  return 'Saque feito';\n}\n```",
+  "exercises": [
+    {
+      "id": "emprestimo-da-biblioteca",
+      "type": "code",
+      "prompt": "A biblioteca da escola empresta livros para quem tem **menos de 3** em casa. Escreva a função `liberarEmprestimo(livrosEmCasa)` com retorno antecipado: um `if` barra quem tem 3 ou mais, com `return`, e a última linha da função devolve a resposta de quem passou. Não use `else`.\n\n**Saída esperada**\n\n```plaintext\nEmpréstimo liberado\nDevolva um livro antes\nEmpréstimo liberado\n```",
+      "starter": "// escreva a função liberarEmprestimo aqui\n\nconsole.log(liberarEmprestimo(1));\nconsole.log(liberarEmprestimo(3));\nconsole.log(liberarEmprestimo(0));\n",
+      "solution": "function liberarEmprestimo(livrosEmCasa) {\n  if (livrosEmCasa >= 3) {\n    return 'Devolva um livro antes';\n  }\n  return 'Empréstimo liberado';\n}\n\nconsole.log(liberarEmprestimo(1));\nconsole.log(liberarEmprestimo(3));\nconsole.log(liberarEmprestimo(0));\n",
+      "expected_output": "Empréstimo liberado\nDevolva um livro antes\nEmpréstimo liberado",
+      "explanation": "Com 3 livros, o `if` dá `true`, e o `return` sai da função na hora. Por isso a última linha não precisa de `else`: ela só roda para quem passou pelo `if`."
+    },
+    {
+      "id": "matricula-da-academia",
+      "type": "code",
+      "prompt": "A academia confere a matrícula nesta ordem e para no primeiro problema:\n\n1. Sem atestado: `Falta o atestado médico`\n2. Menos de 16 anos: `Só a partir de 16 anos`\n3. Sem pagamento: `Falta pagar a matrícula`\n4. Passou por tudo: `Matrícula feita`\n\nEscreva a função `conferirMatricula(aluno)` com retorno antecipado, sem `else`. Cada aluno é uma ficha com os campos `atestado`, `idade` e `pagou`.\n\n**Saída esperada**\n\n```plaintext\nFalta o atestado médico\nSó a partir de 16 anos\nFalta pagar a matrícula\nMatrícula feita\n```",
+      "starter": "// escreva a função conferirMatricula aqui\n\nconsole.log(conferirMatricula({ atestado: false, idade: 15, pagou: false }));\nconsole.log(conferirMatricula({ atestado: true, idade: 15, pagou: true }));\nconsole.log(conferirMatricula({ atestado: true, idade: 22, pagou: false }));\nconsole.log(conferirMatricula({ atestado: true, idade: 22, pagou: true }));\n",
+      "solution": "function conferirMatricula(aluno) {\n  if (!aluno.atestado) {\n    return 'Falta o atestado médico';\n  }\n  if (aluno.idade < 16) {\n    return 'Só a partir de 16 anos';\n  }\n  if (!aluno.pagou) {\n    return 'Falta pagar a matrícula';\n  }\n  return 'Matrícula feita';\n}\n\nconsole.log(conferirMatricula({ atestado: false, idade: 15, pagou: false }));\nconsole.log(conferirMatricula({ atestado: true, idade: 15, pagou: true }));\nconsole.log(conferirMatricula({ atestado: true, idade: 22, pagou: false }));\nconsole.log(conferirMatricula({ atestado: true, idade: 22, pagou: true }));\n",
+      "expected_output": "Falta o atestado médico\nSó a partir de 16 anos\nFalta pagar a matrícula\nMatrícula feita",
+      "explanation": "O primeiro aluno tem os três problemas, mas recebe só a primeira mensagem: o `return` sai da função, e os outros `if` nem rodam. O `!aluno.atestado` lê-se \"não tem atestado\"."
+    },
+    {
+      "id": "litros-do-posto",
+      "type": "code",
+      "prompt": "A bomba do posto recebe os litros como texto, com vírgula ou ponto. Escreva a função `lerLitros(texto)`. Ela tira os espaços das pontas, troca a vírgula por ponto e converte com `Number`. Depois, com retorno antecipado, devolve `null` quando:\n\n- o resultado é `NaN`\n- o valor é 0 ou menos\n- o valor passa de 60, o tamanho do tanque\n\nQuem passa por tudo recebe o número.\n\n**Saída esperada**\n\n```plaintext\n12.5\n40\nnull\nnull\nnull\nnull\n```",
+      "starter": "// escreva a função lerLitros aqui\n\nconsole.log(lerLitros('12,5'));\nconsole.log(lerLitros(' 40 '));\nconsole.log(lerLitros('cheio'));\nconsole.log(lerLitros('0'));\nconsole.log(lerLitros('-5'));\nconsole.log(lerLitros('75'));\n",
+      "solution": "function lerLitros(texto) {\n  const litros = Number(texto.trim().replace(',', '.'));\n  if (Number.isNaN(litros)) {\n    return null;\n  }\n  if (litros <= 0) {\n    return null;\n  }\n  if (litros > 60) {\n    return null;\n  }\n  return litros;\n}\n\nconsole.log(lerLitros('12,5'));\nconsole.log(lerLitros(' 40 '));\nconsole.log(lerLitros('cheio'));\nconsole.log(lerLitros('0'));\nconsole.log(lerLitros('-5'));\nconsole.log(lerLitros('75'));\n",
+      "expected_output": "12.5\n40\nnull\nnull\nnull\nnull",
+      "explanation": "Cada `if` barra um problema e sai da função com `null`. O fim da função só cuida do valor que passou por todos. O `replace` vem antes do `Number`, porque `Number('12,5')` daria `NaN`."
+    },
+    {
+      "id": "embarque-do-onibus",
+      "type": "multiple",
+      "prompt": "Sobre a função abaixo, quais frases estão certas?\n\n```javascript\nfunction embarcar(passageiro) {\n  if (!passageiro.bilhete) {\n    return 'Sem bilhete';\n  }\n  if (passageiro.malas > 2) {\n    return 'Malas demais';\n  }\n  return 'Embarque liberado';\n}\n```",
+      "options": {
+        "a": "O último `return` só funciona com um `else` antes dele",
+        "b": "Sem bilhete, a função sai no primeiro `if`, e o resto não roda",
+        "c": "O segundo `if` só é feito para quem tem bilhete",
+        "d": "Sem bilhete e com 3 malas, a função devolve as duas mensagens",
+        "e": "Com bilhete e 2 malas, a função devolve `'Embarque liberado'`"
+      },
+      "answer": [
+        "b",
+        "c",
+        "e"
+      ],
+      "explanation": "O `return` sai da função na hora, então quem é barrado no primeiro `if` não chega ao segundo. Por isso a frase das duas mensagens está errada: a função devolve um valor só. O `else` não faz falta, porque só chega à última linha quem passou pelos dois `if`."
+    },
+    {
+      "id": "piscina-do-clube",
+      "type": "drag",
+      "prompt": "Arraste cada sócio para o que a função devolve para ele.\n\n```javascript\nfunction entrarNaPiscina(socio) {\n  if (!socio.carteirinha) {\n    return 'Sem carteirinha';\n  }\n  if (socio.idade < 12) {\n    return 'Só com responsável';\n  }\n  return 'Pode entrar';\n}\n```",
+      "layout": "list",
+      "slots": [
+        {
+          "key": "adulto",
+          "label": "Com carteirinha, 30 anos"
+        },
+        {
+          "key": "semcarteirinha",
+          "label": "Sem carteirinha, 8 anos"
+        },
+        {
+          "key": "crianca",
+          "label": "Com carteirinha, 8 anos"
+        }
+      ],
+      "items": [
+        {
+          "key": "a",
+          "text": "`'Só com responsável'`"
+        },
+        {
+          "key": "b",
+          "text": "`'Pode entrar'`"
+        },
+        {
+          "key": "c",
+          "text": "`'Sem carteirinha'`"
+        },
+        {
+          "key": "d",
+          "text": "`undefined`"
+        }
+      ],
+      "answer": {
+        "adulto": "b",
+        "semcarteirinha": "c",
+        "crianca": "a"
+      },
+      "explanation": "A criança sem carteirinha para no primeiro `if`, antes de a idade ser conferida. Com carteirinha, ela para no segundo. O adulto passa pelos dois e chega ao último `return`. O `undefined` não aparece, porque todo caminho da função termina num `return` com valor."
+    }
+  ]
+}

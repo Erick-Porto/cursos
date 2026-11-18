@@ -1,0 +1,61 @@
+{
+  "title": "Acumulador",
+  "lesson": "e11-repeticoes",
+  "recap": "O **acumulador** é uma caixa `let` que nasce **antes** do laço e cresce a cada volta, como o visor da calculadora que vai acumulando.\n\n```javascript\nconst gols = [2, 1, 3];\nlet total = 0;\nfor (const gol of gols) {\n  total = total + gol;\n}\nconsole.log(total); // 6\n```",
+  "exercises": [
+    {
+      "id": "minutos-da-semana",
+      "type": "code",
+      "prompt": "A lista traz os minutos de treino de cada dia. Use um acumulador e um `for...of` para somar tudo e mostre o total depois do laço.\n\n**Saída esperada**\n\n```plaintext\nTotal da semana: 155 minutos\n```",
+      "starter": "const minutos = [30, 45, 20, 60];\n\n// crie o acumulador e escreva o for...of aqui\n",
+      "solution": "const minutos = [30, 45, 20, 60];\n\nlet total = 0;\nfor (const treino of minutos) {\n  total = total + treino;\n}\nconsole.log(`Total da semana: ${total} minutos`);\n",
+      "expected_output": "Total da semana: 155 minutos",
+      "explanation": "O visor começa em 0 e passa por 30, 75, 95 e 155. O `console.log` fica depois da `}` do laço: dentro das chaves, ele escreveria uma linha a cada volta."
+    },
+    {
+      "id": "conta-da-feira",
+      "type": "code",
+      "prompt": "Cada item da sacola é uma ficha com `nome`, `quilos` e `precoCentavos`. Some o valor de cada item, que é `quilos` vezes `precoCentavos`. No fim, mostre o total com a função `formatarReais`, que já vem pronta.\n\n**Saída esperada**\n\n```plaintext\nTotal da feira: R$ 32,30\n```",
+      "starter": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\nconst sacola = [\n  { nome: 'Tomate', quilos: 2, precoCentavos: 790 },\n  { nome: 'Banana', quilos: 3, precoCentavos: 450 },\n  { nome: 'Cebola', quilos: 1, precoCentavos: 300 },\n];\n\n// crie o acumulador e escreva o for...of aqui\n",
+      "solution": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\nconst sacola = [\n  { nome: 'Tomate', quilos: 2, precoCentavos: 790 },\n  { nome: 'Banana', quilos: 3, precoCentavos: 450 },\n  { nome: 'Cebola', quilos: 1, precoCentavos: 300 },\n];\n\nlet total = 0;\nfor (const item of sacola) {\n  total = total + item.quilos * item.precoCentavos;\n}\nconsole.log(`Total da feira: ${formatarReais(total)}`);\n",
+      "expected_output": "Total da feira: R$ 32,30",
+      "explanation": "A multiplicação vem antes da soma: 1580, depois 1350 e depois 300 entram no visor. A soma fica toda em centavos inteiros, e o valor só vira reais na hora de mostrar."
+    },
+    {
+      "id": "passos-da-semana",
+      "type": "code",
+      "prompt": "O celular contou os passos de cada dia da semana. A meta é de **10000 passos ou mais** por dia. Use dois acumuladores no mesmo `for...of`: um soma os passos, e o outro conta os dias que bateram a meta. Mostre o total, a média por dia arredondada com `Math.round` e os dias na meta.\n\n**Saída esperada**\n\n```plaintext\nTotal: 58000 passos\nMédia por dia: 8286 passos\nDias na meta: 3 de 7\n```",
+      "starter": "const passos = [8200, 10500, 4300, 12000, 9700, 10100, 3200];\n\n// crie os acumuladores e escreva o for...of aqui\n",
+      "solution": "const passos = [8200, 10500, 4300, 12000, 9700, 10100, 3200];\n\nlet total = 0;\nlet diasNaMeta = 0;\nfor (const dia of passos) {\n  total = total + dia;\n  if (dia >= 10000) {\n    diasNaMeta = diasNaMeta + 1;\n  }\n}\n\nconsole.log(`Total: ${total} passos`);\nconsole.log(`Média por dia: ${Math.round(total / passos.length)} passos`);\nconsole.log(`Dias na meta: ${diasNaMeta} de ${passos.length}`);\n",
+      "expected_output": "Total: 58000 passos\nMédia por dia: 8286 passos\nDias na meta: 3 de 7",
+      "explanation": "O `total` cresce em toda volta. O `diasNaMeta` só cresce quando o `if` dá `true`, somando 1 de cada vez. A média usa `passos.length`, então a conta continua certa se a lista mudar de tamanho."
+    },
+    {
+      "id": "acumulador-dentro-do-laco",
+      "type": "single",
+      "prompt": "O que este código mostra?\n\n```javascript\nconst vendas = [10, 20, 30];\n\nfor (const venda of vendas) {\n  let total = 0;\n  total = total + venda;\n  console.log(total);\n}\n```",
+      "options": {
+        "a": "`60`, uma vez só",
+        "b": "`10`, `30` e `60`, um por linha",
+        "c": "`10`, `20` e `30`, um por linha",
+        "d": "A mensagem `total is not defined`"
+      },
+      "answer": "c",
+      "explanation": "O `let total = 0` está dentro das chaves, então o visor volta a 0 a cada volta e nunca acumula. A resposta `10`, `30` e `60` seria a certa com o `let` antes do `for`. O erro `total is not defined` só apareceria com o `console.log` fora das chaves."
+    },
+    {
+      "id": "caixas-entregues",
+      "type": "fill",
+      "prompt": "Complete as lacunas para somar as caixas entregues no mercado.\n\n```javascript\nconst entregas = [12, 8, 20];\n\n___ caixas = 0;\nfor (const entrega of entregas) {\n  caixas = ___ + entrega;\n}\nconsole.log(caixas); // 40\n```",
+      "answer": [
+        [
+          "let"
+        ],
+        [
+          "caixas"
+        ]
+      ],
+      "explanation": "O acumulador muda a cada volta, por isso nasce com `let`. Com `const`, o script para com `Assignment to constant variable.`. A segunda lacuna é o próprio acumulador: pegue o que está no visor, some a entrega e guarde de volta."
+    }
+  ]
+}

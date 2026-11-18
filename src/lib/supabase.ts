@@ -62,6 +62,7 @@ export function friendlyError(err: unknown): string {
     [/matrícula necessária/i, 'Matricule-se no curso para continuar.'],
     [/(submit|grade)_project/i, 'A entrega de projetos ainda não foi ativada no servidor (migration 0004).'],
     [/grant_extra_attempts/i, 'A liberação de tentativas ainda não foi ativada no servidor (migration 0005).'],
+    [/(submit|review)_exercise|my_exercise_answers/i, 'As listas de exercícios ainda não foram ativadas no servidor (migration 0006).'],
     [/duplicate key.*username/i, 'Este nome de usuário já está em uso.'],
     [/profiles_username_check/i, 'Nome de usuário inválido: use 3 a 30 letras minúsculas, números ou _.'],
     [/failed to fetch|networkerror/i, 'Sem conexão com o servidor. Verifique sua internet.'],

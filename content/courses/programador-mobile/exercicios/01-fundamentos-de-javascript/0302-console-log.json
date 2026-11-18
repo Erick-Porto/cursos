@@ -1,0 +1,48 @@
+{
+  "title": "console.log",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "O **`console.log`** escreve na tela o que está entre os parênteses. Texto vai entre aspas; número, sem aspas. A vírgula separa os valores.\n\n```javascript\nconsole.log('Total:', 4 * 5);\n// Total: 20\n```",
+  "exercises": [
+    {
+      "id": "aviso-da-escola",
+      "type": "code",
+      "prompt": "A escola quer avisar os pais sobre uma reunião. Escreva um `console.log` para cada linha do aviso.\n\n**Saída esperada**\n\n```plaintext\nEscola Monte Azul\nReunião de pais\nSexta-feira, às 19h\n```",
+      "starter": "// escreva um console.log para cada linha do aviso\n",
+      "solution": "console.log('Escola Monte Azul');\nconsole.log('Reunião de pais');\nconsole.log('Sexta-feira, às 19h');\n",
+      "expected_output": "Escola Monte Azul\nReunião de pais\nSexta-feira, às 19h",
+      "explanation": "Cada `console.log` escreve uma linha. O Node faz as instruções de cima para baixo, por isso as linhas saem na ordem em que você escreveu. O texto fica entre aspas."
+    },
+    {
+      "id": "passagem-de-onibus",
+      "type": "code",
+      "prompt": "A passagem de ônibus custa 5 reais. Mostre o preço da passagem, o gasto de ida e volta em um dia e o gasto de ida e volta em cinco dias. Faça as contas **dentro** do `console.log`, usando `*` para multiplicar.\n\n**Saída esperada**\n\n```plaintext\nPassagem: 5\nIda e volta: 10\nCinco dias: 50\n```",
+      "starter": "// mostre a passagem, a ida e volta e os cinco dias aqui\n",
+      "solution": "console.log('Passagem:', 5);\nconsole.log('Ida e volta:', 5 * 2);\nconsole.log('Cinco dias:', 5 * 2 * 5);\n",
+      "expected_output": "Passagem: 5\nIda e volta: 10\nCinco dias: 50",
+      "explanation": "A vírgula separa o texto do número, e a tela mostra um espaço entre eles. O Node faz a conta primeiro e escreve o resultado: `5 * 2 * 5` vira `50`."
+    },
+    {
+      "id": "cupom-da-padaria",
+      "type": "code",
+      "prompt": "Monte o cupom da padaria. O cliente levou **6 pães** de **1.5 real** cada e **um bolo de 12 reais**. A terceira linha junta três valores no mesmo `console.log`: um texto, um número e outro texto. Faça as contas dentro do `console.log`.\n\n**Saída esperada**\n\n```plaintext\nPadaria Trigo Bom\nPreço do pão: 1.5\nPães: 6 unidades\nTotal dos pães: 9\nBolo: 12\nTotal da compra: 21\n```",
+      "starter": "// monte o cupom aqui, com um console.log para cada linha\n",
+      "solution": "console.log('Padaria Trigo Bom');\nconsole.log('Preço do pão:', 1.5);\nconsole.log('Pães:', 6, 'unidades');\nconsole.log('Total dos pães:', 6 * 1.5);\nconsole.log('Bolo:', 12);\nconsole.log('Total da compra:', 6 * 1.5 + 12);\n",
+      "expected_output": "Padaria Trigo Bom\nPreço do pão: 1.5\nPães: 6 unidades\nTotal dos pães: 9\nBolo: 12\nTotal da compra: 21",
+      "explanation": "Com vírgulas, o `console.log` mostra vários valores na mesma linha, com um espaço entre eles. O número usa ponto, como em `1.5`. Na última linha, o Node multiplica primeiro e depois soma: `9 + 12` dá `21`."
+    },
+    {
+      "id": "conta-entre-aspas",
+      "type": "truefalse",
+      "prompt": "A linha `console.log('7 + 3');` mostra `10` na tela.",
+      "answer": false,
+      "explanation": "O que está entre aspas é texto, e o Node escreve o texto do jeito que está: `7 + 3`. Para ver o resultado da conta, escreva sem aspas: `console.log(7 + 3);`."
+    },
+    {
+      "id": "virgula-e-espaco",
+      "type": "fill",
+      "prompt": "Dentro do `console.log`, a ___ separa os valores. Na tela, eles aparecem com um ___ entre eles.",
+      "answer": [["vírgula", "virgula", ","], ["espaço", "espaco"]],
+      "explanation": "Em `console.log('Troco:', 5)`, a vírgula separa o texto do número, e a tela mostra `Troco: 5`, com um espaço no meio. Esse espaço vem do `console.log`: você não precisa escrever o espaço dentro das aspas."
+    }
+  ]
+}

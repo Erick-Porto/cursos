@@ -1,0 +1,62 @@
+{
+  "title": "Listas e .length",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "Uma **lista** é uma fileira de gavetas numeradas a partir do 0, escrita entre `[ ]`. O **`.length`** diz quantos itens ela tem.\n\n```javascript\nconst dias = ['seg', 'ter', 'qua'];\nconsole.log(dias.length); // 3\nconsole.log(dias[0]);     // seg\n```",
+  "exercises": [
+    {
+      "id": "fila-da-padaria",
+      "type": "code",
+      "prompt": "A lista `fila` guarda quem está esperando na padaria, na ordem de chegada. Mostre quantas pessoas há na fila, quem é a primeira e quem é a terceira.\n\n**Saída esperada**\n\n```plaintext\nPessoas na fila: 4\nPrimeira da fila: Rosa\nTerceira da fila: Clara\n```",
+      "starter": "const fila = ['Rosa', 'Beto', 'Clara', 'Davi'];\n\n// mostre as três linhas aqui\n",
+      "solution": "const fila = ['Rosa', 'Beto', 'Clara', 'Davi'];\n\nconsole.log('Pessoas na fila:', fila.length);\nconsole.log('Primeira da fila:', fila[0]);\nconsole.log('Terceira da fila:', fila[2]);\n",
+      "expected_output": "Pessoas na fila: 4\nPrimeira da fila: Rosa\nTerceira da fila: Clara",
+      "explanation": "A lista começa a contar do zero: a primeira pessoa está na posição 0, e a terceira, na posição 2. O `.length` responde quantos itens existem, por isso mostra 4."
+    },
+    {
+      "id": "musicas-do-celular",
+      "type": "code",
+      "prompt": "A lista `minutos` guarda a duração de cada música de uma playlist no celular. Mostre quantas músicas há, a duração da primeira e quanto tempo as duas primeiras duram juntas.\n\n**Saída esperada**\n\n```plaintext\nMúsicas: 4\nPrimeira música: 3 minutos\nAs duas primeiras: 7 minutos\n```",
+      "starter": "const minutos = [3, 4, 5, 2];\n\n// mostre as três linhas aqui\n",
+      "solution": "const minutos = [3, 4, 5, 2];\n\nconsole.log('Músicas:', minutos.length);\nconsole.log('Primeira música:', minutos[0], 'minutos');\nconsole.log('As duas primeiras:', minutos[0] + minutos[1], 'minutos');\n",
+      "expected_output": "Músicas: 4\nPrimeira música: 3 minutos\nAs duas primeiras: 7 minutos",
+      "explanation": "Cada item da lista funciona como um número comum: `minutos[0] + minutos[1]` vira `3 + 4`. As vírgulas colocam o número e a palavra `minutos` na mesma linha, com um espaço entre eles."
+    },
+    {
+      "id": "treino-da-academia",
+      "type": "code",
+      "prompt": "A lista `treino` guarda fichas de exercícios da academia. Cada ficha tem `exercicio` e `series`. Mostre quantos exercícios há, o nome do primeiro, o nome do último e a média de séries. Para ler o campo de uma ficha da lista, use a posição e o ponto, como em `treino[0].series`. A média é a soma das séries dividida pela quantidade de exercícios.\n\n**Saída esperada**\n\n```plaintext\nExercícios: 3\nPrimeiro: Agachamento\nÚltimo: Remada\nMédia de séries: 3\n```",
+      "starter": "const treino = [\n  { exercicio: 'Agachamento', series: 4 },\n  { exercicio: 'Supino', series: 3 },\n  { exercicio: 'Remada', series: 2 },\n];\n\n// mostre as quatro linhas aqui\n",
+      "solution": "const treino = [\n  { exercicio: 'Agachamento', series: 4 },\n  { exercicio: 'Supino', series: 3 },\n  { exercicio: 'Remada', series: 2 },\n];\n\nconst soma = treino[0].series + treino[1].series + treino[2].series;\n\nconsole.log('Exercícios:', treino.length);\nconsole.log('Primeiro:', treino[0].exercicio);\nconsole.log('Último:', treino[2].exercicio);\nconsole.log('Média de séries:', soma / treino.length);\n",
+      "expected_output": "Exercícios: 3\nPrimeiro: Agachamento\nÚltimo: Remada\nMédia de séries: 3",
+      "explanation": "`treino[2]` abre a terceira gaveta, e `.exercicio` lê um campo da ficha que está lá. A lista tem 3 itens, então a última posição é a 2. A soma das séries é 9, e `9 / 3` dá `3`."
+    },
+    {
+      "id": "o-que-cada-gaveta-mostra",
+      "type": "drag",
+      "prompt": "Veja a lista abaixo e arraste para cada linha de código o valor que ela mostra na tela.\n\n```javascript\nconst linhas = ['Azul', 'Verde', 'Roxa'];\n```",
+      "layout": "list",
+      "slots": [
+        { "key": "primeira", "label": "`console.log(linhas[0])`" },
+        { "key": "terceira", "label": "`console.log(linhas[2])`" },
+        { "key": "fora", "label": "`console.log(linhas[3])`" },
+        { "key": "tamanho", "label": "`console.log(linhas.length)`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`3`" },
+        { "key": "b", "text": "`undefined`" },
+        { "key": "c", "text": "`Azul`" },
+        { "key": "d", "text": "`Verde`" },
+        { "key": "e", "text": "`Roxa`" }
+      ],
+      "answer": { "primeira": "c", "terceira": "e", "fora": "b", "tamanho": "a" },
+      "explanation": "A contagem começa do 0: a posição 0 guarda `Azul`, e a posição 2 guarda `Roxa`. A posição 3 não existe, então chega `undefined`. O `.length` conta os itens, e a lista tem 3. `Verde` sobra, porque está na posição 1."
+    },
+    {
+      "id": "posicao-um",
+      "type": "truefalse",
+      "prompt": "Na lista `const notas = [7, 8, 9];`, o valor de `notas[1]` é `7`.",
+      "answer": false,
+      "explanation": "A lista começa a contar do zero. A posição 0 guarda o `7`, e a posição 1 guarda o `8`. Esse é o erro mais comum com listas: pensar que a primeira posição é a 1."
+    }
+  ]
+}

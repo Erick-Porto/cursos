@@ -1,0 +1,67 @@
+{
+  "title": "const",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "A **`const`** é uma caixa lacrada com etiqueta: o nome fica na etiqueta, e o valor, dentro. Depois de criada, ela não muda.\n\n```javascript\nconst cidade = 'Natal';\nconsole.log('Destino:', cidade);\n// Destino: Natal\n```",
+  "exercises": [
+    {
+      "id": "ficha-da-academia",
+      "type": "code",
+      "prompt": "A academia precisa mostrar a ficha de um aluno. Crie três constantes: `aluno` com o texto `Marcos`, `plano` com o texto `Mensal` e `mensalidade` com o número `90`. Depois, mostre uma linha para cada uma.\n\n**Saída esperada**\n\n```plaintext\nAluno: Marcos\nPlano: Mensal\nMensalidade: 90\n```",
+      "starter": "// crie as três constantes aqui\n\n// mostre a ficha aqui\n",
+      "solution": "const aluno = 'Marcos';\nconst plano = 'Mensal';\nconst mensalidade = 90;\n\nconsole.log('Aluno:', aluno);\nconsole.log('Plano:', plano);\nconsole.log('Mensalidade:', mensalidade);\n",
+      "expected_output": "Aluno: Marcos\nPlano: Mensal\nMensalidade: 90",
+      "explanation": "O nome da constante vai sem aspas, porque é a etiqueta. O texto guardado vai entre aspas, e o número, sem aspas. Dentro do `console.log`, o Node troca a etiqueta pelo valor da caixa."
+    },
+    {
+      "id": "sacola-do-mercado",
+      "type": "code",
+      "prompt": "No mercado, toda compra paga uma sacola de 3 reais. O código inicial já traz a sacola e o preço de três produtos. Mostre o preço de cada produto **somado à sacola**, usando as constantes em vez de escrever os números.\n\n**Saída esperada**\n\n```plaintext\nBanana com sacola: 11\nTomate com sacola: 15\nAlface com sacola: 7\n```",
+      "starter": "const sacola = 3;\nconst banana = 8;\nconst tomate = 12;\nconst alface = 4;\n\n// mostre cada produto com a sacola aqui\n",
+      "solution": "const sacola = 3;\nconst banana = 8;\nconst tomate = 12;\nconst alface = 4;\n\nconsole.log('Banana com sacola:', banana + sacola);\nconsole.log('Tomate com sacola:', tomate + sacola);\nconsole.log('Alface com sacola:', alface + sacola);\n",
+      "expected_output": "Banana com sacola: 11\nTomate com sacola: 15\nAlface com sacola: 7",
+      "explanation": "A constante `sacola` aparece nas três contas. Se o preço da sacola mudar, você troca o número numa linha só, e todas as contas acompanham."
+    },
+    {
+      "id": "conta-do-celular",
+      "type": "code",
+      "prompt": "A conta do celular tem o plano de 45 reais e **3 gigas extras** de 5 reais cada. Crie a constante `extras` com o valor dos gigas extras, a constante `total` com o plano mais os extras e a constante `porDia` com o total dividido por 30 dias. Use `/` para dividir.\n\n**Saída esperada**\n\n```plaintext\nPlano: 45\nGigas extras: 15\nTotal da conta: 60\nPor dia: 2\n```",
+      "starter": "const plano = 45;\nconst gigasExtras = 3;\nconst precoDoGiga = 5;\n\n// crie as constantes extras, total e porDia aqui\n\n// mostre os quatro valores aqui\n",
+      "solution": "const plano = 45;\nconst gigasExtras = 3;\nconst precoDoGiga = 5;\n\nconst extras = gigasExtras * precoDoGiga;\nconst total = plano + extras;\nconst porDia = total / 30;\n\nconsole.log('Plano:', plano);\nconsole.log('Gigas extras:', extras);\nconsole.log('Total da conta:', total);\nconsole.log('Por dia:', porDia);\n",
+      "expected_output": "Plano: 45\nGigas extras: 15\nTotal da conta: 60\nPor dia: 2",
+      "explanation": "Uma constante pode nascer de uma conta com outras constantes. A ordem importa: `total` usa `extras`, então `extras` precisa ser criada antes. O Node faz uma linha de cada vez, de cima para baixo."
+    },
+    {
+      "id": "trocar-o-valor-da-const",
+      "type": "single",
+      "prompt": "O que acontece quando o Node roda estas linhas?\n\n```javascript\nconst vagas = 30;\nvagas = 28;\nconsole.log(vagas);\n```",
+      "options": {
+        "a": "Para com `TypeError: Assignment to constant variable.`",
+        "b": "Mostra `28`: o valor novo substitui o antigo",
+        "c": "Mostra `30`: o Node ignora a segunda linha",
+        "d": "Mostra `30` e `28`, um em cada linha"
+      },
+      "answer": "a",
+      "explanation": "A `const` é uma caixa lacrada: tentar trocar o valor dá `TypeError: Assignment to constant variable.`, e o script para antes do `console.log`. Por isso ele não mostra `28`, a resposta mais tentadora."
+    },
+    {
+      "id": "partes-da-const",
+      "type": "drag",
+      "prompt": "Arraste cada parte da linha `const cidade = 'Recife';` para o que ela faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "cria", "label": "Cria a caixa lacrada" },
+        { "key": "etiqueta", "label": "É a etiqueta da caixa" },
+        { "key": "valor", "label": "É o texto guardado na caixa" },
+        { "key": "fim", "label": "Marca o fim da instrução" }
+      ],
+      "items": [
+        { "key": "a", "text": "`'Recife'`" },
+        { "key": "b", "text": "`;`" },
+        { "key": "c", "text": "`const`" },
+        { "key": "d", "text": "`cidade`" }
+      ],
+      "answer": { "cria": "c", "etiqueta": "d", "valor": "a", "fim": "b" },
+      "explanation": "A palavra `const` cria a caixa, `cidade` é o nome dela e `'Recife'` é o valor guardado. O nome vai sem aspas, e o texto, entre aspas. O `;` encerra a instrução."
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "title": "Função seta",
+  "lesson": "e07-funcoes",
+  "recap": "A **função seta** é a forma curta de uma função. Sem chaves, ela devolve sozinha. Com chaves, ela precisa de `return`.\n\n```javascript\nconst dobro = (n) => n * 2;\nconsole.log(dobro(4)); // 8\n\nconst triplo = (n) => { return n * 3; };\nconsole.log(triplo(4)); // 12\n```",
+  "exercises": [
+    {
+      "id": "cronometro-em-segundos",
+      "type": "code",
+      "prompt": "O cronômetro da academia trabalha em segundos. Reescreva a função `emSegundos` como **função seta**, guardada numa `const` com o mesmo nome. As chamadas continuam iguais.\n\n**Saída esperada**\n\n```plaintext\n180\n300\n```",
+      "starter": "// reescreva esta função como função seta\nfunction emSegundos(minutos) {\n  return minutos * 60;\n}\n\nconsole.log(emSegundos(3));\nconsole.log(emSegundos(5));\n",
+      "solution": "const emSegundos = (minutos) => minutos * 60;\n\nconsole.log(emSegundos(3));\nconsole.log(emSegundos(5));\n",
+      "expected_output": "180\n300",
+      "explanation": "A seta guarda a mesma receita numa `const`. O parâmetro continua nos parênteses, e o que vem depois do `=>` é o valor devolvido, sem chaves e sem `return`."
+    },
+    {
+      "id": "viagens-lotadas",
+      "type": "code",
+      "prompt": "A empresa de ônibus quer contar as viagens lotadas, com **40 passageiros ou mais**. Use o `filter` com uma função seta e mostre quantas viagens passaram no teste.\n\n**Saída esperada**\n\n```plaintext\nViagens lotadas: 3\n```",
+      "starter": "const viagens = [\n  { linha: '405', passageiros: 42 },\n  { linha: '118', passageiros: 17 },\n  { linha: '230', passageiros: 40 },\n  { linha: '512', passageiros: 39 },\n  { linha: '077', passageiros: 51 },\n];\n\n// use o filter com uma função seta aqui\n",
+      "solution": "const viagens = [\n  { linha: '405', passageiros: 42 },\n  { linha: '118', passageiros: 17 },\n  { linha: '230', passageiros: 40 },\n  { linha: '512', passageiros: 39 },\n  { linha: '077', passageiros: 51 },\n];\n\nconst lotadas = viagens.filter((viagem) => viagem.passageiros >= 40);\nconsole.log(`Viagens lotadas: ${lotadas.length}`);\n",
+      "expected_output": "Viagens lotadas: 3",
+      "explanation": "O `filter` chama a seta uma vez por viagem, e cada viagem entra no parâmetro `viagem`. A seta responde `true` ou `false`, e só ficam as que passam. O `>=` inclui a viagem de 40 passageiros."
+    },
+    {
+      "id": "balanco-da-feira",
+      "type": "code",
+      "prompt": "A banca da feira quer um balanço das frutas que custam **mais de R$ 8 o quilo**. Use duas funções seta: uma no `filter`, para separar essas frutas, e outra no `reduce`, para somar os quilos delas.\n\n**Saída esperada**\n\n```plaintext\nFrutas selecionadas: 2\nQuilos vendidos: 17\n```",
+      "starter": "const frutas = [\n  { nome: 'Manga', preco: 9.5, quilos: 12 },\n  { nome: 'Banana', preco: 4, quilos: 30 },\n  { nome: 'Uva', preco: 14, quilos: 5 },\n  { nome: 'Laranja', preco: 3.5, quilos: 25 },\n];\n\n// separe as frutas com o filter aqui\n\n// some os quilos com o reduce aqui\n\n// mostre as duas linhas aqui\n",
+      "solution": "const frutas = [\n  { nome: 'Manga', preco: 9.5, quilos: 12 },\n  { nome: 'Banana', preco: 4, quilos: 30 },\n  { nome: 'Uva', preco: 14, quilos: 5 },\n  { nome: 'Laranja', preco: 3.5, quilos: 25 },\n];\n\nconst selecionadas = frutas.filter((fruta) => fruta.preco > 8);\nconst quilos = selecionadas.reduce((total, fruta) => total + fruta.quilos, 0);\n\nconsole.log(`Frutas selecionadas: ${selecionadas.length}`);\nconsole.log(`Quilos vendidos: ${quilos}`);\n",
+      "expected_output": "Frutas selecionadas: 2\nQuilos vendidos: 17",
+      "explanation": "A seta do `filter` tem um parâmetro e responde se a fruta fica. A do `reduce` tem dois: o `total` acumulado e a fruta da vez. O `0` no fim é o valor inicial do `total`."
+    },
+    {
+      "id": "partes-da-seta",
+      "type": "fill",
+      "prompt": "Complete a função seta: `const triplo = (n) ___ n * 3;`. Quando a seta usa chaves, ela só devolve um valor com a palavra ___.",
+      "answer": [["=>"], ["return"]],
+      "explanation": "A seta `=>` separa o parâmetro do valor devolvido. Sem chaves, ela devolve sozinha. Com chaves, o corpo vira o modo de preparo, e sem `return` a seta devolve `undefined`."
+    },
+    {
+      "id": "setas-que-devolvem",
+      "type": "multiple",
+      "prompt": "Quais destas funções seta **devolvem** o dobro de `n`? Marque todas as certas.",
+      "options": {
+        "a": "`const dobro = (n) => n * 2;`",
+        "b": "`const dobro = (n) => { n * 2 };`",
+        "c": "`const dobro = (n) => { console.log(n * 2); };`",
+        "d": "`const dobro = (n) => { return n * 2; };`"
+      },
+      "answer": ["a", "d"],
+      "explanation": "Sem chaves, a seta devolve sozinha. Com chaves, ela precisa do `return`. A opção `{ n * 2 }` faz a conta e joga o resultado fora, e a do `console.log` só mostra a foto do prato: as duas devolvem `undefined`."
+    }
+  ]
+}

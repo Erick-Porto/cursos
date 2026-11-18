@@ -1,0 +1,71 @@
+{
+  "title": "REPL e arquivos .js",
+  "lesson": "e02a-node-na-pratica",
+  "theory_only": true,
+  "theory_reason": "O REPL e o comando node arquivo.js acontecem no terminal do computador, e o compilador on-line não abre um terminal.",
+  "recap": "O **REPL** funciona como uma calculadora: você digita uma linha e vê o resultado na hora. Um **script** é uma receita: um arquivo `.js` que o Node faz de cima para baixo.\n\n```bash\n$ node\n> 8 * 3\n24\n> .exit\n$ node feira.js\n```",
+  "exercises": [
+    {
+      "id": "undefined-no-repl",
+      "type": "single",
+      "prompt": "Você digita esta linha no REPL e aperta Enter. O que aparece na tela?\n\n```bash\n> console.log('Bom dia')\n```",
+      "options": {
+        "a": "Só `undefined`, porque a linha deu erro",
+        "b": "Só `Bom dia`, e o REPL fica em silêncio",
+        "c": "`Bom dia` e, na linha de baixo, `undefined`",
+        "d": "`'Bom dia'` entre aspas, e mais nada"
+      },
+      "answer": "c",
+      "explanation": "O `console.log` escreve `Bom dia` na tela. Depois, o REPL mostra o que a linha devolveu. Como o `console.log` só escreve e não devolve nada, aparece `undefined`, que quer dizer \"nada aqui\". Não é erro: por isso a alternativa que fala em erro está errada."
+    },
+    {
+      "id": "linhas-do-repl-somem",
+      "type": "truefalse",
+      "prompt": "As linhas que você digita no REPL ficam guardadas: no dia seguinte, você pode rodar todas de novo com um comando.",
+      "answer": false,
+      "explanation": "Quando você sai do REPL, as linhas se perdem. Para repetir os mesmos passos, escreva as instruções num arquivo `.js` e rode com `node arquivo.js` quantas vezes quiser."
+    },
+    {
+      "id": "do-arquivo-ao-resultado",
+      "type": "drag",
+      "prompt": "Você quer rodar um script que mostra o preço do pão. Arraste cada passo para a ordem certa.",
+      "layout": "flow",
+      "slots": [
+        { "key": "passo1", "label": "Primeiro" },
+        { "key": "passo2", "label": "Depois" },
+        { "key": "passo3", "label": "Em seguida" },
+        { "key": "passo4", "label": "Por fim" }
+      ],
+      "items": [
+        { "key": "a", "text": "Escrever o `console.log` no arquivo" },
+        { "key": "b", "text": "Criar o arquivo `padaria.js` no VS Code" },
+        { "key": "c", "text": "Rodar `node padaria.js` no terminal" },
+        { "key": "d", "text": "Salvar com Ctrl + S" },
+        { "key": "e", "text": "Digitar `.exit` no terminal" }
+      ],
+      "answer": { "passo1": "b", "passo2": "a", "passo3": "d", "passo4": "c" },
+      "explanation": "Primeiro o arquivo precisa existir. Depois você escreve as instruções e salva, porque o Node só enxerga o que foi salvo. Por último, `node padaria.js` roda o arquivo. O `.exit` fica de fora: ele serve para sair do REPL."
+    },
+    {
+      "id": "abrir-e-sair-do-repl",
+      "type": "fill",
+      "prompt": "Para abrir o REPL, digite ___ no terminal. Para sair dele, digite ___.",
+      "answer": [["node"], [".exit"]],
+      "explanation": "O comando `node`, sozinho, abre o REPL. O `.exit`, com o ponto na frente, volta ao terminal de sempre. Sem o ponto, o REPL continua aberto."
+    },
+    {
+      "id": "frases-sobre-o-script",
+      "type": "multiple",
+      "prompt": "Marque as frases certas sobre um script, o arquivo `.js`.",
+      "options": {
+        "a": "O Node faz uma linha de cada vez, de cima para baixo",
+        "b": "O Node escolhe sozinho a melhor ordem das linhas",
+        "c": "Você roda o mesmo arquivo quantas vezes quiser",
+        "d": "As linhas do arquivo somem quando o terminal fecha",
+        "e": "O comando `node feira.js` roda o arquivo `feira.js`"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "O script é uma receita: o Node segue os passos na ordem em que estão escritos, e o arquivo continua salvo depois que o terminal fecha. Quem perde as linhas ao sair é o REPL, não o arquivo."
+    }
+  ]
+}

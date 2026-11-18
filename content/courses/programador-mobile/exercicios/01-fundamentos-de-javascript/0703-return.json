@@ -1,0 +1,69 @@
+{
+  "title": "return",
+  "lesson": "e07-funcoes",
+  "recap": "O **`return`** entrega o prato pronto para quem chamou, e a chamada vira esse valor. O `console.log` só mostra a foto do prato. Sem `return`, a função devolve `undefined`.\n\n```javascript\nfunction dobro(n) {\n  return n * 2;\n}\n\nconst total = dobro(4);\nconsole.log(total); // 8\n```",
+  "exercises": [
+    {
+      "id": "troco-do-mercado",
+      "type": "code",
+      "prompt": "Crie a função `calcularTroco`, com os parâmetros `pago` e `preco`, que **devolve** a diferença entre os dois com `return`. A função não mostra nada: guarde cada resultado numa `const` e mostre fora dela.\n\n- Primeira compra: pagou R$ 20 e custou R$ 15\n- Segunda compra: pagou R$ 50 e custou R$ 32\n\n**Saída esperada**\n\n```plaintext\nTroco: R$ 5\nTroco: R$ 18\n```",
+      "starter": "// escreva a função calcularTroco aqui\n\n// guarde o troco de cada compra numa const e mostre aqui\n",
+      "solution": "function calcularTroco(pago, preco) {\n  return pago - preco;\n}\n\nconst primeiroTroco = calcularTroco(20, 15);\nconst segundoTroco = calcularTroco(50, 32);\n\nconsole.log(`Troco: R$ ${primeiroTroco}`);\nconsole.log(`Troco: R$ ${segundoTroco}`);\n",
+      "expected_output": "Troco: R$ 5\nTroco: R$ 18",
+      "explanation": "O `return` entrega o resultado, e a chamada vira esse valor: `calcularTroco(20, 15)` vale `5`. Com o valor guardado na `const`, você decide quando e como mostrar."
+    },
+    {
+      "id": "calorias-da-semana",
+      "type": "code",
+      "prompt": "A academia quer saber as calorias gastas na semana. Crie a função `caloriasDoTreino`, com os parâmetros `minutos` e `porMinuto`, que devolve a multiplicação dos dois. Use os valores devolvidos para mostrar cada treino e a soma da semana.\n\n- Segunda: 30 minutos, 8 calorias por minuto\n- Quarta: 45 minutos, 6 calorias por minuto\n\n**Saída esperada**\n\n```plaintext\nSegunda: 240 calorias\nQuarta: 270 calorias\nSemana: 510 calorias\n```",
+      "starter": "// escreva a função caloriasDoTreino aqui\n\n// guarde as calorias de cada treino e mostre as três linhas aqui\n",
+      "solution": "function caloriasDoTreino(minutos, porMinuto) {\n  return minutos * porMinuto;\n}\n\nconst segunda = caloriasDoTreino(30, 8);\nconst quarta = caloriasDoTreino(45, 6);\n\nconsole.log(`Segunda: ${segunda} calorias`);\nconsole.log(`Quarta: ${quarta} calorias`);\nconsole.log(`Semana: ${segunda + quarta} calorias`);\n",
+      "expected_output": "Segunda: 240 calorias\nQuarta: 270 calorias\nSemana: 510 calorias",
+      "explanation": "Cada chamada vira um número, e você usa esses números numa conta. Se a função só fizesse `console.log`, as constantes valeriam `undefined`, e a soma daria `NaN`."
+    },
+    {
+      "id": "internet-do-celular",
+      "type": "code",
+      "prompt": "Você quer saber quanta internet do celular um filme e uma série gastam. Crie duas funções com `return`:\n\n- `megasUsados(minutos, megasPorMinuto)` devolve a multiplicação dos dois\n- `emGigas(megas)` devolve os megas divididos por 1000\n\nPasse o resultado da primeira como argumento da segunda e mostre os valores com duas casas depois do ponto.\n\n- Filme: 90 minutos, 25 megas por minuto\n- Série: 45 minutos, 20 megas por minuto\n\n**Saída esperada**\n\n```plaintext\nFilme: 2.25 GB\nSérie: 0.90 GB\nTotal: 3.15 GB\n```",
+      "starter": "// escreva as funções megasUsados e emGigas aqui\n\n// calcule os megas do filme e da série e mostre as três linhas aqui\n",
+      "solution": "function megasUsados(minutos, megasPorMinuto) {\n  return minutos * megasPorMinuto;\n}\n\nfunction emGigas(megas) {\n  return megas / 1000;\n}\n\nconst filme = megasUsados(90, 25);\nconst serie = megasUsados(45, 20);\n\nconsole.log(`Filme: ${emGigas(filme).toFixed(2)} GB`);\nconsole.log(`Série: ${emGigas(serie).toFixed(2)} GB`);\nconsole.log(`Total: ${emGigas(filme + serie).toFixed(2)} GB`);\n",
+      "expected_output": "Filme: 2.25 GB\nSérie: 0.90 GB\nTotal: 3.15 GB",
+      "explanation": "A primeira função entrega os megas, e esse valor entra como argumento da segunda. O total soma os megas antes de converter, e o `toFixed(2)` escreve cada resultado com duas casas."
+    },
+    {
+      "id": "foto-ou-prato",
+      "type": "single",
+      "prompt": "O que aparece na tela?\n\n```javascript\nfunction contarPaes(fornadas, paes) {\n  console.log(fornadas * paes);\n}\n\nconst total = contarPaes(2, 30);\nconsole.log(total);\n```",
+      "options": {
+        "a": "`60` e, na linha de baixo, `60`",
+        "b": "`60` em uma linha, e mais nada",
+        "c": "`undefined` e, na linha de baixo, `60`",
+        "d": "`60` e, na linha de baixo, `undefined`"
+      },
+      "answer": "d",
+      "explanation": "A função mostra `60` com o `console.log`, mas não tem `return`: ela só tira a foto do prato e devolve `undefined`. Por isso, `total` não vale `60`. Para valer, troque o `console.log` por `return`."
+    },
+    {
+      "id": "chamada-passo-a-passo",
+      "type": "drag",
+      "prompt": "Coloque em ordem o que acontece quando o Node chega à última linha deste código.\n\n```javascript\nfunction dobrar(pontos) {\n  return pontos * 2;\n}\n\nconst placar = dobrar(4);\n```",
+      "layout": "flow",
+      "slots": [
+        { "key": "passo1", "label": "Passo 1" },
+        { "key": "passo2", "label": "Passo 2" },
+        { "key": "passo3", "label": "Passo 3" },
+        { "key": "passo4", "label": "Passo 4" },
+        { "key": "passo5", "label": "Passo 5" }
+      ],
+      "items": [
+        { "key": "a", "text": "O corpo faz a conta: `4 * 2` dá `8`" },
+        { "key": "b", "text": "A chamada vira o prato: `placar` recebe `8`" },
+        { "key": "c", "text": "O Node encontra `dobrar(4)` e vai até a receita" },
+        { "key": "d", "text": "O `return` entrega `8`, e a receita acaba" },
+        { "key": "e", "text": "O argumento entra no parâmetro: `pontos` vale `4`" }
+      ],
+      "answer": { "passo1": "c", "passo2": "e", "passo3": "a", "passo4": "d", "passo5": "b" },
+      "explanation": "Primeiro, o Node acha a chamada e põe o argumento no parâmetro. Depois, o corpo calcula e o `return` entrega o valor. A `const` recebe o resultado só no fim, quando a receita já acabou."
+    }
+  ]
+}

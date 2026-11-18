@@ -1,0 +1,73 @@
+{
+  "title": "Cliente, servidor, front-end e back-end",
+  "lesson": "e01a-a-web-e-o-javascript",
+  "theory_only": true,
+  "theory_reason": "O tema explica como a web funciona: são conceitos, sem código para rodar no compilador on-line.",
+  "recap": "O **cliente** (navegador ou app) faz o pedido, e o **servidor** responde com os arquivos. O **front-end** é o salão do restaurante: o que você vê e toca. O **back-end** é a cozinha: guarda os dados e aplica as regras.\n\n```plaintext\nCliente: quero a página inicial\nServidor: aqui vão HTML, CSS e JavaScript\n```",
+  "exercises": [
+    {
+      "id": "caminho-da-pagina",
+      "type": "drag",
+      "prompt": "Você toca no link do site de uma farmácia. Arraste cada etapa para a ordem em que ela acontece, até a página aparecer na tela.",
+      "layout": "flow",
+      "slots": [
+        { "key": "primeiro", "label": "Primeiro" },
+        { "key": "depois", "label": "Depois" },
+        { "key": "seguida", "label": "Em seguida" },
+        { "key": "fim", "label": "Por fim" }
+      ],
+      "items": [
+        { "key": "a", "text": "O servidor responde com os arquivos da página" },
+        { "key": "b", "text": "Você toca no link da farmácia" },
+        { "key": "c", "text": "O navegador desenha a página na tela" },
+        { "key": "d", "text": "O navegador envia um pedido ao servidor" }
+      ],
+      "answer": { "primeiro": "b", "depois": "d", "seguida": "a", "fim": "c" },
+      "explanation": "Tudo começa com o seu toque. O navegador, que é o cliente, faz o pedido, e o servidor responde com os arquivos. Só então o navegador lê esses arquivos e desenha a tela. Desenhar antes da resposta não funciona: o navegador só desenha o que já recebeu."
+    },
+    {
+      "id": "o-que-o-servidor-envia",
+      "type": "single",
+      "prompt": "O navegador pediu a página de uma escola de idiomas. O que o servidor manda de volta?",
+      "options": {
+        "a": "A imagem da página pronta, como uma foto da tela",
+        "b": "Só o texto da página, sem cores e sem imagens",
+        "c": "Os arquivos HTML, CSS, JavaScript e as imagens",
+        "d": "Um programa para instalar antes de abrir a página"
+      },
+      "answer": "c",
+      "explanation": "O servidor responde com arquivos: HTML, CSS, JavaScript e imagens. Quem monta a tela é o navegador, ao ler esses arquivos. Por isso a \"foto pronta\" está errada: o servidor não desenha nada na sua tela."
+    },
+    {
+      "id": "tarefas-do-back-end",
+      "type": "multiple",
+      "prompt": "No app de uma farmácia, quais tarefas são do **back-end**? Marque todas as certas.",
+      "options": {
+        "a": "Mostrar o botão Comprar na tela do produto",
+        "b": "Conferir se a senha de quem entra está certa",
+        "c": "Desenhar a foto do remédio na lista de produtos",
+        "d": "Calcular o frete até o CEP que a pessoa digitou",
+        "e": "Guardar o histórico de compras de cada cliente"
+      },
+      "answer": ["b", "d", "e"],
+      "explanation": "O back-end é a cozinha: guarda os dados, aplica as regras e confere a senha. Mostrar o botão e desenhar a foto são tarefas do front-end, o salão, porque a pessoa vê e toca nessas partes."
+    },
+    {
+      "id": "onde-roda-o-front-end",
+      "type": "truefalse",
+      "prompt": "O front-end de um app roda no servidor, junto com os dados de quem usa.",
+      "answer": false,
+      "explanation": "O front-end roda no navegador ou no celular de quem usa. Quem roda no servidor é o back-end, a cozinha que ninguém vê."
+    },
+    {
+      "id": "salao-e-cozinha",
+      "type": "fill",
+      "prompt": "Num app, o salão do restaurante é o ___, tudo o que a pessoa vê e toca. A cozinha é o ___, onde o pedido é preparado.",
+      "answer": [
+        ["front-end", "front end", "frontend"],
+        ["back-end", "back end", "backend"]
+      ],
+      "explanation": "O **front-end** é a parte visível, como o salão. O **back-end** fica escondido, como a cozinha. Para não trocar os dois, pergunte: o cliente consegue ver esta parte?"
+    }
+  ]
+}

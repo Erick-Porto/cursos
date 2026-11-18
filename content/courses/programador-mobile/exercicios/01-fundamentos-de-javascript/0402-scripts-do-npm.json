@@ -1,0 +1,71 @@
+{
+  "title": "Scripts do npm",
+  "lesson": "e04-npm-e-o-racha-conta",
+  "theory_only": true,
+  "theory_reason": "Os scripts do npm rodam no terminal, com um package.json na pasta do projeto. O compilador on-line não tem nenhum dos dois.",
+  "recap": "Um **script do npm** é um apelido para um comando comprido, como um contato salvo com nome no celular. O apelido fica à esquerda, e o comando, à direita:\n\n```json\n\"scripts\": {\n  \"cardapio\": \"node src/scripts/cardapio.js\"\n}\n```\n\nPara rodar, digite `npm run cardapio`.",
+  "exercises": [
+    {
+      "id": "rodar-o-apelido",
+      "type": "single",
+      "prompt": "O `package.json` do app da academia tem este trecho:\n\n```json\n\"scripts\": {\n  \"treino\": \"node src/scripts/treino.js\"\n}\n```\n\nQual comando roda esse script?",
+      "options": {
+        "a": "`npm treino`",
+        "b": "`node treino`",
+        "c": "`npm run treino`",
+        "d": "`npm install treino`"
+      },
+      "answer": "c",
+      "explanation": "Para rodar um apelido, escreva `npm run` e o nome dele. O `npm treino` é a tentação, mas sem o `run` o npm responde `Unknown command`."
+    },
+    {
+      "id": "erros-do-npm",
+      "type": "drag",
+      "prompt": "Arraste cada mensagem para o que ela quer dizer. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "apelido", "label": "O apelido não existe em `scripts`" },
+        { "key": "run", "label": "Faltou a palavra `run` no comando" },
+        { "key": "virgula", "label": "Vírgula ou aspas erradas no `package.json`" },
+        { "key": "arquivo", "label": "O arquivo não foi encontrado" }
+      ],
+      "items": [
+        { "key": "a", "text": "`Unknown command`" },
+        { "key": "b", "text": "`ENOENT`" },
+        { "key": "c", "text": "`Missing script`" },
+        { "key": "d", "text": "`EJSONPARSE`" },
+        { "key": "e", "text": "`Cannot find package`" }
+      ],
+      "answer": { "apelido": "c", "run": "a", "virgula": "d", "arquivo": "b" },
+      "explanation": "`Missing script` avisa que o apelido não existe, e `Unknown command` aparece quando falta o `run`. `EJSONPARSE` aponta erro de vírgula ou aspas, e `ENOENT` diz que o arquivo não foi encontrado. `Cannot find package` sobra: ele avisa que um pacote não foi baixado."
+    },
+    {
+      "id": "rodar-de-outra-pasta",
+      "type": "truefalse",
+      "prompt": "O projeto da feira tem o script `\"precos\": \"node src/scripts/precos.js\"`. Com o terminal dentro da pasta `src/scripts`, o comando `npm run precos` funciona.",
+      "answer": true,
+      "explanation": "Verdadeiro. O npm roda o comando a partir da pasta raiz, em qualquer pasta do projeto. A tentação é pensar no `ENOENT` da pasta errada, que aparece quando você usa o `node` direto, fora da raiz."
+    },
+    {
+      "id": "virgula-que-falta",
+      "type": "multiple",
+      "prompt": "Olhe este trecho do `package.json` e marque **todas** as afirmações corretas.\n\n```json\n\"scripts\": {\n  \"test\": \"echo \\\"Error: no test specified\\\" && exit 1\"\n  \"feira\": \"node src/scripts/feira.js\"\n},\n```",
+      "options": {
+        "a": "A linha `feira` também precisa de vírgula no fim",
+        "b": "Falta uma vírgula no fim da linha do `test`",
+        "c": "Todo `npm run` do projeto falha com `EJSONPARSE`",
+        "d": "Só o `npm run feira` falha, e os outros funcionam",
+        "e": "A mensagem de erro traz a linha e a coluna do problema"
+      },
+      "answer": ["b", "c", "e"],
+      "explanation": "Cada linha dentro das chaves termina com vírgula, menos a última: falta a vírgula no `test`, e a linha `feira` fica sem. O arquivo inteiro deixa de ser lido, então todo `npm run` falha com `EJSONPARSE`, e a mensagem mostra a linha e a coluna."
+    },
+    {
+      "id": "listar-os-apelidos",
+      "type": "fill",
+      "prompt": "Complete as frases.\n\nOs apelidos ficam no campo ___ do `package.json`. Para listar os apelidos que existem, digite `npm ___`, sem nada depois.",
+      "answer": [["scripts"], ["run"]],
+      "explanation": "O campo `scripts` guarda os apelidos: à esquerda o nome, à direita o comando. O `npm run`, sem nada depois, mostra a lista dos que existem."
+    }
+  ]
+}

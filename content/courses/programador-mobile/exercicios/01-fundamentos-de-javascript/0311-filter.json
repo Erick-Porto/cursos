@@ -1,0 +1,68 @@
+{
+  "title": "filter",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "O **`filter`** é a peneira da lista: passa cada item por um teste, e quem responde `true` fica. Ele entrega uma lista nova e não muda a original.\n\n```javascript\nconst notas = [4, 8, 9];\nconst boas = notas.filter((nota) => nota >= 7);\nconsole.log(boas); // [ 8, 9 ]\n```",
+  "exercises": [
+    {
+      "id": "precos-da-feira",
+      "type": "code",
+      "prompt": "A lista `precos` guarda os preços das frutas da feira. Use o `filter` para ficar só com os preços **menores que 8** e guarde o resultado na constante `baratos`. Mostre a lista nova e quantos preços passaram.\n\n**Saída esperada**\n\n```plaintext\nBaratos: [ 3, 7, 5 ]\nQuantos: 3\n```",
+      "starter": "const precos = [3, 12, 7, 20, 5];\n\n// escreva o filter aqui\n\n// mostre a lista nova e a quantidade aqui\n",
+      "solution": "const precos = [3, 12, 7, 20, 5];\n\nconst baratos = precos.filter((preco) => preco < 8);\n\nconsole.log('Baratos:', baratos);\nconsole.log('Quantos:', baratos.length);\n",
+      "expected_output": "Baratos: [ 3, 7, 5 ]\nQuantos: 3",
+      "explanation": "O teste `preco < 8` é o furo da peneira. O 12 e o 20 respondem `false` e saem. Os outros passam, na mesma ordem em que estavam."
+    },
+    {
+      "id": "alunos-da-academia",
+      "type": "code",
+      "prompt": "A lista `alunos` traz as fichas da academia. Use dois `filter`: um para os alunos com `ativo` igual a `true` e outro para os alunos do plano `anual`. Mostre as três quantidades.\n\n**Saída esperada**\n\n```plaintext\nTotal de alunos: 5\nAlunos ativos: 3\nPlano anual: 2\n```",
+      "starter": "const alunos = [\n  { nome: 'Júlia', plano: 'anual', ativo: true },\n  { nome: 'Rui', plano: 'mensal', ativo: false },\n  { nome: 'Nina', plano: 'mensal', ativo: true },\n  { nome: 'Otávio', plano: 'anual', ativo: false },\n  { nome: 'Sara', plano: 'mensal', ativo: true },\n];\n\n// escreva os dois filter aqui\n\n// mostre as três quantidades aqui\n",
+      "solution": "const alunos = [\n  { nome: 'Júlia', plano: 'anual', ativo: true },\n  { nome: 'Rui', plano: 'mensal', ativo: false },\n  { nome: 'Nina', plano: 'mensal', ativo: true },\n  { nome: 'Otávio', plano: 'anual', ativo: false },\n  { nome: 'Sara', plano: 'mensal', ativo: true },\n];\n\nconst ativos = alunos.filter((aluno) => aluno.ativo);\nconst anuais = alunos.filter((aluno) => aluno.plano === 'anual');\n\nconsole.log('Total de alunos:', alunos.length);\nconsole.log('Alunos ativos:', ativos.length);\nconsole.log('Plano anual:', anuais.length);\n",
+      "expected_output": "Total de alunos: 5\nAlunos ativos: 3\nPlano anual: 2",
+      "explanation": "O campo `aluno.ativo` já é `true` ou `false`: ele é a própria resposta do teste. No plano, a pergunta compara textos com `===`. A lista `alunos` não muda, por isso o total continua 5."
+    },
+    {
+      "id": "linhas-para-o-centro",
+      "type": "code",
+      "prompt": "A lista `linhas` traz os ônibus de um terminal. Filtre em duas etapas. Primeiro, guarde em `paraOCentro` os ônibus com destino `Centro`. Depois, filtre **essa lista nova** e guarde em `baratas` os ônibus com tarifa **menor que 6**. Mostre as quantidades e o número do primeiro ônibus de `baratas`.\n\n**Saída esperada**\n\n```plaintext\nÔnibus no terminal: 5\nVão ao Centro: 3\nTarifa menor que 6: 2\nPrimeira opção: 205\n```",
+      "starter": "const linhas = [\n  { numero: 101, destino: 'Praia', tarifa: 5 },\n  { numero: 150, destino: 'Centro', tarifa: 7 },\n  { numero: 205, destino: 'Centro', tarifa: 5 },\n  { numero: 310, destino: 'Estádio', tarifa: 4 },\n  { numero: 422, destino: 'Centro', tarifa: 4 },\n];\n\n// escreva os dois filter aqui\n\n// mostre o resultado aqui\n",
+      "solution": "const linhas = [\n  { numero: 101, destino: 'Praia', tarifa: 5 },\n  { numero: 150, destino: 'Centro', tarifa: 7 },\n  { numero: 205, destino: 'Centro', tarifa: 5 },\n  { numero: 310, destino: 'Estádio', tarifa: 4 },\n  { numero: 422, destino: 'Centro', tarifa: 4 },\n];\n\nconst paraOCentro = linhas.filter((linha) => linha.destino === 'Centro');\nconst baratas = paraOCentro.filter((linha) => linha.tarifa < 6);\n\nconsole.log('Ônibus no terminal:', linhas.length);\nconsole.log('Vão ao Centro:', paraOCentro.length);\nconsole.log('Tarifa menor que 6:', baratas.length);\nconsole.log('Primeira opção:', baratas[0].numero);\n",
+      "expected_output": "Ônibus no terminal: 5\nVão ao Centro: 3\nTarifa menor que 6: 2\nPrimeira opção: 205",
+      "explanation": "O segundo `filter` peneira a lista que o primeiro entregou, e cada peneira deixa a lista menor. O ônibus 310 tem tarifa baixa, mas fica de fora porque não vai ao Centro. O `filter` mantém a ordem, então `baratas[0]` é o ônibus 205."
+    },
+    {
+      "id": "lista-original",
+      "type": "single",
+      "prompt": "O que aparece na tela?\n\n```javascript\nconst idades = [12, 18, 30];\nconst adultos = idades.filter((idade) => idade >= 18);\nconsole.log(idades.length);\n```",
+      "options": {
+        "a": "`2`",
+        "b": "`1`",
+        "c": "`undefined`",
+        "d": "`3`"
+      },
+      "answer": "d",
+      "explanation": "O `console.log` mede a lista `idades`, que continua com os 3 itens: o `filter` copia para a lista nova quem passou e não muda a original. O `2` seria a resposta de `adultos.length`."
+    },
+    {
+      "id": "partes-do-filter",
+      "type": "drag",
+      "prompt": "Arraste cada trecho de `const leves = malas.filter((mala) => mala.peso < 10);` para o que ele faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "lista", "label": "A lista que passa pela peneira" },
+        { "key": "item", "label": "O item que chega para ser testado" },
+        { "key": "teste", "label": "A pergunta feita a cada item, o furo da peneira" },
+        { "key": "nova", "label": "A caixa que guarda a lista nova" }
+      ],
+      "items": [
+        { "key": "a", "text": "`mala.peso < 10`" },
+        { "key": "b", "text": "`const leves`" },
+        { "key": "c", "text": "`malas`" },
+        { "key": "d", "text": "`(mala)`" },
+        { "key": "e", "text": "`malas.length`" }
+      ],
+      "answer": { "lista": "c", "item": "d", "teste": "a", "nova": "b" },
+      "explanation": "O `filter` peneira a lista `malas`. Cada item chega como `(mala)`, e a pergunta `mala.peso < 10` decide quem fica. A lista nova vai para `leves`. O `malas.length` sobra: ele não aparece nessa linha e só contaria os itens."
+    }
+  ]
+}

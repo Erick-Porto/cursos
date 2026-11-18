@@ -1,0 +1,54 @@
+{
+  "title": "Argumentos com process.argv",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "Um **argumento** é o detalhe do pedido: uma palavra escrita depois do nome do arquivo. O primeiro fica em **`process.argv[2]`**. Sem argumento, chega `undefined`.\n\n```javascript\n// node lanche.js frango\nconst sabor = process.argv[2];\nconsole.log('Sabor:', sabor);\n// Sabor: frango\n```",
+  "exercises": [
+    {
+      "id": "recepcao-da-academia",
+      "type": "code",
+      "prompt": "A recepção da academia cumprimenta cada aluna pelo nome. No compilador on-line não há terminal, então a linha `process.argv[2] = 'Ana';` faz o papel do comando `node ola.js Ana`. Guarde o argumento numa constante chamada `nome` e mostre a saudação.\n\n**Saída esperada**\n\n```plaintext\nBem-vinda à academia, Ana\n```",
+      "starter": "// Esta linha faz o papel do comando: node ola.js Ana\nprocess.argv[2] = 'Ana';\n\n// guarde o argumento na constante nome e mostre a saudação aqui\n",
+      "solution": "// Esta linha faz o papel do comando: node ola.js Ana\nprocess.argv[2] = 'Ana';\n\nconst nome = process.argv[2];\nconsole.log('Bem-vinda à academia,', nome);\n",
+      "expected_output": "Bem-vinda à academia, Ana",
+      "explanation": "`process.argv[2]` guarda o primeiro argumento, a primeira palavra depois do nome do arquivo. A vírgula no `console.log` separa o texto do nome, e a tela mostra um espaço entre eles."
+    },
+    {
+      "id": "pedido-da-lanchonete",
+      "type": "code",
+      "prompt": "A lanchonete recebe o sabor do lanche pelo comando. No compilador on-line, a linha `process.argv[2] = 'frango';` faz o papel do comando `node lanche.js frango`. Guarde o argumento na constante `sabor` e mostre as três linhas. Na segunda, junte os textos com `+`.\n\n**Saída esperada**\n\n```plaintext\nPedido recebido\nLanche de frango\nSabor escolhido: frango\n```",
+      "starter": "// Esta linha faz o papel do comando: node lanche.js frango\nprocess.argv[2] = 'frango';\n\n// guarde o argumento na constante sabor e mostre o pedido aqui\n",
+      "solution": "// Esta linha faz o papel do comando: node lanche.js frango\nprocess.argv[2] = 'frango';\n\nconst sabor = process.argv[2];\n\nconsole.log('Pedido recebido');\nconsole.log('Lanche de ' + sabor);\nconsole.log('Sabor escolhido:', sabor);\n",
+      "expected_output": "Pedido recebido\nLanche de frango\nSabor escolhido: frango",
+      "explanation": "Com textos, o `+` junta os pedaços. Repare no espaço dentro de `'Lanche de '`: o `+` não coloca espaço sozinho, e a vírgula do `console.log` coloca. Troque `frango` por outro sabor na primeira linha, e o pedido muda junto."
+    },
+    {
+      "id": "painel-da-rodoviaria",
+      "type": "code",
+      "prompt": "O painel da rodoviária mostra a linha e o destino do ônibus. Agora o comando tem **dois** argumentos: `node painel.js 302 Centro`. O primeiro fica em `process.argv[2]`, e o segundo, na posição seguinte, `process.argv[3]`. No compilador on-line, as duas primeiras linhas de código fazem o papel desse comando. Guarde cada argumento numa constante e monte o painel.\n\n**Saída esperada**\n\n```plaintext\nLinha: 302\nDestino: Centro\nÔnibus 302 para Centro\n```",
+      "starter": "// Estas duas linhas fazem o papel do comando: node painel.js 302 Centro\nprocess.argv[2] = '302';\nprocess.argv[3] = 'Centro';\n\n// guarde os dois argumentos em constantes e monte o painel aqui\n",
+      "solution": "// Estas duas linhas fazem o papel do comando: node painel.js 302 Centro\nprocess.argv[2] = '302';\nprocess.argv[3] = 'Centro';\n\nconst linha = process.argv[2];\nconst destino = process.argv[3];\n\nconsole.log('Linha:', linha);\nconsole.log('Destino:', destino);\nconsole.log('Ônibus', linha, 'para', destino);\n",
+      "expected_output": "Linha: 302\nDestino: Centro\nÔnibus 302 para Centro",
+      "explanation": "O espaço separa os argumentos do comando: `302` é o primeiro e `Centro` é o segundo. O Node guarda o comando inteiro numa lista, por isso o segundo argumento fica logo depois do primeiro, na posição 3. As vírgulas do último `console.log` colocam um espaço entre os quatro valores."
+    },
+    {
+      "id": "dois-nomes-no-comando",
+      "type": "single",
+      "prompt": "O arquivo `recado.js` tem estas duas linhas:\n\n```javascript\nconst nome = process.argv[2];\nconsole.log('Oi,', nome);\n```\n\nO que aparece com o comando abaixo?\n\n```bash\nnode recado.js Pedro Lima\n```",
+      "options": {
+        "a": "`Oi, Pedro Lima`",
+        "b": "`Oi, Lima`",
+        "c": "`Oi, undefined`",
+        "d": "`Oi, Pedro`"
+      },
+      "answer": "d",
+      "explanation": "O espaço separa os argumentos: `Pedro` é o primeiro e `Lima` é o segundo. O script só lê o primeiro, em `process.argv[2]`. Para o nome inteiro virar um argumento só, escreva `\"Pedro Lima\"` entre aspas no comando."
+    },
+    {
+      "id": "posicao-do-argumento",
+      "type": "fill",
+      "prompt": "No comando `node lanche.js frango`, a palavra `frango` fica na posição ___ da lista `process.argv`.",
+      "answer": [["2", "dois"]],
+      "explanation": "O Node guarda o comando inteiro numa lista que começa do 0: a posição 0 é o `node`, a posição 1 é o arquivo e a posição 2 é o primeiro argumento. Por isso a resposta não é 0 nem 1."
+    }
+  ]
+}

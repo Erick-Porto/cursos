@@ -1,0 +1,91 @@
+{
+  "title": "else if",
+  "lesson": "e10-decisoes",
+  "recap": "O **`else if`** (senão, se) põe mais saídas na estrada. As perguntas vão de cima para baixo, vale a **primeira** que dá `true`, e o `else` pega o resto.\n\n```javascript\nconst nota = 6;\nif (nota >= 7) {\n  console.log('Aprovado');\n} else if (nota >= 5) {\n  console.log('Recuperação');\n} else {\n  console.log('Reprovado');\n}\n// Recuperação\n```",
+  "exercises": [
+    {
+      "id": "roupa-da-escola",
+      "type": "code",
+      "prompt": "Escolha a roupa pela temperatura. Abaixo de 15 graus, mostre `Vá de casaco`. Abaixo de 25 graus, mostre `Vá de blusa`. Nos outros casos, mostre `Vá de camiseta`.\n\n**Saída esperada**\n\n```plaintext\nVá de blusa\n```",
+      "starter": "const temperatura = 19;\n\n// escreva o if, o else if e o else aqui\n",
+      "solution": "const temperatura = 19;\n\nif (temperatura < 15) {\n  console.log('Vá de casaco');\n} else if (temperatura < 25) {\n  console.log('Vá de blusa');\n} else {\n  console.log('Vá de camiseta');\n}\n",
+      "expected_output": "Vá de blusa",
+      "explanation": "`19 < 15` dá `false`, e o JavaScript segue para a próxima pergunta. `19 < 25` dá `true`, então esse caminho roda, e o `else` fica de fora. A faixa menor vem primeiro."
+    },
+    {
+      "id": "tipo-de-passagem",
+      "type": "code",
+      "prompt": "Escreva a função `tipoDePassagem(idade)`, que devolve:\n\n- `grátis` até 5 anos\n- `meia passagem` de 6 a 17 anos\n- `grátis` a partir de 65 anos\n- `passagem inteira` nas outras idades\n\n**Saída esperada**\n\n```plaintext\n4 anos: grátis\n17 anos: meia passagem\n18 anos: passagem inteira\n64 anos: passagem inteira\n65 anos: grátis\n```",
+      "starter": "// escreva a função tipoDePassagem aqui\n\nconsole.log(`4 anos: ${tipoDePassagem(4)}`);\nconsole.log(`17 anos: ${tipoDePassagem(17)}`);\nconsole.log(`18 anos: ${tipoDePassagem(18)}`);\nconsole.log(`64 anos: ${tipoDePassagem(64)}`);\nconsole.log(`65 anos: ${tipoDePassagem(65)}`);\n",
+      "solution": "function tipoDePassagem(idade) {\n  if (idade <= 5) {\n    return 'grátis';\n  } else if (idade <= 17) {\n    return 'meia passagem';\n  } else if (idade >= 65) {\n    return 'grátis';\n  } else {\n    return 'passagem inteira';\n  }\n}\n\nconsole.log(`4 anos: ${tipoDePassagem(4)}`);\nconsole.log(`17 anos: ${tipoDePassagem(17)}`);\nconsole.log(`18 anos: ${tipoDePassagem(18)}`);\nconsole.log(`64 anos: ${tipoDePassagem(64)}`);\nconsole.log(`65 anos: ${tipoDePassagem(65)}`);\n",
+      "expected_output": "4 anos: grátis\n17 anos: meia passagem\n18 anos: passagem inteira\n64 anos: passagem inteira\n65 anos: grátis",
+      "explanation": "A pergunta `idade <= 17` só é feita para quem passou de 5 anos, por isso não precisa conferir o começo da faixa. As idades 17, 18, 64 e 65 são as bordas: é nelas que um `<` trocado por `<=` aparece."
+    },
+    {
+      "id": "apelido-no-app",
+      "type": "code",
+      "prompt": "Um app confere o apelido e mostra **só o primeiro problema**. Escreva a função `conferirApelido(texto)`. Ela tira os espaços das pontas e devolve, nesta ordem:\n\n1. `Digite um apelido`, se o texto ficou vazio\n2. `Apelido muito curto`, se tem menos de 3 caracteres\n3. `Apelido muito longo`, se tem mais de 12 caracteres\n4. `Apelido sem espaços, por favor`, se tem espaço no meio\n5. `Apelido aceito`, nos outros casos\n\n**Saída esperada**\n\n```plaintext\nDigite um apelido\nApelido muito curto\nApelido muito longo\nApelido sem espaços, por favor\nApelido aceito\n```",
+      "starter": "// escreva a função conferirApelido aqui\n\nconsole.log(conferirApelido('   '));\nconsole.log(conferirApelido('Jo'));\nconsole.log(conferirApelido('clarinha_da_silva'));\nconsole.log(conferirApelido('bia lima'));\nconsole.log(conferirApelido('  bia_lima  '));\n",
+      "solution": "function conferirApelido(texto) {\n  const apelido = texto.trim();\n  if (apelido === '') {\n    return 'Digite um apelido';\n  } else if (apelido.length < 3) {\n    return 'Apelido muito curto';\n  } else if (apelido.length > 12) {\n    return 'Apelido muito longo';\n  } else if (apelido.includes(' ')) {\n    return 'Apelido sem espaços, por favor';\n  } else {\n    return 'Apelido aceito';\n  }\n}\n\nconsole.log(conferirApelido('   '));\nconsole.log(conferirApelido('Jo'));\nconsole.log(conferirApelido('clarinha_da_silva'));\nconsole.log(conferirApelido('bia lima'));\nconsole.log(conferirApelido('  bia_lima  '));\n",
+      "expected_output": "Digite um apelido\nApelido muito curto\nApelido muito longo\nApelido sem espaços, por favor\nApelido aceito",
+      "explanation": "A ordem das perguntas importa. Se `apelido.length < 3` viesse primeiro, o texto vazio receberia `Apelido muito curto`. O `trim` vem antes de tudo: sem ele, os espaços das pontas contariam como caracteres e como espaço no meio."
+    },
+    {
+      "id": "caminho-dos-pontos",
+      "type": "drag",
+      "prompt": "Com `pontos` valendo 45, arraste cada acontecimento para a ordem em que ele ocorre.\n\n```javascript\nconst pontos = 45;\n\nif (pontos >= 90) {\n  console.log('Ouro');\n} else if (pontos >= 40) {\n  console.log('Prata');\n} else {\n  console.log('Bronze');\n}\n```",
+      "layout": "flow",
+      "slots": [
+        {
+          "key": "primeiro",
+          "label": "Primeiro"
+        },
+        {
+          "key": "segundo",
+          "label": "Depois"
+        },
+        {
+          "key": "terceiro",
+          "label": "Por fim"
+        }
+      ],
+      "items": [
+        {
+          "key": "a",
+          "text": "`45 >= 40` dá `true`"
+        },
+        {
+          "key": "b",
+          "text": "`45 >= 90` dá `false`"
+        },
+        {
+          "key": "c",
+          "text": "Aparece `Prata` na tela"
+        },
+        {
+          "key": "d",
+          "text": "Aparece `Bronze` na tela"
+        }
+      ],
+      "answer": {
+        "primeiro": "b",
+        "segundo": "a",
+        "terceiro": "c"
+      },
+      "explanation": "As perguntas vão de cima para baixo. A primeira dá `false`, e a segunda dá `true`: esse caminho roda, e o resto fica de fora. `Bronze` não aparece, porque o `else` só roda quando todas as perguntas dão `false`."
+    },
+    {
+      "id": "ordem-das-perguntas",
+      "type": "single",
+      "prompt": "Uma academia classifica os alunos pelos dias de matrícula. O que este código mostra?\n\n```javascript\nconst dias = 3;\n\nif (dias < 30) {\n  console.log('Primeiro mês');\n} else if (dias < 7) {\n  console.log('Primeira semana');\n} else {\n  console.log('Aluno antigo');\n}\n```",
+      "options": {
+        "a": "`Primeira semana`",
+        "b": "`Aluno antigo`",
+        "c": "`Primeiro mês` e `Primeira semana`",
+        "d": "`Primeiro mês`"
+      },
+      "answer": "d",
+      "explanation": "Vale a primeira pergunta que dá `true`. `3 < 30` já dá `true`, então `dias < 7` nem é feita. `Primeira semana` engana porque 3 também é menor que 7, mas essa saída nunca aparece: a faixa menor precisaria vir primeiro."
+    }
+  ]
+}

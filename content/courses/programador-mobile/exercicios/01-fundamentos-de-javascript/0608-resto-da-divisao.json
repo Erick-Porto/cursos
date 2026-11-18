@@ -1,0 +1,60 @@
+{
+  "title": "Resto da divisão (%)",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "O **`%`** dá o **resto** da divisão em partes inteiras: 10 balas para 3 crianças, cada uma ganha 3, e sobra 1. Aqui, ele não é porcentagem.\n\n```javascript\nconsole.log(10 % 3); // 1\nconsole.log(9 % 3);  // 0\n```",
+  "exercises": [
+    {
+      "id": "ovos-fora-da-caixa",
+      "type": "code",
+      "prompt": "A granja tem 100 ovos e embala em caixas de 12. Use o `%` para mostrar quantos ovos ficam fora das caixas.\n\n**Saída esperada**\n\n```plaintext\nOvos fora da caixa: 4\n```",
+      "starter": "const ovos = 100;\nconst ovosPorCaixa = 12;\n\n// mostre aqui quantos ovos sobram\n",
+      "solution": "const ovos = 100;\nconst ovosPorCaixa = 12;\n\nconsole.log(`Ovos fora da caixa: ${ovos % ovosPorCaixa}`);\n",
+      "expected_output": "Ovos fora da caixa: 4",
+      "explanation": "Oito caixas de 12 guardam 96 ovos. De 100, sobram 4, e é esse resto que o `%` responde."
+    },
+    {
+      "id": "times-da-educacao-fisica",
+      "type": "code",
+      "prompt": "Na educação física, cada turma forma times de 5 alunos. Mostre quantos alunos de cada turma ficam sem time.\n\n**Saída esperada**\n\n```plaintext\nTurma A: sobram 3 alunos\nTurma B: sobram 0 alunos\nTurma C: sobram 4 alunos\n```",
+      "starter": "const turmaA = 23;\nconst turmaB = 30;\nconst turmaC = 34;\nconst alunosPorTime = 5;\n\n// mostre aqui quantos alunos sobram em cada turma\n",
+      "solution": "const turmaA = 23;\nconst turmaB = 30;\nconst turmaC = 34;\nconst alunosPorTime = 5;\n\nconsole.log(`Turma A: sobram ${turmaA % alunosPorTime} alunos`);\nconsole.log(`Turma B: sobram ${turmaB % alunosPorTime} alunos`);\nconsole.log(`Turma C: sobram ${turmaC % alunosPorTime} alunos`);\n",
+      "expected_output": "Turma A: sobram 3 alunos\nTurma B: sobram 0 alunos\nTurma C: sobram 4 alunos",
+      "explanation": "O `%` faz a divisão em partes inteiras e responde o que sobra. Resto 0, como na turma B, quer dizer que a conta dividiu certinho, sem sobra."
+    },
+    {
+      "id": "poltronas-do-onibus",
+      "type": "code",
+      "prompt": "No ônibus da excursão, as poltronas de número par ficam na janela, e as de número ímpar, no corredor. Um número é par quando o resto da divisão por 2 é 0, e ímpar quando esse resto é 1. Use dois `filter` para separar as poltronas e mostre quantas há em cada grupo, com `.length`.\n\n**Saída esperada**\n\n```plaintext\nJanela: 4 poltronas\nCorredor: 3 poltronas\n```",
+      "starter": "const poltronas = [12, 7, 30, 15, 22, 9, 18];\n\n// separe as poltronas com filter e mostre as quantidades aqui\n",
+      "solution": "const poltronas = [12, 7, 30, 15, 22, 9, 18];\n\nconst janela = poltronas.filter((poltrona) => poltrona % 2 === 0);\nconst corredor = poltronas.filter((poltrona) => poltrona % 2 === 1);\n\nconsole.log(`Janela: ${janela.length} poltronas`);\nconsole.log(`Corredor: ${corredor.length} poltronas`);\n",
+      "expected_output": "Janela: 4 poltronas\nCorredor: 3 poltronas",
+      "explanation": "O teste de cada `filter` pergunta o resto da divisão por 2. Passam na janela 12, 30, 22 e 18, e no corredor 7, 15 e 9."
+    },
+    {
+      "id": "quanto-sobra",
+      "type": "drag",
+      "prompt": "Arraste cada resultado para a sua conta. Um dos resultados não entra.",
+      "layout": "list",
+      "slots": [
+        { "key": "dezessete", "label": "`17 % 5`" },
+        { "key": "vinte", "label": "`20 % 5`" },
+        { "key": "tres", "label": "`3 % 5`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`0`" },
+        { "key": "b", "text": "`3.4`" },
+        { "key": "c", "text": "`3`" },
+        { "key": "d", "text": "`2`" }
+      ],
+      "answer": { "dezessete": "d", "vinte": "a", "tres": "c" },
+      "explanation": "17 dá 3 partes de 5 e sobram 2. 20 divide certinho, com resto 0. Em `3 % 5`, não forma nenhuma parte de 5, e sobram os 3. O `3.4` é o resultado de `17 / 5`, a divisão com casas decimais."
+    },
+    {
+      "id": "resto-nao-e-porcentagem",
+      "type": "truefalse",
+      "prompt": "Em `200 % 10`, o `%` calcula 10 por cento de 200.",
+      "answer": false,
+      "explanation": "Aqui, o `%` é o operador do **resto**: `200 % 10` dá `0`, porque 200 divide certinho por 10. Para calcular 10 por cento, a conta é `200 * 10 / 100`, que dá `20`."
+    }
+  ]
+}

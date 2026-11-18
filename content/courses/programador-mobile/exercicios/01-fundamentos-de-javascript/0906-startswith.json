@@ -1,0 +1,54 @@
+{
+  "title": "startsWith",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`startsWith(trecho)`** (\"começa com\") pergunta se o texto **começa** com o trecho e responde `true` ou `false`. Maiúscula conta, e um espaço na frente também.\n\n```javascript\nconst placa = 'BRA2E19';\nconsole.log(placa.startsWith('BRA'));   // true\nconsole.log(placa.startsWith('RA'));    // false\n```",
+  "exercises": [
+    {
+      "id": "fotos-do-celular",
+      "type": "code",
+      "prompt": "A galeria do celular separa os arquivos pelo começo do nome. Use o `startsWith` para responder se o arquivo começa com `foto` e se começa com `video`.\n\n**Saída esperada**\n\n```plaintext\nÉ foto: true\nÉ vídeo: false\n```",
+      "starter": "const arquivo = 'foto-aniversario.jpg';\n\n// faça as duas perguntas aqui\n",
+      "solution": "const arquivo = 'foto-aniversario.jpg';\n\nconsole.log(`É foto: ${arquivo.startsWith('foto')}`);\nconsole.log(`É vídeo: ${arquivo.startsWith('video')}`);\n",
+      "expected_output": "É foto: true\nÉ vídeo: false",
+      "explanation": "O `startsWith` olha só o começo do texto e responde `true` ou `false`. O nome do arquivo começa com `foto`, por isso a segunda pergunta dá `false`."
+    },
+    {
+      "id": "notificacao-urgente",
+      "type": "code",
+      "prompt": "O celular põe no topo as mensagens que começam com `URGENTE`. Esta mensagem chegou com espaços na frente. Mostre a resposta do `startsWith` sem limpar o texto e depois com o `trim` antes dele, na mesma linha. Se a resposta com o `trim` for `true`, mostre a última linha com um `if`.\n\n**Saída esperada**\n\n```plaintext\nSem trim: false\nCom trim: true\nNotificação no topo da tela\n```",
+      "starter": "const mensagem = '  URGENTE: a reunião de pais mudou para 19h';\n\n// mostre as respostas e escreva o if aqui\n",
+      "solution": "const mensagem = '  URGENTE: a reunião de pais mudou para 19h';\n\nconsole.log(`Sem trim: ${mensagem.startsWith('URGENTE')}`);\nconsole.log(`Com trim: ${mensagem.trim().startsWith('URGENTE')}`);\n\nif (mensagem.trim().startsWith('URGENTE')) {\n  console.log('Notificação no topo da tela');\n}\n",
+      "expected_output": "Sem trim: false\nCom trim: true\nNotificação no topo da tela",
+      "explanation": "Com os espaços na frente, o texto começa com um espaço, e não com `URGENTE`. Em `mensagem.trim().startsWith('URGENTE')`, o `startsWith` pergunta ao texto que o `trim` devolveu, já sem os espaços."
+    },
+    {
+      "id": "produtos-de-limpeza",
+      "type": "code",
+      "prompt": "No mercado, todo produto de limpeza tem um código que começa com `LIM-`. Use o `filter` com o `startsWith` para guardar só esses produtos. Mostre quantos são e depois a lista.\n\n**Saída esperada**\n\n```plaintext\nProdutos de limpeza: 3\n[ 'LIM-detergente', 'LIM-sabão em pó', 'LIM-água sanitária' ]\n```",
+      "starter": "const produtos = ['LIM-detergente', 'HORT-alface', 'LIM-sabão em pó', 'PAD-pão francês', 'HORT-tomate', 'LIM-água sanitária'];\n\n// escreva o filter aqui\n",
+      "solution": "const produtos = ['LIM-detergente', 'HORT-alface', 'LIM-sabão em pó', 'PAD-pão francês', 'HORT-tomate', 'LIM-água sanitária'];\n\nconst limpeza = produtos.filter((produto) => produto.startsWith('LIM-'));\nconsole.log(`Produtos de limpeza: ${limpeza.length}`);\nconsole.log(limpeza);\n",
+      "expected_output": "Produtos de limpeza: 3\n[ 'LIM-detergente', 'LIM-sabão em pó', 'LIM-água sanitária' ]",
+      "explanation": "A peneira do `filter` pergunta a cada código se ele começa com `LIM-`. Os três que respondem `true` ficam na lista nova, e o `length` conta quantos ficaram."
+    },
+    {
+      "id": "qual-responde-false",
+      "type": "single",
+      "prompt": "Com `const destino = 'Praia Grande';`, qual chamada responde `false`?",
+      "options": {
+        "a": "`destino.includes('Grande')`",
+        "b": "`destino.startsWith('Praia')`",
+        "c": "`destino.includes('ia G')`",
+        "d": "`destino.startsWith('Grande')`"
+      },
+      "answer": "d",
+      "explanation": "`Grande` aparece no texto, mas não no começo: o texto começa com `Praia`. Por isso o `startsWith('Grande')` dá `false`. O `includes('Grande')` dá `true`, porque aceita o trecho em qualquer lugar."
+    },
+    {
+      "id": "comeca-com-br",
+      "type": "fill",
+      "prompt": "Complete o código para perguntar se o pacote **começa** com `BR` e escreva o que a linha mostra.\n\n```javascript\nconst pacote = 'BR4471';\nconsole.log(pacote.___('BR'));   // mostra ___\n```",
+      "answer": [["startsWith"], ["true"]],
+      "explanation": "O `startsWith` pergunta se o texto começa com o trecho e responde `true` ou `false`. O código `BR4471` começa com `BR`, por isso a linha mostra `true`."
+    }
+  ]
+}

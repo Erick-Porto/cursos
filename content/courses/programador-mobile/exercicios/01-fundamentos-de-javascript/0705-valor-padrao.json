@@ -1,0 +1,54 @@
+{
+  "title": "Valor padrão de parâmetro",
+  "lesson": "e07-funcoes",
+  "recap": "O **valor padrão** é o de sempre: vale quando a chamada não traz o argumento. Se o argumento vem, vale o argumento, até o `0`.\n\n```javascript\nfunction pedirCafe(acucar = 2) {\n  console.log(`${acucar} colheres`);\n}\n\npedirCafe();  // 2 colheres\npedirCafe(0); // 0 colheres\n```",
+  "exercises": [
+    {
+      "id": "treino-de-sempre",
+      "type": "code",
+      "prompt": "Na academia, o treino de sempre dura 30 minutos. Crie a função `iniciarTreino`, com o parâmetro `minutos` e valor padrão `30`, que mostra a frase da saída. Chame a função uma vez sem argumento e outra vez com `45`.\n\n**Saída esperada**\n\n```plaintext\nTreino de 30 minutos\nTreino de 45 minutos\n```",
+      "starter": "// escreva a função iniciarTreino aqui\n\n// chame a função sem argumento e depois com 45 aqui\n",
+      "solution": "function iniciarTreino(minutos = 30) {\n  console.log(`Treino de ${minutos} minutos`);\n}\n\niniciarTreino();\niniciarTreino(45);\n",
+      "expected_output": "Treino de 30 minutos\nTreino de 45 minutos",
+      "explanation": "Na primeira chamada, nenhum argumento veio, então `minutos` vale o padrão `30`. Na segunda, o `45` veio e ocupa o lugar do padrão."
+    },
+    {
+      "id": "ponto-extra-da-escola",
+      "type": "code",
+      "prompt": "A escola soma um ponto extra na prova. O extra de sempre é 1. Crie a função `notaFinal`, com os parâmetros `prova` e `extra`, e valor padrão `1` em `extra`. Ela **devolve** a soma dos dois. Mostre o resultado destas três chamadas, nesta ordem:\n\n- prova 6, sem dizer o extra\n- prova 6, com extra 2\n- prova 6, com extra 0\n\n**Saída esperada**\n\n```plaintext\n7\n8\n6\n```",
+      "starter": "// escreva a função notaFinal aqui\n\n// mostre o resultado das três chamadas aqui\n",
+      "solution": "function notaFinal(prova, extra = 1) {\n  return prova + extra;\n}\n\nconsole.log(notaFinal(6));\nconsole.log(notaFinal(6, 2));\nconsole.log(notaFinal(6, 0));\n",
+      "expected_output": "7\n8\n6",
+      "explanation": "O padrão só entra quando o argumento não vem. O `0` é um valor: ele veio, então vale, e a nota continua 6."
+    },
+    {
+      "id": "compra-com-sacola",
+      "type": "code",
+      "prompt": "No mercado, toda compra tem 10% de desconto e paga 50 centavos de sacola, a não ser que a chamada diga outra coisa. Crie a função `precoFinal`, com os parâmetros `centavos`, `desconto` (padrão `10`) e `sacola` (padrão `50`). Ela devolve, em centavos, o valor com desconto arredondado com `Math.round`, mais a sacola.\n\nMostre em reais, com duas casas depois do ponto, estas três compras de 2000 centavos:\n\n| Compra | Desconto | Sacola |\n|---|---|---|\n| Padrão | o de sempre | o de sempre |\n| Promoção | 25 | o de sempre |\n| Sem desconto nem sacola | 0 | 0 |\n\n**Saída esperada**\n\n```plaintext\nPadrão: R$ 18.50\nPromoção: R$ 15.50\nSem desconto nem sacola: R$ 20.00\n```",
+      "starter": "const compra = 2000;\n\n// escreva a função precoFinal aqui\n\n// mostre as três compras aqui\n",
+      "solution": "const compra = 2000;\n\nfunction precoFinal(centavos, desconto = 10, sacola = 50) {\n  const valorDoDesconto = centavos * desconto / 100;\n  return Math.round(centavos - valorDoDesconto) + sacola;\n}\n\nconsole.log(`Padrão: R$ ${(precoFinal(compra) / 100).toFixed(2)}`);\nconsole.log(`Promoção: R$ ${(precoFinal(compra, 25) / 100).toFixed(2)}`);\nconsole.log(`Sem desconto nem sacola: R$ ${(precoFinal(compra, 0, 0) / 100).toFixed(2)}`);\n",
+      "expected_output": "Padrão: R$ 18.50\nPromoção: R$ 15.50\nSem desconto nem sacola: R$ 20.00",
+      "explanation": "Cada parâmetro com padrão recebe o valor da chamada ou o de sempre. Na promoção, só o `desconto` muda. Para mudar a `sacola`, a chamada precisa dizer o `desconto` antes, porque os argumentos entram na ordem dos parâmetros."
+    },
+    {
+      "id": "zero-tambem-vale",
+      "type": "truefalse",
+      "prompt": "Neste código, a tela mostra `0`.\n\n```javascript\nfunction reservarAssentos(assentos = 2) {\n  console.log(assentos);\n}\n\nreservarAssentos(0);\n```",
+      "answer": true,
+      "explanation": "O padrão só entra quando o argumento não vem. O `0` veio, então `assentos` vale `0`. Quem acha que o `0` conta como \"nada\" espera ver `2`, mas o `0` é um valor como outro qualquer."
+    },
+    {
+      "id": "padrao-no-fim",
+      "type": "single",
+      "prompt": "Qual destas funções escreve o valor padrão do jeito certo e no lugar certo?",
+      "options": {
+        "a": "`function pedirLanche(lanche, molho = 'alho') { }`",
+        "b": "`function pedirLanche(molho = 'alho', lanche) { }`",
+        "c": "`function pedirLanche(lanche, molho == 'alho') { }`",
+        "d": "`function pedirLanche(lanche, 'alho' = molho) { }`"
+      },
+      "answer": "a",
+      "explanation": "Os parâmetros com padrão ficam no fim da lista. Com o padrão na frente, o primeiro argumento cairia no `molho`, e não no `lanche`. O valor padrão usa um `=` só, com o nome do parâmetro à esquerda."
+    }
+  ]
+}

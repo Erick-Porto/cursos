@@ -1,0 +1,66 @@
+{
+  "title": "console.table",
+  "lesson": "e04-npm-e-o-racha-conta",
+  "recap": "O **`console.table`** é um `console.log` que desenha tabela: uma linha por item e uma coluna por campo. A coluna `(index)` traz o número da gaveta, a partir do 0.\n\n```javascript\nconst notas = [{ nome: 'Ana', nota: 8 }];\nconsole.table(notas);\n```",
+  "exercises": [
+    {
+      "id": "precos-da-padaria",
+      "type": "code",
+      "prompt": "A padaria quer conferir o preço dos pães. Use o `console.table` para mostrar a lista `paes` como tabela. Os espaços dentro das colunas podem mudar de um compilador para outro: confira as linhas, as colunas e os valores.\n\n**Saída esperada**\n\n```plaintext\n┌─────────┬─────────────────┬───────┐\n│ (index) │ nome            │ preco │\n├─────────┼─────────────────┼───────┤\n│ 0       │ 'Pão francês'   │ 0.9   │\n│ 1       │ 'Pão de queijo' │ 3.5   │\n│ 2       │ 'Sonho'         │ 6     │\n└─────────┴─────────────────┴───────┘\n```",
+      "starter": "const paes = [\n  { nome: 'Pão francês', preco: 0.9 },\n  { nome: 'Pão de queijo', preco: 3.5 },\n  { nome: 'Sonho', preco: 6 },\n];\n\n// mostre a lista como tabela aqui\n",
+      "solution": "const paes = [\n  { nome: 'Pão francês', preco: 0.9 },\n  { nome: 'Pão de queijo', preco: 3.5 },\n  { nome: 'Sonho', preco: 6 },\n];\n\nconsole.table(paes);\n",
+      "expected_output": "┌─────────┬─────────────────┬───────┐\n│ (index) │ nome            │ preco │\n├─────────┼─────────────────┼───────┤\n│ 0       │ 'Pão francês'   │ 0.9   │\n│ 1       │ 'Pão de queijo' │ 3.5   │\n│ 2       │ 'Sonho'         │ 6     │\n└─────────┴─────────────────┴───────┘",
+      "explanation": "O `console.table` recebe a lista e desenha uma linha por item e uma coluna por campo. A coluna `(index)` ele acrescenta sozinho, com o número da gaveta de cada item."
+    },
+    {
+      "id": "aulas-com-vaga",
+      "type": "code",
+      "prompt": "A academia quer ver só as aulas que ainda têm vaga. Use um `filter` para guardar numa `const` as aulas com `vagas` maior que 0. Depois, mostre quantas são e a tabela delas. Os espaços dentro das colunas podem mudar de um compilador para outro: confira as linhas, as colunas e os valores.\n\n**Saída esperada**\n\n```plaintext\nAulas com vaga: 3\n┌─────────┬─────────────┬─────────┬───────┐\n│ (index) │ nome        │ horario │ vagas │\n├─────────┼─────────────┼─────────┼───────┤\n│ 0       │ 'Spinning'  │ '07:00' │ 4     │\n│ 1       │ 'Zumba'     │ '18:00' │ 12    │\n│ 2       │ 'Funcional' │ '20:00' │ 2     │\n└─────────┴─────────────┴─────────┴───────┘\n```",
+      "starter": "const aulas = [\n  { nome: 'Spinning', horario: '07:00', vagas: 4 },\n  { nome: 'Pilates', horario: '08:30', vagas: 0 },\n  { nome: 'Zumba', horario: '18:00', vagas: 12 },\n  { nome: 'Yoga', horario: '19:30', vagas: 0 },\n  { nome: 'Funcional', horario: '20:00', vagas: 2 },\n];\n\n// escreva o filter, o console.log e o console.table aqui\n",
+      "solution": "const aulas = [\n  { nome: 'Spinning', horario: '07:00', vagas: 4 },\n  { nome: 'Pilates', horario: '08:30', vagas: 0 },\n  { nome: 'Zumba', horario: '18:00', vagas: 12 },\n  { nome: 'Yoga', horario: '19:30', vagas: 0 },\n  { nome: 'Funcional', horario: '20:00', vagas: 2 },\n];\n\nconst comVaga = aulas.filter((aula) => aula.vagas > 0);\n\nconsole.log('Aulas com vaga:', comVaga.length);\nconsole.table(comVaga);\n",
+      "expected_output": "Aulas com vaga: 3\n┌─────────┬─────────────┬─────────┬───────┐\n│ (index) │ nome        │ horario │ vagas │\n├─────────┼─────────────┼─────────┼───────┤\n│ 0       │ 'Spinning'  │ '07:00' │ 4     │\n│ 1       │ 'Zumba'     │ '18:00' │ 12    │\n│ 2       │ 'Funcional' │ '20:00' │ 2     │\n└─────────┴─────────────┴─────────┴───────┘",
+      "explanation": "O `filter` é a peneira: fica só a aula com `vagas` maior que 0. O `.length` conta o que passou, e o `console.table` desenha a lista nova, por isso o `(index)` recomeça do 0."
+    },
+    {
+      "id": "sacola-da-feira",
+      "type": "code",
+      "prompt": "Monte o resumo da sacola da feira, nesta ordem:\n\n1. O nome da banca\n2. Quantos itens há na sacola\n3. A tabela dos itens\n4. O total, com um `reduce` que soma **preço vezes quantidade**, mostrado com `toFixed(2)`\n\nOs espaços dentro das colunas podem mudar de um compilador para outro: confira as linhas, as colunas e os valores.\n\n**Saída esperada**\n\n```plaintext\nFeira: Banca da Dona Rosa\nItens na sacola: 3\n┌─────────┬──────────┬────────────┬───────┐\n│ (index) │ produto  │ quantidade │ preco │\n├─────────┼──────────┼────────────┼───────┤\n│ 0       │ 'Tomate' │ 2          │ 7.5   │\n│ 1       │ 'Alface' │ 1          │ 3     │\n│ 2       │ 'Banana' │ 3          │ 4.2   │\n└─────────┴──────────┴────────────┴───────┘\nTotal: R$ 30.60\n```",
+      "starter": "const sacola = {\n  banca: 'Banca da Dona Rosa',\n  itens: [\n    { produto: 'Tomate', quantidade: 2, preco: 7.5 },\n    { produto: 'Alface', quantidade: 1, preco: 3 },\n    { produto: 'Banana', quantidade: 3, preco: 4.2 },\n  ],\n};\n\n// escreva o resumo da sacola aqui\n",
+      "solution": "const sacola = {\n  banca: 'Banca da Dona Rosa',\n  itens: [\n    { produto: 'Tomate', quantidade: 2, preco: 7.5 },\n    { produto: 'Alface', quantidade: 1, preco: 3 },\n    { produto: 'Banana', quantidade: 3, preco: 4.2 },\n  ],\n};\n\nconst total = sacola.itens.reduce((soma, item) => soma + item.preco * item.quantidade, 0);\n\nconsole.log('Feira:', sacola.banca);\nconsole.log('Itens na sacola:', sacola.itens.length);\nconsole.table(sacola.itens);\nconsole.log('Total: R$', total.toFixed(2));\n",
+      "expected_output": "Feira: Banca da Dona Rosa\nItens na sacola: 3\n┌─────────┬──────────┬────────────┬───────┐\n│ (index) │ produto  │ quantidade │ preco │\n├─────────┼──────────┼────────────┼───────┤\n│ 0       │ 'Tomate' │ 2          │ 7.5   │\n│ 1       │ 'Alface' │ 1          │ 3     │\n│ 2       │ 'Banana' │ 3          │ 4.2   │\n└─────────┴──────────┴────────────┴───────┘\nTotal: R$ 30.60",
+      "explanation": "A tabela recebe `sacola.itens`, a lista que está dentro da ficha. O `reduce` é a calculadora que acumula: o visor começa no 0, e cada item soma o preço vezes a quantidade. O `toFixed(2)` mostra `30.6` como `30.60`."
+    },
+    {
+      "id": "indice-depois-do-filter",
+      "type": "single",
+      "prompt": "Este código mostra as linhas de ônibus com espera menor que 10 minutos:\n\n```javascript\nconst linhas = [\n  { numero: 101, espera: 15 },\n  { numero: 205, espera: 5 },\n  { numero: 310, espera: 8 },\n];\nconsole.table(linhas.filter((linha) => linha.espera < 10));\n```\n\nQual número aparece na coluna `(index)` do ônibus 205?",
+      "options": {
+        "a": "`0`",
+        "b": "`1`",
+        "c": "`2`",
+        "d": "`205`"
+      },
+      "answer": "a",
+      "explanation": "O `filter` entrega uma lista nova, só com os ônibus 205 e 310. Nessa lista, o 205 ocupa a primeira gaveta, e a fileira começa no 0. O `1` é a tentação: esse era o lugar dele na lista original."
+    },
+    {
+      "id": "partes-da-tabela",
+      "type": "drag",
+      "prompt": "O `console.table` recebeu uma lista de alunos, cada um com `nome` e `nota`. Arraste cada descrição para a parte da tabela que ela explica. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "indice", "label": "A coluna `(index)`" },
+        { "key": "linha", "label": "Cada linha da tabela" },
+        { "key": "coluna", "label": "A coluna `nota`" }
+      ],
+      "items": [
+        { "key": "a", "text": "Um campo da ficha de cada aluno" },
+        { "key": "b", "text": "O número da gaveta, a partir do 0" },
+        { "key": "c", "text": "Um item da lista, com os seus campos" },
+        { "key": "d", "text": "A soma das notas de todos os alunos" }
+      ],
+      "answer": { "indice": "b", "linha": "c", "coluna": "a" },
+      "explanation": "O `console.table` desenha uma linha por item e uma coluna por campo. A coluna `(index)` traz o número da gaveta de cada item, a partir do 0. A soma das notas sobra: a tabela só mostra os dados, e quem soma é o `reduce`."
+    }
+  ]
+}

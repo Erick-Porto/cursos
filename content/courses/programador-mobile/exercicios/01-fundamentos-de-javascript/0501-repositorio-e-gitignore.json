@@ -1,0 +1,70 @@
+{
+  "title": "Repositório e .gitignore",
+  "lesson": "e05-git-e-github",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line não tem terminal nem Git: estes comandos rodam na pasta do projeto, no seu computador.",
+  "recap": "O **repositório** é a pasta do projeto com um álbum de fotos dentro. O `git init` cria o álbum, uma vez por projeto. O **`.gitignore`** é a lista do que fica fora das fotos, um nome por linha:\n\n```plaintext\nnode_modules/\n```",
+  "exercises": [
+    {
+      "id": "nome-do-gitignore",
+      "type": "single",
+      "prompt": "A Bia criou, na raiz do projeto, um arquivo `gitignore.txt` com a linha `node_modules/`. O `git status` continua listando o `node_modules/`. Por quê?",
+      "options": {
+        "a": "A linha precisa ser `node_modules`, sem a barra no fim",
+        "b": "Falta rodar o `git init` de novo na pasta do projeto",
+        "c": "O Git só lê a lista com o nome exato `.gitignore`",
+        "d": "O arquivo da lista precisa ficar dentro da pasta `src`"
+      },
+      "answer": "c",
+      "explanation": "O nome exato é `.gitignore`, com ponto no começo e sem extensão, na raiz, ao lado do `package.json`. Com outro nome, o Git não lê a lista. A barra no fim da linha está certa: ela quer dizer \"a pasta\"."
+    },
+    {
+      "id": "init-duas-vezes",
+      "type": "truefalse",
+      "prompt": "Rodar o `git init` duas vezes na mesma pasta apaga as fotos que o álbum já tinha.",
+      "answer": false,
+      "explanation": "Falso. O álbum já existia, e o Git só avisa com `Reinitialized existing Git repository`. Nada se perde."
+    },
+    {
+      "id": "o-que-entra-na-foto",
+      "type": "multiple",
+      "prompt": "O `.gitignore` do projeto da padaria tem só a linha `node_modules/`. Marque **tudo** o que entra nas fotos.",
+      "options": {
+        "a": "`src/`",
+        "b": "`node_modules/`",
+        "c": "`package.json`",
+        "d": "`package-lock.json`"
+      },
+      "answer": ["a", "c", "d"],
+      "explanation": "`src/` guarda o seu código, e `package.json` e `package-lock.json` são a ficha e a nota fiscal. O `node_modules/` fica fora da foto porque é grande e o `npm install` refaz."
+    },
+    {
+      "id": "criar-o-album",
+      "type": "fill",
+      "prompt": "Complete as frases.\n\nPara criar o repositório do projeto, rode `git ___` na pasta raiz. O álbum de fotos mora na pasta oculta ___.",
+      "answer": [["init"], [".git"]],
+      "explanation": "O `git init` cria o repositório, uma vez por projeto. Ele grava o álbum na pasta oculta `.git`, e você não precisa mexer nela."
+    },
+    {
+      "id": "mensagens-do-repositorio",
+      "type": "drag",
+      "prompt": "Arraste cada mensagem do Git para o que ela quer dizer. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "fora", "label": "Aqui não é um repositório, nem nas pastas de fora" },
+        { "key": "repetido", "label": "O álbum já existia nesta pasta" },
+        { "key": "vazio", "label": "O álbum ainda não tem nenhuma foto" },
+        { "key": "novos", "label": "Arquivos que o Git vê, mas ainda não acompanha" }
+      ],
+      "items": [
+        { "key": "a", "text": "`No commits yet`" },
+        { "key": "b", "text": "`fatal: not a git repository`" },
+        { "key": "c", "text": "`Untracked files`" },
+        { "key": "d", "text": "`Reinitialized existing Git repository`" },
+        { "key": "e", "text": "`nothing to commit, working tree clean`" }
+      ],
+      "answer": { "fora": "b", "repetido": "d", "vazio": "a", "novos": "c" },
+      "explanation": "`fatal: not a git repository` aparece fora do projeto, e `Reinitialized` avisa que o álbum já existia. `No commits yet` diz que não há fotos, e `Untracked files` lista o que o Git ainda não acompanha. A mensagem `nothing to commit` sobra: ela diz que nada mudou desde a última foto."
+    }
+  ]
+}

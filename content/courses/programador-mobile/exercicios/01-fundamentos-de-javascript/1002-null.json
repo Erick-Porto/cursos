@@ -1,0 +1,85 @@
+{
+  "title": "null",
+  "lesson": "e10-decisoes",
+  "recap": "**`null`** quer dizer nada, de propósito: a caixa que a função entrega vazia para avisar \"não deu\". Quem recebe pergunta com `=== null`.\n\n```javascript\nfunction lerNota(texto) {\n  const nota = Number(texto);\n  if (Number.isNaN(nota)) {\n    return null;\n  } else {\n    return nota;\n  }\n}\nconsole.log(lerNota('abc')); // null\n```",
+  "exercises": [
+    {
+      "id": "ler-peso-da-feira",
+      "type": "code",
+      "prompt": "Na balança da feira, o peso chega como texto. Escreva a função `lerPeso(texto)`: ela converte o texto com `Number` e devolve o número. Se o resultado for `NaN`, ela devolve `null`.\n\n**Saída esperada**\n\n```plaintext\n2.5\nnull\n10\n```",
+      "starter": "// escreva a função lerPeso aqui\n\nconsole.log(lerPeso('2.5'));\nconsole.log(lerPeso('dois'));\nconsole.log(lerPeso('10'));\n",
+      "solution": "function lerPeso(texto) {\n  const peso = Number(texto);\n  if (Number.isNaN(peso)) {\n    return null;\n  } else {\n    return peso;\n  }\n}\n\nconsole.log(lerPeso('2.5'));\nconsole.log(lerPeso('dois'));\nconsole.log(lerPeso('10'));\n",
+      "expected_output": "2.5\nnull\n10",
+      "explanation": "`Number('dois')` dá `NaN`, e o `Number.isNaN` percebe isso. A função devolve `null`, sem aspas, para avisar que não deu. Com aspas, ela devolveria um texto comum."
+    },
+    {
+      "id": "pontos-do-cartao",
+      "type": "code",
+      "prompt": "A função `lerPontos` já vem pronta e devolve `null` quando o texto não é um número. Escreva a função `mostrarPontos(texto)`: ela chama `lerPontos`, pergunta com `=== null` e mostra uma das duas mensagens da saída.\n\n**Saída esperada**\n\n```plaintext\nPontos do cartão: 120\n\"cem\" não é um número\nPontos do cartão: 45\n```",
+      "starter": "function lerPontos(texto) {\n  const pontos = Number(texto);\n  if (Number.isNaN(pontos)) {\n    return null;\n  } else {\n    return pontos;\n  }\n}\n\n// escreva a função mostrarPontos aqui\n\nmostrarPontos('120');\nmostrarPontos('cem');\nmostrarPontos('45');\n",
+      "solution": "function lerPontos(texto) {\n  const pontos = Number(texto);\n  if (Number.isNaN(pontos)) {\n    return null;\n  } else {\n    return pontos;\n  }\n}\n\nfunction mostrarPontos(texto) {\n  const pontos = lerPontos(texto);\n  if (pontos === null) {\n    console.log(`\"${texto}\" não é um número`);\n  } else {\n    console.log(`Pontos do cartão: ${pontos}`);\n  }\n}\n\nmostrarPontos('120');\nmostrarPontos('cem');\nmostrarPontos('45');\n",
+      "expected_output": "Pontos do cartão: 120\n\"cem\" não é um número\nPontos do cartão: 45",
+      "explanation": "A `lerPontos` só avisa que não deu. Quem chamou decide o que fazer: a `mostrarPontos` pergunta com `=== null` e escolhe a mensagem de cada caso."
+    },
+    {
+      "id": "media-da-turma",
+      "type": "code",
+      "prompt": "A média é a soma das notas dividida pelo número de provas. Sem nenhuma prova feita, essa conta não existe. Escreva duas funções:\n\n- `calcularMedia(soma, provas)` devolve `null` quando `provas` é 0 e, nos outros casos, devolve a média\n- `mostrarMedia(nome, soma, provas)` mostra a média com uma casa depois do ponto, usando `toFixed(1)`, ou o aviso `sem provas feitas`\n\n**Saída esperada**\n\n```plaintext\nRita: média 8.0\nTéo: sem provas feitas\nDavi: média 0.0\nNina: média 8.5\n```",
+      "starter": "// escreva as funções calcularMedia e mostrarMedia aqui\n\nmostrarMedia('Rita', 24, 3);\nmostrarMedia('Téo', 0, 0);\nmostrarMedia('Davi', 0, 2);\nmostrarMedia('Nina', 17, 2);\n",
+      "solution": "function calcularMedia(soma, provas) {\n  if (provas === 0) {\n    return null;\n  } else {\n    return soma / provas;\n  }\n}\n\nfunction mostrarMedia(nome, soma, provas) {\n  const media = calcularMedia(soma, provas);\n  if (media === null) {\n    console.log(`${nome}: sem provas feitas`);\n  } else {\n    console.log(`${nome}: média ${media.toFixed(1)}`);\n  }\n}\n\nmostrarMedia('Rita', 24, 3);\nmostrarMedia('Téo', 0, 0);\nmostrarMedia('Davi', 0, 2);\nmostrarMedia('Nina', 17, 2);\n",
+      "expected_output": "Rita: média 8.0\nTéo: sem provas feitas\nDavi: média 0.0\nNina: média 8.5",
+      "explanation": "O Davi fez provas e tirou 0: a média dele é um número. O Téo não fez nenhuma, e a função avisa com `null`. A pergunta `media === null` separa os dois casos sem confundir o 0 com o \"não deu\"."
+    },
+    {
+      "id": "null-com-aspas",
+      "type": "truefalse",
+      "prompt": "`'null'`, com aspas, e `null`, sem aspas, são o mesmo valor.",
+      "answer": false,
+      "explanation": "Com aspas, é um texto de quatro letras. Sem aspas, é o valor que quer dizer nada, de propósito. Os dois se parecem na tela, mas `'null' === null` dá `false`."
+    },
+    {
+      "id": "tres-jeitos-de-nada",
+      "type": "drag",
+      "prompt": "Arraste cada valor para o que ele quer dizer.",
+      "layout": "list",
+      "slots": [
+        {
+          "key": "ninguem",
+          "label": "Ninguém pôs nada na caixa, como `process.argv[3]` sem a segunda palavra no comando"
+        },
+        {
+          "key": "funcao",
+          "label": "A função avisou, de propósito, que não deu"
+        },
+        {
+          "key": "conta",
+          "label": "A conta não deu um número, como `Number('abc')`"
+        }
+      ],
+      "items": [
+        {
+          "key": "a",
+          "text": "`null`"
+        },
+        {
+          "key": "b",
+          "text": "`NaN`"
+        },
+        {
+          "key": "c",
+          "text": "`undefined`"
+        },
+        {
+          "key": "d",
+          "text": "`0`"
+        }
+      ],
+      "answer": {
+        "ninguem": "c",
+        "funcao": "a",
+        "conta": "b"
+      },
+      "explanation": "`undefined` é a caixa que ninguém encheu. `null` é a caixa vazia de propósito, o \"não deu\". `NaN` é o visor da calculadora mostrando \"Erro\". O `0` engana, mas é um número como outro qualquer."
+    }
+  ]
+}

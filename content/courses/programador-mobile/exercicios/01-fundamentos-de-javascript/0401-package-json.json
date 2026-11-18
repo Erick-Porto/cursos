@@ -1,0 +1,71 @@
+{
+  "title": "package.json e \"type\": \"module\"",
+  "lesson": "e04-npm-e-o-racha-conta",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line roda um arquivo só: ele não tem terminal para o npm nem um package.json do seu projeto.",
+  "recap": "O **`package.json`** é a ficha do projeto, como a lista de ingredientes de uma receita: o nome, os comandos e os pacotes. O `npm init -y` cria a ficha. Para usar `import`, deixe o `type` assim:\n\n```json\n{\n  \"name\": \"padaria\",\n  \"type\": \"module\"\n}\n```",
+  "exercises": [
+    {
+      "id": "ficha-do-projeto",
+      "type": "single",
+      "prompt": "Você recebeu a pasta do projeto de uma academia. Onde você descobre o nome do projeto, os comandos dele e os pacotes de que ele precisa?",
+      "options": {
+        "a": "`package-lock.json`",
+        "b": "`package.json`",
+        "c": "`node_modules/`",
+        "d": "`src/scripts/treino.js`"
+      },
+      "answer": "b",
+      "explanation": "O `package.json` é a ficha do projeto, como a lista de ingredientes de uma receita: traz o nome, os comandos e os pacotes. O `package-lock.json` parece a resposta pelo nome, mas ele guarda só a versão exata de cada pacote, como uma nota fiscal."
+    },
+    {
+      "id": "criar-a-ficha",
+      "type": "fill",
+      "prompt": "Complete o comando que cria o `package.json` e aceita as respostas padrão, sem perguntar nada.\n\n```bash\nnpm ___ ___\n```",
+      "answer": [["init"], ["-y", "--yes"]],
+      "explanation": "O `npm init` cria a ficha do projeto. O `-y` aceita as respostas padrão: sem ele, o npm pergunta o valor de cada campo."
+    },
+    {
+      "id": "import-com-commonjs",
+      "type": "truefalse",
+      "prompt": "O `package.json` de um projeto tem a linha `\"type\": \"commonjs\"`. Um arquivo desse projeto começa com `import fs from 'node:fs';`. Ao rodar esse arquivo, o Node mostra um erro.",
+      "answer": true,
+      "explanation": "Verdadeiro. O `\"type\": \"commonjs\"` manda o Node ler os arquivos num modo antigo, que não entende `import`. Aparece o erro `Cannot use import statement outside a module`, e a correção é trocar para `\"type\": \"module\"`."
+    },
+    {
+      "id": "campos-da-ficha",
+      "type": "drag",
+      "prompt": "Arraste cada campo do `package.json` para o que ele guarda. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "nome", "label": "O nome do projeto" },
+        { "key": "frase", "label": "Uma frase que diz o que o projeto faz" },
+        { "key": "apelidos", "label": "Os apelidos dos comandos do projeto" },
+        { "key": "modo", "label": "O modo como o Node lê os arquivos" }
+      ],
+      "items": [
+        { "key": "a", "text": "`scripts`" },
+        { "key": "b", "text": "`type`" },
+        { "key": "c", "text": "`name`" },
+        { "key": "d", "text": "`license`" },
+        { "key": "e", "text": "`description`" }
+      ],
+      "answer": { "nome": "c", "frase": "e", "apelidos": "a", "modo": "b" },
+      "explanation": "`name` é o nome e `description` é a frase sobre o projeto. `scripts` guarda os apelidos, e `type` escolhe o modo de leitura: com `module`, o `import` funciona. O `license` sobra porque trata da licença, e nenhum dos lugares fala dela."
+    },
+    {
+      "id": "corrigir-o-import",
+      "type": "multiple",
+      "prompt": "Depois do `npm init -y`, o script da padaria mostrou o erro abaixo. Marque **todas** as afirmações corretas.\n\n```plaintext\nSyntaxError: Cannot use import statement outside a module\n```",
+      "options": {
+        "a": "A correção é deixar `\"type\": \"module\"` no `package.json`",
+        "b": "A correção é rodar `npm install` na pasta raiz do projeto",
+        "c": "Com duas linhas `type` no arquivo, vale a última delas",
+        "d": "O `-y` do `npm init` já grava `\"type\": \"module\"` na ficha",
+        "e": "Se a linha `type` não aparecer, você pode acrescentá-la"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "O erro aparece porque o `type` não é `module`: troque a palavra ou, se a linha não existir, acrescente. Deixe uma linha só, porque com duas vale a última. O `npm install` parece resolver, mas ele só baixa pacotes e não mexe no `type`."
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "title": "Ternário",
+  "lesson": "e10-decisoes",
+  "recap": "O **ternário** escolhe entre dois valores numa linha, como a placa aberto/fechado da porta da loja: `pergunta ? valor do sim : valor do não`.\n\n```javascript\nconst pontos = 12;\nconst nivel = pontos >= 10 ? 'Ouro' : 'Prata';\nconsole.log(nivel); // Ouro\n```",
+  "exercises": [
+    {
+      "id": "lugares-no-onibus",
+      "type": "code",
+      "prompt": "Use um **ternário** para guardar na constante `aviso` o texto `Pode embarcar`, se ainda houver lugares livres, ou o texto `Ônibus lotado`, se não houver. Depois, mostre `aviso`.\n\n**Saída esperada**\n\n```plaintext\nÔnibus lotado\n```",
+      "starter": "const lugaresLivres = 0;\n\n// escreva o ternário aqui\n",
+      "solution": "const lugaresLivres = 0;\n\nconst aviso = lugaresLivres > 0 ? 'Pode embarcar' : 'Ônibus lotado';\nconsole.log(aviso);\n",
+      "expected_output": "Ônibus lotado",
+      "explanation": "`0 > 0` dá `false`, então o ternário escolhe o valor que vem depois do `:`. O valor escolhido fica guardado em `aviso`, e o `console.log` mostra esse texto."
+    },
+    {
+      "id": "mensagens-novas",
+      "type": "code",
+      "prompt": "Escreva a função `avisarMensagens(quantidade)`, que devolve a frase da saída. Use um ternário para escolher entre `mensagem nova`, quando a quantidade é 1, e `mensagens novas`, nos outros casos.\n\n**Saída esperada**\n\n```plaintext\nVocê tem 1 mensagem nova\nVocê tem 3 mensagens novas\nVocê tem 0 mensagens novas\n```",
+      "starter": "// escreva a função avisarMensagens aqui\n\nconsole.log(avisarMensagens(1));\nconsole.log(avisarMensagens(3));\nconsole.log(avisarMensagens(0));\n",
+      "solution": "function avisarMensagens(quantidade) {\n  const texto = quantidade === 1 ? 'mensagem nova' : 'mensagens novas';\n  return `Você tem ${quantidade} ${texto}`;\n}\n\nconsole.log(avisarMensagens(1));\nconsole.log(avisarMensagens(3));\nconsole.log(avisarMensagens(0));\n",
+      "expected_output": "Você tem 1 mensagem nova\nVocê tem 3 mensagens novas\nVocê tem 0 mensagens novas",
+      "explanation": "Só o 1 pede o singular, por isso a pergunta é `quantidade === 1`. O 0 cai no valor do não e sai no plural. O ternário escolhe o texto, e a template string monta a frase."
+    },
+    {
+      "id": "resumo-da-compra",
+      "type": "code",
+      "prompt": "O mercado dá **10% de desconto** para quem tem o cartão da loja. Escreva a função `resumoDaCompra(itens, totalCentavos, temCartao)`, que devolve a frase da saída. Use três ternários:\n\n- o desconto: `Math.round(totalCentavos * 0.1)` com cartão, 0 sem cartão\n- a palavra: `item` quando `itens` é 1, `itens` nos outros casos\n- o fim da frase: `com cartão` ou `sem cartão`\n\nA função `formatarReais` já vem pronta.\n\n**Saída esperada**\n\n```plaintext\n1 item: R$ 45,90 sem cartão\n3 itens: R$ 108,00 com cartão\n2 itens: R$ 35,99 com cartão\n```",
+      "starter": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\n// escreva a função resumoDaCompra aqui\n\nconsole.log(resumoDaCompra(1, 4590, false));\nconsole.log(resumoDaCompra(3, 12000, true));\nconsole.log(resumoDaCompra(2, 3999, true));\n",
+      "solution": "function formatarReais(centavos) {\n  return `R$ ${(centavos / 100).toFixed(2).replace('.', ',')}`;\n}\n\nfunction resumoDaCompra(itens, totalCentavos, temCartao) {\n  const desconto = temCartao ? Math.round(totalCentavos * 0.1) : 0;\n  const palavra = itens === 1 ? 'item' : 'itens';\n  const cartao = temCartao ? 'com cartão' : 'sem cartão';\n  return `${itens} ${palavra}: ${formatarReais(totalCentavos - desconto)} ${cartao}`;\n}\n\nconsole.log(resumoDaCompra(1, 4590, false));\nconsole.log(resumoDaCompra(3, 12000, true));\nconsole.log(resumoDaCompra(2, 3999, true));\n",
+      "expected_output": "1 item: R$ 45,90 sem cartão\n3 itens: R$ 108,00 com cartão\n2 itens: R$ 35,99 com cartão",
+      "explanation": "Cada ternário escolhe um valor e guarda numa constante. Na última compra, 10% de 3999 dá 399,9, e o `Math.round` arredonda para 400 centavos. Assim, a conta segue em centavos inteiros."
+    },
+    {
+      "id": "partes-do-ternario",
+      "type": "drag",
+      "prompt": "Arraste cada trecho de `const entrega = total >= 100 ? 'Grátis' : 'Paga';` para o papel dele.",
+      "layout": "list",
+      "slots": [
+        {
+          "key": "pergunta",
+          "label": "A pergunta"
+        },
+        {
+          "key": "sim",
+          "label": "O valor do sim"
+        },
+        {
+          "key": "nao",
+          "label": "O valor do não"
+        }
+      ],
+      "items": [
+        {
+          "key": "a",
+          "text": "`'Paga'`"
+        },
+        {
+          "key": "b",
+          "text": "`total >= 100`"
+        },
+        {
+          "key": "c",
+          "text": "`'Grátis'`"
+        },
+        {
+          "key": "d",
+          "text": "`const entrega`"
+        }
+      ],
+      "answer": {
+        "pergunta": "b",
+        "sim": "c",
+        "nao": "a"
+      },
+      "explanation": "A pergunta vem antes do `?`. O valor do sim fica entre o `?` e o `:`, e o valor do não vem depois do `:`. O `const entrega` é a caixa que guarda o valor escolhido: ele não é uma das três partes do ternário."
+    },
+    {
+      "id": "quando-usar-if",
+      "type": "single",
+      "prompt": "Em qual situação o `if` e `else` serve melhor que o ternário?",
+      "options": {
+        "a": "Mostrar um aviso num caminho e o recibo inteiro no outro",
+        "b": "Escolher entre `pessoa` e `pessoas` no meio de uma frase",
+        "c": "Guardar `'Cheio'` ou `'Vazio'` numa constante de aviso",
+        "d": "Escolher o valor do frete entre `0` e `1200` centavos"
+      },
+      "answer": "a",
+      "explanation": "O ternário só escolhe um valor. Fazer coisas diferentes em cada caminho, como mostrar um aviso ou várias linhas de recibo, pede `if` e `else`. Nas outras alternativas, a tarefa é escolher um valor, e o ternário resolve numa linha."
+    }
+  ]
+}

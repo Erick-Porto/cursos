@@ -1,0 +1,66 @@
+{
+  "title": "Number, NaN e Number.isNaN",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`Number(texto)`** converte texto em número e só entende o **ponto** antes dos centavos. O que ele não entende vira **`NaN`**, o visor da calculadora mostrando \"Erro\". Para reconhecer, use **`Number.isNaN`**.\n\n```javascript\nconsole.log(Number('3.5') + 1);             // 4.5\nconsole.log(Number.isNaN(Number('3,5')));   // true\n```",
+  "exercises": [
+    {
+      "id": "passagens-da-semana",
+      "type": "code",
+      "prompt": "Um aplicativo de ônibus recebe as passagens de ida e de volta como texto. Mostre o que o `+` faz sem converter e depois some os valores convertidos com o `Number`.\n\n**Saída esperada**\n\n```plaintext\nSem converter: 57\nConvertido: 12\n```",
+      "starter": "const ida = '5';\nconst volta = '7';\n\n// mostre as duas linhas aqui\n",
+      "solution": "const ida = '5';\nconst volta = '7';\n\nconsole.log(`Sem converter: ${ida + volta}`);\nconsole.log(`Convertido: ${Number(ida) + Number(volta)}`);\n",
+      "expected_output": "Sem converter: 57\nConvertido: 12",
+      "explanation": "Com dois textos, o `+` junta: `'5' + '7'` dá `'57'`. O `Number` transforma cada texto em número, e aí o `+` soma."
+    },
+    {
+      "id": "tomate-na-feira",
+      "type": "code",
+      "prompt": "Na feira, o preço do quilo de tomate foi digitado com vírgula. Mostre o que o `Number` faz com esse texto. Depois, troque a vírgula por ponto, converta e calcule o total de 2 quilos, com duas casas no `toFixed`.\n\n**Saída esperada**\n\n```plaintext\nSem trocar a vírgula: NaN\nTotal: R$ 17.50\n```",
+      "starter": "const precoDigitado = '8,75';\nconst quilos = 2;\n\n// mostre as duas linhas aqui\n",
+      "solution": "const precoDigitado = '8,75';\nconst quilos = 2;\n\nconsole.log(`Sem trocar a vírgula: ${Number(precoDigitado)}`);\n\nconst preco = Number(precoDigitado.replace(',', '.'));\nconst total = preco * quilos;\nconsole.log(`Total: R$ ${total.toFixed(2)}`);\n",
+      "expected_output": "Sem trocar a vírgula: NaN\nTotal: R$ 17.50",
+      "explanation": "O `Number` só entende o ponto antes dos centavos, por isso `'8,75'` vira `NaN`. O `replace` roda primeiro, e o texto `'8.75'` que ele devolve entra no `Number`. O `toFixed(2)` escreve o total com duas casas."
+    },
+    {
+      "id": "notas-do-boletim",
+      "type": "code",
+      "prompt": "A secretaria da escola digitou as notas como texto, e algumas vieram erradas. Separe numa lista as notas que o `Number` não entende e mostre essa lista. Depois, some as notas válidas com o `reduce`.\n\nDica: a nota é válida quando `Number.isNaN(Number(nota)) === false`.\n\n**Saída esperada**\n\n```plaintext\n[ 'oito', '6,5' ]\nSoma das válidas: 26.5\n```",
+      "starter": "const notas = ['7.5', 'oito', '9', '6,5', '10'];\n\n// escreva os dois filter e o reduce aqui\n",
+      "solution": "const notas = ['7.5', 'oito', '9', '6,5', '10'];\n\nconst invalidas = notas.filter((nota) => Number.isNaN(Number(nota)));\nconsole.log(invalidas);\n\nconst validas = notas.filter((nota) => Number.isNaN(Number(nota)) === false);\nconst soma = validas.reduce((total, nota) => total + Number(nota), 0);\nconsole.log(`Soma das válidas: ${soma}`);\n",
+      "expected_output": "[ 'oito', '6,5' ]\nSoma das válidas: 26.5",
+      "explanation": "O `Number.isNaN` responde `true` para o que não virou número, e a peneira do `filter` guarda esses textos. Com `=== false`, ela guarda o contrário. Cada nota válida ainda é texto, por isso o `reduce` usa o `Number` antes de somar."
+    },
+    {
+      "id": "nan-nao-e-igual-a-nada",
+      "type": "single",
+      "prompt": "O que este código mostra na tela?\n\n```javascript\nconst idade = Number('vinte');\nconsole.log(idade === NaN);\nconsole.log(Number.isNaN(idade));\n```",
+      "options": {
+        "a": "`true` e depois `true`",
+        "b": "`false` e depois `true`",
+        "c": "`true` e depois `false`",
+        "d": "`NaN` e depois `true`"
+      },
+      "answer": "b",
+      "explanation": "`Number('vinte')` dá `NaN`, e o `NaN` não é igual a nada, nem a ele mesmo. Por isso o `===` responde `false`, mesmo com `NaN` dos dois lados. Para perguntar \"deu `NaN`?\", use o `Number.isNaN`, que responde `true`."
+    },
+    {
+      "id": "caminho-do-valor",
+      "type": "drag",
+      "prompt": "Siga o valor digitado neste código. Arraste para cada etapa o que a caixa guarda depois dela. Uma peça sobra.\n\n```javascript\nlet valor = ' 12,90 ';\nvalor = valor.trim();\nvalor = valor.replace(',', '.');\nconst numero = Number(valor);\n```",
+      "layout": "flow",
+      "slots": [
+        { "key": "trim", "label": "Depois do `trim`" },
+        { "key": "replace", "label": "Depois do `replace`" },
+        { "key": "number", "label": "Depois do `Number`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`12.9`" },
+        { "key": "b", "text": "`NaN`" },
+        { "key": "c", "text": "`'12,90'`" },
+        { "key": "d", "text": "`'12.90'`" }
+      ],
+      "answer": { "trim": "c", "replace": "d", "number": "a" },
+      "explanation": "O `trim` tira os espaços das pontas, e o `replace` troca a vírgula pelo ponto. Com o ponto no lugar, o `Number` entende o texto e devolve o número `12.9`. O `NaN` só apareceria se a vírgula continuasse no texto."
+    }
+  ]
+}

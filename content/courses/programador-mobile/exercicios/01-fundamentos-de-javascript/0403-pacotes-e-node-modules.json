@@ -1,0 +1,68 @@
+{
+  "title": "Pacotes, node_modules e package-lock.json",
+  "lesson": "e04-npm-e-o-racha-conta",
+  "theory_only": true,
+  "theory_reason": "Instalar pacotes exige terminal, internet e a pasta do projeto. O compilador on-line roda um arquivo só.",
+  "recap": "**Pacote** é código pronto, como a farinha comprada. O `npm install` baixa o pacote para o `node_modules`, anota o nome em `dependencies` no `package.json` e grava a versão exata no `package-lock.json`, a nota fiscal.\n\n```bash\nnpm install picocolors\n```",
+  "exercises": [
+    {
+      "id": "o-que-o-install-faz",
+      "type": "drag",
+      "prompt": "O comando `npm install picocolors` muda três lugares do projeto. Arraste cada lugar para o que ele recebe. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "codigo", "label": "O código do pacote, baixado da internet" },
+        { "key": "ficha", "label": "O nome do pacote, em `dependencies`" },
+        { "key": "nota", "label": "A versão exata do pacote" }
+      ],
+      "items": [
+        { "key": "a", "text": "`package-lock.json`" },
+        { "key": "b", "text": "`src/`" },
+        { "key": "c", "text": "`node_modules/`" },
+        { "key": "d", "text": "`package.json`" }
+      ],
+      "answer": { "codigo": "c", "ficha": "d", "nota": "a" },
+      "explanation": "O código baixado vai para o `node_modules/`, o nome entra na ficha, o `package.json`, e a versão exata fica no `package-lock.json`. A pasta `src/` sobra: ela guarda o seu código, e o `npm install` não mexe nela."
+    },
+    {
+      "id": "levar-o-projeto",
+      "type": "single",
+      "prompt": "Você vai levar o projeto do mercadinho para outro computador, num pendrive. O que **fica de fora** da cópia?",
+      "options": {
+        "a": "`src/`",
+        "b": "`package.json`",
+        "c": "`package-lock.json`",
+        "d": "`node_modules/`"
+      },
+      "answer": "d",
+      "explanation": "O `node_modules/` é grande e descartável: no destino, o `npm install` baixa tudo de novo. O `package-lock.json` parece dispensável, mas vai junto, porque garante as mesmas versões em todo computador."
+    },
+    {
+      "id": "apagar-o-node-modules",
+      "type": "truefalse",
+      "prompt": "Você apagou a pasta `node_modules` sem querer. O comando `npm install`, sem nome de pacote, baixa de novo todos os pacotes do projeto.",
+      "answer": true,
+      "explanation": "Verdadeiro. O `npm install` lê a ficha do projeto e baixa tudo outra vez, sem você digitar o nome de cada pacote. Por isso o `node_modules` é descartável."
+    },
+    {
+      "id": "o-que-o-circunflexo-aceita",
+      "type": "multiple",
+      "prompt": "A ficha de um projeto traz `\"relogio\": \"^2.4.1\"`. Marque **todas** as versões novas que o `^` aceita.",
+      "options": {
+        "a": "`3.0.0`",
+        "b": "`2.4.2`",
+        "c": "`2.5.0`",
+        "d": "`3.4.1`"
+      },
+      "answer": ["b", "c"],
+      "explanation": "O `^` quer dizer \"pode atualizar, desde que o primeiro número continue o mesmo\". A `2.4.2` só corrige um defeito, e a `2.5.0` traz novidade sem quebrar. A `3.0.0` e a `3.4.1` mudam o primeiro número e podem quebrar o seu código."
+    },
+    {
+      "id": "faltou-instalar",
+      "type": "fill",
+      "prompt": "Complete as frases.\n\nA mensagem `Cannot find package` quase sempre quer dizer que faltou rodar `npm ___`. A versão exata de cada pacote fica anotada no arquivo ___.",
+      "answer": [["install", "i"], ["package-lock.json", "package-lock"]],
+      "explanation": "O `npm install` baixa os pacotes que a ficha pede. O `package-lock.json` é a nota fiscal: com ele, todo computador instala as mesmas versões."
+    }
+  ]
+}

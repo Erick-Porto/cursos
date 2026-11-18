@@ -1,0 +1,66 @@
+{
+  "title": "Funções",
+  "lesson": "e07-funcoes",
+  "recap": "Uma **função** é uma receita com nome: você guarda os passos uma vez e usa quando quiser. Ela só roda quando é **chamada**, com os parênteses.\n\n```javascript\nfunction avisar() {\n  console.log('Portão aberto');\n}\n\navisar();\n// Portão aberto\n```",
+  "exercises": [
+    {
+      "id": "aviso-do-onibus",
+      "type": "code",
+      "prompt": "O motorista repete o mesmo aviso a cada parada. Crie uma função chamada `avisarParada` que mostre o texto `Próxima parada: Terminal Central`. Depois, chame a função **duas vezes**.\n\n**Saída esperada**\n\n```plaintext\nPróxima parada: Terminal Central\nPróxima parada: Terminal Central\n```",
+      "starter": "// escreva a função avisarParada aqui\n\n// chame a função duas vezes aqui\n",
+      "solution": "function avisarParada() {\n  console.log('Próxima parada: Terminal Central');\n}\n\navisarParada();\navisarParada();\n",
+      "expected_output": "Próxima parada: Terminal Central\nPróxima parada: Terminal Central",
+      "explanation": "A `function` guarda a receita, e nada aparece nessa hora. Cada `avisarParada();` faz a receita de novo, por isso o texto sai duas vezes."
+    },
+    {
+      "id": "ficha-de-treino",
+      "type": "code",
+      "prompt": "A ficha da academia manda descansar entre um exercício e outro. Crie a função `descansar`, que mostra `Descanse 1 minuto`, e chame a função nos dois lugares marcados no código.\n\n**Saída esperada**\n\n```plaintext\nAgachamento: 3 séries\nDescanse 1 minuto\nFlexão: 3 séries\nDescanse 1 minuto\nPrancha: 3 séries\n```",
+      "starter": "// escreva a função descansar aqui\n\nconsole.log('Agachamento: 3 séries');\n// chame a função aqui\nconsole.log('Flexão: 3 séries');\n// chame a função aqui\nconsole.log('Prancha: 3 séries');\n",
+      "solution": "function descansar() {\n  console.log('Descanse 1 minuto');\n}\n\nconsole.log('Agachamento: 3 séries');\ndescansar();\nconsole.log('Flexão: 3 séries');\ndescansar();\nconsole.log('Prancha: 3 séries');\n",
+      "expected_output": "Agachamento: 3 séries\nDescanse 1 minuto\nFlexão: 3 séries\nDescanse 1 minuto\nPrancha: 3 séries",
+      "explanation": "O código roda de cima para baixo. Em cada chamada, o Node vai até a receita, mostra o aviso e volta para a linha seguinte. Para mudar o tempo de descanso, você mexe num lugar só."
+    },
+    {
+      "id": "cartaz-da-feira",
+      "type": "code",
+      "prompt": "A feira do bairro precisa de dois cartazes iguais. Crie duas funções:\n\n- `moldura`, que mostra `**********`\n- `cartaz`, que chama a `moldura`, mostra as duas frases da saída e chama a `moldura` de novo\n\nNo fim, chame a `cartaz` **duas vezes**.\n\n**Saída esperada**\n\n```plaintext\n**********\nFeira do Bairro\nSábado, das 7h às 13h\n**********\n**********\nFeira do Bairro\nSábado, das 7h às 13h\n**********\n```",
+      "starter": "// escreva a função moldura aqui\n\n// escreva a função cartaz aqui\n\n// chame a função cartaz duas vezes aqui\n",
+      "solution": "function moldura() {\n  console.log('**********');\n}\n\nfunction cartaz() {\n  moldura();\n  console.log('Feira do Bairro');\n  console.log('Sábado, das 7h às 13h');\n  moldura();\n}\n\ncartaz();\ncartaz();\n",
+      "expected_output": "**********\nFeira do Bairro\nSábado, das 7h às 13h\n**********\n**********\nFeira do Bairro\nSábado, das 7h às 13h\n**********",
+      "explanation": "Uma função pode chamar outra. Cada `cartaz();` faz quatro passos, e dois deles são a `moldura`. Com duas chamadas, as quatro linhas aparecem duas vezes."
+    },
+    {
+      "id": "funcao-sem-parenteses",
+      "type": "single",
+      "prompt": "O que aparece na tela quando este código roda?\n\n```javascript\nfunction tocarSinal() {\n  console.log('Hora do recreio!');\n}\n\ntocarSinal;\n```",
+      "options": {
+        "a": "O texto `[Function: tocarSinal]`",
+        "b": "Nada: a função não foi chamada",
+        "c": "O texto `Hora do recreio!`, uma vez",
+        "d": "Uma mensagem de erro no terminal"
+      },
+      "answer": "b",
+      "explanation": "Sem os parênteses, `tocarSinal;` só cita o nome da receita, e ela não roda. O `[Function: tocarSinal]` só apareceria com `console.log(tocarSinal)`. Para tocar o sinal, escreva `tocarSinal();`."
+    },
+    {
+      "id": "partes-da-funcao",
+      "type": "drag",
+      "prompt": "Arraste cada trecho do código para o que ele faz.\n\n```javascript\nfunction abrirCaixa() {\n  console.log('Caixa aberto');\n}\n\nabrirCaixa();\n```",
+      "layout": "list",
+      "slots": [
+        { "key": "guardar", "label": "Guarda uma receita com nome" },
+        { "key": "preparo", "label": "O modo de preparo: o que a receita faz" },
+        { "key": "chamar", "label": "Chama a função: faz a receita agora" }
+      ],
+      "items": [
+        { "key": "a", "text": "`abrirCaixa();`" },
+        { "key": "b", "text": "`function abrirCaixa()`" },
+        { "key": "c", "text": "`console.log('Caixa aberto');`" },
+        { "key": "d", "text": "`abrirCaixa;`" }
+      ],
+      "answer": { "guardar": "b", "preparo": "c", "chamar": "a" },
+      "explanation": "A linha com `function` guarda a receita, e as chaves trazem o modo de preparo. Quem faz a receita rodar é a chamada, com parênteses. O `abrirCaixa;` sem parênteses não chama nada."
+    }
+  ]
+}

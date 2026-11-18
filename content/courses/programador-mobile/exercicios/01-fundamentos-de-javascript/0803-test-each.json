@@ -1,0 +1,57 @@
+{
+  "title": "test.each",
+  "lesson": "e08-testes-com-jest",
+  "recap": "O **`test.each`** faz um teste para cada linha de uma tabela. Os valores da linha entram nos parâmetros, na ordem, e cada `%i` vira um número no nome.\n\n```javascript\ntest.each([\n  [2, 4],\n  [5, 10],\n])('dobro(%i) dá %i', (n, esperado) => {\n  expect(dobro(n)).toBe(esperado);\n});\n```",
+  "exercises": [
+    {
+      "id": "assentos-do-onibus",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nO ônibus precisa saber quantos assentos estão livres. A tabela `casos` já está pronta: cada linha traz o total de assentos, os ocupados e o gabarito. Escreva um `test.each` que use essa tabela, com o nome `assentosLivres(%i, %i) dá %i`.\n\n**Saída esperada**\n\n```plaintext\n√ assentosLivres(40, 12) dá 28\n√ assentosLivres(40, 40) dá 0\n√ assentosLivres(32, 5) dá 27\n```",
+      "starter": "function assentosLivres(total, ocupados) {\n  return total - ocupados;\n}\n\nconst casos = [\n  [40, 12, 28],\n  [40, 40, 0],\n  [32, 5, 27],\n];\n\n// escreva o test.each aqui\n",
+      "solution": "function assentosLivres(total, ocupados) {\n  return total - ocupados;\n}\n\nconst casos = [\n  [40, 12, 28],\n  [40, 40, 0],\n  [32, 5, 27],\n];\n\ntest.each(casos)('assentosLivres(%i, %i) dá %i', (total, ocupados, esperado) => {\n  expect(assentosLivres(total, ocupados)).toBe(esperado);\n});\n",
+      "expected_output": "√ assentosLivres(40, 12) dá 28\n√ assentosLivres(40, 40) dá 0\n√ assentosLivres(32, 5) dá 27",
+      "explanation": "O `test.each` lê a tabela de cima para baixo. Em cada linha, os três números entram em `total`, `ocupados` e `esperado`, e cada `%i` do nome vira um desses números."
+    },
+    {
+      "id": "balanca-da-feira",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA balança da feira mostra o peso em quilos, com duas casas depois do ponto. Monte a tabela com os casos abaixo e escreva um `test.each` com o nome `mostrarPeso(%i) dá %s`. O `%i` mostra número inteiro, e o `%s` mostra texto.\n\n| Gramas | Gabarito |\n|---|---|\n| `1500` | `'1.50 kg'` |\n| `250` | `'0.25 kg'` |\n| `2000` | `'2.00 kg'` |\n\n**Saída esperada**\n\n```plaintext\n√ mostrarPeso(1500) dá 1.50 kg\n√ mostrarPeso(250) dá 0.25 kg\n√ mostrarPeso(2000) dá 2.00 kg\n```",
+      "starter": "function mostrarPeso(gramas) {\n  return `${(gramas / 1000).toFixed(2)} kg`;\n}\n\n// escreva o test.each aqui\n",
+      "solution": "function mostrarPeso(gramas) {\n  return `${(gramas / 1000).toFixed(2)} kg`;\n}\n\ntest.each([\n  [1500, '1.50 kg'],\n  [250, '0.25 kg'],\n  [2000, '2.00 kg'],\n])('mostrarPeso(%i) dá %s', (gramas, esperado) => {\n  expect(mostrarPeso(gramas)).toBe(esperado);\n});\n",
+      "expected_output": "√ mostrarPeso(1500) dá 1.50 kg\n√ mostrarPeso(250) dá 0.25 kg\n√ mostrarPeso(2000) dá 2.00 kg",
+      "explanation": "Cada linha tem um número e um texto, por isso o nome usa `%i` e `%s`. O gabarito vem entre aspas, porque a função devolve um texto. O marcador muda só o nome: a conferência usa o valor da linha."
+    },
+    {
+      "id": "ovos-soltos-da-granja",
+      "type": "code",
+      "harness": "mini-jest",
+      "prompt": "As primeiras linhas do código fazem o papel do Jest no compilador on-line: deixe-as como estão e escreva depois delas.\n\nA granja embala ovos em caixas e quer saber o que sobra. Crie duas funções:\n\n- `ovosSoltos(ovos, porCaixa)` devolve o resto da divisão, com `%`\n- `avisoDeSobra(ovos, porCaixa)` chama a `ovosSoltos` e devolve o texto do aviso, como `Ovos soltos: 1`\n\nDepois, escreva **dois** `test.each`, um para cada função, com os nomes `ovosSoltos(%i, %i) dá %i` e `avisoDeSobra(%i, %i) dá %s`.\n\n| Ovos | Por caixa | Sobra | Aviso |\n|---|---|---|---|\n| 13 | 6 | 1 | `Ovos soltos: 1` |\n| 12 | 6 | 0 | `Ovos soltos: 0` |\n| 30 | 12 | 6 | `Ovos soltos: 6` |\n\n**Saída esperada**\n\n```plaintext\n√ ovosSoltos(13, 6) dá 1\n√ ovosSoltos(12, 6) dá 0\n√ ovosSoltos(30, 12) dá 6\n√ avisoDeSobra(13, 6) dá Ovos soltos: 1\n√ avisoDeSobra(12, 6) dá Ovos soltos: 0\n√ avisoDeSobra(30, 12) dá Ovos soltos: 6\n```",
+      "starter": "// escreva as funções ovosSoltos e avisoDeSobra aqui\n\n// escreva os dois test.each aqui\n",
+      "solution": "function ovosSoltos(ovos, porCaixa) {\n  return ovos % porCaixa;\n}\n\nfunction avisoDeSobra(ovos, porCaixa) {\n  return `Ovos soltos: ${ovosSoltos(ovos, porCaixa)}`;\n}\n\ntest.each([\n  [13, 6, 1],\n  [12, 6, 0],\n  [30, 12, 6],\n])('ovosSoltos(%i, %i) dá %i', (ovos, porCaixa, esperado) => {\n  expect(ovosSoltos(ovos, porCaixa)).toBe(esperado);\n});\n\ntest.each([\n  [13, 6, 'Ovos soltos: 1'],\n  [12, 6, 'Ovos soltos: 0'],\n  [30, 12, 'Ovos soltos: 6'],\n])('avisoDeSobra(%i, %i) dá %s', (ovos, porCaixa, esperado) => {\n  expect(avisoDeSobra(ovos, porCaixa)).toBe(esperado);\n});\n",
+      "expected_output": "√ ovosSoltos(13, 6) dá 1\n√ ovosSoltos(12, 6) dá 0\n√ ovosSoltos(30, 12) dá 6\n√ avisoDeSobra(13, 6) dá Ovos soltos: 1\n√ avisoDeSobra(12, 6) dá Ovos soltos: 0\n√ avisoDeSobra(30, 12) dá Ovos soltos: 6",
+      "explanation": "O `%` dá o resto: 13 ovos em caixas de 6 deixam 1 solto. A segunda função reaproveita a primeira, em vez de repetir a conta. Cada `test.each` tem a sua tabela, e cada linha vira um teste com nome próprio."
+    },
+    {
+      "id": "o-que-faz-o-test-each",
+      "type": "multiple",
+      "prompt": "Sobre este código, quais frases estão certas? Marque todas as certas.\n\n```javascript\ntest.each([\n  [10, 2, 5],\n  [9, 3, 3],\n  [8, 4, 2],\n])('dividir(%i, %i) dá %i', (total, pessoas, esperado) => {\n  expect(dividir(total, pessoas)).toBe(esperado);\n});\n```",
+      "options": {
+        "a": "Se uma linha falhar, as três ficam vermelhas",
+        "b": "O código faz três testes, um para cada linha",
+        "c": "Em cada linha, o terceiro número entra em `esperado`",
+        "d": "Trocar um `%i` por `%s` muda o resultado da conferência"
+      },
+      "answer": ["b", "c"],
+      "explanation": "Cada linha vira um teste, e os números entram nos parâmetros, na ordem. Só a linha errada fica vermelha, e o nome dela diz qual foi. O marcador muda só o nome: a conferência usa o valor da linha."
+    },
+    {
+      "id": "marcadores-do-nome",
+      "type": "fill",
+      "prompt": "No nome de um `test.each`, o marcador ___ mostra um número inteiro, e o marcador ___ mostra um texto como ele está.",
+      "answer": [["%i"], ["%s"]],
+      "explanation": "O `%i` mostra o número inteiro, e o `%s` mostra o texto como está. Com um texto, o `%i` mostraria `NaN`. O marcador muda só o nome do teste, e não a conferência."
+    }
+  ]
+}

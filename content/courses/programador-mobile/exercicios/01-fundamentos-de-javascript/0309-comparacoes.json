@@ -1,0 +1,54 @@
+{
+  "title": "Comparações",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "Uma **comparação** é uma pergunta de sim ou não sobre dois valores. O Node responde `true` ou `false`. Use `===` (igual), `>` (maior), `<` (menor) e `>=` (maior ou igual).\n\n```javascript\nconsole.log(8 > 5);       // true\nconsole.log('a' === 'A'); // false\n```",
+  "exercises": [
+    {
+      "id": "meta-da-academia",
+      "type": "code",
+      "prompt": "Na academia, compare o peso de hoje com a meta e confira o plano do aluno. Mostre a resposta de cada pergunta, usando `>`, `<` e `===`.\n\n**Saída esperada**\n\n```plaintext\nAcima da meta: true\nAbaixo da meta: false\nPlano mensal: true\n```",
+      "starter": "const peso = 80;\nconst meta = 75;\nconst plano = 'mensal';\n\n// mostre a resposta de cada pergunta aqui\n",
+      "solution": "const peso = 80;\nconst meta = 75;\nconst plano = 'mensal';\n\nconsole.log('Acima da meta:', peso > meta);\nconsole.log('Abaixo da meta:', peso < meta);\nconsole.log('Plano mensal:', plano === 'mensal');\n",
+      "expected_output": "Acima da meta: true\nAbaixo da meta: false\nPlano mensal: true",
+      "explanation": "O Node troca cada nome pelo valor e só então compara: `peso > meta` vira `80 > 75`, que responde `true`. O `===`, com três sinais de igual, pergunta se os dois valores são iguais."
+    },
+    {
+      "id": "tomate-na-feira",
+      "type": "code",
+      "prompt": "A ficha `produto` guarda um item da feira. Responda às quatro perguntas, na ordem da saída. Repare na segunda: ela compara com `Legumes`, com L maiúsculo.\n\n**Saída esperada**\n\n```plaintext\nÉ da categoria legumes: true\nÉ da categoria Legumes: false\nCusta menos de 10: true\nTem 12 ou mais no estoque: true\n```",
+      "starter": "const produto = { nome: 'Tomate', preco: 7, categoria: 'legumes', estoque: 12 };\n\n// responda às quatro perguntas aqui\n",
+      "solution": "const produto = { nome: 'Tomate', preco: 7, categoria: 'legumes', estoque: 12 };\n\nconsole.log('É da categoria legumes:', produto.categoria === 'legumes');\nconsole.log('É da categoria Legumes:', produto.categoria === 'Legumes');\nconsole.log('Custa menos de 10:', produto.preco < 10);\nconsole.log('Tem 12 ou mais no estoque:', produto.estoque >= 12);\n",
+      "expected_output": "É da categoria legumes: true\nÉ da categoria Legumes: false\nCusta menos de 10: true\nTem 12 ou mais no estoque: true",
+      "explanation": "Texto só é igual letra por letra, maiúsculas incluídas, por isso `'legumes' === 'Legumes'` responde `false`. O `>=` inclui o próprio valor: `12 >= 12` responde `true`."
+    },
+    {
+      "id": "saldo-do-vale",
+      "type": "code",
+      "prompt": "Uma compra no mercado vai ser paga com o vale-alimentação. Crie a constante `total` com a soma dos três produtos e mostre o valor dela. Depois, responda às três perguntas da saída, comparando `saldo` com `total`. Repare na diferença entre `>=` e `>`.\n\n**Saída esperada**\n\n```plaintext\nTotal da compra: 85\nO saldo cobre a compra: true\nVai sobrar dinheiro: false\nA compra usa o saldo inteiro: true\n```",
+      "starter": "const arroz = 28;\nconst feijao = 12;\nconst carne = 45;\nconst saldo = 85;\n\n// crie a constante total e responda às perguntas aqui\n",
+      "solution": "const arroz = 28;\nconst feijao = 12;\nconst carne = 45;\nconst saldo = 85;\n\nconst total = arroz + feijao + carne;\n\nconsole.log('Total da compra:', total);\nconsole.log('O saldo cobre a compra:', saldo >= total);\nconsole.log('Vai sobrar dinheiro:', saldo > total);\nconsole.log('A compra usa o saldo inteiro:', saldo === total);\n",
+      "expected_output": "Total da compra: 85\nO saldo cobre a compra: true\nVai sobrar dinheiro: false\nA compra usa o saldo inteiro: true",
+      "explanation": "O total é 85, igual ao saldo. O saldo cobre a compra porque `85 >= 85` responde `true`. Não sobra dinheiro porque `85 > 85` responde `false`: o `>` não aceita valores iguais."
+    },
+    {
+      "id": "pergunta-certa",
+      "type": "single",
+      "prompt": "A constante `cor` guarda uma cor. Qual linha pergunta se essa cor é azul?",
+      "options": {
+        "a": "`cor = 'azul'`",
+        "b": "`cor === 'azul'`",
+        "c": "`cor === azul`",
+        "d": "`'cor' === 'azul'`"
+      },
+      "answer": "b",
+      "explanation": "O `===` faz a pergunta, o nome `cor` vai sem aspas e o texto `'azul'` vai com aspas. Um `=` só guarda um valor na caixa, em vez de perguntar. Sem aspas, `azul` seria o nome de uma caixa. Com aspas em `'cor'`, você compara a palavra cor, e não o valor guardado."
+    },
+    {
+      "id": "maiuscula-conta",
+      "type": "truefalse",
+      "prompt": "A comparação `'Padaria' === 'padaria'` responde `true`, porque as duas palavras têm as mesmas letras.",
+      "answer": false,
+      "explanation": "Texto só é igual letra por letra, maiúsculas incluídas. `P` e `p` são letras diferentes para o Node, então a resposta é `false`."
+    }
+  ]
+}

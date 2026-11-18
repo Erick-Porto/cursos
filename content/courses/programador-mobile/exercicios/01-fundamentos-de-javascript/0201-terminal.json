@@ -1,0 +1,74 @@
+{
+  "title": "Terminal e seus comandos",
+  "lesson": "e01b-ambiente-de-desenvolvimento",
+  "theory_only": true,
+  "theory_reason": "Os comandos do terminal mexem nas pastas do seu computador, e o compilador on-line só roda JavaScript.",
+  "recap": "O **terminal** é uma conversa por escrito com o computador: você digita um **comando**, aperta Enter e lê a resposta. O **prompt** mostra a pasta em que você está.\n\n```bash\nmkdir receitas   # cria a pasta\ncd receitas      # entra nela\nls               # lista o que há nela\n```",
+  "exercises": [
+    {
+      "id": "cinco-comandos",
+      "type": "drag",
+      "prompt": "Arraste cada comando do terminal para o que ele faz.",
+      "layout": "list",
+      "slots": [
+        { "key": "entra", "label": "Entra em uma pasta" },
+        { "key": "lista", "label": "Lista o que há na pasta atual" },
+        { "key": "cria", "label": "Cria uma pasta nova" },
+        { "key": "abre", "label": "Abre a pasta atual no VS Code" },
+        { "key": "limpa", "label": "Limpa a tela" }
+      ],
+      "items": [
+        { "key": "a", "text": "`code .`" },
+        { "key": "b", "text": "`clear`" },
+        { "key": "c", "text": "`cd escola`" },
+        { "key": "d", "text": "`mkdir escola`" },
+        { "key": "e", "text": "`ls`" }
+      ],
+      "answer": { "entra": "c", "lista": "e", "cria": "d", "abre": "a", "limpa": "b" },
+      "explanation": "`cd` vem de *change directory*, mudar de pasta. `ls` vem de *list*, listar. `mkdir` vem de *make directory*, criar pasta. Em `code .`, o ponto quer dizer \"esta pasta\". O `clear` limpa a tela. Não troque `cd` por `mkdir`: o primeiro entra numa pasta que já existe, e o segundo cria uma nova."
+    },
+    {
+      "id": "voltar-uma-pasta",
+      "type": "single",
+      "prompt": "Você está na pasta `projetos/padaria` e roda o comando `cd ..`. O que acontece?",
+      "options": {
+        "a": "A pasta `padaria` abre no editor VS Code",
+        "b": "A pasta `padaria` é apagada do computador",
+        "c": "O terminal lista o que há dentro de `padaria`",
+        "d": "Você volta uma pasta e fica em `projetos`"
+      },
+      "answer": "d",
+      "explanation": "O `cd ..` volta uma pasta, e o prompt perde o `padaria` do final. Quem abre a pasta no VS Code é outro comando, o `code .`."
+    },
+    {
+      "id": "mkdir-nao-entra-na-pasta",
+      "type": "truefalse",
+      "prompt": "Depois de rodar `mkdir receitas`, você já está dentro da pasta `receitas`.",
+      "answer": false,
+      "explanation": "O `mkdir` só cria a pasta. Para entrar nela, rode `cd receitas` e repare no prompt, que muda para mostrar a pasta nova."
+    },
+    {
+      "id": "criar-e-entrar",
+      "type": "fill",
+      "prompt": "Complete os comandos para criar a pasta `feira` e, depois, entrar nela.\n\n```bash\n___ feira\n___ feira\n```",
+      "answer": [
+        ["mkdir"],
+        ["cd"]
+      ],
+      "explanation": "Primeiro, `mkdir feira` cria a pasta. Depois, `cd feira` entra nela. Na ordem contrária, o `cd` falha, porque a pasta ainda não existe."
+    },
+    {
+      "id": "teclas-que-poupam-tempo",
+      "type": "multiple",
+      "prompt": "Quais teclas ajudam a ganhar tempo no terminal? Marque todas as certas.",
+      "options": {
+        "a": "`F12`, que apaga a linha que você digitou",
+        "b": "`Tab`, que completa os nomes das pastas",
+        "c": "`Ctrl + S`, que guarda os comandos num arquivo",
+        "d": "A seta para cima, que traz o último comando"
+      },
+      "answer": ["b", "d"],
+      "explanation": "O `Tab` completa o nome da pasta, e a seta para cima traz o último comando de volta. O `F12` abre as DevTools no navegador, e o `Ctrl + S` salva o arquivo no editor: nenhum dos dois faz o que a alternativa promete."
+    }
+  ]
+}

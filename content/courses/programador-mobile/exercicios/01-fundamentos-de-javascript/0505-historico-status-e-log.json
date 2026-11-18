@@ -1,0 +1,70 @@
+{
+  "title": "Histórico: git status e git log",
+  "lesson": "e05-git-e-github",
+  "theory_only": true,
+  "theory_reason": "O compilador on-line não tem Git: o histórico só existe no repositório do seu computador e no GitHub.",
+  "recap": "O **histórico** é o álbum inteiro, da foto mais nova para a mais velha. O `git status` mostra o que mudou desde a última foto, e o `git log --oneline` lista as fotos:\n\n```plaintext\nc41d7e2 (HEAD -> main, origin/main) Cria o README\n9ab03f1 Monta o cardápio\n```",
+  "exercises": [
+    {
+      "id": "foto-que-nao-subiu",
+      "type": "single",
+      "prompt": "O `git log --oneline` mostrou:\n\n```plaintext\n7d2e4a1 (HEAD -> main) Corrige o preço do pão\nc41d7e2 (origin/main) Cria o cardápio da padaria\n```\n\nQual comando falta para o GitHub receber a foto de cima?",
+      "options": {
+        "a": "`git add .`",
+        "b": "`git push`",
+        "c": "`git commit -m \"Envia\"`",
+        "d": "`git log`"
+      },
+      "answer": "b",
+      "explanation": "O `origin/main` marca a foto mais nova que o GitHub tem, e ele ficou uma linha abaixo do `HEAD`. A foto de cima já existe no seu computador, então o `git add .` e o `git commit` não ajudam: falta o `git push`."
+    },
+    {
+      "id": "grupos-do-status",
+      "type": "drag",
+      "prompt": "Arraste cada mensagem do `git status` para o que ela quer dizer. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "novo", "label": "Arquivo novo, que o Git não acompanha" },
+        { "key": "mudou", "label": "Mudou, mas não foi chamado para a foto" },
+        { "key": "chamado", "label": "Já foi chamado: entra no próximo commit" },
+        { "key": "limpo", "label": "Nada mudou desde a última foto" }
+      ],
+      "items": [
+        { "key": "a", "text": "`Changes to be committed`" },
+        { "key": "b", "text": "`nothing to commit, working tree clean`" },
+        { "key": "c", "text": "`Untracked files`" },
+        { "key": "d", "text": "`Your branch is ahead of 'origin/main' by 1 commit`" },
+        { "key": "e", "text": "`Changes not staged for commit`" }
+      ],
+      "answer": { "novo": "c", "mudou": "e", "chamado": "a", "limpo": "b" },
+      "explanation": "`Untracked files` lista arquivos novos, `Changes not staged for commit` lista o que mudou sem `git add`, `Changes to be committed` lista quem entra na próxima foto e `nothing to commit` diz que nada mudou. A peça `Your branch is ahead` sobra: ela avisa que o GitHub ainda não tem 1 foto sua."
+    },
+    {
+      "id": "ordem-do-log",
+      "type": "truefalse",
+      "prompt": "No `git log --oneline`, a foto mais nova aparece na última linha.",
+      "answer": false,
+      "explanation": "Falso. O histórico vai da foto mais nova para a mais velha: a mais nova fica em cima, na primeira linha."
+    },
+    {
+      "id": "legendas-que-contam",
+      "type": "multiple",
+      "prompt": "Quem abre o álbum daqui a um mês lê só as legendas. Marque **todas** as legendas que dizem o que mudou.",
+      "options": {
+        "a": "`ajustes e mais umas coisas`",
+        "b": "`Corrige o horário da academia`",
+        "c": "`final agora vai de verdade`",
+        "d": "`Adiciona o preço do suco`"
+      },
+      "answer": ["b", "d"],
+      "explanation": "Uma legenda boa conta o que mudou: corrigiu o horário, adicionou o preço. `ajustes e mais umas coisas` e `final agora vai de verdade` não dizem nada sobre a mudança, e daqui a um mês ninguém sabe o que há nessas fotos."
+    },
+    {
+      "id": "log-e-head",
+      "type": "fill",
+      "prompt": "Complete o comando que mostra uma foto por linha e, depois, a frase sobre a resposta dele.\n\n```bash\ngit log ___\n```\n\nNa resposta, o marcador `___ -> main` quer dizer \"você está aqui\".",
+      "answer": [["--oneline"], ["HEAD"]],
+      "explanation": "O `--oneline` mostra cada foto em uma linha, com o código e a legenda. O `HEAD -> main` marca o ponto do histórico em que você está."
+    }
+  ]
+}

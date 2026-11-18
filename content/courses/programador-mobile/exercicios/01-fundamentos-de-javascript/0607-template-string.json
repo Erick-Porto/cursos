@@ -1,0 +1,54 @@
+{
+  "title": "Template string",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "Uma **template string** é um texto entre **crases**, com lacunas `${ }`, como a mensagem pronta em que só falta o nome.\n\n```javascript\nconst nome = 'Lia';\nconst itens = 3;\nconsole.log(`${nome} comprou ${itens} itens`);\n// Lia comprou 3 itens\n```",
+  "exercises": [
+    {
+      "id": "aviso-da-prova",
+      "type": "code",
+      "prompt": "A escola manda um aviso pronto para cada aluno. Use uma template string para encaixar o nome, a sala e o horário na frase.\n\n**Saída esperada**\n\n```plaintext\nPedro, sua prova será na sala 12, às 14h.\n```",
+      "starter": "const aluno = 'Pedro';\nconst sala = 12;\nconst horario = '14h';\n\n// mostre o aviso aqui, com uma template string\n",
+      "solution": "const aluno = 'Pedro';\nconst sala = 12;\nconst horario = '14h';\n\nconsole.log(`${aluno}, sua prova será na sala ${sala}, às ${horario}.`);\n",
+      "expected_output": "Pedro, sua prova será na sala 12, às 14h.",
+      "explanation": "As crases abrem e fecham o texto, e cada `${ }` encaixa o valor de uma caixa. O resto da frase sai como está escrito."
+    },
+    {
+      "id": "recibo-da-feira",
+      "type": "code",
+      "prompt": "Monte o recibo da feira com template strings. A primeira linha mostra o preço do quilo. A segunda faz a conta dentro da lacuna: quilos vezes preço, com 2 casas.\n\n**Saída esperada**\n\n```plaintext\nPreço do quilo: R$ 6.50\n3 kg de manga: R$ 19.50\n```",
+      "starter": "const fruta = 'manga';\nconst quilos = 3;\nconst precoDoQuilo = 6.5;\n\n// mostre as duas linhas do recibo aqui\n",
+      "solution": "const fruta = 'manga';\nconst quilos = 3;\nconst precoDoQuilo = 6.5;\n\nconsole.log(`Preço do quilo: R$ ${precoDoQuilo.toFixed(2)}`);\nconsole.log(`${quilos} kg de ${fruta}: R$ ${(quilos * precoDoQuilo).toFixed(2)}`);\n",
+      "expected_output": "Preço do quilo: R$ 6.50\n3 kg de manga: R$ 19.50",
+      "explanation": "O JavaScript faz a conta que está dentro do `${ }` e põe o resultado no texto. Os parênteses fazem a multiplicação antes do `toFixed(2)`."
+    },
+    {
+      "id": "parcelas-do-celular",
+      "type": "code",
+      "prompt": "Joana comprou um celular em 3 parcelas de R$ 45,90, com 5% de juros sobre a soma das parcelas. Faça as contas em centavos e arredonde os juros com `Math.round`. Monte as quatro linhas com template strings.\n\n**Saída esperada**\n\n```plaintext\nCliente: Joana\n3 parcelas de R$ 45.90\nJuros (5%): R$ 6.89\nTotal: R$ 144.59\n```",
+      "starter": "const cliente = 'Joana';\nconst parcelaCentavos = 4590;\nconst parcelas = 3;\nconst juros = 5;\n\n// calcule em centavos e mostre as quatro linhas aqui\n",
+      "solution": "const cliente = 'Joana';\nconst parcelaCentavos = 4590;\nconst parcelas = 3;\nconst juros = 5;\n\nconst somaCentavos = parcelaCentavos * parcelas;\nconst jurosCentavos = Math.round(somaCentavos * juros / 100);\nconst totalCentavos = somaCentavos + jurosCentavos;\n\nconsole.log(`Cliente: ${cliente}`);\nconsole.log(`${parcelas} parcelas de R$ ${(parcelaCentavos / 100).toFixed(2)}`);\nconsole.log(`Juros (${juros}%): R$ ${(jurosCentavos / 100).toFixed(2)}`);\nconsole.log(`Total: R$ ${(totalCentavos / 100).toFixed(2)}`);\n",
+      "expected_output": "Cliente: Joana\n3 parcelas de R$ 45.90\nJuros (5%): R$ 6.89\nTotal: R$ 144.59",
+      "explanation": "A soma é 13770 centavos, e os juros dão 688,5, que sobem para 689. O total é 14459. O `%` fora do `${ }` é só o sinal de por cento, texto comum."
+    },
+    {
+      "id": "partes-da-template-string",
+      "type": "fill",
+      "prompt": "Complete as lacunas: uma template string fica entre ___, e cada lugar para encaixar um valor começa com o sinal ___, seguido de uma chave.",
+      "answer": [["crases", "crase", "`"], ["$", "${", "cifrão", "cifrao"]],
+      "explanation": "As **crases** abrem e fecham o texto. O `${ }` marca a lacuna: o JavaScript faz a conta que está dentro e põe o resultado no texto."
+    },
+    {
+      "id": "lacuna-com-aspas",
+      "type": "single",
+      "prompt": "O que este código mostra?\n\n```javascript\nconst vagas = 5;\nconsole.log('Restam ${vagas} vagas');\n```",
+      "options": {
+        "a": "`Restam 5 vagas`",
+        "b": "`Restam ${vagas} vagas`",
+        "c": "`Restam vagas vagas`",
+        "d": "Um erro `vagas is not defined`"
+      },
+      "answer": "b",
+      "explanation": "Com aspas simples, o `${ }` não funciona: sai escrito do jeito que está. A alternativa `Restam 5 vagas` seria a saída com crases no lugar das aspas."
+    }
+  ]
+}

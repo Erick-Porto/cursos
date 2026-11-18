@@ -1,0 +1,54 @@
+{
+  "title": "trim",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`trim`** (\"aparar\") devolve uma cópia do texto sem os espaços das **pontas**. Os espaços do meio ficam. O original não muda: guarde a cópia numa caixa.\n\n```javascript\nconst rua = '  Rua das Flores ';\nconst limpa = rua.trim();\nconsole.log(limpa);   // Rua das Flores\n```",
+  "exercises": [
+    {
+      "id": "nome-na-recepcao",
+      "type": "code",
+      "prompt": "A recepção da academia copiou o nome de um aluno com espaços sobrando nas pontas. Use o `trim` e mostre o nome entre colchetes. Os colchetes deixam ver que os espaços saíram.\n\n**Saída esperada**\n\n```plaintext\n[Marcos Lima]\n```",
+      "starter": "const aluno = '   Marcos Lima  ';\n\n// mostre o nome limpo, entre colchetes, aqui\n",
+      "solution": "const aluno = '   Marcos Lima  ';\n\nconst limpo = aluno.trim();\nconsole.log(`[${limpo}]`);\n",
+      "expected_output": "[Marcos Lima]",
+      "explanation": "O `trim` devolve uma cópia sem os espaços das pontas, e a caixa `limpo` guarda essa cópia. O espaço entre `Marcos` e `Lima` fica, porque está no meio do texto."
+    },
+    {
+      "id": "senha-do-wifi",
+      "type": "code",
+      "prompt": "A senha do Wi-Fi da escola é `aula2026`. Uma aluna colou a senha com espaços nas pontas. Compare o texto colado com a senha duas vezes: primeiro como veio e depois com o `trim`. Se a comparação com o `trim` der certo, mostre a última linha com um `if`.\n\n**Saída esperada**\n\n```plaintext\nComo veio: false\nCom trim: true\nConectada à rede da escola\n```",
+      "starter": "const senha = 'aula2026';\nconst colada = ' aula2026  ';\n\n// escreva as comparações e o if aqui\n",
+      "solution": "const senha = 'aula2026';\nconst colada = ' aula2026  ';\n\nconsole.log(`Como veio: ${colada === senha}`);\nconsole.log(`Com trim: ${colada.trim() === senha}`);\n\nif (colada.trim() === senha) {\n  console.log('Conectada à rede da escola');\n}\n",
+      "expected_output": "Como veio: false\nCom trim: true\nConectada à rede da escola",
+      "explanation": "Para o `===`, um espaço a mais já faz outro texto, por isso a primeira comparação dá `false`. O `trim` devolve a cópia sem os espaços das pontas, e essa cópia é igual à senha."
+    },
+    {
+      "id": "chamada-da-escola",
+      "type": "code",
+      "prompt": "A lista de presença foi digitada às pressas, e alguns nomes ficaram com espaços sobrando. Use o `filter` com o `trim` para guardar só as presenças de `Joana` e mostre quantas são.\n\n**Saída esperada**\n\n```plaintext\nPresenças de Joana: 3\n```",
+      "starter": "const presencas = ['Joana', ' Pedro', 'Joana ', '  Lucas ', ' Joana  ', 'Pedro'];\n\n// escreva o filter aqui\n",
+      "solution": "const presencas = ['Joana', ' Pedro', 'Joana ', '  Lucas ', ' Joana  ', 'Pedro'];\n\nconst daJoana = presencas.filter((nome) => nome.trim() === 'Joana');\nconsole.log(`Presenças de Joana: ${daJoana.length}`);\n",
+      "expected_output": "Presenças de Joana: 3",
+      "explanation": "A peneira do `filter` testa um nome por vez. O `trim` limpa a cópia de cada nome antes do `===`, e assim `'Joana '` e `' Joana  '` também passam. Sem o `trim`, só o primeiro nome passaria."
+    },
+    {
+      "id": "copia-nao-guardada",
+      "type": "single",
+      "prompt": "O que este código mostra na tela?\n\n```javascript\nlet bairro = '   Centro ';\nbairro.trim();\nconsole.log(bairro.length);\n```",
+      "options": {
+        "a": "`6`",
+        "b": "`7`",
+        "c": "`10`",
+        "d": "`9`"
+      },
+      "answer": "c",
+      "explanation": "O `trim` devolve uma cópia limpa, mas ninguém guardou essa cópia. A caixa `bairro` continua com os 3 espaços da frente, as 6 letras de `Centro` e o espaço de trás: 10. O `6` seria a resposta com `bairro = bairro.trim();`."
+    },
+    {
+      "id": "o-que-o-trim-tira",
+      "type": "fill",
+      "prompt": "Complete a frase: o `trim` tira os espaços das ___ do texto, e os espaços do ___ continuam lá.",
+      "answer": [["pontas", "extremidades", "beiradas"], ["meio"]],
+      "explanation": "O `trim` apara só as pontas do texto. Em `'  Vila Nova '`, ele tira os espaços de fora, e o espaço entre `Vila` e `Nova` fica."
+    }
+  ]
+}

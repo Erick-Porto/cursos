@@ -1,0 +1,61 @@
+{
+  "title": "Math.floor",
+  "lesson": "e06-numeros-textos-e-dinheiro",
+  "recap": "O **`Math.floor`** corta as casas depois do ponto: arredonda sempre para baixo. Com o `%`, ele divide sem partir: 10 balas para 3 crianças.\n\n```javascript\nconsole.log(Math.floor(10 / 3)); // 3 para cada uma\nconsole.log(10 % 3);             // sobra 1\n```",
+  "exercises": [
+    {
+      "id": "pacotes-de-figurinha",
+      "type": "code",
+      "prompt": "Você tem R$ 50, e cada pacote de figurinhas custa R$ 6. Ninguém vende meio pacote. Use `Math.floor` para mostrar quantos pacotes inteiros você compra.\n\n**Saída esperada**\n\n```plaintext\nPacotes: 8\n```",
+      "starter": "const dinheiro = 50;\nconst precoDoPacote = 6;\n\n// mostre aqui quantos pacotes você compra\n",
+      "solution": "const dinheiro = 50;\nconst precoDoPacote = 6;\n\nconsole.log(`Pacotes: ${Math.floor(dinheiro / precoDoPacote)}`);\n",
+      "expected_output": "Pacotes: 8",
+      "explanation": "50 dividido por 6 dá 8,33. O `Math.floor` corta as casas depois do ponto e deixa 8, os pacotes que o dinheiro paga por inteiro."
+    },
+    {
+      "id": "tempo-de-viagem",
+      "type": "code",
+      "prompt": "O app de ônibus guarda a duração das viagens em minutos. Mostre cada viagem em horas e minutos. Uma hora tem 60 minutos: use `Math.floor` para as horas e `%` para os minutos que sobram.\n\n**Saída esperada**\n\n```plaintext\nViagem curta: 2 h e 15 min\nViagem longa: 3 h e 20 min\n```",
+      "starter": "const viagemCurta = 135;\nconst viagemLonga = 200;\n\n// mostre as duas viagens em horas e minutos aqui\n",
+      "solution": "const viagemCurta = 135;\nconst viagemLonga = 200;\n\nconsole.log(`Viagem curta: ${Math.floor(viagemCurta / 60)} h e ${viagemCurta % 60} min`);\nconsole.log(`Viagem longa: ${Math.floor(viagemLonga / 60)} h e ${viagemLonga % 60} min`);\n",
+      "expected_output": "Viagem curta: 2 h e 15 min\nViagem longa: 3 h e 20 min",
+      "explanation": "Em 135 minutos cabem 2 horas inteiras, e sobram 15 minutos. Em 200, cabem 3 horas, e sobram 20. O `Math.floor` conta as partes inteiras, e o `%` responde o que sobra."
+    },
+    {
+      "id": "churrasco-dos-amigos",
+      "type": "code",
+      "prompt": "Quatro amigos dividem um churrasco de R$ 157,90. Converta o total para centavos com `Math.round`. Calcule quanto cada amigo paga com `Math.floor` e quantos centavos sobram com `%`. Na última linha, confira a conta: o valor de cada amigo, vezes os amigos, mais a sobra.\n\n**Saída esperada**\n\n```plaintext\nTotal: R$ 157.90\nCada amigo paga: R$ 39.47\nCentavos que sobram: 2\nConferindo: 15790 centavos\n```",
+      "starter": "const totalReais = 157.9;\nconst amigos = 4;\n\n// calcule em centavos e mostre as quatro linhas aqui\n",
+      "solution": "const totalReais = 157.9;\nconst amigos = 4;\n\nconst totalCentavos = Math.round(totalReais * 100);\nconst porAmigo = Math.floor(totalCentavos / amigos);\nconst sobra = totalCentavos % amigos;\n\nconsole.log(`Total: R$ ${(totalCentavos / 100).toFixed(2)}`);\nconsole.log(`Cada amigo paga: R$ ${(porAmigo / 100).toFixed(2)}`);\nconsole.log(`Centavos que sobram: ${sobra}`);\nconsole.log(`Conferindo: ${porAmigo * amigos + sobra} centavos`);\n",
+      "expected_output": "Total: R$ 157.90\nCada amigo paga: R$ 39.47\nCentavos que sobram: 2\nConferindo: 15790 centavos",
+      "explanation": "15790 dividido por 4 dá 3947,5. O `Math.floor` deixa 3947 para cada amigo, e o `%` responde que sobram 2 centavos. A conferência fecha: 3947 vezes 4, mais 2, dá 15790."
+    },
+    {
+      "id": "floor-ou-round",
+      "type": "single",
+      "prompt": "O que este código mostra, na ordem?\n\n```javascript\nconsole.log(Math.floor(9.9));\nconsole.log(Math.round(9.9));\n```",
+      "options": {
+        "a": "`10` e `10`",
+        "b": "`9` e `9`",
+        "c": "`10` e `9`",
+        "d": "`9` e `10`"
+      },
+      "answer": "d",
+      "explanation": "O `Math.floor` arredonda sempre para baixo: `9.9` vira `9`. O `Math.round` leva ao inteiro mais perto: `10`. A alternativa `10` e `10` atrai quem acha que o `Math.floor` também procura o inteiro mais perto."
+    },
+    {
+      "id": "conta-para-tres",
+      "type": "multiple",
+      "prompt": "Três pessoas vão dividir uma conta de 2500 centavos. Quais frases estão certas? Marque todas.",
+      "options": {
+        "a": "`Math.floor(2500 / 3)` dá `833`, o valor de cada pessoa",
+        "b": "`2500 % 3` dá `833`, o valor de cada pessoa",
+        "c": "`2500 % 3` dá `1`, o centavo que sobra",
+        "d": "`Math.floor` leva ao inteiro mais perto, para cima ou para baixo",
+        "e": "`3 * 833 + 1` dá `2500`, e a divisão confere"
+      },
+      "answer": ["a", "c", "e"],
+      "explanation": "O `Math.floor` dá as partes inteiras, 833, e o `%` dá o que sobra, 1. Três vezes 833, mais 1, dá 2500. Quem leva ao inteiro mais perto é o `Math.round`: o `Math.floor` arredonda sempre para baixo."
+    }
+  ]
+}

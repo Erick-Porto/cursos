@@ -1,0 +1,62 @@
+{
+  "title": "split",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`split(separador)`** quebra o texto em cada lugar onde aparece o separador, como a barra de chocolate que parte nos sulcos. Os pedaços vão para uma lista, e o separador some.\n\n```javascript\nconst partes = '12/05'.split('/');\nconsole.log(partes[0]);   // 12\nconsole.log(partes[1]);   // 05\n```",
+  "exercises": [
+    {
+      "id": "horario-em-partes",
+      "type": "code",
+      "prompt": "O relógio do ponto de ônibus mostra `14:45`. Use o `split` com os dois-pontos e mostre as horas e os minutos em linhas separadas.\n\n**Saída esperada**\n\n```plaintext\nHoras: 14\nMinutos: 45\n```",
+      "starter": "const horario = '14:45';\n\n// quebre o texto e mostre as duas linhas aqui\n",
+      "solution": "const horario = '14:45';\n\nconst partes = horario.split(':');\nconsole.log(`Horas: ${partes[0]}`);\nconsole.log(`Minutos: ${partes[1]}`);\n",
+      "expected_output": "Horas: 14\nMinutos: 45",
+      "explanation": "O `split(':')` quebra o texto nos dois-pontos e devolve a lista `[ '14', '45' ]`. A gaveta 0 guarda as horas, e a gaveta 1, os minutos. O separador some e não fica em nenhum pedaço."
+    },
+    {
+      "id": "lista-do-mercado",
+      "type": "code",
+      "prompt": "Você anotou as compras do mercado num texto só, com ponto e vírgula e um espaço entre os itens. Quebre o texto numa lista e mostre quantos itens há, o primeiro e o último.\n\nDica: a última gaveta é a de número `itens.length - 1`.\n\n**Saída esperada**\n\n```plaintext\nItens: 4\nPrimeiro: ovos\nÚltimo: pão\n```",
+      "starter": "const anotacao = 'ovos; leite; café; pão';\n\n// quebre o texto e mostre as três linhas aqui\n",
+      "solution": "const anotacao = 'ovos; leite; café; pão';\n\nconst itens = anotacao.split('; ');\nconsole.log(`Itens: ${itens.length}`);\nconsole.log(`Primeiro: ${itens[0]}`);\nconsole.log(`Último: ${itens[itens.length - 1]}`);\n",
+      "expected_output": "Itens: 4\nPrimeiro: ovos\nÚltimo: pão",
+      "explanation": "O separador pode ter mais de uma letra: aqui é `'; '`, o ponto e vírgula com o espaço. As gavetas começam no 0, por isso a última é a de número `itens.length - 1`, a gaveta 3."
+    },
+    {
+      "id": "minutos-de-treino",
+      "type": "code",
+      "prompt": "A academia anotou os minutos de treino da semana num texto. Quebre o texto, some os minutos com o `reduce` e calcule a média por dia. Cada pedaço é um texto, então converta com o `Number` antes de somar.\n\n**Saída esperada**\n\n```plaintext\nTotal: 180 minutos\nMédia por dia: 36 minutos\n```",
+      "starter": "const treinos = '30,45,20,60,25';\n\n// quebre o texto, some e calcule a média aqui\n",
+      "solution": "const treinos = '30,45,20,60,25';\n\nconst minutos = treinos.split(',');\nconst total = minutos.reduce((soma, minuto) => soma + Number(minuto), 0);\nconst media = total / minutos.length;\n\nconsole.log(`Total: ${total} minutos`);\nconsole.log(`Média por dia: ${media} minutos`);\n",
+      "expected_output": "Total: 180 minutos\nMédia por dia: 36 minutos",
+      "explanation": "O `split` devolve pedaços de texto, como `'30'`. Sem o `Number`, o `+` juntaria os textos em vez de somar. O `length` da lista diz quantos dias há, e a média é o total dividido por esse número."
+    },
+    {
+      "id": "pedacos-do-texto",
+      "type": "drag",
+      "prompt": "Arraste para cada chamada o que ela devolve. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "quebra", "label": "`'sol-lua'.split('-')`" },
+        { "key": "sem-separador", "label": "`'sol-lua'.split(' ')`" },
+        { "key": "gaveta", "label": "`'sol-lua'.split('-')[1]`" },
+        { "key": "tamanho", "label": "`'sol-lua'.split('-').length`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`'lua'`" },
+        { "key": "b", "text": "`[ 'sol', '-', 'lua' ]`" },
+        { "key": "c", "text": "`[ 'sol', 'lua' ]`" },
+        { "key": "d", "text": "`2`" },
+        { "key": "e", "text": "`[ 'sol-lua' ]`" }
+      ],
+      "answer": { "quebra": "c", "sem-separador": "e", "gaveta": "a", "tamanho": "d" },
+      "explanation": "O separador some, por isso a peça `[ 'sol', '-', 'lua' ]` sobra. Sem o separador no texto, a lista tem um pedaço só. A gaveta 1 é a segunda, e o `length` conta os pedaços."
+    },
+    {
+      "id": "pedaco-e-texto",
+      "type": "truefalse",
+      "prompt": "Depois de `const partes = '25.90'.split('.');`, a gaveta `partes[1]` guarda o número `90`.",
+      "answer": false,
+      "explanation": "Cada pedaço do `split` é um texto: a gaveta guarda `'90'`, com aspas. Para fazer contas com ele, converta com o `Number`."
+    }
+  ]
+}

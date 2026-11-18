@@ -1,0 +1,73 @@
+{
+  "title": "Git e GitHub: primeiros passos",
+  "lesson": "e01b-ambiente-de-desenvolvimento",
+  "theory_only": true,
+  "theory_reason": "Instalar e configurar o Git e criar a conta no GitHub acontecem no seu computador e no site, fora do compilador on-line.",
+  "recap": "O **Git** registra a história do código em **commits**, as fotos do projeto. O **repositório** é o álbum, e o **GitHub** guarda esse álbum na nuvem. Configure o seu nome uma vez por computador:\n\n```bash\ngit config --global user.name \"Bia Lima\"\n```",
+  "exercises": [
+    {
+      "id": "preparar-o-git",
+      "type": "drag",
+      "prompt": "Você acabou de baixar o Git. Arraste cada passo para a ordem certa, até o Git estar pronto para assinar as fotos do seu projeto.",
+      "layout": "flow",
+      "slots": [
+        { "key": "primeiro", "label": "Primeiro" },
+        { "key": "depois", "label": "Depois" },
+        { "key": "seguida", "label": "Em seguida" },
+        { "key": "fim", "label": "Por fim" }
+      ],
+      "items": [
+        { "key": "a", "text": "Confira com `git --version`" },
+        { "key": "b", "text": "Instale o Git" },
+        { "key": "c", "text": "Configure o nome e o e-mail" },
+        { "key": "d", "text": "Feche o terminal e abra de novo" }
+      ],
+      "answer": { "primeiro": "b", "depois": "d", "seguida": "a", "fim": "c" },
+      "explanation": "O terminal só enxerga os programas que já existiam quando foi aberto. Por isso, feche e abra de novo **antes** de pedir a versão. Com o Git conferido, você configura o nome e o e-mail, que assinam cada commit."
+    },
+    {
+      "id": "nome-sem-aspas",
+      "type": "single",
+      "prompt": "Bruno rodou o comando abaixo, sem aspas no nome. O que fica gravado como nome dele no Git?\n\n```bash\ngit config --global user.name Bruno Lima\n```",
+      "options": {
+        "a": "`Bruno Lima`",
+        "b": "`Lima`",
+        "c": "`Bruno`",
+        "d": "`BrunoLima`"
+      },
+      "answer": "c",
+      "explanation": "O espaço separa as partes do comando, então o Git grava só a primeira palavra: `Bruno`. Para corrigir, repita o comando com o nome entre aspas: `\"Bruno Lima\"`."
+    },
+    {
+      "id": "git-nao-e-github",
+      "type": "truefalse",
+      "prompt": "Git e GitHub são dois nomes para a mesma ferramenta.",
+      "answer": false,
+      "explanation": "O **Git** registra o histórico do código no seu computador. O **GitHub** é um site que guarda os repositórios na nuvem, como o backup de fotos do celular."
+    },
+    {
+      "id": "foto-e-album",
+      "type": "fill",
+      "prompt": "No Git, a foto do projeto com uma legenda se chama ___. O álbum com todas as fotos do projeto se chama ___.",
+      "answer": [
+        ["commit"],
+        ["repositório", "repositorio"]
+      ],
+      "explanation": "Cada **commit** é uma foto dos arquivos naquele momento, com a legenda do que mudou. O **repositório** é a pasta com todo o histórico: o álbum do projeto. Não troque os dois: o commit é uma foto só, e o repositório guarda todas."
+    },
+    {
+      "id": "para-que-serve-o-github",
+      "type": "multiple",
+      "prompt": "Para que serve o **GitHub**? Marque todas as certas.",
+      "options": {
+        "a": "Rodar os seus programas no lugar do Node.js",
+        "b": "Guardar uma cópia do código, caso o computador quebre",
+        "c": "Mostrar os seus projetos para recrutadores",
+        "d": "Reunir a equipe para trabalhar no mesmo código",
+        "e": "Gravar o seu nome e e-mail no computador"
+      },
+      "answer": ["b", "c", "d"],
+      "explanation": "O GitHub serve de backup, portfólio e ponto de encontro da equipe. Quem roda os programas é o Node.js. O nome e o e-mail ficam gravados pelo `git config`, no seu computador."
+    }
+  ]
+}

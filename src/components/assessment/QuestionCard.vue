@@ -13,6 +13,8 @@ const props = defineProps<{
   disabled?: boolean
   /** Quando presente, mostra a correção (modo revisão). */
   review?: AttemptDetail | null
+  /** Sem cartão, cabeçalho e pontos: a questão entra dentro de outro cartão (listas de exercícios). */
+  bare?: boolean
 }>()
 const emit = defineEmits<{ 'update:modelValue': [value: AnswerValue] }>()
 
@@ -89,8 +91,8 @@ const typeLabel: Record<Question['type'], string> = {
 </script>
 
 <template>
-  <section class="q card" :class="{ 'q--correct': review?.correct, 'q--wrong': review && !review.correct }">
-    <header class="q__head">
+  <section class="q" :class="{ card: !bare, 'q--correct': review?.correct, 'q--wrong': review && !review.correct }">
+    <header v-if="!bare" class="q__head">
       <span class="q__num">Questão {{ number }} de {{ total }}</span>
       <span class="q__type">{{ typeLabel[question.type] }} · {{ question.points }} {{ question.points === 1 ? 'ponto' : 'pontos' }}</span>
     </header>
@@ -193,7 +195,7 @@ const typeLabel: Record<Question['type'], string> = {
       <div class="q__verdict">
         <component :is="review.correct ? CircleCheck : CircleX" />
         <strong>{{ review.correct ? 'Correta' : 'Incorreta' }}</strong>
-        <span class="muted">· {{ review.earned }}/{{ review.points }} pt</span>
+        <span v-if="!bare" class="muted">· {{ review.earned }}/{{ review.points }} pt</span>
       </div>
       <p v-if="question.type === 'fill' && !review.correct && expectedFill.length" class="small text-2">
         Resposta esperada: <strong>{{ expectedFill.join(' / ') }}</strong>

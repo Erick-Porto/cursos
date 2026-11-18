@@ -2,18 +2,18 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import {
-  ArrowLeft, Award, BookOpen, CalendarClock, Circle, CircleCheck, CirclePlay, Clock, FileText, Layers, Lock, Milestone, Play, Signal, Target, Trophy, UserRound,
+  ArrowLeft, Award, BookOpen, CalendarClock, Circle, CircleCheck, CirclePlay, ClipboardList, Clock, FileText, Layers, Lock, Milestone, Play, Signal, Target, Trophy, UserRound,
 } from 'lucide-vue-next'
 import { useCatalogStore } from '@/stores/catalog'
 import { useAchievementsStore } from '@/stores/achievements'
 import { useToastStore } from '@/stores/toast'
-import { fetchCourseBySlug, fetchCourseProgress, fetchCourseStructure } from '@/lib/api'
+import { fetchCourseBySlug, fetchCourseProgress, fetchCourseStructure, fetchExerciseLists } from '@/lib/api'
 import { courseMaterialBase, renderInline, renderMarkdown } from '@/lib/markdown'
 import { courseAssetBase, friendlyError } from '@/lib/supabase'
 import { resolveIcon } from '@/lib/icons'
 import { formatMinutes, formatPct, LEVEL_LABEL } from '@/lib/format'
 import { groupBySection, PROJECT_STATE_BADGE, PROJECT_STATE_LABEL, projectState } from '@/lib/projects'
-import type { Achievement, Assessment, Attempt, Course, LessonProgress, LessonSummary, Module, Project, ProjectSubmission } from '@/types/db'
+import type { Achievement, Assessment, Attempt, Course, ExerciseList, LessonProgress, LessonSummary, Module, Project, ProjectSubmission } from '@/types/db'
 import ProgressBar from '@/components/ui/ProgressBar.vue'
 import LoadingBlock from '@/components/ui/LoadingBlock.vue'
 import EmptyState from '@/components/ui/EmptyState.vue'
@@ -34,6 +34,7 @@ const progress = ref<LessonProgress[]>([])
 const attempts = ref<Attempt[]>([])
 const projects = ref<Project[]>([])
 const submissions = ref<ProjectSubmission[]>([])
+const exerciseLists = ref<ExerciseList[]>([])
 const loading = ref(true)
 const notFound = ref(false)
 const enrolling = ref(false)
@@ -119,7 +120,8 @@ async function load() {
     }
     course.value = c
     document.title = `${c.title} · Cursos`
-    const s = await fetchCourseStructure(c.id)
+    const [s, lists] = await Promise.all([fetchCourseStructure(c.id), fetchExerciseLists(c.id)])
+    exerciseLists.value = lists
     modules.value = s.modules
     lessons.value = s.lessons
     assessments.value = s.assessments
@@ -238,6 +240,32 @@ onMounted(load)
                 </li>
               </ol>
             </div>
+          </section>
+
+          <section v-if="exerciseLists.length" class="card" style="padding: 0">
+            <header class="mod__head">
+              <h2 class="mod__title">Listas de exercícios</h2>
+              <p class="muted small" style="margin: 2px 0 0">Treino por tema: rode o código no compilador on-line e entregue aqui.</p>
+            </header>
+            <ol class="lessons">
+              <li v-for="l in exerciseLists" :key="l.id">
+                <component
+                  :is="enrollment ? RouterLink : 'div'"
+                  :to="enrollment ? `/cursos/${course.slug}/exercicios/${l.slug}` : undefined"
+                  class="lesson"
+                  :class="{ 'is-locked': !enrollment }"
+                >
+                  <span class="lesson__status">
+                    <Lock v-if="!enrollment" />
+                    <ClipboardList v-else />
+                  </span>
+                  <span class="lesson__body">
+                    <span class="lesson__title">{{ l.title }}</span>
+                    <span v-if="l.summary" class="lesson__summary">{{ l.summary }}</span>
+                  </span>
+                </component>
+              </li>
+            </ol>
           </section>
 
           <section v-for="s in sections" :key="s.key" class="card" style="padding: 0">

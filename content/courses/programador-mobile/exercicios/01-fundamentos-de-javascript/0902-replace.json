@@ -1,0 +1,62 @@
+{
+  "title": "replace e replaceAll",
+  "lesson": "e09-trabalhando-com-textos",
+  "recap": "O **`replace(velho, novo)`** troca só a **primeira** vez que o `velho` aparece. O **`replaceAll`** troca **todas**. Trocar por `''`, o texto vazio, apaga o pedaço.\n\n```javascript\nconst placa = 'A-B-C';\nconsole.log(placa.replace('-', ''));      // AB-C\nconsole.log(placa.replaceAll('-', ''));   // ABC\n```",
+  "exercises": [
+    {
+      "id": "horario-do-onibus",
+      "type": "code",
+      "prompt": "O painel da rodoviária escreve o horário como `07h30`. Troque o `h` por dois-pontos com o `replace` e mostre a frase da saída.\n\n**Saída esperada**\n\n```plaintext\nSaída do ônibus: 07:30\n```",
+      "starter": "const horario = '07h30';\n\n// troque o h por dois-pontos e mostre a frase aqui\n",
+      "solution": "const horario = '07h30';\n\nconst novo = horario.replace('h', ':');\nconsole.log(`Saída do ônibus: ${novo}`);\n",
+      "expected_output": "Saída do ônibus: 07:30",
+      "explanation": "O `replace` recebe o que sai, `'h'`, e o que entra, `':'`. Ele devolve um texto novo, e a caixa `novo` guarda esse texto."
+    },
+    {
+      "id": "codigo-de-barras",
+      "type": "code",
+      "prompt": "O código de barras de um produto do mercado veio com traços. Mostre o que acontece com o `replace` e com o `replaceAll` quando você apaga os traços. Para apagar, troque o traço pelo texto vazio, `''`.\n\n**Saída esperada**\n\n```plaintext\nCom replace: 7891234-5678-9\nCom replaceAll: 789123456789\n```",
+      "starter": "const codigo = '789-1234-5678-9';\n\n// mostre o resultado do replace e do replaceAll aqui\n",
+      "solution": "const codigo = '789-1234-5678-9';\n\nconsole.log(`Com replace: ${codigo.replace('-', '')}`);\nconsole.log(`Com replaceAll: ${codigo.replaceAll('-', '')}`);\n",
+      "expected_output": "Com replace: 7891234-5678-9\nCom replaceAll: 789123456789",
+      "explanation": "O `replace` troca só a primeira vez que encontra o traço, e os outros dois ficam. O `replaceAll` troca todas as vezes. Trocar por `''` é o jeito de apagar um pedaço."
+    },
+    {
+      "id": "telefone-limpo",
+      "type": "code",
+      "prompt": "A agenda do celular precisa do telefone só com números. Use a caixa `telefone`, feita com `let`, e tire um sinal por linha: o `(`, o `)`, o espaço e o traço. No fim, mostre o telefone e a quantidade de dígitos.\n\n**Saída esperada**\n\n```plaintext\nTelefone: 81998765432\nDígitos: 11\n```",
+      "starter": "let telefone = '(81) 99876-5432';\n\n// limpe o telefone aqui, guardando o resultado em cada linha\n",
+      "solution": "let telefone = '(81) 99876-5432';\n\ntelefone = telefone.replace('(', '');\ntelefone = telefone.replace(')', '');\ntelefone = telefone.replace(' ', '');\ntelefone = telefone.replace('-', '');\n\nconsole.log(`Telefone: ${telefone}`);\nconsole.log(`Dígitos: ${telefone.length}`);\n",
+      "expected_output": "Telefone: 81998765432\nDígitos: 11",
+      "explanation": "Cada `replace` devolve um texto novo, e `telefone = ...` guarda esse texto na mesma caixa. Sem guardar, a limpeza se perde. Aqui cada sinal aparece uma vez, por isso o `replace` resolve. O `length` conta os dígitos que sobraram."
+    },
+    {
+      "id": "trocas-na-data",
+      "type": "drag",
+      "prompt": "Com `const data = '10/05/2026';`, arraste para cada chamada o texto que ela devolve. Uma peça sobra.",
+      "layout": "list",
+      "slots": [
+        { "key": "troca-uma", "label": "`data.replace('/', '-')`" },
+        { "key": "troca-todas", "label": "`data.replaceAll('/', '-')`" },
+        { "key": "apaga-uma", "label": "`data.replace('/', '')`" },
+        { "key": "apaga-todas", "label": "`data.replaceAll('/', '')`" }
+      ],
+      "items": [
+        { "key": "a", "text": "`10052026`" },
+        { "key": "b", "text": "`10-05/2026`" },
+        { "key": "c", "text": "`10/05-2026`" },
+        { "key": "d", "text": "`1005/2026`" },
+        { "key": "e", "text": "`10-05-2026`" }
+      ],
+      "answer": { "troca-uma": "b", "troca-todas": "e", "apaga-uma": "d", "apaga-todas": "a" },
+      "explanation": "O `replace` mexe só na primeira barra, e o `replaceAll` mexe nas duas. Com `''` no lugar do novo, a barra é apagada. A peça `10/05-2026` sobra porque o `replace` nunca começa pela última barra."
+    },
+    {
+      "id": "troca-sem-guardar",
+      "type": "truefalse",
+      "prompt": "Este código mostra `bola` na tela.\n\n```javascript\nlet brinquedo = 'bala';\nbrinquedo.replace('a', 'o');\nconsole.log(brinquedo);\n```",
+      "answer": false,
+      "explanation": "O código mostra `bala`. O `replace` devolve uma cópia trocada, `'bola'`, mas ninguém guardou essa cópia, e o original não muda. Para valer, a linha precisa ser `brinquedo = brinquedo.replace('a', 'o');`."
+    }
+  ]
+}

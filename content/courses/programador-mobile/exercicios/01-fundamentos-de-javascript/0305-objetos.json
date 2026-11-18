@@ -1,0 +1,55 @@
+{
+  "title": "Objetos",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "Um **objeto** é uma ficha de cadastro: cada campo tem nome, dois-pontos e valor, tudo entre `{ }`. Para ler um campo, use o nome da ficha, um ponto e o nome do campo.\n\n```javascript\nconst aluno = { nome: 'Lia', idade: 15 };\nconsole.log(aluno.nome); // Lia\n```",
+  "exercises": [
+    {
+      "id": "ficha-do-livro",
+      "type": "code",
+      "prompt": "A biblioteca guarda cada livro numa ficha. O código inicial traz a ficha `livro`. Mostre o título, o autor e o número de páginas, lendo cada campo com o ponto.\n\n**Saída esperada**\n\n```plaintext\nTítulo: Dom Casmurro\nAutor: Machado de Assis\nPáginas: 256\n```",
+      "starter": "const livro = { titulo: 'Dom Casmurro', autor: 'Machado de Assis', paginas: 256 };\n\n// mostre os três campos aqui\n",
+      "solution": "const livro = { titulo: 'Dom Casmurro', autor: 'Machado de Assis', paginas: 256 };\n\nconsole.log('Título:', livro.titulo);\nconsole.log('Autor:', livro.autor);\nconsole.log('Páginas:', livro.paginas);\n",
+      "expected_output": "Título: Dom Casmurro\nAutor: Machado de Assis\nPáginas: 256",
+      "explanation": "O nome da ficha, um ponto e o nome do campo leem o valor: `livro.titulo` vale `Dom Casmurro`. O nome do campo precisa ser escrito igual ao da ficha: `titulo`, sem acento."
+    },
+    {
+      "id": "banca-da-feira",
+      "type": "code",
+      "prompt": "Na banca da feira, a ficha `compra` guarda a fruta, o preço do quilo e quantos quilos o cliente levou. Mostre as três linhas. O total a pagar é o preço do quilo vezes os quilos.\n\n**Saída esperada**\n\n```plaintext\nManga: 3 kg\nPreço do quilo: 6\nTotal a pagar: 18\n```",
+      "starter": "const compra = { fruta: 'Manga', precoDoQuilo: 6, quilos: 3 };\n\n// mostre as três linhas aqui\n",
+      "solution": "const compra = { fruta: 'Manga', precoDoQuilo: 6, quilos: 3 };\n\nconsole.log(compra.fruta + ':', compra.quilos, 'kg');\nconsole.log('Preço do quilo:', compra.precoDoQuilo);\nconsole.log('Total a pagar:', compra.precoDoQuilo * compra.quilos);\n",
+      "expected_output": "Manga: 3 kg\nPreço do quilo: 6\nTotal a pagar: 18",
+      "explanation": "O campo de uma ficha funciona como qualquer valor: entra em contas e em textos. O `+` junta `Manga` com os dois-pontos, sem espaço, e as vírgulas colocam um espaço antes do `3` e do `kg`."
+    },
+    {
+      "id": "cartao-de-onibus",
+      "type": "code",
+      "prompt": "Crie você mesmo a ficha `cartao`, com os campos `dono` (texto `Rita`), `saldo` (número `40`), `passagem` (número `5`) e `ativo` (valor `true`). Depois, mostre as quatro linhas. As viagens possíveis são o saldo dividido pela passagem.\n\n**Saída esperada**\n\n```plaintext\nCartão de Rita\nSaldo: 40\nViagens possíveis: 8\nAtivo: true\n```",
+      "starter": "// crie a ficha cartao aqui\n\n// mostre as quatro linhas aqui\n",
+      "solution": "const cartao = { dono: 'Rita', saldo: 40, passagem: 5, ativo: true };\n\nconsole.log('Cartão de ' + cartao.dono);\nconsole.log('Saldo:', cartao.saldo);\nconsole.log('Viagens possíveis:', cartao.saldo / cartao.passagem);\nconsole.log('Ativo:', cartao.ativo);\n",
+      "expected_output": "Cartão de Rita\nSaldo: 40\nViagens possíveis: 8\nAtivo: true",
+      "explanation": "Cada campo tem nome, dois-pontos e valor, separados por vírgula. O texto vai entre aspas; o número e o `true`, sem aspas. A conta `cartao.saldo / cartao.passagem` vira `40 / 5`, que dá `8`."
+    },
+    {
+      "id": "fichas-bem-escritas",
+      "type": "multiple",
+      "prompt": "Marque as fichas escritas do jeito certo.",
+      "options": {
+        "a": "`{ nome = 'Lia', idade = 15 }`",
+        "b": "`{ nome: 'Lia', idade: 15 }`",
+        "c": "`{ nome: 'Lia' idade: 15 }`",
+        "d": "`{ preco: 12.5, ativo: true }`",
+        "e": "`{ preco: 12,5, ativo: true }`"
+      },
+      "answer": ["b", "d"],
+      "explanation": "Cada campo usa dois-pontos entre o nome e o valor, e a vírgula separa um campo do outro. A ficha com `=` usa o sinal errado, a ficha sem vírgula junta dois campos, e `12,5` usa vírgula no número: o certo é `12.5`, com ponto."
+    },
+    {
+      "id": "campo-que-nao-existe",
+      "type": "fill",
+      "prompt": "A ficha abaixo não tem o campo `valor`.\n\n```javascript\nconst pao = { nome: 'Pão de forma', preco: 8 };\nconsole.log(pao.valor);\n```\n\nO `console.log` mostra ___ na tela.",
+      "answer": [["undefined"]],
+      "explanation": "O campo que não existe não tem valor, e o Node mostra `undefined`, que quer dizer \"nada aqui\". O script não para com erro. Quando aparecer `undefined` onde devia ter um valor, confira o nome do campo: aqui o certo é `pao.preco`."
+    }
+  ]
+}

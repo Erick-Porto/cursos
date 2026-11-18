@@ -1,0 +1,69 @@
+{
+  "title": "E, ou, não (&&, || e !)",
+  "lesson": "e10-decisoes",
+  "recap": "**`&&`** (e) dá `true` quando as duas perguntas dão `true`. **`||`** (ou) pede pelo menos uma. **`!`** (não) inverte a resposta. É a portaria do cinema: idade e documento; estudante ou idoso.\n\n```javascript\nconst pagou = true;\nconst temFicha = false;\nconsole.log(pagou && temFicha); // false\nconsole.log(pagou || temFicha); // true\nconsole.log(!pagou);            // false\n```",
+  "exercises": [
+    {
+      "id": "catraca-do-onibus",
+      "type": "code",
+      "prompt": "Mostre três respostas sobre uma passageira, cada uma com um operador:\n\n- **Viaja de graça:** tem até 5 anos **ou** tem 65 anos ou mais\n- **Passa com o cartão:** tem cartão **e** o saldo é de 500 centavos ou mais\n- **Precisa fazer o cartão:** **não** tem cartão\n\n**Saída esperada**\n\n```plaintext\nViaja de graça: true\nPassa com o cartão: false\nPrecisa fazer o cartão: true\n```",
+      "starter": "const idade = 67;\nconst temCartao = false;\nconst saldoCentavos = 800;\n\n// mostre as três respostas aqui\n",
+      "solution": "const idade = 67;\nconst temCartao = false;\nconst saldoCentavos = 800;\n\nconsole.log('Viaja de graça:', idade <= 5 || idade >= 65);\nconsole.log('Passa com o cartão:', temCartao && saldoCentavos >= 500);\nconsole.log('Precisa fazer o cartão:', !temCartao);\n",
+      "expected_output": "Viaja de graça: true\nPassa com o cartão: false\nPrecisa fazer o cartão: true",
+      "explanation": "No `||`, uma resposta `true` já resolve, e `67 >= 65` dá `true`. No `&&`, `temCartao` já é `false`, e o saldo nem é conferido. O `!` inverte o `false` de `temCartao` para `true`."
+    },
+    {
+      "id": "natacao-infantil",
+      "type": "code",
+      "prompt": "A natação infantil aceita crianças **de 6 a 12 anos**, contando as duas idades. Escreva a função `conferirIdade(idade)`, que mostra uma das duas mensagens da saída. Faça uma pergunta só no `if`, juntando as duas comparações com `&&`.\n\n**Saída esperada**\n\n```plaintext\n5 anos: fora da turma\n6 anos: pode entrar\n12 anos: pode entrar\n13 anos: fora da turma\n```",
+      "starter": "// escreva a função conferirIdade aqui\n\nconferirIdade(5);\nconferirIdade(6);\nconferirIdade(12);\nconferirIdade(13);\n",
+      "solution": "function conferirIdade(idade) {\n  if (idade >= 6 && idade <= 12) {\n    console.log(`${idade} anos: pode entrar`);\n  } else {\n    console.log(`${idade} anos: fora da turma`);\n  }\n}\n\nconferirIdade(5);\nconferirIdade(6);\nconferirIdade(12);\nconferirIdade(13);\n",
+      "expected_output": "5 anos: fora da turma\n6 anos: pode entrar\n12 anos: pode entrar\n13 anos: fora da turma",
+      "explanation": "A idade precisa passar nas duas comparações ao mesmo tempo, por isso o `&&`. O `>=` e o `<=` incluem as bordas, 6 e 12. Com `||`, toda idade passaria em pelo menos uma das perguntas."
+    },
+    {
+      "id": "padaria-aberta",
+      "type": "code",
+      "prompt": "A padaria **não abre** na segunda nem em feriado. Nos outros dias, ela funciona das 6h até antes das 20h. Escreva a função `padariaAberta(dia, hora)`, que devolve `true` ou `false`:\n\n- use `||` para saber se o dia é de porta fechada\n- use `&&` para saber se a hora está dentro do horário\n- no `return`, use `!` para inverter a resposta do dia e `&&` para juntar com a do horário\n\nA função `mostrar` já vem pronta.\n\n**Saída esperada**\n\n```plaintext\nterça às 7h: aberta\nsegunda às 7h: fechada\nferiado às 10h: fechada\nsábado às 20h: fechada\ndomingo às 19h: aberta\n```",
+      "starter": "// escreva a função padariaAberta aqui\n\nfunction mostrar(dia, hora) {\n  if (padariaAberta(dia, hora)) {\n    console.log(`${dia} às ${hora}h: aberta`);\n  } else {\n    console.log(`${dia} às ${hora}h: fechada`);\n  }\n}\n\nmostrar('terça', 7);\nmostrar('segunda', 7);\nmostrar('feriado', 10);\nmostrar('sábado', 20);\nmostrar('domingo', 19);\n",
+      "solution": "function padariaAberta(dia, hora) {\n  const diaFechado = dia === 'segunda' || dia === 'feriado';\n  const noHorario = hora >= 6 && hora < 20;\n  return !diaFechado && noHorario;\n}\n\nfunction mostrar(dia, hora) {\n  if (padariaAberta(dia, hora)) {\n    console.log(`${dia} às ${hora}h: aberta`);\n  } else {\n    console.log(`${dia} às ${hora}h: fechada`);\n  }\n}\n\nmostrar('terça', 7);\nmostrar('segunda', 7);\nmostrar('feriado', 10);\nmostrar('sábado', 20);\nmostrar('domingo', 19);\n",
+      "expected_output": "terça às 7h: aberta\nsegunda às 7h: fechada\nferiado às 10h: fechada\nsábado às 20h: fechada\ndomingo às 19h: aberta",
+      "explanation": "O `||` pede a comparação inteira dos dois lados: `dia === 'segunda' || dia === 'feriado'`. Com `|| 'feriado'` sozinho, a resposta nunca seria `false`. O `hora < 20` deixa as 20h de fora, por isso o sábado aparece fechado."
+    },
+    {
+      "id": "respostas-da-secretaria",
+      "type": "multiple",
+      "prompt": "Com os valores abaixo, quais expressões dão `true`?\n\n```javascript\nconst nota = 8;\nconst faltas = 2;\nconst bolsista = false;\n```",
+      "options": {
+        "a": "`nota >= 7 && faltas <= 3`",
+        "b": "`bolsista || nota < 5`",
+        "c": "`!bolsista`",
+        "d": "`nota >= 9 || faltas === 2`",
+        "e": "`bolsista && nota >= 7`"
+      },
+      "answer": [
+        "a",
+        "c",
+        "d"
+      ],
+      "explanation": "Em **a**, as duas partes dão `true`. Em **c**, o `!` inverte o `false`. Em **d**, o `||` precisa de uma só, e `faltas === 2` dá `true`. A **e** engana porque a nota é boa, mas o `&&` pede as duas, e `bolsista` é `false`. Na **b**, nenhuma parte dá `true`."
+    },
+    {
+      "id": "tres-operadores",
+      "type": "fill",
+      "prompt": "Complete cada linha com o operador certo: `&&`, `||` ou `!`.\n\n```javascript\n// a carteirinha pede 14 anos ou mais e a foto\nconst liberada = idade >= 14 ___ trouxeFoto;\n\n// tem folga no sábado e no domingo\nconst folga = dia === 'sábado' ___ dia === 'domingo';\n\n// a foto está faltando\nconst faltaFoto = ___trouxeFoto;\n```",
+      "answer": [
+        [
+          "&&"
+        ],
+        [
+          "||"
+        ],
+        [
+          "!"
+        ]
+      ],
+      "explanation": "A carteirinha pede as duas coisas, então vai `&&`. O dia não pode ser sábado e domingo ao mesmo tempo: com `&&`, a folga nunca daria `true`, por isso vai `||`. O `!` inverte a resposta de `trouxeFoto`."
+    }
+  ]
+}

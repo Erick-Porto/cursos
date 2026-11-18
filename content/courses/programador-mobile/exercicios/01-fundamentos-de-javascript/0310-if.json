@@ -1,0 +1,68 @@
+{
+  "title": "if",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "O **`if`** é uma bifurcação na estrada: as chaves só rodam se a comparação responder `true`. Com `false`, o Node pula as chaves.\n\n```javascript\nconst idade = 15;\nlet aviso = 'Pode entrar';\nif (idade < 18) {\n  aviso = 'Só com responsável';\n}\nconsole.log(aviso);\n```",
+  "exercises": [
+    {
+      "id": "bateria-do-celular",
+      "type": "code",
+      "prompt": "O celular avisa quando a bateria está fraca. Se `bateria` for **menor que 20**, mostre o aviso. Depois do `if`, mostre sempre a carga da bateria.\n\n**Saída esperada**\n\n```plaintext\nBateria fraca: ligue o carregador\nBateria: 15\n```",
+      "starter": "const bateria = 15;\n\n// escreva o if aqui\n\n// mostre a carga da bateria aqui\n",
+      "solution": "const bateria = 15;\n\nif (bateria < 20) {\n  console.log('Bateria fraca: ligue o carregador');\n}\n\nconsole.log('Bateria:', bateria);\n",
+      "expected_output": "Bateria fraca: ligue o carregador\nBateria: 15",
+      "explanation": "A pergunta `15 < 20` responde `true`, então as chaves rodam. A última linha fica fora das chaves e roda sempre. Com `bateria` igual a 50, só ela apareceria."
+    },
+    {
+      "id": "pao-no-atacado",
+      "type": "code",
+      "prompt": "Na padaria, cada pão custa 2 reais, mas quem leva **10 pães ou mais** paga 1 real por pão. Use um `if` para trocar o preço e mostre o preço do pão e o total.\n\n**Saída esperada**\n\n```plaintext\nPreço do pão: 1\nTotal: 12\n```",
+      "starter": "const paes = 12;\nlet precoDoPao = 2;\n\n// escreva o if aqui\n\n// mostre o preço do pão e o total aqui\n",
+      "solution": "const paes = 12;\nlet precoDoPao = 2;\n\nif (paes >= 10) {\n  precoDoPao = 1;\n}\n\nconsole.log('Preço do pão:', precoDoPao);\nconsole.log('Total:', paes * precoDoPao);\n",
+      "expected_output": "Preço do pão: 1\nTotal: 12",
+      "explanation": "A `let` é a caixa que deixa trocar o conteúdo. Como `12 >= 10` responde `true`, o preço passa para 1. O total é calculado depois do `if`, com o preço novo: `12 * 1`."
+    },
+    {
+      "id": "entrega-da-padaria",
+      "type": "code",
+      "prompt": "A entrega da padaria custa 10 reais. Escreva **dois** `if`, nesta ordem:\n\n- Se o bairro for `Centro`, a entrega passa a custar 5 reais.\n- Se a compra for de **40 reais ou mais**, a entrega fica grátis (0) e o brinde passa a ser `biscoito`.\n\nDepois, mostre a entrega, o brinde e o total da compra somado à entrega.\n\n**Saída esperada**\n\n```plaintext\nEntrega: 0\nBrinde: biscoito\nTotal: 45\n```",
+      "starter": "const compra = 45;\nconst bairro = 'Centro';\nlet entrega = 10;\nlet brinde = 'nenhum';\n\n// escreva os dois if aqui\n\n// mostre a entrega, o brinde e o total aqui\n",
+      "solution": "const compra = 45;\nconst bairro = 'Centro';\nlet entrega = 10;\nlet brinde = 'nenhum';\n\nif (bairro === 'Centro') {\n  entrega = 5;\n}\n\nif (compra >= 40) {\n  entrega = 0;\n  brinde = 'biscoito';\n}\n\nconsole.log('Entrega:', entrega);\nconsole.log('Brinde:', brinde);\nconsole.log('Total:', compra + entrega);\n",
+      "expected_output": "Entrega: 0\nBrinde: biscoito\nTotal: 45",
+      "explanation": "O Node confere um `if` de cada vez, de cima para baixo. O primeiro troca a entrega para 5, e o segundo troca de novo, para 0. Com os dois `if` em ordem contrária, a entrega terminaria em 5."
+    },
+    {
+      "id": "cupom-que-nao-veio",
+      "type": "single",
+      "prompt": "O arquivo `caixa.js` tem estas linhas:\n\n```javascript\nconst cupom = process.argv[2];\nlet desconto = 0;\n\nif (cupom) {\n  desconto = 10;\n}\n\nconsole.log('Desconto:', desconto);\n```\n\nO que aparece com o comando `node caixa.js`, sem nenhuma palavra depois do nome do arquivo?",
+      "options": {
+        "a": "`Desconto: 10`",
+        "b": "`Desconto: undefined`",
+        "c": "`Desconto: 0`",
+        "d": "Um erro: `cupom` não existe"
+      },
+      "answer": "c",
+      "explanation": "Sem argumento, `cupom` vale `undefined`, e no `if` isso conta como \"não\". O Node pula as chaves, e `desconto` continua com 0. O `undefined` fica na caixa `cupom`, e não na caixa `desconto`, que é a que aparece na tela."
+    },
+    {
+      "id": "caminho-do-if",
+      "type": "drag",
+      "prompt": "Arraste cada passo para a ordem em que o Node roda este código.\n\n```javascript\nconst nota = 5;\nlet resultado = 'Recuperação';\n\nif (nota >= 7) {\n  resultado = 'Aprovado';\n}\n\nconsole.log(resultado);\n```",
+      "layout": "flow",
+      "slots": [
+        { "key": "passo1", "label": "Primeiro" },
+        { "key": "passo2", "label": "Depois" },
+        { "key": "passo3", "label": "Em seguida" },
+        { "key": "passo4", "label": "Por fim" }
+      ],
+      "items": [
+        { "key": "a", "text": "Responde `false` para `5 >= 7` e pula as chaves" },
+        { "key": "b", "text": "Cria a caixa `nota` com 5" },
+        { "key": "c", "text": "Mostra `Recuperação` na tela" },
+        { "key": "d", "text": "Cria a caixa `resultado` com `Recuperação`" },
+        { "key": "e", "text": "Troca `resultado` para `Aprovado`" }
+      ],
+      "answer": { "passo1": "b", "passo2": "d", "passo3": "a", "passo4": "c" },
+      "explanation": "O Node faz uma linha de cada vez. Como `5 >= 7` responde `false`, as chaves não rodam. Por isso `resultado` nunca vira `Aprovado`, e a tela mostra `Recuperação`."
+    }
+  ]
+}

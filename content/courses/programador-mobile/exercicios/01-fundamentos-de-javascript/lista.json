@@ -1,0 +1,8 @@
+{
+  "title": "Lista de exercícios: do ambiente às repetições",
+  "summary": "Cinco exercícios por tema, das aulas 1 a 5 do Ambiente JavaScript às aulas 1 a 6 da Linguagem JavaScript.",
+  "intro": "Cada tema tem **5 exercícios**. Os de **código** você escreve e roda no [OneCompiler](https://onecompiler.com/nodejs), ou em outro compilador on-line de Node.js, e entrega aqui o código e a saída. Os de **teoria** são corrigidos na hora, com até 3 tentativas.",
+  "harnesses": {
+    "mini-jest": "// Corretor de bolso: faz o papel do Jest aqui no compilador on-line.\n// Deixe estas linhas como estão e escreva o seu código depois delas.\nfunction test(nome, funcao) {\n  try {\n    funcao();\n    console.log(`√ ${nome}`);\n  } catch (erro) {\n    console.log(`× ${nome}`);\n    console.log(`  ${erro.message}`);\n  }\n}\ntest.each = (casos) => (nome, funcao) => {\n  for (const caso of casos) {\n    let i = 0;\n    const titulo = nome.replace(/%[dijs]/g, (marca) => {\n      const valor = caso[i++];\n      return marca === '%j' ? JSON.stringify(valor) : String(valor);\n    });\n    test(titulo, () => funcao(...caso));\n  }\n};\nfunction expect(recebido) {\n  const texto = (valor) => JSON.stringify(valor);\n  return {\n    toBe(esperado) {\n      if (recebido !== esperado) throw new Error(`Expected: ${texto(esperado)} | Received: ${texto(recebido)}`);\n    },\n    toEqual(esperado) {\n      if (texto(recebido) !== texto(esperado)) throw new Error(`Expected: ${texto(esperado)} | Received: ${texto(recebido)}`);\n    },\n  };\n}"
+  }
+}

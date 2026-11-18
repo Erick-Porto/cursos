@@ -351,3 +351,104 @@ export interface GrantAttemptsResult {
   used: number
   limit: number
 }
+
+// ---- Listas de exercícios (migration 0006) ----
+
+export type ExerciseType = 'code' | QuestionType | 'drag'
+export type ExerciseStatus = 'answered' | 'submitted' | 'returned' | 'approved'
+
+export interface ExerciseList {
+  id: string
+  course_id: string
+  slug: string
+  title: string
+  summary: string | null
+  intro_md: string
+  position: number
+  is_published: boolean
+}
+
+export interface ExerciseTopic {
+  id: string
+  list_id: string
+  slug: string
+  title: string
+  module_title: string | null
+  lesson_slug: string | null
+  lesson_title: string | null
+  recap_md: string | null
+  position: number
+}
+
+export interface DragSlot {
+  key: string
+  label: string
+}
+
+export interface DragItem {
+  key: string
+  text: string
+}
+
+export interface DragOptions {
+  layout: 'list' | 'flow'
+  slots: DragSlot[]
+  items: DragItem[]
+}
+
+export interface Exercise {
+  id: string
+  list_id: string
+  topic_id: string
+  key: string
+  position: number
+  type: ExerciseType
+  prompt_md: string
+  starter_code: string | null
+  options: QuestionOption[] | DragOptions | null
+}
+
+/** O que o aluno pode ver do gabarito: teoria encerrada ou código aprovado. */
+export interface ExerciseReveal {
+  answer?: unknown
+  explanation_md?: string | null
+  solution_code?: string | null
+  expected_output?: string | null
+}
+
+/** Resposta de um exercício: em drag, o objeto { lugar: peça }. */
+export type ExerciseAnswerValue = AnswerValue | Record<string, string>
+
+export interface ExerciseAnswer {
+  id: string
+  user_id: string
+  exercise_id: string
+  list_id: string
+  course_id: string
+  code: string | null
+  output: string | null
+  answer: ExerciseAnswerValue
+  correct: boolean | null
+  tries: number
+  status: ExerciseStatus
+  feedback: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
+  submitted_at: string
+  updated_at: string
+  reveal?: ExerciseReveal | null
+}
+
+/** Gabarito de um exercício (só staff lê). */
+export interface ExerciseKey {
+  exercise_id: string
+  answer: unknown
+  explanation_md: string | null
+  solution_code: string | null
+  expected_output: string | null
+}
+
+export interface ExerciseSubmitResult {
+  answer: ExerciseAnswer
+  reveal: ExerciseReveal | null
+}

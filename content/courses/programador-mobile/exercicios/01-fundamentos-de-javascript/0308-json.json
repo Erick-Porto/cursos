@@ -1,0 +1,69 @@
+{
+  "title": "JSON.parse e JSON.stringify",
+  "lesson": "e02a-node-na-pratica",
+  "recap": "**JSON** é um jeito de escrever dados como texto. O **`JSON.stringify`** transforma objeto em texto, e o **`JSON.parse`** transforma texto em objeto.\n\n```javascript\nconst texto = '{\"nome\":\"Lia\"}';\nconst ficha = JSON.parse(texto);\nconsole.log(ficha.nome); // Lia\n```",
+  "exercises": [
+    {
+      "id": "contato-do-celular",
+      "type": "code",
+      "prompt": "A agenda do celular guarda um contato em JSON, dentro da constante `texto`. Transforme o texto em objeto com `JSON.parse` e mostre os três campos.\n\n**Saída esperada**\n\n```plaintext\nNome: Carla\nTelefone: 98888-1234\nFavorito: true\n```",
+      "starter": "const texto = '{\"nome\":\"Carla\",\"telefone\":\"98888-1234\",\"favorito\":true}';\n\n// transforme o texto em objeto e mostre os três campos aqui\n",
+      "solution": "const texto = '{\"nome\":\"Carla\",\"telefone\":\"98888-1234\",\"favorito\":true}';\n\nconst contato = JSON.parse(texto);\n\nconsole.log('Nome:', contato.nome);\nconsole.log('Telefone:', contato.telefone);\nconsole.log('Favorito:', contato.favorito);\n",
+      "expected_output": "Nome: Carla\nTelefone: 98888-1234\nFavorito: true",
+      "explanation": "Enquanto é texto, não dá para ler os campos. O `JSON.parse` transforma o texto em objeto, e aí o ponto funciona: `contato.nome` vale `Carla`."
+    },
+    {
+      "id": "comanda-em-texto",
+      "type": "code",
+      "prompt": "A lanchonete precisa enviar a comanda para a cozinha como texto. Transforme o objeto `comanda` em texto com `JSON.stringify` e mostre o resultado de dois jeitos: primeiro numa linha só e depois organizado em linhas, com `JSON.stringify(comanda, null, 2)`.\n\n**Saída esperada**\n\n```plaintext\n{\"mesa\":7,\"prato\":\"Feijoada\",\"bebida\":\"Suco\"}\n{\n  \"mesa\": 7,\n  \"prato\": \"Feijoada\",\n  \"bebida\": \"Suco\"\n}\n```",
+      "starter": "const comanda = { mesa: 7, prato: 'Feijoada', bebida: 'Suco' };\n\n// mostre a comanda em texto, dos dois jeitos, aqui\n",
+      "solution": "const comanda = { mesa: 7, prato: 'Feijoada', bebida: 'Suco' };\n\nconst emUmaLinha = JSON.stringify(comanda);\nconst organizado = JSON.stringify(comanda, null, 2);\n\nconsole.log(emUmaLinha);\nconsole.log(organizado);\n",
+      "expected_output": "{\"mesa\":7,\"prato\":\"Feijoada\",\"bebida\":\"Suco\"}\n{\n  \"mesa\": 7,\n  \"prato\": \"Feijoada\",\n  \"bebida\": \"Suco\"\n}",
+      "explanation": "O `JSON.stringify` transforma o objeto em texto e coloca aspas duplas nos nomes dos campos. O `null, 2` organiza o texto em linhas, com recuo de dois espaços."
+    },
+    {
+      "id": "boletim-em-json",
+      "type": "code",
+      "prompt": "O boletim chegou da secretaria em JSON, com uma lista de notas dentro do objeto. Transforme o texto em objeto e mostre a escola, a quantidade de notas e a média. A média é a soma das três notas dividida pela quantidade. Na última linha, transforme **só a lista de notas** de volta em texto.\n\n**Saída esperada**\n\n```plaintext\nEscola: Monte Azul\nQuantidade de notas: 3\nMédia: 8\nNotas em texto: [7,8,9]\n```",
+      "starter": "const texto = '{\"escola\":\"Monte Azul\",\"notas\":[7,8,9]}';\n\n// transforme o texto em objeto e mostre as quatro linhas aqui\n",
+      "solution": "const texto = '{\"escola\":\"Monte Azul\",\"notas\":[7,8,9]}';\n\nconst boletim = JSON.parse(texto);\nconst notas = boletim.notas;\nconst soma = notas[0] + notas[1] + notas[2];\n\nconsole.log('Escola:', boletim.escola);\nconsole.log('Quantidade de notas:', notas.length);\nconsole.log('Média:', soma / notas.length);\nconsole.log('Notas em texto:', JSON.stringify(notas));\n",
+      "expected_output": "Escola: Monte Azul\nQuantidade de notas: 3\nMédia: 8\nNotas em texto: [7,8,9]",
+      "explanation": "Depois do `JSON.parse`, `boletim.notas` é uma lista de verdade: tem `.length` e posições. A soma das notas é 24, e `24 / 3` dá `8`. O `JSON.stringify` faz o caminho de volta e transforma a lista em texto."
+    },
+    {
+      "id": "json-valido",
+      "type": "multiple",
+      "prompt": "Marque os textos que são JSON válido.",
+      "options": {
+        "a": "`{\"cidade\": \"Natal\"}`",
+        "b": "`{'cidade': 'Natal'}`",
+        "c": "`{\"preco\": 12,5}`",
+        "d": "`{\"pao\": 6, \"leite\": 2,}`",
+        "e": "`{\"preco\": 12.5, \"ativo\": true}`"
+      },
+      "answer": ["a", "e"],
+      "explanation": "O JSON só aceita aspas duplas, número com ponto e nenhuma vírgula sobrando no fim. Por isso os textos com aspas simples, com `12,5` e com a vírgula depois do `2` fazem o `JSON.parse` falhar com `SyntaxError`."
+    },
+    {
+      "id": "do-arquivo-ao-codigo",
+      "type": "drag",
+      "prompt": "O cardápio de um restaurante está no arquivo `cardapio.json`. Arraste cada etapa para a ordem certa, do disco até o código usar os dados.",
+      "layout": "flow",
+      "slots": [
+        { "key": "inicio", "label": "Início" },
+        { "key": "ler", "label": "Ler" },
+        { "key": "transformar", "label": "Transformar" },
+        { "key": "usar", "label": "Usar" }
+      ],
+      "items": [
+        { "key": "a", "text": "`JSON.parse` transforma o texto em objeto" },
+        { "key": "b", "text": "`cardapio.pratos` lê um campo do objeto" },
+        { "key": "c", "text": "O arquivo `cardapio.json` está no disco" },
+        { "key": "d", "text": "`fs.readFileSync` tira o texto do arquivo" },
+        { "key": "e", "text": "`JSON.stringify` transforma o objeto em texto" }
+      ],
+      "answer": { "inicio": "c", "ler": "d", "transformar": "a", "usar": "b" },
+      "explanation": "Para ler, o caminho é arquivo, texto e objeto: o `fs.readFileSync` tira o texto do arquivo e o `JSON.parse` transforma esse texto em objeto. O `JSON.stringify` fica de fora porque faz o caminho contrário, o de gravar."
+    }
+  ]
+}

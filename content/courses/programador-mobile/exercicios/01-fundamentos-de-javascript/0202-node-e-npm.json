@@ -1,0 +1,73 @@
+{
+  "title": "Node.js, versão LTS e npm",
+  "lesson": "e01b-ambiente-de-desenvolvimento",
+  "theory_only": true,
+  "theory_reason": "Instalar o Node e conferir as versões acontece no terminal do seu computador, fora do compilador on-line.",
+  "recap": "O **Node.js** roda JavaScript no computador. Instale sempre a versão **LTS**, de primeiro número par. O **npm** vem junto e baixa **pacotes**: código pronto, como a farinha comprada em vez de plantar o trigo.\n\n```bash\nnode -v   # v24.11.1, por exemplo\nnpm -v    # 11.6.2, por exemplo\n```",
+  "exercises": [
+    {
+      "id": "versao-de-numero-impar",
+      "type": "single",
+      "prompt": "Depois de instalar o Node, você rodou `node -v` e apareceu `v25.1.0`. O que você faz?",
+      "options": {
+        "a": "Desinstala essa versão e instala a LTS, de número par",
+        "b": "Mantém essa versão, porque o número maior é o melhor",
+        "c": "Roda `npm -v`, porque o npm corrige a versão do Node",
+        "d": "Fecha e abre o terminal, até aparecer um número par"
+      },
+      "answer": "a",
+      "explanation": "O primeiro número ímpar, 25, indica a versão Current. Desinstale e instale a LTS, que tem número par e é a que as ferramentas do curso esperam. Número maior não quer dizer versão mais adequada."
+    },
+    {
+      "id": "o-que-e-lts",
+      "type": "multiple",
+      "prompt": "O que é verdade sobre a versão **LTS** do Node.js? Marque todas as certas.",
+      "options": {
+        "a": "Traz as novidades antes das outras versões",
+        "b": "Recebe correções por mais tempo",
+        "c": "Tem o primeiro número par, como 22 ou 24",
+        "d": "Muda rápido, com novidades a toda hora",
+        "e": "É a versão que as ferramentas do curso esperam"
+      },
+      "answer": ["b", "c", "e"],
+      "explanation": "LTS quer dizer *Long Term Support*, suporte de longo prazo. Ela recebe correções por mais tempo, tem número par e é a que o curso usa. Novidades primeiro e mudança rápida descrevem a versão Current."
+    },
+    {
+      "id": "npm-vem-com-o-node",
+      "type": "truefalse",
+      "prompt": "Ao instalar o Node.js, você já recebe o npm junto, sem outra instalação.",
+      "answer": true,
+      "explanation": "O npm vem junto com o Node.js. Para conferir, rode `npm -v`: se aparecer um número, ele está instalado."
+    },
+    {
+      "id": "motor-e-pacotes",
+      "type": "fill",
+      "prompt": "O Node.js usa o motor ___, o mesmo do Chrome. O npm baixa ___: código pronto, escrito por outras pessoas.",
+      "answer": [
+        ["V8"],
+        ["pacotes", "pacote"]
+      ],
+      "explanation": "O **V8** é o motor do Chrome e do Node.js. Os **pacotes** são como a farinha comprada pronta: você usa o que já existe, em vez de plantar o trigo. O npm é a ferramenta que baixa, e o pacote é o código baixado."
+    },
+    {
+      "id": "comandos-do-node",
+      "type": "drag",
+      "prompt": "Arraste cada comando para o que ele faz no terminal.",
+      "layout": "list",
+      "slots": [
+        { "key": "versao-node", "label": "Mostra a versão do Node instalada" },
+        { "key": "versao-npm", "label": "Mostra a versão do npm instalada" },
+        { "key": "entrar", "label": "Faz o terminal entender JavaScript" },
+        { "key": "sair", "label": "Volta ao terminal de sempre" }
+      ],
+      "items": [
+        { "key": "a", "text": "`.exit`" },
+        { "key": "b", "text": "`npm -v`" },
+        { "key": "c", "text": "`node`" },
+        { "key": "d", "text": "`node -v`" }
+      ],
+      "answer": { "versao-node": "d", "versao-npm": "b", "entrar": "c", "sair": "a" },
+      "explanation": "Com `-v`, cada programa responde com a sua versão. Sem o `-v`, o `node` não mostra versão nenhuma: ele muda o prompt para `>`, e o terminal passa a entender JavaScript. O `.exit` sai desse modo."
+    }
+  ]
+}

@@ -11,6 +11,13 @@ import type {
   AttemptSummary,
   ClassScript,
   Course,
+  Exercise,
+  ExerciseAnswer,
+  ExerciseAnswerValue,
+  ExerciseKey,
+  ExerciseList,
+  ExerciseSubmitResult,
+  ExerciseTopic,
   GrantAttemptsResult,
   Lesson,
   LessonProgress,
@@ -386,4 +393,71 @@ export async function gradeProject(args: {
       p_final: args.final,
     }),
   ) as ProjectGradeResult
+}
+
+// ---- Listas de exercícios (migration 0006) ----
+
+/** Listas de um curso, em ordem (vazio enquanto a migration não for aplicada). */
+export async function fetchExerciseLists(courseId: string): Promise<ExerciseList[]> {
+  return listOrEmpty<ExerciseList>(await supabase.from('exercise_lists').select('*').eq('course_id', courseId).order('position'))
+}
+
+export async function fetchExerciseList(courseId: string, slug: string): Promise<ExerciseList | null> {
+  return oneOrNull<ExerciseList>(await supabase.from('exercise_lists').select('*').eq('course_id', courseId).eq('slug', slug).maybeSingle())
+}
+
+/** Temas e enunciados de uma lista, em ordem. */
+export async function fetchExerciseContent(listId: string): Promise<{ topics: ExerciseTopic[]; exercises: Exercise[] }> {
+  const [topics, exercises] = await Promise.all([
+    fetchAllPages<ExerciseTopic>((from, to) =>
+      supabase.from('exercise_topics').select('*').eq('list_id', listId).order('position').range(from, to),
+    ),
+    fetchAllPages<Exercise>((from, to) =>
+      supabase.from('exercises').select('*').eq('list_id', listId).order('position').range(from, to),
+    ),
+  ])
+  return { topics, exercises }
+}
+
+/** Minhas respostas numa lista, com o que já posso ver do gabarito. */
+export async function fetchMyExerciseAnswers(listId: string): Promise<ExerciseAnswer[]> {
+  return (unwrap(await supabase.rpc('my_exercise_answers', { p_list_id: listId })) as ExerciseAnswer[] | null) ?? []
+}
+
+export async function submitExercise(args: {
+  exerciseId: string
+  answer?: ExerciseAnswerValue
+  code?: string
+  output?: string
+}): Promise<ExerciseSubmitResult> {
+  return unwrap(
+    await supabase.rpc('submit_exercise', {
+      p_exercise_id: args.exerciseId,
+      p_answer: args.answer ?? null,
+      p_code: args.code ?? null,
+      p_output: args.output ?? null,
+    }),
+  ) as ExerciseSubmitResult
+}
+
+/** Respostas de todos os alunos numa lista (a RLS só libera para staff). */
+export async function fetchExerciseAnswersForStaff(listId: string): Promise<ExerciseAnswer[]> {
+  return fetchAllPages<ExerciseAnswer>((from, to) =>
+    supabase.from('exercise_answers').select('*').eq('list_id', listId).order('id').range(from, to),
+  )
+}
+
+/** Gabarito dos exercícios de uma lista (só staff lê). */
+export async function fetchExerciseKeys(listId: string): Promise<ExerciseKey[]> {
+  const rows = await fetchAllPages<ExerciseKey & { exercises?: unknown }>((from, to) =>
+    supabase.from('exercise_keys').select('*, exercises!inner(list_id)').eq('exercises.list_id', listId).order('exercise_id').range(from, to),
+  )
+  return rows.map(({ exercises: _list, ...key }) => key)
+}
+
+export async function reviewExercise(answerId: string, approved: boolean, feedback: string): Promise<ExerciseAnswer> {
+  const res = unwrap(
+    await supabase.rpc('review_exercise', { p_answer_id: answerId, p_approved: approved, p_feedback: feedback || null }),
+  ) as { answer: ExerciseAnswer }
+  return res.answer
 }
