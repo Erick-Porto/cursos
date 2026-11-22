@@ -110,6 +110,36 @@ Em português: "esse arquivo não tem na vitrine nada com esse nome". Um nome co
 
 ---
 
+## :icon[notebook-pen] Exercícios: Export com nome
+
+:::example Exercícios
+1. O `cantina.js` de uma escola tem estas linhas. O `pedido.js` pode importar quais nomes?
+
+   ```javascript
+   const TAXA = 2;
+   export const LANCHES = ['coxinha', 'pão de queijo'];
+   export function preco(lanche) {
+     // a conta do preço
+   }
+   function desconto(valor) {
+     // a conta do desconto
+   }
+   ```
+
+2. Complete o `import` de `preco` e `LANCHES` no `pedido.js`, na mesma pasta: `import ___ from ___;`
+3. Ache o erro: `import { preco } from './cantina';`
+4. O que o Node diz com `import { Preco } from './cantina.js';`?
+:::
+
+:::tip Respostas
+1. `LANCHES` e `preco`. A `TAXA` e o `desconto` ficam no estoque
+2. `import { preco, LANCHES } from './cantina.js';`, com os nomes em qualquer ordem
+3. Falta o `.js` no fim: o Node para com `Cannot find module`
+4. `does not provide an export named 'Preco'`: o nome vai letra por letra, e a maiúscula conta
+:::
+
+---
+
 ## Export default
 
 Toda vitrine tem um produto em destaque, bem no meio. Quantos destaques cabem numa vitrine?
@@ -168,6 +198,30 @@ console.log(BEBIDAS.join(', ')); // suco, refrigerante, água
 - `import prato from './cardapio.js'` também funciona: `prato('sexta')` dá `Peixe frito`
 - Com chaves no destaque, `import { pratoDoDia }`, o Node para: `does not provide an export named 'pratoDoDia'`
 - Dois `export default` no mesmo arquivo: `SyntaxError: Duplicate export of 'default'`
+
+---
+
+## :icon[notebook-pen] Exercícios: Export default
+
+:::example Exercícios
+1. O `frete.js` tem `export default function calcularFrete(km)`. Qual destes funciona?
+
+   ```javascript
+   import { calcularFrete } from './frete.js';
+   import frete from './frete.js';
+   ```
+
+2. O `academia.js` tem o destaque `treinoDoDia` e `export const HORARIOS`. Complete: `import ___, { ___ } from './academia.js';`
+3. Outra forma: a `function calcularFrete(km)` sem `export`. Que linha, no fim do arquivo, faz dela o destaque?
+4. O `validar.js` tem uma função principal e duas de apoio. Qual vai de `export default`?
+:::
+
+:::tip Respostas
+1. O segundo: o destaque vem sem chaves, e o nome é seu. Com chaves, `does not provide an export named 'calcularFrete'`
+2. `treinoDoDia` (ou o nome que quiser) e `HORARIOS`
+3. `export default calcularFrete;`
+4. A principal: só cabe um destaque. As de apoio vão com nome
+:::
 
 ---
 
@@ -262,6 +316,39 @@ No E11, o `for...of` percorreu listas. Ele também percorre um **texto**: a cada
 | 4 | `')'` | não | `'11'` |
 | 5 | `' '` | não | `'11'` |
 | 6 | `'9'` | sim | `'119'` |
+
+---
+
+## :icon[notebook-pen] Exercícios: Validar os dados
+
+:::example Exercícios
+1. A vistoria do cupom de desconto. O que aparece?
+
+   ```javascript
+   function validarCupom(cupom) {
+     const erros = [];
+     if (cupom.length !== 6) {
+       erros.push('Use 6 caracteres');
+     }
+     if (!cupom.startsWith('BR')) {
+       erros.push('Comece com BR');
+     }
+     return erros;
+   }
+   console.log(validarCupom('promo'), validarCupom('BR2026'));
+   ```
+
+2. Com a segunda regra num `else if`, o que `validarCupom('promo')` devolveria?
+3. Escreva o `if` que mostra `Cupom aceito` quando `validarCupom(texto)` não acha problema
+4. Quantas voltas dá o `for (const letra of 'BR 10')`?
+:::
+
+:::tip Respostas
+1. `[ 'Use 6 caracteres', 'Comece com BR' ] []`: a lista vazia é o cupom certo
+2. `[ 'Use 6 caracteres' ]`: o `else if` só confere quando a primeira regra passa
+3. `if (validarCupom(texto).length === 0) { console.log('Cupom aceito'); }`
+4. 5: o espaço também é uma letra
+:::
 
 ---
 
@@ -410,6 +497,24 @@ Se a ficha ficasse copiada nos dois arquivos, o que aconteceria no dia em que o 
 
 ---
 
+## :icon[notebook-pen] Exercícios: Um assunto por arquivo
+
+:::example Exercícios
+1. Um app de lanchonete tem `cardapio.js`, `pedido.js` e `pagamento.js`. Onde mora o `calcularTroco(pago, total)`?
+2. A `formatarReais(centavos)` é usada pelo `pedido.js` e pelo `recibo.js`. Onde ela deve morar?
+3. No `src/telas/inicio.js`, complete o `import` da `saudacao`, que mora em `src/regras/textos.js`: `import { saudacao } from '___';`
+4. Você mudou a ficha `TAXAS` de arquivo. Como saber que nada quebrou?
+:::
+
+:::tip Respostas
+1. No `pagamento.js`: troco é assunto do pagamento
+2. Num terceiro arquivo, como um `dinheiro.js`, com `export`; os dois importam de lá
+3. `'../regras/textos.js'`: o `..` sobe de `telas` para `src`
+4. Rode os testes: os mesmos verdes de antes provam que nada mudou
+:::
+
+---
+
 ## :icon[milestone] Projeto 2 · Passo 2: grupos.js
 
 A ficha muda de casa. Crie `src/regras/grupos.js`, com o `export` na frente do `const`:
@@ -471,6 +576,24 @@ Quando algo foge do combinado, a página avisa num quadro vermelho, no topo, ou 
 | `mudou a lista que recebeu` | uma rasura (E15): o Desfazer deixa de funcionar |
 | `Ainda não existe` | falta a função, ou o nome difere |
 | `Ela tem export com nome; o combinado é export default` | o `validarContato` saiu sem o `default` |
+
+---
+
+## :icon[notebook-pen] Exercícios: A agenda na web
+
+:::example Exercícios
+1. Aberta com dois cliques no `index.html`, a página fica em "Carregando...". Como abrir?
+2. O `npm test` passa, mas a página mostra `Failed to fetch dynamically imported module`. O que procurar nos `import`?
+3. A página avisa `mudou a lista que recebeu`. Qual linha causou: `lista.filter(...)` ou `lista.push(novo)`?
+4. O painel diz `Ela tem export com nome; o combinado é export default`. O que muda na função?
+:::
+
+:::tip Respostas
+1. `npx serve .` na raiz do projeto e `http://localhost:3000/web/` no navegador
+2. Um caminho sem o `.js` no fim: o Jest acha o arquivo, o navegador não
+3. `lista.push(novo)`: ele rasura a lista que chegou
+4. O `default` depois do `export`: `export default function`
+:::
 
 ---
 

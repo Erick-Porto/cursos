@@ -110,6 +110,32 @@ Num app que cresceu sem tokens, cada tela escolheu o seu cinza. Com tokens, toda
 
 ---
 
+## :icon[notebook-pen] Exercícios: Tokens
+
+:::example Exercícios
+1. O que aparece?
+
+   ```javascript
+   const espaco = { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 };
+   const fonte = { pequena: 13, corpo: 16, titulo: 24 };
+   console.log(espaco.sm, fonte.titulo);
+   console.log(espaco.lg === fonte.titulo);
+   ```
+
+2. Num app de mercado, qual token vai no `gap: 24` entre as seções, no `fontSize: 13` do preço do quilo e no `borderRadius: 8` da foto?
+3. `preco: { fontSize: espaco.md }` funciona e dá 16. O que está errado?
+4. O app do ônibus chama a cor dos títulos de `azulEscuro`. Por que esse nome atrapalha no tema escuro?
+:::
+
+:::tip Respostas
+1. `8 24` e `true`: os dois valem 24, mas cada um tem o seu papel
+2. `espaco.lg`, `fonte.pequena` e `raio.sm`
+3. O token: `espaco` é para `gap` e `padding`. Para letra, `fonte.corpo`
+4. No escuro, o título fica claro, e o nome vira mentira. O nome do papel, `texto`, continua certo
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: os números viram tokens
 
 :::steps
@@ -176,6 +202,35 @@ Há ainda `sobreCor`, `sucesso`, `alerta` e `perigo`, usados pelo `Badge` e pelo
 |---|---|
 | `texto` da paleta escura, `#f4efe8` | 14,6 : 1 |
 | o preto padrão dos seus textos | 1,3 : 1: some |
+
+---
+
+## :icon[notebook-pen] Exercícios: Tema claro e escuro
+
+:::example Exercícios
+1. Um aviso tem contraste de 2 : 1; outro, de 7 : 1. Qual serve para texto?
+2. Um app com `"userInterfaceStyle": "automatic"` está aberto, e a pessoa liga o tema escuro do celular. O que o app faz?
+3. O que aparece?
+
+   ```javascript
+   const cores = {
+     claro: { fundo: '#f7f4ef', texto: '#1f1a14' },
+     escuro: { fundo: '#15120f', texto: '#f4efe8' },
+   };
+   const escuro = true;
+   const paleta = escuro ? cores.escuro : cores.claro;
+   console.log(paleta.fundo, paleta.texto);
+   ```
+
+4. E se a paleta `escuro` chamasse o texto de `letra`, no lugar de `texto`?
+:::
+
+:::tip Respostas
+1. O de 7 : 1: texto pede pelo menos 4,5 : 1
+2. Escurece junto: abre no tema do celular e acompanha quando ele muda
+3. `#15120f #f4efe8`: o ternário escolhe a paleta escura
+4. `#15120f undefined`: as duas paletas precisam dos mesmos nomes
+:::
 
 ---
 
@@ -252,22 +307,26 @@ Um aviso no quadro, e todos leem. Hoje, a sua Início passa a ler também.
 
 ---
 
-## Pratique
+## :icon[notebook-pen] Exercícios: Contexto
 
-:::example Desafio
-O celular está no tema escuro. A função `Inicio` começa assim:
+:::example Exercícios
+1. O que o terminal do Expo mostra, com o celular no tema escuro? E no claro?
 
-```jsx
-const { cores, escuro } = useTema();
-console.log(escuro, cores.texto, cores.primaria);
-```
+   ```jsx
+   const { cores, escuro } = useTema();
+   console.log(escuro, cores.texto, cores.primaria);
+   ```
 
-O que aparece no terminal do Expo? E se o celular estiver no tema claro?
+2. No app da academia, o `Placar`, o `Treino` e o `Rodape` chamam `useTema()`. O tema muda: quais desenham de novo?
+3. `const { cores } = useTema();` está acima do `export default function Placar()`. O que acontece?
+4. Uma peça fora do `TemaProvider` chama `useTema()`. O que acontece?
 :::
 
-:::tip Resposta
-1. No escuro: `LOG  true #f4efe8 #5eead4`. O `cores` é a paleta escura
-2. No claro: `LOG  false #1f1a14 #0f766e`. Os nomes são os mesmos; o quadro entrega a outra paleta
+:::tip Respostas
+1. No escuro, `LOG  true #f4efe8 #5eead4`; no claro, `LOG  false #1f1a14 #0f766e`: os mesmos nomes, outra paleta
+2. Os três, juntos: todos leem o mesmo quadro
+3. `Invalid hook call`: o `useTema()` vai dentro da função, na primeira linha
+4. Dá erro: `useTema só funciona dentro do TemaProvider`
 :::
 
 ---
@@ -329,6 +388,29 @@ No tema escuro, o item 1 é o mesmo. O item 2 traz `'#f4efe8'`, e o título fica
 ```
 
 O `estilos.nome` traz a letra 16 e o negrito; o objeto do fim troca a letra para 18. O negrito fica.
+
+---
+
+## :icon[notebook-pen] Exercícios: Cor no array
+
+:::example Exercícios
+1. Complete, com o estilo `estilos.nome` e a cor `cores.texto`: `<Text style={___}>Arroz</Text>`
+2. Onde vai cada uma, no `StyleSheet` ou no array: `gap: espaco.md`, `color: cores.textoSuave`, `fontSize: fonte.corpo`, `backgroundColor: cores.superficie`?
+3. O `estilos.preco` traz `fontSize: 16` e `fontWeight: 'bold'`. Como fica o preço?
+
+   ```jsx
+   <Text style={[estilos.preco, { fontSize: 20 }, { fontSize: 13 }]}>R$ 9,90</Text>
+   ```
+
+4. Com `style={estilos.preco, { color: cores.texto }}`, não há erro, mas o preço fica pequeno e sem negrito. Por quê?
+:::
+
+:::tip Respostas
+1. `[estilos.nome, { color: cores.texto }]`
+2. No `StyleSheet`, o `gap` e o `fontSize`: não mudam com o tema. No array, as duas cores
+3. Letra 13, em negrito: vale o último `fontSize`, e o negrito fica
+4. Sem os colchetes, a vírgula fica só com o último objeto, a cor
+:::
 
 ---
 
@@ -409,6 +491,32 @@ O botão mostra o tema **para onde vai**: a lua leva ao escuro; o sol, ao claro.
 | `true` | `'sunny-outline'`, o sol | Usar tema claro | o tema claro |
 
 `onPress={alternarTema}` vai **sem** parênteses: você entrega a função, e o botão chama no toque. Com `alternarTema()`, ela roda na hora de desenhar a tela, e o toque não faz nada.
+
+---
+
+## :icon[notebook-pen] Exercícios: O botão de tema
+
+:::example Exercícios
+1. No player de música, o que aparece?
+
+   ```javascript
+   const tocando = false;
+   const icone = tocando ? 'pause' : 'play';
+   const rotulo = tocando ? 'Pausar música' : 'Tocar música';
+   console.log(icone, rotulo);
+   ```
+
+2. Na lanterna, com `ligada` em `true`, o toque desliga. Complete: `rotulo={ligada ? ___ : ___}`
+3. `<BotaoIcone icone="heart-outline" onPress={curtir} />`: o que falta, e para quem?
+4. No app de receitas, `onPress={favoritar()}`: o toque não faz nada. Por quê?
+:::
+
+:::tip Respostas
+1. `play Tocar música`: parado, o botão mostra para onde vai
+2. `rotulo={ligada ? 'Desligar lanterna' : 'Ligar lanterna'}`
+3. O `rotulo`, como `rotulo="Curtir"`: o leitor de tela fala o rótulo, e o ícone sozinho não diz nada
+4. Com parênteses, `favoritar` roda ao desenhar a tela. O certo é `onPress={favoritar}`, sem parênteses
+:::
 
 ---
 

@@ -144,6 +144,41 @@ Resultado: a tela vermelha `Rendered more hooks than during the previous render`
 
 ---
 
+## :icon[notebook-pen] Exercícios: Os estados da tela
+
+:::example Exercícios
+1. No app do ônibus, que estado é: a rodinha girando; a lista sem horários; "Sem conexão"?
+2. Para ver 5 segundos de carregando, o que muda na `simulacao`?
+3. O que aparece no terminal?
+   ```javascript
+   function tela(carregando, erro, horarios) {
+     if (carregando) return 'Buscando os horários...';
+     if (erro) return 'Algo deu errado';
+     if (horarios.length === 0) return 'Nenhum ônibus agora';
+     return horarios.length + ' ônibus';
+   }
+   console.log(tela(true, 'Sem rede', []));
+   console.log(tela(false, null, ['701U', '8700']));
+   ```
+4. Com `falhas: 2`, o que aparece no primeiro toque em Tentar de novo?
+5. Ache o erro e conserte:
+   ```jsx
+   const { treinos, carregando } = useTreinos();
+   if (carregando) return <Carregando />;
+   const [dia, setDia] = useState('segunda');
+   ```
+:::
+
+:::tip Respostas
+1. Carregando, vazio e erro
+2. `atraso: 5000`, em milissegundos
+3. `Buscando os horários...` e `2 ônibus`: o carregando vem primeiro e ganha do erro
+4. Carregando e erro de novo: a segunda busca também falha; o toque seguinte traz a lista
+5. Hook depois do `return` dá tela vermelha quando os treinos chegam: o `useState` sobe para antes do `if`
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: carregando
 
 :::steps
@@ -260,6 +295,34 @@ accessibilityLabel={`${casa.nome}, ${casa.bairro}, ${casa.cidade}. ${casa.aceita
 
 ---
 
+## :icon[notebook-pen] Exercícios: Leitor de tela
+
+:::example Exercícios
+1. Com o leitor ligado, como ativar o item ouvido? E ir ao próximo?
+2. Num app de mercado, que prop recebe cada valor: `"button"`, `"Arroz 5 kg, R$ 27,90"` e `"Põe o arroz no carrinho"`?
+3. Que rótulo sai daqui?
+   ```javascript
+   const onibus = { linha: '701U', destino: 'Butantã', minutos: 4 };
+   const rotulo = `Linha ${onibus.linha}, para ${onibus.destino}. Chega em ${onibus.minutos} minutos`;
+   console.log(rotulo);
+   ```
+4. O leitor fala "Botão Pedir lanche, botão". O que sobra?
+5. O leitor lê `${item.nome}` ao pé da letra. Por quê?
+   ```jsx
+   accessibilityLabel={'${item.nome}, ${item.preco}'}
+   ```
+:::
+
+:::tip Respostas
+1. Dois toques rápidos; deslizar um dedo para a direita
+2. `accessibilityRole`, o papel; `accessibilityLabel`, o rótulo; `accessibilityHint`, a dica
+3. `Linha 701U, para Butantã. Chega em 4 minutos`
+4. O "Botão" do rótulo: o papel já diz. Rótulo: `"Pedir lanche"`
+5. Aspas simples não fazem template string: a lacuna pede crase
+:::
+
+---
+
 ## Área de toque
 
 Por que o interruptor de tecla larga é mais fácil de acertar no escuro?
@@ -298,6 +361,30 @@ link: { minHeight: 44, fontSize: fonte.corpo, fontWeight: 'bold', paddingVertica
 - **`minHeight`** (altura mínima): o link começa com 44 e cresce se o texto pedir, como um nome que quebra a linha
 - `height: 44` seria uma altura fixa: com a letra do celular aumentada, o texto ficaria cortado
 - `espaco.sm` é o token de 8: mais folga em cima e embaixo
+
+---
+
+## :icon[notebook-pen] Exercícios: Área de toque
+
+:::example Exercícios
+1. A Apple pede pelo menos 44 de área de toque. E o Android?
+2. Num app de academia, o botão "Marcar série" tem um texto de 20 de altura e `paddingVertical: 8`. Ele chega aos 44?
+3. O que aparece no terminal?
+   ```javascript
+   function altura(texto, padding) {
+     return texto + padding * 2;
+   }
+   console.log(altura(20, 4) >= 44, altura(20, 12) >= 44);
+   ```
+4. Complete para o item "Ver horários" começar com 44 e crescer com a letra grande do celular: `item: { ___: 44, paddingVertical: espaco.sm }`
+:::
+
+:::tip Respostas
+1. 48
+2. Não: 20 + 8 + 8 dá 36
+3. `false true`: 28 fica abaixo; 44 chega lá
+4. `minHeight`: com `height: 44`, a altura fica fixa, e o texto maior sai cortado
+:::
 
 ---
 
@@ -390,6 +477,33 @@ Quem decide é a largura, não o aparelho: o mesmo celular tem 393 em pé e 852 
 
 ---
 
+## :icon[notebook-pen] Exercícios: Tela larga
+
+:::example Exercícios
+1. Complete para pegar a altura da tela: `const { ___ } = useWindowDimensions();`
+2. Num app de receitas, `const fotoGrande = width >= 800;`. Quanto vale num tablet em pé, com 768?
+3. O que aparece no terminal?
+   ```javascript
+   function colunas(width) {
+     if (width >= 1000) return 3;
+     return width >= 600 ? 2 : 1;
+   }
+   console.log(colunas(390), colunas(600), colunas(1180));
+   ```
+4. A equipe queria 2 colunas com 700, e sai 1. Ache o erro: `const colunas = width > 700 ? 2 : 1;`
+5. O celular girou. Precisa chamar o `useWindowDimensions` de novo?
+:::
+
+:::tip Respostas
+1. `height`, o campo da altura
+2. `false`: 768 é menor que 800
+3. `1 2 3`
+4. O `>` deixa o 700 de fora; com `>=`, ele entra
+5. Não: a medida muda, e a tela se redesenha sozinha
+:::
+
+---
+
 ## Duas colunas
 
 Crachá novo, o porteiro acha que é outra pessoa. E se a lista inteira trocar de crachá?
@@ -429,6 +543,31 @@ Sem a `key`, a primeira vez que o celular deita dá tela vermelha: `Changing num
 | `metade: { flex: 1, maxWidth: '50%' }` | o `flex: 1` divide a linha; o `maxWidth` segura a casa que fica sozinha |
 
 Com 12 casas, 6 linhas de 2. A busca "campinas" acha 3: a terceira fica sozinha, com metade da largura.
+
+---
+
+## :icon[notebook-pen] Exercícios: Duas colunas
+
+:::example Exercícios
+1. Um app de mercado mostra 7 ofertas em 2 colunas. Quantas linhas? Como fica a última?
+2. Complete:
+   ```jsx
+   <FlatList
+     key={___}
+     numColumns={colunas}
+     columnWrapperStyle={colunas === 2 ? estilos.linha : ___}
+   />
+   ```
+3. Com `metade: { flex: 1 }`, a sétima oferta, sozinha na linha, estica até a borda. O que falta?
+4. Com 1 coluna, o `renderItem` põe o cartão numa `View` com `style={null}`. Muda alguma coisa na tela?
+:::
+
+:::tip Respostas
+1. 4 linhas: 3 com 2 ofertas e a última com 1, na metade da largura
+2. `colunas` e `null`: mudou a coluna, crachá novo; com uma coluna, nada de estilo de linha
+3. `maxWidth: '50%'`: só com o `flex: 1`, ela fica com a linha toda
+4. Não: `null` é "nada a mais", e o cartão ocupa a linha inteira, como antes
+:::
 
 ---
 

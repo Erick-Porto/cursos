@@ -111,6 +111,37 @@ No E10, o `lerValor` devolvia `null`, e quem chamava precisava lembrar de confer
 
 ---
 
+## :icon[notebook-pen] Exercícios: Lançar um erro
+
+:::example Exercícios
+1. Complete: `___ new ___('Escolha o tamanho do açaí.');`
+2. O que aparece no terminal?
+
+   ```javascript
+   function pagarPassagem(saldo) {
+     if (saldo < 5) {
+       throw new Error('Saldo insuficiente no cartão.');
+     }
+     return saldo - 5;
+   }
+   console.log(pagarPassagem(12));
+   console.log(pagarPassagem(3));
+   console.log('Boa viagem');
+   ```
+
+3. Com `if (litros <= 0) { new Error('Escolha quantos litros.'); }`, a função não para. Por quê?
+4. Escreva `conferirIdade(idade)`, que lança `'Filme para maiores de 16 anos.'` quando a idade é menor que 16.
+:::
+
+:::tip Respostas
+1. `throw` e `Error`: o `new Error` cria o erro, e o `throw` lança.
+2. `7` e, depois, `Error: Saldo insuficiente no cartão.`; o programa para, e `Boa viagem` não aparece.
+3. Faltou o `throw`: o erro foi criado, ninguém lançou, e o código segue.
+4. `function conferirIdade(idade) { if (idade < 16) { throw new Error('Filme para maiores de 16 anos.'); } }`
+:::
+
+---
+
 ## Erros próprios
 
 A luz do painel diz o que aconteceu. O que mais ela precisa dizer?
@@ -178,6 +209,39 @@ ErroDeTarefa: Escreva o título da tarefa.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Erros próprios
+
+:::example Exercícios
+1. O que aparece no terminal?
+
+   ```javascript
+   class ErroDeSaldo extends Error {
+     constructor(mensagem, falta = 0) {
+       super(mensagem);
+       this.name = 'ErroDeSaldo';
+       this.falta = falta;
+     }
+   }
+   const erro = new ErroDeSaldo('Saldo insuficiente.', 2);
+   console.log(erro.name, erro.falta);
+   console.log(erro.message);
+   console.log(new ErroDeSaldo('Cartão bloqueado.').falta);
+   ```
+
+2. Sem a linha `this.name = 'ErroDeSaldo';`, o que mostra `erro.name`?
+3. O `constructor` começa com `this.falta = falta;` e só depois chama `super(mensagem)`. O que acontece?
+4. Lance um `ErroDeSaldo` com a mensagem `'Recarregue o cartão.'` e a falta 3.
+:::
+
+:::tip Respostas
+1. `ErroDeSaldo 2`, `Saldo insuficiente.` e `0`: sem a falta, vale o padrão.
+2. `Error`: sem o `name` escrito à mão, fica o nome da mãe.
+3. O Node para com `Must call super constructor`: o `super` vem antes de qualquer `this`.
+4. `throw new ErroDeSaldo('Recarregue o cartão.', 3);`
+:::
+
+---
+
 ## Testar o erro
 
 Como provar, sem abrir a tela, que a tarefa recusa o título vazio?
@@ -224,6 +288,37 @@ No terceiro, o Jest mostra o próprio erro no lugar da conferência:
 ```
 
 Quando a chamada não lança nada, o vermelho é outro: `Received function did not throw` (a função não lançou).
+
+---
+
+## :icon[notebook-pen] Exercícios: Testar o erro
+
+:::example Exercícios
+Verde ou vermelho, com esta função?
+
+```javascript
+function pagarPassagem(saldo) {
+  if (saldo < 5) {
+    throw new Error('Saldo insuficiente no cartão.');
+  }
+  return saldo - 5;
+}
+```
+
+1. `expect(() => pagarPassagem(3)).toThrow('Saldo insuficiente');`
+2. `expect(() => pagarPassagem(10)).toThrow(Error);`
+3. `expect(pagarPassagem(3)).toThrow(Error);`
+4. `expect(() => pagarPassagem(3)).toThrow('saldo insuficiente');`
+5. Escreva o `expect` de que `pagarPassagem(0)` lança um `Error`.
+:::
+
+:::tip Respostas
+1. Verde: a mensagem contém o pedaço.
+2. Vermelho, `Received function did not throw`: com 10, a passagem é paga.
+3. Vermelho: sem a seta, o erro estoura antes do `expect`, e o Jest mostra `Saldo insuficiente no cartão.`
+4. Vermelho: o pedaço precisa ser igual letra por letra, e a mensagem tem `Saldo`, com S maiúsculo.
+5. `expect(() => pagarPassagem(0)).toThrow(Error);`
+:::
 
 ---
 
@@ -426,6 +521,41 @@ try {
 
 ---
 
+## :icon[notebook-pen] Exercícios: try e catch
+
+:::example Exercícios
+1. Complete: `___ { pagarPassagem(2); } ___ (erro) { console.log(erro.message); }`
+2. O que aparece no terminal?
+
+   ```javascript
+   function pagarPassagem(saldo) {
+     if (saldo < 5) {
+       throw new Error('Saldo insuficiente.');
+     }
+     return saldo - 5;
+   }
+   try {
+     console.log('Saldo:', pagarPassagem(3));
+     console.log('Catraca liberada');
+   } catch (erro) {
+     console.log('Aviso:', erro.message);
+   }
+   console.log('Próximo da fila');
+   ```
+
+3. E com `pagarPassagem(12)` no lugar do 3?
+4. O `try` chama `embarcar(2)`, que chama `pagarPassagem(2)`. Sem rede no `embarcar`, quem segura o erro?
+:::
+
+:::tip Respostas
+1. `try` e `catch`.
+2. `Aviso: Saldo insuficiente.` e `Próximo da fila`: o `try` pula direto para o `catch`.
+3. `Saldo: 7`, `Catraca liberada` e `Próximo da fila`: sem erro, o `catch` não roda.
+4. O `catch` do `try`: o erro sobe pelas chamadas sem rede até cair nele.
+:::
+
+---
+
 ## Esperado ou bug
 
 Se o seu código tem um erro de digitação, você quer descobrir ou prefere que ninguém veja?
@@ -476,6 +606,36 @@ try {
 | com o `if` | `ReferenceError: criarTarefas is not defined` e a linha do erro: você acha e corrige |
 
 Num laço que pula as tarefas com problema, o mesmo bug sem o `if` faz pior: pula **todas**, devolve 0 e ninguém fica sabendo por quê.
+
+---
+
+## :icon[notebook-pen] Exercícios: Esperado ou bug
+
+:::example Exercícios
+1. Esperado ou bug? A senha vazia; `pagarPasagem is not defined`; o CPF com 5 números.
+2. O que aparece no terminal?
+
+   ```javascript
+   function pagarPassagem(saldo) {
+     return saldo - 5;
+   }
+   try {
+     pagarPasagem(3); // faltou um s
+   } catch (erro) {
+     console.log('Aviso:', erro.message);
+   }
+   ```
+
+3. Complete o `catch` para relançar o que não é seu: `if (erro.name !== 'ErroDeSaldo') { ___ }`
+4. Com o `if` do exercício 3 no começo do `catch`, o que aparece agora?
+:::
+
+:::tip Respostas
+1. Esperado, bug e esperado: a senha e o CPF são culpa do dado; o nome errado, do código.
+2. `Aviso: pagarPasagem is not defined`: o bug virou um aviso para a pessoa.
+3. `throw erro;`
+4. O programa para com `ReferenceError: pagarPasagem is not defined`, e você corrige o nome.
+:::
 
 ---
 
@@ -598,6 +758,43 @@ console.log(botao.ligado);  // true
 ```
 
 **Caso 2: o botão Importar exemplos, da tela.** Ele faz o mesmo: desliga enquanto busca as tarefas na internet e religa no `finally`. Você vê esse botão funcionar no E22.
+
+---
+
+## :icon[notebook-pen] Exercícios: finally
+
+:::example Exercícios
+1. Complete: `try { ... } catch (erro) { ... } ___ { impressora.ligada = true; }`
+2. Religar a impressora no fim, com erro ou sem erro: no `catch` ou no `finally`?
+3. O que aparece no terminal?
+
+   ```javascript
+   function imprimir(paginas) {
+     try {
+       console.log('A');
+       if (paginas > 10) {
+         throw new Error('Limite de 10 páginas.');
+       }
+       console.log('B');
+     } catch (erro) {
+       console.log('C', erro.message);
+     } finally {
+       console.log('D');
+     }
+   }
+   imprimir(3);
+   imprimir(25);
+   ```
+
+4. E com `imprimir(10)`?
+:::
+
+:::tip Respostas
+1. `finally`.
+2. No `finally`: o `catch` só roda quando há erro.
+3. `A`, `B`, `D` e, depois, `A`, `C Limite de 10 páginas.`, `D`.
+4. `A`, `B` e `D`: 10 não é maior que 10, e nada é lançado.
+:::
 
 ---
 

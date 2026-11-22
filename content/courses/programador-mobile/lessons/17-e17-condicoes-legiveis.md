@@ -159,6 +159,39 @@ Sem o `break` do `'semanal'`, a execução desce para o caso de baixo, e o `rotu
 
 ---
 
+## :icon[notebook-pen] Exercícios: O switch
+
+:::example Exercícios
+1. A tarifa do ônibus. O que aparece?
+
+   ```javascript
+   function tarifa(tipo) {
+     switch (tipo) {
+       case 'estudante':
+         return 2.5;
+       case 'idoso':
+         return 0;
+       default:
+         return 5;
+     }
+   }
+   console.log(tarifa('idoso'), tarifa('Estudante'));
+   ```
+
+2. Complete o caso do professor, que paga 3: `___ 'professor': ___ 3;`
+3. Fora de função, o `case 'estudante':` faz `rotulo = 'Meia';` sem `break`, e logo abaixo vem `default: rotulo = 'Inteira';`. Com `'estudante'`, quanto vale o `rotulo`?
+4. Para a nota virar `'Aprovado'` a partir de 6: `switch` ou `if`?
+:::
+
+:::tip Respostas
+1. `0 5`: o `case` compara com `===`, e `'Estudante'`, com maiúscula, cai no `default`
+2. `case` e `return`, antes do `default`
+3. `'Inteira'`: sem o `break`, a execução desce para o `default`
+4. `if`: o `switch` só compara valores exatos, e "a partir de 6" é `nota >= 6`
+:::
+
+---
+
 ## :icon[milestone] Projeto 3 · Passo 2: o peso da prioridade
 
 Quanto maior o peso, mais urgente: a tela usa o peso para ordenar as tarefas. Em `src/regras/prazos.js`, no lugar do comentário do kit:
@@ -251,6 +284,35 @@ Por isso a `situacaoDoPrazo`, do passo 3, barra o "sem prazo" na primeira linha,
 
 ---
 
+## :icon[notebook-pen] Exercícios: Retorno antecipado
+
+:::example Exercícios
+1. O crachá da academia. O que aparece?
+
+   ```javascript
+   function apelido(nome) {
+     if (nome === null) {
+       return 'Visitante';
+     }
+     return nome.trim().toUpperCase();
+   }
+   console.log(apelido(' bia '), apelido(null));
+   ```
+
+2. Sem a guarda, o que `apelido(null)` mostra?
+3. Escreva a guarda do `precoPorPessoa(total, pessoas)`: com `pessoas` igual a `0`, ela devolve `0` antes da divisão
+4. Ache o erro: `const letra = nome[0];` vem antes de `if (nome === null) { return '?'; }`
+:::
+
+:::tip Respostas
+1. `BIA Visitante`: o `null` sai na guarda, e o resto da função nem roda
+2. `TypeError: Cannot read properties of null (reading 'trim')`: a última linha tenta ler o `trim` da caixa vazia
+3. `if (pessoas === 0) { return 0; }`, na primeira linha da função
+4. Com `null`, o `nome[0]` quebra antes de chegar à guarda: ela vem primeiro
+:::
+
+---
+
 ## Cadeia de else if
 
 No app de entrega, o restaurante de nota 4.7 ganha o selo "Bom" ou "Excelente"?
@@ -310,6 +372,38 @@ Toda nota a partir de 3 entra na primeira saída: "Muito bom" e "Excelente" nunc
 console.log(seloDaNota(4.5), seloDaNota(4.49), seloDaNota(3));
 // Excelente Muito bom Bom
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Cadeia de else if
+
+:::example Exercícios
+1. A faixa de idade do cadastro. O que aparece?
+
+   ```javascript
+   function faixa(idade) {
+     if (idade >= 60) {
+       return 'Idoso';
+     } else if (idade >= 18) {
+       return 'Adulto';
+     } else {
+       return 'Jovem';
+     }
+   }
+   console.log(faixa(60), faixa(17), faixa(18));
+   ```
+
+2. Com a ordem trocada, `idade >= 18` em cima e `idade >= 60` embaixo, o que `faixa(70)` dá?
+3. Quais idades o teste dessa função precisa conferir?
+4. Reescreva a cadeia com `<`: qual pergunta vem primeiro?
+:::
+
+:::tip Respostas
+1. `Idoso Jovem Adulto`: no 60 e no 18, as bordas, o `>=` já vale
+2. `'Adulto'`: 70 é `>= 18`, e a primeira saída engole a outra
+3. As bordas: 60 e 59, 18 e 17
+4. `idade < 18`, o `'Jovem'`; depois `idade < 60`, o `'Adulto'`; e o `else`, o `'Idoso'`
+:::
 
 ---
 
@@ -436,6 +530,32 @@ A primeira caixa tem um 0 dentro: não está vazia, e o `??` respeita a escolha.
 
 ---
 
+## :icon[notebook-pen] Exercícios: O operador ??
+
+:::example Exercícios
+1. O pedido da lanchonete. O que cada linha mostra?
+
+   ```javascript
+   const pedido = { lanche: 'X-salada', gelo: 0, troco: null };
+   console.log(pedido.bebida ?? 'água');
+   console.log(pedido.gelo ?? 3);
+   console.log(pedido.troco ?? 'sem troco');
+   ```
+
+2. Complete para o volume do celular ser 5 quando `config.volume` não vier: `const volume = config.volume ___ 5;`
+3. Na ficha `{ nome: 'Leo', ativo: false }`, o que dá `ficha.ativo ?? true`?
+4. Com `ficha.apelido ?? 'sem apelido'`, qual a diferença entre a ficha `{ apelido: '' }` e a ficha `{}`?
+:::
+
+:::tip Respostas
+1. `água`, `0` e `sem troco`: a `bebida` não existe e o `troco` é `null`, mas o `0` é um valor e fica
+2. `??`
+3. `false`: o `??` só troca `null` e `undefined`
+4. Com `''`, fica o texto vazio; sem o campo, `undefined`, e vem `'sem apelido'`
+:::
+
+---
+
 ## O operador ?.
 
 Dá para ler o dia do aniversário de quem não informou o aniversário?
@@ -486,6 +606,37 @@ Use o `?.` só onde o valor pode faltar de verdade. Espalhado por todo lado, ele
 
 ---
 
+## :icon[notebook-pen] Exercícios: O operador ?.
+
+:::example Exercícios
+1. O endereço do cadastro. O que aparece?
+
+   ```javascript
+   const ana = { nome: 'Ana', endereco: { cidade: 'Recife' } };
+   const leo = { nome: 'Leo', endereco: null };
+   console.log(ana.endereco?.cidade, leo.endereco?.cidade);
+   ```
+
+2. E `console.log(leo.endereco.cidade)`?
+3. Complete para mostrar `sem cidade` quando o endereço faltar: `leo.endereco___cidade ___ 'sem cidade'`
+4. As linhas de ônibus. O que aparece?
+
+   ```javascript
+   const linhas = [{ numero: 101, destino: 'Centro' }];
+   const achada = linhas.find((linha) => linha.numero === 202);
+   console.log(achada?.destino ?? 'linha não existe');
+   ```
+:::
+
+:::tip Respostas
+1. `Recife undefined`: o endereço do Leo é `null`, e o `?.` responde `undefined`, sem erro
+2. `TypeError: Cannot read properties of null (reading 'cidade')`: sem o `?.`, o ponto entra na caixa vazia
+3. `?.` e `??`: o `?.` lê sem quebrar, e o `??` troca o `undefined` pelo texto
+4. `linha não existe`: o `find` não achou a 202 e deu `undefined`
+:::
+
+---
+
 ## O while
 
 Guardando R$ 30 por semana, quando você para de guardar para juntar R$ 100?
@@ -532,6 +683,43 @@ console.log(semanas);
 - O terminal fica parado: não mostra nada e não volta. O `npm test` trava do mesmo jeito
 - Para encerrar: <kbd>Ctrl</kbd> + <kbd>C</kbd> no terminal
 - Antes de rodar, confira: alguma linha dentro das chaves muda a caixa da condição? Ela anda na direção da saída?
+
+---
+
+## :icon[notebook-pen] Exercícios: O while
+
+:::example Exercícios
+1. O celular carregando. O que aparece?
+
+   ```javascript
+   let bateria = 20;
+   let minutos = 0;
+   while (bateria < 100) {
+     bateria = bateria + 25;
+     minutos = minutos + 10;
+   }
+   console.log(minutos, bateria);
+   ```
+
+2. E se a `bateria` começasse em `100`?
+3. Ache o erro:
+
+   ```javascript
+   let degrau = 0;
+   while (degrau < 10) {
+     console.log(degrau);
+   }
+   ```
+
+4. Na academia, a corrida começa com 2 km e ganha 1 km por semana. Escreva o `while` que conta as semanas até 10 km
+:::
+
+:::tip Respostas
+1. `40 120`: quatro voltas, com a bateria em 45, 70, 95 e 120
+2. `0 100`: a condição já começa `false`, e o laço roda zero vezes
+3. Nada muda o `degrau`, e o laço não acaba: falta `degrau = degrau + 1;` dentro das chaves
+4. `while (km < 10) { km = km + 1; semanas = semanas + 1; }`, com `km` em 2 e `semanas` em 0: 8 semanas
+:::
 
 ---
 

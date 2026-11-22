@@ -126,6 +126,37 @@ O botão de tema do E34 usa os dois:
 
 ---
 
+## :icon[notebook-pen] Exercícios: Componente próprio
+
+:::example Exercícios
+1. Um `CartaoMusica` recebe `titulo`, `artista`, `capa` e `onTocar`. Quais props são de dados? Qual é de ação?
+2. O que aparece na tela? E no terminal, depois de um toque?
+
+   ```jsx
+   function BotaoPedido({ lanche, onPedir }) {
+     return (
+       <Pressable onPress={onPedir}>
+         <Text>Pedir {lanche}</Text>
+       </Pressable>
+     );
+   }
+
+   <BotaoPedido lanche="X-salada" onPedir={() => console.log('Pedido feito')} />
+   ```
+
+3. Quem decide o que o toque faz: o `BotaoPedido` ou a tela que o usa?
+4. Escreva as props do manual de um `CartaoOnibus` que mostra a linha e o horário e avisa no toque.
+:::
+
+:::tip Respostas
+1. Dados: `titulo`, `artista` e `capa`. Ação: `onTocar`, que leva uma função
+2. Na tela, "Pedir X-salada". No toque, `LOG  Pedido feito`
+3. A tela: o botão só avisa
+4. `linha`, o número da linha; `horario`, quando ele passa; `onPress`, o que fazer no toque
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: o CartaoCasa nasce
 
 Em `src/components/`, ao lado da pasta `ui`, crie o arquivo `CartaoCasa.js`, com o C e o C maiúsculos. No topo, o manual e os imports:
@@ -249,6 +280,24 @@ Os nomes estão no site **icons.expo.fyi**: filtre por Ionicons e busque em ingl
 
 ---
 
+## :icon[notebook-pen] Exercícios: Ícones
+
+:::example Exercícios
+1. Complete o carrinho do mercado, de 24, na cor do texto do tema: `<Ionicons name="cart-outline" size={___} color={___} />`
+2. No app do ônibus, `name="onibus"` mostra um `?` no lugar do ícone. O que houve?
+3. `<Ionicons name="heart" size={24} color="#000000" />`: o que acontece no tema escuro?
+4. Escreva o `name` do coração dos favoritos: cheio com `favorito` em `true`, de contorno com `false`.
+:::
+
+:::tip Respostas
+1. `size={24}` e `color={cores.texto}`
+2. O nome não existe: é em inglês, `bus`. O terminal avisa `"onibus" is not a valid icon name`
+3. O coração preto some no fundo escuro. A cor vem do tema: `color={cores.texto}`
+4. `name={favorito ? 'heart' : 'heart-outline'}`
+:::
+
+---
+
 ## Imagem da internet
 
 Você compraria um sofá pela internet sem medir a sala antes?
@@ -311,6 +360,37 @@ Quatro casas não têm foto: no `casas.js`, elas têm `foto: ''`, um texto vazio
 | ONG Amigo Fiel | `''` | não | a caixa com a pata |
 
 O texto vazio conta como "não", como o `undefined` no `if` da aula 3. Os parênteses guardam o JSX de várias linhas de cada lado do `:`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Imagem da internet
+
+:::example Exercícios
+1. `<Image source={{ uri: produto.foto }} />` não mostra nada, sem mensagem. O que falta?
+2. Complete a foto de perfil redonda:
+
+   ```javascript
+   perfil: { width: 64, height: 64, borderRadius: ___ },
+   ```
+
+3. A foto `https://picsum.photos/id/10/300/600` vai num quadrado de 72. Ela é deitada ou em pé? O que é cortado?
+4. Na chamada da escola, o que aparece para `{ foto: '', iniciais: 'AL' }`? E com uma foto?
+
+   ```jsx
+   {aluno.foto ? (
+     <Image source={{ uri: aluno.foto }} style={estilos.foto} />
+   ) : (
+     <Text>{aluno.iniciais}</Text>
+   )}
+   ```
+:::
+
+:::tip Respostas
+1. `width` e `height` no `style`: sem eles, a foto fica com tamanho zero
+2. `32`, a metade do lado
+3. Em pé, 300 por 600: ela preenche o quadrado e perde as sobras de cima e de baixo
+4. As iniciais "AL": o texto vazio conta como não. Com foto, a `Image`
+:::
 
 ---
 
@@ -426,6 +506,36 @@ onPress={() => Alert.alert(casa.nome, `Visitas: ${casa.visitas}`)}
 No E37, a mesma prop abre o Detalhe da casa, sem mudar o cartão.
 
 **Caso 3: sem a seta.** `onPress={Alert.alert(casa.nome, ...)}` chama o aviso na hora de desenhar a tela: um aviso por casa, 12 ao todo, antes de qualquer toque. É o "sem a seta" do E30: a seta `() =>` guarda o aviso para a hora do toque.
+
+---
+
+## :icon[notebook-pen] Exercícios: Retorno ao toque
+
+:::example Exercícios
+1. Qual `opacity` deixa um botão invisível? E inteiro?
+2. Escreva o aviso do app do ônibus, com o título "Linha 201" e a mensagem "Chega em 5 min".
+3. O que acontece quando o dedo encosta em "Ver treino"? E quando solta?
+
+   ```jsx
+   const treino = { nome: 'Pernas', minutos: 40 };
+
+   <Pressable
+     onPress={() => Alert.alert(treino.nome, `Duração: ${treino.minutos} min`)}
+     style={({ pressed }) => (pressed ? { opacity: 0.3 } : null)}
+   >
+     <Text>Ver treino</Text>
+   </Pressable>
+   ```
+
+4. E com `onPress={Alert.alert(treino.nome, ...)}`, sem a seta?
+:::
+
+:::tip Respostas
+1. `0`, invisível; `1`, inteiro
+2. `Alert.alert('Linha 201', 'Chega em 5 min');`
+3. Encostou: o botão fica bem apagado. Soltou: volta ao normal e abre o aviso "Pernas", com "Duração: 40 min"
+4. O aviso abre ao desenhar a tela, antes de qualquer toque
+:::
 
 ---
 
@@ -556,6 +666,41 @@ console.log(aviso, tom);   // Bateria fraca alerta
 | 80 | `false` | `false` | Bateria boa, `sucesso`: os valores do começo |
 
 As duas caixas `let` começam com o caso mais comum, e cada saída troca as duas. No app, elas vão para o selo: `<Badge texto={aviso} tom={tom} />`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Variantes
+
+:::example Exercícios
+1. Que cor tem cada selo, no tema claro? `<Badge texto="Pago" tom="sucesso" />` e `<Badge texto="Pendente" />`
+2. No app da academia, qual `variante` do `Botao` vai no Excluir conta?
+3. `<Badge texto="Esgotado" tom="vermelho" />` saiu cinza. Por quê?
+4. O que aparece? E com `minutos` igual a 30? E a 3?
+
+   ```javascript
+   const minutos = 12;
+   let aviso = 'No horário';
+   let tom = 'sucesso';
+   if (minutos > 20) {
+     aviso = 'Muito atrasado';
+     tom = 'perigo';
+   } else if (minutos > 5) {
+     aviso = 'Atrasado';
+     tom = 'alerta';
+   }
+   console.log(aviso, tom);
+   ```
+
+5. Com a pergunta `minutos > 5` antes da `minutos > 20`, o que 30 mostraria?
+:::
+
+:::tip Respostas
+1. "Pago" em verde; "Pendente" em cinza, o `neutro`
+2. `variante="perigo"`, de contorno vermelho
+3. `vermelho` não é tom do `Badge`: o `??` deixa cinza. Use `tom="perigo"`
+4. `Atrasado alerta`; com 30, `Muito atrasado perigo`; com 3, `No horário sucesso`
+5. `Atrasado alerta`: vale a primeira saída que dá `true`
+:::
 
 ---
 

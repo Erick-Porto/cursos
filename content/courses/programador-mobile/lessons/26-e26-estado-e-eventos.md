@@ -92,6 +92,34 @@ function BotaoOi() {
 
 ---
 
+## :icon[notebook-pen] Exercícios: Eventos
+
+:::example Exercícios
+```jsx
+function Campainha() {
+  function tocar() {
+    console.log('Dim-dom')
+  }
+
+  return <button onClick={tocar}>Tocar</button>
+}
+```
+
+1. A página abre, e você clica três vezes. O que aparece no Console?
+2. Trocaram para `onClick={tocar()}`. O que muda?
+3. E com `onclick={tocar}`?
+4. Escreva a peça `Garcom`, com um botão "Chamar garçom" que escreve `Mesa 4 chamou` no Console a cada clique
+:::
+
+:::tip Respostas
+1. `Dim-dom` três vezes, uma por clique; ao abrir, nada
+2. `Dim-dom` aparece uma vez, ao abrir a página, sem clique, e o clique não faz mais nada
+3. O clique não faz nada, e o Console pergunta se você quis dizer `onClick`, com C maiúsculo
+4. Como a `Campainha`: uma função `chamar` com `console.log('Mesa 4 chamou')` e o `return <button onClick={chamar}>Chamar garçom</button>`
+:::
+
+---
+
 ## Estado
 
 Como o estádio inteiro fica sabendo que saiu um gol?
@@ -186,6 +214,43 @@ O `!aberto` é o contrário, do E10: `false` vira `true`. O ternário, também d
 
 ---
 
+## :icon[notebook-pen] Exercícios: Estado
+
+:::example Exercícios
+1. O que aparece no terminal?
+
+   ```javascript
+   const ponto = ['Centro', 'Praia']
+   const [ida, volta] = ponto
+   console.log(volta, ida)
+   ```
+
+2. Depois de três cliques, o que o botão mostra?
+
+   ```jsx
+   const [fila, setFila] = useState(0)
+   <button onClick={() => setFila(fila + 2)}>Na fila: {fila}</button>
+   ```
+
+3. Complete para o botão alternar entre Acender e Apagar:
+
+   ```jsx
+   const [ligada, setLigada] = useState(false)
+   <button onClick={() => setLigada(___)}>{ligada ? 'Apagar' : 'Acender'}</button>
+   ```
+
+4. Um colega guardou os passageiros do ônibus num `let` e soma 1 a cada clique. O Console mostra 1, 2 e 3, mas a tela fica em 0. Por quê?
+:::
+
+:::tip Respostas
+1. `Praia Centro`: os colchetes pegam pela posição
+2. `Na fila: 6`; antes, 0, 2 e 4
+3. `!ligada`, o contrário do valor de agora. O botão começa em Acender
+4. A variável comum muda, mas o React não fica sabendo: só o `set` do estado pede o redesenho
+:::
+
+---
+
 ## Input controlado
 
 Você digita no campo. Quem guarda o texto: o campo ou o seu código?
@@ -242,6 +307,35 @@ O `CampoBusca` do kit é um input controlado. Ele não guarda o texto: recebe do
 | `type="search"` | campo de busca: aparece um X para apagar o texto |
 | `placeholder` | o texto cinza do campo vazio |
 | `onChange={...}` | a cada letra, avisa o `App` com o texto novo: `aoMudar(...)` |
+
+---
+
+## :icon[notebook-pen] Exercícios: Input controlado
+
+:::example Exercícios
+```jsx
+const [endereco, setEndereco] = useState('')
+
+return (
+  <>
+    <input value={endereco} onChange={(evento) => setEndereco(evento.target.value)} />
+    <p>Entregar em: {endereco}</p>
+  </>
+)
+```
+
+1. Com a página recém-aberta, o que o parágrafo mostra? E depois de digitar `Rua 7`?
+2. Complete o campo da cidade: `onChange={(evento) => setCidade(___)}`
+3. Sem o `onChange`, só com o `value={endereco}`, o que acontece ao digitar?
+4. Com `<label htmlFor="cep">CEP</label>` e `<input id="cep" />`, o que acontece ao clicar no texto CEP?
+:::
+
+:::tip Respostas
+1. Só "Entregar em:", porque o estado começa em `''`; depois, "Entregar em: Rua 7", letra por letra
+2. `evento.target.value`, o texto do campo agora
+3. O campo não aceita nada: ele mostra o estado, e o estado não muda mais. O Console avisa que falta o `onChange`
+4. O cursor vai para o campo: o `htmlFor` liga o rótulo ao campo de `id="cep"`
+:::
 
 ---
 
@@ -367,6 +461,44 @@ O JSX é um valor, como um número ou um texto: cabe numa variável. O `let avis
 
 ---
 
+## :icon[notebook-pen] Exercícios: Filtrar com estado
+
+:::example Exercícios
+1. O que aparece no terminal?
+
+   ```javascript
+   const linhas = ['Centro', 'Praia do Futuro', 'Centro Histórico', 'Aeroporto']
+   const busca = 'CENTRO'
+   const achadas = linhas.filter((linha) =>
+     linha.toLowerCase().includes(busca.toLowerCase())
+   )
+   console.log(achadas)
+   ```
+
+2. E com `const busca = ''`?
+3. Sem o `toLowerCase` da busca, `'CENTRO'` acha quantas linhas?
+4. Com `vagas` igual a 3, e depois igual a 0, o que aparece?
+
+   ```jsx
+   let aviso
+   if (vagas === 0) {
+     aviso = <p>Turma lotada</p>
+   } else {
+     aviso = <p>Restam {vagas} vagas</p>
+   }
+   return <div>{aviso}</div>
+   ```
+:::
+
+:::tip Respostas
+1. `[ 'Centro', 'Centro Histórico' ]`
+2. As 4 linhas: todo texto tem o texto vazio dentro
+3. Nenhuma, `[]`: `'CENTRO'` não está em nenhum nome em minúsculas
+4. "Restam 3 vagas"; com 0, "Turma lotada"
+:::
+
+---
+
 ## :icon[milestone] Projeto 4 · Passo 2: quando nada passa
 
 No topo, junto das peças do kit: `import ListaVazia from './components/ListaVazia.jsx'`. No `App`, abaixo do `visiveis`, o começo da escolha:
@@ -409,6 +541,33 @@ Uma prop também pode levar uma **função**: o pai entrega, e o filho chama qua
 As favoritas moram no `App`: o cabeçalho conta todas, e a marca não pode sumir quando a busca esconde o cartão.
 
 O nome com `ao` ("ao mudar", "ao clicar") avisa: a prop é a função de um evento.
+
+---
+
+## :icon[notebook-pen] Exercícios: O filho avisa
+
+:::example Exercícios
+```jsx
+function BotaoParada({ aoPedir }) {
+  return <button onClick={aoPedir}>Parada</button>
+}
+
+// no App
+<BotaoParada aoPedir={() => console.log('Próxima parada')} />
+```
+
+1. O passageiro aperta o botão duas vezes. O que aparece no Console?
+2. No `BotaoParada`, trocaram para `onClick={aoPedir()}`. O que acontece?
+3. O `App` tem `const [nota, setNota] = useState('')`. Complete: `<CampoNota valor={___} aoMudar={___} />`
+4. No app da academia, cada aluno tem um `BotaoPresenca`, e o topo conta os presentes. Quem guarda a lista: o botão ou o `App`?
+:::
+
+:::tip Respostas
+1. `Próxima parada` duas vezes: o botão chama a função que veio do pai
+2. `Próxima parada` aparece uma vez, ao abrir a página, e o botão não faz mais nada
+3. `valor={nota}` e `aoMudar={setNota}`
+4. O `App`: o pai guarda, o filho avisa. O topo conta todos, e cada botão só conhece o seu aluno
+:::
 
 ---
 
@@ -489,6 +648,39 @@ setFavoritas(favoritas)
 
 - Com o `push`, o `set` recebe **a mesma** lista, no mesmo endereço (E15). O React compara, acha igual e não redesenha: o clique não muda nada, e não aparece erro
 - Para saber se uma receita é favorita, o `includes` do E14: `favoritas.includes(1)` responde `true` ou `false`
+
+---
+
+## :icon[notebook-pen] Exercícios: Lista no estado
+
+:::example Exercícios
+1. Escreva o estado `presentes`, uma lista que começa vazia
+2. O que aparece no terminal?
+
+   ```javascript
+   const fila = ['Ana', 'Caio']
+   const novaFila = [...fila, 'Duda']
+   console.log(fila.length, novaFila)
+   console.log(novaFila.includes('Caio'), novaFila.includes('Bia'))
+   ```
+
+3. Complete para pôr `'arroz'` no fim do carrinho, sem rasurar: `setCarrinho(___)`
+4. O clique não muda a tela, e o Console fica limpo. Por quê? Corrija.
+
+   ```jsx
+   function adicionar(item) {
+     compras.push(item)
+     setCompras(compras)
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `const [presentes, setPresentes] = useState([])`
+2. `2 [ 'Ana', 'Caio', 'Duda' ]` e `true false`: a cópia ganhou a Duda, e a `fila` continua com 2
+3. `[...carrinho, 'arroz']`, uma lista nova com o arroz a mais
+4. O `set` recebe a mesma lista, no mesmo endereço: o React acha igual e não redesenha. Use `setCompras([...compras, item])`
+:::
 
 ---
 

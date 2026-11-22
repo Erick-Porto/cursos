@@ -104,6 +104,30 @@ O **`autoCapitalize`** (maiúscula automática) diz quando o teclado põe maiús
 
 ---
 
+## :icon[notebook-pen] Exercícios: Campos de texto
+
+:::example Exercícios
+```jsx
+const [cep, setCep] = useState('');
+
+<TextInput value={cep} onChangeText={setCep} placeholder="01310-100" />
+```
+
+1. Ninguém digitou nada. O que o campo mostra, e quanto vale `cep`?
+2. Qual `autoCapitalize` para o nome de um aluno? E para o e-mail? E para um recado?
+3. Ache o erro: em `<Campo rotulo="Placa" value={placa} />`, o que se digita não fica
+4. Escreva o `Campo` "Seu apelido", ligado ao estado `apelido`, com o exemplo "Ju"
+:::
+
+:::tip Respostas
+1. O `01310-100` em cinza; `cep` continua `''`: o placeholder não é o valor
+2. `'words'`, `'none'` e `'sentences'`, o padrão
+3. Falta o `onChangeText={setPlaca}`: sem ele, o texto não chega ao estado
+4. `<Campo rotulo="Seu apelido" placeholder="Ju" value={apelido} onChangeText={setApelido} />`
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: o botão Cadastrar casa
 
 Na Início (`app/(abas)/index.js`), dentro do `topo`, entre a faixa de números e a busca:
@@ -204,6 +228,26 @@ No iPhone, o teclado de números não tem a tecla de fechar: toque fora do campo
 
 ---
 
+## :icon[notebook-pen] Exercícios: O teclado certo
+
+:::example Exercícios
+1. Qual `keyboardType` para o celular do cliente, a idade, o e-mail e o nome do pet?
+2. Complete: `<Campo rotulo="Pessoas na mesa" keyboardType="____" value={pessoas} onChangeText={setPessoas} />`
+3. Com o `number-pad`, dá para colar "dez" no campo?
+4. Ache o erro: com `keyboardType="telefone"`, o teclado continua o de letras
+5. Ache o erro: o campo de e-mail tem `keyboardType="email-address"`, mas começa com maiúscula
+:::
+
+:::tip Respostas
+1. `'phone-pad'`, `'number-pad'`, `'email-address'` e `'default'`
+2. `number-pad`: só os números de 0 a 9
+3. Sim: o teclado ajuda, mas não trava. Por isso o formulário confere antes de salvar
+4. O nome é em inglês, exato: `'phone-pad'`
+5. Falta o `autoCapitalize="none"`
+:::
+
+---
+
 ## Escolher uma opção
 
 No rádio antigo do carro, o que acontece com a estação de antes quando você aperta outra?
@@ -245,6 +289,33 @@ Cada campo tem o seu **placar**, o seu `useState` (E26). Quando a pessoa digita 
 
 - Todos começam vazios, com `''`: o formulário abre em branco
 - Todos guardam **texto**, até a capacidade, que veio do teclado de números
+
+---
+
+## :icon[notebook-pen] Exercícios: Escolher uma opção
+
+:::example Exercícios
+```jsx
+const [tamanho, setTamanho] = useState('M');
+
+<Opcoes rotulo="Tamanho do açaí" opcoes={['P', 'M', 'G']}
+  valor={tamanho} onMudar={setTamanho} />
+```
+
+1. Qual botão aparece cheio quando a tela abre?
+2. A pessoa toca no G. O que o `Opcoes` chama, e quantos botões ficam cheios?
+3. Ache o erro: com `valor="tamanho"`, nenhum botão acende
+4. Ache o erro: `onMudar={setTamanho('G')}`
+5. A ficha da academia tem nome, peso e plano. Quantos `useState`? Com 72 digitado no peso, o estado guarda `72` ou `'72'`?
+:::
+
+:::tip Respostas
+1. O M: o estado começa com `'M'`
+2. `onMudar('G')`, ou seja, `setTamanho('G')`; só o G fica cheio
+3. Sem as chaves, o valor é o texto `'tamanho'`, que não é opção: `valor={tamanho}`
+4. Com parênteses, roda ao desenhar: `Too many re-renders`. O certo é `onMudar={setTamanho}`
+5. Três, um por campo; `'72'`, um texto
+:::
 
 ---
 
@@ -353,6 +424,39 @@ No fim, `novos` tem 4 campos. O **`Object.keys(novos)`** (E13) dá `['nome', 'ci
 
 ---
 
+## :icon[notebook-pen] Exercícios: Validação por campo
+
+:::example Exercícios
+1. Quanto dá `Number('')`? E `Number('3,5')`? E `'9' > '12'`?
+2. O que aparece?
+   ```javascript
+   function validar(nome, idade) {
+     const novos = {};
+     if (nome.trim() === '') novos.nome = 'Informe o nome';
+     const anos = Number(idade);
+     if (!Number.isInteger(anos) || anos < 16) novos.idade = 'A partir de 16 anos';
+     return novos;
+   }
+   console.log(validar('  ', '15'));
+   console.log(Object.keys(validar('Ana', '20')).length);
+   ```
+3. Ache o erro: o `validar` anota em `novos.mail`, e o campo usa `erro={erros.email}`
+4. Escreva a regra da mesa do restaurante: `pessoas`, um texto, precisa ser um inteiro de 1 a 8
+:::
+
+:::tip Respostas
+1. `0`, `NaN` e `true`: os textos comparam letra por letra
+2. `{ nome: 'Informe o nome', idade: 'A partir de 16 anos' }` e `0`
+3. Os nomes não batem, e a mensagem nunca aparece: um nome só, `email`
+4. Uma forma:
+   ```javascript
+   const lugares = Number(pessoas);
+   if (!Number.isInteger(lugares) || lugares < 1 || lugares > 8) novos.pessoas = 'De 1 a 8 pessoas';
+   ```
+:::
+
+---
+
 ## Retorno ao usuário
 
 Você faz um Pix e a tela não mostra nada. O que você faz?
@@ -377,6 +481,30 @@ A prop `erro` leva cada mensagem ao seu campo:
 - Com `{ cidade: 'Informe a cidade' }` em `erros`, a mensagem aparece embaixo da cidade
 - `erros.telefone` não está na folha: dá `undefined`, e o telefone fica sem mensagem
 - A mensagem diz **o que fazer**: "Informe a cidade", não "Campo inválido"
+
+---
+
+## :icon[notebook-pen] Exercícios: Retorno ao usuário
+
+:::example Exercícios
+A folha de erros de um cadastro de entrega:
+
+```jsx
+const erros = { cep: 'Use o CEP com 8 números' };
+```
+
+1. O que aparece em `<Campo rotulo="CEP" value={cep} onChangeText={setCep} erro={erros.cep} />`?
+2. E em `<Campo rotulo="Número" value={numero} onChangeText={setNumero} erro={erros.numero} />`?
+3. Reescreva para dizer o que fazer: "Erro no e-mail"
+4. Depois de pedir, a pessoa não vê nada na tela. Escreva o `Alert.alert` que avisa que o pedido chega em 40 minutos
+:::
+
+:::tip Respostas
+1. A borda vermelha e, embaixo, "Use o CEP com 8 números"
+2. Nenhuma mensagem: `erros.numero` é `undefined`
+3. Por exemplo, "Escreva o e-mail com @, como ana@email.com"
+4. Por exemplo, `Alert.alert('Pedido enviado', 'Chega em 40 minutos.')`
+:::
 
 ---
 
@@ -451,6 +579,29 @@ router.back();
 - `aceita` sozinho é o atalho de `aceita: aceita`: o campo e o estado têm o mesmo nome
 - `nome.trim()` tira os espaços das pontas; `Number(capacidade)` guarda o número, não o texto
 - A Início lê o mesmo quadro: a casa aparece lá sem nenhuma linha nova na Início
+
+---
+
+## :icon[notebook-pen] Exercícios: Salvar e voltar
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const sabor = 'Uva';
+   const pedido = { nome: '  Bia '.trim(), sabor, litros: Number('2') };
+   console.log(pedido);
+   ```
+2. A pilha tem Início e Nova tarefa. Depois do `router.back()`, que tela aparece?
+3. Ache o problema: o app guarda `{ nome, idade }`, com `idade` igual a `'30'`. Quanto dá `idade + 1`?
+4. O app de tarefas tem um quadro, o `useTarefas()`. Depois do `adicionarTarefa`, a lista precisa de uma linha nova para mostrar a tarefa?
+:::
+
+:::tip Respostas
+1. `{ nome: 'Bia', sabor: 'Uva', litros: 2 }`: o `sabor` sozinho é `sabor: sabor`
+2. A Início: o `back` tira a carta de cima
+3. `'301'`: com texto, o `+` junta. Guarde `idade: Number(idade)`
+4. Não: a lista lê o mesmo quadro, e a tarefa aparece sozinha
+:::
 
 ---
 

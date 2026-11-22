@@ -99,6 +99,36 @@ Go back
 
 ---
 
+## :icon[notebook-pen] Exercícios: Expo Router
+
+:::example Exercícios
+A pasta `app/` de uma lanchonete:
+
+```plaintext
+app/
+├── _layout.js
+├── index.js
+├── cardapio.js
+└── pedido.js
+```
+
+1. Qual é a rota de `cardapio.js`? E a de `index.js`?
+2. O `_layout.js` é a tela `/_layout`?
+3. A pessoa pede o endereço `/promocoes`. O que aparece?
+4. A peça `src/components/CartaoLanche.js` tem rota?
+5. Para a rota `/horarios`, que arquivo você cria?
+:::
+
+:::tip Respostas
+1. `/cardapio` e `/`, a porta de entrada
+2. Não: é a moldura das telas da pasta
+3. `Unmatched Route`: nenhum arquivo atende esse endereço
+4. Não: só o que está em `app/` vira tela
+5. `app/horarios.js`, com um `export default function`
+:::
+
+---
+
 ## A pilha de telas
 
 O que acontece com a tela de baixo quando outra abre por cima dela?
@@ -150,6 +180,26 @@ A seta só aparece da segunda carta em diante: na primeira, não há nada embaix
 
 ---
 
+## :icon[notebook-pen] Exercícios: A pilha de telas
+
+:::example Exercícios
+1. App do banco: abre na Início, toca em Pix, toca em Confirmar e volta. Que tela aparece?
+2. Ela rolou a lista de produtos até o fim e abriu um. Ao voltar, a lista está no topo?
+3. Complete: `<Stack.Screen name="carrinho" options={{ ____: 'Seu carrinho' }} />`
+4. Que opção esconde o cabeçalho da tela `index`?
+5. Pilha: Início, Produto e Carrinho. Quantos "voltar" do Android até sair do app?
+:::
+
+:::tip Respostas
+1. A de Pix: voltar tira a Confirmar, a carta de cima
+2. Não: a tela de baixo fica como ela deixou
+3. `title`
+4. `headerShown: false`
+5. Três: o terceiro, já na Início, sai do app
+:::
+
+---
+
 ## Rota com parâmetro
 
 Doze casas no app: são precisos doze arquivos de Detalhe?
@@ -196,6 +246,33 @@ console.log(casas.find((item) => item.id === Number(id)).nome); // Casa do Bigod
 | `/casa/99` | `99` | ninguém: `undefined` |
 
 O `Number` do E09 transforma o texto em número. Quando ninguém passa, o `find` (E14) devolve `undefined`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Rota com parâmetro
+
+:::example Exercícios
+1. Quantos arquivos atendem os 300 produtos, de `/produto/1` a `/produto/300`? Com que nome?
+2. Com o arquivo `app/linha/[numero].js`, o que o endereço `/linha/202` entrega ao `useLocalSearchParams()`?
+3. O que aparece?
+   ```javascript
+   const { id } = { id: '7' };
+   console.log(typeof id, id === 7, Number(id) === 7);
+   ```
+4. Ache o erro: o `find` não acha o pedido 3
+   ```javascript
+   const pedidos = [{ id: 3, lanche: 'X-Salada' }];
+   const { id } = { id: '3' };
+   console.log(pedidos.find((p) => p.id === id));
+   ```
+:::
+
+:::tip Respostas
+1. Um só: `app/produto/[id].js`
+2. `{ numero: '202' }`: o nome entre colchetes vira o campo, e o valor chega como texto
+3. `string false true`
+4. Sai `undefined`, porque `3 === '3'` é `false`. Com `p.id === Number(id)`, sai `{ id: 3, lanche: 'X-Salada' }`
+:::
 
 ---
 
@@ -320,6 +397,26 @@ import { Stack } from 'expo-router';
 
 ---
 
+## :icon[notebook-pen] Exercícios: Abrir outra tela
+
+:::example Exercícios
+1. Que endereço `router.push('/produto/' + 15)` abre?
+2. A pilha tem Início e Produto. O código roda `router.back()` e, depois, `router.push('/carrinho')`. Como fica?
+3. Ache o erro: `onPress={router.push('/carrinho')}`
+4. Ache o erro: com `item.id` igual a 7, `router.push('/produto' + item.id)` dá `Unmatched Route`
+5. O layout tem `title: 'Produto'`; a tela, `<Stack.Title>{produto.nome}</Stack.Title>`. No Tênis Azul, o que diz o cabeçalho?
+:::
+
+:::tip Respostas
+1. `'/produto/15'`
+2. Início e Carrinho: o `back` tira o Produto; o `push` põe o Carrinho
+3. Sem a seta, roda ao desenhar: `onPress={() => router.push('/carrinho')}`
+4. Dá `'/produto7'`, sem a barra: `'/produto/' + item.id`
+5. Tênis Azul: o `Stack.Title` troca o título fixo
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 3: a casa que não existe
 
 No `app/casa/[id].js`, os imports ficam assim:
@@ -426,6 +523,26 @@ Por isso a pasta `casa` fica **fora** de `(abas)`.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Abas
+
+:::example Exercícios
+1. Qual é a rota de `app/(abas)/perfil.js`? E de `app/(abas)/index.js`?
+2. Trocar da aba Início para a Perfil empilha uma tela?
+3. App de música: Início, Buscar, Biblioteca e a tela de uma música. Quais viram aba?
+4. A música, `app/musica/[id].js`, fica fora de `(abas)`. Ela mostra a barra?
+5. Ache o erro: com a pasta `app/abas/`, sem parênteses, o app abre em `Unmatched Route`
+:::
+
+:::tip Respostas
+1. `/perfil` e `/`: os parênteses não entram no endereço
+2. Não: trocar de aba não empilha nada
+3. Início, Buscar e Biblioteca; a música vai por cima, na pilha
+4. Não: ela cobre a barra, por cima do grupo
+5. A pasta entra no endereço: a Início vira `/abas`, e nada atende o `/`
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 4: as abas
 
 :::steps
@@ -525,6 +642,35 @@ const gatosComVaga = casas.filter(
 | Cantinho dos Bichanos | `true` | `true` (7) | sim |
 
 Na tela, três links, cada um com o seu crachá, o `key` do E25. Tocar em Lar Temporário Ronrom abre `/casa/10`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Link
+
+:::example Exercícios
+1. Complete: `<Link ____="/ajuda">Precisa de ajuda?</Link>`
+2. Aonde leva `<Link href={'/linha/' + 302}>Linha 302</Link>`?
+3. `Link` ou `router.push`: o texto "Ver regulamento", no fim da tela? E o cartão de um produto, que avisa pelo `onPress`?
+4. Quais lanches viram link?
+   ```javascript
+   const lanches = [
+     { nome: 'X-Salada', preco: 18, temHoje: true },
+     { nome: 'X-Bacon', preco: 24, temHoje: true },
+     { nome: 'Misto', preco: 12, temHoje: false },
+   ];
+   const nomes = lanches.filter((l) => l.preco < 20 && l.temHoje).map((l) => l.nome);
+   console.log(nomes);
+   ```
+5. Ache o erro: no `map` dos links, o terminal avisa `Each child in a list should have a unique "key" prop`
+:::
+
+:::tip Respostas
+1. `href`
+2. A `/linha/302`, por cima, na pilha
+3. O texto: `Link`. O cartão: `router.push`, no `onPress`
+4. `[ 'X-Salada' ]`: o X-Bacon passa de 20, e o Misto não tem hoje
+5. Faltou o crachá: cada `Link` do `map` leva um `key` único, como o nome do lanche
+:::
 
 ---
 

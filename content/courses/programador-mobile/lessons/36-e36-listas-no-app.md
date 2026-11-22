@@ -98,6 +98,29 @@ Toda tela lê o mesmo quadro: no E37, o Detalhe procura a casa nele.
 
 ---
 
+## :icon[notebook-pen] Exercícios: As casas do servidor
+
+:::example Exercícios
+```jsx
+// o quadro das aulas de uma academia, como o das casas
+const { aulas, carregando, atualizando } = useAulas();
+```
+
+1. O app acabou de abrir, e o servidor não respondeu ainda. Quanto valem `aulas.length` e `carregando`?
+2. Com as aulas na tela, o app busca a lista de novo. Qual fica `true`?
+3. Ache o erro: `const { lista } = useAulas();` e, depois, `lista.length`
+4. A tela Nova aula põe uma aula no quadro. A Agenda, que lê o mesmo `useAulas()`, mostra a aula nova?
+:::
+
+:::tip Respostas
+1. `0` e `true`: a lista fica vazia até a resposta
+2. `atualizando`; o `carregando` é só a primeira espera, sem lista
+3. O campo se chama `aulas`: `lista` vale `undefined`, e o `.length` quebra
+4. Sim: toda tela lê o mesmo quadro
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: as casas do servidor
 
 Em `app/index.js`, troque a linha do `import` das casas:
@@ -163,6 +186,35 @@ O **`ListHeaderComponent`** (a peça do cabeçalho da lista) recebe uma peça pr
 
 - O cabeçalho vem antes do primeiro item e **rola junto**: ao descer a lista, ele sobe e sai da tela
 - Com a lista vazia, o cabeçalho continua, e o aviso entra no lugar dos itens
+
+---
+
+## :icon[notebook-pen] Exercícios: FlatList a fundo
+
+:::example Exercícios
+```jsx
+<FlatList
+  data={linhas}
+  renderItem={({ item }) => <Text>{item.destino}</Text>}
+  ListHeaderComponent={<Text>Ônibus de hoje</Text>}
+  ListEmptyComponent={<Text>Nenhuma linha</Text>}
+/>
+```
+
+1. Com `linhas` vazia, o que a tela mostra?
+2. Com 40 linhas, ao rolar até o fim, "Ônibus de hoje" fica parado no alto?
+3. Um cardápio de 4 sucos ou um extrato de 5 mil compras: qual sofre mais com o `map`?
+4. Falta o crachá. Cada linha tem o `numero`, um número: `keyExtractor={(linha) => ____}`
+5. Ache o erro: essa lista está dentro de uma `<Tela rolar>`
+:::
+
+:::tip Respostas
+1. "Ônibus de hoje" e, embaixo, "Nenhuma linha"
+2. Não: o cabeçalho rola junto e sai da tela
+3. O extrato: o `map` desenharia as 5 mil de uma vez
+4. `String(linha.numero)`: o crachá é texto
+5. Aviso `VirtualizedLists should never be nested`: use `<Tela>`, sem `rolar`
+:::
 
 ---
 
@@ -270,6 +322,37 @@ O **`Campo`** do kit é um `TextInput` com rótulo em cima, ícone e lugar para 
 // a cidade, com erro (no Cadastro, no E38)
 <Campo rotulo="Cidade" value={cidade} onChangeText={setCidade} erro="Informe a cidade" />
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Campo de busca
+
+:::example Exercícios
+```jsx
+const [placa, setPlaca] = useState('');
+
+return (
+  <View>
+    <TextInput value={placa} onChangeText={setPlaca} placeholder="ABC1D23" />
+    <Text>Placa: {placa}</Text>
+  </View>
+);
+```
+
+1. Antes de digitar, o que aparece na caixa e no `Text`?
+2. A pessoa digita `RIO`. O que o `Text` mostra a cada letra?
+3. Ache o erro: `<TextInput value={placa} onChange={setPlaca} />`
+4. Complete a busca da academia: `<Campo ____="Buscar aula" ____="search-outline" value={termo} onChangeText={setTermo} />`
+5. Com `value={placa}` e sem o `onChangeText`, o que acontece ao digitar?
+:::
+
+:::tip Respostas
+1. Na caixa, o `ABC1D23` clarinho; no `Text`, só `Placa:`. A `placa` vale `''`
+2. `Placa: R`, `Placa: RI` e `Placa: RIO`
+3. O `onChange` entrega um evento, e não o texto: `onChangeText={setPlaca}`
+4. `rotulo` e `icone`
+5. A caixa não muda: ela mostra a `placa`, e nada muda o estado
+:::
 
 ---
 
@@ -414,6 +497,32 @@ Com três perguntas, vale o mesmo: um `true` já faz o resultado dar `true`. Uma
 
 ---
 
+## :icon[notebook-pen] Exercícios: Sem acento
+
+:::example Exercícios
+Para rodar, copie no arquivo a `SEM_ACENTO` e a `paraBusca`, sem o `export`.
+
+1. Quanto vale `paraBusca('  Pão de QUEIJO ')`?
+2. E `'São Paulo'.toLowerCase().includes('sao')`?
+3. O que aparece?
+   ```javascript
+   const frutas = ['Maçã', 'Limão', 'Açaí', 'Uva'];
+   console.log(frutas.filter((f) => paraBusca(f).includes(paraBusca('ÇA'))));
+   ```
+4. Ache o erro: com `termo` igual a `'MAÇÃ'`, `frutas.filter((f) => paraBusca(f).includes(termo))` não acha nada
+5. Com `const meia = idade >= 60 || estudante;`, quanto vale `meia` para 30 anos e `estudante` igual a `true`? E com `false`?
+:::
+
+:::tip Respostas
+1. `'pao de queijo'`
+2. `false`: `'são paulo'` tem o til
+3. `[ 'Maçã', 'Açaí' ]`: o `'ÇA'` vira `'ca'`, que está em `'maca'` e em `'acai'`
+4. O termo não passou a limpo: `includes(paraBusca(termo))`
+5. `true`, porque um sim basta; e `false`, porque as duas dão não
+:::
+
+---
+
 ## Puxar para atualizar
 
 O que você faz no app do banco para ver se o Pix já caiu?
@@ -462,6 +571,35 @@ Na `FlatList`: `refreshing={atualizando}` e `onRefresh={atualizar}`. Sem o `setA
 
 ---
 
+## :icon[notebook-pen] Exercícios: Puxar para atualizar
+
+:::example Exercícios
+Os horários de ônibus, numa `FlatList`:
+
+```jsx
+const [buscando, setBuscando] = useState(false);
+
+function buscarDeNovo() {
+  setBuscando(true);
+  setTimeout(() => setBuscando(false), 3000);
+}
+```
+
+1. Complete a `FlatList`: `refreshing={____}` e `onRefresh={____}`
+2. A pessoa puxa a lista e solta. Por quanto tempo a rodinha gira?
+3. Sem a linha do `setTimeout`, o que acontece?
+4. Ache o erro: as duas props estão na `Tela`, em volta da lista, e puxar não faz nada
+:::
+
+:::tip Respostas
+1. `refreshing={buscando}` e `onRefresh={buscarDeNovo}`
+2. 3 segundos: o `setBuscando(false)` roda 3000 milissegundos depois
+3. A rodinha gira para sempre: nada desliga o `buscando`
+4. Quem cuida do gesto e da rodinha é a `FlatList`: as duas props vão nela
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 4: puxar para atualizar
 
 No `useCasas()`, pegue mais dois campos do quadro:
@@ -503,6 +641,24 @@ Sem nenhuma casa na `visiveis`, a `FlatList` mostra o topo e, embaixo, nada: par
 ```
 
 O topo continua no lugar: o `ListHeaderComponent` aparece mesmo com a lista vazia.
+
+---
+
+## :icon[notebook-pen] Exercícios: Lista vazia
+
+:::example Exercícios
+1. Sem a prop `icone`, que ícone o `EstadoVazio` mostra?
+2. O que aparece com `<EstadoVazio titulo="Nenhum pedido" textoAcao="Fazer pedido" />`?
+3. A lista de treinos tem 3 itens e um `ListEmptyComponent`. O aviso aparece?
+4. Ache o erro: o `EstadoVazio` do carrinho foi escrito embaixo da `FlatList`, fora dela, e aparece mesmo com produtos
+:::
+
+:::tip Respostas
+1. A pata, `'paw-outline'`, o padrão do kit
+2. A pata e o título, sem botão: o botão só aparece com `textoAcao` e `onAcao`
+3. Não: ele só aparece enquanto a lista está vazia
+4. Fora da `FlatList`, ele aparece sempre; no `ListEmptyComponent`, só com o carrinho vazio
+:::
 
 ---
 

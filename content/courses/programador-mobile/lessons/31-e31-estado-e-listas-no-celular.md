@@ -105,6 +105,34 @@ Na tela, "Toques: 0"; cada toque soma 1.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Estado no celular
+
+:::example Exercícios
+1. Complete: `import { useState } from '___';`
+2. O que aparece ao abrir?
+   ```jsx
+   const [pedidos, setPedidos] = useState(['Pastel', 'Suco']);
+   <Text>Pedidos: {pedidos.length}</Text>
+   ```
+3. A catraca do ônibus conta assim. Ao abrir, a pessoa toca 4 vezes, e depois você aperta `r` no terminal. O que a tela mostra antes e depois do `r`?
+   ```jsx
+   const [passageiros, setPassageiros] = useState(0);
+   <Pressable onPress={() => setPassageiros(passageiros + 1)}>
+     <Text>Passageiros: {passageiros}</Text>
+   </Pressable>
+   ```
+4. Escreva o estado `senha`, que começa em 1, e o `onPress` que chama a próxima senha.
+:::
+
+:::tip Respostas
+1. `react`; o `react-native` traz as peças da tela
+2. "Pedidos: 2", o tamanho da lista
+3. Antes, "Passageiros: 4"; depois do `r`, "Passageiros: 0": o estado mora na memória do app
+4. `const [senha, setSenha] = useState(1);` e `onPress={() => setSenha(senha + 1)}`
+:::
+
+---
+
 ## Uma lista nova
 
 Para pôr um convidado no topo da lista da festa, você rasura ou passa a limpo?
@@ -154,6 +182,36 @@ A lista de antes não mudou. Com `[...registros, novo]`, o novo iria para o fim.
 ```plaintext
  LOG  {"hora": "14:05", "id": 1793725500000, "ml": 300}
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Uma lista nova
+
+:::example Exercícios
+1. O que o Node mostra?
+   ```javascript
+   const fila = ['Ana', 'Bia'];
+   const nova = ['Caio', ...fila];
+   console.log(nova);
+   console.log(fila);
+   ```
+2. Com a mesma `fila`, que lista sai de `[...fila, 'Davi']`?
+3. O que o Node mostra? A lista de antes ficou igual?
+   ```javascript
+   const carrinho = ['arroz'];
+   const outro = carrinho;
+   outro.push('feijão');
+   console.log(carrinho);
+   ```
+4. No app do mercado, qual linha faz a tela mudar: `itens.push(novo)` ou `setItens([novo, ...itens])`?
+:::
+
+:::tip Respostas
+1. `[ 'Caio', 'Ana', 'Bia' ]` e `[ 'Ana', 'Bia' ]`: o spread copia, sem rasurar
+2. `[ 'Ana', 'Bia', 'Davi' ]`: o novo vai para o fim
+3. `[ 'arroz', 'feijão' ]`: não; os dois nomes levam à mesma casa, e o `push` mexeu nela
+4. `setItens([novo, ...itens])`: o `push` rasura a lista velha, e o React não desenha de novo
+:::
 
 ---
 
@@ -258,6 +316,35 @@ Três registros, o mais novo em cima:
 
 ---
 
+## :icon[notebook-pen] Exercícios: O total do dia
+
+:::example Exercícios
+1. O que o Node mostra? Diga a `soma` depois de cada volta.
+   ```javascript
+   const compras = [12, 5, 8];
+   console.log(compras.reduce((soma, preco) => soma + preco, 0));
+   ```
+2. E `[].reduce((soma, preco) => soma + preco, 0)`? E sem o `0`?
+3. Escreva o `reduce` que soma os minutos de `treinos`:
+   ```javascript
+   const treinos = [{ minutos: 30 }, { minutos: 45 }];
+   ```
+4. O que o Node mostra, e por quê?
+   ```javascript
+   const ml = ['300', '200'];
+   console.log(ml.reduce((soma, copo) => soma + copo, 0));
+   ```
+:::
+
+:::tip Respostas
+1. `25`; a `soma` vai de 0 para 12, 17 e 25
+2. `0`, sem nenhuma volta; sem o `0`, `TypeError: Reduce of empty array with no initial value`
+3. `treinos.reduce((soma, treino) => soma + treino.minutos, 0)`, que dá `75`
+4. `0300200`: os ml são textos, e o `+` junta em vez de somar
+:::
+
+---
+
 ## :icon[milestone] Projeto 5 · Passo 2: o total na barra
 
 O `ProgressoMeta` do kit é o cartão da meta. O comentário no topo de `src/components/ProgressoMeta.js` diz as props: `total` e `meta`, números em ml. No topo do `App.js`, junto das peças do kit:
@@ -347,6 +434,33 @@ keyExtractor={(item) => String(item.id)}
 
 ---
 
+## :icon[notebook-pen] Exercícios: FlatList
+
+:::example Exercícios
+1. Complete a prop que recebe a lista: `<FlatList ___={onibus} ... />`
+2. O que aparece na tela?
+   ```jsx
+   <FlatList
+     data={['501', '230', '115']}
+     keyExtractor={(item) => item}
+     renderItem={({ item }) => <Text>Linha {item}</Text>}
+   />
+   ```
+3. O que o Node mostra? `console.log(String(10) + 1);`
+4. Com `data={[{ id: 1, nome: 'Pão' }]}`, a linha saiu em branco. Ache o engano: `renderItem={(item) => <Text>{item.nome}</Text>}`
+5. Escreva o `keyExtractor` de produtos como `{ codigo: 15, nome: 'Arroz' }`.
+:::
+
+:::tip Respostas
+1. `data`
+2. "Linha 501", "Linha 230" e "Linha 115", um embaixo do outro
+3. `101`: o `String` fez do 10 um texto, e o `+` juntou
+4. Faltaram as chaves, `({ item })`: sem elas, `item` é a ficha inteira, e `item.nome` dá `undefined`
+5. `keyExtractor={(item) => String(item.codigo)}`
+:::
+
+---
+
 ## :icon[milestone] Projeto 5 · Passo 3: a lista
 
 No topo do `App.js`, a `FlatList` entra no `import` de `react-native`, e o `ItemRegistro` do kit, junto das outras peças:
@@ -406,6 +520,32 @@ Sem nenhum item, a `FlatList` não desenha nada, e embaixo do título fica um va
 - O valor da prop é uma **peça pronta**, em JSX, entre chaves. No E26, o JSX coube numa variável, o `let conteudo`: ele é um valor, como um número ou um texto, e por isso cabe numa prop
 - Chegou o primeiro item, o aviso some; a lista esvaziou de novo, ele volta
 - No Gota, a peça é a `ListaVazia` do kit, com a prop `texto`
+
+---
+
+## :icon[notebook-pen] Exercícios: Lista vazia
+
+:::example Exercícios
+1. O que aparece? E se a `data` fosse `['Oi, tudo bem?']`?
+   ```jsx
+   <FlatList
+     data={[]}
+     keyExtractor={(item) => item}
+     renderItem={({ item }) => <Text>{item}</Text>}
+     ListEmptyComponent={<Text>Nenhuma mensagem</Text>}
+   />
+   ```
+2. A pessoa apaga a última tarefa da lista. O aviso de lista vazia volta?
+3. Escreva a prop que mostra "Nada para hoje" na agenda vazia.
+4. O terminal avisa `Text strings must be rendered within a <Text> component.` Ache o engano: `ListEmptyComponent={<View>Carrinho vazio</View>}`
+:::
+
+:::tip Respostas
+1. "Nenhuma mensagem"; com um item, só "Oi, tudo bem?", e o aviso some
+2. Sim: com a `data` vazia de novo, ele aparece
+3. `ListEmptyComponent={<Text>Nada para hoje</Text>}`
+4. O texto ficou solto na `View`: `<View><Text>Carrinho vazio</Text></View>`
+:::
 
 ---
 
@@ -474,6 +614,33 @@ console.log(contatos.filter((contato) => contato.id !== 2));
 Pelo `id`, sai só a Bia, mesmo que houvesse duas pessoas com o mesmo nome.
 
 **Caso 2: a seta leva o `id` junto.** No E26, cada cartão recebeu `aoFavoritar={() => alternarFavorita(receita.id)}`. A seta guarda o pedido com o `id` daquele cartão, e ele só roda no clique. Sem a seta, a função rodaria ao desenhar a tela.
+
+---
+
+## :icon[notebook-pen] Exercícios: Remover
+
+:::example Exercícios
+1. O que o Node mostra?
+   ```javascript
+   const pedidos = ['suco', 'pastel', 'café'];
+   console.log(pedidos.filter((pedido) => pedido !== 'pastel'));
+   console.log(pedidos);
+   ```
+2. E se o teste fosse `pedido === 'pastel'`?
+3. Escreva o `filter` que tira a linha `'230'` de `const linhas = ['501', '230', '115'];`
+4. A pessoa queria tirar um pão só. O que o Node mostra?
+   ```javascript
+   const compras = ['pão', 'leite', 'pão'];
+   console.log(compras.filter((item) => item !== 'pão'));
+   ```
+:::
+
+:::tip Respostas
+1. `[ 'suco', 'café' ]` e `[ 'suco', 'pastel', 'café' ]`: o `filter` entrega uma lista nova
+2. `[ 'pastel' ]`: a peneira deixa passar só o pastel
+3. `linhas.filter((linha) => linha !== '230')`, que dá `[ '501', '115' ]`
+4. `[ 'leite' ]`: saem os dois pães. Com um `id` em cada item, sairia só aquele
+:::
 
 ---
 

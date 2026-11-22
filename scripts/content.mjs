@@ -124,7 +124,11 @@ function stripCode(text) {
 }
 
 function wordCount(text) {
-  return text.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length
+  return text
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^\s*:{3,4}[a-z-]*/gm, ' ') // a marcação dos blocos (:::tip, :::) não é palavra; o título do bloco é
+    .split(/\s+/)
+    .filter(Boolean).length
 }
 
 function normalizeOptions(options) {

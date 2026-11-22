@@ -109,6 +109,43 @@ ReferenceError: Must call super constructor in derived class before accessing 't
 
 ---
 
+## :icon[notebook-pen] Exercícios: Herança
+
+:::example Exercícios
+1. O combo é um tipo de lanche. Qual está certo: `class Combo extends Lanche` ou `class Lanche extends Combo`?
+2. O que aparece no terminal?
+
+   ```javascript
+   class Lanche {
+     constructor(dados) {
+       this.nome = dados.nome;
+     }
+     get etiqueta() {
+       return `Lanche: ${this.nome}`;
+     }
+   }
+   class Combo extends Lanche {
+     constructor(dados) {
+       super(dados);
+       this.bebida = dados.bebida ?? 'suco';
+     }
+   }
+   console.log(new Combo({ nome: 'X-tudo' }).etiqueta);
+   ```
+
+3. No `constructor` do `Combo`, o `this.bebida` veio antes do `super(dados)`. O que acontece?
+4. Escreva a classe `Monitor`, um tipo de `Aluno`, que acrescenta a `materia`.
+:::
+
+:::tip Respostas
+1. `class Combo extends Lanche`: a filha vem antes do `extends`; a mãe, depois.
+2. `Lanche: X-tudo`: o `Combo` não escreveu o `etiqueta`, herdou da mãe.
+3. O Node para com `Must call super constructor`: a parte da mãe vem antes de qualquer `this`.
+4. `class Monitor extends Aluno`, com `super(dados);` e `this.materia = dados.materia;` no `constructor(dados)`.
+:::
+
+---
+
 ## :icon[milestone] Projeto 3 · Passo 1: a tarefa que se repete
 
 O kit deixou `src/modelos/TarefaRecorrente.js` só com um comentário. Troque o comentário pela classe:
@@ -238,6 +275,42 @@ const regar = new TarefaRecorrente({ titulo: 'Regar as plantas', prazo: '2026-11
 const proxima = regar.concluir(hoje);
 console.log(regar.concluida, proxima.concluida); // true false
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Sobrescrever
+
+:::example Exercícios
+1. O que aparece no terminal?
+
+   ```javascript
+   class Ingresso {
+     preco() {
+       return 30;
+     }
+   }
+   class Meia extends Ingresso {
+     preco() {
+       return super.preco() / 2;
+     }
+   }
+   const fila = [new Ingresso(), new Meia(), new Ingresso()];
+   for (const ingresso of fila) {
+     console.log(ingresso.preco());
+   }
+   ```
+
+2. Para custar metade, a `Meia` sobrescreve o `preco()` ou ganha um método novo, `precoDaMeia()`? Por quê?
+3. Se o método da `Meia` se chamasse `Preco()`, com P maiúsculo, o que a fila mostraria?
+4. Escreva o `preco()` do `Vip`, filho de `Ingresso`, que custa o da mãe mais 20.
+:::
+
+:::tip Respostas
+1. `30`, `15` e `30`: o mesmo pedido, `preco()`, e cada ingresso responde do seu jeito.
+2. Sobrescreve: a fila pede `preco()` a todos, sem perguntar o tipo. É o polimorfismo.
+3. `30`, `30` e `30`: com outro nome, nada é sobrescrito, e vale o `preco()` da mãe.
+4. `preco() { return super.preco() + 20; }`, dentro da classe `Vip`.
+:::
 
 ---
 
@@ -410,6 +483,40 @@ Nenhuma tarefa tem o número 99: o `find` não acha e devolve `undefined`.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Composição
+
+:::example Exercícios
+1. Herança ou composição? A `Playlist` e as músicas; a `MusicaAoVivo` e a `Musica`.
+2. Escreva o `get quantos` do `Carrinho`: quantos itens ele guarda em `this.itens`.
+3. Complete o `buscar(nome)`: `return this.itens.___((item) => item.nome === nome);`
+4. O que aparece no terminal?
+
+   ```javascript
+   class Carrinho {
+     constructor() {
+       this.itens = [];
+     }
+     colocar(item) {
+       this.itens.push(item);
+     }
+   }
+   const meu = new Carrinho();
+   const arroz = { nome: 'Arroz', quantidade: 1 };
+   meu.colocar(arroz);
+   arroz.quantidade = 2;
+   console.log(meu.itens.length, meu.itens[0].quantidade);
+   ```
+:::
+
+:::tip Respostas
+1. A playlist **guarda** músicas: composição. A música ao vivo **é uma** música: herança.
+2. `get quantos() { return this.itens.length; }`
+3. `find`: devolve o primeiro item que passa, ou `undefined` se nenhum passa.
+4. `1 2`: o carrinho guarda o mesmo arroz, não uma cópia; os dois papéis levam à mesma casa.
+:::
+
+---
+
 ## :icon[milestone] Projeto 3 · Passo 3: a lista que guarda tarefas
 
 Em `src/modelos/ListaDeTarefas.js`, troque o comentário do kit pela classe:
@@ -529,6 +636,35 @@ import ListaDeTarefas, { criarTarefa } from './ListaDeTarefas.js';
 ```
 
 O `export default` vem sem chaves; o `export` com nome, entre chaves. É a vitrine do E16, numa linha.
+
+---
+
+## :icon[notebook-pen] Exercícios: Escolher a forma
+
+:::example Exercícios
+Na lanchonete:
+
+```javascript
+function criarPedido(dados) {
+  if (dados.endereco) {
+    return new Entrega(dados);
+  }
+  return new Retirada(dados);
+}
+```
+
+1. Qual forma sai para `{ nome: 'Bia', endereco: 'Rua A, 10' }`, `{ nome: 'Caio' }` e `{ nome: 'Duda', endereco: '' }`?
+2. Sem o primeiro `return`, só `new Entrega(dados);`, o que a Bia recebe?
+3. `Academia.js` tem `export default class Plano` e `export function criarPlano`. Escreva o `import` dos dois.
+4. Escreva o `criarPlano(dados)`: com `dados.personal`, um `PlanoComPersonal`; senão, um `Plano`.
+:::
+
+:::tip Respostas
+1. `Entrega`, `Retirada` e `Retirada`: `undefined` e o texto vazio contam como não.
+2. Uma `Retirada`: a `Entrega` nasce, ninguém a devolve, e a função segue até o último `return`.
+3. `import Plano, { criarPlano } from './Academia.js';`
+4. `if (dados.personal) { return new PlanoComPersonal(dados); }` e, embaixo, `return new Plano(dados);`
+:::
 
 ---
 

@@ -125,6 +125,29 @@ console.log('Pedido anotado');
 
 ---
 
+## :icon[notebook-pen] Exercícios: Código que espera
+
+:::example Exercícios
+1. O que aparece, e quando?
+   ```javascript
+   console.log('Ônibus chamado no app');
+   setTimeout(() => console.log('Ônibus na parada'), 1500);
+   console.log('Fone no ouvido');
+   ```
+2. Complete para a função `avisarTreino` rodar daqui a 3 segundos: `setTimeout(___, ___);`
+3. Ache o erro: `setTimeout(tocarAlarme(), 5000);`
+4. Escreva a linha que mostra `'Pipoca pronta!'` daqui a 90 segundos, com uma seta
+:::
+
+:::tip Respostas
+1. `Ônibus chamado no app` e `Fone no ouvido` na hora; 1,5 segundo depois, `Ônibus na parada`. O `setTimeout` não para o programa
+2. `setTimeout(avisarTreino, 3000);`: a função vai sem parênteses, e 3 segundos são 3000 ms
+3. Com parênteses, o alarme toca na hora, e o Node quebra com `The "callback" argument must be of type function`. O certo: `setTimeout(tocarAlarme, 5000);`
+4. `setTimeout(() => console.log('Pipoca pronta!'), 90000);`
+:::
+
+---
+
 ## A ordem das linhas
 
 Você pede suco, lanche e água. Qual chega primeiro à mesa: o primeiro pedido ou o mais rápido?
@@ -156,21 +179,33 @@ O garçom só vai à cozinha quando termina o que está fazendo: mesmo com 0 ms,
 
 ---
 
-## Pratique
+## :icon[notebook-pen] Exercícios: A ordem das linhas
 
-:::example Desafio
-Em que ordem aparecem as quatro linhas?
-
-```javascript
-console.log('A: tarefa adicionada');
-setTimeout(() => console.log('B: tudo salvo'), 300);
-console.log('C: lista desenhada');
-setTimeout(() => console.log('D: lembrete'), 0);
-```
+:::example Exercícios
+1. Em que ordem aparecem as quatro linhas?
+   ```javascript
+   console.log('A: tarefa adicionada');
+   setTimeout(() => console.log('B: tudo salvo'), 300);
+   console.log('C: lista desenhada');
+   setTimeout(() => console.log('D: lembrete'), 0);
+   ```
+2. Qual aparece primeiro: `setTimeout(() => console.log('Sinal da escola'), 0);` ou, na linha de baixo, `console.log('Chamada feita');`?
+3. Em que ordem aparecem as linhas da academia?
+   ```javascript
+   function avisarAula() {
+     console.log('Aula de spinning começou');
+   }
+   setTimeout(avisarAula, 200);
+   console.log('Catraca liberada');
+   setTimeout(() => console.log('Toalha entregue'), 50);
+   console.log('Armário 12');
+   ```
 :::
 
-:::tip Resposta
-**A, C, D, B.** A e C são código de agora e saem primeiro, na ordem do texto. Depois vêm os callbacks, na ordem em que o tempo acaba: o D com 0 ms e o B com 300 ms.
+:::tip Respostas
+1. **A, C, D, B.** A e C são código de agora e saem primeiro, na ordem do texto. Depois, os callbacks, na ordem em que o tempo acaba: o D com 0 ms e o B com 300 ms
+2. `Chamada feita`: mesmo com 0 ms, o callback espera o código de agora
+3. `Catraca liberada`, `Armário 12`, `Toalha entregue` (50 ms) e `Aula de spinning começou` (200 ms)
 :::
 
 ---
@@ -219,6 +254,37 @@ console.log(senha);   // Promise { <pending> }
 | `setTimeout(resolve, ms)` | "daqui a `ms`, chame o `resolve`": ele é o callback, sem parênteses |
 
 O `<pending>` quer dizer pendente: a senha chegou na hora, o resultado ainda não.
+
+---
+
+## :icon[notebook-pen] Exercícios: Promise
+
+:::example Exercícios
+1. Você pediu um carro pelo aplicativo, e a tela diz "procurando motorista". Se o pedido fosse uma Promise, em que estado ela estaria? E se a corrida for cancelada?
+2. Complete para a senha ser chamada depois de `ms` milissegundos:
+   ```javascript
+   function contarTempo(ms) {
+     return new Promise((resolve) => {
+       setTimeout(___, ms);
+     });
+   }
+   ```
+3. Ache o erro: por que aparece `undefined`, e não `Promise { <pending> }`?
+   ```javascript
+   function esperarOnibus(ms) {
+     new Promise((resolve) => {
+       setTimeout(resolve, ms);
+     });
+   }
+   console.log(esperarOnibus(1000));
+   ```
+:::
+
+:::tip Respostas
+1. Pendente. Cancelada, ela fica rejeitada, com um erro, e não muda mais
+2. `resolve`, sem parênteses: é o callback que o `setTimeout` chama depois de `ms`
+3. Falta o `return` antes do `new Promise`: sem ele, a função não entrega a senha, e quem chama recebe `undefined`
+:::
 
 ---
 
@@ -292,6 +358,43 @@ mostrar();
 
 ---
 
+## :icon[notebook-pen] Exercícios: async e await
+
+:::example Exercícios
+Nos três, o `esperar(ms)` é o da Promise, no topo do arquivo.
+
+1. Em que ordem aparecem as três linhas?
+   ```javascript
+   async function aquecer() {
+     console.log('Esteira ligada');
+     await esperar(1000);
+     console.log('Aquecimento feito');
+   }
+   aquecer();
+   console.log('Música no fone');
+   ```
+2. Por que `function chamarProximo() { await esperar(500); }` nem chega a rodar?
+3. O que aparece ao chamar `fechar()`? Conserte para mostrar `Frete: 15`.
+   ```javascript
+   async function precoDoFrete() {
+     await esperar(200);
+     return 15;
+   }
+   async function fechar() {
+     const frete = precoDoFrete();
+     console.log('Frete:', frete);
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `Esteira ligada`, `Música no fone` e, 1 segundo depois, `Aquecimento feito`: o `await` pausa só a `aquecer`
+2. O `await` só vale em função `async`: o Node para antes da primeira linha, com `await is only valid in async functions`
+3. `Frete: Promise { <pending> }`, a senha. Com `const frete = await precoDoFrete();`, aparece `Frete: 15`
+:::
+
+---
+
 ## Testes que esperam
 
 Se o professor recolhe a prova antes de você responder, a nota vale alguma coisa?
@@ -319,6 +422,30 @@ test('contarPendentes devolve 3', async () => {
 | `async () => { ... }` | a seta do teste é `async`: dentro dela vale o `await` |
 | `await contarPendentes()` | "espere a senha e guarde o resultado em `total`" |
 | sem o `await` | o teste confere a senha: `Expected: 3`, `Received: Promise {}` |
+
+---
+
+## :icon[notebook-pen] Exercícios: Testes que esperam
+
+:::example Exercícios
+Nos três, `contarVagas()` é uma função `async` que devolve `12` depois de uma espera.
+
+1. Complete o teste:
+   ```javascript
+   test('contarVagas devolve 12', ___ () => {
+     const vagas = ___ contarVagas();
+     expect(vagas).toBe(12);
+   });
+   ```
+2. Sem o `await` antes de `contarVagas()`, o teste fica verde ou vermelho? O que o Jest mostra?
+3. Com o `await` e sem o `async`, o que acontece?
+:::
+
+:::tip Respostas
+1. `async` e `await`: a seta do teste é `async`, e o `await` espera o resultado
+2. Vermelho, com `Expected: 12` e `Received: Promise {}`: o teste conferiu a senha, antes da resposta
+3. O Jest nem roda o arquivo: `Unexpected reserved word 'await'`. O `await` pede uma função `async` em volta
+:::
 
 ---
 
@@ -431,6 +558,30 @@ class ArmazenamentoFalso {
 
 - `this.guardado[chave]`: a chave vem de uma variável, então vai entre colchetes (E13)
 - `?? null`: sem nada naquela chave, devolve `null`, como o `localStorage` (o `??` do E17)
+
+---
+
+## :icon[notebook-pen] Exercícios: localStorage
+
+:::example Exercícios
+1. No Console do navegador, `localStorage.setItem('volume', 8)` e depois `localStorage.getItem('volume') + 2`. O que aparece?
+2. Escreva a linha que guarda a lista `['Pão', 'Leite']` na chave `'compras'`
+3. O que aparece?
+   ```javascript
+   const treino = { aluno: 'Rita', series: 3 };
+   const texto = JSON.stringify(treino);
+   console.log(texto);
+   console.log(texto.series, JSON.parse(texto).series);
+   ```
+4. Ontem, o app da academia abriu em `localhost:3000`; hoje, em `localhost:3001`. A ficha salva ontem aparece?
+:::
+
+:::tip Respostas
+1. `'82'`: a gaveta guardou o 8 como texto, e o `+` com texto junta
+2. `localStorage.setItem('compras', JSON.stringify(['Pão', 'Leite']));`: a gaveta só guarda texto
+3. `{"aluno":"Rita","series":3}` e `undefined 3`: o texto não tem campos; o `JSON.parse` devolve a ficha
+4. Não: cada endereço tem a sua gaveta
+:::
 
 ---
 

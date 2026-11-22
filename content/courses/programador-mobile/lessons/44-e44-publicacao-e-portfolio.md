@@ -118,6 +118,31 @@ Saída vazia: o item passa. **Caso 2: o leitor de tela.** Um toque no cartão do
 
 ---
 
+## :icon[notebook-pen] Exercícios: Checklist de qualidade
+
+:::example Exercícios
+Qual item do checklist falhou?
+
+1. No tema escuro, o título da tela de treinos some no fundo.
+2. Com a fonte do celular no máximo, o preço do lanche fica por cima do nome.
+3. Sem nenhuma linha favorita, a tela do app do ônibus fica em branco.
+4. Fechou o app de verdade e abriu: os alarmes novos sumiram.
+5. O `git grep` da cor mostrou isto. Qual item, qual arquivo e qual linha?
+   ```plaintext
+   app/(abas)/treinos.js:12:  nome: { color: '#333' },
+   ```
+:::
+
+:::tip Respostas
+1. O 2: claro e escuro
+2. O 7: letra grande
+3. O 4: a lista vazia explica
+4. O 8: dados no celular
+5. O 3, no `treinos.js`, linha 12: a cor precisa vir do tema, o `useTema()`
+:::
+
+---
+
 ## :icon[milestone] Projeto 7 · Passo 1: o checklist na sua tela
 
 Cada pessoa, na própria tela e no próprio celular:
@@ -180,12 +205,22 @@ O **APK** é o **instalador** do app, como o instalador de um programa no comput
 
 Na loja, a Google Play, publicar pede conta paga (US$ 25, uma vez): fica para depois do curso.
 
-:::example Pergunta rápida
-A equipe corrigiu um texto na `main` depois do build. No APK da tia, aparece o texto novo?
+---
+
+## :icon[notebook-pen] Exercícios: O app instalado
+
+:::example Exercícios
+1. O computador da equipe desligou. O app abre no Expo Go? E no APK instalado?
+2. Que nome aparece embaixo do ícone do app instalado: o do Expo Go ou o do `app.json`?
+3. O dono da academia vai usar o app todo dia, longe do computador. Expo Go ou APK?
+4. A equipe corrigiu um texto na `main` depois do build. No APK da tia, aparece o texto novo?
 :::
 
-:::tip Resposta
-Não: o APK é uma foto do app na hora do build. O texto novo aparece no Expo Go; no APK, só com outro build. Por isso o checklist vem antes.
+:::tip Respostas
+1. Expo Go, não: o código vem do computador. APK, sim: está dentro do celular
+2. O do `app.json`
+3. O APK: abre pelo ícone, sem computador
+4. Não: o APK é uma foto do app na hora do build; o texto novo, só com outro build
 :::
 
 ---
@@ -266,6 +301,26 @@ Na raiz do projeto, ao lado do `app.json`, crie o `eas.json`: ele diz ao EAS com
 | `"buildType": "apk"` | "gere o APK"; sem isso, sai um AAB, que só a loja instala |
 | `"appVersionSource": "remote"` | "o número da versão fica guardado no Expo"; sem isso, o EAS avisa |
 | `"version": ">= 16.0.0"` | "o `eas-cli` precisa ser da versão 16 ou mais nova" |
+
+---
+
+## :icon[notebook-pen] Exercícios: Build na nuvem
+
+:::example Exercícios
+1. Que campo do `app.json` dá o nome embaixo do ícone: `name`, `slug` ou `scheme`?
+2. Qual `android.package` vale: `com.bia-lima.treino`, `com.bialima.treino` ou `com.bialima.2treino`?
+3. O terminal mostra `Waiting in Free tier queue`, e a aula acabou. Pode fechar o terminal?
+4. O Caio fez o primeiro build e hoje faltou. A Lia faz o próximo pela conta dela?
+5. Sem o `"buildType": "apk"` no perfil `preview`, o que sai do build?
+:::
+
+:::tip Respostas
+1. `name`
+2. `com.bialima.treino`: o primeiro tem hífen; o terceiro, número depois do ponto
+3. Pode: o build continua, e a página dele fica no expo.dev
+4. Não: o projeto está na conta do Caio, e o EAS recusa
+5. Um AAB, que só a loja instala
+:::
 
 ---
 
@@ -373,6 +428,30 @@ No celular, abra o arquivo e permita instalar apps desta fonte.
 
 ---
 
+## :icon[notebook-pen] Exercícios: README de portfólio
+
+:::example Exercícios
+1. Em que seção do README vai "No celular, abra o arquivo e permita instalar apps desta fonte"?
+2. Melhore a frase do topo de um app de horário de ônibus: "App para facilitar a vida das pessoas."
+3. Na prévia, os prints não viram tabela. O que falta?
+   ```markdown
+   | Linhas | Favoritas |
+   | ![Lista de linhas](docs/linhas.png) | ![Linhas salvas](docs/favoritas.png) |
+   ```
+4. Escreva o link "Baixe a v1.0.0" para `https://github.com/bia-lima/onibus/releases/tag/v1.0.0`.
+5. Na seção Equipe, melhore: "Bia: ajudou no app."
+:::
+
+:::tip Respostas
+1. Instale no Android
+2. Um modelo: "App de celular para saber, no ponto, quanto falta para o ônibus passar."
+3. A linha dos tracinhos, `|---|---|`, logo abaixo do cabeçalho
+4. `[Baixe a v1.0.0](https://github.com/bia-lima/onibus/releases/tag/v1.0.0)`
+5. Um modelo: "Bia: a tela Favoritas e o componente CartaoLinha; o build do APK."
+:::
+
+---
+
 ## :icon[milestone] Projeto 7 · Passo 3: o README de portfólio
 
 Quem cuida do README, com o build na fila:
@@ -417,6 +496,26 @@ Por isso ele já vai no README: abre assim que a versão for publicada.
 **Caso 2: a próxima versão.** Depois da banca, a equipe corrige um defeito: build novo e Release `v1.0.1`. Uma novidade, como a troca de mês: `v1.1.0`.
 
 **Caso 3: quem tem iPhone.** O APK é só para Android. No iPhone, o app abre pelo Expo Go, como sempre. Na banca, a equipe mostra num Android ou no Expo Go.
+
+---
+
+## :icon[notebook-pen] Exercícios: Release do GitHub
+
+:::example Exercícios
+1. O repositório é `https://github.com/lia-rocha/treino-certo`. Qual é o link da versão `v1.0.0`?
+2. Depois da `v1.0.0`, a equipe conserta o botão que não salvava. Qual é a próxima versão?
+3. Depois dela, entra uma novidade: o gráfico da semana. E agora?
+4. Por que pôr no README o link da Release, e não o da página do build no expo.dev?
+5. O avô do Caio tem iPhone. Como ele vê o app?
+:::
+
+:::tip Respostas
+1. `https://github.com/lia-rocha/treino-certo/releases/tag/v1.0.0`
+2. `v1.0.1`: uma correção
+3. `v1.1.0`: uma novidade
+4. A página do expo.dev fica na conta de uma pessoa, e o arquivo não fica lá para sempre; a Release fica no repositório da equipe
+5. Pelo Expo Go: o APK é só para Android
+:::
 
 ---
 

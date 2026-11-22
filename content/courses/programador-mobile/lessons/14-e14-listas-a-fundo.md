@@ -140,6 +140,38 @@ console.log(precos.map((preco) => Math.round(preco * 100)));   // [ 7290, 6890, 
 
 ---
 
+## :icon[notebook-pen] Exercícios: map
+
+:::example Exercícios
+1. Na promoção, tudo pela metade. O que aparece?
+   ```javascript
+   console.log([1000, 2500, 790].map((preco) => preco / 2));
+   ```
+2. Complete para sair a lista das notas, `[ 8, 5 ]`:
+   ```javascript
+   const alunos = [{ nome: 'Ana', nota: 8 }, { nome: 'Caio', nota: 5 }];
+   console.log(alunos.map((aluno) => ___));
+   ```
+3. Para ficar só com os pedidos prontos, você usa `map` ou `filter`?
+4. A chamada da escola sai em maiúsculas. Com `const chamada = ['ana', 'bruno'];`, escreva o `map` que dá `[ 'ANA', 'BRUNO' ]`
+5. O que aparece?
+   ```javascript
+   const produtos = [{ nome: 'Arroz', preco: 2500 }, { nome: 'Sal', preco: 300 }];
+   const caros = produtos.filter((produto) => produto.preco > 1000);
+   console.log(caros.map((produto) => produto.nome));
+   ```
+:::
+
+:::tip Respostas
+1. `[ 500, 1250, 395 ]`: cada preço sai dividido por 2, na mesma ordem
+2. `aluno.nota`: entra a ficha, sai a nota
+3. `filter`: o `map` não tira ninguém, só transforma
+4. `chamada.map((nome) => nome.toUpperCase())`
+5. `[ 'Arroz' ]`: a peneira deixa só o arroz, e o `map` troca a ficha pelo nome
+:::
+
+---
+
 ## :icon[milestone] Projeto 2 · Passo 1: nomesDosContatos
 
 Em `src/regras/lista.js`, abaixo do comentário do kit:
@@ -218,6 +250,33 @@ O `findIndex` faz a mesma volta e entrega a gaveta: `3`. Com o id 99, ninguém p
 
 ---
 
+## :icon[notebook-pen] Exercícios: find
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const notas = [4, 7, 9, 6];
+   console.log(notas.find((nota) => nota >= 7), notas.findIndex((nota) => nota >= 7));
+   ```
+2. Com as mesmas `notas`, o que `find` e `findIndex` devolvem com `nota > 10`?
+3. Para saber o primeiro ônibus depois das 7h, você usa `filter` ou `find`? Por quê?
+4. Em `linhas`, fichas com `numero` e `destino`, escreva a linha que acha a do `'703'`
+5. Ache o erro: esta busca sempre devolve o primeiro produto
+   ```javascript
+   produtos.find((produto) => produto.codigo = 42);
+   ```
+:::
+
+:::tip Respostas
+1. `7 1`: o 7 é o primeiro que passa, e ele está na gaveta 1
+2. `undefined` e `-1`: ninguém passa
+3. `find`: ele entrega o primeiro que passa, e não uma lista
+4. `linhas.find((linha) => linha.numero === '703')`
+5. O `=` sozinho guarda o 42 no código, em vez de perguntar: use `===`
+:::
+
+---
+
 ## :icon[milestone] Projeto 2 · Passo 2: buscarPorId
 
 No `lista.js`, depois da `nomesDosContatos`:
@@ -291,6 +350,30 @@ O `some` faz o contrário: para no primeiro `true`. Em "alguém sem aniversário
 
 ---
 
+## :icon[notebook-pen] Exercícios: Perguntas à lista
+
+:::example Exercícios
+1. Na portaria da festa, o que aparece?
+   ```javascript
+   const idades = [17, 21, 34];
+   console.log(idades.some((idade) => idade < 18), idades.every((idade) => idade >= 18));
+   ```
+2. O que `['pix', 'dinheiro'].includes('Pix')` devolve?
+3. "Alguém da turma tirou 10?": `some` ou `every`?
+4. Complete para "todas as mensalidades estão em dia": `mensalidades.every((m) => m.status ___ 'atrasada')`
+5. Escreva a pergunta "algum item do `carrinho` está com `quantidade` 0?"
+:::
+
+:::tip Respostas
+1. `true false`: o 17 já responde as duas perguntas
+2. `false`: o `includes` de lista compara o item inteiro, e `'Pix'` não é `'pix'`
+3. `some`: uma nota 10 já responde sim
+4. `!==`, "é diferente?"
+5. `carrinho.some((item) => item.quantidade === 0)`
+:::
+
+---
+
 ## A seta com chaves
 
 E quando o teste da peneira precisa de duas perguntas antes de responder?
@@ -342,6 +425,43 @@ console.log(linhas[0], '|', linhas[1]);   // Mariana Souza (favorito) | Bruno Ca
 ```
 
 **Caso 3: sem `return`.** `contatos.filter((contato) => { contato.favorito })` dá `[]`. No `map`, sai `undefined` em todas as gavetas.
+
+---
+
+## :icon[notebook-pen] Exercícios: A seta com chaves
+
+:::example Exercícios
+1. O que aparece? Por quê?
+   ```javascript
+   const dobro = (numero) => { numero * 2 };
+   console.log(dobro(4));
+   ```
+2. Corrija o `dobro` para devolver `8`, ainda com chaves
+3. O que aparece?
+   ```javascript
+   const etiquetas = [800, 1500, 300].map((preco) => {
+     if (preco > 1000) {
+       return 'caro';
+     }
+     return 'ok';
+   });
+   console.log(etiquetas);
+   ```
+4. Escreva, com chaves e uma caixa `notaBoa`, a peneira de `alunos` que deixa passar quem tem `nota` 7 ou mais e menos de 10 `faltas`
+:::
+
+:::tip Respostas
+1. `undefined`: com chaves, a seta só devolve com `return`
+2. `const dobro = (numero) => { return numero * 2; };`
+3. `[ 'ok', 'caro', 'ok' ]`: só o 1500 sai pelo primeiro `return`
+4. A peneira abaixo:
+   ```javascript
+   alunos.filter((aluno) => {
+     const notaBoa = aluno.nota >= 7;
+     return notaBoa && aluno.faltas < 10;
+   });
+   ```
+:::
 
 ---
 
@@ -492,6 +612,35 @@ Com fichas, subtraia um campo de número: `(a, b) => a.id - b.id`. O `localeComp
 
 ---
 
+## :icon[notebook-pen] Exercícios: Ordenar
+
+:::example Exercícios
+1. Tempos da corrida, em minutos. O que aparece?
+   ```javascript
+   const tempos = [42, 7, 15];
+   tempos.sort((a, b) => a - b);
+   console.log(tempos);
+   ```
+2. O que `[9, 10, 2].sort()` devolve? Por quê?
+3. Complete para o ranking, do maior para o menor: `pontos.sort((a, b) => ___)`
+4. O que aparece em cada linha?
+   ```javascript
+   console.log(['Bia', 'Ágata', 'Caio'].sort());
+   console.log(['Bia', 'Ágata', 'Caio'].sort((a, b) => a.localeCompare(b)));
+   ```
+5. Escreva o `sort` que põe as fichas de `produtos` do menor `preco` ao maior
+:::
+
+:::tip Respostas
+1. `[ 7, 15, 42 ]`: o `a - b` põe do menor ao maior
+2. `[ 10, 2, 9 ]`: sem comparador, o número vira texto, e `'10'` começa com `'1'`
+3. `b - a`
+4. `[ 'Bia', 'Caio', 'Ágata' ]` e `[ 'Ágata', 'Bia', 'Caio' ]`: sem o `localeCompare`, o Á vai depois do Z
+5. `produtos.sort((a, b) => a.preco - b.preco);`
+:::
+
+---
+
 ## Cópia
 
 Na lista de compras da geladeira, você risca a original ou tira uma cópia?
@@ -539,6 +688,32 @@ console.log(contatos[0].nome, contatos.length);   // Mariana Souza 15
 | `contatos.slice()` | a lista inteira |
 
 Os três mais novos: o `sort` ordena a cópia e devolve ela mesma, e o `slice` corta os três primeiros.
+
+---
+
+## :icon[notebook-pen] Exercícios: Cópia
+
+:::example Exercícios
+1. Com `const fila = ['Ana', 'Bia', 'Caio', 'Davi'];`, o que `fila.slice(1, 3)` devolve?
+2. E `fila.slice(2)`?
+3. O que aparece? Por quê?
+   ```javascript
+   const notas = [8, 5, 9];
+   const copia = notas;
+   copia.sort((a, b) => a - b);
+   console.log(notas);
+   ```
+4. Corrija a segunda linha para `notas` continuar `[ 8, 5, 9 ]`
+5. Escreva a linha que mostra os 3 maiores `placares`, sem mexer na lista `placares`
+:::
+
+:::tip Respostas
+1. `[ 'Bia', 'Caio' ]`: da gaveta 1 até antes da 3
+2. `[ 'Caio', 'Davi' ]`: da gaveta 2 até o fim
+3. `[ 5, 8, 9 ]`: `copia` é outro nome para a mesma lista, e o `sort` rasura o original
+4. `const copia = [...notas];` ou `const copia = notas.slice();`
+5. `console.log([...placares].sort((a, b) => b - a).slice(0, 3));`
+:::
 
 ---
 

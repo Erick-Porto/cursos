@@ -130,6 +130,38 @@ Uma colega trouxe do Projeto 4 a meta do dia, dentro da `Tela`:
 
 ---
 
+## :icon[notebook-pen] Exercícios: O app no celular
+
+:::example Exercícios
+1. O aviso "Pix recebido" aparece no celular bloqueado. É coisa de site ou de app nativo?
+2. Você salva o `App.js`, e o celular muda sozinho. Como se chama isso? Que tecla do terminal abre o app do começo?
+3. O celular mostra a tela **Render Error**. Ache o engano:
+   ```jsx
+   <view>
+     <Text>Padaria</Text>
+   </view>
+   ```
+4. Dentro do `App`, o que aparece no celular? E no terminal?
+   ```jsx
+   console.log('Cardápio aberto');
+   return (
+     <View>
+       <Text>Lanchonete</Text>
+       <Text>{2 + 3} lanches hoje</Text>
+     </View>
+   );
+   ```
+:::
+
+:::tip Respostas
+1. De app nativo: ele mora no celular e usa as peças dele, como os avisos
+2. Fast Refresh; a tecla `r`
+3. A `view` em minúscula: o celular não conhece essa peça. É `View`, com maiúscula
+4. No celular, "Lanchonete" e "5 lanches hoje"; no terminal, `LOG  Cardápio aberto`
+:::
+
+---
+
 ## Componentes e estilo
 
 O que transforma um texto preto num botão azul que responde ao dedo?
@@ -206,6 +238,38 @@ export default function BotaoCopo(ml) {
 1. `'./tema'` procura o tema dentro de `src/components/`: `Unable to resolve "./tema" from "src\components\BotaoCopo.js"`. O tema fica uma pasta acima: `'../tema'`
 2. Sem as chaves, `ml` recebe a ficha inteira das props: `Objects are not valid as a React child (found: object with keys {ml})`. O conserto: `BotaoCopo({ ml })`
 3. Sem a seta, o `console.log` roda ao desenhar: os três `LOG` saem sozinhos, ao salvar, e o toque não faz nada. O conserto: `onPress={() => console.log(...)}`
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Componentes e estilo
+
+:::example Exercícios
+1. Passe para o `StyleSheet`: `border-radius: 10px;`
+2. O que o celular mostra?
+   ```jsx
+   function Etiqueta({ produto, preco }) {
+     return <Text>{produto}: R$ {preco * 2}</Text>;
+   }
+   <Etiqueta produto="Dois pastéis" preco={6} />
+   ```
+3. Qual chama a função só no toque: `onPress={chamarElevador}` ou `onPress={chamarElevador()}`?
+4. O `CartaoTreino.js`, em `src/components/`, tem `export default`. Qual `import` traz a peça para o `App.js`?
+5. A tela de erro pede letra maiúscula no começo do nome. Ache o engano:
+   ```jsx
+   function botaoCurtir() {
+     return <Text>Curtir</Text>;
+   }
+   <botaoCurtir />
+   ```
+:::
+
+:::tip Respostas
+1. `borderRadius: 10,`
+2. "Dois pastéis: R$ 12": `preco={6}` chega como número, e o `*` multiplica
+3. `onPress={chamarElevador}`: com os parênteses, ela roda ao desenhar a tela
+4. `import CartaoTreino from './src/components/CartaoTreino';`, sem o `.js`
+5. Componente começa com maiúscula: `BotaoCurtir`, na função e na tag
 :::
 
 ---
@@ -287,6 +351,37 @@ Cada engano, sozinho, faz uma coisa:
 
 1. Sem a seta, o `removerRegistro` roda ao desenhar a lista, e não no toque: os copos somem logo depois de aparecer, e o terminal mostra `Cannot update a component (App) while rendering a different component (CellRenderer)`. O conserto: `aoRemover={() => removerRegistro(item.id)}`
 2. O `===` deixa passar só o copo tocado: Remover no de 300 apaga os outros e deixa só ele. O teste pergunta "é diferente?": `registro.id !== id`
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Estado e listas
+
+:::example Exercícios
+1. O que o Node mostra?
+   ```javascript
+   let fila = ['Ana', 'Bia'];
+   fila = ['Caio', ...fila];
+   fila = fila.filter((nome) => nome !== 'Ana');
+   console.log(fila);
+   ```
+2. O cartão do ônibus tem R$ 100 e recebe recargas de 20 e de 30. O que o Node mostra? `console.log([20, 30].reduce((soma, recarga) => soma + recarga, 100));`
+3. O que aparece na tela?
+   ```jsx
+   <FlatList
+     data={[{ id: 1, nome: 'Pão' }, { id: 2, nome: 'Leite' }]}
+     keyExtractor={(item) => String(item.id)}
+     renderItem={({ item }) => <Text>{item.id}. {item.nome}</Text>}
+   />
+   ```
+4. Na lista de chamada há duas Anas, e o terminal avisa `Encountered two children with the same key`. Qual o engano em `keyExtractor={(item) => item.nome}`?
+:::
+
+:::tip Respostas
+1. `[ 'Caio', 'Bia' ]`: o Caio entra na frente, e a peneira tira a Ana
+2. `150`: o visor da calculadora começa no 100
+3. "1. Pão" e "2. Leite", um embaixo do outro
+4. O crachá repetiu: as duas têm o mesmo nome. O `id` não repete: `String(item.id)`
 :::
 
 ---

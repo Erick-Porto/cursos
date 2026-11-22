@@ -107,6 +107,35 @@ Como na aula 3, texto só é igual letra por letra, maiúsculas incluídas: `'ea
 
 ---
 
+## :icon[notebook-pen] Exercícios: Props
+
+:::example Exercícios
+O manual da peça `Placa`, a placa da porta da loja:
+
+```jsx
+// Props:
+//   texto  (opcional) o que a placa diz. Sem ela, aparece "Aberto".
+//
+// Uso: <Placa texto="Fechado" />
+```
+
+1. O que aparece com `<Placa />`?
+2. E com `<Placa texto="Volto em 10 minutos" />`?
+3. `<Placa mensagem="Fechado" />` mostra "Aberto", sem erro. Por quê?
+4. Escreva o pedido para a placa dizer "Fechado para almoço"
+5. No `App`, em `<Placa texto="Fechado" />`, quem é o pai, o filho e a prop?
+:::
+
+:::tip Respostas
+1. Aberto: sem a prop, vale o que o manual diz
+2. Volto em 10 minutos
+3. A prop se chama `texto`, como diz o manual: `mensagem` a peça não conhece
+4. `<Placa texto="Fechado para almoço" />`
+5. O `App` é o pai, a `Placa` é o filho, e `texto="Fechado"` é a prop
+:::
+
+---
+
 ## :icon[milestone] Projeto 4 · Passo 1: o seu nome no rodapé
 
 O `livro-de-receitas` continua do ponto em que o E24 parou.
@@ -201,6 +230,32 @@ O valor de uma prop vai **entre aspas** quando é um texto pronto. Vai **entre c
 | `nome="receitas[7].name"` | o texto, letra por letra | receitas[7].name |
 
 Entre aspas, o React não lê nada: copia o texto como está.
+
+---
+
+## :icon[notebook-pen] Exercícios: Desestruturar as props
+
+:::example Exercícios
+```jsx
+function Aluno({ nome, nota }) {
+  return <p>{nome}: nota {nota + 1} com o ponto extra</p>
+}
+```
+
+1. Com `<Aluno nome="Bia" nota={7} />`, que ficha chega ao `Aluno`?
+2. O que aparece na tela com esse pedido?
+3. E com `<Aluno nome="Bia" nota="7" />`, entre aspas?
+4. Um colega tirou as chaves do parâmetro: `function Aluno(nome, nota)`. O que acontece?
+5. Escreva o parâmetro da peça `Produto`, que recebe `nome` e `preco`
+:::
+
+:::tip Respostas
+1. `{ nome: 'Bia', nota: 7 }`
+2. "Bia: nota 8 com o ponto extra"
+3. "Bia: nota 71 com o ponto extra": entre aspas, chega o texto `'7'`, e o `+` junta `'7'` e `1`
+4. O `nome` recebe a ficha inteira, e a tela fica branca: `Objects are not valid as a React child`
+5. `function Produto({ nome, preco })`
+:::
 
 ---
 
@@ -388,6 +443,43 @@ Com a lista vazia, `[]`, o `map` devolve `[]`: nenhum cartão.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Listas com map
+
+:::example Exercícios
+1. O que aparece no terminal?
+
+   ```javascript
+   const precos = [5, 8, 12]
+   console.log(precos.map((preco) => preco * 2))
+   ```
+
+2. Complete para o terminal mostrar `[ 'Ana', 'Caio' ]`:
+
+   ```javascript
+   const alunos = [{ nome: 'Ana', idade: 16 }, { nome: 'Caio', idade: 17 }]
+   console.log(alunos.map((aluno) => ___))
+   ```
+
+3. Com `const linhas = ['101', '230', '415']`, o que aparece na tela?
+
+   ```jsx
+   {linhas.map((linha) => (
+     <p>Linha {linha}</p>
+   ))}
+   ```
+
+4. E com chaves no lugar dos parênteses: `(linha) => { <p>Linha {linha}</p> }`?
+:::
+
+:::tip Respostas
+1. `[ 10, 16, 24 ]`
+2. `aluno.nome`: entra uma ficha, sai o nome
+3. Três parágrafos, na ordem da lista: Linha 101, Linha 230 e Linha 415
+4. Nada, e sem erro: com chaves, a seta precisa de `return`; sem ele, devolve `undefined`
+:::
+
+---
+
 ## A key
 
 Num evento com cem pessoas, como a organização sabe quem é quem?
@@ -425,6 +517,43 @@ O aviso aparece no Console (F12) e no terminal do `npm run dev`, com `[vite] (cl
 
 - **Crachá repetido:** três receitas são italianas. A cozinha não identifica uma receita; o `id`, sim
 - **Crachá no lugar errado:** a `key` no `<article>`, dentro do cartão, não conta. O aviso continua, porque o React confere o crachá na tag que o `map` devolve
+
+---
+
+## :icon[notebook-pen] Exercícios: A key
+
+:::example Exercícios
+1. Cada aluno da escola tem `matricula`, `nome` e `turma`. Qual campo vai na `key`?
+2. A banana e a maçã têm a mesma `categoria`, `'fruta'`. O que o Console diz?
+
+   ```jsx
+   {produtos.map((produto) => (
+     <p key={produto.categoria}>{produto.nome}</p>
+   ))}
+   ```
+
+3. O aviso de `key` continua. Ache o erro:
+
+   ```jsx
+   function Parada({ numero }) {
+     return <p key={numero}>Parada {numero}</p>
+   }
+
+   // no App
+   {paradas.map((parada) => (
+     <Parada numero={parada.numero} />
+   ))}
+   ```
+
+4. Em `function Parada({ key, numero })`, o que chega na `key`?
+:::
+
+:::tip Respostas
+1. A `matricula`: única, e não muda. O nome pode repetir, e a turma se repete com certeza
+2. `Encountered two children with the same key`, com `fruta`: crachá repetido
+3. A `key` vai na tag que o `map` devolve: `<Parada key={parada.numero} numero={parada.numero} />`
+4. Nada, `undefined`: a `key` é só para o React, e o Console avisa que ela não é prop
+:::
 
 ---
 

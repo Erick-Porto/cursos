@@ -106,6 +106,38 @@ O **HTTP** é a língua do pedido e da resposta: daí o `https://` do endereço.
 
 ---
 
+## :icon[notebook-pen] Exercícios: APIs
+
+:::example Exercícios
+A DummyJSON também tem receitas. O pedido `https://dummyjson.com/recipes?limit=2` traz esta resposta, organizada e com só três campos de cada receita:
+
+```json
+{
+  "recipes": [
+    { "id": 1, "name": "Classic Margherita Pizza", "cookTimeMinutes": 15 },
+    { "id": 2, "name": "Vegetarian Stir-Fry", "cookTimeMinutes": 20 }
+  ],
+  "total": 50,
+  "skip": 0,
+  "limit": 2
+}
+```
+
+1. Qual parte do endereço é o detalhe do pedido? O que ele pede?
+2. Em que campo vem a lista? Quantas receitas a API tem ao todo?
+3. Quantos minutos de forno leva a pizza?
+4. Escreva o endereço que pede só a receita 2
+:::
+
+:::tip Respostas
+1. `limit=2`, depois do `?`: só 2 receitas
+2. No campo `recipes`; ao todo são 50, no campo `total`
+3. 15, no campo `cookTimeMinutes` (minutos de cozimento) da receita 1
+4. `https://dummyjson.com/recipes/2`, que traz a `Vegetarian Stir-Fry`
+:::
+
+---
+
 ## :icon[milestone] Projeto 3 · Passo 1: o endereço dos exemplos
 
 :::steps
@@ -198,6 +230,39 @@ Do something nice for someone you care about | false
 
 ---
 
+## :icon[notebook-pen] Exercícios: fetch
+
+:::example Exercícios
+1. O que aparece no terminal?
+   ```javascript
+   async function mostrarReceita() {
+     const resposta = await fetch('https://dummyjson.com/recipes/1');
+     const receita = await resposta.json();
+     console.log(receita.name, '|', receita.servings, 'porções');
+   }
+   mostrarReceita();
+   ```
+2. Escreva a linha que pede a receita 3 e guarda a resposta em `resposta`
+3. Sem o `await` antes de `resposta.json()`, o que `receita.name` mostra? Por quê?
+4. Abra `https://dummyjson.com/products?limit=5` no navegador e complete:
+   ```javascript
+   async function contarProdutos() {
+     const resposta = await fetch('https://dummyjson.com/products?limit=5');
+     const dados = ___ resposta.json();
+     console.log(dados.___.length);
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `Classic Margherita Pizza | 4 porções`: o primeiro `await` traz a resposta; o segundo, o corpo como objeto
+2. `const resposta = await fetch('https://dummyjson.com/recipes/3');`
+3. `undefined`: a `receita` guarda a senha do corpo, não o prato
+4. `await` e `products`, o campo da lista. Com `contarProdutos()`, aparece `5`
+:::
+
+---
+
 ## Status e ok
 
 O garçom voltou e disse: "esse prato não existe". Isso é uma resposta?
@@ -273,6 +338,32 @@ O `!` troca o sim pelo não: `!resposta.ok` pergunta "não deu certo?".
 
 ---
 
+## :icon[notebook-pen] Exercícios: Status e ok
+
+:::example Exercícios
+1. Quanto vale o `ok` com o status 201? E com o 503?
+2. Verdadeiro ou falso: com o status 404, o `await fetch(...)` lança um erro
+3. Complete para lançar só quando a resposta não deu certo: `if (___resposta.ok) {`
+4. O que aparece com `verUsuario(9999)`? E com `verUsuario(1)`? Onde entra o `if` que falta?
+   ```javascript
+   async function verUsuario(id) {
+     const resposta = await fetch(`https://dummyjson.com/users/${id}`);
+     console.log(resposta.status, resposta.ok);
+     const usuario = await resposta.json();
+     console.log(usuario.firstName);
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `true` com 201, que fica entre 200 e 299; `false` com 503
+2. Falso: chega uma resposta, com `ok` falso
+3. `!`: o `!resposta.ok` pergunta "não deu certo?"
+4. `404 false` e `undefined`: o 9999 não existe, e o corpo só traz a `message`. Com o 1, `200 true` e `Emily`. O `if (!resposta.ok)` vai antes do `json()`
+:::
+
+---
+
 ## Busca de mentira
 
 Como testar um pedido com a cozinha fechada e o Wi-Fi desligado?
@@ -322,6 +413,32 @@ class RespostaFalsa {
 
 ---
 
+## :icon[notebook-pen] Exercícios: Busca de mentira
+
+:::example Exercícios
+1. Qual chamada está certa: `buscarCardapio(fetch)` ou `buscarCardapio(fetch())`?
+2. O que aparece no terminal?
+   ```javascript
+   async function buscarFalso(url) {
+     return { status: 500, ok: false };
+   }
+   async function verCardapio(buscar) {
+     const resposta = await buscar('https://dummyjson.com/recipes');
+     console.log(resposta.ok ? 'Cardápio aberto' : `Falhou: ${resposta.status}`);
+   }
+   verCardapio(buscarFalso);
+   ```
+3. Na `RespostaFalsa`, `this.ok = status === 200`. Quanto vale o `ok` de `new RespostaFalsa(201, [])`? E o de uma resposta de verdade com 201?
+:::
+
+:::tip Respostas
+1. `buscarCardapio(fetch)`: a função vai sem parênteses, e o `buscarCardapio` a chama quando precisa. Com parênteses, vai o resultado do `fetch`, não a função
+2. `Falhou: 500`. O garçom de treino nem sai da sala: ignora o endereço e devolve sempre a resposta 500
+3. `false`, porque 201 não é igual a 200. Na de verdade, `true`: o `ok` vale de 200 a 299
+:::
+
+---
+
 ## Esperar um erro
 
 O `toThrow` do E20 confere um erro que sai na hora. E o erro que chega depois?
@@ -345,6 +462,31 @@ await expect(buscarExemplos(buscarComErro)).rejects.toThrow('respondeu 500');
 
 :::warning
 Sem o `await`, o teste acaba antes da conferência: com o código certo, passa sem conferir; com algo errado, o Jest para no meio.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Esperar um erro
+
+:::example Exercícios
+O `buscarNotas(buscar)` é `async` e, com a resposta 500, lança "respondeu 500".
+
+1. Complete: `___ expect(buscarNotas(buscarComErro)).___.toThrow('respondeu 500');`
+2. O `new Aluno({ nome: '' })` lança na hora. Escreva a conferência com `toThrow(Error)`
+3. Ache o erro: o teste passa, mas não confere nada
+   ```javascript
+   test('avisa quando o servidor de notas falha', () => {
+     expect(buscarNotas(buscarComErro)).rejects.toThrow('respondeu 500');
+   });
+   ```
+4. Se a busca de mentira responder 200, o que o Jest mostra?
+:::
+
+:::tip Respostas
+1. `await` e `rejects`: a senha tem de ser cancelada
+2. `expect(() => new Aluno({ nome: '' })).toThrow(Error);`: o erro na hora pede a seta, sem `await`
+3. Faltam o `async` na seta e o `await` antes do `expect`: sem eles, o teste acaba antes de conferir
+4. Vermelho, com `Received promise resolved instead of rejected`: a senha foi cumprida
 :::
 
 ---
@@ -497,6 +639,40 @@ No E20, a rede pegava só o **erro esperado** e relançava o resto. Aqui, o erro
 | um bug depois do `try` | ninguém | "Erro inesperado" e o bug |
 
 Um bug **dentro** daquela linha cai na rede: `buscarQueDaCerto()`, com parênteses, vira "Sem conexão".
+
+---
+
+## :icon[notebook-pen] Exercícios: Sem internet
+
+:::example Exercícios
+1. O que aparece com `baixar('https://dummyjson.com/quotes/9999')`? E com `baixar('https://horarios.invalid')`?
+   ```javascript
+   async function baixar(url) {
+     try {
+       const resposta = await fetch(url);
+       console.log('Chegou:', resposta.status);
+     } catch (erro) {
+       console.log('Caiu na rede:', erro.message);
+     }
+   }
+   ```
+2. Ache o erro neste trecho de uma função `async`:
+   ```javascript
+   try {
+     const resposta = await buscar(URL_DO_BOLETIM);
+   } catch (erro) {
+     return 'Sem conexão';
+   }
+   return resposta.status;
+   ```
+3. O `try` vai em volta só do `await buscar(...)` ou da função inteira? Por quê?
+:::
+
+:::tip Respostas
+1. `Chegou: 404`: a resposta chegou, e o `fetch` não lança. Com o endereço que não existe, `Caiu na rede: fetch failed`: o pedido nem chegou
+2. `resposta is not defined`: a caixa nasceu dentro do `try`. O certo: `let resposta;` antes do `try` e `resposta = await ...` dentro dele
+3. Só do `await`: com a função inteira, o `catch` pegaria também a resposta 500 e os bugs, e tudo viraria "Sem conexão"
+:::
 
 ---
 

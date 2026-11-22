@@ -114,6 +114,35 @@ O conserto: uma `<div>` em volta das duas tags, `className="cartao__nome"` e `<i
 
 ---
 
+## :icon[notebook-pen] Exercícios: Componente e JSX
+
+:::example Exercícios
+1. Complete a foto da padaria: `<img src="pao.webp" alt="Pão francês" ___`
+2. O `App.jsx` está em `src/`, e o `Placa.jsx`, em `src/components/`. Qual caminho serve no `import`: `'./Placa.jsx'` ou `'./components/Placa.jsx'`?
+3. O que aparece na tela?
+
+   ```jsx
+   function placa() {
+     return <p>Aberto até as 22h</p>
+   }
+
+   function App() {
+     return <placa />
+   }
+   ```
+
+4. Escreva o componente `Placa`, que mostra `Fechado para almoço` num `<p>`, e a linha que o põe na vitrine
+:::
+
+:::tip Respostas
+1. `/>`: no JSX, toda tag fecha
+2. `'./components/Placa.jsx'`: o `./` parte da pasta do `App.jsx`. O outro dá `Failed to resolve import`
+3. Nada: com minúscula, o React procura uma tag do HTML `placa`. O Console avisa `The tag <placa> is unrecognized`
+4. `function Placa() { return <p>Fechado para almoço</p> }` e, no fim, `export default Placa`
+:::
+
+---
+
 ## Props e listas
 
 Oito pedidos, uma chapa só. Quem diz como cada lanche sai?
@@ -198,6 +227,37 @@ function CartaoReceita({ nome, cozinha, minutos }) {
 
 ---
 
+## :icon[notebook-pen] Exercícios: Props e listas
+
+:::example Exercícios
+1. Escreva a tag que pede à `Ficha` o nome `Bia` e a idade 20, em número
+2. O que aparece na tela com `<Ficha nome="Caio" idade={17 + 1} />`?
+
+   ```jsx
+   function Ficha(props) {
+     return <p>{props.nome}, {props.idade} anos</p>
+   }
+   ```
+
+3. Duas alunas da academia se chamam Bia. Qual crachá: `key={aluno.nome}` ou `key={aluno.matricula}`?
+4. Nenhum aluno aparece, e o Console está limpo. O que está errado?
+
+   ```jsx
+   {alunos.map((aluno) => {
+     <li key={aluno.matricula}>{aluno.nome}</li>
+   })}
+   ```
+:::
+
+:::tip Respostas
+1. `<Ficha nome="Bia" idade={20} />`: texto pronto entre aspas, número entre chaves
+2. `Caio, 18 anos`: sem chaves no parâmetro, a ficha chega inteira, e a conta já vem feita
+3. `aluno.matricula`: o nome repete o crachá, e o Console avisa `Encountered two children with the same key`
+4. Com chaves, a seta precisa de `return`; com parênteses, devolve o `<li>` direto
+:::
+
+---
+
 ## Estado e eventos
 
 Saiu gol. Quem muda o placar, e como o telão fica sabendo?
@@ -265,6 +325,32 @@ function alternarFavorita(id) {
 
 :::tip Resposta
 O `push` rasura a lista velha, e o `set` recebe **a mesma** lista, no mesmo endereço (E15). O React compara, acha igual e não redesenha: o botão continua "Favoritar", e o cabeçalho, "Nenhuma favorita". A lista no estado é sempre uma lista nova, com o spread do E15: `setFavoritas([...favoritas, id])` tira uma cópia e mexe na cópia, sem rasurar o original.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Estado e eventos
+
+:::example Exercícios
+1. Complete o botão do jogo: `<button ___={() => setPontos(pontos + 1)}>+1</button>`
+2. A pessoa digita `Oi, mãe`. O que o parágrafo mostra?
+
+   ```jsx
+   const [recado, setRecado] = useState('')
+
+   <input value={recado} onChange={(evento) => setRecado(evento.target.value)} />
+   <p>{recado.length} de 20 letras</p>
+   ```
+
+3. Sem o `onChange` no `<input>`, o que acontece quando a pessoa digita?
+4. Escreva o `onClick` que põe `'arroz'` no fim da lista `compras`, guardada num estado
+:::
+
+:::tip Respostas
+1. `onClick`, com C maiúsculo
+2. `7 de 20 letras`: cada letra troca o estado, e o React redesenha
+3. O campo fica vazio: ele mostra o estado, e ninguém troca o estado. O Console avisa ``without an `onChange` handler``
+4. `onClick={() => setCompras([...compras, 'arroz'])}`: uma lista nova, sem `push`
 :::
 
 ---
@@ -338,6 +424,46 @@ useEffect(async () => {
 :::tip Resposta
 1. A função do efeito é `async`, e toda função `async` devolve uma Promise, a senha da lanchonete do E21. O React quer um efeito que não devolva nada: a `async function carregarReceitas` mora **dentro** do efeito e é chamada logo abaixo, com `carregarReceitas()`
 2. `dados` é o objeto inteiro, e o objeto não tem `filter`. A lista está dentro dele: `setReceitas(dados.recipes)`
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Efeitos e API
+
+:::example Exercícios
+1. Escreva o estado `carregando` do app do clima, que já abre buscando
+2. O app pede a temperatura ao abrir. O pedido vai no corpo do componente ou num `useEffect` com `[]`?
+3. O Console mostra `resposta.json is not a function`. O que falta?
+
+   ```jsx
+   async function carregarAlunos() {
+     const resposta = fetch('https://dummyjson.com/users')
+     const dados = await resposta.json()
+     setAlunos(dados.users)
+   }
+   ```
+
+4. O que `contarAlunos()` mostra sem internet? E com a API no ar?
+
+   ```javascript
+   async function contarAlunos() {
+     try {
+       await fetch('https://dummyjson.com/users')
+       console.log('A')
+     } catch (falha) {
+       console.log('B')
+     } finally {
+       console.log('C')
+     }
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `const [carregando, setCarregando] = useState(true)`
+2. No efeito com `[]`: no corpo, o pedido sairia a cada desenho, e cada resposta pediria outro
+3. O `await` antes do `fetch`: sem ele, `resposta` guarda a senha, e não a resposta
+4. Sem internet, `B` e `C`. Com a API no ar, `A` e `C`: o `finally` roda sempre
 :::
 
 ---

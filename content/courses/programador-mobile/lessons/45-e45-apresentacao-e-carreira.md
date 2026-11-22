@@ -93,6 +93,26 @@ As palavras estão no README, em "O problema".
 
 ---
 
+## :icon[notebook-pen] Exercícios: A apresentação
+
+:::example Exercícios
+1. Ponha em ordem: quem fez o quê, o caminho no celular, o problema.
+2. Dos 6 minutos, quantos são do app funcionando?
+3. Em que parte a equipe fala do AsyncStorage?
+4. Na abertura "O app ajuda as pessoas", o que falta?
+5. Reescreva "Nosso app foi feito com React Native" para um app que mostra o aparelho livre na academia.
+:::
+
+:::tip Respostas
+1. O problema, o caminho no celular, quem fez o quê
+2. 3: metade do tempo
+3. Em nenhuma: só se a banca perguntar
+4. Quem sofre, com o quê e o que o app muda
+5. Um modelo: "No horário de pico, a fila do supino passa de 15 minutos. O app mostra o aparelho livre."
+:::
+
+---
+
 ## A demonstração
 
 Num test-drive, o vendedor explica cada botão ou leva você para dar uma volta?
@@ -126,6 +146,24 @@ Com os dados do kit:
 | Cardápio | a Água e 2 X-Burger "sem cebola": R$ 49,80, Fazer pedido | antes, só a Água, de R$ 4,00: abaixo do mínimo de R$ 15,00 |
 
 Use dados de verdade: nada de "teste" ou "aaa" na tela. Antes da banca, apague pelas telas o que os ensaios criaram.
+
+---
+
+## :icon[notebook-pen] Exercícios: A demonstração
+
+:::example Exercícios
+1. A equipe quer começar pelo tema escuro e pela tela Sobre. Onde isso entra?
+2. Do ensaio, ficou na lista um item "aaa". O que fazer antes da banca?
+3. Por que mostrar um erro de propósito, como um campo recusado?
+4. Monte o caminho principal, com o erro tratado, de um app de reservar livros na biblioteca.
+:::
+
+:::tip Respostas
+1. Nas perguntas: a demonstração segue o caminho principal
+2. Apagar pelas telas: na banca, só dados de verdade
+3. Prova que a regra funciona e foi pensada
+4. Um modelo: abrir no Acervo; reservar sem o dia e ver a mensagem embaixo do campo; reservar "Dom Casmurro"; ver em Minhas reservas; fechar e abrir: continua lá
+:::
 
 ---
 
@@ -177,6 +215,26 @@ Travou por 30 segundos? Diga "vamos mostrar no vídeo" e narre por cima dele. Us
 | o celular não aparece no projetor | faltou testar a ligação | a câmera, ou o computador do instrutor |
 
 O APK abre sem computador e sem rede: é o mais seguro.
+
+---
+
+## :icon[notebook-pen] Exercícios: O plano B
+
+:::example Exercícios
+1. A demonstração travou há 30 segundos. O que a equipe diz e faz?
+2. Usar o vídeo tira ponto?
+3. O APK mostra a tela sem a correção de ontem. Como mostrar a versão certa?
+4. O Expo Go não acha o projeto: o celular está no 4G, e o computador, no Wi-Fi da escola. O que fazer?
+5. A internet da sala caiu. Qual jeito de mostrar o app ainda funciona?
+:::
+
+:::tip Respostas
+1. Diz "vamos mostrar no vídeo" e narra por cima dele
+2. Não
+3. Pelo Expo Go, com a `main` atualizada
+4. `npx expo start --tunnel`, ou o APK
+5. O APK: abre sem computador e sem rede. E o vídeo, no computador do instrutor
+:::
 
 ---
 
@@ -246,6 +304,24 @@ No fim, cada pessoa avalia os colegas da **própria equipe** na [ficha dos pares
 5. Seguiu os combinados: branch, pull request, nada na tela do outro sem falar
 
 Sim vale 2, Em parte 1, Não 0: de 0 a 10 por colega. A média é metade da sua participação, 10 dos 20 pontos; a outra metade vem do seu GitHub. Só o instrutor lê a ficha.
+
+---
+
+## :icon[notebook-pen] Exercícios: A banca
+
+:::example Exercícios
+1. No critério 1, de peso 30, a equipe ficou no nível 3. Quantos pontos?
+2. Ficha dos pares: Sim, Sim, Em parte, Sim e Não. Qual é a nota do colega?
+3. Responda à banca, sobre a sua tela: "de onde vem a lista desta tela?"
+4. E a pergunta "com mil itens, a lista fica lenta?", que vocês não testaram?
+:::
+
+:::tip Respostas
+1. 30 × 3 ÷ 4 = 22,5
+2. 2 + 2 + 1 + 2 + 0 = 7
+3. Um modelo: "Do quadro de avisos da equipe: a tela lê com `useContext`, e o quadro guarda a lista no AsyncStorage."
+4. Um modelo: "Não testamos esse caso; eu começaria criando mil itens e olhando a `FlatList`."
+:::
 
 ---
 
@@ -319,6 +395,24 @@ Diga a sua parte com verbo e número:
 
 ---
 
+## :icon[notebook-pen] Exercícios: O portfólio
+
+:::example Exercícios
+1. Você tem 9 repositórios: os 7 projetos e 2 exercícios soltos, sem README. Quais fixar, e qual primeiro?
+2. O repositório da equipe está na conta da Lia. O Davi pode fixá-lo no perfil dele?
+3. Escreva o About do Racha-conta, numa frase.
+4. Troque a promessa por uma prova: "Sei fazer testes."
+:::
+
+:::tip Respostas
+1. Seis dos projetos, com o app da equipe primeiro; os exercícios soltos ficam fora
+2. Pode: vale o repositório em que ele contribuiu
+3. Um modelo: "Divide a conta do restaurante entre as pessoas da mesa, sem perder nenhum centavo."
+4. Um modelo: "O Racha-conta tem testes com Jest para a gorjeta e para a sobra de centavos."
+:::
+
+---
+
 ## A primeira vaga
 
 Na lista de compras do mês, o que não pode faltar, e o que entra só se der?
@@ -376,6 +470,26 @@ Um perfil no **LinkedIn**, a rede social do trabalho, com o link do seu GitHub, 
 Uma **trilha** é um caminho de estudo, como as linhas de ônibus que saem do mesmo terminal. A base vale nas três: React Native, com TypeScript; nativo, com Kotlin no Android ou Swift no iPhone, que pede um Mac; full stack, com o servidor e o banco de dados.
 
 Publicar na loja tem custo: hoje, US$ 25 uma vez no Google Play e US$ 99 por ano na Apple. Estude um tema por vez, aplicado num app seu.
+
+---
+
+## :icon[notebook-pen] Exercícios: A primeira vaga
+
+:::example Exercícios
+1. O anúncio pede React Native, TypeScript, Git e inglês. Quais são diferenciais?
+2. O anúncio pede "buscar dados de uma API". Que projeto do curso é a prova?
+3. A vaga pede seis itens, e você tem quatro. Vale se candidatar?
+4. Para fazer apps nativos de iPhone: que trilha, e do que precisa?
+5. Na entrevista: "me mostra um app que você fez". Como você responde?
+:::
+
+:::tip Respostas
+1. TypeScript e inglês
+2. O Livro de receitas; a Lista de tarefas também, com o `fetch`
+3. Vale: a vaga júnior existe para quem está começando
+4. A nativa, com Swift, e um Mac
+5. Como na banca: o problema, o caminho no celular e a sua parte
+:::
 
 ---
 

@@ -91,6 +91,24 @@ São dois projetos, cada tela feita duas vezes. Mudou o título? Muda nos dois.
 
 ---
 
+## :icon[notebook-pen] Exercícios: App ou site
+
+:::example Exercícios
+1. O cardápio da lanchonete abre no navegador, pelo endereço. Site ou app nativo?
+2. Com a tela bloqueada, o app avisa que o ônibus está chegando. Por que o site não avisa?
+3. Qual destas linhas é do Android: `Text(text = "Academia")` ou `Text("Academia")`?
+4. Do jeito tradicional, um app de 6 telas para Android e iPhone: quantas telas a equipe escreve?
+:::
+
+:::tip Respostas
+1. Site: abre pelo endereço, sem instalar
+2. O aviso é uma peça do sistema, que o app nativo usa; o site só faz o que o navegador deixa
+3. A primeira, na língua Kotlin. A segunda é Swift, do iPhone
+4. 12: as 6 telas em Kotlin e as mesmas 6 em Swift
+:::
+
+---
+
 ## React Native
 
 Numa reunião com um estrangeiro, o que faz o intérprete?
@@ -128,6 +146,31 @@ Apps conhecidos usam React Native, no app inteiro ou em partes dele: o Discord, 
 
 ---
 
+## :icon[notebook-pen] Exercícios: React Native
+
+:::example Exercícios
+1. Com React Native, um app de 6 telas para Android e iPhone: quantas telas a equipe escreve?
+2. Do Projeto 4 para o Gota, vai igual ou muda: o `useState`, a `<div>`, o `map` com `key`?
+3. O que o celular mostra?
+
+   ```jsx
+   <View>
+     <Text>Treino de {3 * 15} minutos</Text>
+   </View>
+   ```
+
+4. Quem desenha esse texto no celular: o seu código ou o sistema?
+:::
+
+:::tip Respostas
+1. 6: um código só vira o app do Android e o do iPhone
+2. O `useState` e o `map` com `key` vão iguais; a `<div>` vira `View`
+3. `Treino de 45 minutos`: as chaves calculam, como no Projeto 4
+4. O sistema: o seu código diz o que aparece, e o React Native repete a peça na língua do sistema
+:::
+
+---
+
 ## Expo
 
 Para montar um móvel: ferramentas avulsas ou uma caixa completa?
@@ -145,6 +188,24 @@ O **Expo** é a caixa de ferramentas do React Native: em vez de buscar cada ferr
 | `npx expo login` | entra na sua conta Expo, pelo terminal |
 
 O `npx` é o do `npx serve`, do E12: roda o comando de um pacote. Sem o Expo, ver o app no celular pedia programas pesados, como o Android Studio.
+
+---
+
+## :icon[notebook-pen] Exercícios: Expo
+
+:::example Exercícios
+1. Qual comando liga o servidor de desenvolvimento do Expo?
+2. No Projeto 4, o `npm run dev` servia a página, e o navegador a abria. E no Gota?
+3. O Expo Go fica no computador ou no celular? De onde ele vem?
+4. O que o `npx` faz em `npx expo login`?
+:::
+
+:::tip Respostas
+1. `npx expo start`
+2. O `npx expo start` serve o app, e o Expo Go o abre no celular
+3. No celular: é um app da loja, a Play Store ou a App Store
+4. Roda o comando de um pacote, como no `npx serve` do E12: aqui, o `login` do pacote `expo`
+:::
 
 ---
 
@@ -198,6 +259,24 @@ Desde setembro de 2026, o Expo Go do iPhone só abre o app com a mesma conta nos
 
 ---
 
+## :icon[notebook-pen] Exercícios: A conta do Expo
+
+:::example Exercícios
+1. Qual comando entra na conta Expo pelo terminal? E qual mostra quem entrou?
+2. A Bia entrou no terminal como `bia.souza` e, no Expo Go do iPhone, como `bia2010`. O app abre?
+3. No Android, a mesma conta ainda não é obrigatória. Por que a turma entra assim mesmo?
+4. Quanto custa a conta Expo, e onde se cria?
+:::
+
+:::tip Respostas
+1. `npx expo login`; depois, `npx expo whoami` mostra a conta, ou `Not logged in`
+2. Não: desde setembro de 2026, o iPhone pede a mesma conta nos dois lados
+3. O túnel, o caminho pela internet, pede a conta no terminal
+4. É grátis, em `expo.dev/signup`
+:::
+
+---
+
 ## O QR code
 
 No restaurante, o que acontece quando você lê o QR code da mesa?
@@ -229,6 +308,26 @@ npx expo start --tunnel
 O túnel leva o app pela internet, como um desvio quando a rua de sempre está fechada: funciona em quase qualquer rede, só que mais devagar. Ele precisa da conta Expo no terminal.
 
 **Caso 3: a primeira vez no Windows.** O **firewall**, o porteiro do computador, pergunta se o Node.js pode usar a rede: clique em **Permitir acesso**.
+
+---
+
+## :icon[notebook-pen] Exercícios: O QR code
+
+:::example Exercícios
+1. O que o QR code do `npx expo start` guarda?
+2. No iPhone, quem lê o QR code? E no Android?
+3. O computador está no Wi-Fi da escola; o celular, no da padaria ao lado. O app abre?
+4. A rede bloqueia a conversa entre aparelhos. Complete: `npx expo start ___`
+5. O firewall do Windows pergunta se o Node.js pode usar a rede. Qual botão?
+:::
+
+:::tip Respostas
+1. O endereço do computador na rede, como `exp://192.168.0.20:8081`
+2. A câmera do sistema; no Android, o Expo Go
+3. Não: o servidor é uma rádio de alcance curto, que só pega no mesmo Wi-Fi
+4. `--tunnel`: o desvio pela internet, mais devagar, com a conta Expo
+5. **Permitir acesso**
+:::
 
 ---
 
@@ -292,6 +391,30 @@ console.log('O App desenhou a tela');
 ```
 
 **Caso 3: recarregar e desligar.** A tecla `r` escreve `› Reloading apps` e abre o app do começo. Com <kbd>Ctrl</kbd> + <kbd>C</kbd>, o servidor sai do ar, e o celular para de atualizar.
+
+---
+
+## :icon[notebook-pen] Exercícios: O terminal do Expo
+
+:::example Exercícios
+1. Qual tecla do terminal abre o app de novo, do começo?
+2. O que quer dizer cada linha?
+
+   ```plaintext
+   › Metro: exp://192.168.0.20:8081
+    LOG  Treino salvo
+   ```
+
+3. Você trocou um texto, salvou, e o celular mudou sozinho. Como se chama isso?
+4. O celular parou de mudar ao salvar, e o terminal não mostra mais o menu do Expo. O que houve?
+:::
+
+:::tip Respostas
+1. `r`, que escreve `› Reloading apps`
+2. O endereço que o QR code guarda; e um `console.log('Treino salvo')` que rodou no app
+3. Fast Refresh, o "salvou, mudou" do Vite, agora no celular
+4. O servidor saiu do ar, com <kbd>Ctrl</kbd> + <kbd>C</kbd>: rode `npx expo start` de novo
+:::
 
 ---
 
@@ -370,6 +493,35 @@ O celular não conhece a `div`, nem a `view` em minúscula. Troque por `View` e 
 | `export default function App() {` | "esta é a peça `App`, a tela": o `export default` do E24, na linha da função |
 | `<Tela> ... </Tela>` | "ponha tudo isto no fundo azul-claro, longe do relógio"; o que fica entre as tags chega à `Tela` na prop `children` (filhos) |
 | `{/* ... */}` | um **comentário no JSX**: nada aparece no celular |
+
+---
+
+## :icon[notebook-pen] Exercícios: View e Text
+
+:::example Exercícios
+1. Troque a tag da web pela peça do celular: `<p>Ponto final</p>`
+2. O que o celular mostra?
+
+   ```jsx
+   <View>
+     <Text>Academia aberta</Text>
+     {/* <Text>Fechada</Text> */}
+     <Text>Até as {20 + 2}h</Text>
+   </View>
+   ```
+
+3. Conserte o texto solto: `<View>Bom treino!</View>`
+4. A tela **Render Error** fala do componente `view`. O que está errado em `<view><Text>Oi</Text></view>`?
+5. Complete: `import { ___, ___ } from '___';`
+:::
+
+:::tip Respostas
+1. `<Text>Ponto final</Text>`: só o `Text` mostra letras
+2. `Academia aberta` e, embaixo, `Até as 22h`: o comentário não aparece
+3. `<View><Text>Bom treino!</Text></View>`, e o aviso `Text strings must be rendered within a <Text> component` some
+4. A `view` em minúscula: o celular só conhece a `View`, com V maiúsculo
+5. `Text` e `View`, em qualquer ordem, e `react-native`
+:::
 
 ---
 

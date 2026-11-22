@@ -96,6 +96,40 @@ Um círculo em cada ponta e, entre eles, o texto, em duas linhas.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Flexbox e área segura
+
+:::example Exercícios
+1. Sem nada no estilo, qual é a direção de uma `View`? E o `alignItems`?
+2. Complete para o ícone e o texto ficarem lado a lado, na altura do meio:
+   ```javascript
+   linha: { flexDirection: '___', alignItems: '___', gap: espaco.sm },
+   ```
+3. O Detalhe e o Cadastro usam `<Tela rolar comCabecalho>`. O que o `comCabecalho` muda?
+4. Num celular de 360, quanto de largura sobra para o nome do mercado?
+   ```jsx
+   <Tela>
+     <View style={estilos.linha}>
+       <View style={estilos.foto} />
+       <Text style={estilos.nome}>Mercadinho Bom Preço</Text>
+     </View>
+   </Tela>
+   ```
+   ```javascript
+   linha: { flexDirection: 'row', gap: espaco.md },
+   foto: { width: 56, height: 56 },
+   nome: { flex: 1 },
+   ```
+:::
+
+:::tip Respostas
+1. `'column'`, uma embaixo da outra, e `'stretch'`, que estica na largura
+2. `'row'` e `'center'`
+3. O cabeçalho da pilha já protege o topo: a `Tela` cuida só das laterais e da parte de baixo
+4. 256: 360 menos os 16 de cada borda da `Tela` (328), menos a foto (56) e o vão (16)
+:::
+
+---
+
 ## Tokens e tema
 
 O celular foi para o tema escuro. Quem avisa cada tela, e o que muda nela?
@@ -148,6 +182,28 @@ export default function Rodape() {
   return <Text style={[estilos.texto, { color: cores.textoSuave }]}>Feito por Ana Souza</Text>;
 }
 ```
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Tokens e tema
+
+:::example Exercícios
+1. No `tokens.js`, o `md: 16` virou `md: 20`. O que muda no app?
+2. Em que arquivo fica o `TemaProvider`, e por que ali?
+3. O `Badge` recebe só `tom="perigo"`. Como ele acerta o vermelho do tema escuro?
+4. O tema vira escuro. O que acontece com o cabeçalho do Detalhe?
+   ```jsx
+   const { cores } = useTema();
+   <Stack screenOptions={opcoesDaPilha(cores)}>
+   ```
+:::
+
+:::tip Respostas
+1. Todo espaço médio passa de 16 para 20, também nas peças do kit
+2. No `app/_layout.js`, a moldura de todas as telas: pendurado uma vez, todas leem
+3. Ele chama o `useTema()` por dentro: `perigo` é um papel, com um valor em cada paleta
+4. Muda de cor junto: o `opcoesDaPilha` recebe a paleta da vez, e a pilha desenha de novo
 :::
 
 ---
@@ -237,6 +293,34 @@ O conserto: do caso mais estreito ao mais largo, `<= 0`, `=== 1` e `<= 3`.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Componente próprio
+
+:::example Exercícios
+1. O `CartaoTreino` tem `export default`. O `import` vem com ou sem chaves?
+2. Ele recebe o treino e avisa quando a pessoa toca em Concluir. Escreva a primeira linha da função, com as duas props
+3. No cartão, quem escolhe o `tom` do selo: o `Badge` ou o cartão?
+4. O que aparece, e o que o toque faz?
+   ```jsx
+   function LinhaOnibus({ linha, onPress }) {
+     return (
+       <Pressable onPress={onPress}>
+         <Text>{linha.numero} · {linha.destino}</Text>
+       </Pressable>
+     );
+   }
+   <LinhaOnibus linha={{ numero: '701U', destino: 'Butantã' }} onPress={() => router.push('/linha/701U')} />
+   ```
+:::
+
+:::tip Respostas
+1. Sem: `import CartaoTreino from '@/components/CartaoTreino';`
+2. `export default function CartaoTreino({ treino, onConcluir }) {`: a de ação começa com `on`
+3. O cartão, com a regra do `else if`; o `Badge` só pinta na cor do tom
+4. "701U · Butantã"; o toque põe a tela `/linha/701U` por cima, na pilha
+:::
+
+---
+
 ## Listas e busca
 
 Alguém digita "sao", sem til. Como o app acha São Paulo e desenha só o que cabe?
@@ -311,6 +395,29 @@ return (
 
 ---
 
+## :icon[notebook-pen] Exercícios: Listas e busca
+
+:::example Exercícios
+1. O que aparece no terminal?
+   ```javascript
+   const linhas = ['701U Butantã', '8700 Lapa', '177H Centro'];
+   const busca = '';
+   console.log(linhas.filter((linha) => linha.toLowerCase().includes(busca)).length);
+   ```
+2. Por que a Início começa com todas as casas, antes de alguém digitar?
+3. Por que o `visiveis` não é um `useState`?
+4. Desde o E39, o que a Início mostra nos 800 milissegundos em que o `useCasas()` ainda não tem as casas?
+:::
+
+:::tip Respostas
+1. `3`
+2. O `termo` começa com `''`, e todo texto inclui o texto vazio: a peneira deixa passar tudo
+3. Ele sai do `termo` a cada desenho: cada letra chama o `setTermo`, e o `filter` roda de novo
+4. A rodinha e "Buscando as casas...": o `carregando` é `true`, e o primeiro `return` sai ali
+:::
+
+---
+
 ## Navegação
 
 Você abriu uma casa e, nela, outra. Quantos toques em voltar até a lista?
@@ -359,6 +466,28 @@ Os endereços: `/casa/9`, `/casa/nove` e `/casa/13`, antes e depois de cadastrar
 | `/casa/13`, depois | `13` | o Detalhe do Lar do Totó: o `adicionarCasa` deu a ele o `id` 13 |
 
 Nenhum dá `Unmatched Route`: os quatro batem com o arquivo `app/casa/[id].js`. Quem decide a tela é o `find`.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Navegação
+
+:::example Exercícios
+1. No app da biblioteca, quais endereços têm `app/(abas)/index.js`, `app/(abas)/reservas.js` e `app/livro/[id].js`?
+2. Qual aba aparece primeiro na barra, à esquerda?
+   ```jsx
+   <Tabs.Screen name="reservas" options={{ title: 'Reservas' }} />
+   <Tabs.Screen name="index" options={{ title: 'Livros' }} />
+   ```
+3. O `useLocalSearchParams()` é um hook? Onde ele vai na função?
+4. Ache o erro: `<Link href="/livro/" + livro.id>{livro.titulo}</Link>`
+:::
+
+:::tip Respostas
+1. `/`, `/reservas` e `/livro/7`, com qualquer `id`: o grupo `(abas)` não entra no endereço
+2. Reservas: a ordem dos `Tabs.Screen` é a ordem na barra
+3. É, porque começa com `use`: vai no começo da função, antes de qualquer `return`
+4. A conta precisa das chaves, a janela para o JavaScript: `href={'/livro/' + livro.id}`. Sem elas, o app nem abre
 :::
 
 ---
@@ -412,6 +541,35 @@ Duas mensagens, com a borda vermelha: "Informe a cidade" embaixo da Cidade e "N�
 | nome | `'Lar'`: o `trim` tira os espaços das pontas, e sobram 3 letras | não |
 | cidade | `''`: só havia espaços | sim |
 | animais | `12 > 10`, em números | sim |
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Formulários
+
+:::example Exercícios
+1. No iPhone, o teclado de números não tem a tecla de fechar. Como ele desce?
+2. Por que o Cadastro usa `<Tela rolar>`, e a Início, não?
+3. O que aparece no terminal?
+   ```javascript
+   function salvar(novos) {
+     if (Object.keys(novos).length > 0) return 'Confira o formulário';
+     return 'Casa cadastrada';
+   }
+   console.log(salvar({}));
+   console.log(salvar({ cidade: 'Informe a cidade' }));
+   ```
+4. O `Campo` do kit tem esta linha. Com `rotulo="Cidade"` e `erro="Informe a cidade"`, o que o leitor de tela lê?
+   ```jsx
+   <TextInput accessibilityLabel={rotulo} accessibilityHint={erro || undefined} />
+   ```
+:::
+
+:::tip Respostas
+1. Com um toque fora do campo
+2. Os sete campos não cabem, e o `rolar` sobe a tela quando o teclado abre. A Início tem a `FlatList`, que já rola
+3. `Casa cadastrada` e `Confira o formulário`: folha em branco, aprovado
+4. "Cidade" e, como dica, "Informe a cidade". Sem erro, o `||` dá `undefined`, e não há dica
 :::
 
 ---
@@ -492,6 +650,31 @@ Em pé, a Início abre com a tela vermelha `columnWrapperStyle not supported for
 :::tip Resposta
 1. O `columnWrapperStyle` é o estilo de cada linha da grade. Com uma coluna, não há grade: `columnWrapperStyle={colunas === 2 ? estilos.linha : null}`
 2. Falta o crachá da própria lista: `key={colunas}`. Girou, crachá novo, lista nova
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Estados e acessibilidade
+
+:::example Exercícios
+1. Que valor da `simulacao` faz o servidor responder com a lista vazia?
+2. O `Carregando` do kit começa assim. Com `texto="Buscando as casas..."`, o que o leitor de tela lê?
+   ```jsx
+   <View style={estilos.estado} accessible accessibilityLabel={texto}>
+   ```
+3. O que aparece no terminal?
+   ```javascript
+   const larguras = [360, 699, 700, 1024];
+   console.log(larguras.filter((width) => width >= 700).length);
+   ```
+4. Pode pôr um `useState` dentro de um `if`?
+:::
+
+:::tip Respostas
+1. `vazio: true`
+2. "Buscando as casas...", num foco só: o `accessible` junta a rodinha e o texto
+3. `2`: o 699 fica de fora por um ponto
+4. Não: num desenho o hook roda, no outro não, e a ordem da chamada da escola se perde
 :::
 
 ---

@@ -91,6 +91,24 @@ A Novo chama `adicionar`. O quadro muda, e a Início e a Lançamentos desenham d
 
 ---
 
+## :icon[notebook-pen] Exercícios: Estado global
+
+:::example Exercícios
+1. Qual destes é um quadro de avisos pronto: `useState`, `useTema()` ou `FlatList`?
+2. No app da academia, a Treino marca o exercício feito, e a Resumo conta quantos faltam. Um `useState` na Treino resolve?
+3. Ligue ao código: fazer, pendurar e ler o quadro.
+4. No app da biblioteca da escola, a Acervo empresta, a Meus livros mostra e devolve, e a Início conta. O quadro tem `livros`, `emprestar` e `devolver`. O que cada tela pega?
+:::
+
+:::tip Respostas
+1. `useTema()`: todas as telas leem o mesmo tema
+2. Não: o placar da Treino não chega à Resumo; a lista vai para um contexto
+3. Fazer: `createContext`; pendurar: o Provider; ler: `useContext`
+4. Acervo: `emprestar`; Meus livros: `livros` e `devolver`; Início: `livros`
+:::
+
+---
+
 ## Escrever um quadro
 
 Para pôr um quadro de avisos na sala, do que você precisa?
@@ -212,6 +230,32 @@ export default function Lancamentos() {
 
 ---
 
+## :icon[notebook-pen] Exercícios: Escrever um quadro
+
+:::example Exercícios
+1. O que aparece no terminal?
+   ```javascript
+   const compras = [{ id: 1, item: 'Arroz' }, { id: 2, item: 'Café' }];
+   const novo = { item: 'Leite' };
+   const depois = [{ ...novo, id: 3 }, ...compras];
+   console.log(depois[0].item, depois.length, compras.length);
+   ```
+2. E `console.log(depois.filter((c) => c.id !== 1).length)`?
+3. No `filter` do 2, trocaram o `!==` por `===`. O que sobra na lista?
+4. Escreva mais curto: `const valor = { livros: livros, devolver: devolver };`
+5. A tela Perfil ficou fora do `<BibliotecaProvider>`. O que o `useContext(BibliotecaContext)` devolve?
+:::
+
+:::tip Respostas
+1. `Leite 3 2`: o novo entra na frente, e a lista antiga não muda
+2. `2`: fica tudo, menos o do `id` 1
+3. Só o Arroz, o que devia sair
+4. `const valor = { livros, devolver };`
+5. `null`, e o app para com `Cannot read property 'livros' of null`
+:::
+
+---
+
 ## :icon[milestone] Projeto 7 · Passo 2: o quadro em volta do app
 
 No `app/_layout.js`, o import do Provider e o `GastosProvider` em volta da `Pilha`, dentro do `TemaProvider`. É o que o comentário `E43`, no topo do arquivo do kit, pedia:
@@ -325,6 +369,33 @@ As telas só falam com o quadro. O quadro fala com a gaveta em dois momentos: **
 
 ---
 
+## :icon[notebook-pen] Exercícios: AsyncStorage
+
+:::example Exercícios
+1. O que aparece no terminal?
+   ```javascript
+   const treino = [{ id: 1, nome: 'Supino' }, { id: 2, nome: 'Remada' }];
+   const texto = JSON.stringify(treino);
+   console.log(texto);
+   console.log(typeof texto);
+   console.log(JSON.parse(texto)[1].nome);
+   ```
+2. Nada foi guardado com a chave `'onibus.linhas'`. O que devolve `await AsyncStorage.getItem('onibus.linhas')`?
+3. E sem o `await`, o que o `getItem` devolve?
+4. Ache o erro: `await AsyncStorage.setItem('mercado.lista', lista);`, com a `lista` sendo um array.
+5. O que mostra `console.log(JSON.stringify(['pão', 'leite']).length)`? Por que não dá 2?
+:::
+
+:::tip Respostas
+1. `[{"id":1,"nome":"Supino"},{"id":2,"nome":"Remada"}]`, depois `string` e `Remada`
+2. `null`: não há nada com essa etiqueta
+3. Uma Promise, a senha da lanchonete, e não o texto
+4. A gaveta só guarda texto: falta o `JSON.stringify(lista)`, e o terminal avisa `is not a string`
+5. `15`: o texto tem 15 letras e sinais; os 2 itens são da lista, antes do `JSON.stringify`
+:::
+
+---
+
 ## Ler ao abrir
 
 Quando você abre um app, quem lembra o que você deixou lá ontem?
@@ -373,6 +444,36 @@ O `if` escolhe o caminho:
 
 ---
 
+## :icon[notebook-pen] Exercícios: Ler ao abrir
+
+:::example Exercícios
+1. O que aparece no terminal? O `if` é o do primeiro efeito, numa função comum.
+   ```javascript
+   const exemplos = ['Linha 201'];
+   function lerGaveta(texto) {
+     let lista = exemplos;
+     if (texto !== null) {
+       lista = JSON.parse(texto);
+     }
+     return lista;
+   }
+   console.log(lerGaveta(null));
+   console.log(lerGaveta('["Linha 305","Linha 410"]'));
+   ```
+2. O efeito termina com `}, []);`. Quantas vezes ele roda?
+3. No app do ônibus, qual chave é melhor: `'lista'` ou `'onibus.favoritas'`?
+4. Ache o erro: o `setCarregado(true)` foi para dentro do `if`. No primeiro uso do app, o `carregado` vira `true`?
+:::
+
+:::tip Respostas
+1. `[ 'Linha 201' ]` e `[ 'Linha 305', 'Linha 410' ]`: com `null`, ficam os exemplos
+2. Uma vez, quando o app abre
+3. `'onibus.favoritas'`: o nome do app na frente não mistura com outras gavetas
+4. Não: o `texto` vem `null`, o `if` não entra, e a trava fica fechada. O lugar dele é fora do `if`
+:::
+
+---
+
 ## Guardar quando muda
 
 Você guardaria uma gaveta nova por cima da antiga, sem olhar o que tinha dentro?
@@ -413,6 +514,38 @@ Os dois efeitos rodam logo depois do primeiro desenho, e a leitura da gaveta dem
 | a pessoa apaga um | 6 | `true` | sim, os 6 |
 
 Sem a trava, o primeiro desenho guarda os 6 exemplos por cima dos 7, sem olhar o que tinha dentro. Se a leitura ainda não tinha pegado os 7, eles se perdem. A trava garante a ordem: primeiro ler, depois guardar.
+
+---
+
+## :icon[notebook-pen] Exercícios: Guardar quando muda
+
+:::example Exercícios
+1. No app de alarmes, o efeito termina com `}, [alarmes, carregado]);`. A pessoa apaga um alarme. Ele roda de novo?
+2. O que aparece no terminal? A `guardar` faz o papel do segundo efeito.
+   ```javascript
+   let gaveta = '["6:00","6:10","7:00"]';
+   function guardar(lista, carregado) {
+     if (carregado) {
+       gaveta = JSON.stringify(lista);
+     }
+   }
+   guardar(['8:00'], false);
+   console.log(gaveta);
+   guardar(['6:00', '7:00'], true);
+   console.log(gaveta);
+   ```
+3. Escreva a linha que guarda a lista `alarmes` na gaveta, com a `CHAVE`.
+4. Por que o `setItem` desse efeito não precisa de `await`?
+5. Sem o `if (carregado)`, o que o primeiro desenho guarda na gaveta?
+:::
+
+:::tip Respostas
+1. Sim: `alarmes` mudou
+2. `["6:00","6:10","7:00"]` e `["6:00","7:00"]`: com a trava fechada, a gaveta fica como estava
+3. `AsyncStorage.setItem(CHAVE, JSON.stringify(alarmes));`
+4. Depois de guardar, não há mais nada a fazer
+5. Os exemplos do `useState`, por cima do que estava guardado
+:::
 
 ---
 

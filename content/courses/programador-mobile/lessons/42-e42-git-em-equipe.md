@@ -100,6 +100,30 @@ O **`git switch`** troca de branch; o **`-c`** (de *create*, criar) cria antes d
 
 ---
 
+## :icon[notebook-pen] Exercícios: Branch
+
+:::example Exercícios
+1. O `git branch` mostrou isto. Em qual branch entra o próximo commit?
+   ```plaintext
+     main
+   * treino-de-perna
+   ```
+2. Na `main`, qual comando cria a branch `horario-onibus` e entra nela?
+3. Qual nome segue a regra: `Ranking Vôlei`, `ranking-volei` ou `ranking volei`?
+4. Na `ranking-volei`, você fez o commit do `placar.js` e rodou `git switch main`. O `placar.js` continua na pasta?
+5. E se o `placar.js` ainda não tivesse virado commit?
+:::
+
+:::tip Respostas
+1. Na `treino-de-perna`: o `*` marca onde você está
+2. `git switch -c horario-onibus`
+3. `ranking-volei`: minúsculas, sem acento e sem espaço, com hífen
+4. Não: ele mora no commit da branch; `git switch ranking-volei` traz de volta
+5. Continua: o que não virou foto vai junto para a `main`
+:::
+
+---
+
 ## A main protegida
 
 Num prédio com porteiro, quem consegue entrar?
@@ -137,6 +161,26 @@ remote: - Changes must be made through a pull request.
 | merge de um pull request sem aprovação | trava o botão: **Review required** (revisão obrigatória) |
 | o autor aprova o próprio pull request | não deixa: quem aprova é outra pessoa |
 | merge de um pull request aprovado por um colega | libera |
+
+---
+
+## :icon[notebook-pen] Exercícios: A main protegida
+
+:::example Exercícios
+1. O push na `main` voltou com `Changes must be made through a pull request`. O que quer dizer?
+2. Os commits recusados se perderam?
+3. A Lia criou o repositório do app da academia. Pode fazer push direto na `main` protegida?
+4. O Davi quer aprovar o próprio pull request. O GitHub deixa?
+5. Num repositório privado, no plano gratuito, a regra ligada deixou passar o push direto. Por quê?
+:::
+
+:::tip Respostas
+1. As mudanças precisam chegar por um pull request
+2. Não: continuam no seu computador
+3. Não: a regra vale para todos, até para quem criou
+4. Não: quem aprova é outra pessoa; até lá, **Review required**
+5. No plano gratuito, a regra só funciona em repositório público
+:::
 
 ---
 
@@ -205,6 +249,31 @@ O *up to date* compara com o que o computador já sabia da nuvem; quem pergunta 
 **Caso 2: nada novo.** O `git pull` responde `Already up to date.`
 
 **Caso 3: a branch nova sem o `-u`.** O push responde `has no upstream branch`: a branch ainda não tem destino (*upstream*) na nuvem. Rode `git push -u origin` e o nome dela.
+
+---
+
+## :icon[notebook-pen] Exercícios: Push e pull
+
+:::example Exercícios
+1. Qual comando faz o primeiro push da branch `lista-mercado`?
+2. A colega acabou de juntar uma branch à `main`. No seu computador, o `git switch main` respondeu `up to date`. A mudança dela já chegou?
+3. Depois do `git pull`, apareceu isto. O que aconteceu com a sua `main`?
+   ```plaintext
+   Updating b076b49..80954ad
+   Fast-forward
+    linhas.js | 3 +++
+    1 file changed, 3 insertions(+)
+    create mode 100644 linhas.js
+   ```
+4. O `git push` da branch nova `placar-volei` respondeu `has no upstream branch`. Qual comando resolve?
+:::
+
+:::tip Respostas
+1. `git push -u origin lista-mercado`
+2. Ainda não: o *up to date* não pergunta à nuvem; quem pergunta é o `git pull`
+3. Avançou até a foto da nuvem e ganhou o arquivo novo `linhas.js`, com 3 linhas
+4. `git push -u origin placar-volei`: a branch ainda não tinha destino na nuvem
+:::
 
 ---
 
@@ -380,6 +449,26 @@ O **`git fetch`** (buscar) pergunta à nuvem que branches existem, sem juntar na
 
 ---
 
+## :icon[notebook-pen] Exercícios: Pull request
+
+:::example Exercícios
+1. No pull request, `base: main` e `compare: horario-onibus`. Qual branch vai ser juntada, e em qual?
+2. O pull request cumpre o Pronto quando da issue 5. O que vai na descrição para fechar a issue no merge?
+3. Quais dois comandos trazem a branch `tela-treino` do colega para você rodar?
+4. Na branch dele, o botão Salvar do treino não faz nada. Qual opção da revisão?
+5. Reescreva o comentário "nome horrível", sobre a função `f`, que soma o carrinho.
+:::
+
+:::tip Respostas
+1. A `horario-onibus` entra na `main`
+2. `Closes #5`; só o `#5` faz o link, sem fechar
+3. `git fetch` e `git switch tela-treino`
+4. **Request changes**: algo quebra
+5. "`f` faz o quê? `somarCarrinho` diz na hora"
+:::
+
+---
+
 ## :icon[milestone] Projeto 7 · Passo 3: o pull request e a revisão
 
 Cada pessoa pede a revisão do seu esqueleto e revisa o de um colega: A revisa B, B revisa C, C revisa A.
@@ -465,6 +554,33 @@ Em cima do bloco, o VS Code oferece: **Accept Current Change** (fica a sua), **A
 **Caso 2: duas frases.** Só uma pode ficar. Com as duas, o app para com `Identifier 'frase' has already been declared` (o nome `frase` já existe). A equipe conversa e escolhe **Current** ou **Incoming**, ou escreve uma frase nova no lugar.
 
 **Caso 3: arquivos diferentes.** Bruno mexe no `lancamentos.js`, Carla no `novo.js`: o merge junta sozinho, sem conflito. É a reforma da casa do E41: o eletricista não mexe no encanamento, e cada pessoa mexe na sua tela.
+
+---
+
+## :icon[notebook-pen] Exercícios: Conflito
+
+:::example Exercícios
+1. Na branch `preco-coxinha`, o `git merge main --no-edit` deixou isto. Qual preço é da sua branch?
+   ```javascript
+   <<<<<<< HEAD
+   const precoCoxinha = 7;
+   =======
+   const precoCoxinha = 8;
+   >>>>>>> main
+   ```
+2. Com **Accept Incoming Change**, o que fica no arquivo?
+3. E com **Accept Both Changes**, o que acontece ao rodar?
+4. A Rita mudou o `bebidas.js`, e o Davi, o `salgados.js`. O merge dá conflito?
+5. A escolha está feita, sem marcas. Quais três comandos terminam o merge?
+:::
+
+:::tip Respostas
+1. 7: do `<<<<<<< HEAD` até o `=======`, a versão da sua branch
+2. Só `const precoCoxinha = 8;`, sem as marcas
+3. Ficam as duas, e o código para com `'precoCoxinha' has already been declared`
+4. Não: arquivos diferentes juntam sozinhos
+5. `git add .`, `git commit -m` com a mensagem e `git push`
+:::
 
 ---
 

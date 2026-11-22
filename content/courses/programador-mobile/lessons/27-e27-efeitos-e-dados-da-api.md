@@ -136,6 +136,43 @@ Sem o `[]`, o efeito roda depois de **todo** desenho. Com um pedido à API dentr
 
 ---
 
+## :icon[notebook-pen] Exercícios: useEffect
+
+:::example Exercícios
+O contador de séries da academia:
+
+```jsx
+function Treino() {
+  const [series, setSeries] = useState(0)
+  console.log('desenhou')
+
+  useEffect(() => {
+    console.log('aquecimento')
+  }, [])
+
+  return (
+    <button onClick={() => setSeries(series + 1)}>
+      Séries: {series}
+    </button>
+  )
+}
+```
+
+1. A pessoa abre a página. O que o Console mostra, em ordem?
+2. Depois, ela clica duas vezes no botão. O que aparece a mais?
+3. Escreva um efeito que mostre `Bom treino!` no Console uma vez só, quando a tela aparece
+4. Sem o `[]`, o que os mesmos dois cliques mostram a mais?
+:::
+
+:::tip Respostas
+1. `desenhou` e `aquecimento`: o React desenha primeiro e roda o efeito depois
+2. `desenhou` duas vezes: cada clique muda o estado e redesenha; o efeito com `[]` não roda de novo
+3. `useEffect(() => { console.log('Bom treino!') }, [])`
+4. `desenhou`, `aquecimento`, `desenhou`, `aquecimento`: sem o `[]`, o efeito roda depois de todo desenho
+:::
+
+---
+
 ## Buscar no efeito
 
 No restaurante, você vai até a cozinha buscar o prato?
@@ -188,6 +225,37 @@ Abra `https://dummyjson.com/recipes` numa aba do navegador: é o JSON que o gar�
 | a cozinha dela | `dados.recipes[0].cuisine` | `'Italian'` |
 
 Os campos são os mesmos das receitas do kit (`name`, `image`, `cuisine`...). Só os textos vêm em inglês.
+
+---
+
+## :icon[notebook-pen] Exercícios: Buscar no efeito
+
+:::example Exercícios
+O app de frases do dia. No Console, a resposta da DummyJSON é `{quotes: Array(30), total: 1454, skip: 0, limit: 30}`.
+
+```jsx
+useEffect(() => {
+  ___ function carregarFrases() {
+    const resposta = ___ fetch('https://dummyjson.com/quotes')
+    const dados = await resposta.json()
+    console.log(dados.quotes.length, dados.total)
+  }
+  ___
+}, [])
+```
+
+1. Complete as três lacunas
+2. Completo, o que o efeito mostra no Console?
+3. Escreva a linha que mostra a primeira frase, guardada no campo `quote`
+4. Sem o `await` do `json()`, quanto vale `dados.quotes`?
+:::
+
+:::tip Respostas
+1. `async`, `await` e `carregarFrases()`: o `await` pede uma função `async`, e sem a chamada nada é buscado
+2. `30 1454`: vieram 30 frases, de um total de 1454
+3. `console.log(dados.quotes[0].quote)`
+4. `undefined`: sem o `await`, `dados` guarda a senha, e não o prato
+:::
 
 ---
 
@@ -250,6 +318,44 @@ setReceitas(dados.recipes)
 :::
 
 O React desenha primeiro, com a lista vazia. Só **depois** o efeito pede as receitas. Quando a resposta chega, `setReceitas` muda o estado, e o React desenha de novo. Com o `[]`, o efeito não roda nesse segundo desenho: um pedido só.
+
+---
+
+## :icon[notebook-pen] Exercícios: Dados no estado
+
+:::example Exercícios
+O app do mercado busca os produtos na DummyJSON:
+
+```jsx
+function Mercado() {
+  const [produtos, setProdutos] = useState([])
+  console.log('produtos:', produtos.length)
+
+  useEffect(() => {
+    async function carregar() {
+      const resposta = await fetch('https://dummyjson.com/products/category/groceries')
+      const dados = await resposta.json()
+      setProdutos(dados.products)
+    }
+    carregar()
+  }, [])
+
+  return <p>{produtos.length} produtos</p>
+}
+```
+
+1. O que a tela mostra no primeiro desenho? E quando chegam os 27 produtos?
+2. O que o Console mostra, em ordem?
+3. Quantos pedidos aparecem na aba Rede?
+4. Com `useState()` no lugar de `useState([])`, o que acontece ao abrir?
+:::
+
+:::tip Respostas
+1. `0 produtos` e, depois, `27 produtos`: o `setProdutos` muda o estado, e o React desenha de novo
+2. `produtos: 0` e `produtos: 27`
+3. Um: com o `[]`, o efeito não roda no segundo desenho
+4. Tela branca e `Cannot read properties of undefined`: nada chegou ainda, e `undefined` não tem `length`
+:::
 
 ---
 
@@ -326,6 +432,39 @@ if (carregando) {
 
 ---
 
+## :icon[notebook-pen] Exercícios: Carregando
+
+:::example Exercícios
+O painel do ponto de ônibus:
+
+```jsx
+let painel
+if (carregando) {
+  painel = <p>Buscando horários...</p>
+} else if (horarios.length === 0) {
+  painel = <p>Nenhum ônibus agora.</p>
+} else {
+  painel = <p>{horarios.length} ônibus a caminho</p>
+}
+```
+
+1. Complete a linha que vem logo depois de guardar os horários: `___(false)`
+2. `carregando` é `true`, e `horarios` está vazia. O que aparece?
+3. `carregando` é `false`, e chegaram 3 horários?
+4. `carregando` é `false`, e a lista veio vazia?
+5. O estado começa com `useState(false)`. O que aparece ao abrir, antes da resposta?
+:::
+
+:::tip Respostas
+1. `setCarregando`: a resposta chegou, a espera acabou
+2. `Buscando horários...`: vale o primeiro caminho que dá sim
+3. `3 ônibus a caminho`: os dois testes dão não, e vale o `else`
+4. `Nenhum ônibus agora.`
+5. `Nenhum ônibus agora.`, até a resposta chegar: o primeiro teste dá não, e a lista ainda vazia dá sim
+:::
+
+---
+
 ## :icon[milestone] Projeto 4 · Passo 3: o aviso de carregando
 
 :::steps
@@ -398,6 +537,43 @@ async function verReceita(id) {
 | `verReceita(1)`, sem internet | `Falhou: Failed to fetch` e `Pedido encerrado` |
 
 O `resposta.status` é o número da resposta (200, 404), e o `falha.message`, o texto do erro. Sem o `if` do `ok`, o 9999 mostraria `undefined`. Computador sem Wi-Fi para desligar? Um endereço que não existe, como `https://dummyjson.invalid/recipes`, falha igual à falta de internet.
+
+---
+
+## :icon[notebook-pen] Exercícios: Quando a API falha
+
+:::example Exercícios
+1. Sem internet, o `fetch` cai no `catch`? E quando a API responde 404?
+2. Complete: `if (___) { throw new Error('A API respondeu ' + resposta.status) }`
+3. O que este código mostra?
+
+   ```javascript
+   function conferir(resposta) {
+     if (!resposta.ok) {
+       throw new Error('A API respondeu ' + resposta.status)
+     }
+     console.log('Chegou:', resposta.status)
+   }
+   try {
+     conferir({ ok: true, status: 200 })
+     conferir({ ok: false, status: 500 })
+     conferir({ ok: true, status: 200 })
+   } catch (falha) {
+     console.log('Falhou:', falha.message)
+   } finally {
+     console.log('Pedido encerrado')
+   }
+   ```
+
+4. Sem o `finally`, com o `console.log('Pedido encerrado')` no fim do `try`, o que muda?
+:::
+
+:::tip Respostas
+1. Sem internet, sim. Com 404, não: chegou uma resposta, com `ok` falso
+2. `!resposta.ok`, "não deu certo?"
+3. `Chegou: 200`, `Falhou: A API respondeu 500` e `Pedido encerrado`: o `throw` pula para o `catch`, e a terceira chamada não roda
+4. `Pedido encerrado` some: o `throw` pulou o resto do `try`
+:::
 
 ---
 

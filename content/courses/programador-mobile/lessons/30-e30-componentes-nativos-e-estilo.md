@@ -159,6 +159,34 @@ import { cores } from './src/tema';
 
 ---
 
+## :icon[notebook-pen] Exercícios: Estilo no celular
+
+:::example Exercícios
+1. Passe para o `StyleSheet` este CSS do cardápio: `font-size: 22px;`
+2. Com o estilo `preco: { fontSize: 24, color: cores.agua }`, como aparecem os dois textos?
+   ```jsx
+   <Text style={estilos.preco}>R$ 15</Text>
+   <Text>X-salada</Text>
+   ```
+3. Ache os dois enganos no estilo do horário do ônibus:
+   ```jsx
+   horario: {
+     fontSize: '18px',
+     font-weight: 'bold',
+   },
+   ```
+4. Para o nome da academia: `color: cores.titulo` ou `color: '#0c4a6e'`? Por quê?
+:::
+
+:::tip Respostas
+1. `fontSize: 22,`: camelCase e sem `px`
+2. "R$ 15" na letra 24, azul; "X-salada" preto, no tamanho padrão
+3. `font-weight`, com hífen, quebra o arquivo (`Unexpected token`): é `fontWeight`. O `'18px'` falha calado: é `fontSize: 18`
+4. `cores.titulo`: o código mora só no `tema.js`, e mudar lá muda o app inteiro
+:::
+
+---
+
 ## :icon[milestone] Projeto 5 · Passo 1: o estilo do topo
 
 O `gota` continua do ponto em que o E29 parou: `npx expo start` ligado e o app aberto no Expo Go.
@@ -256,6 +284,27 @@ A `Image` não tem nada dentro: fecha com `/>`, como a `<img>` do E24. Ela tamb�
 
 ---
 
+## :icon[notebook-pen] Exercícios: Imagens
+
+:::example Exercícios
+1. Complete: `<Image ___={require('./assets/onibus.png')} style={estilos.icone} />`
+2. A `onibus.png` tem 120 por 120. Com o estilo `icone: { width: 60, height: 60 }`, de que tamanho ela aparece? E sem `style`?
+3. O `Cabecalho.js` mora em `src/`, e o logo em `assets/logo.png`, na raiz do projeto. Qual caminho vai no `require`?
+4. O app mostra `Property 'Image' doesn't exist`. O `App.js` começa assim. O que falta?
+   ```jsx
+   import { StyleSheet, Text, View } from 'react-native';
+   ```
+:::
+
+:::tip Respostas
+1. `source`, a origem da imagem
+2. 60 por 60; sem `style`, 120 por 120, o tamanho do arquivo
+3. `require('../assets/logo.png')`: o `..` sobe de `src/` para a raiz
+4. O nome `Image` entre as chaves do `import` de `react-native`
+:::
+
+---
+
 ## :icon[milestone] Projeto 5 · Passo 2: a gota no topo
 
 No `import` de `react-native`, mais um nome. A ordem dentro das chaves não importa:
@@ -323,6 +372,29 @@ No E26, o evento era a campainha, e o `onClick`, o combinado do que fazer quando
 **Caso 2: sem a seta.** `onPress={console.log('Oi!')}` roda o `console.log` na hora de desenhar a tela: o `Oi!` aparece sozinho, ao salvar, e o toque não faz mais nada. É o `avisar()` com parênteses do E26.
 
 **Caso 3: o nome do combinado.** No celular, é `onPress`. O `onClick` é da web, do Projeto 4.
+
+---
+
+## :icon[notebook-pen] Exercícios: O toque
+
+:::example Exercícios
+1. Complete o botão de pedir parada no ônibus: `<Pressable ___={() => console.log('Parada')}>`
+2. A pessoa toca duas vezes. O que aparece no celular? E no terminal?
+   ```jsx
+   <Pressable onPress={() => console.log('Senha chamada')}>
+     <Text>Chamar senha</Text>
+   </Pressable>
+   ```
+3. O botão da academia escreve `Bom treino!` ao salvar, e o toque não faz nada. Conserte: `onPress={console.log('Bom treino!')}`
+4. Escreva um `Pressable` com o texto "Chamar garçom" que, no toque, escreve `Garçom chamado` no terminal.
+:::
+
+:::tip Respostas
+1. `onPress`; o `onClick` é da web
+2. No celular, só "Chamar senha". No terminal, duas linhas `LOG  Senha chamada`
+3. Com a seta, que espera o toque: `onPress={() => console.log('Bom treino!')}`
+4. `<Pressable onPress={() => console.log('Garçom chamado')}><Text>Chamar garçom</Text></Pressable>`
+:::
 
 ---
 
@@ -414,6 +486,37 @@ Um selo de aviso: uma `View` com fundo azul e, dentro, o texto branco.
 | sem o `padding` | o texto encosta na borda da faixa |
 | `borderRadius: 0` | os cantos ficam retos |
 | sem o `backgroundColor` | a faixa some, e o texto branco quase desaparece no fundo claro |
+
+---
+
+## :icon[notebook-pen] Exercícios: A caixa do botão
+
+:::example Exercícios
+1. Qual propriedade dá os cantos redondos? E a cor do fundo? E o espaço por dentro?
+2. Como aparece esta etiqueta do mercado?
+   ```jsx
+   <View style={estilos.etiqueta}>
+     <Text style={estilos.letra}>Oferta</Text>
+   </View>
+   // etiqueta: { backgroundColor: cores.agua, borderRadius: 0, padding: 4 }
+   // letra: { color: cores.textoNoAzul }
+   ```
+3. A senha da lanchonete saiu em letra preta no fundo azul. Por quê?
+   ```jsx
+   <View style={estilos.senha}>
+     <Text>Senha 27</Text>
+   </View>
+   // senha: { backgroundColor: cores.agua, color: cores.textoNoAzul }
+   ```
+4. Escreva o estilo `ficha`: fundo `cores.agua`, cantos 16 e espaço por dentro de 20.
+:::
+
+:::tip Respostas
+1. `borderRadius`, `backgroundColor` e `padding`
+2. Uma faixa azul de cantos retos, com "Oferta" em branco, a 4 pontos da borda
+3. O `color` pinta a letra e vai no `Text`; na `View`, não pinta nada
+4. `ficha: { backgroundColor: cores.agua, borderRadius: 16, padding: 20 },`
+:::
 
 ---
 
@@ -524,6 +627,38 @@ export default function Lembrete({ hora }) {
 
 - Texto pronto vai entre aspas. Número vai entre chaves: `copos={3}` chega como número; `copos="3"`, como texto
 - Dentro da peça, a prop entra no JSX entre chaves, como o `{hora}`, e numa template string, com `${ }`
+
+---
+
+## :icon[notebook-pen] Exercícios: Coluna por padrão
+
+:::example Exercícios
+1. Como os três textos aparecem dentro da `Tela`?
+   ```jsx
+   <Text>Pão</Text>
+   <Linha>
+     <Text>Leite</Text>
+     <Text>Café</Text>
+   </Linha>
+   ```
+2. Um `Pressable` sem fundo, com o texto "Ligar", está sozinho na `Tela`. Tocar à direita do texto, longe dele, chama o `onPress`?
+3. O que o celular mostra em cada tag?
+   ```jsx
+   function Senha({ numero }) {
+     return <Text>Próxima: {numero + 1}</Text>;
+   }
+   <Senha numero={7} />
+   <Senha numero="7" />
+   ```
+4. Escreva a tag da `Senha` que mostra "Próxima: 43".
+:::
+
+:::tip Respostas
+1. "Pão" em cima, na linha toda; embaixo, "Leite" e "Café" na mesma linha, um em cada ponta
+2. Sim: o `Pressable` ocupa a linha toda, mesmo sem aparecer
+3. "Próxima: 8" e "Próxima: 71": entre chaves chega número, e o `+` soma; entre aspas chega texto, e o `+` junta
+4. `<Senha numero={42} />`, com o número entre chaves
+:::
 
 ---
 

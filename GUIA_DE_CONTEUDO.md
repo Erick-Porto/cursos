@@ -151,7 +151,7 @@ entre aspas (`summary: "Monitoramento: métricas e ferramentas"`). Sem aspas, o 
 - **Todos os outros slides começam com `## Título do slide`.** Um único `##` por slide.
 - Use `###` só para subdivisões curtas dentro do slide.
 - Tamanho: de 8 a 20 slides por aula. Em curso com encontro presencial de 4h e uma aula por encontro
-  (o Programador Mobile), de 26 a 34 slides, contando os de seção. Até 130 palavras por slide (aviso); 200 é o limite (erro).
+  (o Programador Mobile), de 26 a 34 slides, contando os de seção, mais um slide de Exercícios por tema (12.1, regra 8). Até 130 palavras por slide (aviso); 200 é o limite (erro).
   Slides de seção (4.8) não entram na conta; o validador avisa acima de 40 slides de conteúdo.
 
 ### 4.3 Roteiro recomendado de uma aula
@@ -372,7 +372,7 @@ Uma **constante** é um valor guardado com um nome, que não muda depois de cria
 - **Um por conceito novo**, em geral de 3 a 8 por aula. Os slides seguintes (exemplos, tradução do
   código, prática) pertencem à mesma seção, até a próxima.
 - **Não ganham seção** os slides de rotina: capa, "O que você vai aprender", "Palavras novas de hoje",
-  o slide de problema que abre a aula, Resumo, Próximos passos, No laboratório e a etapa do projeto.
+  o slide de problema que abre a aula, Resumo, Próximos passos, No laboratório, os Exercícios e a etapa do projeto.
 - **Título:** de 1 a 4 palavras, o nome do conceito como se diz em sala ("Variáveis", "O REPL",
   "Mensagens de erro"). Sem ícone: o validador avisa título longo, ícone, seção sem gancho, seção no fim
   da aula e duas seções seguidas.
@@ -973,7 +973,11 @@ a aula 3 e o E04 (`lessons/03-e02a-node-na-pratica.md`, `lessons/04-e04-npm-e-o-
 7. **Erros com nome.** Um slide "Quando aparece um erro" (tabela `A mensagem tem | Quer dizer | O que fazer`)
    com as mensagens reais que a turma vai ver.
 8. **Pratique com resposta**: o desafio em `:::example` e a resposta em `:::tip Resposta`, para quem
-   estuda sozinho conferir.
+   estuda sozinho conferir. Aula sem lista de exercícios na plataforma (seção 13) fecha **cada tema** com um slide
+   `## :icon[notebook-pen] Exercícios: tema`: de 3 a 5 exercícios curtos em `:::example Exercícios` e as respostas numeradas em
+   `:::tip Respostas`, logo depois do último slide de explicação do tema e antes do passo do projeto. Situações
+   diferentes das do slide, do mais fácil ao mais difícil, com pelo menos um de ler código; até 130 palavras. No
+   roteiro, o instrutor faz o primeiro em voz alta e os outros ficam para a revisão.
 9. **O slide se basta.** Nada de "slide anterior" (4.7): se o exercício usa um código, repita o código.
 10. **Tudo o que aparece no código é explicado.** Se um recurso entra num código da aula, a turma
     aprende ali o que ele é e o que ele faz: seção própria (gancho, explicação com analogia, na prática)

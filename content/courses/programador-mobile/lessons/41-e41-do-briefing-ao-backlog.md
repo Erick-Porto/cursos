@@ -107,6 +107,24 @@ A tela entre parênteses é só da equipe de 4. O briefing inteiro, com o públi
 
 ---
 
+## :icon[notebook-pen] Exercícios: Briefing
+
+:::example Exercícios
+1. App de academia: que parte do briefing é cada frase? "A ficha de papel some"; "quem treina à noite, sem professor"; "no máximo 8 exercícios por treino"
+2. Que partes faltam? "Problema: a fila do almoço leva 20 minutos. Telas: Cardápio e Senha. Regra: uma senha por aluno."
+3. Escreva, numa frase, o problema de um app para o ônibus da escola
+4. No app da academia, o que a regra dos 8 exercícios vira na tela?
+:::
+
+:::tip Respostas
+1. Problema, público e regra
+2. O público e os dados
+3. Modelo: "Os alunos perdem o ônibus porque não sabem a que horas ele passa no ponto"
+4. Uma conferência, como o `validar`: com 9, uma mensagem, e nada é salvo
+:::
+
+---
+
 ## Trabalho em equipe
 
 Na reforma de uma casa, o pintor também faz a parte elétrica?
@@ -143,6 +161,24 @@ Os combinados valem o projeto inteiro:
 - Cada pessoa mexe nos arquivos da sua tela e do seu componente
 - As peças de `src/components/ui/` e o `src/theme/` são do kit: ninguém muda
 - Os nomes das telas, dos componentes e das props são os do enunciado: é por eles que o instrutor acha a parte de cada um
+
+---
+
+## :icon[notebook-pen] Exercícios: Trabalho em equipe
+
+:::example Exercícios
+1. Numa equipe de 3, o que acontece com a tela 4 e com as quatro tarefas?
+2. A Bia quer mudar a cor do `Botao` do kit para combinar com a tela dela. Pode?
+3. O enunciado pede `ItemLancamento`, e o Edu chamou de `CartaoGasto`. Qual é o problema?
+4. Pintor e eletricista na mesma parede, ao mesmo tempo: no app, que combinado isso quebra?
+:::
+
+:::tip Respostas
+1. A tela 4 sai, e alguém fica com duas tarefas
+2. Não: as peças de `src/components/ui/` são do kit, e ninguém muda
+3. O instrutor acha a parte de cada um pelos nomes do enunciado
+4. Cada pessoa mexe só nos arquivos da sua tela e do seu componente
+:::
 
 ---
 
@@ -199,6 +235,24 @@ Como cliente, quero ver os horários livres do dia, para marcar sem ligar para o
 
 ---
 
+## :icon[notebook-pen] Exercícios: História de usuário
+
+:::example Exercícios
+1. Escreva a história: a Dona Lúcia esquece a hora do remédio de pressão e quer um aviso
+2. "Tela de login com dois campos" é história? Reescreva
+3. Ache o erro: "Como aluno, quero ver o saldo do cartão do ônibus, para ver o saldo"
+4. "Como aluno, quero usar a biblioteca pelo app" é grande. Quebre em três
+:::
+
+:::tip Respostas
+1. Modelo: "Como paciente, quero um aviso na hora do remédio, para não esquecer a dose"
+2. É tela. Modelo: "Como aluno, quero entrar com o meu e-mail, para ver as minhas notas"
+3. O "para" repete o "quero". Modelo: "para saber se preciso recarregar"
+4. Modelo: ver os livros da estante; reservar um; ver a data de devolução
+:::
+
+---
+
 ## Pronto quando
 
 Quando a encomenda chega, o que você confere antes de aceitar?
@@ -231,6 +285,24 @@ Se ninguém consegue conferir no celular, não é Pronto quando. Troque o vago p
 | O lançamento não some | Fechei o app e abri de novo: o lançamento continua lá |
 
 Os números de cada briefing estão no enunciado do Projeto 7, em **Com os dados do kit**.
+
+---
+
+## :icon[notebook-pen] Exercícios: Pronto quando
+
+:::example Exercícios
+1. Quem confere o Pronto quando: só quem fez a tela?
+2. Qual dá para conferir? (a) "O treino carrega rápido"; (b) "Com o treino de exemplo, aparecem 6 exercícios, e o primeiro é Agachamento, 3 x 12"
+3. Ache o problema e reescreva: "A lista de remédios aparece bonita"
+4. Reescreva com um número: "O formulário avisa quando a idade está errada"
+:::
+
+:::tip Respostas
+1. Qualquer pessoa da equipe, no celular
+2. O (b): tem número, e qualquer pessoa compara
+3. É vago: "bonita" não se confere. Modelo: "Com os dados de exemplo, aparecem 3 remédios, e o primeiro é Losartana, às 8:00"
+4. Modelo: "Com a idade 'abc', aparece 'Use um número inteiro, como 17' embaixo do campo"
+:::
 
 ---
 
@@ -399,6 +471,29 @@ Resolving deltas: 100% (1/1), done.
 
 ---
 
+## :icon[notebook-pen] Exercícios: O repositório da equipe
+
+:::example Exercícios
+1. Em que pasta este comando põe o projeto?
+   ```bash
+   git clone https://github.com/bia-lima/treino-certo.git
+   ```
+2. Depois do clone, o `npx expo start` falha. O que faltou, e por quê?
+3. Depois do clone, precisa do `git remote add origin`?
+4. O Edu baixou o zip do kit, sem clonar. O que falta na pasta?
+5. E se ele rodar o mesmo `git clone` duas vezes no mesmo lugar?
+:::
+
+:::tip Respostas
+1. Numa pasta nova, `treino-certo`, o nome do repositório
+2. O `npm install`: o `.gitignore` deixou o `node_modules/` fora do GitHub
+3. Não: o clone já sabe o endereço
+4. Os commits da equipe e a ligação com o GitHub
+5. O Git para, porque a pasta já existe: `destination path ... already exists`
+:::
+
+---
+
 ## :icon[milestone] Projeto 7 · Passo 4: a equipe entra no repositório
 
 **Quem cuida do repositório**, no GitHub: **Settings**, **Collaborators** (no grupo **Access**), **Add people**, o usuário do colega e **Add ... to this repository**. Um convite por pessoa.
@@ -451,6 +546,24 @@ No GitHub, o backlog mora nas **Issues** do repositório: uma **issue** por hist
 
 - Os rótulos, uma vez por equipe: **Issues**, **Labels**, **New label**, o nome, **Create label**
 - Uma issue: **Issues**, **New issue**, título, descrição, **Assignees** e **Labels**, **Create**
+
+---
+
+## :icon[notebook-pen] Exercícios: Backlog
+
+:::example Exercícios
+1. Dê o rótulo, no app da biblioteca: ver os livros; reservar um livro; avisar um dia antes da devolução; escolher a cor do app; pagar multa pelo app
+2. Qual título é melhor: "FlatList dos livros" ou "Ver os livros da estante"?
+3. A equipe pôs `precisa-ter` nas 10 issues. Qual é o problema?
+4. O que falta nesta issue? Título "Coisas da tela de reservas", sem **Assignees**, com `precisa-ter` e `poderia-ter`
+:::
+
+:::tip Respostas
+1. Modelo: `precisa-ter`, `precisa-ter`, `deveria-ter`, `poderia-ter`; a multa fica fora, sem issue
+2. O segundo: tem verbo e diz o que a pessoa quer
+3. Se tudo é `precisa-ter`, nada é prioridade
+4. Título com verbo, como "Reservar um livro", um responsável em **Assignees** e um rótulo só
+:::
 
 ---
 

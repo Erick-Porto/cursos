@@ -93,6 +93,24 @@ No E29, o React Native monta apps de celular do mesmo jeito.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Componentes
+
+:::example Exercícios
+1. O app da academia mostra 12 aulas, cada uma num cartão. Quantas peças de cartão você escreve?
+2. O horário saiu pequeno demais nos 12 cartões. Em quantos arquivos você corrige?
+3. Divida em peças a tela de um app de ônibus: o topo, uma linha por ônibus e o rodapé. Qual peça se repete?
+4. Certo ou errado: para encaixar o `Cabecalho` do kit, você precisa entender o código dele.
+:::
+
+:::tip Respostas
+1. Uma: a mesma peça aparece 12 vezes
+2. Num só, o da peça: os 12 mudam juntos
+3. Por exemplo, `Cabecalho`, `LinhaOnibus` e `Rodape`, dentro do `App`; a `LinhaOnibus` se repete
+4. Errado: a peça pronta encaixa sem abrir, como no Lego
+:::
+
+---
+
 ## O Vite
 
 Todo site precisa de um servidor. E se o servidor fosse o seu computador?
@@ -145,6 +163,26 @@ O endereço não está na internet: só você vê. É o mesmo tipo de endereço 
 **Caso 2: o terminal fica ocupado.** Enquanto o Vite está ligado, aquele terminal não aceita outro comando. Para o Git, abra um segundo terminal, no botão **+** do painel.
 
 **Caso 3: desligar e ligar.** <kbd>Ctrl</kbd> + <kbd>C</kbd> desliga, e a página para de abrir: "A conexão com localhost foi recusada". `npm run dev` liga de novo. Com dois ligados, o segundo avisa `Port 5173 is in use` e atende na porta 5174.
+
+---
+
+## :icon[notebook-pen] Exercícios: O Vite
+
+:::example Exercícios
+1. Qual comando liga o Vite? E o que o desliga?
+2. Com o Vite ligado, você salva o `App.jsx`. Precisa do <kbd>F5</kbd>?
+3. No terminal do Vite, você digita `git status`, e nada acontece. Por quê?
+4. O terminal mostra `http://localhost:5174/`. Por que não 5173?
+5. Você manda `http://localhost:5173` a um colega. O que ele vê no computador dele?
+:::
+
+:::tip Respostas
+1. `npm run dev` liga; <kbd>Ctrl</kbd> + <kbd>C</kbd> desliga
+2. Não: ao salvar, a página muda sozinha
+3. O terminal está ocupado: abra um segundo, no **+**
+4. Já havia um Vite ligado na 5173, e o segundo atende na 5174
+5. "A conexão com localhost foi recusada": para ele, `localhost` é o computador dele, sem Vite
+:::
 
 ---
 
@@ -270,6 +308,43 @@ Invalid DOM property `class`. Did you mean `className`?
 
 ---
 
+## :icon[notebook-pen] Exercícios: O primeiro componente
+
+:::example Exercícios
+1. Com `<Horario />` duas vezes dentro do `<main>`, o que aparece?
+
+   ```jsx
+   function Horario() {
+     return <p>Academia aberta das 6h às 22h</p>
+   }
+   ```
+
+2. O que está errado em `<p class="preco">Coxinha: R$ 7</p>`?
+3. E em `<img src="onibus.png" alt="Ônibus 101">`?
+4. Por que esta peça dá erro? Corrija.
+
+   ```jsx
+   function Parada() {
+     return (
+       <h2>Parada Central</h2>
+       <p>Linhas 101 e 230</p>
+     )
+   }
+   ```
+
+5. A peça `function cardapio()`, usada como `<cardapio />`, não aparece. Por quê?
+:::
+
+:::tip Respostas
+1. Dois parágrafos iguais: "Academia aberta das 6h às 22h"
+2. No JSX, é `className`: com `class`, a página funciona, mas o Console avisa
+3. Ela não fecha: `<img src="onibus.png" alt="Ônibus 101" />`
+4. Duas tags sem um pai: envolva as duas numa `<div>` ou no fragmento `<>...</>`
+5. Com minúscula, o React procura a tag `<cardapio>` do HTML, que não existe. O nome vai com maiúscula
+:::
+
+---
+
 ## Importar componentes
 
 Na padaria, como o pão sai da vitrine e chega à sua mesa?
@@ -316,6 +391,29 @@ import Rodape from './components/Rodape.jsx'
 ```
 
 **Caso 3: uma peça com atributo.** Como o `src` diz à `<img>` qual foto mostrar, um atributo diz à peça o que mostrar: `<Etiqueta dificuldade="Easy" />` mostra "Fácil", em verde. No E25, esse atributo ganha um nome: **prop**.
+
+---
+
+## :icon[notebook-pen] Exercícios: Importar componentes
+
+:::example Exercícios
+1. Complete a última linha de `src/components/Saldo.jsx`, a peça com o saldo do cartão do ônibus: `___ ___ Saldo`
+2. Escreva a linha que importa o `Saldo` no `src/App.jsx`
+3. O `src/components/Extrato.jsx`, da mesma pasta, importa o `Saldo` assim, e a página mostra `Failed to resolve import`. Corrija.
+
+   ```jsx
+   import Saldo from './components/Saldo.jsx'
+   ```
+
+4. O que está errado em `import { Saldo } from './components/Saldo.jsx'`, se o arquivo termina com `export default Saldo`?
+:::
+
+:::tip Respostas
+1. `export default Saldo`
+2. `import Saldo from './components/Saldo.jsx'`
+3. O `./` parte da pasta do `Extrato.jsx`, que já é a `components`: `import Saldo from './Saldo.jsx'`
+4. As chaves: com `export default`, o `import` vem sem elas
+:::
 
 ---
 
@@ -436,6 +534,40 @@ const preco = 2.5
 Dentro das chaves vale o JavaScript que você já conhece: o `toUpperCase` do E09, o `.length` da aula 3, o `toFixed(2)` do E04.
 
 A última linha esqueceu as chaves: o React mostra o texto como está, sem erro nenhum. É o engano mais comum com chaves.
+
+---
+
+## :icon[notebook-pen] Exercícios: Chaves no JSX
+
+:::example Exercícios
+1. Com `const alunos = 30`, complete para a tela mostrar "Turma de 30 alunos": `<p>Turma de ___ alunos</p>`
+2. O que aparece em cada parágrafo?
+
+   ```jsx
+   function Passagem() {
+     const linha = 'Centro'
+     const preco = 4.5
+
+     return (
+       <div>
+         <p>Linha {linha.toUpperCase()}</p>
+         <p>Ida e volta: R$ {(preco * 2).toFixed(2)}</p>
+         <p>preco * 2</p>
+       </div>
+     )
+   }
+   ```
+
+3. Com `const preco = 3` e `const itens = 4`, escreva o parágrafo que mostra "Total: R$ 12.00"
+4. Por que `<p>{if (vip) 'Sala VIP'}</p>` não funciona?
+:::
+
+:::tip Respostas
+1. `{alunos}`
+2. "Linha CENTRO", "Ida e volta: R$ 9.00" e "preco * 2": sem chaves, o texto fica como está
+3. `<p>Total: R$ {(preco * itens).toFixed(2)}</p>`
+4. Entre as chaves cabe só o que dá um valor; o `if` escolhe um caminho, não dá um valor
+:::
 
 ---
 

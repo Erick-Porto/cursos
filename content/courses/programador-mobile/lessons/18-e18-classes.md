@@ -115,6 +115,33 @@ console.log(luz === racao);   // false
 
 ---
 
+## :icon[notebook-pen] Exercícios: Classe e instância
+
+:::example Exercícios
+1. Em `const linha42 = new Onibus();`, qual é a forma e qual é o bolo?
+2. O que aparece no terminal?
+
+   ```javascript
+   class Lanche {}
+   const a = new Lanche();
+   const b = new Lanche();
+   const c = a;
+   console.log(a, a === b, a === c);
+   ```
+
+3. O Node para em `const pedido = Lanche();`. Corrija a linha.
+4. Escreva a classe `Aluno` e faça duas instâncias dela, `ana` e `bruno`.
+:::
+
+:::tip Respostas
+1. `Onibus` é a forma, a classe; `linha42` é o bolo, uma instância.
+2. `Lanche {} false true`: `a` e `b` são dois bolos; `c` tem o mesmo endereço de `a` (E15).
+3. `const pedido = new Lanche();`: sem o `new`, aparece `cannot be invoked without 'new'`.
+4. `class Aluno {}`, depois `const ana = new Aluno();` e `const bruno = new Aluno();`.
+:::
+
+---
+
 ## O constructor
 
 Na hora de fazer o bolo, o que você põe dentro da forma?
@@ -207,6 +234,40 @@ import Tarefa from './Tarefa.js';
 - O `import` de um `default` vai **sem chaves**: `import Tarefa`, e não `import { Tarefa }`
 - O `.js` no fim é obrigatório: o Jest aceita sem, a tela no navegador não
 - O nome do arquivo repete o nome da classe, com o **T maiúsculo**
+
+---
+
+## :icon[notebook-pen] Exercícios: O constructor
+
+:::example Exercícios
+1. Complete: `constructor(dados) { ___.turma = dados.turma; }`
+2. O que aparece no terminal?
+
+   ```javascript
+   class Lanche {
+     constructor(dados) {
+       this.nome = dados.nome;
+       this.preco = dados.preco ?? 10;
+     }
+   }
+   const xSalada = new Lanche({ nome: 'X-salada' });
+   const misto = new Lanche({ nome: 'Misto', preco: 8 });
+   console.log(xSalada.preco, misto.preco);
+   console.log(misto);
+   ```
+
+3. No `constructor`, `this.nome = nome;` dá `nome is not defined`. Corrija.
+4. `Onibus.js` tem `export default class Onibus`. Qual serve: `import { Onibus }` ou `import Onibus`?
+5. Escreva o `constructor` do `Pedido`: guarda a `mesa` e os `itens`; sem itens, `[]`.
+:::
+
+:::tip Respostas
+1. `this`: o campo é desta instância.
+2. `10 8` e `Lanche { nome: 'Misto', preco: 8 }`: sem preço na ficha, o `??` dá 10.
+3. `this.nome = dados.nome;`: o nome vem na ficha `dados`.
+4. `import Onibus from './Onibus.js';`: o `default` entra sem chaves.
+5. `this.mesa = dados.mesa;` e `this.itens = dados.itens ?? [];` dentro de `constructor(dados)`.
+:::
 
 ---
 
@@ -326,6 +387,42 @@ No Projeto 3, a tarefa ganha o método `concluir()`: `regar.concluir()` conclui 
 
 ---
 
+## :icon[notebook-pen] Exercícios: Métodos
+
+:::example Exercícios
+1. Chame o método `girar` da catraca `saida`.
+2. O que aparece no terminal?
+
+   ```javascript
+   class Catraca {
+     constructor() {
+       this.passagens = 0;
+     }
+     girar() {
+       this.passagens = this.passagens + 1;
+     }
+   }
+   const entrada = new Catraca();
+   const saida = new Catraca();
+   entrada.girar();
+   saida.girar();
+   entrada.girar();
+   console.log(entrada.passagens, saida.passagens);
+   ```
+
+3. Na classe `Garrafa`, a linha `function beber(gole) {` para o Node. Por quê?
+4. Escreva o método `beber(gole)` da `Garrafa`, que tira o `gole` de `this.ml`.
+:::
+
+:::tip Respostas
+1. `saida.girar();`: o objeto, o ponto, o nome do método e os parênteses.
+2. `2 1`: o método é um só, e cada catraca guarda as próprias passagens.
+3. Método não leva `function`: o Node mostra `Unexpected identifier 'beber'`.
+4. `beber(gole) { this.ml = this.ml - gole; }`, dentro da classe.
+:::
+
+---
+
 ## O this
 
 Quando a Ana diz "eu" e o Bruno diz "eu", é a mesma pessoa?
@@ -368,6 +465,42 @@ depositar(valor) {
 ```
 
 Sozinho, `saldo` procura uma caixa (`const` ou `let`) com esse nome, e ela não existe. O saldo mora na instância: `this.saldo`. Dentro da classe, campo é sempre `this.` e o nome.
+
+---
+
+## :icon[notebook-pen] Exercícios: O this
+
+:::example Exercícios
+1. Em `daBia.correr(3)`, quem é o `this`?
+2. O que aparece no terminal?
+
+   ```javascript
+   class Esteira {
+     constructor() {
+       this.km = 0;
+     }
+     correr(km) {
+       this.km = this.km + km;
+     }
+   }
+   const daAna = new Esteira();
+   const daBia = new Esteira();
+   daAna.correr(2);
+   daBia.correr(3);
+   daAna.correr(4);
+   console.log(daAna.km, daBia.km);
+   ```
+
+3. O placar dá `ReferenceError: gols is not defined` em `marcar() { gols = gols + 1; }`. Corrija.
+4. Escreva o método `zerar()` da `Esteira`, que volta o `km` dela a 0.
+:::
+
+:::tip Respostas
+1. A `daBia`, que vem antes do ponto.
+2. `6 3`: quando a `daAna` chama, o `this` é ela, e soma 2 e 4; a `daBia` soma só o 3.
+3. `this.gols = this.gols + 1;`: o campo mora na instância.
+4. `zerar() { this.km = 0; }`, dentro da classe.
+:::
 
 ---
 
@@ -457,6 +590,41 @@ console.log(daAna);          // Cofrinho { dono: 'Ana', saldo: 15 }
 O `console.log(daAna)` mostra só os campos guardados: o `get` não fica guardado, é calculado.
 
 **Caso 2: com parênteses, quebra.** `daAna.vazio()` dá `TypeError: daAna.vazio is not a function`. O `get` já devolveu `false`, e `false` não é uma função.
+
+---
+
+## :icon[notebook-pen] Exercícios: O get
+
+:::example Exercícios
+1. O ônibus tem `get lotado`. Qual lê certo: `linha42.lotado` ou `linha42.lotado()`?
+2. O que aparece no terminal?
+
+   ```javascript
+   class Onibus {
+     constructor() {
+       this.passageiros = 0;
+     }
+     get lotado() {
+       return this.passageiros >= 40;
+     }
+   }
+   const linha42 = new Onibus();
+   console.log(linha42.lotado);
+   linha42.passageiros = 40;
+   console.log(linha42.lotado);
+   console.log(linha42);
+   ```
+
+3. Complete: `___ total() { ___ this.preco * this.quantidade; }`
+4. O que dá `console.log(linha42.lotado());`?
+:::
+
+:::tip Respostas
+1. `linha42.lotado`: o `get` se lê sem parênteses.
+2. `false`, `true` e `Onibus { passageiros: 40 }`: o `get` faz a conta a cada leitura e não fica guardado.
+3. `get` e `return`: o `get` sempre devolve o valor lido.
+4. `TypeError: linha42.lotado is not a function`: o `get` já devolveu um `true` ou `false`.
+:::
 
 ---
 

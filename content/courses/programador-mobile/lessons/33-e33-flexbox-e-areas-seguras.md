@@ -110,6 +110,24 @@ No E37, a Início muda de pasta, e nenhum `import` quebra. O caminho termina na 
 
 ---
 
+## :icon[notebook-pen] Exercícios: O kit
+
+:::example Exercícios
+1. No kit de um app de ônibus, a pasta `app/` tem `_layout.js`, `index.js` e `linhas.js`. Qual é a primeira tela, a do endereço `/`?
+2. Com `"@/*": ["./src/*"]` no `jsconfig.json`, que arquivo o `import { lanches } from '@/data/lanches';` abre?
+3. Sem o atalho, que caminho o `app/index.js` usaria para chegar ao mesmo arquivo?
+4. `import { Tela } from '@/src/components/ui';` dá `Unable to resolve`. Por quê?
+:::
+
+:::tip Respostas
+1. O `app/index.js`, a Início; o `_layout.js` só envolve todas as telas
+2. O `src/data/lanches.js`: o `@/` vira `./src/`
+3. `'../src/data/lanches'`: o `..` sai da pasta `app/`
+4. O `@` já é a pasta `src/`: o caminho vira `./src/src/components/ui`, que não existe. O certo é `'@/components/ui'`
+:::
+
+---
+
 ## :icon[milestone] Projeto 6 · Passo 1: o kit no celular
 
 :::steps
@@ -179,6 +197,31 @@ A `Tela` do kit cuida da área segura, do fundo do tema e de um espaço de 16 na
 | Detalhe, no E37 | `<Tela rolar comCabecalho>` | o cabeçalho protege o topo |
 
 Prop sem valor vale `true`: `<Tela rolar>` é o mesmo que `<Tela rolar={true}>`. As props de cada peça estão no comentário do topo do arquivo dela.
+
+---
+
+## :icon[notebook-pen] Exercícios: Área segura
+
+:::example Exercícios
+1. Quais ficam fora da área segura: o relógio, o entalhe, a playlist, a barra de gestos?
+2. Uma playlist de 50 músicas com `map`: `<Tela>` ou `<Tela rolar>`? E com `FlatList`?
+3. A Início de um app de ônibus feito com o kit é só isto. Onde aparece o texto? Como consertar?
+
+   ```jsx
+   <View>
+     <Text>Próximo ônibus: 8 min</Text>
+   </View>
+   ```
+
+4. Por que não pôr um espaço fixo de 40 no topo?
+:::
+
+:::tip Respostas
+1. O relógio, o entalhe e a barra de gestos
+2. Com `map`, `<Tela rolar>`: as 50 não cabem. Com `FlatList`, `<Tela>`: ela já rola
+3. Colado no relógio. Troque a `View` de fora pela `Tela` do kit
+4. Em cada celular, o entalhe e as barras têm um tamanho: 40 sobra ou falta
+:::
 
 ---
 
@@ -322,6 +365,36 @@ O `alignItems: 'center'` põe os botões de 40 na altura do meio do play, de 64.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Flexbox
+
+:::example Exercícios
+1. No app do ônibus, onde fica cada texto?
+
+   ```jsx
+   <View style={estilos.linha}>
+     <Text>Linha 201</Text>
+     <Text>8 min</Text>
+   </View>
+   ```
+
+   ```javascript
+   linha: { flexDirection: 'row', justifyContent: 'space-between' },
+   ```
+
+2. Três abas lado a lado, com todos os vãos iguais, até nas pontas: `justifyContent: ___`
+3. Num chat, a coluna das mensagens enviadas tem `alignItems: 'flex-end'`. Onde fica cada balão?
+4. Numa coluna de botões, `justifyContent: 'center'` não centralizou os botões na largura. Por quê? Qual o conserto?
+:::
+
+:::tip Respostas
+1. Na mesma linha: "Linha 201" na ponta esquerda, "8 min" na direita
+2. `'space-evenly'`
+3. Encostado à direita, cada um do tamanho do seu texto
+4. Em `'column'`, o `justifyContent` age de cima para baixo. Na largura, o eixo cruzado, quem centraliza é o `alignItems: 'center'`
+:::
+
+---
+
 ## flex: 1
 
 Sobrou um vão no fim da prateleira. Qual caixa estica para ocupar?
@@ -372,6 +445,30 @@ tecla: { flex: 1, height: 48, alignItems: 'center', justifyContent: 'center' },
 ```
 
 Numa tela de 360 dentro da `Tela`: 360 menos as bordas de 16 dá 328; menos os dois vãos de 8, 312; cada tecla fica com 104.
+
+---
+
+## :icon[notebook-pen] Exercícios: flex: 1
+
+:::example Exercícios
+1. No carrinho, um nome comprido empurra o botão Remover para fora. O que falta?
+2. Três caixas `time` num `placar` de 300. Quanto mede cada uma?
+
+   ```javascript
+   placar: { flexDirection: 'row', gap: 6 },
+   time: { flex: 1 },
+   ```
+
+3. Numa linha de 300, sem vão: uma caixa com `width: 60` e duas com `flex: 1`. Quanto mede cada?
+4. A tela, em coluna, ocupa o celular; a lista tem `flex: 1`, e o botão Pagar vem depois. Onde ele fica?
+:::
+
+:::tip Respostas
+1. `flex: 1` no nome: fica com o que sobra e quebra a linha
+2. 96: 300 menos os 12 dos vãos, dividido por 3
+3. 60, 120 e 120: as duas repartem os 240 que sobram
+4. No pé da tela: a lista estica e empurra o botão
+:::
 
 ---
 
@@ -463,6 +560,29 @@ sair: { marginTop: 24 },
 ```
 
 Prefira o `gap` na `View` de fora: o `margin` vai em cada filho, precisa ser lembrado em todos e sobra no último.
+
+---
+
+## :icon[notebook-pen] Exercícios: Espaços
+
+:::example Exercícios
+1. No botão Pedir da lanchonete, o texto encosta na borda. `padding`, `margin` ou `gap`?
+2. Cinco treinos, com 12 entre um e outro e nada nas pontas: `lista: { ___: 12 }`
+3. Onde fica cada espaço da etiqueta de preço? Quanto sobra para o texto, na largura?
+
+   ```javascript
+   etiqueta: { width: 100, paddingHorizontal: 20, paddingVertical: 8 },
+   ```
+
+4. Cada item do menu tem `marginBottom: 16`, e sobra espaço embaixo do último. Como evitar?
+:::
+
+:::tip Respostas
+1. `padding`: o espaço por dentro, até a borda
+2. `gap`, na `View` de fora: o vão entre os filhos, nunca nas pontas
+3. Por dentro: 20 de cada lado e 8 em cima e embaixo. Sobram 60 dos 100
+4. Tire o `marginBottom` dos itens e ponha `gap: 16` na `View` de fora
+:::
 
 ---
 

@@ -127,6 +127,29 @@ console.log(Number.isNaN(Number('setenta')));
 
 ---
 
+## :icon[notebook-pen] Exercícios: Valores, textos e dinheiro
+
+:::example Exercícios
+1. O que aparece? `console.log('5' + 3, Number('5') + 3);`
+2. Quanto dá `19.9 * 100`? E `Math.round(19.9 * 100)`?
+3. São 50 ovos e bandejas de 12. Escreva as duas contas: quantas bandejas ficam cheias e quantos ovos sobram
+4. O que aparece nas duas linhas?
+   ```javascript
+   const placa = ' abc-1234 ';
+   console.log(placa.trim().toUpperCase().length);
+   console.log(placa.length);
+   ```
+:::
+
+:::tip Respostas
+1. `53 8`: com texto, o `+` junta; o `Number` transforma o texto em número antes da conta
+2. `1989.9999999999998` e `1990`: o `Math.round` tira a sobra, como na conversão para centavos
+3. `Math.floor(50 / 12)` dá `4` bandejas; `50 % 12` dá `2` ovos
+4. `8` e `10`: o `trim` e o `toUpperCase` trabalham numa cópia, e a `placa` continua com os espaços
+:::
+
+---
+
 ## Funções, módulos e testes
 
 A regra da gorjeta mudou. Em quantos lugares do código você quer mexer?
@@ -204,6 +227,30 @@ test('sem pessoas, divide por 2', () => {
 
 :::tip Resposta
 `Tests: 1 failed, 2 passed, 3 total`. O vermelho é o `● fatiasPorPessoa(8, 3) dá 3`, com `Expected: 3` e `Received: 2`: o `Math.floor(8 / 3)` corta para 2. Quem errou foi o gabarito: 8 fatias para 3 pessoas dão 2 para cada, e sobram 2. O terceiro teste confere o valor padrão: `fatiasPorPessoa(8)` divide por 2.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Funções, módulos e testes
+
+:::example Exercícios
+1. Qual devolve o dobro: `(n) => n * 2` ou `(n) => { n * 2; }`?
+2. O que aparece? (em centavos)
+   ```javascript
+   function passagem(tarifa = 500, viagens = 2) {
+     return tarifa * viagens;
+   }
+   console.log(passagem(), passagem(440), passagem(440, 1));
+   ```
+3. O `preco.js` tem `export default function formatarPreco` e `export function somar`. Escreva o import das duas numa linha só, da mesma pasta
+4. No vermelho do Jest, `Expected: 1000` e `Received: 880`: qual é o gabarito?
+:::
+
+:::tip Respostas
+1. A primeira. Com chaves, a seta precisa de `return`: a segunda devolve `undefined`
+2. `1000 880 440`: o padrão vale só para o argumento que não veio
+3. `import formatarPreco, { somar } from './preco.js';`: chaves só no nomeado
+4. O `Expected`; o `Received` é o que a função devolveu
 :::
 
 ---
@@ -288,6 +335,40 @@ O `total` e a `cheios` nascem antes do laço, e o `console.log` vem depois da `}
 
 ---
 
+## :icon[notebook-pen] Exercícios: Decisões e repetições
+
+:::example Exercícios
+1. Meia-entrada vale para estudante ou para quem tem 60 anos ou mais. Complete: `const meia = estudante ___ idade >= 60;`
+2. Escreva com ternário: a `placa` é `'aberto'` se `hora < 22`; senão, `'fechado'`
+3. Quantas vezes aparece `Chamando`?
+   ```javascript
+   let senha = 10;
+   while (senha < 5) {
+     console.log('Chamando', senha);
+     senha = senha + 1;
+   }
+   console.log('Fim');
+   ```
+4. Ache o erro e conserte para mostrar `10000`:
+   ```javascript
+   const passos = [3200, 4100, 2700];
+   for (const dia of passos) {
+     let total = 0;
+     total = total + dia;
+   }
+   console.log(total);
+   ```
+:::
+
+:::tip Respostas
+1. `||`: uma das duas já vale
+2. `const placa = hora < 22 ? 'aberto' : 'fechado';`
+3. Nenhuma: `10 < 5` começa `false`, o laço não dá nenhuma volta, e só aparece `Fim`
+4. `total is not defined`: o `let total` nasceu dentro do laço. Com o `let total = 0;` antes do `for`, ele acumula as três voltas: `10000`
+:::
+
+---
+
 ## Objetos e listas
 
 Peneira, linha de produção e calculadora: qual delas devolve um número só?
@@ -355,6 +436,38 @@ console.log(contatos[0].nome, ana.nome);
 1. A `mesma` não é outra lista: é outro papel com o mesmo endereço, e os dois levam à mesma casa. O `push` pela `mesma` muda a `contatos`
 2. O `[...contatos]` tirou uma cópia antes do `push`: ela continua com 2
 3. `{ ...contatos[0], nome: 'Ana Souza' }` copia a ficha e troca o nome na cópia. É mexer na cópia, sem rasurar o original: a `contatos[0]` continua `Ana`
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Objetos e listas
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const precos = { pao: 150, leite: 600 };
+   const item = 'leite';
+   console.log(precos[item], precos.item);
+   ```
+2. O que aparece nas duas linhas?
+   ```javascript
+   const onibus = [
+     { linha: '101', lotado: true },
+     { linha: '202', lotado: false },
+     { linha: '303', lotado: false },
+   ];
+   console.log(onibus.find((o) => !o.lotado).linha);
+   console.log(onibus.some((o) => o.lotado), onibus.every((o) => o.lotado));
+   ```
+3. Escreva o `map` que transforma `[10, 20]` em `['R$ 10', 'R$ 20']`
+4. O que dá `['Uva', 'banana', 'Abacaxi'].sort((a, b) => a.localeCompare(b))`?
+:::
+
+:::tip Respostas
+1. `600 undefined`: o `[item]` lê o campo com o nome guardado na caixa, `leite`; o `.item` procura um campo chamado `item`
+2. `202`, o primeiro não lotado, e `true false`: algum está lotado, mas não todos
+3. `[10, 20].map((n) => 'R$ ' + n)`
+4. `[ 'Abacaxi', 'banana', 'Uva' ]`: a ordem do dicionário
 :::
 
 ---
@@ -458,6 +571,36 @@ O `finally` roda nas três voltas. A rede segura o erro da segunda, e o laço se
 
 ---
 
+## :icon[notebook-pen] Exercícios: Classes e erros
+
+:::example Exercícios
+1. O que aparece? E com `g.litros()`?
+   ```javascript
+   class Garrafa {
+     constructor(ml) {
+       this.ml = ml;
+     }
+     get litros() {
+       return this.ml / 1000;
+     }
+   }
+   const g = new Garrafa(1500);
+   console.log(g.litros, g.ml);
+   ```
+2. Ache o erro: com `constructor(saldo) { saldo = saldo; }`, a `new Conta(50).saldo` dá `undefined`
+3. Na filha, `constructor(valor, dia) { this.dia = dia; super(valor); }`. O que acontece no `new`?
+4. Num `catch` que só mostra `erro.message`, o bug `criarConta is not defined` vira aviso. Como relançar o que não é `ErroDeConta`?
+:::
+
+:::tip Respostas
+1. `1.5 1500`: o `get` se lê sem parênteses. Com eles, `TypeError: g.litros is not a function`
+2. Falta o `this.`: `this.saldo = saldo;` guarda na instância
+3. `ReferenceError: Must call super constructor...`: o `super(valor)` vem antes de qualquer `this`
+4. Relance o que não é seu: `if (erro.name !== 'ErroDeConta') { throw erro; }`
+:::
+
+---
+
 ## Código que espera
 
 Você pagou o lanche e recebeu uma senha. O que dá para fazer enquanto espera?
@@ -543,6 +686,35 @@ mostrar();
 
 :::tip Resposta
 `Watch a classic movie` e `Respondeu 404`. A tarefa 3 existe: o `ok` é `true`, e o segundo `await` transforma o corpo em objeto. A 9999 não existe: a resposta chega, com `ok` falso e o status 404, e quem confere é o `if`, porque o `fetch` não lança. Sem internet, o pedido nem chega: o `await fetch` lança, e o `catch` devolve `Sem conexão` nas duas linhas.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Código que espera
+
+:::example Exercícios
+1. O `esperar(ms)` é o do Projeto 3. Em que ordem, e quando, aparecem as linhas?
+   ```javascript
+   async function lavar() {
+     console.log('Lavando');
+     await esperar(300);
+     console.log('Enxaguando');
+     await esperar(300);
+     console.log('Pronto');
+   }
+   lavar();
+   console.log('Máquina ligada');
+   ```
+2. A gaveta guardou `JSON.stringify([3, 5, 8])` na chave `'fila'`. Quanto dão `localStorage.getItem('fila').length` e `JSON.parse(localStorage.getItem('fila')).length`?
+3. Verdadeiro ou falso: sem internet, o `fetch` devolve uma resposta com `ok` falso
+4. Escreva a linha: `dados` recebe o corpo da `resposta`, como objeto
+:::
+
+:::tip Respostas
+1. `Lavando` e `Máquina ligada` na hora; `Enxaguando` em 300 ms; `Pronto` em 600 ms. Cada `await` pausa só a `lavar`
+2. `7` e `3`: o texto `'[3,5,8]'` tem 7 sinais; a lista, 3 itens
+3. Falso: a senha é cancelada, e o `await` lança. O `ok` falso é do 404 e do 500
+4. `const dados = await resposta.json();`
 :::
 
 ---

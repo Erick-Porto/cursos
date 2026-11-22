@@ -111,6 +111,50 @@ console.log(['Ana'] === ['Ana']); // false: duas casas, iguais por dentro
 
 ---
 
+## :icon[notebook-pen] Exercícios: Referência
+
+:::example Exercícios
+1. Na fila do ônibus, o que aparece?
+
+   ```javascript
+   const fila = ['Rita', 'Caio'];
+   const outraFila = fila;
+   outraFila.push('Davi');
+   console.log(fila.length);
+   ```
+
+2. E com uma ficha, na lanchonete?
+
+   ```javascript
+   const pedido = { lanche: 'X-salada' };
+   const doBalcao = pedido;
+   doBalcao.lanche = 'X-tudo';
+   console.log(pedido.lanche, pedido === doBalcao);
+   ```
+
+3. Na academia, o que aparece?
+
+   ```javascript
+   function marcarTreino(treinos) {
+     treinos.push('perna');
+   }
+   const semana = ['peito'];
+   marcarTreino(semana);
+   console.log(semana);
+   ```
+
+4. A Bia quer uma lista de compras só dela. `const minha = daCasa;` resolve?
+:::
+
+:::tip Respostas
+1. `3`: os dois nomes levam à mesma lista, e o `push` pôs o Davi nela
+2. `X-tudo true`: com ficha é igual, a mesma casa
+3. `[ 'peito', 'perna' ]`: a função recebeu o endereço da `semana` e mexeu nela
+4. Não: é outro papel com o mesmo endereço. A cópia é `[...daCasa]`, do E14
+:::
+
+---
+
 ## Spread em listas
 
 Antes de marcar um documento importante, o que você faz para não estragar o original?
@@ -166,6 +210,39 @@ copia.push('Elisa');
 console.log(daNoiva, copia);    // [ 'Ana', 'Bruno' ] [ 'Ana', 'Bruno', 'Elisa' ]
 console.log(copia === daNoiva); // false
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Spread em listas
+
+:::example Exercícios
+1. Na lanchonete, o que aparece?
+
+   ```javascript
+   const pedidos = ['suco', 'pastel'];
+   const comCafe = ['café', ...pedidos];
+   console.log(comCafe, pedidos.length);
+   ```
+
+2. Na marmita, quanto valem `marmita.length` e `marmita[1]`?
+
+   ```javascript
+   const pratos = ['arroz', 'feijão'];
+   const marmita = ['salada', ...pratos, 'pudim'];
+   ```
+
+3. Complete para juntar as linhas de ônibus `bairro` e `centro` numa lista nova: `const todas = [___, ___];`
+4. Corrija para a `playlist` não ganhar a música: `const nova = playlist; nova.push('Forró');`
+5. Sem os três pontos, quantos itens tem `[playlist, 'Forró']`?
+:::
+
+:::tip Respostas
+1. `[ 'café', 'suco', 'pastel' ] 2`: só a cópia ganhou o café
+2. `4` e `'arroz'`: os itens espalhados entram onde estão os três pontos
+3. `[...bairro, ...centro]`
+4. `const nova = [...playlist, 'Forró'];`: uma lista nova, e a `playlist` fica como estava
+5. 2: a `playlist` inteira vira um item só, uma lista dentro da lista
+:::
 
 ---
 
@@ -311,6 +388,40 @@ console.log(antes);    // [ 'Ana', 'Carla' ]: o Bruno sumiu do original
 
 ---
 
+## :icon[notebook-pen] Exercícios: Mudar sem rasurar
+
+:::example Exercícios
+1. No estacionamento, o que aparece?
+
+   ```javascript
+   const vagas = ['A1', 'A2', 'A3', 'A4'];
+   vagas.splice(2, 1);
+   console.log(vagas);
+   ```
+
+2. No mercado, o que aparece?
+
+   ```javascript
+   const carrinho = ['leite', 'ovo', 'leite'];
+   const semLeite = carrinho.filter((item) => item !== 'leite');
+   console.log(semLeite, carrinho.length);
+   ```
+
+3. Qual não rasura a lista `notas`: `notas.sort(...)` ou `[...notas].sort(...)`?
+4. Na escola, troque a rasura por uma lista nova: `chamada.push('Leo');`
+5. O Desfazer do app do banco volta ao extrato guardado. Se apagar um gasto usa `splice` no extrato recebido, o que ele mostra?
+:::
+
+:::tip Respostas
+1. `[ 'A1', 'A2', 'A4' ]`: saiu 1 item da gaveta 2, na própria lista
+2. `[ 'ovo' ] 3`: a peneira fez uma lista nova; o carrinho continua com 3
+3. A segunda: o `sort` ordena a cópia
+4. `const comLeo = [...chamada, 'Leo'];`
+5. O extrato sem o gasto: o guardado e o novo são a mesma casa
+:::
+
+---
+
 ## :icon[milestone] Projeto 2 · Passo 2: removerContato
 
 No fim do `edicao.js`:
@@ -399,6 +510,39 @@ console.log(errado); // { favorito: true, nome: 'Helena Martins' }
 const copia = { ...helena };
 console.log(copia === helena); // false
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Spread em objetos
+
+:::example Exercícios
+1. Na academia, o que aparece?
+
+   ```javascript
+   const aluno = { nome: 'Rui', plano: 'mensal' };
+   const renovado = { ...aluno, plano: 'anual' };
+   console.log(renovado.plano, aluno.plano);
+   ```
+
+2. Na lanchonete, qual é o `tamanho` do `pedido`?
+
+   ```javascript
+   const padrao = { tamanho: 'médio', gelo: true };
+   const pedido = { tamanho: 'grande', ...padrao };
+   ```
+
+3. Complete para o celular trocar só o toque da ficha `config`: `const nova = { ___, toque: 'sino' };`
+4. A `apagarLuz(casa)` faz `casa.luz = false; return casa;` e rasura a ficha. Reescreva sem rasurar
+5. Para copiar a ficha `sala`: `[...sala]` ou `{ ...sala }`?
+:::
+
+:::tip Respostas
+1. `anual mensal`: a ficha nova ganhou o plano novo; a antiga ficou como estava
+2. `'médio'`: o `...padrao` veio depois e cobriu o `'grande'`
+3. `...config`
+4. Uma linha só: `return { ...casa, luz: false };`
+5. `{ ...sala }`: chaves fazem ficha. O `[...sala]` para com `TypeError: sala is not iterable`
+:::
 
 ---
 
@@ -535,6 +679,44 @@ export function inicial(nome) {
 | `!== undefined` | o `!==` do E14, "é diferente?": a letra está na ficha? O `M` não está e volta como veio |
 
 Com ela, Álvaro e Ana ficam juntos no A, e Érica, no E.
+
+---
+
+## :icon[notebook-pen] Exercícios: Agrupar com reduce
+
+:::example Exercícios
+1. Na votação do lanche da turma, o que aparece?
+
+   ```javascript
+   const votos = ['pizza', 'sushi', 'pizza'];
+   const placar = votos.reduce((visor, voto) => {
+     visor[voto] = visor[voto] + 1;
+     return visor;
+   }, { pizza: 0, sushi: 0 });
+   console.log(placar);
+   ```
+
+2. Sem o `return visor`, o que acontece na segunda volta?
+3. O que dá `'  laranja'.trim()[0].toUpperCase()`?
+4. Complete o agrupamento dos alunos por turno:
+
+   ```javascript
+   const porTurno = alunos.reduce((turnos, aluno) => {
+     if (turnos[aluno.turno] === undefined) {
+       turnos[aluno.turno] = ___;
+     }
+     turnos[aluno.turno].push(aluno.nome);
+     return turnos;
+   }, ___);
+   ```
+:::
+
+:::tip Respostas
+1. `{ pizza: 2, sushi: 1 }`: cada voto soma 1 no campo com o nome dele
+2. O visor vira `undefined`, e o programa para: `Cannot read properties of undefined (reading 'sushi')`
+3. `'L'`: sem os espaços, a gaveta 0 é o `l`, em maiúscula
+4. `[]`, a lista vazia do turno novo, e `{}`, o visor vazio do começo
+:::
 
 ---
 

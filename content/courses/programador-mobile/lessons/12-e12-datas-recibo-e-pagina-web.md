@@ -156,6 +156,44 @@ console.log(natal.getMonth(), natal.getHours());   // 11 0
 
 ---
 
+## :icon[notebook-pen] Exercícios: Datas
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const consulta = new Date(2026, 0, 15, 8, 30);
+   console.log(consulta.getMonth() + 1, consulta.getHours());
+   ```
+2. A matrícula da academia vence em 5/3/2027. Complete: `new Date(2027, ___, 5)`
+3. Para o dia do vencimento do boleto, alguém usou `boleto.getDay()`. O que está errado?
+4. Escreva o `console.log` que mostra `30/11/2026`, o dia da viagem de ônibus:
+   ```javascript
+   const saida = new Date(2026, 10, 30, 6, 15);
+   ```
+5. No domingo, a feira fecha. O que aparece, se 22/11/2026 é domingo?
+   ```javascript
+   const hoje = new Date(2026, 10, 22);
+   if (hoje.getDay() === 0) {
+     console.log('Feira fechada');
+   } else {
+     console.log('Feira aberta');
+   }
+   ```
+:::
+
+:::tip Respostas
+1. `1 8`: janeiro é o mês 0, mais 1 dá 1; a hora é 8
+2. `2`: o mês começa em 0
+3. `getDay()` dá o dia da semana; o do mês é `getDate()`
+4. A linha abaixo:
+   ```javascript
+   console.log(`${saida.getDate()}/${saida.getMonth() + 1}/${saida.getFullYear()}`);
+   ```
+5. `Feira fechada`: o domingo é o 0 do `getDay()`
+:::
+
+---
+
 ## Zero à esquerda
 
 No relógio do celular, como aparecem nove horas e sete minutos?
@@ -199,6 +237,36 @@ console.log(`${hora}:${minuto}`);   // 09:07
 ```
 
 Sem o `String`, `alarme.getMinutes().padStart(2, '0')` para com `TypeError: alarme.getMinutes(...).padStart is not a function`: número não tem `padStart`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Zero à esquerda
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   console.log(String(5).padStart(2, '0'), String(12).padStart(2, '0'));
+   ```
+2. A senha da fila tem 3 dígitos. O que `String(7).padStart(3, '0')` devolve?
+3. Ache o erro e corrija:
+   ```javascript
+   const minutos = 4;
+   console.log(minutos.padStart(2, '0'));
+   ```
+4. O despertador tem `h = 6` e `m = 5`. Escreva o `console.log` que mostra `06:05`
+5. Com `mes = 8`, vindo do `getMonth()`, qual forma dá `'09'`: `String(mes + 1).padStart(2, '0')` ou `String(mes).padStart(2, '0') + 1`?
+:::
+
+:::tip Respostas
+1. `05 12`: o 5 ganha o zero, e o 12 já tem 2 caracteres
+2. `'007'`: zeros pela esquerda até ter 3 caracteres
+3. `TypeError: minutos.padStart is not a function`. Número não tem `padStart`: `String(minutos).padStart(2, '0')`
+4. A linha abaixo:
+   ```javascript
+   console.log(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`);
+   ```
+5. A primeira. A segunda junta o texto `'08'` com o 1 e dá `'081'`
+:::
 
 ---
 
@@ -246,6 +314,37 @@ Received: "03/11/2026 13:49"
 |---|---|
 | `new Date(2026, 9, 28, 19, 42)` | tudo com 2 dígitos; o mês 9 sai como `10` |
 | `new Date(2026, 2, 5, 9, 7)` | o zero à esquerda no dia, no mês, na hora e no minuto |
+
+---
+
+## :icon[notebook-pen] Exercícios: Teste com data fixa
+
+:::example Exercícios
+1. Qual teste passa todo dia: `expect(diaDoMes(new Date())).toBe(22)` ou `expect(diaDoMes(new Date(2026, 10, 22))).toBe(22)`?
+2. O que aparece?
+   ```javascript
+   function lanchoneteAberta(data) {
+     return data.getHours() >= 18;
+   }
+   console.log(lanchoneteAberta(new Date(2026, 4, 1, 19, 0)));
+   console.log(lanchoneteAberta(new Date(2026, 4, 1, 9, 0)));
+   ```
+3. Por que esta regra é difícil de testar? Como corrigir?
+   ```javascript
+   function horaDoPedido() {
+     const agora = new Date();
+     return agora.getHours();
+   }
+   ```
+4. Qual data fixa confere o zero à esquerda no dia **e** no mês: `new Date(2026, 0, 9)` ou `new Date(2026, 10, 25)`?
+:::
+
+:::tip Respostas
+1. O segundo: a data fixa não muda; o primeiro só passa no dia 22
+2. `true` e, embaixo, `false`: 19 passa no `>= 18`, e 9 não
+3. A data nasce dentro da regra e muda a cada minuto. Receba a data pelo parâmetro: `horaDoPedido(data)`
+4. A primeira: o dia 9 e o mês 1 têm um dígito; 25 e 11 já têm dois
+:::
 
 ---
 
@@ -353,6 +452,33 @@ console.log(linhas.join('\n'));
 
 :::warning
 `join()`, sem nada entre os parênteses, usa a vírgula sem espaço: `X-salada,Suco,Pudim`.
+:::
+
+---
+
+## :icon[notebook-pen] Exercícios: Quebra de linha
+
+:::example Exercícios
+1. O que aparece? `console.log(['Ana', 'Bia', 'Caio'].join(' e '));`
+2. Complete para sair `arroz - feijão`: `['arroz', 'feijão'].join(___)`
+3. Alguém queria `1 2 3`, escreveu `['1', '2', '3'].join()` e recebeu `1,2,3`. Corrija
+4. O que aparece?
+   ```javascript
+   const linhas = [];
+   for (const item of ['Café', 'Pão']) {
+     linhas.push(`- ${item}`);
+   }
+   console.log(linhas.join('\n'));
+   ```
+5. O que `'11-98765-4321'.split('-').join(' ')` devolve?
+:::
+
+:::tip Respostas
+1. `Ana e Bia e Caio`: o separador vai entre os itens, nunca nas pontas
+2. `' - '`, com um espaço de cada lado do traço
+3. `join(' ')`: sem separador, o `join` usa a vírgula sem espaço
+4. Duas linhas: `- Café` e, embaixo, `- Pão`
+5. `'11 98765 4321'`: o `split` corta nos traços, e o `join` junta com espaço
 :::
 
 ---
@@ -535,6 +661,26 @@ racha-conta/              o npx serve . abre aqui
 - O servidor abre na **raiz**: aberto dentro de `web/`, ele não enxerga o `src`
 - As regras são puras, sem `fs`: no navegador, o `fs` não existe
 - No fim da página, "Funções que a página usa" marca as 7 que ela encontrou
+
+---
+
+## :icon[notebook-pen] Exercícios: Servidor local
+
+:::example Exercícios
+1. Em `npx serve .`, o que o `.` quer dizer?
+2. Depois do `npx serve .`, o terminal não aceita comandos. Por quê?
+3. A página `site/index.html` importa `../dados/pratos.js`. Em que pasta você liga o servidor?
+4. O navegador mostra `file:///C:/cardapio/site/index.html`, e os botões não funcionam. Por quê?
+5. Com a porta 54321, qual é o endereço da página do item 3?
+:::
+
+:::tip Respostas
+1. "Esta pasta": a pasta em que o terminal está
+2. Ele está preso ao servidor: abra outro terminal no **+**
+3. Na pasta que tem `site` e `dados`: dentro de `site/`, o servidor não enxerga `dados`
+4. Aberta como arquivo, a página não puxa outros com `import`: ligue o servidor
+5. `http://localhost:54321/site/`
+:::
 
 ---
 

@@ -203,6 +203,38 @@ Em `lanche: lanche`, à esquerda está o nome do campo; à direita, a caixa de o
 
 ---
 
+## :icon[notebook-pen] Exercícios: Objetos
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const lanche = { nome: 'X-tudo', preco: 2800 };
+   console.log(lanche.nome, lanche.bebida);
+   ```
+2. O que aparece?
+   ```javascript
+   const aluno = { nome: 'Caio', faltas: 2 };
+   aluno.faltas = aluno.faltas + 1;
+   aluno.turma = 'B';
+   console.log(aluno);
+   ```
+3. A bateria do celular caiu para 75. Ache o erro e corrija:
+   ```javascript
+   const celular = { modelo: 'G54', bateria: 80 };
+   celular = { modelo: 'G54', bateria: 75 };
+   ```
+4. Escreva `fichaDoPasse(nome, saldo)`, que devolve a ficha do passe do ônibus: `nome`, `saldo` e `bloqueado: false`
+:::
+
+:::tip Respostas
+1. `X-tudo undefined`: a ficha não tem o campo `bebida`
+2. `{ nome: 'Caio', faltas: 3, turma: 'B' }`: o `faltas` muda, e o `turma` nasce no fim
+3. `TypeError: Assignment to constant variable.`: a `const` lacra a caixa, não a ficha. Mude só o campo: `celular.bateria = 75;`
+4. Dentro da `function`, `return { nome: nome, saldo: saldo, bloqueado: false };`
+:::
+
+---
+
 ## Ficha dentro da ficha
 
 No seu cadastro da loja, o endereço é um campo só, ou tem rua, número e CEP?
@@ -248,6 +280,38 @@ console.log(contatos[10].aniversario.dia);
 Antes de ler dentro de um campo que pode ser `null`, pergunte com `if (contato.aniversario === null)`.
 
 **Caso 3: você já faz isso desde o E04.** Em `conta.itens[2].preco`, o caminho entra na ficha da conta, abre a lista `itens`, a gaveta 2 e, nela, o campo `preco`.
+
+---
+
+## :icon[notebook-pen] Exercícios: Ficha dentro da ficha
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const loja = { nome: 'Bom Preço', endereco: { rua: 'das Flores', numero: 120 } };
+   console.log(loja.endereco.numero);
+   ```
+2. Com `const aluna = { nome: 'Bia', endereco: { cidade: 'Recife' } };`, complete: `aluna.___.cidade`
+3. A loja mudou para o número 150. Escreva a linha que troca só o número
+4. O que acontece? Como evitar?
+   ```javascript
+   const pedido = { cliente: 'Davi', entrega: null };
+   console.log(pedido.entrega.bairro);
+   ```
+5. O que aparece?
+   ```javascript
+   const linha = { numero: '701', paradas: [{ nome: 'Centro' }, { nome: 'Praça' }] };
+   console.log(linha.paradas[1].nome, linha.paradas.length);
+   ```
+:::
+
+:::tip Respostas
+1. `120`: na `loja`, abra o `endereco`; nele, leia o `numero`
+2. `endereco`: um ponto por vez, da esquerda para a direita
+3. `loja.endereco.numero = 150;`
+4. `TypeError: Cannot read properties of null (reading 'bairro')`: no `null` não há campo. Pergunte antes: `if (pedido.entrega === null)`
+5. `Praça 2`: a gaveta 1 da lista `paradas` e o tamanho dela
+:::
 
 ---
 
@@ -395,6 +459,41 @@ A `inicial` do kit usa essa resposta: com `undefined`, a letra fica como está. 
 
 ---
 
+## :icon[notebook-pen] Exercícios: Colchetes
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const PRECOS = { coxinha: 650, pastel: 800 };
+   const pedido = 'pastel';
+   console.log(PRECOS[pedido], PRECOS.pedido);
+   ```
+2. Complete para mostrar o horário de domingo:
+   ```javascript
+   const HORARIOS = { sabado: '8h às 12h', domingo: 'fechado' };
+   const dia = 'domingo';
+   console.log(HORARIOS___);
+   ```
+3. Com o mesmo `PRECOS`, alguém escreveu `PRECOS['pedido']` e recebeu `undefined`. Por quê?
+4. O que aparece na apuração?
+   ```javascript
+   const votos = { sim: 0, nao: 0 };
+   for (const voto of ['sim', 'nao', 'sim']) {
+     votos[voto] = votos[voto] + 1;
+   }
+   console.log(votos);
+   ```
+:::
+
+:::tip Respostas
+1. `800 undefined`: os colchetes abrem a caixa `pedido`; o ponto procura um campo chamado `pedido`
+2. `[dia]`, sem aspas: a caixa `dia` guarda o nome do campo
+3. Com aspas, é o nome escrito: o campo `pedido` não existe. O certo é `PRECOS[pedido]`
+4. `{ sim: 2, nao: 1 }`: a cada volta, os colchetes somam 1 no campo daquele voto
+:::
+
+---
+
 ## :icon[milestone] Projeto 2 · Passo 3: descreverContato
 
 A linha de cada contato: o nome, o telefone e o grupo como aparece na tela. No `contato.js`, depois da `criarContato`:
@@ -529,6 +628,43 @@ No E16, a conferência do formulário usa esta lista para saber se o grupo vale.
 
 ---
 
+## :icon[notebook-pen] Exercícios: Percorrer a ficha
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const placar = { casa: 2, visitante: 1 };
+   console.log(Object.keys(placar), Object.values(placar));
+   ```
+2. Com o mesmo `placar`, o que `Object.entries(placar)` devolve?
+3. Ache o erro e corrija: `for (const item of estoque)`, com `estoque` igual a `{ arroz: 4, feijao: 0 }`
+4. Com `const treino = { segunda: 'peito', quarta: 'perna' };`, escreva o laço que mostra `segunda: peito` e `quarta: perna`
+5. O que aparece?
+   ```javascript
+   const gastos = { mercado: 320, luz: 150, internet: 100 };
+   let total = 0;
+   for (const valor of Object.values(gastos)) {
+     total = total + valor;
+   }
+   console.log(total);
+   ```
+:::
+
+:::tip Respostas
+1. `[ 'casa', 'visitante' ] [ 2, 1 ]`: os nomes dos campos e os valores
+2. `[ [ 'casa', 2 ], [ 'visitante', 1 ] ]`: um par `[nome, valor]` por campo
+3. `TypeError: estoque is not iterable`. A ficha vira lista antes: `Object.entries(estoque)`
+4. O laço abaixo:
+   ```javascript
+   for (const [dia, musculo] of Object.entries(treino)) {
+     console.log(`${dia}: ${musculo}`);
+   }
+   ```
+5. `570`: o acumulador soma os três valores da ficha
+:::
+
+---
+
 ## Desestruturação
 
 Para ligar para alguém, de quais campos da ficha você precisa?
@@ -586,6 +722,40 @@ console.log(linhaDeLigacao(contatos[2]));
 const { dia, mes } = contatos[10].aniversario;
 // TypeError: Cannot destructure property 'dia' of 'contatos[10].aniversario' as it is null.
 ```
+
+---
+
+## :icon[notebook-pen] Exercícios: Desestruturação
+
+:::example Exercícios
+1. O que aparece?
+   ```javascript
+   const filme = { titulo: 'Divertida Mente', sala: 3, horario: '19:00' };
+   const { sala, horario } = filme;
+   console.log(sala, horario);
+   ```
+2. Com o mesmo `filme`, o que `const { hora } = filme;` guarda em `hora`?
+3. Complete o parâmetro para `saudacao({ nome: 'Rita', idade: 30 })` dar `Bom dia, Rita!`:
+   ```javascript
+   function saudacao({ ___ }) {
+     return `Bom dia, ${nome}!`;
+   }
+   ```
+4. Troque as duas linhas por uma só: `const marca = carro.marca;` e `const ano = carro.ano;`
+5. O que aparece?
+   ```javascript
+   const [primeiro, segundo] = ['Ana', 'Bia', 'Caio'];
+   console.log(segundo);
+   ```
+:::
+
+:::tip Respostas
+1. `3 19:00`: cada campo vai para a caixa com o mesmo nome
+2. `undefined`: a ficha tem `horario`, e não `hora`
+3. `nome`: as chaves no parâmetro tiram o campo `nome` da ficha que chegar
+4. `const { marca, ano } = carro;`
+5. `Bia`: com colchetes, a desestruturação vai pela posição, e `segundo` fica com a gaveta 1
+:::
 
 ---
 
